@@ -1,0 +1,13 @@
+{
+  "name": "@rollbound/rules",
+  "version": "0.1.0",
+  "description": "Pure-function Pathfinder 2e (Remaster) rules engine for RollBound.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

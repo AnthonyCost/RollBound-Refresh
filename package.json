@@ -1,0 +1,19 @@
+{
+  "name": "rollbound",
+  "private": true,
+  "version": "0.1.0",
+  "description": "RollBound: a Pathfinder 2e (Remaster) table companion that teaches the rules as you play.",
+  "workspaces": [
+    "packages/*",
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace client & npm run dev --workspace server",
+    "dev:client": "npm run dev --workspace client",
+    "dev:server": "npm run dev --workspace server",
+    "build": "npm run build --workspace client",
+    "test": "npm test --workspace @rollbound/rules",
+    "db:setup": "npm run db:setup --workspace server"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@rollbound/server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env src/index.js",
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "db:setup": "node --env-file-if-exists=.env db/setup.js"
+  },
+  "dependencies": {
+    "@rollbound/rules": "*",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+  }
+}
