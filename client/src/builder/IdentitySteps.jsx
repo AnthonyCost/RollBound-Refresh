@@ -1,5 +1,6 @@
 import { loreOptions, lookup, keyAbilityOptions, keyAbilityOf, sanctificationOptions, TRADITIONS } from '@rollbound/rules';
 import OptionList from './OptionList.jsx';
+import Showcase from './Showcase.jsx';
 import Chips from './Chips.jsx';
 import { SIZE, abilityList, boostSlotLabel, cap } from './labels.js';
 
@@ -12,11 +13,20 @@ export function AncestryStep({ build, update, data }) {
 
   return (
     <>
-      <OptionList
+      <Showcase
+        kind="ancestry"
         label="Ancestries"
+        prompt="Choose your ancestry"
         items={data.ancestries}
         selected={build.ancestry}
-        meta={(a) => `HP ${a.hp} · ${SIZE[a.size] ?? a.size} · Speed ${a.speed} ft · Boosts ${boostsLine(a.boosts)}${a.flaws.length ? ` · Flaw ${abilityList(a.flaws)}` : ''}`}
+        stats={(a) => [
+          ['Hit Points', a.hp],
+          ['Size', SIZE[a.size] ?? a.size],
+          ['Speed', `${a.speed} ft`],
+          ['Vision', cap(a.vision.replace(/-vision$/, ''))],
+          ['Boosts', boostsLine(a.boosts)],
+          ['Flaw', a.flaws.length ? abilityList(a.flaws) : 'None'],
+        ]}
         onSelect={(slug) =>
           slug !== build.ancestry &&
           update({ ancestry: slug, heritage: null, heritageSkill: null, ancestryBoosts: [], ancestryFeat: null, languages: [] })
@@ -134,23 +144,25 @@ export function ClassStep({ build, update, data }) {
 
   return (
     <>
-      <OptionList
+      <Showcase
+        kind="class"
         label="Classes"
+        prompt="Choose your class"
         items={data.classes}
         selected={build.class}
         onSelect={select}
-        meta={(c) => `HP ${c.hp} + Con · Key ${abilityList(c.keyAbility)}${c.spellcasting ? ' · Spellcaster' : ''}`}
+        stats={(c) => [
+          ['HP per level', `${c.hp} + Con`],
+          ['Key attribute', abilityList(c.keyAbility)],
+          ['Perception', cap(c.perception)],
+          ['Fort · Ref · Will', [c.saves.fortitude, c.saves.reflex, c.saves.will].map((r) => r[0].toUpperCase()).join(' · ')],
+          ['Skills', `${c.trainedSkills.length + (c.skillChoice ? 1 : 0)} + ${c.additionalSkills} + Int`],
+          ['Spellcasting', c.spellcasting ? 'Yes' : 'No'],
+        ]}
       />
 
       {cls && (
         <>
-          <section className="panel">
-            <h2 className="panel__title">{cls.name} training</h2>
-            <p className="rule-note" style={{ margin: 0 }}>
-              Perception {cap(cls.perception)} · Fortitude {cap(cls.saves.fortitude)} · Reflex {cap(cls.saves.reflex)} · Will{' '}
-              {cap(cls.saves.will)}
-            </p>
-          </section>
 
           {cls.skillChoice && (
             <section className="panel">

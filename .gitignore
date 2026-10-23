@@ -4,3 +4,6 @@ dist/
 *.log
 .DS_Store
 *:Zone.Identifier
+
+# Third-party placeholder art (Monster Hunter, (c) Capcom): local use only, replace before publishing.
+client/public/art/placeholder-hero.png
