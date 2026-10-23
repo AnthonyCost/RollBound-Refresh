@@ -18,6 +18,13 @@ import {
   skillCheck,
   strikeBonus,
   damageModifier,
+  featSummary,
+  checkPrerequisite,
+  keyAbilityOptions,
+  spellcastingOf,
+  spellOptions,
+  spellDc,
+  classDc,
 } from '../src/index.js';
 
 const data = JSON.parse(readFileSync(new URL('../data/pf2e-level1.json', import.meta.url)));
@@ -39,7 +46,7 @@ function fighterBuild() {
     classSkill: 'athletics',
     freeBoosts: ['str', 'dex', 'con', 'wis'],
     skills: ['acrobatics', 'survival', 'society'],
-    ancestryFeat: ancestryFeatOptions({ ancestry: 'human', heritage: 'skilled-human' }, data)[0].slug,
+    ancestryFeat: 'cooperative-nature',
     classFeat: 'vicious-swing',
     armor: 'chain-mail',
     weapons: ['longsword'],
@@ -163,5 +170,133 @@ describe('damage modifier', () => {
     assert.equal(damageModifier({ ranged: true, traits: ['thrown-10'] }, abilities), 3);
     assert.equal(damageModifier({ ranged: true, traits: ['propulsive'] }, abilities), 1);
     assert.equal(damageModifier({ ranged: true, traits: [] }, abilities), 0);
+  });
+});
+
+const firstOption = (cls, key) => data.classes.find((c) => c.slug === cls).features.find((f) => f.choice?.key === key).choice.options;
+const optionSlug = (cls, key, name) => firstOption(cls, key).find((o) => o.name === name).slug;
+
+describe('subclass effects', () => {
+  it('applies racket skills and key attribute options', () => {
+    const thief = { ...emptyBuild(), class: 'rogue', classChoices: { 'rogue-racket': optionSlug('rogue', 'rogue-racket', 'Thief') } };
+    assert.ok(skillPicks(thief, data).fixed.has('thievery'));
+    const ruffian = { ...thief, classChoices: { 'rogue-racket': optionSlug('rogue', 'rogue-racket', 'Ruffian') } };
+    assert.deepEqual(keyAbilityOptions(ruffian, data).sort(), ['dex', 'str']);
+  });
+
+  it('gives a warpriest armor training, expert Fortitude, and Shield Block', () => {
+    const build = { ...fighterBuild(), class: 'cleric', classChoices: { 'cleric-doctrine': optionSlug('cleric', 'cleric-doctrine', 'Warpriest') }, deity: 'sarenrae' };
+    const c = buildCharacter(build, data);
+    assert.equal(c.proficiencies.armor.medium, 'trained');
+    assert.equal(c.proficiencies.fortitude, 'expert');
+    assert.ok(c.feats.some((f) => f.name === 'Shield Block'));
+  });
+
+  it("grants Deadly Simplicity only when the deity's favored weapon is simple", () => {
+    const warpriest = (deity) => ({ ...fighterBuild(), class: 'cleric', classChoices: { 'cleric-doctrine': 'warpriest' }, deity });
+    const has = (b) => featSummary(b, data).owned.some(({ feat }) => feat.slug === 'deadly-simplicity');
+    assert.equal(has(warpriest('torag')), false); // warhammer: martial
+    assert.equal(has(warpriest('sarenrae')), false); // scimitar: martial
+    const simple = data.deities.find((d) => d.weapons.some((w) => data.weapons.find((x) => x.slug === w)?.category === 'simple'));
+    assert.equal(has(warpriest(simple.slug)), true);
+  });
+});
+
+describe('deities', () => {
+  const cleric = () => ({
+    ...fighterBuild(),
+    class: 'cleric',
+    keyAbility: null,
+    classFeat: null,
+    classChoices: { 'cleric-doctrine': optionSlug('cleric', 'cleric-doctrine', 'Cloistered Cleric') },
+    deity: 'sarenrae',
+  });
+
+  it("trains the deity's skill and favored weapon", () => {
+    const build = cleric();
+    assert.ok(skillPicks(build, data).fixed.has('medicine'));
+    const c = buildCharacter({ ...build, weapons: ['scimitar'] }, data);
+    assert.equal(c.proficiencies.weapons.martial, 'untrained');
+    assert.equal(strikeBonus(c, c.weapons[0]).parts[1].label, 'Proficiency (Trained)');
+  });
+
+  it('asks for sanctification only when the deity allows a choice', () => {
+    assert.ok(buildProblems(cleric(), data).some((p) => /holy/.test(p.message)));
+    assert.ok(!buildProblems({ ...cleric(), sanctification: 'holy' }, data).some((p) => /holy/.test(p.message)));
+  });
+
+  it("rejects a champion cause the deity's sanctification forbids", () => {
+    const build = {
+      ...fighterBuild(),
+      class: 'champion',
+      classChoices: { 'champion-cause': optionSlug('champion', 'champion-cause', 'Desecration') },
+      deity: 'sarenrae',
+      sanctification: 'holy',
+    };
+    assert.ok(buildProblems(build, data).some((p) => /Desecration cause requires you to be unholy/.test(p.message)));
+  });
+});
+
+describe('feats that grant feats', () => {
+  it('Natural Ambition opens a 1st-level class feat slot', () => {
+    const build = { ...fighterBuild(), ancestryFeat: 'natural-ambition' };
+    const { slots } = featSummary(build, data);
+    assert.equal(slots.length, 1);
+    assert.ok(slots[0].options.every((f) => f.category === 'class' && f.traits.includes('fighter')));
+    assert.ok(buildProblems(build, data).some((p) => /Natural Ambition/.test(p.message)));
+    const done = { ...build, bonusFeats: { 'natural-ambition': 'sudden-charge' } };
+    assert.ok(featSummary(done, data).owned.some(({ feat }) => feat.slug === 'sudden-charge'));
+  });
+
+  it('grants fixed feats, like a background skill feat', () => {
+    assert.ok(featSummary(fighterBuild(), data).owned.some(({ feat, kind }) => feat.name === 'Quick Coercion' && kind === 'granted'));
+  });
+});
+
+describe('prerequisites', () => {
+  const b = fighterBuild();
+  it('checks skills, attributes, subclasses, and feats', () => {
+    assert.equal(checkPrerequisite('trained in Athletics', b, data), true);
+    assert.equal(checkPrerequisite('trained in Arcana', b, data), false);
+    assert.equal(checkPrerequisite('trained in Arcana, Nature, Occultism, or Religion', b, data), false);
+    assert.equal(checkPrerequisite('trained in Warfare Lore', b, data), true);
+    assert.equal(checkPrerequisite('Strength +2', b, data), true);
+    assert.equal(checkPrerequisite('Intelligence +1', b, data), false);
+    assert.equal(checkPrerequisite('Quick Coercion', b, data), true);
+    assert.equal(checkPrerequisite('spellcasting class feature', b, data), false);
+    assert.equal(checkPrerequisite('expert in Arcana, Nature, Occultism, or Religion', b, data), false);
+    assert.equal(checkPrerequisite('precise strike', b, data), false);
+  });
+
+  it("returns null for things it can't check", () => {
+    assert.equal(checkPrerequisite('at least 100 years old', b, data), null);
+  });
+});
+
+describe('spellcasting', () => {
+  const sorcerer = () => ({
+    ...fighterBuild(),
+    class: 'sorcerer',
+    keyAbility: null,
+    classFeat: null,
+    freeBoosts: ['cha', 'dex', 'con', 'wis'],
+    classChoices: { 'sorcerer-bloodline': optionSlug('sorcerer', 'sorcerer-bloodline', 'Imperial') },
+  });
+
+  it("takes the sorcerer's tradition and gift spells from the bloodline", () => {
+    const casting = spellcastingOf(sorcerer(), data);
+    assert.equal(casting.tradition, 'arcane');
+    assert.deepEqual(casting.granted.map((s) => s.name).sort(), ['Detect Magic', 'Force Barrage']);
+    assert.ok(spellOptions(sorcerer(), data).spells.every((s) => s.traditions.includes('arcane') && s.rank === 1));
+  });
+
+  it('requires the right number of spells and computes the spell DC', () => {
+    const { cantrips, spells } = spellOptions(sorcerer(), data);
+    const build = { ...sorcerer(), cantrips: cantrips.slice(0, 4).map((s) => s.slug), spells: spells.slice(0, 2).map((s) => s.slug) };
+    assert.ok(!buildProblems(build, data).some((p) => p.step === 'spells'));
+    const c = buildCharacter(build, data);
+    assert.equal(c.spellcasting.cantrips.length, 5);
+    assert.equal(spellDc(c).total, 10 + 2 + 3); // Cha: key boost + free boost
+    assert.equal(classDc(c).total, 10 + 2 + 3);
   });
 });

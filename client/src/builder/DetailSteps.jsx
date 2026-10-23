@@ -6,6 +6,12 @@ import {
   languagePicks,
   ancestryFeatOptions,
   classFeatOptions,
+  featSummary,
+  featPrerequisites,
+  spellcastingOf,
+  spellOptions,
+  spellDc,
+  classDc,
   gearCost,
   formatPrice,
   lookup,
@@ -180,26 +186,55 @@ export function SkillsStep({ build, update, data }) {
   );
 }
 
+const actionLabel = (a) => {
+  if (a == null || a === '') return null;
+  if (/^\d$/.test(String(a))) return `${a} action${String(a) === '1' ? '' : 's'}`;
+  if (/^\d to \d$/.test(a)) return `${a} actions`;
+  return cap(String(a));
+};
+
 const featMeta = (f) =>
-  [f.traits.filter((t) => t !== 'general' && t !== 'skill').map(cap).join(', '), f.prerequisites.length && `Requires ${f.prerequisites.join('; ')}`]
+  [actionLabel(f.actions), f.traits.filter((t) => t !== 'general' && t !== 'skill').map(cap).join(', ')]
     .filter(Boolean)
     .join(' · ');
 
+function FeatPicker({ label, items, selected, onSelect, build, data, emptyText }) {
+  const check = (f) => featPrerequisites(f, build, data);
+  return (
+    <OptionList
+      label={label}
+      items={items}
+      selected={selected}
+      onSelect={onSelect}
+      meta={featMeta}
+      emptyText={emptyText}
+      blocked={(f) => {
+        const pre = check(f);
+        return pre.met ? null : `Requires ${pre.failed.join('; ')}`;
+      }}
+      note={(f) => {
+        const pre = check(f);
+        return pre.unknown.length ? `Check yourself: ${pre.unknown.join('; ')}` : null;
+      }}
+    />
+  );
+}
+
 export function FeatsStep({ build, update, data }) {
-  const { background, cls } = lookup(build, data);
-  const ancestryFeats = ancestryFeatOptions(build, data);
-  const classFeats = classFeatOptions(build, data);
-  const backgroundFeats = (background?.feats ?? []).map((slug) => data.feats.find((f) => f.slug === slug)).filter(Boolean);
+  const { cls } = lookup(build, data);
+  const { owned, slots } = featSummary(build, data);
+  const granted = owned.filter((o) => o.kind === 'granted');
 
   return (
     <>
       <h2 className="panel__title builder__subhead">Ancestry feat</h2>
-      <OptionList
+      <FeatPicker
         label="Ancestry feats"
-        items={ancestryFeats}
+        items={ancestryFeatOptions(build, data)}
         selected={build.ancestryFeat}
         onSelect={(slug) => update({ ancestryFeat: slug })}
-        meta={featMeta}
+        build={build}
+        data={data}
         emptyText="Choose an ancestry first."
       />
 
@@ -207,29 +242,138 @@ export function FeatsStep({ build, update, data }) {
       {cls && !cls.classFeatAt1 ? (
         <p className="rule-note">{cls.name}s don't get a class feat at 1st level; their first one comes at 2nd.</p>
       ) : (
-        <OptionList
+        <FeatPicker
           label="Class feats"
-          items={classFeats}
+          items={classFeatOptions(build, data)}
           selected={build.classFeat}
           onSelect={(slug) => update({ classFeat: slug })}
-          meta={featMeta}
+          build={build}
+          data={data}
           emptyText="Choose a class first."
         />
       )}
 
-      {backgroundFeats.length > 0 && (
+      {slots.map((slot) => (
+        <section key={slot.parent.slug} className="options">
+          <h2 className="panel__title builder__subhead">Bonus feat from {slot.parent.name}</h2>
+          <FeatPicker
+            label={`Bonus feat from ${slot.parent.name}`}
+            items={slot.options.filter((f) => f.slug !== slot.parent.slug)}
+            selected={slot.chosen}
+            onSelect={(slug) => update({ bonusFeats: { ...build.bonusFeats, [slot.parent.slug]: slug } })}
+            build={build}
+            data={data}
+          />
+        </section>
+      ))}
+
+      {granted.length > 0 && (
         <>
-          <h2 className="panel__title builder__subhead">From your background</h2>
-          {backgroundFeats.map((f) => (
-            <details key={f.slug} className="feature">
-              <summary>{f.name}</summary>
-              <div className="option__desc" dangerouslySetInnerHTML={{ __html: f.description }} />
+          <h2 className="panel__title builder__subhead">Granted automatically</h2>
+          {granted.map(({ feat, from }) => (
+            <details key={feat.slug} className="feature">
+              <summary>
+                {feat.name} <span className="feature__from">from {from}</span>
+              </summary>
+              <div className="option__desc" dangerouslySetInnerHTML={{ __html: feat.description }} />
             </details>
           ))}
         </>
       )}
 
-      <p className="rule-note">Prerequisites are listed for you to check; the builder doesn't enforce them yet.</p>
+      <p className="rule-note">
+        Feats whose prerequisites you don't meet are locked. Prerequisites the builder can't check, like your age, are listed for you to
+        confirm with your GM.
+      </p>
+    </>
+  );
+}
+
+const SPELL_LIST_NAME = {
+  repertoire: 'Spell repertoire',
+  prepared: 'Prepared today',
+  spellbook: 'Spellbook',
+  familiar: "Your familiar's spells",
+};
+
+const SPELL_NOTE = {
+  repertoire: 'These are the spells you know. You can cast any of them using your spell slots.',
+  prepared: 'You prepare spells each morning from every common spell on your list. These are today’s picks; you can change them each day.',
+  spellbook: 'Your spellbook holds these. Each morning you prepare some of them into your spell slots.',
+  familiar: 'Your familiar holds the spells your patron teaches you. Each morning you prepare some of them through your familiar.',
+};
+
+const spellMeta = (s) => [actionLabel(s.actions), s.range, s.area, s.defense && `${cap(s.defense)} save`].filter(Boolean).join(' · ');
+
+export function SpellsStep({ build, update, data }) {
+  const casting = spellcastingOf(build, data);
+  const { cls } = lookup(build, data);
+
+  if (!cls) return <p className="rule-note">Choose a class first.</p>;
+  if (!casting) return <p className="rule-note">{cls.name}s don't cast spells at 1st level. Skip ahead to gear.</p>;
+  if (casting.kind === 'focus') {
+    return <p className="rule-note">Champions don't choose spells: your devotion spells come from your cause. They're listed in your class features.</p>;
+  }
+  if (!casting.tradition) return <p className="rule-note">Choose your {cls.slug === 'sorcerer' ? 'bloodline' : 'patron'} first; it sets your spell tradition.</p>;
+
+  const { cantrips, spells } = spellOptions(build, data);
+  const toggle = (field, max) => (slug) => {
+    const list = build[field];
+    if (list.includes(slug)) update({ [field]: list.filter((s) => s !== slug) });
+    else if (list.length < max) update({ [field]: [...list, slug] });
+  };
+  const full = (field, max) => (s) => (!build[field].includes(s.slug) && build[field].length >= max ? `You've chosen ${max}` : null);
+
+  return (
+    <>
+      <section className="panel">
+        <h2 className="panel__title">
+          {SPELL_LIST_NAME[casting.kind]} · {cap(casting.tradition)}
+        </h2>
+        <p className="rule-note" style={{ margin: 0 }}>
+          {SPELL_NOTE[casting.kind]} You have {casting.slots} 1st-rank spell slots a day; cantrips are free to cast.
+          {casting.prepares && ` You prepare ${casting.prepares.cantrips} cantrips and ${casting.prepares.spells} spells each day.`}
+        </p>
+      </section>
+
+      {casting.granted.length > 0 && (
+        <section className="panel">
+          <h2 className="panel__title">Granted by your {cls.slug === 'sorcerer' ? 'bloodline' : 'class'}</h2>
+          <ul className="log">
+            {casting.granted.map((s) => (
+              <li key={s.slug}>
+                <strong>{s.name}</strong> <span className="muted">{s.rank === 0 ? 'cantrip' : '1st rank'}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <h2 className="panel__title builder__subhead">
+        Cantrips · {build.cantrips.length}/{casting.cantrips}
+      </h2>
+      <OptionList
+        label="Cantrips"
+        items={cantrips}
+        selected={build.cantrips}
+        multiple
+        onSelect={toggle('cantrips', casting.cantrips)}
+        meta={spellMeta}
+        blocked={full('cantrips', casting.cantrips)}
+      />
+
+      <h2 className="panel__title builder__subhead">
+        1st-rank spells · {build.spells.length}/{casting.spells}
+      </h2>
+      <OptionList
+        label="1st-rank spells"
+        items={spells}
+        selected={build.spells}
+        multiple
+        onSelect={toggle('spells', casting.spells)}
+        meta={spellMeta}
+        blocked={full('spells', casting.spells)}
+      />
     </>
   );
 }
@@ -341,7 +485,20 @@ export function ReviewStep({ build, update, data, goTo }) {
           </div>
           <AbilityTiles mods={character.abilities} />
           <ul className="log" style={{ marginTop: 12 }}>
-            <li>Perception {signed(perception(character).total)}</li>
+            <li>
+              Perception {signed(perception(character).total)} · Class DC {classDc(character).total}
+              {character.spellcasting && ` · Spell DC ${spellDc(character).total}`}
+            </li>
+            {character.deity && (
+              <li>
+                Deity: {character.deity.name}
+                {character.deity.sanctification !== 'none' && ` (${character.deity.sanctification})`}
+                {character.deity.font && ` · ${cap(character.deity.font)} font`}
+              </li>
+            )}
+            {character.spellcasting && (
+              <li>Spells: {[...character.spellcasting.cantrips, ...character.spellcasting.spells].map((s) => s.name).join(', ')}</li>
+            )}
             <li>Skills: {[...Object.keys(character.skills).map(cap), ...character.lores].join(', ')}</li>
             <li>Feats: {character.feats.map((f) => f.name).join(', ')}</li>
             <li>

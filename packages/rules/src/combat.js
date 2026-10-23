@@ -30,10 +30,17 @@ export function damageModifier(weapon, abilities) {
   return 0;
 }
 
+/** Your proficiency with a weapon: its category, or your deity's favored weapon if that's better. */
+export function weaponRank(character, weapon) {
+  const byCategory = character.proficiencies.weapons[weapon.category] ?? 'untrained';
+  const favored = character.proficiencies.favoredWeapons?.includes(weapon.slug);
+  return favored && byCategory === 'untrained' ? 'trained' : byCategory;
+}
+
 /** Attack bonus for a Strike, as { total, parts }. */
 export function strikeBonus(character, weapon, { attacksSoFar = 0, conditions = [] } = {}) {
   const ability = strikeAbility(weapon, character.abilities);
-  const rank = character.proficiencies.weapons[weapon.category];
+  const rank = weaponRank(character, weapon);
   const parts = [
     { label: ability === 'dex' ? 'Dexterity' : 'Strength', value: character.abilities[ability] },
     proficiencyPart(rank, character.level),

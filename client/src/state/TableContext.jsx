@@ -10,6 +10,7 @@ import {
   endOfTurn,
 } from '@rollbound/rules';
 import { api } from '../api.js';
+import { DEMO_ID_PREFIX, getDemoCharacter } from './demoCharacters.js';
 
 const TableContext = createContext(null);
 
@@ -34,8 +35,10 @@ export function TableProvider({ characterId, children }) {
   const [lastRoll, setLastRoll] = useState(null);
 
   useEffect(() => {
-    if (characterId === DEMO_CHARACTER_ID) {
-      setCharacter(mira);
+    if (characterId === DEMO_CHARACTER_ID || characterId.startsWith(DEMO_ID_PREFIX)) {
+      const local = characterId === DEMO_CHARACTER_ID ? mira : getDemoCharacter(characterId)?.data;
+      if (local) setCharacter(local);
+      else setNotFound(true);
       setLoading(false);
       return;
     }

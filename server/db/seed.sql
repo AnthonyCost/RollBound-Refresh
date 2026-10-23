@@ -21,6 +21,7 @@ SELECT u.id, c.id, 'Mira Ashvale', 1, $json$
   "background": "Guard",
   "className": "Fighter",
   "classHp": 10,
+  "keyAbility": "str",
   "abilities": { "str": 4, "dex": 2, "con": 2, "int": 0, "wis": 1, "cha": 0 },
   "proficiencies": {
     "perception": "expert",

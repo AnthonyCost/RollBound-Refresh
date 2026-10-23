@@ -30,6 +30,8 @@ const PACK_PATTERNS = [
   /^packs\/classfeatures\/[^/]+\.json$/,
   /^packs\/feats\/(ancestry|class|general|skill)\/.+\.json$/,
   /^packs\/equipment\/[^/]+\.json$/,
+  /^packs\/deities\/.+\.json$/,
+  /^packs\/spells\/(cantrip|1st-rank)\/.+\.json$/,
 ];
 
 const headers = { 'User-Agent': 'rollbound-import' };
@@ -97,28 +99,87 @@ function cleanDescription(html = '') {
     .trim();
 }
 
-// ---------- Mappers ----------
+// ---------- Rule elements ----------
+// Foundry encodes most mechanical effects as "rule elements". We read the few
+// kinds that matter at 1st level: skill training, proficiency upgrades, granted
+// feats, and skill choices. Anything else stays in the description text.
 
 const source = (item) => item.system.publication.title.replace(/^Pathfinder /, '');
 const slugOf = (name) => name.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const boostSlots = (boosts = {}) => Object.values(boosts).map((b) => b.value).filter((v) => v.length);
+const uuidName = (uuid) => (typeof uuid === 'string' && !uuid.includes('{') ? uuid.split('.Item.')[1] : null);
 
-function skillChoice(rules = []) {
-  const choice = rules.find((r) => r.key === 'ChoiceSet');
-  const upgradesSkill = rules.some((r) => r.key === 'ActiveEffectLike' && String(r.path).startsWith('system.skills.'));
-  if (!choice || !upgradesSkill) return null;
-  if (choice.choices?.config === 'skills') return { any: true };
-  if (Array.isArray(choice.choices)) {
-    const values = choice.choices.map((c) => c.value);
-    if (values.every((v) => SKILLS.includes(v))) return { options: values };
-  }
-  return null;
+// Effects Foundry implements in code rather than rule elements (checked against the rules text).
+const TEXT_ONLY_EFFECTS = {
+  'first-doctrine-warpriest': { proficiencies: { 'defenses.light': 'trained', 'defenses.medium': 'trained', 'saves.fortitude': 'expert' } },
+  ruffian: { proficiencies: { 'defenses.medium': 'trained' } },
+};
+
+/** True when a rule's predicate holds for a 1st-level character of this class with no other options. */
+function predicateApplies(predicate, cls) {
+  if (!predicate) return true;
+  const term = (t) => {
+    if (typeof t === 'string') return t === `class:${cls}`;
+    if (t.not || t.nor) return true;
+    if (t.or) return t.or.some(term);
+    if (t.and) return t.and.every(term);
+    return false;
+  };
+  return predicate.every(term);
 }
+
+const PROFICIENCY_PATHS = [
+  [/^system\.proficiencies\.defenses\.(\w+)\.rank$/, (m) => `defenses.${m[1]}`],
+  [/^system\.proficiencies\.attacks\.(\w+)\.rank$/, (m) => `attacks.${m[1]}`],
+  [/^system\.saves\.(\w+)\.rank$/, (m) => `saves.${m[1]}`],
+  [/^system\.perception\.rank$/, () => 'perception'],
+];
+
+function ruleEffects(rules = [], cls = null) {
+  const effects = { skills: [], skillChoice: null, feats: [], proficiencies: {}, tradition: null };
+  for (const r of rules) {
+    if (!predicateApplies(r.predicate, cls)) continue;
+    if (r.key === 'ActiveEffectLike' && r.mode === 'upgrade' && typeof r.value === 'number') {
+      const skill = /^system\.skills\.(\w+)\.rank$/.exec(r.path)?.[1];
+      if (skill && SKILLS.includes(skill) && r.value === 1) effects.skills.push(skill);
+      for (const [re, key] of PROFICIENCY_PATHS) {
+        const m = re.exec(r.path);
+        if (m) effects.proficiencies[key(m)] = RANK_NAMES[r.value];
+      }
+    }
+    if (r.key === 'ActiveEffectLike' && /^system\.proficiencies\.aliases\./.test(r.path) && typeof r.value === 'string') {
+      effects.tradition = r.value;
+    }
+    if (r.key === 'GrantItem' && /feats-srd/.test(r.uuid ?? '')) effects.feats.push(slugOf(uuidName(r.uuid)));
+    if (r.key === 'ChoiceSet') {
+      if (r.choices?.config === 'skills') effects.skillChoice = SKILLS;
+      else if (Array.isArray(r.choices)) {
+        const values = r.choices.map((c) => /^system\.skills\.(\w+)\.rank$/.exec(c.value)?.[1] ?? c.value);
+        if (values.every((v) => SKILLS.includes(v))) effects.skillChoice = values;
+      }
+    }
+  }
+  return effects;
+}
+
+function mergeEffects(a, b) {
+  return {
+    skills: [...new Set([...a.skills, ...(b.skills ?? [])])],
+    skillChoice: a.skillChoice ?? b.skillChoice ?? null,
+    feats: [...new Set([...a.feats, ...(b.feats ?? [])])],
+    proficiencies: { ...a.proficiencies, ...b.proficiencies },
+    tradition: a.tradition ?? b.tradition ?? null,
+  };
+}
+
+const plainText = (html) => cleanDescription(html).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+
+// ---------- Mappers ----------
 
 function mapAncestry(a) {
   const s = a.system;
   return {
-    slug: a.system.slug ?? slugOf(a.name),
+    slug: s.slug ?? slugOf(a.name),
     name: a.name,
     hp: s.hp,
     size: s.size,
@@ -137,13 +198,17 @@ function mapAncestry(a) {
 
 function mapHeritage(h) {
   const s = h.system;
+  const effects = ruleEffects(s.rules);
   return {
     slug: s.slug ?? slugOf(h.name),
     name: h.name,
     ancestry: s.ancestry?.slug ?? null,
     traits: s.traits.value,
     rarity: s.traits.rarity,
-    skillChoice: skillChoice(s.rules),
+    senses: (s.rules ?? []).filter((r) => r.key === 'Sense').map((r) => r.selector),
+    skills: effects.skills,
+    skillChoice: effects.skillChoice,
+    feats: effects.feats,
     description: cleanDescription(s.description.value),
     source: source(h),
   };
@@ -164,8 +229,22 @@ function mapBackground(b) {
   };
 }
 
+/** "Gain a 1st-level class feat" style choices, from a ChoiceSet filter. */
+function featGrantChoice(rules = []) {
+  const choice = rules.find((r) => r.key === 'ChoiceSet' && Array.isArray(r.choices?.filter) && r.choices.itemType === 'feat');
+  const grants = rules.some((r) => r.key === 'GrantItem' && String(r.uuid).includes(`rulesSelections.${choice?.flag}`));
+  if (!choice || !grants) return null;
+  const strings = choice.choices.filter.filter((f) => typeof f === 'string');
+  const level = Number(strings.find((f) => f.startsWith('item:level:'))?.split(':')[2]);
+  const category = strings.find((f) => f.startsWith('item:category:'))?.split(':')[2] ?? null;
+  const traits = strings.filter((f) => f.startsWith('item:trait:') && !f.includes('{')).map((f) => f.split(':')[2]);
+  const classTrait = strings.some((f) => f.includes('system.details.class.trait'));
+  return { level: level || 1, category, traits, classTrait };
+}
+
 function mapFeat(f) {
   const s = f.system;
+  const effects = ruleEffects(s.rules);
   return {
     slug: s.slug ?? slugOf(f.name),
     name: f.name,
@@ -175,36 +254,73 @@ function mapFeat(f) {
     rarity: s.traits.rarity,
     prerequisites: (s.prerequisites?.value ?? []).map((p) => p.value),
     actions: s.actionType.value === 'passive' ? null : s.actionType.value === 'action' ? s.actions.value : s.actionType.value,
+    skills: effects.skills,
+    feats: effects.feats,
+    grantChoice: featGrantChoice(s.rules),
     description: cleanDescription(s.description.value),
     source: source(f),
   };
 }
 
-function mapClass(c, featuresByName, featuresByTag) {
+function mapSubclassOption(o, cls, featuresByUuidName) {
+  const slug = o.system.slug ?? slugOf(o.name);
+  let effects = ruleEffects(o.system.rules, cls);
+
+  // Cleric doctrines point at a separate "First Doctrine (X)" feature for their 1st-level effects.
+  for (const r of o.system.rules ?? []) {
+    const first = r.key === 'ActiveEffectLike' && r.value?.firstDoctrine && featuresByUuidName.get(uuidName(r.value.firstDoctrine));
+    if (first) {
+      effects = mergeEffects(effects, ruleEffects(first.system.rules, cls));
+      effects = mergeEffects(effects, TEXT_ONLY_EFFECTS[first.system.slug ?? slugOf(first.name)] ?? {});
+    }
+  }
+  effects = mergeEffects(effects, TEXT_ONLY_EFFECTS[slug] ?? {});
+
+  const text = plainText(o.system.description.value);
+  const tradition = effects.tradition ?? /(?:Tradition|Spell List) (arcane|divine|occult|primal)\b/.exec(text)?.[1] ?? null;
+  const keyAbility = /You can choose (\w+) as your key attribute/.exec(text)?.[1]?.slice(0, 3).toLowerCase() ?? null;
+  const gifts = /Sorcerous Gifts:? cantrip:? ([^;,]+)[;,] 1st: ([^;,]+)[;,]/.exec(text);
+  const giftSpells = gifts && !/see /i.test(gifts[0]) ? [slugOf(gifts[1].trim()), slugOf(gifts[2].trim())] : [];
+
+  return {
+    slug,
+    name: o.name.replace(/^Bloodline: /, ''),
+    tags: o.system.traits.otherTags ?? [],
+    skills: effects.skills,
+    skillChoice: effects.skillChoice,
+    feats: effects.feats,
+    proficiencies: effects.proficiencies,
+    tradition,
+    traditionChoice: /Tradition variable/.test(text),
+    keyAbility,
+    grantedSpells: giftSpells,
+    description: cleanDescription(o.system.description.value),
+  };
+}
+
+function mapClass(c, featuresByUuidName, featuresByTag) {
   const s = c.system;
+  const slug = s.slug ?? slugOf(c.name);
   const features = Object.values(s.items ?? {})
     .filter((i) => i.level === 1)
-    .map((i) => featuresByName.get(i.name))
+    .map((i) => featuresByUuidName.get(uuidName(i.uuid)) ?? featuresByUuidName.get(i.name))
     .filter(Boolean)
     .map((feature) => {
       const choiceRule = feature.system.rules?.find((r) => r.key === 'ChoiceSet' && Array.isArray(r.choices?.filter));
       const tag = choiceRule?.choices.filter.find((x) => typeof x === 'string' && x.startsWith('item:tag:'))?.slice('item:tag:'.length);
       const options = tag ? (featuresByTag.get(tag) ?? []) : [];
+      const effects = ruleEffects(feature.system.rules, slug);
       return {
-        name: feature.name,
+        name: feature.name.replace(/ \(\w+\)$/, ''),
         description: cleanDescription(feature.system.description.value),
-        choice: options.length
-          ? {
-              key: tag,
-              options: options.map((o) => ({ slug: o.system.slug ?? slugOf(o.name), name: o.name, description: cleanDescription(o.system.description.value) })),
-            }
-          : null,
+        feats: effects.feats,
+        choice: options.length ? { key: tag, options: options.map((o) => mapSubclassOption(o, slug, featuresByUuidName)) } : null,
       };
     });
 
-  const classSkill = skillChoice(s.rules);
+  const classSkill = ruleEffects(s.rules, slug).skillChoice;
   return {
-    slug: s.slug ?? slugOf(c.name),
+    slug,
     name: c.name,
     hp: s.hp,
     keyAbility: s.keyAbility.value,
@@ -213,11 +329,12 @@ function mapClass(c, featuresByName, featuresByTag) {
     attacks: Object.fromEntries(['unarmed', 'simple', 'martial', 'advanced'].map((k) => [k, RANK_NAMES[s.attacks[k]]])),
     defenses: Object.fromEntries(['unarmored', 'light', 'medium', 'heavy'].map((k) => [k, RANK_NAMES[s.defenses[k]]])),
     trainedSkills: s.trainedSkills.value,
-    skillChoice: classSkill?.options ?? null,
+    skillChoice: classSkill,
     additionalSkills: s.trainedSkills.additional,
     classFeatAt1: s.classFeatLevels.value.includes(1),
+    deity: features.some((f) => /^Deity$/.test(f.name)),
     spellcasting: Boolean(s.spellcasting),
-    features,
+    features: features.filter((f) => f.name !== 'Deity'),
     rarity: s.traits.rarity,
     description: cleanDescription(s.description.value),
     source: source(c),
@@ -282,6 +399,43 @@ function mapShield(sh) {
   };
 }
 
+function mapDeity(d) {
+  const s = d.system;
+  return {
+    slug: s.slug ?? slugOf(d.name),
+    name: d.name,
+    font: s.font,
+    sanctification: s.sanctification ? { modal: s.sanctification.modal, what: s.sanctification.what } : null,
+    skills: s.skill ?? [],
+    weapons: s.weapons ?? [],
+    domains: s.domains?.primary ?? [],
+    attribute: s.attribute ?? [],
+    description: cleanDescription(s.description.value),
+    source: source(d),
+  };
+}
+
+function mapSpell(sp) {
+  const s = sp.system;
+  const cantrip = s.traits.value.includes('cantrip');
+  return {
+    slug: s.slug ?? slugOf(sp.name),
+    name: sp.name,
+    rank: cantrip ? 0 : s.level.value,
+    traditions: s.traits.traditions ?? [],
+    traits: s.traits.value.filter((t) => t !== 'cantrip'),
+    rarity: s.traits.rarity,
+    actions: s.time?.value ?? '',
+    range: s.range?.value || null,
+    area: s.area ? `${s.area.value}-foot ${s.area.type}` : null,
+    target: s.target?.value || null,
+    defense: s.defense?.save ? `${s.defense.save.basic ? 'basic ' : ''}${s.defense.save.statistic}` : s.defense?.passive?.statistic ?? null,
+    duration: s.duration?.value || null,
+    description: cleanDescription(s.description.value),
+    source: source(sp),
+  };
+}
+
 // ---------- Main ----------
 
 const commit = await getJson(`https://api.github.com/repos/${REPO}/commits/${BRANCH}`);
@@ -293,20 +447,21 @@ if (tree.truncated) throw new Error('GitHub truncated the file tree; cannot impo
 const paths = tree.tree.filter((e) => e.type === 'blob' && PACK_PATTERNS.some((p) => p.test(e.path))).map((e) => e.path);
 console.log(`Fetching ${paths.length} files (cached in ${CACHE})`);
 
-const items = await mapLimit(paths, 32, async (path) => ({ path, item: await fetchPack(sha, path) }));
+const items = (await mapLimit(paths, 32, async (path) => ({ path, item: await fetchPack(sha, path) }))).filter(({ item }) => item.system);
 
 const skippedImpossible = new Set();
 const inBooks = items.filter(({ item }) => {
-  const title = item.system?.publication?.title ?? '';
+  const title = item.system.publication?.title ?? '';
   if (/impossible/i.test(title) && !BOOKS.includes(title)) skippedImpossible.add(title);
   return BOOKS.includes(title);
 });
 if (skippedImpossible.size) console.log('Skipped titles mentioning "Impossible":', [...skippedImpossible]);
 
 const byPack = (re) => inBooks.filter(({ path }) => re.test(path)).map(({ item }) => item);
+const byName = (a, b) => a.name.localeCompare(b.name);
 
 const classFeatures = byPack(/^packs\/classfeatures\//);
-const featuresByName = new Map(classFeatures.map((f) => [f.name, f]));
+const featuresByUuidName = new Map(classFeatures.map((f) => [f.name, f]));
 const featuresByTag = new Map();
 for (const f of classFeatures) {
   for (const tag of f.system.traits?.otherTags ?? []) {
@@ -315,20 +470,30 @@ for (const f of classFeatures) {
   }
 }
 
-const byName = (a, b) => a.name.localeCompare(b.name);
+const classes = byPack(/^packs\/classes\//).map((c) => mapClass(c, featuresByUuidName, featuresByTag)).sort(byName);
+const heritages = byPack(/^packs\/heritages\//).map(mapHeritage).sort(byName);
 const backgrounds = byPack(/^packs\/backgrounds\//).map(mapBackground).sort(byName);
-const level1Feats = byPack(/^packs\/feats\//).filter((f) => f.system.level.value === 1).map(mapFeat);
+let feats = byPack(/^packs\/feats\//).filter((f) => f.system.level.value === 1).map(mapFeat);
 
-// A background's granted feat can come from an older book; include it anyway.
-const featSlugs = new Set(level1Feats.map((f) => f.slug));
-const grantedElsewhere = new Set(backgrounds.flatMap((b) => b.feats).filter((s) => !featSlugs.has(s)));
-const grantedFeats = items
-  .filter(({ path, item }) => path.startsWith('packs/feats/') && grantedElsewhere.has(item.system.slug ?? slugOf(item.name)))
-  .map(({ item }) => mapFeat(item));
+// Feats granted by something we import can come from any level or older book; include them too.
+const allFeats = new Map(
+  items.filter(({ path }) => path.startsWith('packs/feats/')).map(({ item }) => [item.system.slug ?? slugOf(item.name), item]),
+);
+for (let pass = 0; pass < 3; pass++) {
+  const have = new Set(feats.map((f) => f.slug));
+  const wanted = [
+    ...backgrounds.flatMap((b) => b.feats),
+    ...heritages.flatMap((h) => h.feats),
+    ...feats.flatMap((f) => f.feats),
+    ...classes.flatMap((c) => c.features.flatMap((f) => [...f.feats, ...(f.choice?.options.flatMap((o) => o.feats) ?? [])])),
+  ].filter((s) => !have.has(s) && allFeats.has(s));
+  if (!wanted.length) break;
+  feats = feats.concat([...new Set(wanted)].map((s) => mapFeat(allFeats.get(s))));
+}
 
+const ancestries = byPack(/^packs\/ancestries\//).map(mapAncestry).sort(byName);
 // Starting gear: items of your level or lower.
 const equipment = byPack(/^packs\/equipment\//).filter((e) => (e.system.level?.value ?? 0) <= 1);
-const ancestries = byPack(/^packs\/ancestries\//).map(mapAncestry).sort(byName);
 
 const data = {
   meta: {
@@ -341,10 +506,16 @@ const data = {
   skills: SKILLS,
   languages: [...new Set(ancestries.flatMap((a) => [...a.languages, ...a.additionalLanguages.options]))].sort(),
   ancestries,
-  heritages: byPack(/^packs\/heritages\//).map(mapHeritage).sort(byName),
+  heritages,
   backgrounds,
-  classes: byPack(/^packs\/classes\//).map((c) => mapClass(c, featuresByName, featuresByTag)).sort(byName),
-  feats: [...level1Feats, ...grantedFeats].sort(byName),
+  classes,
+  feats: feats.sort(byName),
+  // Player Core's deities; Foundry files them under Divine Mysteries, which reprints them.
+  deities: items
+    .filter(({ path, item }) => path.startsWith('packs/deities/core-gods/') && item.system.category === 'deity')
+    .map(({ item }) => mapDeity(item))
+    .sort(byName),
+  spells: byPack(/^packs\/spells\//).map(mapSpell).sort(byName),
   weapons: equipment.filter((e) => e.type === 'weapon').map(mapWeapon).sort(byName),
   armor: equipment
     .filter((e) => e.type === 'armor' && ['unarmored', 'light', 'medium', 'heavy'].includes(e.system.category))

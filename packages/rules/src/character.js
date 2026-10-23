@@ -123,6 +123,34 @@ export function skillCheck(character, skill, { conditions = [] } = {}) {
   return { total: sum(parts), parts, rank, ability };
 }
 
+/** Spell attack modifier: key attribute + spellcasting proficiency. */
+export function spellAttack(character, { conditions = [] } = {}) {
+  const ability = character.spellcasting?.ability ?? character.keyAbility;
+  const parts = [
+    { label: ABILITY_NAME[ability], value: character.abilities[ability] },
+    proficiencyPart(character.proficiencies.spellcasting ?? 'untrained', character.level),
+  ];
+  withPenalty(parts, conditions, ability);
+  return { total: sum(parts), parts };
+}
+
+/** Spell DC: 10 + the same parts as your spell attack. */
+export function spellDc(character, opts) {
+  const attack = spellAttack(character, opts);
+  return { total: 10 + attack.total, parts: [{ label: 'Base', value: 10 }, ...attack.parts] };
+}
+
+/** Class DC: 10 + key attribute + class DC proficiency. */
+export function classDc(character) {
+  const ability = character.keyAbility;
+  const parts = [
+    { label: 'Base', value: 10 },
+    { label: ABILITY_NAME[ability], value: character.abilities[ability] },
+    proficiencyPart(character.proficiencies.classDc ?? 'trained', character.level),
+  ];
+  return { total: sum(parts), parts };
+}
+
 export function abilityName(key) {
   return ABILITY_NAME[key];
 }

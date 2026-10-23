@@ -9,7 +9,7 @@ Built with the PERN stack: **Postgres, Express, React, Node**.
 | Screen | What it teaches |
 | --- | --- |
 | **Hub** | Home after sign-in: your characters (with HP and AC at a glance) and the campaigns you run as GM. |
-| **Builder** | Step-by-step level 1 character creation from Player Core and Player Core 2: ancestry, heritage, background, class, attribute boosts, skills, languages, feats, and 15 gp of gear. Each step explains the rule it applies. |
+| **Builder** | Step-by-step level 1 character creation from Player Core and Player Core 2: ancestry, heritage, background, class and subclass, deity, attribute boosts, skills, languages, feats (with prerequisite checks and bonus feats), spells, and 15 gp of gear. Each step explains the rule it applies. Demo users can build and play a character for the rest of their session. |
 | **Sheet** | Tap AC, a save, or Perception to see the breakdown: ability, proficiency rank + level, item bonus, armor's Dex cap, and condition penalties. |
 | **Turn** | The 3-action economy. Strikes show the multiple attack penalty as it grows; conditions like Frightened apply to the numbers and tick down when you end your turn. |
 | **Roll** | Rolls a Strike against the GM's target AC and shows where it landed on the four degrees of success, including natural 20/1 shifts and crit damage. |
@@ -55,7 +55,7 @@ The builder reads `packages/rules/data/pf2e-level1.json`, generated from the ope
 npm run data:import    # set GITHUB_TOKEN to avoid API rate limits
 ```
 
-The importer keeps content from the books listed in `BOOKS` in `packages/rules/scripts/import-pf2e.js` (currently Player Core and Player Core 2) and records the upstream commit it used. It keeps level 1 feats and gear of level 1 or lower.
+The importer keeps content from the books listed in `BOOKS` in `packages/rules/scripts/import-pf2e.js` (currently Player Core and Player Core 2) and records the upstream commit it used. It keeps level 1 feats, cantrips and 1st-rank spells, gear of level 1 or lower, and any feat something else grants. Deities come from Foundry's `core-gods` folder, which is Player Core's deity list (Foundry files it under *Lost Omens Divine Mysteries*).
 
 ## Tests
 

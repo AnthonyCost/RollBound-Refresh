@@ -610,3 +610,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .skill__rank--trained, .skill__rank--expert, .skill__rank--master, .skill__rank--legendary { color: var(--bronze); }
 .skill__name { flex: 1; min-width: 0; font-size: 14px; color: var(--text-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .skill__total { font-family: var(--display); font-weight: 700; }
+
+.option--blocked { opacity: 0.6; }
+.option--blocked .option__head:disabled { opacity: 1; }
+.option__hint { font-size: 13px; font-style: italic; color: var(--bronze); }
+.feature__from { font-family: var(--body); font-weight: 400; font-style: italic; letter-spacing: 0; text-transform: none; color: var(--text-muted); }
+.stats--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.spell-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }

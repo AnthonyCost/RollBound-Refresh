@@ -5,7 +5,7 @@ import { sourceTag } from './labels.js';
  * A list of choosable rules options. The selected option expands to show its
  * description (imported HTML, reduced to plain formatting tags at import time).
  */
-export default function OptionList({ items, selected, onSelect, meta, warn, multiple = false, label, emptyText = 'Nothing to choose here.' }) {
+export default function OptionList({ items, selected, onSelect, meta, warn, note, blocked, multiple = false, label, emptyText = 'Nothing to choose here.' }) {
   const [query, setQuery] = useState('');
   const isSelected = (slug) => (multiple ? selected.includes(slug) : selected === slug);
   const q = query.trim().toLowerCase();
@@ -27,15 +27,18 @@ export default function OptionList({ items, selected, onSelect, meta, warn, mult
       <ul className="options__list" aria-label={label}>
         {shown.map((item) => {
           const on = isSelected(item.slug);
-          const warning = warn?.(item);
+          const reason = blocked?.(item);
+          const warning = reason ?? warn?.(item);
+          const hint = note?.(item);
           return (
-            <li key={item.slug} className={`option ${on ? 'option--on' : ''}`}>
-              <button type="button" className="option__head" aria-pressed={on} onClick={() => onSelect(item.slug)}>
+            <li key={item.slug} className={`option ${on ? 'option--on' : ''} ${reason && !on ? 'option--blocked' : ''}`}>
+              <button type="button" className="option__head" aria-pressed={on} disabled={Boolean(reason) && !on} onClick={() => onSelect(item.slug)}>
                 <span className="option__gem" aria-hidden="true" />
                 <span className="option__main">
                   <span className="option__name">{item.name}</span>
                   {meta && <span className="option__meta">{meta(item)}</span>}
                   {warning && <span className="option__warn">{warning}</span>}
+                  {hint && <span className="option__hint">{hint}</span>}
                 </span>
                 <span className="option__tags">
                   {item.rarity && item.rarity !== 'common' && <span className="tag tag--rare">{item.rarity}</span>}

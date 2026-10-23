@@ -5,7 +5,8 @@ import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { AncestryStep, BackgroundStep, ClassStep } from '../builder/IdentitySteps.jsx';
-import { AttributesStep, SkillsStep, FeatsStep, GearStep, ReviewStep } from '../builder/DetailSteps.jsx';
+import { AttributesStep, SkillsStep, FeatsStep, SpellsStep, GearStep, ReviewStep } from '../builder/DetailSteps.jsx';
+import { saveDemoCharacter } from '../state/demoCharacters.js';
 
 const DRAFT_KEY = 'rollbound:draft';
 
@@ -38,7 +39,12 @@ const STEP_INFO = {
   feats: {
     title: 'Feats',
     Component: FeatsStep,
-    note: 'At 1st level you get an ancestry feat, the skill feat from your background, and (for most classes) a class feat.',
+    note: 'At 1st level you get an ancestry feat, the skill feat from your background, and (for most classes) a class feat. Some feats and class choices grant more feats.',
+  },
+  spells: {
+    title: 'Spells',
+    Component: SpellsStep,
+    note: 'Spellcasters choose spells from their tradition: arcane, divine, occult, or primal. Cantrips can be cast as often as you like; other spells use up a spell slot.',
   },
   gear: {
     title: 'Gear',
@@ -103,9 +109,11 @@ export default function BuilderPage() {
     setSaving(true);
     setErrors([]);
     try {
-      const created = await api.createCharacter(buildCharacter(build, data));
+      const character = buildCharacter(build, data);
+      const id = isDemo ? saveDemoCharacter(character) : (await api.createCharacter(character)).id;
+      if (!id) throw new Error('Your browser is blocking storage, so the demo can’t keep this character.');
       saveDraft(null);
-      navigate(`/play/${created.id}/sheet`, { replace: true });
+      navigate(`/play/${id}/sheet`, { replace: true });
     } catch (err) {
       setErrors(errorsFrom(err));
       setSaving(false);
@@ -153,9 +161,9 @@ export default function BuilderPage() {
         {step === 'review' && (
           <>
             <FormErrors errors={errors} />
-            {isDemo && <p className="rule-note center">Demo characters can't be saved. Create an account to keep this one.</p>}
-            <button type="button" className="btn btn--blood" disabled={!data || problems.length > 0 || saving || isDemo} onClick={save}>
-              {saving ? 'Saving…' : 'Save character'}
+            {isDemo && <p className="rule-note center">In demo mode this character lasts until you close the tab. Create an account to keep it.</p>}
+            <button type="button" className="btn btn--blood" disabled={!data || problems.length > 0 || saving} onClick={save}>
+              {saving ? 'Saving…' : isDemo ? 'Play this character' : 'Save character'}
             </button>
             <button type="button" className="btn" onClick={startOver}>Start over</button>
           </>

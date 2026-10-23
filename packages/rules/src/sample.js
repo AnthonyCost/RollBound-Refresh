@@ -7,6 +7,7 @@ export const mira = {
   background: 'Guard',
   className: 'Fighter',
   classHp: 10,
+  keyAbility: 'str',
   abilities: { str: 4, dex: 2, con: 2, int: 0, wis: 1, cha: 0 },
   proficiencies: {
     perception: 'expert',

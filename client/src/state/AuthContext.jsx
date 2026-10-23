@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { api } from '../api.js';
+import { clearDemoCharacters } from './demoCharacters.js';
 
 const AuthContext = createContext(null);
 
@@ -57,6 +58,7 @@ export function AuthProvider({ children }) {
   );
 
   const enterDemo = useCallback(() => {
+    clearDemoCharacters();
     writeDemoFlag(true);
     setUser(null);
     setStatus('demo');
@@ -64,6 +66,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(async () => {
     if (status === 'user') await api.logout().catch(() => {});
+    clearDemoCharacters();
     writeDemoFlag(false);
     setUser(null);
     setStatus('signedOut');

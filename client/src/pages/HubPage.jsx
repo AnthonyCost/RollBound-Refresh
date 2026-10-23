@@ -5,6 +5,7 @@ import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import { DEMO_CHARACTER_ID } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
+import { listDemoCharacters } from '../state/demoCharacters.js';
 
 const DEMO_HUB = {
   characters: [
@@ -20,11 +21,23 @@ const DEMO_HUB = {
   campaigns: [{ id: 'demo', name: 'Wolves at the Ford', partyLevel: 1, characterCount: 1 }],
 };
 
+function demoHub() {
+  const built = listDemoCharacters().map(({ id, data }) => ({
+    id,
+    name: data.name,
+    level: data.level,
+    campaignName: null,
+    data,
+    summary: { maxHp: maxHp(data), ac: armorClass(data).total },
+  }));
+  return { ...DEMO_HUB, characters: [...DEMO_HUB.characters, ...built] };
+}
+
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 export default function HubPage() {
   const { user, isDemo, logout } = useAuth();
-  const [hub, setHub] = useState(isDemo ? DEMO_HUB : null);
+  const [hub, setHub] = useState(isDemo ? demoHub : null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {

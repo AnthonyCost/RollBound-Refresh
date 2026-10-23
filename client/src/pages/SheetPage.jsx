@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY } from '@rollbound/rules';
+import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import Breakdown from '../components/Breakdown.jsx';
@@ -12,6 +12,7 @@ export default function SheetPage() {
   const { character, hp, conditions, shieldRaised } = useTable();
   const [selected, setSelected] = useState('ac');
   const [skill, setSkill] = useState(null);
+  const [magic, setMagic] = useState(null);
 
   const opts = { conditions, shieldRaised };
   const stats = {
@@ -79,6 +80,62 @@ export default function SheetPage() {
       </ul>
 
       {skill && <Breakdown title={titleCase(skill)} stat={skillCheck(character, skill, opts)} />}
+
+      {character.keyAbility && <MagicAndDcs character={character} opts={opts} selected={magic} onSelect={setMagic} />}
+    </>
+  );
+}
+
+function MagicAndDcs({ character, opts, selected, onSelect }) {
+  const casting = character.spellcasting;
+  const stats = {
+    classDc: { short: 'CLASS DC', title: 'Class DC', stat: classDc(character), signed: false },
+    ...(casting && {
+      spellAttack: { short: 'SPELL ATK', title: 'Spell attack', stat: spellAttack(character, opts) },
+      spellDc: { short: 'SPELL DC', title: 'Spell DC', stat: spellDc(character, opts), signed: false },
+    }),
+  };
+  const current = stats[selected];
+
+  return (
+    <>
+      <Ornament label={casting ? `${casting.tradition.toUpperCase()} SPELLS` : 'CLASS DC'} />
+      <div className="stats stats--3" role="group" aria-label="Class and spell DCs">
+        {Object.entries(stats).map(([key, s]) => (
+          <button key={key} type="button" className="stat" aria-pressed={selected === key} onClick={() => onSelect(selected === key ? null : key)}>
+            <span className="stat__label">{s.short}</span>
+            <span className="stat__value">{s.signed === false ? s.stat.total : signed(s.stat.total)}</span>
+          </button>
+        ))}
+      </div>
+      {current && <Breakdown title={current.title} stat={current.stat} signTotal={current.signed !== false} />}
+
+      {casting && casting.kind !== 'focus' && (
+        <section className="panel">
+          <h2 className="panel__title">{casting.slots} first-rank slots a day</h2>
+          {[
+            ['Cantrips', casting.cantrips],
+            ['1st rank', casting.spells],
+          ].map(([label, list]) => (
+            <div key={label} className="spell-group">
+              <span className="eyebrow">{label}</span>
+              <ul className="log">
+                {list.map((s) => (
+                  <li key={s.slug}>
+                    <strong>{s.name}</strong>
+                    <span className="muted"> · {/^\d$/.test(s.actions) ? `${s.actions} action${s.actions === '1' ? '' : 's'}` : s.actions}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {casting.prepares && (
+            <p className="rule-note" style={{ margin: '8px 0 0' }}>
+              You prepare {casting.prepares.cantrips} cantrips and {casting.prepares.spells} of these spells each morning.
+            </p>
+          )}
+        </section>
+      )}
     </>
   );
 }
