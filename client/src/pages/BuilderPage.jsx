@@ -58,6 +58,19 @@ const STEP_INFO = {
   },
 };
 
+// Whether the player has chosen anything on each step yet (not whether it's complete).
+const STEP_TOUCHED = {
+  ancestry: (b) => Boolean(b.ancestry || b.heritage),
+  background: (b) => Boolean(b.background),
+  class: (b) => Boolean(b.class),
+  attributes: (b) => b.altAncestryBoosts || b.freeBoosts.length > 0 || [...b.ancestryBoosts, ...b.backgroundBoosts].some(Boolean) || Boolean(b.keyAbility),
+  skills: (b) => b.skills.length > 0 || b.languages.length > 0,
+  feats: (b) => Boolean(b.ancestryFeat || b.classFeat || Object.values(b.bonusFeats).some(Boolean)),
+  spells: (b) => b.cantrips.length > 0 || b.spells.length > 0,
+  gear: (b) => Boolean(b.armor || b.shield || b.weapons.length),
+  review: (b) => Boolean(b.name.trim()),
+};
+
 function loadDraft() {
   try {
     const saved = JSON.parse(localStorage.getItem(DRAFT_KEY));
@@ -103,7 +116,9 @@ export default function BuilderPage() {
   const index = STEPS.indexOf(step);
   const info = STEP_INFO[step];
   const problems = data ? buildProblems(build, data) : [];
-  const stepDone = (s) => data && !problems.some((p) => p.step === s);
+  const touched = (s) => STEP_TOUCHED[s](build);
+  const anyTouched = STEPS.some(touched);
+  const [confirmReset, setConfirmReset] = useState(false);
 
   const save = async () => {
     setSaving(true);
@@ -120,8 +135,10 @@ export default function BuilderPage() {
     }
   };
 
-  const startOver = () => {
+  const reset = () => {
     setDraft({ build: emptyBuild(), step: STEPS[0] });
+    setConfirmReset(false);
+    setErrors([]);
     window.scrollTo(0, 0);
   };
 
@@ -129,17 +146,34 @@ export default function BuilderPage() {
     <div className="app">
       <header className="topbar">
         <Link to="/home" className="wordmark">ROLLBOUND</Link>
-        <Link to="/home" className="topbar__signout">Close</Link>
+        <div className="topbar__right">
+          {anyTouched && (
+            <button type="button" className="topbar__signout" onClick={() => setConfirmReset(true)}>
+              Reset
+            </button>
+          )}
+          <Link to="/home" className="topbar__signout">Close</Link>
+        </div>
       </header>
+
+      {confirmReset && (
+        <div className="confirm" role="alertdialog" aria-labelledby="reset-title">
+          <p id="reset-title">Reset every choice and start from a blank character?</p>
+          <div className="btn-row">
+            <button type="button" className="btn btn--grow" onClick={() => setConfirmReset(false)}>Keep my choices</button>
+            <button type="button" className="btn btn--blood btn--grow" onClick={reset}>Reset</button>
+          </div>
+        </div>
+      )}
 
       <nav className="steps" aria-label="Builder steps">
         {STEPS.map((s, i) => (
           <button
             key={s}
             type="button"
-            className={`steps__pip ${stepDone(s) ? 'steps__pip--done' : ''}`}
+            className={`steps__pip ${touched(s) ? 'steps__pip--touched' : ''}`}
             aria-current={s === step ? 'step' : undefined}
-            aria-label={`Step ${i + 1}: ${STEP_INFO[s].title}${stepDone(s) ? ' (done)' : ''}`}
+            aria-label={`Step ${i + 1}: ${STEP_INFO[s].title}${touched(s) ? ' (started)' : ''}`}
             onClick={() => goTo(s)}
           />
         ))}
@@ -165,7 +199,6 @@ export default function BuilderPage() {
             <button type="button" className="btn btn--blood" disabled={!data || problems.length > 0 || saving} onClick={save}>
               {saving ? 'Saving…' : isDemo ? 'Play this character' : 'Save character'}
             </button>
-            <button type="button" className="btn" onClick={startOver}>Start over</button>
           </>
         )}
       </main>

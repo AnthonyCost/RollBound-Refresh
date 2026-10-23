@@ -495,10 +495,21 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   padding: 0;
   transform: rotate(45deg);
   border: 1px solid var(--line);
-  background: #1a120f;
+  background: transparent;
 }
-.steps__pip--done { background: var(--bronze); border-color: var(--bronze); }
+.steps__pip--touched { background: var(--bronze); border-color: var(--bronze); }
 .steps__pip[aria-current='step'] { border-color: var(--blood-text); box-shadow: 0 0 10px #8e1c14; background: var(--blood); }
+
+.confirm {
+  margin: 0 20px 8px;
+  padding: 14px;
+  border: 1px solid var(--blood);
+  background: var(--panel-hot);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.confirm p { margin: 0; color: var(--text); }
 
 .builder__header { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding-top: 6px; }
 .builder__subhead { margin: 6px 0 0; text-align: left; }
