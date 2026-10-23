@@ -5,6 +5,7 @@ import {
   strikeBonus,
   degreeOfSuccess,
   strikeDamage,
+  damageModifier,
   rollDie,
   endOfTurn,
 } from '@rollbound/rules';
@@ -12,17 +13,18 @@ import { api } from '../api.js';
 
 const TableContext = createContext(null);
 
+export const DEMO_CHARACTER_ID = 'demo';
+
 const STARTING_CONDITIONS = [{ id: 'frightened', value: 1 }];
 
 /**
  * Holds everything happening "at the table" for one character: conditions,
  * the actions spent this turn, the last roll, and the GM-entered target AC.
  */
-export function TableProvider({ children }) {
+export function TableProvider({ characterId, children }) {
   const [character, setCharacter] = useState(null);
-  const [characterId, setCharacterId] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [offline, setOffline] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   const [round, setRound] = useState(1);
   const [conditions, setConditions] = useState(STARTING_CONDITIONS);
@@ -31,30 +33,22 @@ export function TableProvider({ children }) {
   const [targetAC, setTargetAC] = useState(15);
   const [lastRoll, setLastRoll] = useState(null);
 
-  // Load the first saved character from the API; fall back to the bundled sample.
   useEffect(() => {
+    if (characterId === DEMO_CHARACTER_ID) {
+      setCharacter(mira);
+      setLoading(false);
+      return;
+    }
     let cancelled = false;
     api
-      .listCharacters()
-      .then((rows) => {
-        if (cancelled) return;
-        if (rows.length) {
-          setCharacterId(rows[0].id);
-          setCharacter(rows[0].data);
-        } else {
-          setCharacter(mira);
-        }
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setOffline(true);
-        setCharacter(mira);
-      })
+      .getCharacter(characterId)
+      .then((row) => !cancelled && setCharacter(row.data))
+      .catch(() => !cancelled && setNotFound(true))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [characterId]);
 
   const strikesSoFar = used.filter((a) => a.id === 'strike').length;
   const actionsLeft = 3 - used.length;
@@ -77,7 +71,7 @@ export function TableProvider({ children }) {
       const total = natural + bonus.total;
       const degree = degreeOfSuccess(total, targetAC, natural);
       const damageRoll = rollDie(weapon.die);
-      const damageMod = character.abilities.str; // melee Strikes add Strength to damage
+      const damageMod = damageModifier(weapon, character.abilities);
       const damage = strikeDamage(damageRoll, damageMod, degree.name);
 
       const roll = {
@@ -130,7 +124,7 @@ export function TableProvider({ children }) {
       characterId,
       hp: character ? maxHp(character) : 0,
       loading,
-      offline,
+      notFound,
       round,
       conditions,
       shieldRaised,
@@ -146,7 +140,7 @@ export function TableProvider({ children }) {
       cycleCondition,
       resetEncounter,
     }),
-    [character, characterId, loading, offline, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, characterId, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

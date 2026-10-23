@@ -14,6 +14,7 @@
     "dev:server": "npm run dev --workspace server",
     "build": "npm run build --workspace client",
     "test": "npm test --workspace @rollbound/rules",
-    "db:setup": "npm run db:setup --workspace server"
+    "db:setup": "npm run db:setup --workspace server",
+    "data:import": "npm run data:import --workspace @rollbound/rules"
   }
 }

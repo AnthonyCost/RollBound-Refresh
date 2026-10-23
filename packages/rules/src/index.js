@@ -4,3 +4,4 @@ export * from './character.js';
 export * from './combat.js';
 export * from './gm.js';
 export { mira } from './sample.js';
+export * from './builder.js';

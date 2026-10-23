@@ -1,13 +1,17 @@
 import express from 'express';
 import cors from 'cors';
 import { characters } from './routes/characters.js';
+import { auth } from './routes/auth.js';
+import { campaigns } from './routes/campaigns.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
+app.use('/api/auth', auth);
 app.use('/api/characters', characters);
+app.use('/api/campaigns', campaigns);
 
 // Express 5 forwards rejected promises from async handlers here.
 app.use((err, _req, res, _next) => {

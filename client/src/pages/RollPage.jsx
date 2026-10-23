@@ -51,7 +51,7 @@ export default function RollPage() {
         <h1 className="title center" style={{ paddingTop: 16 }}>No roll yet</h1>
         <p className="italic muted center">Choose Strike on your turn and the result lands here, explained.</p>
         <TargetAC />
-        <Link to="/turn" className="btn btn--blood">Go to your turn</Link>
+        <Link to="../turn" className="btn btn--blood">Go to your turn</Link>
       </>
     );
   }
@@ -89,7 +89,7 @@ export default function RollPage() {
         {natNote && <p className="italic" style={{ margin: 0, color: 'var(--gold)' }}>{natNote}</p>}
         {damage > 0 && (
           <p className="eyebrow" style={{ color: 'var(--text)', fontSize: 15, margin: '4px 0 0' }}>
-            ({damageRoll} + {damageMod}){degree.name === 'critical success' ? ' × 2' : ''} ={' '}
+            ({damageRoll} {damageMod < 0 ? '−' : '+'} {Math.abs(damageMod)}){degree.name === 'critical success' ? ' × 2' : ''} ={' '}
             <span style={{ color: 'var(--blood-text)' }}>{damage} {weapon.damageType}</span>
           </p>
         )}
@@ -121,7 +121,7 @@ export default function RollPage() {
         <button type="button" className="btn btn--grow" disabled={actionsLeft <= 0} onClick={() => strike(character.weapons[0])}>
           Strike again
         </button>
-        <Link to="/turn" className="btn btn--blood btn--grow">Back to turn</Link>
+        <Link to="../turn" className="btn btn--blood btn--grow">Back to turn</Link>
       </div>
     </>
   );

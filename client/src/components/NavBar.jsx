@@ -23,17 +23,17 @@ const icon = {
 };
 
 const LINKS = [
-  { to: '/', label: 'Sheet', icon: 'sheet', end: true },
-  { to: '/turn', label: 'Turn', icon: 'turn' },
-  { to: '/roll', label: 'Roll', icon: 'roll' },
-  { to: '/gm', label: 'GM', icon: 'gm' },
+  { to: 'sheet', label: 'Sheet', icon: 'sheet' },
+  { to: 'turn', label: 'Turn', icon: 'turn' },
+  { to: 'roll', label: 'Roll', icon: 'roll' },
+  { to: 'gm', label: 'GM', icon: 'gm' },
 ];
 
 export default function NavBar() {
   return (
     <nav className="nav" aria-label="Main">
       {LINKS.map((l) => (
-        <NavLink key={l.to} to={l.to} end={l.end}>
+        <NavLink key={l.to} to={l.to}>
           <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
             {icon[l.icon]}
           </svg>

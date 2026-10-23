@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { armorClass, savingThrow, perception, abilityName } from '@rollbound/rules';
+import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import Breakdown from '../components/Breakdown.jsx';
 import Ornament from '../components/Ornament.jsx';
-import { signed } from '../format.js';
+import { signed, titleCase } from '../format.js';
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 
 export default function SheetPage() {
-  const { character, hp, conditions, shieldRaised, offline } = useTable();
+  const { character, hp, conditions, shieldRaised } = useTable();
   const [selected, setSelected] = useState('ac');
+  const [skill, setSkill] = useState(null);
 
   const opts = { conditions, shieldRaised };
   const stats = {
@@ -60,11 +61,24 @@ export default function SheetPage() {
         ))}
       </div>
 
-      {offline && (
-        <p className="muted italic center" style={{ fontSize: 13 }}>
-          Server not reachable, so you're seeing the sample character.
-        </p>
-      )}
+      <Ornament label="SKILLS" />
+
+      <ul className="skills">
+        {[...Object.keys(SKILL_ABILITY), ...(character.lores ?? [])].map((name) => {
+          const check = skillCheck(character, name, opts);
+          return (
+            <li key={name}>
+              <button type="button" className="skill" aria-pressed={skill === name} onClick={() => setSkill(skill === name ? null : name)}>
+                <span className={`skill__rank skill__rank--${check.rank}`} title={titleCase(check.rank)}>{check.rank[0].toUpperCase()}</span>
+                <span className="skill__name">{titleCase(name)}</span>
+                <span className="skill__total">{signed(check.total)}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+
+      {skill && <Breakdown title={titleCase(skill)} stat={skillCheck(character, skill, opts)} />}
     </>
   );
 }

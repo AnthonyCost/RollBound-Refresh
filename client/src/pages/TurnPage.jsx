@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { strikeBonus, describeCondition, CONDITIONS } from '@rollbound/rules';
+import { strikeBonus, damageModifier, describeCondition, CONDITIONS } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
 import { signed } from '../format.js';
@@ -31,7 +31,7 @@ export default function TurnPage() {
 
   const onAction = (a) => {
     if (a.id === 'strike') {
-      if (strike(weapon)) navigate('/roll');
+      if (strike(weapon)) navigate('../roll');
       return;
     }
     takeAction(a);
@@ -92,7 +92,7 @@ export default function TurnPage() {
           <button key={a.id} type="button" className="action" disabled={outOfActions} onClick={() => onAction(a)}>
             <span className="action__name">{a.name}</span>
             <span className="action__hint">
-              {a.id === 'strike' ? `${signed(next.total)} to hit · 1d${weapon.die}+${character.abilities.str}` : a.hint(character)}
+              {a.id === 'strike' ? `${signed(next.total)} to hit · 1d${weapon.die}${damageModifier(weapon, character.abilities) ? signed(damageModifier(weapon, character.abilities)) : ''}` : a.hint(character)}
             </span>
           </button>
         ))}

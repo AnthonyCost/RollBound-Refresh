@@ -22,6 +22,14 @@ export function strikeAbility(weapon, abilities) {
   return 'str';
 }
 
+/** Strength to damage: full for melee and thrown, half (if positive) for propulsive, none for other ranged. */
+export function damageModifier(weapon, abilities) {
+  const traits = weapon.traits ?? [];
+  if (!weapon.ranged || traits.some((t) => t.startsWith('thrown'))) return abilities.str;
+  if (traits.includes('propulsive')) return abilities.str > 0 ? Math.floor(abilities.str / 2) : abilities.str;
+  return 0;
+}
+
 /** Attack bonus for a Strike, as { total, parts }. */
 export function strikeBonus(character, weapon, { attacksSoFar = 0, conditions = [] } = {}) {
   const ability = strikeAbility(weapon, character.abilities);

@@ -75,6 +75,54 @@ export function perception(character, { conditions = [] } = {}) {
   return { total: sum(parts), parts };
 }
 
+export const SKILL_ABILITY = {
+  acrobatics: 'dex',
+  arcana: 'int',
+  athletics: 'str',
+  crafting: 'int',
+  deception: 'cha',
+  diplomacy: 'cha',
+  intimidation: 'cha',
+  medicine: 'wis',
+  nature: 'wis',
+  occultism: 'int',
+  performance: 'cha',
+  religion: 'wis',
+  society: 'int',
+  stealth: 'dex',
+  survival: 'wis',
+  thievery: 'dex',
+};
+
+/** A skill check, or a Lore check when `skill` isn't one of the 16 skills (Lore uses Int). */
+export function skillCheck(character, skill, { conditions = [] } = {}) {
+  const ability = SKILL_ABILITY[skill] ?? 'int';
+  const rank = SKILL_ABILITY[skill]
+    ? (character.skills?.[skill] ?? 'untrained')
+    : character.lores?.includes(skill) ? 'trained' : 'untrained';
+  const parts = [
+    { label: ABILITY_NAME[ability], value: character.abilities[ability] },
+    proficiencyPart(rank, character.level),
+  ];
+
+  // Armor's check penalty hits Str and Dex skills unless you meet its Strength
+  // requirement; flexible armor spares Acrobatics and Athletics, and noisy armor
+  // penalizes Stealth regardless.
+  const armor = character.armor;
+  if (armor?.checkPenalty && (ability === 'str' || ability === 'dex')) {
+    const traits = armor.traits ?? [];
+    const meetsStrength = armor.strength != null && character.abilities.str >= armor.strength;
+    const flexibleExempt = traits.includes('flexible') && (skill === 'acrobatics' || skill === 'athletics');
+    const noisyStealth = traits.includes('noisy') && skill === 'stealth';
+    if (!flexibleExempt && (!meetsStrength || noisyStealth)) {
+      parts.push({ label: `${armor.name} check penalty`, value: armor.checkPenalty, note: 'Armor hampers Strength- and Dexterity-based skills.' });
+    }
+  }
+
+  withPenalty(parts, conditions, ability);
+  return { total: sum(parts), parts, rank, ability };
+}
+
 export function abilityName(key) {
   return ABILITY_NAME[key];
 }

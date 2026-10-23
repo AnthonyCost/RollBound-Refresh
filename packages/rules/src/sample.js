@@ -16,7 +16,9 @@ export const mira = {
     armor: { unarmored: 'trained', light: 'trained', medium: 'trained', heavy: 'trained' },
     weapons: { unarmed: 'expert', simple: 'expert', martial: 'expert', advanced: 'trained' },
   },
-  armor: { name: 'Chain mail', category: 'medium', acBonus: 4, dexCap: 1 },
+  skills: { acrobatics: 'trained', athletics: 'trained', intimidation: 'trained', medicine: 'trained', survival: 'trained' },
+  lores: ['Warfare Lore'],
+  armor: { name: 'Chain mail', category: 'medium', acBonus: 4, dexCap: 1, strength: 3, checkPenalty: -2, traits: ['flexible', 'noisy'] },
   weapons: [
     { name: 'Longsword', category: 'martial', die: 8, damageType: 'slashing', traits: ['versatile P'] },
   ],

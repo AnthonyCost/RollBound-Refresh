@@ -7,6 +7,18 @@ CREATE TABLE IF NOT EXISTS users (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Nullable so seeded/demo users without a login still fit.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT;
+
+-- Only a SHA-256 of the session token is stored, so a leaked table can't be replayed.
+CREATE TABLE IF NOT EXISTS sessions (
+  token_hash  TEXT PRIMARY KEY,
+  user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires_at  TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS sessions_user_idx ON sessions (user_id);
+
 CREATE TABLE IF NOT EXISTS campaigns (
   id          SERIAL PRIMARY KEY,
   name        TEXT NOT NULL,
