@@ -1,4 +1,4 @@
-// AWS S3 storage. Browsers upload covers straight to the bucket with presigned
+// AWS S3 storage. Browsers upload images straight to the bucket with presigned
 // PUT URLs; the API never handles the file bytes. Turn it on with
 // STORAGE_DRIVER=s3. Setup steps: docs/aws-s3-setup.md.
 import {
@@ -9,13 +9,13 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { UPLOAD_TTL_SECONDS, contentTypeForKey, looksLikeImage, newCoverKey } from './shared.js';
+import { UPLOAD_TTL_SECONDS, contentTypeForKey, looksLikeImage, newUploadKey } from './shared.js';
 
 export const name = 's3';
 
 const BUCKET = process.env.S3_BUCKET;
 const REGION = process.env.AWS_REGION;
-// Where browsers load covers from: a CloudFront distribution (recommended) or the bucket's own URL.
+// Where browsers load images from: a CloudFront distribution (recommended) or the bucket's own URL.
 const PUBLIC_URL = process.env.S3_PUBLIC_URL?.replace(/\/+$/, '');
 
 const missing = [['S3_BUCKET', BUCKET], ['AWS_REGION', REGION], ['S3_PUBLIC_URL', PUBLIC_URL]].filter(([, v]) => !v).map(([k]) => k);
@@ -32,12 +32,12 @@ const client = new S3Client({
 });
 
 // New uploads are tagged pending. A lifecycle rule (infra/aws/s3-lifecycle.json)
-// deletes pending objects after a day, so covers that were uploaded but never
-// saved to a campaign don't pile up. Saving a campaign retags its cover as attached.
+// deletes pending objects after a day, so images that were uploaded but never
+// saved (to a campaign, account, or character) don't pile up. Saving retags them attached.
 const PENDING_TAG = 'state=pending';
 
-export async function createUpload({ userId, contentType, size }) {
-  const key = newCoverKey(userId, contentType);
+export async function createUpload({ kind, userId, contentType, size }) {
+  const key = newUploadKey(kind, userId, contentType);
   const command = new PutObjectCommand({
     Bucket: BUCKET,
     Key: key,

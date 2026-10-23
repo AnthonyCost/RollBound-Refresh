@@ -1,6 +1,6 @@
 // Picks the storage driver from STORAGE_DRIVER: "local" (default) saves under
 // server/uploads/; "s3" uses AWS S3. Both expose the same functions:
-//   createUpload({ userId, contentType, size }) -> { key, uploadUrl, method, headers, expiresAt }
+//   createUpload({ kind, userId, contentType, size }) -> { key, uploadUrl, method, headers, expiresAt }
 //   verifyImage(key)   -> true if the object exists and is a real image
 //   markInUse(key)     -> protect an upload from automatic cleanup once it's used
 //   deleteObject(key)

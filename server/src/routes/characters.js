@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { armorClass, maxHp } from '@rollbound/rules';
 import { pool } from '../db.js';
 import { requireUser } from '../auth.js';
+import { storage } from '../storage/index.js';
+import { checkImageKey, swapImages } from '../images.js';
 import { validateCharacter } from '../validate.js';
 
 export const characters = Router();
@@ -13,6 +15,7 @@ const toJson = (row) => ({
   level: row.level,
   campaignId: row.campaign_id,
   campaignName: row.campaign_name ?? null,
+  portraitUrl: storage.publicUrl(row.portrait_key),
   data: row.data,
   // Derived on the way out so every client sees the same math.
   summary: { maxHp: maxHp(row.data), ac: armorClass(row.data).total },
@@ -65,7 +68,24 @@ characters.put('/:id', async (req, res) => {
 
 characters.delete('/:id', async (req, res) => {
   if (!isId(req.params.id)) return res.status(404).json({ error: 'Character not found' });
-  const { rowCount } = await pool.query('DELETE FROM characters WHERE id = $1 AND owner_id = $2', [req.params.id, req.user.id]);
-  if (!rowCount) return res.status(404).json({ error: 'Character not found' });
+  const { rows } = await pool.query('DELETE FROM characters WHERE id = $1 AND owner_id = $2 RETURNING portrait_key', [req.params.id, req.user.id]);
+  if (!rows.length) return res.status(404).json({ error: 'Character not found' });
+  await swapImages(rows[0].portrait_key, null);
   res.status(204).end();
+});
+
+// Set or remove a character's portrait. portraitKey: null removes it.
+characters.put('/:id/portrait', async (req, res) => {
+  if (!isId(req.params.id)) return res.status(404).json({ errors: ['Character not found.'] });
+  const { rows: before } = await pool.query('SELECT portrait_key FROM characters WHERE id = $1 AND owner_id = $2', [req.params.id, req.user.id]);
+  if (!before.length) return res.status(404).json({ errors: ['Character not found.'] });
+  if (req.body?.portraitKey === undefined) return res.status(400).json({ errors: ['Send portraitKey (or null to remove it).'] });
+
+  const checked = await checkImageKey(req.body.portraitKey, 'portrait', req.user.id);
+  if (checked.error) return res.status(400).json({ errors: [checked.error] });
+
+  await pool.query('UPDATE characters SET portrait_key = $1, updated_at = now() WHERE id = $2', [checked.key, req.params.id]);
+  await swapImages(before[0].portrait_key, checked.key);
+  const { rows } = await pool.query(`${SELECT_WITH_CAMPAIGN} WHERE ch.id = $1`, [req.params.id]);
+  res.json(toJson(rows[0]));
 });

@@ -5,6 +5,10 @@ import PageShell from '../components/PageShell.jsx';
 import CampaignCover from '../components/CampaignCover.jsx';
 import InviteCode from '../components/InviteCode.jsx';
 import Ornament from '../components/Ornament.jsx';
+import Portrait from '../components/Portrait.jsx';
+import Avatar from '../components/Avatar.jsx';
+import { useAuth } from '../state/AuthContext.jsx';
+import { demoPortraitUrl } from '../state/portraits.js';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 
 export default function CampaignPage() {
@@ -14,6 +18,7 @@ export default function CampaignPage() {
   const [errors, setErrors] = useState([]);
   const [missing, setMissing] = useState(false);
   const service = useCampaignService();
+  const { isDemo } = useAuth();
 
   const load = useCallback(() => {
     service
@@ -99,12 +104,16 @@ export default function CampaignPage() {
             <ul className="hub__list">
               {campaign.characters.map((c) => (
                 <li key={c.id} className="hub-card">
+                  <Portrait url={isDemo ? demoPortraitUrl(c.id) : c.portraitUrl} name={c.name} size="sm" />
                   <div className="hub-card__body">
                     <span className="hub-card__name">{c.name}</span>
                     <span className="hub-card__sub">
                       {[c.ancestry, c.className].filter(Boolean).join(' ')} · Level {c.level}
                     </span>
-                    <span className="hub-card__tag">{c.mine ? 'Your character' : `Played by ${c.player}`}</span>
+                    <span className="hub-card__tag hub-card__player">
+                      {!c.mine && <Avatar url={c.playerAvatarUrl} name={c.player} size={18} />}
+                      {c.mine ? 'Your character' : `Played by ${c.player}`}
+                    </span>
                   </div>
                   {c.mine && (
                     <div className="hub-card__actions">

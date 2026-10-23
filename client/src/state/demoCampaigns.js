@@ -3,6 +3,7 @@
 // create, edit, invite codes, and joining with your demo characters.
 import { mira } from '@rollbound/rules';
 import { getDemoCharacter, listDemoCharacters } from './demoCharacters.js';
+import { imageToDataUrl } from '../imageData.js';
 
 const KEY = 'rollbound:demo-campaigns';
 const MIRA_ID = 'demo';
@@ -78,21 +79,6 @@ function withCounts(c, memberships) {
   return { ...c, isGm: true, gmName: 'You', characterCount: Object.values(memberships).filter((id) => id === c.id).length };
 }
 
-/** Shrinks a cover to fit comfortably in session storage, as a JPEG data URL. */
-async function coverDataUrl(file, maxWidth = 1280) {
-  const bitmap = await createImageBitmap(file);
-  const scale = Math.min(1, maxWidth / bitmap.width);
-  const canvas = document.createElement('canvas');
-  canvas.width = Math.round(bitmap.width * scale);
-  canvas.height = Math.round(bitmap.height * scale);
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#0b0908';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  bitmap.close?.();
-  return canvas.toDataURL('image/jpeg', 0.8);
-}
-
 export const demoCampaignService = {
   async list() {
     const { campaigns, memberships } = read();
@@ -126,7 +112,7 @@ export const demoCampaignService = {
       name: name.trim(),
       backstory: backstory.trim(),
       partyLevel,
-      coverUrl: cover.file ? await coverDataUrl(cover.file) : null,
+      coverUrl: cover.file ? await imageToDataUrl(cover.file) : null,
       inviteCode: inviteCode(),
       createdAt: new Date().toISOString(),
     };
@@ -138,7 +124,7 @@ export const demoCampaignService = {
     const state = read();
     const existing = state.campaigns.find((c) => c.id === id);
     if (!existing) throw notFound();
-    const coverUrl = cover.file ? await coverDataUrl(cover.file) : cover.remove ? null : existing.coverUrl;
+    const coverUrl = cover.file ? await imageToDataUrl(cover.file) : cover.remove ? null : existing.coverUrl;
     const updated = { ...existing, name: name.trim(), backstory: backstory.trim(), partyLevel, coverUrl };
     write({ ...state, campaigns: state.campaigns.map((c) => (c.id === id ? updated : c)) });
     return withCounts(updated, state.memberships);

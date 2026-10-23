@@ -1,14 +1,14 @@
 import { useEffect, useId, useState } from 'react';
 
 const TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX_BYTES = 5 * 1024 * 1024;
 
 /**
- * Choose a cover image by tapping or dragging. `value` is { file } for a new image,
+ * Choose an image by tapping or dragging. `value` is { file } for a new image,
  * { remove: true } to drop the current one, or {} to keep `currentUrl`.
  * Validates and previews locally; uploading happens when the form is saved.
+ * shape is "wide" (16:9 covers) or "square" (avatars and portraits).
  */
-export default function CoverPicker({ value, currentUrl, onChange }) {
+export default function ImagePicker({ label, value, currentUrl, onChange, shape = 'wide', maxMb = 5, hint }) {
   const id = useId();
   const [filePreview, setFilePreview] = useState(null);
   const [error, setError] = useState(null);
@@ -26,16 +26,16 @@ export default function CoverPicker({ value, currentUrl, onChange }) {
   const accept = (f) => {
     if (!f) return;
     if (!TYPES.includes(f.type)) return setError('Use a JPEG, PNG, or WebP image.');
-    if (f.size > MAX_BYTES) return setError('That image is over 5 MB. Try a smaller one.');
+    if (f.size > maxMb * 1024 * 1024) return setError(`That image is over ${maxMb} MB. Try a smaller one.`);
     setError(null);
     onChange({ file: f });
   };
 
   return (
     <div className="form-field">
-      <span id={`${id}-label`}>Cover image</span>
+      <span id={`${id}-label`}>{label}</span>
       <div
-        className={`cover-picker ${dragging ? 'cover-picker--drag' : ''} ${shown ? 'cover-picker--filled' : ''}`}
+        className={`image-picker image-picker--${shape} ${dragging ? 'image-picker--drag' : ''} ${shown ? 'image-picker--filled' : ''}`}
         onDragOver={(e) => {
           e.preventDefault();
           setDragging(true);
@@ -47,10 +47,12 @@ export default function CoverPicker({ value, currentUrl, onChange }) {
           accept(e.dataTransfer.files?.[0]);
         }}
       >
-        {shown && <img className="cover-picker__img" src={shown} alt="Cover preview" />}
-        <label htmlFor={id} className="cover-picker__label">
-          <span className="eyebrow">{shown ? 'Change image' : 'Choose an image'}</span>
-          <small className="muted italic">or drag one here · JPEG, PNG, or WebP up to 5 MB · wide images work best</small>
+        {shown && <img className="image-picker__img" src={shown} alt={`${label} preview`} />}
+        <label htmlFor={id} className="image-picker__label">
+          <span className="eyebrow">{shown ? 'Change' : 'Choose an image'}</span>
+          <small className="muted italic">
+            or drag one here · JPEG, PNG, or WebP up to {maxMb} MB{hint ? ` · ${hint}` : ''}
+          </small>
         </label>
         <input
           id={id}

@@ -26,10 +26,12 @@ export const api = {
   login: (email, password) => post('/auth/login', { email, password }),
   register: (displayName, email, password) => post('/auth/register', { displayName, email, password }),
   logout: () => request('/auth/logout', { method: 'POST' }),
+  updateProfile: (data) => request('/auth/me', { method: 'PATCH', body: JSON.stringify(data) }),
 
   listCharacters: () => request('/characters'),
   getCharacter: (id) => request(`/characters/${id}`),
   createCharacter: (data) => post('/characters', data),
+  setPortrait: (id, portraitKey) => request(`/characters/${id}/portrait`, { method: 'PUT', body: JSON.stringify({ portraitKey }) }),
   listCampaigns: () => request('/campaigns'),
   getCampaign: (id) => request(`/campaigns/${id}`),
   createCampaign: (data) => post('/campaigns', data),
@@ -42,9 +44,10 @@ export const api = {
   /**
    * Uploads an image the way S3 presigned uploads work: get a signed URL from the
    * API, send the file straight to it, and keep only the returned key.
+   * kind is "cover", "avatar", or "portrait".
    */
-  async uploadImage(file) {
-    const target = await post('/uploads', { contentType: file.type, size: file.size });
+  async uploadImage(file, kind) {
+    const target = await post('/uploads', { kind, contentType: file.type, size: file.size });
     const res = await fetch(target.uploadUrl, { method: target.method, headers: target.headers, body: file });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));

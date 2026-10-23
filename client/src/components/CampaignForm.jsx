@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import CoverPicker from './CoverPicker.jsx';
+import ImagePicker from './ImagePicker.jsx';
 import CampaignCover from './CampaignCover.jsx';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 
@@ -65,7 +65,7 @@ export default function CampaignForm({ initial, submitLabel, onSubmit }) {
           <small className="muted counter">{backstory.length}/{BACKSTORY_MAX}</small>
         </label>
 
-        <CoverPicker value={cover} currentUrl={initial?.coverUrl ?? null} onChange={setCover} />
+        <ImagePicker label="Cover image" hint="wide images work best" value={cover} currentUrl={initial?.coverUrl ?? null} onChange={setCover} />
 
         <FormErrors errors={errors} />
         <button type="submit" className="btn btn--blood" disabled={Boolean(status) || !name.trim()}>

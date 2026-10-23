@@ -9,11 +9,14 @@ import {
   readSessionToken,
   userForToken,
   verifyPassword,
+  requireUser,
 } from '../auth.js';
+import { storage } from '../storage/index.js';
+import { checkImageKey, swapImages } from '../images.js';
 
 export const auth = Router();
 
-const toJson = (u) => ({ id: u.id, email: u.email, displayName: u.display_name });
+const toJson = (u) => ({ id: u.id, email: u.email, displayName: u.display_name, avatarUrl: storage.publicUrl(u.avatar_key) });
 
 const cookieOptions = {
   httpOnly: true,
@@ -83,4 +86,32 @@ auth.get('/me', async (req, res) => {
   const user = await userForToken(readSessionToken(req));
   if (!user) return res.status(401).json({ error: 'Not signed in' });
   res.json(toJson(user));
+});
+
+// Update your profile: display name and/or avatar. avatarKey: null removes it.
+auth.patch('/me', requireUser, async (req, res) => {
+  const errors = [];
+  const { rows: current } = await pool.query('SELECT * FROM users WHERE id = $1', [req.user.id]);
+  const user = current[0];
+
+  let displayName = user.display_name;
+  if (req.body?.displayName !== undefined) {
+    displayName = typeof req.body.displayName === 'string' ? req.body.displayName.trim() : '';
+    if (!displayName || displayName.length > 60) errors.push('Display name must be 1–60 characters.');
+  }
+
+  let avatarKey = user.avatar_key;
+  if (req.body?.avatarKey !== undefined) {
+    const checked = await checkImageKey(req.body.avatarKey, 'avatar', req.user.id);
+    if (checked.error) errors.push(checked.error);
+    else avatarKey = checked.key;
+  }
+  if (errors.length) return res.status(400).json({ errors });
+
+  const { rows } = await pool.query(
+    'UPDATE users SET display_name = $1, avatar_key = $2 WHERE id = $3 RETURNING *',
+    [displayName, avatarKey, req.user.id],
+  );
+  await swapImages(user.avatar_key, avatarKey);
+  res.json(toJson(rows[0]));
 });

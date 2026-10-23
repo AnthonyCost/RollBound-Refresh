@@ -7,6 +7,8 @@ import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { AncestryStep, BackgroundStep, ClassStep } from '../builder/IdentitySteps.jsx';
 import { AttributesStep, SkillsStep, FeatsStep, SpellsStep, GearStep, ReviewStep } from '../builder/DetailSteps.jsx';
 import { saveDemoCharacter } from '../state/demoCharacters.js';
+import { savePortrait } from '../state/portraits.js';
+import ImagePicker from '../components/ImagePicker.jsx';
 
 const DRAFT_KEY = 'rollbound:draft';
 
@@ -98,6 +100,7 @@ export default function BuilderPage() {
   const [{ build, step }, setDraft] = useState(loadDraft);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [portrait, setPortrait] = useState({});
 
   useEffect(() => {
     import('@rollbound/rules/data/pf2e-level1.json')
@@ -128,6 +131,8 @@ export default function BuilderPage() {
       const id = isDemo ? saveDemoCharacter(character) : (await api.createCharacter(character)).id;
       if (!id) throw new Error('Your browser is blocking storage, so the demo can’t keep this character.');
       saveDraft(null);
+      // The character is saved either way; a portrait that fails can be added from the sheet.
+      if (portrait.file) await savePortrait(id, portrait.file, { isDemo }).catch(() => {});
       navigate(`/play/${id}/sheet`, { replace: true });
     } catch (err) {
       setErrors(errorsFrom(err));
@@ -194,6 +199,7 @@ export default function BuilderPage() {
 
         {step === 'review' && (
           <>
+            <ImagePicker label="Portrait (optional)" shape="square" hint="you can add or change it later from the sheet" value={portrait} onChange={setPortrait} />
             <FormErrors errors={errors} />
             {isDemo && <p className="rule-note center">In demo mode this character lasts until you close the tab. Create an account to keep it.</p>}
             <button type="button" className="btn btn--blood" disabled={!data || problems.length > 0 || saving} onClick={save}>

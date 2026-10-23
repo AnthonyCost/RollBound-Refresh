@@ -1,24 +1,32 @@
-# Moving cover images to AWS S3
+# Moving uploaded images to AWS S3
 
 The code for S3 is already in place. This guide covers the AWS setup you do by hand, and the settings that switch RollBound from local storage to S3.
+
+RollBound stores three kinds of uploaded image, each in its own folder (prefix) in one bucket:
+
+| Image | Prefix | Max size | Set from |
+| --- | --- | --- | --- |
+| Campaign cover | `covers/` | 5 MB | The campaign creator and editor |
+| Account profile image | `avatars/` | 2 MB | The Account page |
+| Character portrait | `portraits/` | 5 MB | The character sheet, or the builder's review step |
 
 ## How it works
 
 ```
-Browser ──1. "I want to upload a 2 MB PNG"──▶ RollBound API
-        ◀──── signed S3 upload URL (10 min) ──
-Browser ──2. PUT the file────────────────────▶ S3 bucket   (tagged state=pending)
-Browser ──3. save campaign with the key──────▶ RollBound API ──checks the file is a real image,
-                                                              retags it state=attached
-Players ◀─4. load the cover──────────────────── CloudFront ◀── S3 bucket (private)
+Browser ──1. "I want to upload a 2 MB PNG portrait"──▶ RollBound API
+        ◀──── signed S3 upload URL (10 min) ───────────
+Browser ──2. PUT the file─────────────────────────────▶ S3 bucket   (tagged state=pending)
+Browser ──3. attach the key to the character──────────▶ RollBound API ──checks the file is a real image,
+                                                                       retags it state=attached
+Players ◀─4. load the image─────────────────────────── CloudFront ◀── S3 bucket (private)
 ```
 
 - **The file never passes through the API.** The browser uploads it straight to S3 with a presigned URL.
-- **The signature covers the content type, the exact size, and the `state=pending` tag.** S3 rejects anything else, and the API caps the size at 5 MB.
-- **The API checks the image before using it.** Before a campaign uses an uploaded file, the API reads its first bytes from S3 to confirm it really is a JPEG, PNG or WebP.
-- **Abandoned uploads clean themselves up.** If someone uploads a cover but never saves the campaign, the file stays `pending`, and a lifecycle rule deletes it after a day.
-- **Replaced and removed covers are deleted** right away.
-- **The bucket stays private.** Players load covers through CloudFront.
+- **The signature covers the content type, the exact size, and the `state=pending` tag.** S3 rejects anything else, and the API enforces each kind's size limit.
+- **The API checks every image before using it.** It confirms the file is the right kind and was uploaded by the same user, then reads its first bytes from S3 to make sure it really is a JPEG, PNG or WebP.
+- **Abandoned uploads clean themselves up.** If someone uploads an image but never saves it, the file stays `pending`, and a lifecycle rule deletes it after a day.
+- **Replaced and removed images are deleted** right away. Deleting a character deletes its portrait.
+- **The bucket stays private.** Players load images through CloudFront.
 
 The code for all of this is in `server/src/storage/s3.js`.
 
@@ -72,10 +80,10 @@ aws s3api put-bucket-lifecycle-configuration --bucket YOUR_BUCKET_NAME \
   --lifecycle-configuration file://infra/aws/s3-lifecycle.json
 ```
 
-This deletes objects under `covers/` that are still tagged `state=pending` after one day. Covers in use are tagged `state=attached`, so the rule never touches them.
+This deletes any object still tagged `state=pending` after one day, whether it's a cover, avatar or portrait. Images in use are tagged `state=attached`, so the rule never touches them.
 
 In the console, go to **Bucket → Management → Create lifecycle rule**:
-1. Limit the rule to prefix `covers/` and the object tag `state` = `pending`.
+1. Limit the rule to the object tag `state` = `pending`, with no prefix.
 2. Choose **Expire current versions of objects**, with **1** day.
 
 ## 4. Serve covers through CloudFront
@@ -83,7 +91,7 @@ In the console, go to **Bucket → Management → Create lifecycle rule**:
 1. Open **CloudFront → Create distribution**.
 2. **Origin:** pick the bucket (`YOUR_BUCKET_NAME.s3.<region>.amazonaws.com`). Under **Origin access**, choose **Origin access control settings (recommended)** and create a new OAC.
 3. **Viewer protocol policy:** Redirect HTTP to HTTPS.
-4. **Cache policy:** `CachingOptimized`. Cover keys are unique and never change, so they can be cached for a long time.
+4. **Cache policy:** `CachingOptimized`. Image keys are unique and never change, so they can be cached for a long time.
 5. Create the distribution, then note its **ID** and **domain** (like `d1234abcd.cloudfront.net`).
 6. Allow CloudFront to read the bucket:
    1. Edit `infra/aws/s3-bucket-policy.json` with your bucket name, account ID and distribution ID.
@@ -93,7 +101,7 @@ In the console, go to **Bucket → Management → Create lifecycle rule**:
       aws s3api put-bucket-policy --bucket YOUR_BUCKET_NAME --policy file://infra/aws/s3-bucket-policy.json
       ```
 
-The policy also refuses any request made without HTTPS.
+The policy lets CloudFront read all three image folders, and refuses any request made without HTTPS.
 
 Your `S3_PUBLIC_URL` will be `https://d1234abcd.cloudfront.net`, or a custom domain if you attach one to the distribution.
 
@@ -102,7 +110,7 @@ Your `S3_PUBLIC_URL` will be `https://d1234abcd.cloudfront.net`, or a custom dom
 ## 5. Give the server permission
 
 The server needs exactly the permissions in `infra/aws/iam-policy.json`:
-- put, tag, read and delete objects under `covers/`,
+- put, tag, read and delete objects under `covers/`, `avatars/` and `portraits/`,
 - list the bucket, so a missing file returns "not found" instead of "access denied".
 
 Replace `YOUR_BUCKET_NAME`, then:
@@ -132,12 +140,12 @@ Restart the API (`npm run dev:server`). If anything required is missing, it refu
 
 You don't need to change anything in the client or the database.
 
-## 7. Move existing covers (if any)
+## 7. Move existing images (if any)
 
-Covers uploaded while using local storage live in `server/uploads/covers/`. Their keys are the same in S3, so copy them across and the campaigns keep working:
+Images uploaded while using local storage live in `server/uploads/`. Their keys are the same in S3, so copy them across and everything keeps working:
 
 ```bash
-aws s3 sync server/uploads/covers s3://YOUR_BUCKET_NAME/covers
+aws s3 sync server/uploads s3://YOUR_BUCKET_NAME
 ```
 
 Copied files have no `state` tag, so the lifecycle rule leaves them alone.
@@ -149,6 +157,7 @@ Copied files have no `state` tag, so the lifecycle rule leaves them alone.
 3. The campaign page's cover should load from your CloudFront domain.
 4. In the S3 console, the object under `covers/` should be tagged `state=attached`.
 5. Edit the campaign and replace the cover. The old object should disappear from the bucket.
+6. Set a profile image on the Account page, and a portrait from a character sheet. They should land under `avatars/` and `portraits/`.
 
 ## Troubleshooting
 
@@ -157,10 +166,10 @@ Copied files have no `state` tag, so the lifecycle rule leaves them alone.
 | Upload fails in the browser with a **CORS** error | Your site's origin isn't in `s3-cors.json`, or `x-amz-tagging` is missing from `AllowedHeaders`. Origins must match exactly, including `https://` and the port. |
 | Upload returns **403 SignatureDoesNotMatch** | The browser sent different headers than were signed. The client sends exactly the `headers` the API returns, so look for a proxy or extension that changes the request. A server clock that's minutes off also causes this. |
 | Upload returns **403 AccessDenied** | The IAM user or role is missing `s3:PutObject` or `s3:PutObjectTagging`, or its policy names the wrong bucket. |
-| Saving a campaign says **"That cover image upload was not found"** | The upload didn't finish, the file isn't a real image, or the server lacks `s3:GetObject`. |
+| Saving says **"That image upload was not found"** | The upload didn't finish, the file isn't a real image, or the server lacks `s3:GetObject` on that prefix. |
 | Server logs show **AccessDenied** when saving | The role is missing `s3:ListBucket`. Without it, S3 reports missing files as "access denied" instead of "not found". |
-| Covers upload but don't display | `S3_PUBLIC_URL` is wrong, or the bucket policy doesn't name your CloudFront distribution. Open a cover URL directly to see the error. |
+| Images upload but don't display | `S3_PUBLIC_URL` is wrong, or the bucket policy doesn't name your CloudFront distribution. Also check that the bucket policy lists all three prefixes. Open an image URL directly to see the error. |
 
 ## Testing without AWS
 
-`S3_ENDPOINT` points the driver at any S3-compatible server, such as LocalStack (`http://localhost:4566`). Set `STORAGE_DRIVER=s3` with test credentials and a test bucket to exercise the whole flow locally. The driver was tested this way against an S3-compatible gateway: presigned uploads, the signed size, type and tag checks, image verification, tagging, and deleting replaced covers.
+`S3_ENDPOINT` points the driver at any S3-compatible server, such as LocalStack (`http://localhost:4566`). Set `STORAGE_DRIVER=s3` with test credentials and a test bucket to exercise the whole flow locally. The driver was tested this way against an S3-compatible gateway: presigned uploads, the signed size, type and tag checks, image verification, tagging, and deleting replaced images, for all three kinds.

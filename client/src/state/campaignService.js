@@ -11,13 +11,13 @@ const serverCampaignService = {
   get: (id) => api.getCampaign(id),
 
   async create({ name, backstory, partyLevel, cover }) {
-    const coverKey = cover.file ? await api.uploadImage(cover.file) : null;
+    const coverKey = cover.file ? await api.uploadImage(cover.file, 'cover') : null;
     return api.createCampaign({ name, backstory, partyLevel, coverKey });
   },
 
   async update(id, { name, backstory, partyLevel, cover }) {
     const body = { name, backstory, partyLevel };
-    if (cover.file) body.coverKey = await api.uploadImage(cover.file);
+    if (cover.file) body.coverKey = await api.uploadImage(cover.file, 'cover');
     else if (cover.remove) body.coverKey = null;
     return api.updateCampaign(id, body);
   },

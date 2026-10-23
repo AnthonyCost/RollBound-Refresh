@@ -931,7 +931,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 .link-button { align-self: flex-start; padding: 4px 0; border: none; background: none; color: var(--bronze); text-decoration: underline; font-size: 14px; }
 
-.cover-picker {
+.image-picker {
   position: relative;
   aspect-ratio: 16 / 9;
   max-height: 240px;
@@ -943,9 +943,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   background: var(--panel);
   transition: border-color 150ms ease;
 }
-.cover-picker--drag { border-color: var(--blood-text); background: var(--panel-hot); }
-.cover-picker__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.cover-picker__label {
+.image-picker--drag { border-color: var(--blood-text); background: var(--panel-hot); }
+.image-picker__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.image-picker__label {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -955,8 +955,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   text-align: center;
   cursor: pointer;
 }
-.cover-picker--filled .cover-picker__label { background: rgba(7, 5, 5, 0.72); border: 1px solid var(--line); }
-.cover-picker:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
+.image-picker--filled .image-picker__label { background: rgba(7, 5, 5, 0.72); border: 1px solid var(--line); }
+.image-picker:focus-within { outline: 2px solid var(--gold); outline-offset: 2px; }
 
 .cover {
   position: relative;
@@ -1044,3 +1044,70 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 .hub-card__actions { display: flex; gap: 6px; }
 .chip--link { display: inline-flex; align-items: center; text-decoration: none; }
+
+/* ---------- Avatars and portraits ---------- */
+
+.image-picker--square { aspect-ratio: 1; max-width: 240px; max-height: none; }
+
+.avatar {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  background: radial-gradient(circle, #2a1610, #120c0a);
+  font-family: var(--display);
+  font-weight: 700;
+  color: var(--bronze);
+}
+.avatar--hero { border-color: var(--bronze); box-shadow: 0 0 20px var(--glow); }
+
+.topbar__account { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-soft); min-height: 44px; }
+.topbar__account-name { font-family: var(--display); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; }
+@media (max-width: 480px) { .topbar__account-name { display: none; } }
+@media (hover: hover) { .topbar__account:hover .avatar { border-color: var(--bronze); } }
+
+.portrait {
+  flex: none;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--bronze);
+  background: radial-gradient(circle at 50% 35%, #3a1410, #140806);
+  box-shadow: inset 0 0 0 3px var(--bg), inset 0 0 0 4px var(--line);
+}
+.portrait img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.portrait__letter { font-family: var(--display); font-weight: 700; color: var(--bronze); }
+.portrait--sm { width: 48px; height: 48px; }
+.portrait--sm .portrait__letter { font-size: 20px; }
+.portrait--lg { width: 88px; height: 88px; }
+.portrait--lg .portrait__letter { font-size: 38px; }
+
+.hero__portrait {
+  flex: none;
+  position: relative;
+  padding: 0;
+  border: none;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.hero__portrait-hint { font-family: var(--display); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--bronze); }
+@media (hover: hover) { .hero__portrait:hover .portrait { box-shadow: inset 0 0 0 3px var(--bg), inset 0 0 0 4px var(--blood-text), 0 0 14px var(--glow); } }
+.hero__body { flex: 1; min-width: 0; }
+
+.portrait-editor { display: flex; flex-direction: column; gap: 12px; }
+.hub-card__player { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Three things share the hero row; tighten them on narrow phones. */
+@container (max-width: 400px) {
+  .hero { gap: 10px; }
+  .hero .portrait--lg { width: 64px; height: 64px; }
+  .hero .orb { width: 64px; height: 64px; }
+  .hero .orb__hp { font-size: 17px; }
+  .hero__name { font-size: 18px; }
+}

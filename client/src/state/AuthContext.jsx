@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { api } from '../api.js';
 import { clearDemoCharacters } from './demoCharacters.js';
 import { clearDemoCampaigns } from './demoCampaigns.js';
+import { clearDemoPortraits } from './portraits.js';
 
 const AuthContext = createContext(null);
 
@@ -61,6 +62,7 @@ export function AuthProvider({ children }) {
   const enterDemo = useCallback(() => {
     clearDemoCharacters();
     clearDemoCampaigns();
+    clearDemoPortraits();
     writeDemoFlag(true);
     setUser(null);
     setStatus('demo');
@@ -70,14 +72,17 @@ export function AuthProvider({ children }) {
     if (status === 'user') await api.logout().catch(() => {});
     clearDemoCharacters();
     clearDemoCampaigns();
+    clearDemoPortraits();
     writeDemoFlag(false);
     setUser(null);
     setStatus('signedOut');
   }, [status]);
 
+  const updateProfile = useCallback(async (changes) => setUser(await api.updateProfile(changes)), []);
+
   const value = useMemo(
-    () => ({ status, user, isDemo: status === 'demo', login, register, enterDemo, logout }),
-    [status, user, login, register, enterDemo, logout],
+    () => ({ status, user, isDemo: status === 'demo', login, register, enterDemo, logout, updateProfile }),
+    [status, user, login, register, enterDemo, logout, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

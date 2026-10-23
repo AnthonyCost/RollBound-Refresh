@@ -1,11 +1,21 @@
 {
   "CORSRules": [
     {
-      "ID": "browser-cover-uploads",
-      "AllowedOrigins": ["http://localhost:5173", "https://YOUR_APP_DOMAIN"],
-      "AllowedMethods": ["PUT"],
-      "AllowedHeaders": ["Content-Type", "x-amz-tagging"],
-      "ExposeHeaders": ["ETag"],
+      "ID": "browser-image-uploads",
+      "AllowedOrigins": [
+        "http://localhost:5173",
+        "https://YOUR_APP_DOMAIN"
+      ],
+      "AllowedMethods": [
+        "PUT"
+      ],
+      "AllowedHeaders": [
+        "Content-Type",
+        "x-amz-tagging"
+      ],
+      "ExposeHeaders": [
+        "ETag"
+      ],
       "MaxAgeSeconds": 3000
     }
   ]

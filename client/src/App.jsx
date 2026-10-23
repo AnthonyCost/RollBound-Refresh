@@ -11,6 +11,7 @@ import BuilderPage from './pages/BuilderPage.jsx';
 import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
 import CampaignPage from './pages/CampaignPage.jsx';
 import CampaignEditPage from './pages/CampaignEditPage.jsx';
+import AccountPage from './pages/AccountPage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
 
@@ -85,6 +86,7 @@ export default function App() {
       </Route>
       <Route element={<SignedInOnly />}>
         <Route path="/home" element={<HubPage />} />
+        <Route path="/account" element={<AccountPage />} />
         <Route path="/create" element={<BuilderPage />} />
         <Route path="/campaigns/new" element={<CampaignCreatePage />} />
         <Route path="/campaigns/:id" element={<CampaignPage />} />

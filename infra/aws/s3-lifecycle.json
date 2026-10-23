@@ -1,14 +1,9 @@
 {
   "Rules": [
     {
-      "ID": "expire-abandoned-cover-uploads",
+      "ID": "expire-abandoned-image-uploads",
       "Status": "Enabled",
-      "Filter": {
-        "And": {
-          "Prefix": "covers/",
-          "Tags": [{ "Key": "state", "Value": "pending" }]
-        }
-      },
+      "Filter": { "Tag": { "Key": "state", "Value": "pending" } },
       "Expiration": { "Days": 1 }
     }
   ]

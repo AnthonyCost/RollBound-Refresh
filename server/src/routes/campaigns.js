@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { pool } from '../db.js';
 import { requireUser } from '../auth.js';
 import { generateInviteCode, normalizeInviteCode } from '../inviteCode.js';
-import { COVER_KEY, storage } from '../storage/index.js';
+import { storage } from '../storage/index.js';
+import { checkImageKey, swapImages } from '../images.js';
 
 export const campaigns = Router();
 campaigns.use(requireUser);
@@ -48,9 +49,9 @@ async function validCampaign(body, userId) {
   if (!name || name.length > NAME_MAX) errors.push(`Title must be 1–${NAME_MAX} characters.`);
   if (backstory.length > BACKSTORY_MAX) errors.push(`Backstory must be ${BACKSTORY_MAX} characters or fewer.`);
   if (!Number.isInteger(partyLevel) || partyLevel < 1 || partyLevel > 20) errors.push('Party level must be from 1 to 20.');
-  if (coverKey != null) {
-    const m = typeof coverKey === 'string' && COVER_KEY.exec(coverKey);
-    if (!m || Number(m[1]) !== userId || !(await storage.verifyImage(coverKey))) errors.push('That cover image upload was not found.');
+  if (coverKey !== undefined) {
+    const checked = await checkImageKey(coverKey, 'cover', userId);
+    if (checked.error) errors.push(checked.error);
   }
   return { errors, name, backstory, partyLevel, coverKey };
 }
@@ -89,7 +90,7 @@ campaigns.post('/', async (req, res) => {
   const input = await validCampaign(req.body, req.user.id);
   if (input.errors.length) return res.status(400).json({ errors: input.errors });
   const row = await insertCampaign(input, req.user.id);
-  if (input.coverKey) await storage.markInUse(input.coverKey);
+  await swapImages(null, input.coverKey ?? null);
   res.status(201).json(toJson({ ...row, character_count: 0, gm_name: req.user.display_name }, req.user.id));
 });
 
@@ -127,7 +128,7 @@ campaigns.get('/:id', async (req, res) => {
   const row = rows[0];
   const { rows: roster } = await pool.query(
     `SELECT ch.id, ch.name, ch.level, ch.data->>'className' AS class_name, ch.data->'ancestry'->>'name' AS ancestry,
-            ch.owner_id, u.display_name AS player
+            ch.owner_id, ch.portrait_key, u.display_name AS player, u.avatar_key AS player_avatar_key
      FROM characters ch JOIN users u ON u.id = ch.owner_id
      WHERE ch.campaign_id = $1 ORDER BY ch.name`,
     [req.params.id],
@@ -144,6 +145,8 @@ campaigns.get('/:id', async (req, res) => {
       className: r.class_name,
       ancestry: r.ancestry,
       player: r.player,
+      playerAvatarUrl: storage.publicUrl(r.player_avatar_key),
+      portraitUrl: storage.publicUrl(r.portrait_key),
       mine: r.owner_id === req.user.id,
     })),
   });
@@ -164,8 +167,7 @@ campaigns.patch('/:id', async (req, res) => {
     'UPDATE campaigns SET name = $1, backstory = $2, party_level = $3, cover_key = $4 WHERE id = $5',
     [input.name, input.backstory, input.partyLevel, newCover, req.params.id],
   );
-  if (newCover && newCover !== oldCover) await storage.markInUse(newCover);
-  if (oldCover && oldCover !== newCover) await storage.deleteObject(oldCover);
+  await swapImages(oldCover, newCover);
 
   const { rows } = await pool.query(`${SELECT_CAMPAIGN} WHERE c.id = $1`, [req.params.id]);
   res.json(toJson(rows[0], req.user.id));

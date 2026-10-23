@@ -2,17 +2,21 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "ManageCoverObjects",
+      "Sid": "ManageUploadedImages",
       "Effect": "Allow",
       "Action": ["s3:PutObject", "s3:PutObjectTagging", "s3:GetObject", "s3:DeleteObject"],
-      "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/covers/*"
+      "Resource": [
+        "arn:aws:s3:::YOUR_BUCKET_NAME/covers/*",
+        "arn:aws:s3:::YOUR_BUCKET_NAME/avatars/*",
+        "arn:aws:s3:::YOUR_BUCKET_NAME/portraits/*"
+      ]
     },
     {
-      "Sid": "MissingCoversReturn404Not403",
+      "Sid": "MissingImagesReturn404Not403",
       "Effect": "Allow",
       "Action": "s3:ListBucket",
       "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME",
-      "Condition": { "StringLike": { "s3:prefix": "covers/*" } }
+      "Condition": { "StringLike": { "s3:prefix": ["covers/*", "avatars/*", "portraits/*"] } }
     }
   ]
 }

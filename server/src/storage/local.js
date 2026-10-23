@@ -5,7 +5,7 @@ import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { mkdir, open, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { UPLOAD_TTL_SECONDS, contentTypeForKey, looksLikeImage, newCoverKey } from './shared.js';
+import { UPLOAD_TTL_SECONDS, contentTypeForKey, looksLikeImage, newUploadKey } from './shared.js';
 
 export const name = 'local';
 
@@ -19,8 +19,8 @@ const sign = (key, contentType, expires) =>
 
 export const objectPath = (key) => join(UPLOAD_DIR, key);
 
-export async function createUpload({ userId, contentType }) {
-  const key = newCoverKey(userId, contentType);
+export async function createUpload({ kind, userId, contentType }) {
+  const key = newUploadKey(kind, userId, contentType);
   const expires = Date.now() + UPLOAD_TTL_SECONDS * 1000;
   const query = new URLSearchParams({ expires: String(expires), sig: sign(key, contentType, expires) });
   return {

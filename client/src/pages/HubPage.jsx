@@ -9,6 +9,9 @@ import { listDemoCharacters } from '../state/demoCharacters.js';
 import { demoMemberships } from '../state/demoCampaigns.js';
 import { useCampaignService } from '../state/campaignService.js';
 import JoinCampaign from '../components/JoinCampaign.jsx';
+import Avatar from '../components/Avatar.jsx';
+import Portrait from '../components/Portrait.jsx';
+import { demoPortraitUrl } from '../state/portraits.js';
 
 const summary = (data) => ({ maxHp: maxHp(data), ac: armorClass(data).total });
 
@@ -21,6 +24,7 @@ function demoCharacterCards() {
     level: data.level,
     campaignId: memberships[id]?.id ?? null,
     campaignName: memberships[id]?.name ?? null,
+    portraitUrl: demoPortraitUrl(id),
     data,
     summary: summary(data),
   }));
@@ -75,9 +79,17 @@ export default function HubPage() {
     <div className="app">
       <header className="topbar">
         <Link to="/home" className="wordmark">ROLLBOUND</Link>
-        <button type="button" className="topbar__signout" onClick={logout}>
-          {isDemo ? 'Exit demo' : 'Sign out'}
-        </button>
+        <div className="topbar__right">
+          {!isDemo && (
+            <Link to="/account" className="topbar__account" aria-label="Your account">
+              <Avatar url={user.avatarUrl} name={user.displayName} size={32} />
+              <span className="topbar__account-name">{user.displayName}</span>
+            </Link>
+          )}
+          <button type="button" className="topbar__signout" onClick={logout}>
+            {isDemo ? 'Exit demo' : 'Sign out'}
+          </button>
+        </div>
       </header>
 
       {isDemo && <p className="demo-banner">Demo mode · nothing you do here is saved</p>}
@@ -100,6 +112,7 @@ export default function HubPage() {
                   {hub.characters.map((c) => (
                     <li key={c.id}>
                       <Link to={`/play/${c.id}/sheet`} className="hub-card hub-card--link">
+                        <Portrait url={c.portraitUrl} name={c.name} size="sm" />
                         <div className="hub-card__body">
                           <span className="hub-card__name">{c.name}</span>
                           <span className="hub-card__sub">

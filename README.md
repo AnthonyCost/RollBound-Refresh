@@ -64,7 +64,7 @@ The ancestry and class steps show portrait art. To add your own, see [docs/addin
 
 ## Image uploads
 
-Cover images use presigned uploads: `POST /api/uploads` returns a short-lived signed URL, the browser `PUT`s the file straight to it, and the campaign stores only the object key. Replaced or removed covers are deleted.
+Campaign covers, account profile images, and character portraits use presigned uploads: `POST /api/uploads` (with `kind` = `cover`, `avatar`, or `portrait`) returns a short-lived signed URL, the browser `PUT`s the file straight to it, and the record stores only the object key. Replaced or removed images are deleted.
 
 `STORAGE_DRIVER` in `server/.env` picks where files go:
 
@@ -102,7 +102,9 @@ Runs the rules engine tests with Node's built-in test runner: proficiency, AC wi
 | GET | `/api/campaigns/invites/:code` | Preview a campaign from its invite code |
 | POST | `/api/campaigns/join` | Bring one of your characters in (`code`, `characterId`) |
 | POST | `/api/campaigns/:id/leave` | Take your character out (`characterId`) |
-| POST | `/api/uploads` | Get a signed upload URL for a cover image (`contentType`, `size`) |
+| POST | `/api/uploads` | Get a signed upload URL (`kind`: `cover`, `avatar`, or `portrait`; `contentType`; `size`) |
+| PATCH | `/api/auth/me` | Update your `displayName` and/or `avatarKey` (`null` removes it) |
+| PUT | `/api/characters/:id/portrait` | Set (`portraitKey`) or remove (`null`) a character's portrait |
 
 Character and campaign routes require a signed-in session and only touch the signed-in user's own rows.
 

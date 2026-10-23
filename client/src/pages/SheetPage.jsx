@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
+import Portrait from '../components/Portrait.jsx';
+import PortraitEditor from '../components/PortraitEditor.jsx';
 import Breakdown from '../components/Breakdown.jsx';
 import Ornament from '../components/Ornament.jsx';
 import { signed, titleCase } from '../format.js';
@@ -9,7 +11,8 @@ import { signed, titleCase } from '../format.js';
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 
 export default function SheetPage() {
-  const { character, hp, conditions, shieldRaised } = useTable();
+  const { character, characterId, portraitUrl, setPortraitUrl, hp, conditions, shieldRaised } = useTable();
+  const [editingPortrait, setEditingPortrait] = useState(false);
   const [selected, setSelected] = useState('ac');
   const [skill, setSkill] = useState(null);
   const [magic, setMagic] = useState(null);
@@ -28,8 +31,17 @@ export default function SheetPage() {
     <div className="split">
       <div className="split__col">
       <section className="hero">
-        <HealthOrb current={hp} max={hp} />
-        <div>
+        <button
+          type="button"
+          className="hero__portrait"
+          onClick={() => setEditingPortrait((v) => !v)}
+          aria-expanded={editingPortrait}
+          aria-label={portraitUrl ? 'Change portrait' : 'Add a portrait'}
+        >
+          <Portrait url={portraitUrl} name={character.name} size="lg" />
+          <span className="hero__portrait-hint">{portraitUrl ? 'Change' : 'Add portrait'}</span>
+        </button>
+        <div className="hero__body">
           <h1 className="hero__name">{character.name}</h1>
           <p className="italic muted" style={{ margin: '2px 0 4px' }}>
             {character.ancestry.name} {character.className} · Level {character.level}
@@ -39,7 +51,17 @@ export default function SheetPage() {
             <span>Hero Points <strong>{character.heroPoints}</strong></span>
           </div>
         </div>
+        <HealthOrb current={hp} max={hp} />
       </section>
+
+      {editingPortrait && (
+        <PortraitEditor
+          characterId={characterId}
+          currentUrl={portraitUrl}
+          onSaved={setPortraitUrl}
+          onClose={() => setEditingPortrait(false)}
+        />
+      )}
 
       <Ornament />
 

@@ -35,6 +35,9 @@ ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS invite_code TEXT;
 CREATE UNIQUE INDEX IF NOT EXISTS campaigns_invite_code_idx ON campaigns (invite_code);
 CREATE INDEX IF NOT EXISTS campaigns_gm_idx ON campaigns (gm_user_id);
 
+-- Uploaded images, stored as object keys (the file lives in S3 or server/uploads).
+ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_key TEXT;
+
 -- Character data lives in JSONB so the shape can grow with the rules engine
 -- (feats, spells, inventory) without a migration for every field. The columns
 -- pulled out alongside it are the ones we filter or sort on.
@@ -48,6 +51,8 @@ CREATE TABLE IF NOT EXISTS characters (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS portrait_key TEXT;
 
 CREATE INDEX IF NOT EXISTS characters_campaign_idx ON characters (campaign_id);
 CREATE INDEX IF NOT EXISTS characters_owner_idx ON characters (owner_id);

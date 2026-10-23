@@ -55,7 +55,7 @@ export async function requireUser(req, res, next) {
 export async function userForToken(token) {
   if (!token) return null;
   const { rows } = await pool.query(
-    `SELECT u.id, u.email, u.display_name
+    `SELECT u.id, u.email, u.display_name, u.avatar_key
      FROM sessions s JOIN users u ON u.id = s.user_id
      WHERE s.token_hash = $1 AND s.expires_at > now()`,
     [hashToken(token)],

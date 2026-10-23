@@ -11,6 +11,7 @@ import {
 } from '@rollbound/rules';
 import { api } from '../api.js';
 import { DEMO_ID_PREFIX, getDemoCharacter } from './demoCharacters.js';
+import { demoPortraitUrl } from './portraits.js';
 
 const TableContext = createContext(null);
 
@@ -24,6 +25,7 @@ const STARTING_CONDITIONS = [{ id: 'frightened', value: 1 }];
  */
 export function TableProvider({ characterId, children }) {
   const [character, setCharacter] = useState(null);
+  const [portraitUrl, setPortraitUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -37,15 +39,21 @@ export function TableProvider({ characterId, children }) {
   useEffect(() => {
     if (characterId === DEMO_CHARACTER_ID || characterId.startsWith(DEMO_ID_PREFIX)) {
       const local = characterId === DEMO_CHARACTER_ID ? mira : getDemoCharacter(characterId)?.data;
-      if (local) setCharacter(local);
-      else setNotFound(true);
+      if (local) {
+        setCharacter(local);
+        setPortraitUrl(demoPortraitUrl(characterId));
+      } else setNotFound(true);
       setLoading(false);
       return;
     }
     let cancelled = false;
     api
       .getCharacter(characterId)
-      .then((row) => !cancelled && setCharacter(row.data))
+      .then((row) => {
+        if (cancelled) return;
+        setCharacter(row.data);
+        setPortraitUrl(row.portraitUrl);
+      })
       .catch(() => !cancelled && setNotFound(true))
       .finally(() => !cancelled && setLoading(false));
     return () => {
@@ -125,6 +133,8 @@ export function TableProvider({ characterId, children }) {
     () => ({
       character,
       characterId,
+      portraitUrl,
+      setPortraitUrl,
       hp: character ? maxHp(character) : 0,
       loading,
       notFound,
@@ -143,7 +153,7 @@ export function TableProvider({ characterId, children }) {
       cycleCondition,
       resetEncounter,
     }),
-    [character, characterId, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, characterId, portraitUrl, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;
