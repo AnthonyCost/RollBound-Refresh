@@ -1,7 +1,7 @@
 // Builds data/pf2e-level1.json from the Foundry VTT pf2e system's open data.
 // Usage: npm run data:import --workspace @rollbound/rules
 // Set GITHUB_TOKEN to raise the GitHub API rate limit.
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,6 +14,7 @@ const REPO = 'foundryvtt/pf2e';
 const BRANCH = 'master';
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = join(here, '..', 'data', 'pf2e-level1.json');
+const CORRECTIONS = join(here, '..', 'corrections');
 const CACHE = join(here, '..', '..', '..', 'node_modules', '.cache', 'pf2e-import');
 
 const SKILLS = [
@@ -109,12 +110,6 @@ const slugOf = (name) => name.toLowerCase().replace(/['’]/g, '').replace(/[^a-
 const boostSlots = (boosts = {}) => Object.values(boosts).map((b) => b.value).filter((v) => v.length);
 const uuidName = (uuid) => (typeof uuid === 'string' && !uuid.includes('{') ? uuid.split('.Item.')[1] : null);
 
-// Effects Foundry implements in code rather than rule elements (checked against the rules text).
-const TEXT_ONLY_EFFECTS = {
-  'first-doctrine-warpriest': { proficiencies: { 'defenses.light': 'trained', 'defenses.medium': 'trained', 'saves.fortitude': 'expert' } },
-  ruffian: { proficiencies: { 'defenses.medium': 'trained' } },
-};
-
 /** True when a rule's predicate holds for a 1st-level character of this class with no other options. */
 function predicateApplies(predicate, cls) {
   if (!predicate) return true;
@@ -179,6 +174,7 @@ const plainText = (html) => cleanDescription(html).replace(/<[^>]+>/g, ' ').repl
 function mapAncestry(a) {
   const s = a.system;
   return {
+    id: a._id,
     slug: s.slug ?? slugOf(a.name),
     name: a.name,
     hp: s.hp,
@@ -200,6 +196,7 @@ function mapHeritage(h) {
   const s = h.system;
   const effects = ruleEffects(s.rules);
   return {
+    id: h._id,
     slug: s.slug ?? slugOf(h.name),
     name: h.name,
     ancestry: s.ancestry?.slug ?? null,
@@ -209,6 +206,7 @@ function mapHeritage(h) {
     skills: effects.skills,
     skillChoice: effects.skillChoice,
     feats: effects.feats,
+    featAncestries: [],
     description: cleanDescription(s.description.value),
     source: source(h),
   };
@@ -217,6 +215,7 @@ function mapHeritage(h) {
 function mapBackground(b) {
   const s = b.system;
   return {
+    id: b._id,
     slug: s.slug ?? slugOf(b.name),
     name: b.name,
     boosts: boostSlots(s.boosts),
@@ -246,6 +245,7 @@ function mapFeat(f) {
   const s = f.system;
   const effects = ruleEffects(s.rules);
   return {
+    id: f._id,
     slug: s.slug ?? slugOf(f.name),
     name: f.name,
     level: s.level.value,
@@ -257,6 +257,7 @@ function mapFeat(f) {
     skills: effects.skills,
     feats: effects.feats,
     grantChoice: featGrantChoice(s.rules),
+    grantedOnlyIf: null,
     description: cleanDescription(s.description.value),
     source: source(f),
   };
@@ -269,20 +270,16 @@ function mapSubclassOption(o, cls, featuresByUuidName) {
   // Cleric doctrines point at a separate "First Doctrine (X)" feature for their 1st-level effects.
   for (const r of o.system.rules ?? []) {
     const first = r.key === 'ActiveEffectLike' && r.value?.firstDoctrine && featuresByUuidName.get(uuidName(r.value.firstDoctrine));
-    if (first) {
-      effects = mergeEffects(effects, ruleEffects(first.system.rules, cls));
-      effects = mergeEffects(effects, TEXT_ONLY_EFFECTS[first.system.slug ?? slugOf(first.name)] ?? {});
-    }
+    if (first) effects = mergeEffects(effects, ruleEffects(first.system.rules, cls));
   }
-  effects = mergeEffects(effects, TEXT_ONLY_EFFECTS[slug] ?? {});
 
   const text = plainText(o.system.description.value);
   const tradition = effects.tradition ?? /(?:Tradition|Spell List) (arcane|divine|occult|primal)\b/.exec(text)?.[1] ?? null;
-  const keyAbility = /You can choose (\w+) as your key attribute/.exec(text)?.[1]?.slice(0, 3).toLowerCase() ?? null;
   const gifts = /Sorcerous Gifts:? cantrip:? ([^;,]+)[;,] 1st: ([^;,]+)[;,]/.exec(text);
   const giftSpells = gifts && !/see /i.test(gifts[0]) ? [slugOf(gifts[1].trim()), slugOf(gifts[2].trim())] : [];
 
   return {
+    id: o._id,
     slug,
     name: o.name.replace(/^Bloodline: /, ''),
     tags: o.system.traits.otherTags ?? [],
@@ -292,9 +289,10 @@ function mapSubclassOption(o, cls, featuresByUuidName) {
     proficiencies: effects.proficiencies,
     tradition,
     traditionChoice: /Tradition variable/.test(text),
-    keyAbility,
+    keyAbility: null,
     grantedSpells: giftSpells,
     description: cleanDescription(o.system.description.value),
+    source: source(o),
   };
 }
 
@@ -320,6 +318,7 @@ function mapClass(c, featuresByUuidName, featuresByTag) {
 
   const classSkill = ruleEffects(s.rules, slug).skillChoice;
   return {
+    id: c._id,
     slug,
     name: c.name,
     hp: s.hp,
@@ -334,6 +333,10 @@ function mapClass(c, featuresByUuidName, featuresByTag) {
     classFeatAt1: s.classFeatLevels.value.includes(1),
     deity: features.some((f) => /^Deity$/.test(f.name)),
     spellcasting: Boolean(s.spellcasting),
+    // Filled in by corrections (see corrections/README.md).
+    casting: null,
+    divineFont: false,
+    deityFavoredWeapon: null,
     features: features.filter((f) => f.name !== 'Deity'),
     rarity: s.traits.rarity,
     description: cleanDescription(s.description.value),
@@ -346,6 +349,7 @@ const priceCp = ({ gp = 0, sp = 0, cp = 0 } = {}) => gp * 100 + sp * 10 + cp;
 function mapWeapon(w) {
   const s = w.system;
   return {
+    id: w._id,
     slug: s.slug ?? slugOf(w.name),
     name: w.name,
     level: s.level?.value ?? 0,
@@ -366,6 +370,7 @@ function mapWeapon(w) {
 function mapArmor(a) {
   const s = a.system;
   return {
+    id: a._id,
     slug: s.slug ?? slugOf(a.name),
     name: a.name,
     level: s.level?.value ?? 0,
@@ -386,6 +391,7 @@ function mapArmor(a) {
 function mapShield(sh) {
   const s = sh.system;
   return {
+    id: sh._id,
     slug: s.slug ?? slugOf(sh.name),
     name: sh.name,
     acBonus: s.acBonus,
@@ -402,6 +408,7 @@ function mapShield(sh) {
 function mapDeity(d) {
   const s = d.system;
   return {
+    id: d._id,
     slug: s.slug ?? slugOf(d.name),
     name: d.name,
     font: s.font,
@@ -419,6 +426,7 @@ function mapSpell(sp) {
   const s = sp.system;
   const cantrip = s.traits.value.includes('cantrip');
   return {
+    id: sp._id,
     slug: s.slug ?? slugOf(sp.name),
     name: sp.name,
     rank: cantrip ? 0 : s.level.value,
@@ -476,9 +484,16 @@ const backgrounds = byPack(/^packs\/backgrounds\//).map(mapBackground).sort(byNa
 let feats = byPack(/^packs\/feats\//).filter((f) => f.system.level.value === 1).map(mapFeat);
 
 // Feats granted by something we import can come from any level or older book; include them too.
-const allFeats = new Map(
-  items.filter(({ path }) => path.startsWith('packs/feats/')).map(({ item }) => [item.system.slug ?? slugOf(item.name), item]),
-);
+// Several books can have a feat with the same name (e.g. a legacy and a Remaster
+// version). Prefer the one from the selected books, then any Remaster version.
+const featRank = (item) => (BOOKS.includes(item.system.publication?.title) ? 2 : item.system.publication?.remaster ? 1 : 0);
+const allFeats = new Map();
+for (const { path, item } of items) {
+  if (!path.startsWith('packs/feats/')) continue;
+  const slug = item.system.slug ?? slugOf(item.name);
+  const current = allFeats.get(slug);
+  if (!current || featRank(item) > featRank(current)) allFeats.set(slug, item);
+}
 for (let pass = 0; pass < 3; pass++) {
   const have = new Set(feats.map((f) => f.slug));
   const wanted = [
@@ -524,8 +539,124 @@ const data = {
   shields: equipment.filter((e) => e.type === 'shield').map(mapShield).sort(byName),
 };
 
+// ---------- Corrections ----------
+// Rules Foundry's data doesn't encode, one file per book (see corrections/README.md).
+
+const bookFile = (title) => `${slugOf(title.replace(/^Pathfinder /, ''))}.json`;
+const CORRECTABLE = {
+  classes: { list: () => data.classes, fields: ['casting', 'divineFont', 'deityFavoredWeapon'] },
+  subclassOptions: {
+    list: () => data.classes.flatMap((c) => c.features.flatMap((f) => f.choice?.options ?? [])),
+    fields: ['proficiencies', 'keyAbility'],
+  },
+  heritages: { list: () => data.heritages, fields: ['featAncestries'] },
+  feats: { list: () => data.feats, fields: ['grantedOnlyIf'] },
+};
+
+const correctionFiles = new Set((await readdir(CORRECTIONS)).filter((f) => f.endsWith('.json')));
+for (const title of BOOKS) {
+  const file = bookFile(title);
+  if (!correctionFiles.has(file)) continue;
+  correctionFiles.delete(file);
+  const book = title.replace(/^Pathfinder /, '');
+  const corrections = JSON.parse(await readFile(join(CORRECTIONS, file), 'utf8'));
+  for (const [section, entries] of Object.entries(corrections)) {
+    if (section.startsWith('$')) continue;
+    const kind = CORRECTABLE[section];
+    if (!kind) throw new Error(`${file}: unknown section "${section}"`);
+    for (const [slug, fix] of Object.entries(entries)) {
+      const target = kind.list().find((x) => x.slug === slug && x.source === book);
+      if (!target) throw new Error(`${file}: no ${section} entry "${slug}" in ${book}`);
+      for (const [field, value] of Object.entries(fix)) {
+        if (!kind.fields.includes(field)) throw new Error(`${file}: ${section}.${slug} can't correct "${field}"`);
+        target[field] = field === 'proficiencies' ? { ...target.proficiencies, ...value } : value;
+      }
+    }
+  }
+}
+for (const unused of correctionFiles) console.log(`Note: corrections/${unused} is for a book that isn't being imported.`);
+
+// ---------- Link references by ID ----------
+// Items reference each other (a background grants a feat, a bloodline grants a spell).
+// Those links are found by name during import, then stored as stable Foundry IDs.
+
+const needsReview = [];
+const linker = (list, label) => {
+  const bySlug = new Map(list.map((x) => [x.slug, x.id]));
+  return (refs, owner) =>
+    refs.flatMap((slug) => {
+      const id = bySlug.get(slug);
+      if (!id) needsReview.push(`${owner}: grants ${label} "${slug}", which wasn't found`);
+      return id ? [id] : [];
+    });
+};
+const linkFeats = linker(data.feats, 'feat');
+const linkSpells = linker(data.spells, 'spell');
+for (const b of data.backgrounds) b.feats = linkFeats(b.feats, b.name);
+for (const h of data.heritages) h.feats = linkFeats(h.feats, h.name);
+for (const f of data.feats) f.feats = linkFeats(f.feats, f.name);
+for (const c of data.classes) {
+  for (const f of c.features) {
+    f.feats = linkFeats(f.feats, `${c.name}: ${f.name}`);
+    for (const o of f.choice?.options ?? []) {
+      o.feats = linkFeats(o.feats, `${c.name}: ${o.name}`);
+      o.grantedSpells = linkSpells(o.grantedSpells, `${c.name}: ${o.name}`);
+    }
+  }
+}
+
+// IDs must be unique within each list, or a saved choice could point at the wrong thing.
+const idLists = {
+  ...Object.fromEntries(['ancestries', 'heritages', 'backgrounds', 'classes', 'feats', 'deities', 'spells', 'weapons', 'armor', 'shields'].map((k) => [k, data[k]])),
+  subclassOptions: CORRECTABLE.subclassOptions.list(),
+};
+for (const [kind, list] of Object.entries(idLists)) {
+  const seen = new Map();
+  for (const x of list) {
+    if (!x.id) throw new Error(`${kind}: "${x.name}" has no id`);
+    if (seen.has(x.id)) throw new Error(`${kind}: "${x.name}" and "${seen.get(x.id)}" share id ${x.id}`);
+    seen.set(x.id, x.name);
+  }
+}
+
+// ---------- Report: things that look like they need a correction ----------
+
+const plain = (html = '') => html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+for (const c of data.classes) {
+  if (c.spellcasting && !c.casting) needsReview.push(`${c.name} (${c.source}): spellcasting class with no "casting" correction`);
+}
+for (const c of data.classes) {
+  for (const o of CORRECTABLE.subclassOptions.list().filter((x) => c.features.some((f) => f.choice?.options.includes(x)))) {
+    const text = plain(o.description);
+    const where = `${c.name}: ${o.name} (${o.source})`;
+    if (/You're trained in [^.]*armor/.test(text) && !Object.keys(o.proficiencies).some((k) => k.startsWith('defenses.'))) {
+      needsReview.push(`${where}: text grants armor training the data doesn't`);
+    }
+    if (/you have expert proficiency in/i.test(text) && !Object.values(o.proficiencies).includes('expert')) {
+      needsReview.push(`${where}: text grants expert proficiency the data doesn't`);
+    }
+    if (/You can choose \w+ as your key attribute/.test(text) && !o.keyAbility) {
+      needsReview.push(`${where}: text allows another key attribute`);
+    }
+  }
+}
+const ancestrySlugs = new Set(data.ancestries.map((a) => a.slug));
+for (const h of data.heritages) {
+  const other = /choose from \w+ and (\w+) feats/.exec(plain(h.description))?.[1];
+  if (other && ancestrySlugs.has(other) && !h.featAncestries.includes(other)) {
+    needsReview.push(`${h.name} (${h.source}): text allows ${other} feats`);
+  }
+}
+data.meta.needsReview = needsReview;
+
 await mkdir(dirname(OUT), { recursive: true });
 await writeFile(OUT, `${JSON.stringify(data, null, 1)}\n`);
 
 const counts = Object.entries(data).filter(([, v]) => Array.isArray(v)).map(([k, v]) => `${k} ${v.length}`);
 console.log(`Wrote ${OUT}\n  ${counts.join(', ')}`);
+if (needsReview.length) {
+  console.log(`\nImport report: ${needsReview.length} thing(s) need a look (add corrections, see corrections/README.md):`);
+  for (const line of needsReview) console.log(`  - ${line}`);
+} else {
+  console.log('\nImport report: nothing needs a correction.');
+}

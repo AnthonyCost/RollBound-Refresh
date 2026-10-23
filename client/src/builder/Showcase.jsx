@@ -16,16 +16,17 @@ const monogram = (name) => name.replace(/^The /, '')[0];
  * A character-select screen: small emblem tiles plus a large art stage that shows
  * the selected option's portrait, name, key stats, and opening description.
  * Tiles follow the radio-group pattern: arrow keys move between them and select.
+ * Selection uses item IDs; art is looked up by slug, which file names use.
  */
 export default function Showcase({ kind, label, items, selected, onSelect, stats, prompt }) {
-  const current = items.find((i) => i.slug === selected) ?? null;
+  const current = items.find((i) => i.id === selected) ?? null;
   const tileRefs = useRef([]);
   const stripRef = useRef(null);
 
   // On phones the tiles are a sideways strip; keep the selected one in view without moving the page.
   useEffect(() => {
     const strip = stripRef.current;
-    const tile = tileRefs.current[items.findIndex((i) => i.slug === selected)];
+    const tile = tileRefs.current[items.findIndex((i) => i.id === selected)];
     if (!strip || !tile || strip.scrollWidth <= strip.clientWidth) return;
     strip.scrollLeft = tile.offsetLeft - strip.offsetLeft - (strip.clientWidth - tile.offsetWidth) / 2;
   }, [selected, items]);
@@ -38,7 +39,7 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
     e.preventDefault();
     const next = jump ?? (index + step + items.length) % items.length;
     tileRefs.current[next]?.focus();
-    onSelect(items[next].slug);
+    onSelect(items[next].id);
   };
 
   const art = current ? artFor(kind, current.slug) : artFor(kind, null);
@@ -66,18 +67,18 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
 
       <div ref={stripRef} className="showcase__tiles" role="radiogroup" aria-label={label}>
         {items.map((item, i) => {
-          const on = item.slug === selected;
+          const on = item.id === selected;
           const focusable = on || (!current && i === 0);
           return (
             <button
-              key={item.slug}
+              key={item.id}
               ref={(el) => (tileRefs.current[i] = el)}
               type="button"
               role="radio"
               aria-checked={on}
               tabIndex={focusable ? 0 : -1}
               className={`tile ${on ? 'tile--on' : ''}`}
-              onClick={() => onSelect(item.slug)}
+              onClick={() => onSelect(item.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
             >
               {iconFor(kind, item.slug) ? (

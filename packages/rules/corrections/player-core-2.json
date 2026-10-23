@@ -1,0 +1,14 @@
+{
+  "$comment": "Rules from Pathfinder Player Core 2 that Foundry's data doesn't encode. See README.md in this folder.",
+  "classes": {
+    "champion": {
+      "casting": { "kind": "focus", "tradition": "divine", "cantrips": 0, "spells": 0, "slots": 0 }
+    },
+    "oracle": {
+      "casting": { "kind": "repertoire", "tradition": "divine", "cantrips": 5, "spells": 2, "slots": 3 }
+    },
+    "sorcerer": {
+      "casting": { "kind": "repertoire", "tradition": null, "cantrips": 4, "spells": 2, "slots": 3 }
+    }
+  }
+}

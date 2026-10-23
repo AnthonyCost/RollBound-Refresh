@@ -56,7 +56,11 @@ The builder reads `packages/rules/data/pf2e-level1.json`, generated from the ope
 npm run data:import    # set GITHUB_TOKEN to avoid API rate limits
 ```
 
-The importer keeps content from the books listed in `BOOKS` in `packages/rules/scripts/import-pf2e.js` (currently Player Core and Player Core 2) and records the upstream commit it used. It keeps level 1 feats, cantrips and 1st-rank spells, gear of level 1 or lower, and any feat something else grants. Deities come from Foundry's `core-gods` folder, which is Player Core's deity list (Foundry files it under *Lost Omens Divine Mysteries*).
+The importer keeps content from the books listed in `BOOKS` in `packages/rules/scripts/import-pf2e.js` (currently Player Core and Player Core 2) and records the upstream commit it used.
+
+A few rules live only in the rulebook text, not in Foundry's data, such as a Warpriest's armor training or each class's starting spells. Those are filled in from one corrections file per book in `packages/rules/corrections/`, so the rules engine has no book-specific code. After each import, the importer prints a report of anything that looks like it needs a correction. See [packages/rules/corrections/README.md](packages/rules/corrections/README.md).
+
+Every rules item keeps Foundry's stable ID, and characters save their choices by ID, so renames and new books can't scramble them. Characters saved by older versions store names instead. The builder converts drafts automatically, and `npm run db:setup` converts saved characters (or run `npm run db:migrate-builds --workspace @rollbound/server`). It keeps level 1 feats, cantrips and 1st-rank spells, gear of level 1 or lower, and any feat something else grants. Deities come from Foundry's `core-gods` folder, which is Player Core's deity list (Foundry files it under *Lost Omens Divine Mysteries*).
 
 ## Character sheet PDF
 

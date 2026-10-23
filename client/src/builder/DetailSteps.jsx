@@ -10,6 +10,7 @@ import {
   featPrerequisites,
   spellcastingOf,
   spellOptions,
+  proficienciesOf,
   spellDc,
   classDc,
   gearCost,
@@ -232,7 +233,7 @@ export function FeatsStep({ build, update, data }) {
         label="Ancestry feats"
         items={ancestryFeatOptions(build, data)}
         selected={build.ancestryFeat}
-        onSelect={(slug) => update({ ancestryFeat: slug })}
+        onSelect={(id) => update({ ancestryFeat: id })}
         build={build}
         data={data}
         emptyText="Choose an ancestry first."
@@ -246,7 +247,7 @@ export function FeatsStep({ build, update, data }) {
           label="Class feats"
           items={classFeatOptions(build, data)}
           selected={build.classFeat}
-          onSelect={(slug) => update({ classFeat: slug })}
+          onSelect={(id) => update({ classFeat: id })}
           build={build}
           data={data}
           emptyText="Choose a class first."
@@ -254,13 +255,13 @@ export function FeatsStep({ build, update, data }) {
       )}
 
       {slots.map((slot) => (
-        <section key={slot.parent.slug} className="options">
+        <section key={slot.parent.id} className="options">
           <h2 className="panel__title builder__subhead">Bonus feat from {slot.parent.name}</h2>
           <FeatPicker
             label={`Bonus feat from ${slot.parent.name}`}
-            items={slot.options.filter((f) => f.slug !== slot.parent.slug)}
+            items={slot.options.filter((f) => f.id !== slot.parent.id)}
             selected={slot.chosen}
-            onSelect={(slug) => update({ bonusFeats: { ...build.bonusFeats, [slot.parent.slug]: slug } })}
+            onSelect={(id) => update({ bonusFeats: { ...build.bonusFeats, [slot.parent.id]: id } })}
             build={build}
             data={data}
           />
@@ -271,7 +272,7 @@ export function FeatsStep({ build, update, data }) {
         <>
           <h2 className="panel__title builder__subhead">Granted automatically</h2>
           {granted.map(({ feat, from }) => (
-            <details key={feat.slug} className="feature">
+            <details key={feat.id} className="feature">
               <summary>
                 {feat.name} <span className="feature__from">from {from}</span>
               </summary>
@@ -314,15 +315,17 @@ export function SpellsStep({ build, update, data }) {
   if (casting.kind === 'focus') {
     return <p className="rule-note">Champions don't choose spells: your devotion spells come from your cause. They're listed in your class features.</p>;
   }
-  if (!casting.tradition) return <p className="rule-note">Choose your {cls.slug === 'sorcerer' ? 'bloodline' : 'patron'} first; it sets your spell tradition.</p>;
+  // The subclass feature that sets the tradition (a sorcerer's Bloodline, a witch's Patron).
+  const traditionFeature = cls.features.find((f) => f.choice?.options.some((o) => o.tradition || o.traditionChoice))?.name.toLowerCase() ?? 'class options';
+  if (!casting.tradition) return <p className="rule-note">Choose your {traditionFeature} first; it sets your spell tradition.</p>;
 
   const { cantrips, spells } = spellOptions(build, data);
-  const toggle = (field, max) => (slug) => {
+  const toggle = (field, max) => (id) => {
     const list = build[field];
-    if (list.includes(slug)) update({ [field]: list.filter((s) => s !== slug) });
-    else if (list.length < max) update({ [field]: [...list, slug] });
+    if (list.includes(id)) update({ [field]: list.filter((s) => s !== id) });
+    else if (list.length < max) update({ [field]: [...list, id] });
   };
-  const full = (field, max) => (s) => (!build[field].includes(s.slug) && build[field].length >= max ? `You've chosen ${max}` : null);
+  const full = (field, max) => (s) => (!build[field].includes(s.id) && build[field].length >= max ? `You've chosen ${max}` : null);
 
   return (
     <>
@@ -338,10 +341,10 @@ export function SpellsStep({ build, update, data }) {
 
       {casting.granted.length > 0 && (
         <section className="panel">
-          <h2 className="panel__title">Granted by your {cls.slug === 'sorcerer' ? 'bloodline' : 'class'}</h2>
+          <h2 className="panel__title">Granted by your {traditionFeature}</h2>
           <ul className="log">
             {casting.granted.map((s) => (
-              <li key={s.slug}>
+              <li key={s.id}>
                 <strong>{s.name}</strong> <span className="muted">{s.rank === 0 ? 'cantrip' : '1st rank'}</span>
               </li>
             ))}
@@ -382,11 +385,13 @@ export function GearStep({ build, update, data }) {
   const { cls } = lookup(build, data);
   const spent = gearCost(build, data);
   const left = STARTING_GOLD_CP - spent;
+  // Class plus subclass training (a Ruffian is trained in medium armor), so warnings match the sheet.
+  const prof = cls ? proficienciesOf(build, data) : null;
   const untrained = (rank) => (cls && rank === 'untrained' ? `Your class is untrained with this` : null);
 
-  const toggle = (field) => (slug) => update({ [field]: build[field] === slug ? null : slug });
-  const toggleWeapon = (slug) =>
-    update({ weapons: build.weapons.includes(slug) ? build.weapons.filter((w) => w !== slug) : [...build.weapons, slug] });
+  const toggle = (field) => (id) => update({ [field]: build[field] === id ? null : id });
+  const toggleWeapon = (id) =>
+    update({ weapons: build.weapons.includes(id) ? build.weapons.filter((w) => w !== id) : [...build.weapons, id] });
 
   return (
     <>
@@ -404,7 +409,7 @@ export function GearStep({ build, update, data }) {
         selected={build.armor}
         onSelect={toggle('armor')}
         meta={(a) => `${cap(a.category)} · AC +${a.acBonus}${a.dexCap != null ? ` · Dex cap +${a.dexCap}` : ''}${a.strength ? ` · Str +${a.strength}` : ''} · ${formatPrice(a.price)}`}
-        warn={(a) => untrained(cls?.defenses[a.category])}
+        warn={(a) => untrained(prof?.armor[a.category])}
       />
 
       <h2 className="panel__title builder__subhead">Shield</h2>
@@ -426,10 +431,10 @@ export function GearStep({ build, update, data }) {
         onSelect={toggleWeapon}
         meta={(w) =>
           `1d${w.die} ${w.damageType} · ${cap(w.category)}${w.range ? ` · Range ${w.range} ft` : ''} · ${formatPrice(w.price)}${
-            build.weapons[0] === w.slug ? ' · Primary' : ''
+            build.weapons[0] === w.id ? ' · Primary' : ''
           }`
         }
-        warn={(w) => untrained(cls?.attacks[w.category])}
+        warn={(w) => untrained(prof?.weapons[w.category])}
       />
     </>
   );

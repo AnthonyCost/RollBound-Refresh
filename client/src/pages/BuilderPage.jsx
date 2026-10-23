@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { STEPS, emptyBuild, buildProblems, buildCharacter } from '@rollbound/rules';
+import { STEPS, emptyBuild, buildProblems, buildCharacter, migrateBuild } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
@@ -76,7 +76,9 @@ const STEP_TOUCHED = {
 function loadDraft() {
   try {
     const saved = JSON.parse(localStorage.getItem(DRAFT_KEY));
-    if (saved?.build) return { build: { ...emptyBuild(), ...saved.build }, step: STEPS.includes(saved.step) ? saved.step : STEPS[0] };
+    // Drafts saved before builds had a version are version 1 (slugs); they're
+    // converted to IDs once the rules data has loaded (see below).
+    if (saved?.build) return { build: { ...emptyBuild(), ...saved.build, v: saved.build.v ?? 1 }, step: STEPS.includes(saved.step) ? saved.step : STEPS[0] };
   } catch {
     // Unreadable or blocked storage: start fresh.
   }
@@ -107,6 +109,10 @@ export default function BuilderPage() {
       .then((m) => setData(m.default))
       .catch(() => setLoadFailed(true));
   }, []);
+
+  useEffect(() => {
+    if (data) setDraft((d) => ({ ...d, build: migrateBuild(d.build, data) }));
+  }, [data]);
 
   useEffect(() => saveDraft({ build, step }), [build, step]);
 

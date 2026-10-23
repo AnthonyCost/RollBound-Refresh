@@ -1,5 +1,8 @@
 // Level 1 character building (Player Core ch. 1). Pure functions over a
 // "build" (the player's choices) and the imported data in data/pf2e-level1.json.
+// Builds refer to rules items by their Foundry ID, which stays the same across
+// imports and renames. Book-specific rules come from the data (corrections/), so
+// nothing here is special-cased by name.
 
 import { RANKS } from './proficiency.js';
 
@@ -7,26 +10,10 @@ export const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 export const STARTING_GOLD_CP = 1500;
 export const TRADITIONS = ['arcane', 'divine', 'occult', 'primal'];
 
-// These versatile heritages can also take feats from the matching ancestry.
-const VERSATILE_FEAT_ANCESTRY = { aiuvarin: 'elf', dromaar: 'orc' };
-
 const RECALL_KNOWLEDGE_SKILLS = ['arcana', 'crafting', 'medicine', 'nature', 'occultism', 'religion', 'society'];
 
-/**
- * 1st-level spellcasting, from each class's Spellcasting and Spell Repertoire
- * entries. `learn` is what you choose at creation; prepared casters who draw on
- * their whole list (cleric, druid) choose today's preparation instead.
- */
-export const SPELLCASTING = {
-  bard: { kind: 'repertoire', tradition: 'occult', cantrips: 5, spells: 2, slots: 2 },
-  oracle: { kind: 'repertoire', tradition: 'divine', cantrips: 5, spells: 2, slots: 3 },
-  sorcerer: { kind: 'repertoire', tradition: null, cantrips: 4, spells: 2, slots: 3 },
-  cleric: { kind: 'prepared', tradition: 'divine', cantrips: 5, spells: 2, slots: 2 },
-  druid: { kind: 'prepared', tradition: 'primal', cantrips: 5, spells: 2, slots: 2 },
-  wizard: { kind: 'spellbook', tradition: 'arcane', cantrips: 10, spells: 5, slots: 2, prepares: { cantrips: 5, spells: 2 } },
-  witch: { kind: 'familiar', tradition: null, cantrips: 10, spells: 5, slots: 2, prepares: { cantrips: 5, spells: 2 } },
-  champion: { kind: 'focus', tradition: 'divine', cantrips: 0, spells: 0, slots: 0 },
-};
+/** Bumped when the shape of a build changes; migrateBuild() upgrades older ones. */
+export const BUILD_VERSION = 2;
 
 const FIST = {
   slug: 'fist',
@@ -40,6 +27,7 @@ const FIST = {
 
 export function emptyBuild() {
   return {
+    v: BUILD_VERSION,
     name: '',
     ancestry: null,
     heritage: null,
@@ -72,7 +60,7 @@ export function emptyBuild() {
   };
 }
 
-const find = (list, slug) => (slug ? list.find((x) => x.slug === slug) ?? null : null);
+const find = (list, id) => (id ? list.find((x) => x.id === id) ?? null : null);
 const rankIndex = (r) => RANKS.indexOf(r);
 const best = (a, b) => (rankIndex(b) > rankIndex(a) ? b : a);
 
@@ -200,10 +188,9 @@ export function ancestryFeatOptions(build, data) {
   const { ancestry, heritage } = lookup(build, data);
   if (!ancestry) return [];
   const traits = new Set(ancestry.traits.filter((t) => t !== 'humanoid'));
-  for (const t of heritage?.traits ?? []) {
-    traits.add(t);
-    if (VERSATILE_FEAT_ANCESTRY[t]) traits.add(VERSATILE_FEAT_ANCESTRY[t]);
-  }
+  for (const t of heritage?.traits ?? []) traits.add(t);
+  // Some versatile heritages also open another ancestry's feats (e.g. aiuvarin: elf).
+  for (const a of heritage?.featAncestries ?? []) traits.add(a);
   return data.feats.filter((f) => f.category === 'ancestry' && f.level === 1 && f.traits.some((t) => traits.has(t)));
 }
 
@@ -213,19 +200,33 @@ export function classFeatOptions(build, data) {
   return featPool(data, { category: 'class', traits: [cls.slug] });
 }
 
+/** Named conditions a correction can attach to a granted feat. */
+const GRANT_CONDITIONS = {
+  // "If your deity's favored weapon is a simple weapon or an unarmed attack" (Warpriest's Deadly Simplicity).
+  'deity-favored-weapon-simple': (build, data) =>
+    Boolean(lookup(build, data).deity?.weapons.some((w) => w === 'fist' || ['simple', 'unarmed'].includes(data.weapons.find((x) => x.slug === w)?.category))),
+};
+
+function grantConditionHolds(condition, build, data) {
+  const check = GRANT_CONDITIONS[condition];
+  if (!check) throw new Error(`Unknown grant condition "${condition}" in the rules data`);
+  return check(build, data);
+}
+
 /** Feats you get automatically, with where they came from. */
 function fixedFeatGrants(build, data) {
   const { heritage, background, cls } = lookup(build, data);
   const grants = [];
-  for (const slug of background?.feats ?? []) grants.push({ slug, from: background.name });
-  for (const slug of heritage?.feats ?? []) grants.push({ slug, from: heritage.name });
-  for (const f of cls?.features ?? []) for (const slug of f.feats) grants.push({ slug, from: f.name });
-  for (const { option } of chosenOptions(build, data)) for (const slug of option.feats) grants.push({ slug, from: option.name });
+  for (const id of background?.feats ?? []) grants.push({ id, from: background.name });
+  for (const id of heritage?.feats ?? []) grants.push({ id, from: heritage.name });
+  for (const f of cls?.features ?? []) for (const id of f.feats) grants.push({ id, from: f.name });
+  for (const { option } of chosenOptions(build, data)) for (const id of option.feats) grants.push({ id, from: option.name });
 
-  // Warpriest: "If your deity's favored weapon is a simple weapon or an unarmed attack, you gain Deadly Simplicity."
-  const deity = lookup(build, data).deity;
-  const simpleFavored = deity?.weapons.some((w) => w === 'fist' || ['simple', 'unarmed'].includes(find(data.weapons, w)?.category));
-  return grants.filter((g) => g.slug !== 'deadly-simplicity' || simpleFavored);
+  // Some grants only apply under a condition (corrections: feats.<slug>.grantedOnlyIf).
+  return grants.filter((g) => {
+    const condition = find(data.feats, g.id)?.grantedOnlyIf;
+    return !condition || grantConditionHolds(condition, build, data);
+  });
 }
 
 /**
@@ -239,23 +240,23 @@ export function featSummary(build, data) {
   const slots = [];
   const seen = new Set();
 
-  const add = (slug, from, kind) => {
-    const feat = find(data.feats, slug);
-    if (!feat || seen.has(slug)) return;
-    seen.add(slug);
+  const add = (id, from, kind) => {
+    const feat = find(data.feats, id);
+    if (!feat || seen.has(id)) return;
+    seen.add(id);
     owned.push({ feat, from, kind });
     for (const granted of feat.feats) add(granted, feat.name, 'granted');
     if (feat.grantChoice) {
       const g = feat.grantChoice;
       const options = featPool(data, { category: g.category, traits: [...g.traits, ...(g.classTrait && cls ? [cls.slug] : [])], level: g.level });
-      slots.push({ parent: feat, options, chosen: build.bonusFeats[feat.slug] ?? null });
-      if (build.bonusFeats[feat.slug]) add(build.bonusFeats[feat.slug], feat.name, 'bonus');
+      slots.push({ parent: feat, options, chosen: build.bonusFeats[feat.id] ?? null });
+      if (build.bonusFeats[feat.id]) add(build.bonusFeats[feat.id], feat.name, 'bonus');
     }
   };
 
   if (build.ancestryFeat) add(build.ancestryFeat, 'Ancestry feat', 'chosen');
   if (build.classFeat) add(build.classFeat, 'Class feat', 'chosen');
-  for (const g of fixedFeatGrants(build, data)) add(g.slug, g.from, 'granted');
+  for (const g of fixedFeatGrants(build, data)) add(g.id, g.from, 'granted');
   return { owned, slots };
 }
 
@@ -364,14 +365,14 @@ export function checkPrerequisite(text, build, data) {
   if (t === 'healing font') return fontOf(build, data) === 'heal';
   if (t === 'harmful font') return fontOf(build, data) === 'harm';
   if (t === 'holy or unholy trait') return ['holy', 'unholy'].includes(sanctificationOf(build, data));
-  if (t === 'spellcasting class feature') return Boolean(SPELLCASTING[cls?.slug] && SPELLCASTING[cls.slug].kind !== 'focus');
+  if (t === 'spellcasting class feature') return Boolean(cls?.casting && cls.casting.kind !== 'focus');
   if (t === 'low-light vision') {
     return ['low-light-vision', 'darkvision'].includes(ancestry?.vision) || (heritage?.senses ?? []).length > 0;
   }
   if (t === 'deity with a simple or unarmed attack favored weapon') {
     return Boolean(deity?.weapons.some((w) => ['simple', 'unarmed'].includes(find(data.weapons, w)?.category ?? (w === 'fist' ? 'unarmed' : null))));
   }
-  if (t === "trained with your deity's favored weapon") return Boolean(deity && cls?.slug === 'cleric');
+  if (t === "trained with your deity's favored weapon") return Boolean(deity && cls?.deityFavoredWeapon);
 
   m = /^(.+) heritage$/.exec(t);
   if (m) return heritage?.name.toLowerCase() === m[1] || false;
@@ -399,7 +400,7 @@ export function featPrerequisites(feat, build, data) {
 
 export function spellcastingOf(build, data) {
   const { cls } = lookup(build, data);
-  const base = SPELLCASTING[cls?.slug];
+  const base = cls?.casting;
   if (!base) return null;
   const option = chosenOptions(build, data).find((c) => c.option.tradition || c.option.traditionChoice)?.option;
   const tradition = option?.traditionChoice ? build.tradition : base.tradition ?? option?.tradition ?? null;
@@ -411,10 +412,10 @@ export function spellOptions(build, data) {
   const casting = spellcastingOf(build, data);
   if (!casting?.tradition) return { cantrips: [], spells: [] };
   const pool = data.spells.filter((s) => s.rarity === 'common' && s.traditions.includes(casting.tradition));
-  const granted = new Set(casting.granted.map((s) => s.slug));
+  const granted = new Set(casting.granted.map((s) => s.id));
   return {
-    cantrips: pool.filter((s) => s.rank === 0 && !granted.has(s.slug)),
-    spells: pool.filter((s) => s.rank === 1 && !granted.has(s.slug)),
+    cantrips: pool.filter((s) => s.rank === 0 && !granted.has(s.id)),
+    spells: pool.filter((s) => s.rank === 1 && !granted.has(s.id)),
   };
 }
 
@@ -455,8 +456,11 @@ export function proficienciesOf(build, data) {
     }
   }
   if (spellcastingOf(build, data)) p.spellcasting = 'trained';
-  // Clerics are trained with their deity's favored weapon (Deity, Player Core).
-  if (cls.slug === 'cleric' && deity) p.favoredWeapons = deity.weapons;
+  // Some classes (cleric) are trained with their deity's favored weapon.
+  if (cls.deityFavoredWeapon && deity) {
+    p.favoredWeapons = deity.weapons;
+    p.favoredWeaponRank = cls.deityFavoredWeapon;
+  }
   return p;
 }
 
@@ -493,7 +497,7 @@ export function buildProblems(build, data) {
       if (!deity) add('class', 'Choose a deity.');
       else {
         if (!sanctificationOf(build, data)) add('class', `Choose whether you're holy, unholy, or neither.`);
-        if (cls.slug === 'cleric' && !fontOf(build, data)) add('class', 'Choose your divine font.');
+        if (cls.divineFont && !fontOf(build, data)) add('class', 'Choose your divine font.');
         for (const { option } of chosenOptions(build, data)) {
           for (const need of ['holy', 'unholy']) {
             if (option.tags.includes(need) && sanctificationOf(build, data) !== need) {
@@ -555,7 +559,7 @@ function toWeapon(w) {
   };
 }
 
-const toSpell = (s) => ({ slug: s.slug, name: s.name, rank: s.rank, actions: s.actions, traits: s.traits, defense: s.defense, range: s.range });
+const toSpell = (s) => ({ id: s.id, slug: s.slug, name: s.name, rank: s.rank, actions: s.actions, traits: s.traits, defense: s.defense, range: s.range });
 
 /** The character object the sheet, turn, and roll screens read. Assumes buildProblems() is empty. */
 export function buildCharacter(build, data) {
@@ -594,7 +598,7 @@ export function buildCharacter(build, data) {
     ...(cls.deity && deity && {
       deity: { name: deity.name, font: fontOf(build, data), sanctification: sanctificationOf(build, data), weapons: deity.weapons },
     }),
-    feats: featSummary(build, data).owned.map(({ feat, from, kind }) => ({ slug: feat.slug, name: feat.name, category: feat.category, from, kind })),
+    feats: featSummary(build, data).owned.map(({ feat, from, kind }) => ({ id: feat.id, slug: feat.slug, name: feat.name, category: feat.category, from, kind })),
     ...(casting && {
       spellcasting: {
         kind: casting.kind,
@@ -621,4 +625,38 @@ export function buildCharacter(build, data) {
     heroPoints: 1,
     build,
   };
+}
+
+// ---------- Migration ----------
+
+/**
+ * Upgrades a build saved by an older version. Version 1 builds referred to items
+ * by slug; version 2 uses Foundry IDs. Values that are already IDs are kept, so
+ * this is safe to run on any build.
+ */
+export function migrateBuild(build, data) {
+  if (!build || build.v >= BUILD_VERSION) return build;
+  const toId = (list, value) => {
+    if (!value) return value ?? null;
+    if (list.some((x) => x.id === value)) return value;
+    return list.find((x) => x.slug === value)?.id ?? value;
+  };
+  const ids = (list, values) => (values ?? []).map((v) => toId(list, v));
+  const out = { ...emptyBuild(), ...build, v: BUILD_VERSION };
+  out.ancestry = toId(data.ancestries, build.ancestry);
+  out.heritage = toId(data.heritages, build.heritage);
+  out.background = toId(data.backgrounds, build.background);
+  out.class = toId(data.classes, build.class);
+  out.deity = toId(data.deities, build.deity);
+  out.ancestryFeat = toId(data.feats, build.ancestryFeat);
+  out.classFeat = toId(data.feats, build.classFeat);
+  out.bonusFeats = Object.fromEntries(Object.entries(build.bonusFeats ?? {}).map(([k, v]) => [toId(data.feats, k), toId(data.feats, v)]));
+  const options = data.classes.find((c) => c.id === out.class)?.features.flatMap((f) => f.choice?.options ?? []) ?? [];
+  out.classChoices = Object.fromEntries(Object.entries(build.classChoices ?? {}).map(([k, v]) => [k, toId(options, v)]));
+  out.cantrips = ids(data.spells, build.cantrips);
+  out.spells = ids(data.spells, build.spells);
+  out.armor = toId(data.armor, build.armor);
+  out.shield = toId(data.shields, build.shield);
+  out.weapons = ids(data.weapons, build.weapons);
+  return out;
 }

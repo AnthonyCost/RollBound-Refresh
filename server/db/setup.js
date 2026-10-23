@@ -2,6 +2,7 @@
 import { readFile } from 'node:fs/promises';
 import { pool } from '../src/db.js';
 import { generateInviteCode } from '../src/inviteCode.js';
+import { migrateBuilds } from './migrate-builds.js';
 
 const here = new URL('.', import.meta.url);
 
@@ -19,6 +20,10 @@ try {
   }
   await pool.query('ALTER TABLE campaigns ALTER COLUMN invite_code SET NOT NULL');
   if (rows.length) console.log(`Gave ${rows.length} campaign(s) an invite code`);
+
+  // Saved characters from older versions store their choices by name; convert them to IDs.
+  const builds = await migrateBuilds();
+  if (builds.upgraded) console.log(`Upgraded ${builds.upgraded} saved character build(s)`);
 } catch (err) {
   console.error('Database setup failed:', err.message);
   process.exitCode = 1;

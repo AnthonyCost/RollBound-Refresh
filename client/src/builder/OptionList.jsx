@@ -7,7 +7,7 @@ import { sourceTag } from './labels.js';
  */
 export default function OptionList({ items, selected, onSelect, meta, warn, note, blocked, multiple = false, label, emptyText = 'Nothing to choose here.' }) {
   const [query, setQuery] = useState('');
-  const isSelected = (slug) => (multiple ? selected.includes(slug) : selected === slug);
+  const isSelected = (id) => (multiple ? selected.includes(id) : selected === id);
   const q = query.trim().toLowerCase();
   const shown = q ? items.filter((i) => i.name.toLowerCase().includes(q)) : items;
 
@@ -26,13 +26,13 @@ export default function OptionList({ items, selected, onSelect, meta, warn, note
       {!items.length && <p className="muted italic">{emptyText}</p>}
       <ul className="options__list" aria-label={label}>
         {shown.map((item) => {
-          const on = isSelected(item.slug);
+          const on = isSelected(item.id);
           const reason = blocked?.(item);
           const warning = reason ?? warn?.(item);
           const hint = note?.(item);
           return (
-            <li key={item.slug} className={`option ${on ? 'option--on' : ''} ${on && item.description ? 'option--open' : ''} ${reason && !on ? 'option--blocked' : ''}`}>
-              <button type="button" className="option__head" aria-pressed={on} disabled={Boolean(reason) && !on} onClick={() => onSelect(item.slug)}>
+            <li key={item.id} className={`option ${on ? 'option--on' : ''} ${on && item.description ? 'option--open' : ''} ${reason && !on ? 'option--blocked' : ''}`}>
+              <button type="button" className="option__head" aria-pressed={on} disabled={Boolean(reason) && !on} onClick={() => onSelect(item.id)}>
                 <span className="option__gem" aria-hidden="true" />
                 <span className="option__main">
                   <span className="option__name">{item.name}</span>

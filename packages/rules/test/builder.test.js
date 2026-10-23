@@ -1,33 +1,29 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import {
-  emptyBuild,
-  attributes,
-  skillPicks,
-  languagePicks,
-  ancestryFeatOptions,
-  classFeatOptions,
-  buildProblems,
-  buildCharacter,
-  gearCost,
-  loreOptions,
-  maxHp,
-  armorClass,
-  savingThrow,
-  skillCheck,
-  strikeBonus,
-  damageModifier,
-  featSummary,
-  checkPrerequisite,
-  keyAbilityOptions,
-  spellcastingOf,
-  spellOptions,
-  spellDc,
-  classDc,
-} from '../src/index.js';
+import * as R from '../src/index.js';
+
+const { emptyBuild, loreOptions, maxHp, armorClass, savingThrow, skillCheck, strikeBonus, damageModifier, spellDc, classDc, migrateBuild } = R;
 
 const data = JSON.parse(readFileSync(new URL('../data/pf2e-level1.json', import.meta.url)));
+
+// Test builds name items by slug ("human", "fighter") so they stay readable. Each
+// call converts them to IDs with migrateBuild, which also exercises the migration.
+const named = (build) => migrateBuild({ ...build, v: 1 }, data);
+const byName = (fn) => (build, ...rest) => fn(named(build), ...rest);
+const attributes = byName(R.attributes);
+const skillPicks = byName(R.skillPicks);
+const languagePicks = byName(R.languagePicks);
+const ancestryFeatOptions = byName(R.ancestryFeatOptions);
+const classFeatOptions = byName(R.classFeatOptions);
+const buildProblems = byName(R.buildProblems);
+const buildCharacter = byName(R.buildCharacter);
+const gearCost = byName(R.gearCost);
+const featSummary = byName(R.featSummary);
+const keyAbilityOptions = byName(R.keyAbilityOptions);
+const spellcastingOf = byName(R.spellcastingOf);
+const spellOptions = byName(R.spellOptions);
+const checkPrerequisite = (text, build, d) => R.checkPrerequisite(text, named(build), d);
 
 // A human fighter with the guard background, matching the sample character Mira.
 function fighterBuild() {
@@ -298,5 +294,70 @@ describe('spellcasting', () => {
     assert.equal(c.spellcasting.cantrips.length, 5);
     assert.equal(spellDc(c).total, 10 + 2 + 3); // Cha: key boost + free boost
     assert.equal(classDc(c).total, 10 + 2 + 3);
+  });
+});
+
+describe('stable IDs and migration', () => {
+  const v1 = {
+    name: 'Old Save',
+    ancestry: 'human',
+    heritage: 'skilled-human',
+    background: 'guard',
+    class: 'rogue',
+    classChoices: { 'rogue-racket': 'thief' },
+    ancestryFeat: 'natural-ambition',
+    bonusFeats: { 'natural-ambition': 'nimble-dodge' },
+    cantrips: ['daze'],
+    armor: 'leather-armor',
+    weapons: ['rapier', 'shortbow'],
+  };
+  const idOf = (list, slug) => list.find((x) => x.slug === slug).id;
+
+  it('converts a version 1 build from slugs to Foundry IDs', () => {
+    const m = migrateBuild({ ...v1, v: 1 }, data);
+    assert.equal(m.v, R.BUILD_VERSION);
+    assert.equal(m.ancestry, idOf(data.ancestries, 'human'));
+    assert.equal(m.heritage, idOf(data.heritages, 'skilled-human'));
+    assert.equal(m.class, idOf(data.classes, 'rogue'));
+    assert.equal(m.classChoices['rogue-racket'], firstOption('rogue', 'rogue-racket').find((o) => o.slug === 'thief').id);
+    assert.deepEqual(m.bonusFeats, { [idOf(data.feats, 'natural-ambition')]: idOf(data.feats, 'nimble-dodge') });
+    assert.deepEqual(m.cantrips, [idOf(data.spells, 'daze')]);
+    assert.deepEqual(m.weapons, [idOf(data.weapons, 'rapier'), idOf(data.weapons, 'shortbow')]);
+  });
+
+  it('leaves current builds alone, so it is safe to run on anything', () => {
+    const m = migrateBuild({ ...v1, v: 1 }, data);
+    assert.equal(migrateBuild(m, data), m);
+    assert.deepEqual(migrateBuild({ ...m, v: 1 }, data), m);
+  });
+
+  it('gives every rules item a unique ID', () => {
+    for (const list of ['ancestries', 'heritages', 'backgrounds', 'classes', 'feats', 'deities', 'spells', 'weapons', 'armor', 'shields']) {
+      const ids = data[list].map((x) => x.id);
+      assert.ok(ids.every(Boolean), `${list} all have ids`);
+      assert.equal(new Set(ids).size, ids.length, `${list} ids are unique`);
+    }
+  });
+});
+
+describe('corrections', () => {
+  const cls = (slug) => data.classes.find((c) => c.slug === slug);
+
+  it('fills in spellcasting for every spellcasting class', () => {
+    for (const c of data.classes.filter((x) => x.spellcasting)) assert.ok(c.casting, `${c.name} has casting`);
+    assert.equal(cls('wizard').casting.cantrips, 10);
+    assert.equal(cls('fighter').casting, null);
+  });
+
+  it('applies class, subclass, heritage, and feat corrections', () => {
+    assert.equal(cls('cleric').divineFont, true);
+    assert.equal(cls('cleric').deityFavoredWeapon, 'trained');
+    assert.equal(firstOption('rogue', 'rogue-racket').find((o) => o.slug === 'mastermind').keyAbility, 'int');
+    assert.deepEqual(data.heritages.find((h) => h.slug === 'dromaar').featAncestries, ['orc']);
+    assert.equal(data.feats.find((f) => f.slug === 'deadly-simplicity').grantedOnlyIf, 'deity-favored-weapon-simple');
+  });
+
+  it('leaves nothing in the import report', () => {
+    assert.deepEqual(data.meta.needsReview, []);
   });
 });

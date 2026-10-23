@@ -27,9 +27,9 @@ export function AncestryStep({ build, update, data }) {
           ['Boosts', boostsLine(a.boosts)],
           ['Flaw', a.flaws.length ? abilityList(a.flaws) : 'None'],
         ]}
-        onSelect={(slug) =>
-          slug !== build.ancestry &&
-          update({ ancestry: slug, heritage: null, heritageSkill: null, ancestryBoosts: [], ancestryFeat: null, languages: [] })
+        onSelect={(id) =>
+          id !== build.ancestry &&
+          update({ ancestry: id, heritage: null, heritageSkill: null, ancestryBoosts: [], ancestryFeat: null, languages: [] })
         }
       />
 
@@ -40,7 +40,7 @@ export function AncestryStep({ build, update, data }) {
             label={`${ancestry.name} heritages`}
             items={ownHeritages}
             selected={build.heritage}
-            onSelect={(slug) => update({ heritage: slug, heritageSkill: null, ancestryFeat: null })}
+            onSelect={(id) => update({ heritage: id, heritageSkill: null, ancestryFeat: null })}
           />
           <h2 className="panel__title builder__subhead">Versatile heritages</h2>
           <p className="rule-note">A versatile heritage can belong to any ancestry, and opens up its own ancestry feats.</p>
@@ -48,7 +48,7 @@ export function AncestryStep({ build, update, data }) {
             label="Versatile heritages"
             items={versatile}
             selected={build.heritage}
-            onSelect={(slug) => update({ heritage: slug, heritageSkill: null, ancestryFeat: null })}
+            onSelect={(id) => update({ heritage: id, heritageSkill: null, ancestryFeat: null })}
           />
         </>
       )}
@@ -73,11 +73,11 @@ export function BackgroundStep({ build, update, data }) {
   const { background } = lookup(build, data);
   const lore = background?.lore[0] ? loreOptions(background.lore[0]) : null;
 
-  const select = (slug) => {
-    if (slug === build.background) return;
-    const bg = data.backgrounds.find((b) => b.slug === slug);
+  const select = (id) => {
+    if (id === build.background) return;
+    const bg = data.backgrounds.find((b) => b.id === id);
     const l = bg.lore[0] ? loreOptions(bg.lore[0]) : null;
-    update({ background: slug, backgroundBoosts: [], lore: l?.fixed ?? '' });
+    update({ background: id, backgroundBoosts: [], lore: l?.fixed ?? '' });
   };
 
   return (
@@ -114,10 +114,10 @@ export function ClassStep({ build, update, data }) {
   const { cls, deity } = lookup(build, data);
   const keyOptions = keyAbilityOptions(build, data);
 
-  const select = (slug) =>
-    slug !== build.class &&
+  const select = (id) =>
+    id !== build.class &&
     update({
-      class: slug,
+      class: id,
       keyAbility: null,
       classSkill: null,
       classChoices: {},
@@ -132,9 +132,9 @@ export function ClassStep({ build, update, data }) {
       spells: [],
     });
 
-  const chooseOption = (key, slug) =>
+  const chooseOption = (key, id) =>
     update({
-      classChoices: { ...build.classChoices, [key]: slug },
+      classChoices: { ...build.classChoices, [key]: id },
       classChoiceSkills: { ...build.classChoiceSkills, [key]: null },
       tradition: null,
       keyAbility: null,
@@ -181,14 +181,15 @@ export function ClassStep({ build, update, data }) {
             <section>
               <h2 className="panel__title builder__subhead">Deity</h2>
               <p className="rule-note">
-                Your deity trains you in their divine skill{cls.slug === 'cleric' ? ' and favored weapon, and sets your divine font' : ''}. Their
+                Your deity trains you in their divine skill{cls.deityFavoredWeapon ? ' and favored weapon' : ''}
+                {cls.divineFont ? ', and sets your divine font' : ''}. Their
                 sanctification decides whether you can be holy or unholy.
               </p>
               <OptionList
                 label="Deities"
                 items={data.deities}
                 selected={build.deity}
-                onSelect={(slug) => slug !== build.deity && update({ deity: slug, font: null, sanctification: null })}
+                onSelect={(id) => id !== build.deity && update({ deity: id, font: null, sanctification: null })}
                 meta={(d) =>
                   [
                     `Font ${d.font.join(' or ')}`,
@@ -201,7 +202,7 @@ export function ClassStep({ build, update, data }) {
             </section>
           )}
 
-          {deity && cls.slug === 'cleric' && deity.font.length > 1 && (
+          {deity && cls.divineFont && deity.font.length > 1 && (
             <section className="panel">
               <h2 className="panel__title">Divine font</h2>
               <Chips label="Divine font" options={deity.font} isOn={(f) => build.font === f} onToggle={(f) => update({ font: f })} render={cap} />
@@ -244,7 +245,7 @@ export function ClassStep({ build, update, data }) {
                 </details>
               );
             }
-            const option = f.choice.options.find((o) => o.slug === build.classChoices[f.choice.key]);
+            const option = f.choice.options.find((o) => o.id === build.classChoices[f.choice.key]);
             return (
               <section key={f.name} className="options">
                 <h2 className="panel__title builder__subhead">{f.name}</h2>
@@ -252,7 +253,7 @@ export function ClassStep({ build, update, data }) {
                   label={f.name}
                   items={f.choice.options}
                   selected={build.classChoices[f.choice.key] ?? null}
-                  onSelect={(slug) => slug !== build.classChoices[f.choice.key] && chooseOption(f.choice.key, slug)}
+                  onSelect={(id) => id !== build.classChoices[f.choice.key] && chooseOption(f.choice.key, id)}
                   meta={(o) =>
                     [
                       o.skills.length && `Trained ${o.skills.map(cap).join(', ')}`,

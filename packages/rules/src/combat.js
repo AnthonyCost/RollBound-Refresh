@@ -1,6 +1,6 @@
 // Strikes, the multiple attack penalty, and the four degrees of success.
 
-import { proficiencyPart } from './proficiency.js';
+import { RANKS, proficiencyPart } from './proficiency.js';
 import { statusPenalty } from './conditions.js';
 
 export const DEGREES = ['critical failure', 'failure', 'success', 'critical success'];
@@ -34,7 +34,9 @@ export function damageModifier(weapon, abilities) {
 export function weaponRank(character, weapon) {
   const byCategory = character.proficiencies.weapons[weapon.category] ?? 'untrained';
   const favored = character.proficiencies.favoredWeapons?.includes(weapon.slug);
-  return favored && byCategory === 'untrained' ? 'trained' : byCategory;
+  if (!favored) return byCategory;
+  const favoredRank = character.proficiencies.favoredWeaponRank ?? 'trained';
+  return RANKS.indexOf(favoredRank) > RANKS.indexOf(byCategory) ? favoredRank : byCategory;
 }
 
 /** Attack bonus for a Strike, as { total, parts }. */

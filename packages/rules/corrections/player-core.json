@@ -1,0 +1,40 @@
+{
+  "$comment": "Rules from Pathfinder Player Core that Foundry's data doesn't encode. Each entry is keyed by the item's slug and checked against the rules text. See README.md in this folder.",
+  "classes": {
+    "bard": {
+      "casting": { "kind": "repertoire", "tradition": "occult", "cantrips": 5, "spells": 2, "slots": 2 }
+    },
+    "cleric": {
+      "casting": { "kind": "prepared", "tradition": "divine", "cantrips": 5, "spells": 2, "slots": 2 },
+      "divineFont": true,
+      "deityFavoredWeapon": "trained"
+    },
+    "druid": {
+      "casting": { "kind": "prepared", "tradition": "primal", "cantrips": 5, "spells": 2, "slots": 2 }
+    },
+    "witch": {
+      "casting": { "kind": "familiar", "tradition": null, "cantrips": 10, "spells": 5, "slots": 2, "prepares": { "cantrips": 5, "spells": 2 } }
+    },
+    "wizard": {
+      "casting": { "kind": "spellbook", "tradition": "arcane", "cantrips": 10, "spells": 5, "slots": 2, "prepares": { "cantrips": 5, "spells": 2 } }
+    }
+  },
+  "subclassOptions": {
+    "warpriest": {
+      "proficiencies": { "defenses.light": "trained", "defenses.medium": "trained", "saves.fortitude": "expert" }
+    },
+    "ruffian": {
+      "proficiencies": { "defenses.medium": "trained" },
+      "keyAbility": "str"
+    },
+    "mastermind": { "keyAbility": "int" },
+    "scoundrel": { "keyAbility": "cha" }
+  },
+  "heritages": {
+    "aiuvarin": { "featAncestries": ["elf"] },
+    "dromaar": { "featAncestries": ["orc"] }
+  },
+  "feats": {
+    "deadly-simplicity": { "grantedOnlyIf": "deity-favored-weapon-simple" }
+  }
+}
