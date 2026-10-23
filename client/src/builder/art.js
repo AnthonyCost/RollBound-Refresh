@@ -1,6 +1,6 @@
 // Portrait art for the ancestry and class showcases, keyed by slug. Drop files in
 // client/public/art/ and list them here, e.g. class: { wizard: '/art/class-wizard.png' }.
-// Anything without its own art uses the placeholder.
+// Anything without its own art uses the placeholder. Full guide: docs/adding-art.md
 const ART = {
   ancestry: {},
   class: {},

@@ -58,6 +58,10 @@ npm run data:import    # set GITHUB_TOKEN to avoid API rate limits
 
 The importer keeps content from the books listed in `BOOKS` in `packages/rules/scripts/import-pf2e.js` (currently Player Core and Player Core 2) and records the upstream commit it used. It keeps level 1 feats, cantrips and 1st-rank spells, gear of level 1 or lower, and any feat something else grants. Deities come from Foundry's `core-gods` folder, which is Player Core's deity list (Foundry files it under *Lost Omens Divine Mysteries*).
 
+## Builder art
+
+The ancestry and class steps show portrait art. To add your own, see [docs/adding-art.md](docs/adding-art.md).
+
 ## Image uploads
 
 Cover images use the same flow as S3 presigned uploads: `POST /api/uploads` returns a short-lived signed URL, the browser `PUT`s the file straight to it, and the campaign stores only the object key. Until S3 is set up, `server/src/storage.js` stands in for the bucket and saves files under `server/uploads/` (ignored by git). Set `UPLOAD_SECRET` in `server/.env` so signed links survive restarts.
