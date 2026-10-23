@@ -58,6 +58,10 @@ npm run data:import    # set GITHUB_TOKEN to avoid API rate limits
 
 The importer keeps content from the books listed in `BOOKS` in `packages/rules/scripts/import-pf2e.js` (currently Player Core and Player Core 2) and records the upstream commit it used. It keeps level 1 feats, cantrips and 1st-rank spells, gear of level 1 or lower, and any feat something else grants. Deities come from Foundry's `core-gods` folder, which is Player Core's deity list (Foundry files it under *Lost Omens Divine Mysteries*).
 
+## Character sheet PDF
+
+The sheet screen can download the character as Paizo's official fillable Remaster character sheet, filled in. The template isn't in the repo; see [docs/character-sheet-pdf.md](docs/character-sheet-pdf.md) to install it.
+
 ## Builder art
 
 The ancestry and class steps show portrait art. To add your own, see [docs/adding-art.md](docs/adding-art.md).

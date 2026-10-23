@@ -12,6 +12,7 @@ import {
 import { api } from '../api.js';
 import { DEMO_ID_PREFIX, getDemoCharacter } from './demoCharacters.js';
 import { demoPortraitUrl } from './portraits.js';
+import { demoMemberships } from './demoCampaigns.js';
 
 const TableContext = createContext(null);
 
@@ -26,6 +27,7 @@ const STARTING_CONDITIONS = [{ id: 'frightened', value: 1 }];
 export function TableProvider({ characterId, children }) {
   const [character, setCharacter] = useState(null);
   const [portraitUrl, setPortraitUrl] = useState(null);
+  const [campaignName, setCampaignName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -42,6 +44,7 @@ export function TableProvider({ characterId, children }) {
       if (local) {
         setCharacter(local);
         setPortraitUrl(demoPortraitUrl(characterId));
+        setCampaignName(demoMemberships()[characterId]?.name ?? null);
       } else setNotFound(true);
       setLoading(false);
       return;
@@ -53,6 +56,7 @@ export function TableProvider({ characterId, children }) {
         if (cancelled) return;
         setCharacter(row.data);
         setPortraitUrl(row.portraitUrl);
+        setCampaignName(row.campaignName);
       })
       .catch(() => !cancelled && setNotFound(true))
       .finally(() => !cancelled && setLoading(false));
@@ -135,6 +139,7 @@ export function TableProvider({ characterId, children }) {
       characterId,
       portraitUrl,
       setPortraitUrl,
+      campaignName,
       hp: character ? maxHp(character) : 0,
       loading,
       notFound,
@@ -153,7 +158,7 @@ export function TableProvider({ characterId, children }) {
       cycleCondition,
       resetEncounter,
     }),
-    [character, characterId, portraitUrl, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, characterId, portraitUrl, campaignName, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

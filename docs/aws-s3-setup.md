@@ -103,6 +103,12 @@ In the console, go to **Bucket → Management → Create lifecycle rule**:
 
 The policy lets CloudFront read all three image folders, and refuses any request made without HTTPS.
 
+7. So the app can read images back (it does this to put a character's portrait into the exported PDF sheet), edit the distribution's behavior:
+   - set **Origin request policy** to `CORS-S3Origin`,
+   - set **Response headers policy** to `CORS-With-Preflight`.
+
+   The bucket's CORS rules from step 2 already allow `GET` from your site.
+
 Your `S3_PUBLIC_URL` will be `https://d1234abcd.cloudfront.net`, or a custom domain if you attach one to the distribution.
 
 > **Without CloudFront:** you can turn off "Block public access" and allow public `s3:GetObject` on `covers/*`, then set `S3_PUBLIC_URL=https://YOUR_BUCKET_NAME.s3.<region>.amazonaws.com`. It's simpler, but slower, costlier at scale, and the bucket is public. CloudFront is recommended.
@@ -168,6 +174,7 @@ Copied files have no `state` tag, so the lifecycle rule leaves them alone.
 | Upload returns **403 AccessDenied** | The IAM user or role is missing `s3:PutObject` or `s3:PutObjectTagging`, or its policy names the wrong bucket. |
 | Saving says **"That image upload was not found"** | The upload didn't finish, the file isn't a real image, or the server lacks `s3:GetObject` on that prefix. |
 | Server logs show **AccessDenied** when saving | The role is missing `s3:ListBucket`. Without it, S3 reports missing files as "access denied" instead of "not found". |
+| The PDF sheet exports without the portrait | CloudFront isn't passing CORS headers. Check the origin request and response headers policies in step 4. |
 | Images upload but don't display | `S3_PUBLIC_URL` is wrong, or the bucket policy doesn't name your CloudFront distribution. Also check that the bucket policy lists all three prefixes. Open an image URL directly to see the error. |
 
 ## Testing without AWS

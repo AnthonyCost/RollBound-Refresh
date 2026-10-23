@@ -1111,3 +1111,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .hero .orb__hp { font-size: 17px; }
   .hero__name { font-size: 18px; }
 }
+
+.export { display: flex; flex-direction: column; gap: 6px; }
+.export .btn { min-height: 44px; }
+.export__alt { align-self: center; font-size: 13px; }

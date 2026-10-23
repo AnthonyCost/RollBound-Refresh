@@ -7,7 +7,8 @@
         "https://YOUR_APP_DOMAIN"
       ],
       "AllowedMethods": [
-        "PUT"
+        "PUT",
+        "GET"
       ],
       "AllowedHeaders": [
         "Content-Type",

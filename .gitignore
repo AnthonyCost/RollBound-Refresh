@@ -10,3 +10,6 @@ client/public/art/placeholder-hero.png
 
 # Local stand-in for the S3 bucket
 server/uploads/
+
+# Paizo character sheet template (personal-use license): add locally, see docs/character-sheet-pdf.md
+client/public/sheets/*.pdf

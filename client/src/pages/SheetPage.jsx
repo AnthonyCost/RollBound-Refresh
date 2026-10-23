@@ -4,6 +4,7 @@ import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import Portrait from '../components/Portrait.jsx';
 import PortraitEditor from '../components/PortraitEditor.jsx';
+import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import Breakdown from '../components/Breakdown.jsx';
 import Ornament from '../components/Ornament.jsx';
 import { signed, titleCase } from '../format.js';
@@ -53,6 +54,8 @@ export default function SheetPage() {
         </div>
         <HealthOrb current={hp} max={hp} />
       </section>
+
+      <ExportSheetButton />
 
       {editingPortrait && (
         <PortraitEditor
