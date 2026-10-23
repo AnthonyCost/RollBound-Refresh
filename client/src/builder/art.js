@@ -2,7 +2,18 @@
 // client/public/art/ and list them here, e.g. class: { wizard: '/art/class-wizard.png' }.
 // Anything without its own art uses the placeholder. Full guide: docs/adding-art.md
 const ART = {
-  ancestry: {},
+  // Borrowed from the class iconics until ancestry art arrives. Where possible these
+  // use classes the builder doesn't show yet, so no character appears on both steps.
+  ancestry: {
+    dwarf: '/art/class-gunslinger.webp', // Nhalmika
+    elf: '/art/class-rogue.webp', // Merisiel
+    gnome: '/art/class-druid.webp', // Lini
+    goblin: '/art/class-alchemist.webp', // Fumbus
+    halfling: '/art/class-bard.webp', // Lem
+    human: '/art/class-fighter.webp', // Valeros
+    orc: '/art/class-inventor.webp', // Droven
+    tengu: '/art/class-oracle.webp', // Korakai
+  },
   // Paizo's Remaster iconics, one per class.
   class: {
     alchemist: '/art/class-alchemist.webp',
@@ -44,6 +55,17 @@ const ICONS = {
 };
 
 export const iconFor = (kind, slug) => ICONS[kind]?.[slug] ?? null;
+
+// Optional tile framing for portraits whose default crop misses the face:
+// x/y is the point (in % of the image) to center on, zoom is how many tile-widths
+// wide the image is drawn.
+const TILE_FOCUS = {
+  ancestry: {
+    human: { x: 45, y: 10, zoom: 2.6 },
+  },
+};
+
+export const tileFocusFor = (kind, slug) => TILE_FOCUS[kind]?.[slug] ?? null;
 
 export const PLACEHOLDER_ART = '/art/placeholder-hero.png';
 

@@ -1,8 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { artFor, hasOwnArt, iconFor } from './art.js';
+import { artFor, hasOwnArt, iconFor, tileFocusFor } from './art.js';
 import { sourceTag } from './labels.js';
 
 const firstParagraph = (html = '') => /<p>[\s\S]*?<\/p>/.exec(html)?.[0] ?? '';
+/** Centers a tile crop on a chosen point; translate % is relative to the image itself. */
+const focusProps = (focus) =>
+  focus && {
+    className: 'tile__focus',
+    style: { width: `${focus.zoom * 100}%`, transform: `translate(-${focus.x}%, -${focus.y}%)` },
+  };
+
 const monogram = (name) => name.replace(/^The /, '')[0];
 
 /**
@@ -80,7 +87,7 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
               ) : (
                 <span className={`tile__emblem ${hasOwnArt(kind, item.slug) ? 'tile__emblem--art' : ''}`} aria-hidden="true">
                   {hasOwnArt(kind, item.slug) ? (
-                    <img src={artFor(kind, item.slug)} alt="" loading="lazy" />
+                    <img src={artFor(kind, item.slug)} alt="" loading="lazy" {...focusProps(tileFocusFor(kind, item.slug))} />
                   ) : (
                     <span className="tile__letter">{monogram(item.name)}</span>
                   )}
