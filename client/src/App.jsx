@@ -8,6 +8,9 @@ import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import HubPage from './pages/HubPage.jsx';
 import BuilderPage from './pages/BuilderPage.jsx';
+import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
+import CampaignPage from './pages/CampaignPage.jsx';
+import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
 
@@ -83,6 +86,9 @@ export default function App() {
       <Route element={<SignedInOnly />}>
         <Route path="/home" element={<HubPage />} />
         <Route path="/create" element={<BuilderPage />} />
+        <Route path="/campaigns/new" element={<CampaignCreatePage />} />
+        <Route path="/campaigns/:id" element={<CampaignPage />} />
+        <Route path="/campaigns/:id/edit" element={<CampaignEditPage />} />
         <Route path="/play/:characterId" element={<Play />}>
           <Route index element={<Navigate to="sheet" replace />} />
           <Route path="sheet" element={<SheetPage />} />

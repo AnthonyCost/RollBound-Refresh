@@ -1,0 +1,130 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { useCampaignService } from '../state/campaignService.js';
+import PageShell from '../components/PageShell.jsx';
+import CampaignCover from '../components/CampaignCover.jsx';
+import InviteCode from '../components/InviteCode.jsx';
+import Ornament from '../components/Ornament.jsx';
+import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
+
+export default function CampaignPage() {
+  const { id } = useParams();
+  const { state } = useLocation();
+  const [campaign, setCampaign] = useState(null);
+  const [errors, setErrors] = useState([]);
+  const [missing, setMissing] = useState(false);
+  const service = useCampaignService();
+
+  const load = useCallback(() => {
+    service
+      .get(id)
+      .then(setCampaign)
+      .catch((err) => (err.status === 404 ? setMissing(true) : setErrors(errorsFrom(err))));
+  }, [service, id]);
+
+  useEffect(load, [load]);
+
+  const regenerate = async () => {
+    try {
+      const { inviteCode } = await service.regenerate(id);
+      setCampaign((c) => ({ ...c, inviteCode }));
+    } catch (err) {
+      setErrors(errorsFrom(err));
+    }
+  };
+
+  const leave = async (characterId) => {
+    try {
+      await service.leave(id, characterId);
+      load();
+    } catch (err) {
+      setErrors(errorsFrom(err));
+    }
+  };
+
+  const back = <Link to="/home" className="topbar__signout">Hub</Link>;
+  if (missing) {
+    return (
+      <PageShell actions={back}>
+        <p className="muted italic center">This campaign doesn't exist, or you're not part of it. <Link to="/home">Back to the hub</Link></p>
+      </PageShell>
+    );
+  }
+  if (!campaign) {
+    return (
+      <PageShell actions={back}>
+        <FormErrors errors={errors} />
+        {!errors.length && <p className="muted italic center">Unrolling the map…</p>}
+      </PageShell>
+    );
+  }
+
+  const others = campaign.characters.filter((c) => !c.mine);
+  const actions = (
+    <>
+      {campaign.isGm && <Link to={`/campaigns/${id}/edit`} className="topbar__signout">Edit</Link>}
+      {back}
+    </>
+  );
+  return (
+    <PageShell actions={actions}>
+      {state?.created && (
+        <p className="panel panel--hot center" role="status">
+          Your campaign is ready. Share the invite code below with your players.
+        </p>
+      )}
+
+      <CampaignCover
+        name={campaign.name}
+        coverUrl={campaign.coverUrl}
+        subtitle={`${campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`} · Party level ${campaign.partyLevel}`}
+      />
+      <FormErrors errors={errors} />
+
+      <div className="split">
+        <section className="split__col" aria-label="Backstory">
+          <Ornament label="BACKSTORY" />
+          {campaign.backstory ? (
+            <p className="backstory">{campaign.backstory}</p>
+          ) : (
+            <p className="rule-note">No backstory yet.</p>
+          )}
+        </section>
+
+        <section className="split__col" aria-label="Party">
+          {campaign.isGm && <InviteCode code={campaign.inviteCode} onRegenerate={regenerate} />}
+
+          <Ornament label="THE PARTY" />
+          {campaign.characters.length ? (
+            <ul className="hub__list">
+              {campaign.characters.map((c) => (
+                <li key={c.id} className="hub-card">
+                  <div className="hub-card__body">
+                    <span className="hub-card__name">{c.name}</span>
+                    <span className="hub-card__sub">
+                      {[c.ancestry, c.className].filter(Boolean).join(' ')} · Level {c.level}
+                    </span>
+                    <span className="hub-card__tag">{c.mine ? 'Your character' : `Played by ${c.player}`}</span>
+                  </div>
+                  {c.mine && (
+                    <div className="hub-card__actions">
+                      <Link to={`/play/${c.id}/sheet`} className="chip chip--link">Play</Link>
+                      <button type="button" className="chip" onClick={() => leave(c.id)}>Leave</button>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="panel panel--dashed muted italic center">
+              {campaign.isGm ? 'No one has joined yet. Share your invite code to gather a party.' : 'No characters yet.'}
+            </p>
+          )}
+          {!campaign.isGm && others.length === 0 && campaign.characters.length > 0 && (
+            <p className="rule-note">Ask your GM for the invite code to bring more players in.</p>
+          )}
+        </section>
+      </div>
+    </PageShell>
+  );
+}

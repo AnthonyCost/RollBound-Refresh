@@ -27,6 +27,14 @@ CREATE TABLE IF NOT EXISTS campaigns (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Campaign details. invite_code is backfilled and made NOT NULL by db/setup.js,
+-- since existing rows need codes generated in application code.
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS backstory TEXT NOT NULL DEFAULT '';
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS cover_key TEXT;
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS invite_code TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS campaigns_invite_code_idx ON campaigns (invite_code);
+CREATE INDEX IF NOT EXISTS campaigns_gm_idx ON campaigns (gm_user_id);
+
 -- Character data lives in JSONB so the shape can grow with the rules engine
 -- (feats, spells, inventory) without a migration for every field. The columns
 -- pulled out alongside it are the ones we filter or sort on.

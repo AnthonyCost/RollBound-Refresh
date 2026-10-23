@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { armorClass, maxHp, mira } from '@rollbound/rules';
 import { api } from '../api.js';
@@ -6,50 +6,70 @@ import { useAuth } from '../state/AuthContext.jsx';
 import { DEMO_CHARACTER_ID } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
 import { listDemoCharacters } from '../state/demoCharacters.js';
+import { demoMemberships } from '../state/demoCampaigns.js';
+import { useCampaignService } from '../state/campaignService.js';
+import JoinCampaign from '../components/JoinCampaign.jsx';
 
-const DEMO_HUB = {
-  characters: [
-    {
-      id: DEMO_CHARACTER_ID,
-      name: mira.name,
-      level: mira.level,
-      campaignName: 'Wolves at the Ford',
-      data: mira,
-      summary: { maxHp: maxHp(mira), ac: armorClass(mira).total },
-    },
-  ],
-  campaigns: [{ id: 'demo', name: 'Wolves at the Ford', partyLevel: 1, characterCount: 1 }],
-};
+const summary = (data) => ({ maxHp: maxHp(data), ac: armorClass(data).total });
 
-function demoHub() {
-  const built = listDemoCharacters().map(({ id, data }) => ({
+/** Demo characters (Mira plus any built this session) shaped like the API's character list. */
+function demoCharacterCards() {
+  const memberships = demoMemberships();
+  return [{ id: DEMO_CHARACTER_ID, data: mira }, ...listDemoCharacters()].map(({ id, data }) => ({
     id,
     name: data.name,
     level: data.level,
-    campaignName: null,
+    campaignId: memberships[id]?.id ?? null,
+    campaignName: memberships[id]?.name ?? null,
     data,
-    summary: { maxHp: maxHp(data), ac: armorClass(data).total },
+    summary: summary(data),
   }));
-  return { ...DEMO_HUB, characters: [...DEMO_HUB.characters, ...built] };
 }
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
+function CampaignCard({ campaign }) {
+  const body = (
+    <>
+      {campaign.coverUrl ? (
+        <img className="hub-card__thumb" src={campaign.coverUrl} alt="" />
+      ) : (
+        <span className="hub-card__thumb hub-card__thumb--plain" aria-hidden="true">{campaign.name[0]}</span>
+      )}
+      <div className="hub-card__body">
+        <span className="hub-card__name">{campaign.name}</span>
+        <span className="hub-card__sub">
+          {campaign.isGm === false ? `Run by ${campaign.gmName} · ` : ''}Party level {campaign.partyLevel} ·{' '}
+          {plural(campaign.characterCount, 'character')}
+        </span>
+      </div>
+      {campaign.isGm !== false && <span className="combatant__tag">GM</span>}
+    </>
+  );
+  return (
+    <li>
+      <Link to={`/campaigns/${campaign.id}`} className="hub-card hub-card--link">{body}</Link>
+    </li>
+  );
+}
+
 export default function HubPage() {
   const { user, isDemo, logout } = useAuth();
-  const [hub, setHub] = useState(isDemo ? demoHub : null);
+  const service = useCampaignService();
+  const [hub, setHub] = useState(null);
   const [failed, setFailed] = useState(false);
 
-  useEffect(() => {
-    if (isDemo) return;
+  const load = useCallback(() => {
     let cancelled = false;
-    Promise.all([api.listCharacters(), api.listCampaigns()])
+    Promise.all([isDemo ? demoCharacterCards() : api.listCharacters(), service.list()])
       .then(([characters, campaigns]) => !cancelled && setHub({ characters, campaigns }))
       .catch(() => !cancelled && setFailed(true));
     return () => {
       cancelled = true;
     };
-  }, [isDemo]);
+  }, [isDemo, service]);
+
+  useEffect(load, [load]);
 
   return (
     <div className="app">
@@ -74,52 +94,57 @@ export default function HubPage() {
         {hub && (
           <div className="split hub__split">
             <section className="split__col" aria-label="Characters">
-            <Ornament label="CHARACTERS" />
-            {hub.characters.length ? (
-              <ul className="hub__list">
-                {hub.characters.map((c) => (
-                  <li key={c.id}>
-                    <Link to={`/play/${c.id}/sheet`} className="hub-card hub-card--link">
-                      <div className="hub-card__body">
-                        <span className="hub-card__name">{c.name}</span>
-                        <span className="hub-card__sub">
-                          {c.data.ancestry.name} {c.data.className} · Level {c.level}
-                        </span>
-                        <span className="hub-card__tag">{c.campaignName ?? 'No campaign'}</span>
-                      </div>
-                      <div className="hub-card__stats">
-                        <span><small>HP</small>{c.summary.maxHp}</span>
-                        <span><small>AC</small>{c.summary.ac}</span>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="panel panel--dashed muted italic center">No characters yet. Characters you create will gather here.</p>
-            )}
-            <Link to="/create" className="btn btn--blood">New character</Link>
-
+              <Ornament label="CHARACTERS" />
+              {hub.characters.length ? (
+                <ul className="hub__list">
+                  {hub.characters.map((c) => (
+                    <li key={c.id}>
+                      <Link to={`/play/${c.id}/sheet`} className="hub-card hub-card--link">
+                        <div className="hub-card__body">
+                          <span className="hub-card__name">{c.name}</span>
+                          <span className="hub-card__sub">
+                            {c.data.ancestry.name} {c.data.className} · Level {c.level}
+                          </span>
+                          <span className="hub-card__tag">{c.campaignName ?? 'No campaign'}</span>
+                        </div>
+                        <div className="hub-card__stats">
+                          <span><small>HP</small>{c.summary.maxHp}</span>
+                          <span><small>AC</small>{c.summary.ac}</span>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="panel panel--dashed muted italic center">No characters yet. Characters you create will gather here.</p>
+              )}
+              <Link to="/create" className="btn btn--blood">New character</Link>
             </section>
+
             <section className="split__col" aria-label="Campaigns">
-            <Ornament label="CAMPAIGNS YOU RUN" />
-            {hub.campaigns.length ? (
-              <ul className="hub__list">
-                {hub.campaigns.map((c) => (
-                  <li key={c.id} className="hub-card">
-                    <div className="hub-card__body">
-                      <span className="hub-card__name">{c.name}</span>
-                      <span className="hub-card__sub">
-                        Party level {c.partyLevel} · {plural(c.characterCount, 'character')}
-                      </span>
-                    </div>
-                    <span className="combatant__tag">GM</span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="panel panel--dashed muted italic center">No campaigns yet. Campaigns you run as GM will appear here.</p>
-            )}
+              <Ornament label="CAMPAIGNS YOU RUN" />
+              {hub.campaigns.running.length ? (
+                <ul className="hub__list">
+                  {hub.campaigns.running.map((c) => <CampaignCard key={c.id} campaign={c} />)}
+                </ul>
+              ) : (
+                <p className="panel panel--dashed muted italic center">No campaigns yet. Start one and invite your players.</p>
+              )}
+              <Link to="/campaigns/new" className="btn">New campaign</Link>
+
+              {hub.campaigns.playing.length > 0 && (
+                <>
+                  <Ornament label="CAMPAIGNS YOU PLAY IN" />
+                  <ul className="hub__list">
+                    {hub.campaigns.playing.map((c) => <CampaignCard key={c.id} campaign={c} />)}
+                  </ul>
+                </>
+              )}
+
+              <JoinCampaign characters={hub.characters} onJoined={load} />
+              {isDemo && (
+                <p className="rule-note center">Demo campaigns and codes only exist in this tab. Create an account to invite real players.</p>
+              )}
             </section>
           </div>
         )}

@@ -10,6 +10,7 @@ Built with the PERN stack: **Postgres, Express, React, Node**.
 | --- | --- |
 | **Hub** | Home after sign-in: your characters (with HP and AC at a glance) and the campaigns you run as GM. |
 | **Builder** | Step-by-step level 1 character creation from Player Core and Player Core 2: ancestry, heritage, background, class and subclass, deity, attribute boosts, skills, languages, feats (with prerequisite checks and bonus feats), spells, and 15 gp of gear. Each step explains the rule it applies. Demo users can build and play a character for the rest of their session. |
+| **Campaigns** | GMs create and edit a campaign's title, party level, backstory, and cover image, and get a unique invite code to share. Players enter the code on their hub to bring a character in. Demo users can try the whole flow; their campaigns last until the tab closes. |
 | **Sheet** | Tap AC, a save, or Perception to see the breakdown: ability, proficiency rank + level, item bonus, armor's Dex cap, and condition penalties. |
 | **Turn** | The 3-action economy. Strikes show the multiple attack penalty as it grows; conditions like Frightened apply to the numbers and tick down when you end your turn. |
 | **Roll** | Rolls a Strike against the GM's target AC and shows where it landed on the four degrees of success, including natural 20/1 shifts and crit damage. |
@@ -57,6 +58,12 @@ npm run data:import    # set GITHUB_TOKEN to avoid API rate limits
 
 The importer keeps content from the books listed in `BOOKS` in `packages/rules/scripts/import-pf2e.js` (currently Player Core and Player Core 2) and records the upstream commit it used. It keeps level 1 feats, cantrips and 1st-rank spells, gear of level 1 or lower, and any feat something else grants. Deities come from Foundry's `core-gods` folder, which is Player Core's deity list (Foundry files it under *Lost Omens Divine Mysteries*).
 
+## Image uploads
+
+Cover images use the same flow as S3 presigned uploads: `POST /api/uploads` returns a short-lived signed URL, the browser `PUT`s the file straight to it, and the campaign stores only the object key. Until S3 is set up, `server/src/storage.js` stands in for the bucket and saves files under `server/uploads/` (ignored by git). Set `UPLOAD_SECRET` in `server/.env` so signed links survive restarts.
+
+Replaced or removed covers are deleted from storage. Moving to S3 means rewriting `storage.js` so `createUpload` returns an S3 presigned PUT URL and `publicUrl` returns the bucket or CloudFront URL, and `deleteObject` calls S3's DeleteObject. The client doesn't change.
+
 ## Tests
 
 ```bash
@@ -78,7 +85,15 @@ Runs the rules engine tests with Node's built-in test runner: proficiency, AC wi
 | POST | `/api/characters` | Create (validated) |
 | PUT | `/api/characters/:id` | Update (validated) |
 | DELETE | `/api/characters/:id` | Delete |
-| GET | `/api/campaigns` | Campaigns you run as GM (with character count) |
+| GET | `/api/campaigns` | `{ running, playing }`: campaigns you GM and campaigns your characters are in |
+| POST | `/api/campaigns` | Create (`name`, `backstory`, `partyLevel`, optional `coverKey`); returns the invite code |
+| GET | `/api/campaigns/:id` | One campaign with its party (GM or members only; only the GM sees the code) |
+| PATCH | `/api/campaigns/:id` | GM: edit `name`, `backstory`, `partyLevel`; `coverKey` replaces the cover, `null` removes it, omitted keeps it |
+| POST | `/api/campaigns/:id/invite-code` | GM: replace the invite code (the old one stops working) |
+| GET | `/api/campaigns/invites/:code` | Preview a campaign from its invite code |
+| POST | `/api/campaigns/join` | Bring one of your characters in (`code`, `characterId`) |
+| POST | `/api/campaigns/:id/leave` | Take your character out (`characterId`) |
+| POST | `/api/uploads` | Get a signed upload URL for a cover image (`contentType`, `size`) |
 
 Character and campaign routes require a signed-in session and only touch the signed-in user's own rows.
 

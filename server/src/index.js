@@ -3,6 +3,7 @@ import cors from 'cors';
 import { characters } from './routes/characters.js';
 import { auth } from './routes/auth.js';
 import { campaigns } from './routes/campaigns.js';
+import { uploads } from './routes/uploads.js';
 
 const app = express();
 app.use(cors());
@@ -12,6 +13,7 @@ app.get('/api/health', (_req, res) => res.json({ ok: true }));
 app.use('/api/auth', auth);
 app.use('/api/characters', characters);
 app.use('/api/campaigns', campaigns);
+app.use('/api/uploads', uploads);
 
 // Express 5 forwards rejected promises from async handlers here.
 app.use((err, _req, res, _next) => {
