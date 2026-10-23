@@ -38,7 +38,8 @@ export default function TurnPage() {
   };
 
   return (
-    <>
+    <div className="split">
+      <div className="split__col">
       <section className="center" style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 8 }}>
         <h1 className="title">{character.name.split(' ')[0]}'s turn</h1>
         <div className="pips" role="img" aria-label={`${actionsLeft} of 3 actions remaining`}>
@@ -85,6 +86,8 @@ export default function TurnPage() {
         <span className="next-strike__value">{signed(next.total)}</span>
       </section>
 
+      </div>
+      <div className="split__col">
       <Ornament label="CHOOSE AN ACTION" />
 
       <div className="actions">
@@ -122,6 +125,7 @@ export default function TurnPage() {
         <button type="button" className="btn" onClick={resetEncounter}>Reset</button>
         <button type="button" className="btn btn--blood btn--grow" onClick={endTurn}>End turn</button>
       </div>
-    </>
+      </div>
+    </div>
   );
 }

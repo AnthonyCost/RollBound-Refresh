@@ -47,7 +47,7 @@ function PlayShell() {
   const { isDemo } = useAuth();
 
   return (
-    <div className="app">
+    <div className="app app--play">
       <header className="topbar">
         <Link to="/home" className="wordmark">ROLLBOUND</Link>
         <div className="topbar__right">

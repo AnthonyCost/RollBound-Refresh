@@ -25,7 +25,8 @@ export default function SheetPage() {
   const current = stats[selected];
 
   return (
-    <>
+    <div className="split">
+      <div className="split__col">
       <section className="hero">
         <HealthOrb current={hp} max={hp} />
         <div>
@@ -62,6 +63,8 @@ export default function SheetPage() {
         ))}
       </div>
 
+      </div>
+      <div className="split__col">
       <Ornament label="SKILLS" />
 
       <ul className="skills">
@@ -82,7 +85,8 @@ export default function SheetPage() {
       {skill && <Breakdown title={titleCase(skill)} stat={skillCheck(character, skill, opts)} />}
 
       {character.keyAbility && <MagicAndDcs character={character} opts={opts} selected={magic} onSelect={setMagic} />}
-    </>
+      </div>
+    </div>
   );
 }
 

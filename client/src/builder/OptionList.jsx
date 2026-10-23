@@ -31,7 +31,7 @@ export default function OptionList({ items, selected, onSelect, meta, warn, note
           const warning = reason ?? warn?.(item);
           const hint = note?.(item);
           return (
-            <li key={item.slug} className={`option ${on ? 'option--on' : ''} ${reason && !on ? 'option--blocked' : ''}`}>
+            <li key={item.slug} className={`option ${on ? 'option--on' : ''} ${on && item.description ? 'option--open' : ''} ${reason && !on ? 'option--blocked' : ''}`}>
               <button type="button" className="option__head" aria-pressed={on} disabled={Boolean(reason) && !on} onClick={() => onSelect(item.slug)}>
                 <span className="option__gem" aria-hidden="true" />
                 <span className="option__main">

@@ -43,8 +43,11 @@ export default function GmPage() {
     <>
       <h1 className="title center" style={{ paddingTop: 8 }}>Wolves at the Ford</h1>
 
+      <div className="split">
+      <div className="split__col">
+
       <section className="panel" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
           <h2 className="eyebrow" style={{ margin: 0, color: 'var(--bronze)', letterSpacing: 3 }}>Encounter budget</h2>
           <label className="italic muted" style={{ fontSize: 14 }}>
             <select
@@ -77,6 +80,8 @@ export default function GmPage() {
         </p>
       </section>
 
+      </div>
+      <div className="split__col">
       <Ornament label="INITIATIVE" />
 
       <ol className="initiative">
@@ -108,6 +113,8 @@ export default function GmPage() {
         <button type="button" className="btn btn--blood btn--grow" onClick={() => setActive((a) => (a + 1) % order.length)}>
           Next turn
         </button>
+      </div>
+      </div>
       </div>
     </>
   );

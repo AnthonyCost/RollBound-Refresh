@@ -47,12 +47,12 @@ export default function RollPage() {
 
   if (!lastRoll) {
     return (
-      <>
+      <div className="narrow">
         <h1 className="title center" style={{ paddingTop: 16 }}>No roll yet</h1>
         <p className="italic muted center">Choose Strike on your turn and the result lands here, explained.</p>
         <TargetAC />
         <Link to="../turn" className="btn btn--blood">Go to your turn</Link>
-      </>
+      </div>
     );
   }
 
@@ -64,7 +64,8 @@ export default function RollPage() {
     natural === 20 ? 'Natural 20: the result moved up one step.' : natural === 1 ? 'Natural 1: the result moved down one step.' : null;
 
   return (
-    <>
+    <div className="split">
+      <div className="split__col">
       <p className="eyebrow center" style={{ margin: '4px 0 0' }}>
         Strike #{attackNumber} · {weapon.name}
       </p>
@@ -95,6 +96,8 @@ export default function RollPage() {
         )}
       </section>
 
+      </div>
+      <div className="split__col">
       <section className="panel">
         <h2 className="panel__title">The four degrees of success</h2>
         <div className="ladder">
@@ -123,6 +126,7 @@ export default function RollPage() {
         </button>
         <Link to="../turn" className="btn btn--blood btn--grow">Back to turn</Link>
       </div>
-    </>
+      </div>
+    </div>
   );
 }

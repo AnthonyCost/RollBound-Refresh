@@ -72,7 +72,8 @@ export default function HubPage() {
         {!hub && !failed && <p className="muted italic center">Gathering your party…</p>}
 
         {hub && (
-          <>
+          <div className="split hub__split">
+            <section className="split__col" aria-label="Characters">
             <Ornament label="CHARACTERS" />
             {hub.characters.length ? (
               <ul className="hub__list">
@@ -99,6 +100,8 @@ export default function HubPage() {
             )}
             <Link to="/create" className="btn btn--blood">New character</Link>
 
+            </section>
+            <section className="split__col" aria-label="Campaigns">
             <Ornament label="CAMPAIGNS YOU RUN" />
             {hub.campaigns.length ? (
               <ul className="hub__list">
@@ -117,7 +120,8 @@ export default function HubPage() {
             ) : (
               <p className="panel panel--dashed muted italic center">No campaigns yet. Campaigns you run as GM will appear here.</p>
             )}
-          </>
+            </section>
+          </div>
         )}
       </main>
     </div>

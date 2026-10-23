@@ -12,7 +12,7 @@ export default function AuthLayout({ title, children }) {
   };
 
   return (
-    <div className="app">
+    <div className="app app--auth">
       <main className="auth">
         <header className="auth__header">
           <span className="wordmark auth__wordmark">ROLLBOUND</span>
