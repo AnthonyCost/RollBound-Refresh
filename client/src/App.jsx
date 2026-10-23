@@ -14,6 +14,7 @@ import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
+import AccountLink from './components/AccountLink.jsx';
 
 function Loading() {
   return (
@@ -56,6 +57,7 @@ function PlayShell() {
         <Link to="/home" className="wordmark">ROLLBOUND</Link>
         <div className="topbar__right">
           <span className="eyebrow">Round {round}</span>
+          <AccountLink />
           <Link to="/home" className="topbar__signout">Hub</Link>
         </div>
       </header>

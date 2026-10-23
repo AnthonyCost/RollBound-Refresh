@@ -82,7 +82,12 @@ export default function CampaignPage() {
       <CampaignCover
         name={campaign.name}
         coverUrl={campaign.coverUrl}
-        subtitle={`${campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`} · Party level ${campaign.partyLevel}`}
+        subtitle={
+          <span className="cover__byline">
+            <Avatar url={campaign.gmAvatarUrl} name={campaign.gmName} size={24} />
+            {campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`} · Party level {campaign.partyLevel}
+          </span>
+        }
       />
       <FormErrors errors={errors} />
 

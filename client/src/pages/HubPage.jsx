@@ -10,6 +10,7 @@ import { demoMemberships } from '../state/demoCampaigns.js';
 import { useCampaignService } from '../state/campaignService.js';
 import JoinCampaign from '../components/JoinCampaign.jsx';
 import Avatar from '../components/Avatar.jsx';
+import AccountLink from '../components/AccountLink.jsx';
 import Portrait from '../components/Portrait.jsx';
 import { demoPortraitUrl } from '../state/portraits.js';
 
@@ -42,9 +43,13 @@ function CampaignCard({ campaign }) {
       )}
       <div className="hub-card__body">
         <span className="hub-card__name">{campaign.name}</span>
-        <span className="hub-card__sub">
-          {campaign.isGm === false ? `Run by ${campaign.gmName} · ` : ''}Party level {campaign.partyLevel} ·{' '}
-          {plural(campaign.characterCount, 'character')}
+        <span className="hub-card__sub hub-card__gm">
+          {campaign.isGm === false && (
+            <>
+              <Avatar url={campaign.gmAvatarUrl} name={campaign.gmName} size={16} /> Run by {campaign.gmName} ·{' '}
+            </>
+          )}
+          Party level {campaign.partyLevel} · {plural(campaign.characterCount, 'character')}
         </span>
       </div>
       {campaign.isGm !== false && <span className="combatant__tag">GM</span>}
@@ -80,12 +85,7 @@ export default function HubPage() {
       <header className="topbar">
         <Link to="/home" className="wordmark">ROLLBOUND</Link>
         <div className="topbar__right">
-          {!isDemo && (
-            <Link to="/account" className="topbar__account" aria-label="Your account">
-              <Avatar url={user.avatarUrl} name={user.displayName} size={32} />
-              <span className="topbar__account-name">{user.displayName}</span>
-            </Link>
-          )}
+          <AccountLink />
           <button type="button" className="topbar__signout" onClick={logout}>
             {isDemo ? 'Exit demo' : 'Sign out'}
           </button>

@@ -21,6 +21,7 @@ const toJson = (row, userId) => {
     partyLevel: row.party_level,
     characterCount: row.character_count ?? undefined,
     gmName: row.gm_name ?? undefined,
+    gmAvatarUrl: storage.publicUrl(row.gm_avatar_key ?? null),
     isGm,
     // Only the GM sees the code; players share it by asking the GM.
     ...(isGm && { inviteCode: row.invite_code }),
@@ -29,7 +30,7 @@ const toJson = (row, userId) => {
 };
 
 const SELECT_CAMPAIGN = `
-  SELECT c.*, u.display_name AS gm_name,
+  SELECT c.*, u.display_name AS gm_name, u.avatar_key AS gm_avatar_key,
          (SELECT COUNT(*)::int FROM characters ch WHERE ch.campaign_id = c.id) AS character_count
   FROM campaigns c
   LEFT JOIN users u ON u.id = c.gm_user_id`;
@@ -91,7 +92,7 @@ campaigns.post('/', async (req, res) => {
   if (input.errors.length) return res.status(400).json({ errors: input.errors });
   const row = await insertCampaign(input, req.user.id);
   await swapImages(null, input.coverKey ?? null);
-  res.status(201).json(toJson({ ...row, character_count: 0, gm_name: req.user.display_name }, req.user.id));
+  res.status(201).json(toJson({ ...row, character_count: 0, gm_name: req.user.display_name, gm_avatar_key: req.user.avatar_key }, req.user.id));
 });
 
 // Preview a campaign from its invite code before joining.

@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../state/AuthContext.jsx';
 import AuthLayout from '../components/AuthLayout.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
+import ImagePicker from '../components/ImagePicker.jsx';
+import { api } from '../api.js';
 
 export default function RegisterPage() {
-  const { register } = useAuth();
+  const { register, updateProfile } = useAuth();
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
@@ -13,6 +15,7 @@ export default function RegisterPage() {
   const [confirm, setConfirm] = useState('');
   const [errors, setErrors] = useState([]);
   const [busy, setBusy] = useState(false);
+  const [avatar, setAvatar] = useState({});
 
   const submit = async (e) => {
     e.preventDefault();
@@ -24,11 +27,22 @@ export default function RegisterPage() {
     setErrors([]);
     try {
       await register(displayName, email, password);
-      navigate('/home', { replace: true });
     } catch (err) {
       setErrors(errorsFrom(err));
       setBusy(false);
+      return;
     }
+    // Uploading needs a signed-in user, so the picture is attached once the account exists.
+    // If that part fails, the account is fine; send them to the Account page to retry.
+    if (avatar.file) {
+      try {
+        await updateProfile({ avatarKey: await api.uploadImage(avatar.file, 'avatar') });
+      } catch {
+        navigate('/account', { replace: true, state: { avatarFailed: true } });
+        return;
+      }
+    }
+    navigate('/home', { replace: true });
   };
 
   return (
@@ -51,6 +65,14 @@ export default function RegisterPage() {
           <span>Confirm password</span>
           <input type="password" autoComplete="new-password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} />
         </label>
+        <ImagePicker
+          label="Profile picture (optional)"
+          shape="square"
+          maxMb={2}
+          hint="you can change it later"
+          value={avatar}
+          onChange={setAvatar}
+        />
         <FormErrors errors={errors} />
         <button type="submit" className="btn btn--blood" disabled={busy}>{busy ? 'Creating…' : 'Create account'}</button>
         <p className="center muted auth__switch">

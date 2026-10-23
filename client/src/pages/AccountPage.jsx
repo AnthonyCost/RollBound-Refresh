@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import PageShell from '../components/PageShell.jsx';
@@ -14,6 +14,7 @@ export default function AccountPage() {
   const [errors, setErrors] = useState([]);
   const [status, setStatus] = useState(null);
   const [saved, setSaved] = useState(false);
+  const { state } = useLocation();
 
   const back = <Link to="/home" className="topbar__signout">Hub</Link>;
   if (isDemo) {
@@ -50,6 +51,12 @@ export default function AccountPage() {
         <h1 className="title">{user.displayName}</h1>
         <span className="rule-note">{user.email}</span>
       </header>
+
+      {state?.avatarFailed && !saved && (
+        <p className="panel panel--hot center narrow" role="status">
+          Your account is ready, but the profile picture didn't upload. Try adding it again below.
+        </p>
+      )}
 
       <form className="form narrow" onSubmit={submit}>
         <label className="form-field">

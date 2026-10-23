@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCampaignService } from '../state/campaignService.js';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
+import Avatar from './Avatar.jsx';
 
 const format = (raw) => {
   const clean = raw.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
@@ -75,7 +76,9 @@ export default function JoinCampaign({ characters, onJoined }) {
           {preview.coverUrl && <img className="join__thumb" src={preview.coverUrl} alt="" />}
           <div>
             <p className="hub-card__name" style={{ margin: 0 }}>{preview.name}</p>
-            <p className="hub-card__sub" style={{ margin: 0 }}>Run by {preview.gmName}</p>
+            <p className="hub-card__sub hub-card__gm" style={{ margin: 0 }}>
+              <Avatar url={preview.gmAvatarUrl} name={preview.gmName} size={18} /> Run by {preview.gmName}
+            </p>
           </div>
         </div>
       )}

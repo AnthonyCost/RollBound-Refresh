@@ -1115,3 +1115,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .export { display: flex; flex-direction: column; gap: 6px; }
 .export .btn { min-height: 44px; }
 .export__alt { align-self: center; font-size: 13px; }
+
+.hub-card__gm, .cover__byline { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.auth .image-picker--square { max-width: 160px; }
