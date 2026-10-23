@@ -9,6 +9,8 @@
     "db:setup": "node --env-file-if-exists=.env db/setup.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1156.0",
+    "@aws-sdk/s3-request-presigner": "^3.1156.0",
     "@rollbound/rules": "*",
     "cors": "^2.8.5",
     "express": "^5.1.0",

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { pool } from '../db.js';
 import { requireUser } from '../auth.js';
 import { generateInviteCode, normalizeInviteCode } from '../inviteCode.js';
-import { COVER_KEY, deleteObject, objectExists, publicUrl } from '../storage.js';
+import { COVER_KEY, storage } from '../storage/index.js';
 
 export const campaigns = Router();
 campaigns.use(requireUser);
@@ -16,7 +16,7 @@ const toJson = (row, userId) => {
     id: row.id,
     name: row.name,
     backstory: row.backstory,
-    coverUrl: publicUrl(row.cover_key),
+    coverUrl: storage.publicUrl(row.cover_key),
     partyLevel: row.party_level,
     characterCount: row.character_count ?? undefined,
     gmName: row.gm_name ?? undefined,
@@ -50,7 +50,7 @@ async function validCampaign(body, userId) {
   if (!Number.isInteger(partyLevel) || partyLevel < 1 || partyLevel > 20) errors.push('Party level must be from 1 to 20.');
   if (coverKey != null) {
     const m = typeof coverKey === 'string' && COVER_KEY.exec(coverKey);
-    if (!m || Number(m[1]) !== userId || !(await objectExists(coverKey))) errors.push('That cover image upload was not found.');
+    if (!m || Number(m[1]) !== userId || !(await storage.verifyImage(coverKey))) errors.push('That cover image upload was not found.');
   }
   return { errors, name, backstory, partyLevel, coverKey };
 }
@@ -89,6 +89,7 @@ campaigns.post('/', async (req, res) => {
   const input = await validCampaign(req.body, req.user.id);
   if (input.errors.length) return res.status(400).json({ errors: input.errors });
   const row = await insertCampaign(input, req.user.id);
+  if (input.coverKey) await storage.markInUse(input.coverKey);
   res.status(201).json(toJson({ ...row, character_count: 0, gm_name: req.user.display_name }, req.user.id));
 });
 
@@ -163,7 +164,8 @@ campaigns.patch('/:id', async (req, res) => {
     'UPDATE campaigns SET name = $1, backstory = $2, party_level = $3, cover_key = $4 WHERE id = $5',
     [input.name, input.backstory, input.partyLevel, newCover, req.params.id],
   );
-  if (oldCover && oldCover !== newCover) await deleteObject(oldCover);
+  if (newCover && newCover !== oldCover) await storage.markInUse(newCover);
+  if (oldCover && oldCover !== newCover) await storage.deleteObject(oldCover);
 
   const { rows } = await pool.query(`${SELECT_CAMPAIGN} WHERE c.id = $1`, [req.params.id]);
   res.json(toJson(rows[0], req.user.id));

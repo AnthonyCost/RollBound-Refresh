@@ -64,9 +64,14 @@ The ancestry and class steps show portrait art. To add your own, see [docs/addin
 
 ## Image uploads
 
-Cover images use the same flow as S3 presigned uploads: `POST /api/uploads` returns a short-lived signed URL, the browser `PUT`s the file straight to it, and the campaign stores only the object key. Until S3 is set up, `server/src/storage.js` stands in for the bucket and saves files under `server/uploads/` (ignored by git). Set `UPLOAD_SECRET` in `server/.env` so signed links survive restarts.
+Cover images use presigned uploads: `POST /api/uploads` returns a short-lived signed URL, the browser `PUT`s the file straight to it, and the campaign stores only the object key. Replaced or removed covers are deleted.
 
-Replaced or removed covers are deleted from storage. Moving to S3 means rewriting `storage.js` so `createUpload` returns an S3 presigned PUT URL and `publicUrl` returns the bucket or CloudFront URL, and `deleteObject` calls S3's DeleteObject. The client doesn't change.
+`STORAGE_DRIVER` in `server/.env` picks where files go:
+
+- `local` (default): saved under `server/uploads/` (ignored by git), with signed URLs the API checks itself. Set `UPLOAD_SECRET` so links survive restarts.
+- `s3`: uploaded straight to an AWS S3 bucket and served through CloudFront. Follow [docs/aws-s3-setup.md](docs/aws-s3-setup.md). The bucket, CORS, lifecycle, and IAM configs are in `infra/aws/`.
+
+Both drivers live in `server/src/storage/`. The client and database are the same either way.
 
 ## Tests
 
