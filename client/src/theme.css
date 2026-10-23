@@ -779,19 +779,20 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   filter: blur(6px);
 }
 .showcase__img {
-  position: relative;
-  height: 94%;
-  max-width: 92%;
+  /* Every portrait fills the same inset box, anchored to the top, so heads line
+     up across classes whatever the image's shape. */
+  position: absolute;
+  inset: clamp(16px, 5%, 32px);
+  width: calc(100% - 2 * clamp(16px, 5%, 32px));
+  height: calc(100% - 2 * clamp(16px, 5%, 32px));
   object-fit: contain;
-  object-position: bottom center;
+  object-position: top center;
   filter: drop-shadow(0 0 18px rgba(226, 90, 69, 0.25)) drop-shadow(0 12px 16px #000);
   animation: showcase-reveal 450ms ease-out both;
 }
 .showcase__monogram {
   display: grid;
   place-items: center;
-  align-self: center;
-  height: auto;
   font-family: var(--display);
   font-size: clamp(96px, 20vw, 180px);
   font-weight: 900;
@@ -858,7 +859,32 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   border: 1px solid var(--line);
   background: radial-gradient(circle, #2a1610, #120c0a);
 }
-.tile__emblem img { position: relative; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+/* Art tiles: a round head-and-shoulders crop of the full-length portrait. */
+.tile__emblem--art {
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 40%, #3a1410, #120c0a);
+}
+.tile__emblem--art::before { display: none; }
+.tile__emblem--art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 0;
+  transform: scale(1.5);
+  transform-origin: 50% 12%;
+}
+.tile__emblem--icon { width: 64px; height: 64px; }
+.tile__emblem--icon::before { display: none; }
+.tile__emblem--icon img { position: relative; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px #000); }
+.tile:not(.tile--on) .tile__emblem--icon img { filter: drop-shadow(0 2px 4px #000) saturate(0.75) brightness(0.85); }
+.tile--on .tile__emblem--icon img { filter: drop-shadow(0 0 10px #e25a45) drop-shadow(0 2px 4px #000); }
+.tile--on .tile__emblem--art { border-color: var(--blood-text); box-shadow: 0 0 12px #8e1c14; }
 .tile__letter { position: relative; font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--text-soft); }
 .tile__name { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); }
 
@@ -897,7 +923,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     grid-template-rows: auto 1fr;
     column-gap: 24px;
   }
-  .showcase__art { height: auto; min-height: 520px; }
+  /* A fixed 2:3 frame (close to the art's own shape) instead of stretching with the
+     text beside it, so every portrait gets the same space. It stays in view while
+     the details scroll. */
+  .showcase__art { height: auto; aspect-ratio: 2 / 3; align-self: start; position: sticky; top: 16px; }
   .showcase__tiles { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); overflow: visible; padding: 0; }
 }
 

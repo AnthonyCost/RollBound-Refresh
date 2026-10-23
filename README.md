@@ -114,6 +114,6 @@ Character and campaign routes require a signed-in session and only touch the sig
 
 ## Licensing
 
-Game mechanics come from the Pathfinder Second Edition Remaster rules, which Paizo publishes under the [ORC License](https://paizo.com/community/blog/v5748dyo6sico). RollBound reimplements mechanics only. The rules text in the builder comes from Player Core and Player Core 2, which Paizo publishes under the ORC License. It doesn't include Paizo's art, logos, or setting material.
+Game mechanics come from the Pathfinder Second Edition Remaster rules, which Paizo publishes under the [ORC License](https://paizo.com/community/blog/v5748dyo6sico). RollBound reimplements mechanics only. The rules text in the builder comes from Player Core and Player Core 2, which Paizo publishes under the ORC License. The class art is Paizo's iconic character art from the Community Use Package, used under Paizo's [Community Use Policy](https://paizo.com/licenses/communityuse). See [docs/adding-art.md](docs/adding-art.md).
 
 This is an unofficial fan project. *Pathfinder* is a trademark of Paizo Inc.; see Paizo's [Community Use Policy](https://paizo.com/community/communityuse).

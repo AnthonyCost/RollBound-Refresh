@@ -3,8 +3,47 @@
 // Anything without its own art uses the placeholder. Full guide: docs/adding-art.md
 const ART = {
   ancestry: {},
-  class: {},
+  // Paizo's Remaster iconics, one per class.
+  class: {
+    alchemist: '/art/class-alchemist.webp',
+    barbarian: '/art/class-barbarian.webp',
+    bard: '/art/class-bard.webp',
+    champion: '/art/class-champion.webp',
+    cleric: '/art/class-cleric.webp',
+    druid: '/art/class-druid.webp',
+    fighter: '/art/class-fighter.webp',
+    investigator: '/art/class-investigator.webp',
+    monk: '/art/class-monk.webp',
+    oracle: '/art/class-oracle.webp',
+    ranger: '/art/class-ranger.webp',
+    rogue: '/art/class-rogue.webp',
+    sorcerer: '/art/class-sorcerer.webp',
+    swashbuckler: '/art/class-swashbuckler.webp',
+    witch: '/art/class-witch.webp',
+    wizard: '/art/class-wizard.webp',
+    // Not in the imported books yet; picked up automatically once these classes are added.
+    animist: '/art/class-animist.webp',
+    commander: '/art/class-commander.webp',
+    exemplar: '/art/class-exemplar.webp',
+    guardian: '/art/class-guardian.webp',
+    gunslinger: '/art/class-gunslinger.webp',
+    inventor: '/art/class-inventor.webp',
+    kineticist: '/art/class-kineticist.webp',
+  },
 };
+
+// Round emblems shown on the selection tiles. Classes without one fall back to a
+// crop of the portrait.
+const ICONS = {
+  class: Object.fromEntries(
+    ['alchemist', 'barbarian', 'bard', 'champion', 'cleric', 'druid', 'fighter', 'investigator', 'monk', 'oracle', 'ranger', 'rogue', 'sorcerer', 'swashbuckler', 'witch', 'wizard',
+      // Not in the imported books yet.
+      'gunslinger', 'magus', 'summoner',
+    ].map((slug) => [slug, `/art/class-${slug}-icon.webp`]),
+  ),
+};
+
+export const iconFor = (kind, slug) => ICONS[kind]?.[slug] ?? null;
 
 export const PLACEHOLDER_ART = '/art/placeholder-hero.png';
 

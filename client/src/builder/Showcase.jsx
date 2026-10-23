@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { artFor, hasOwnArt } from './art.js';
+import { artFor, hasOwnArt, iconFor } from './art.js';
 import { sourceTag } from './labels.js';
 
 const firstParagraph = (html = '') => /<p>[\s\S]*?<\/p>/.exec(html)?.[0] ?? '';
@@ -73,13 +73,19 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
               onClick={() => onSelect(item.slug)}
               onKeyDown={(e) => onKeyDown(e, i)}
             >
-              <span className="tile__emblem" aria-hidden="true">
-                {hasOwnArt(kind, item.slug) ? (
-                  <img src={artFor(kind, item.slug)} alt="" loading="lazy" />
-                ) : (
-                  <span className="tile__letter">{monogram(item.name)}</span>
-                )}
-              </span>
+              {iconFor(kind, item.slug) ? (
+                <span className="tile__emblem tile__emblem--icon" aria-hidden="true">
+                  <img src={iconFor(kind, item.slug)} alt="" loading="lazy" />
+                </span>
+              ) : (
+                <span className={`tile__emblem ${hasOwnArt(kind, item.slug) ? 'tile__emblem--art' : ''}`} aria-hidden="true">
+                  {hasOwnArt(kind, item.slug) ? (
+                    <img src={artFor(kind, item.slug)} alt="" loading="lazy" />
+                  ) : (
+                    <span className="tile__letter">{monogram(item.name)}</span>
+                  )}
+                </span>
+              )}
               <span className="tile__name">{item.name}</span>
             </button>
           );

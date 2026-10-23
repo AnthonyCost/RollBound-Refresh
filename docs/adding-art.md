@@ -9,6 +9,14 @@ Adding art for one ancestry or class takes two steps:
 
 You can add art one image at a time. Every ancestry and class you haven't covered keeps using the placeholder.
 
+## What's in place
+
+Every class has art: Paizo's Remaster iconics, saved as `client/public/art/class-<slug>.webp`. Seven more images are ready for classes RollBound doesn't offer yet: animist, commander, exemplar, guardian, gunslinger, inventor and kineticist. Those are registered in `art.js` under the class names Foundry uses, so they show up automatically once those classes are imported.
+
+Class tiles show round emblem icons from the Adventure Card Game, saved as `class-<slug>-icon.webp` and registered in `ICONS` in `art.js`. All 16 classes have icons. Gunslinger, magus and summoner icons are saved for later.
+
+Ancestries don't have art yet and still use the placeholder. Ancestry icons will follow the same `ancestry-<slug>-icon.webp` pattern.
+
 ## 1. Prepare the image
 
 | | Recommendation | Why |
@@ -101,6 +109,8 @@ The fallback image is `PLACEHOLDER_ART` in `art.js`, currently `/art/placeholder
 
 ## Licensing
 
+The class art is Paizo's iconic character art. If it came from Paizo's Community Use Package, the [Community Use Policy](https://paizo.com/licenses/communityuse) allows it in free, non-commercial fan projects, as long as the site shows Paizo's required notice. The notice says the site uses Paizo's trademarks and copyrights under that policy, isn't published or endorsed by Paizo, and doesn't charge for access. Check the policy page for the exact wording before publishing, and keep RollBound free while it uses this art.
+
 Only add art you have the right to publish, such as art you made, commissioned, or licensed. The current placeholder is Monster Hunter art owned by Capcom, so it's listed in `.gitignore` and never committed. Don't publish the site with it. Art you own can be committed normally; just don't add it to `.gitignore`.
 
-Paizo's [Community Use Policy](https://paizo.com/community/communityuse) doesn't let fan projects reuse Paizo's own art, so don't use Pathfinder book art either.
+Other Paizo art, such as illustrations from the rulebooks, isn't covered by the policy, so stick to the Community Use Package.
