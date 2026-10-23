@@ -861,22 +861,34 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   border: 1px solid var(--line);
   background: radial-gradient(circle, #2a1610, #120c0a);
 }
-/* Art tiles: a round head-and-shoulders crop of the full-length portrait. */
-.tile__emblem--art {
-  width: 56px;
-  height: 56px;
+/* Framed tiles: the app clips the image to a circle and draws the ring, so any
+   source image (a square icon, or a crop of a full-length portrait) matches. */
+.tile__emblem--framed {
+  width: 64px;
+  height: 64px;
   overflow: hidden;
   border-radius: 50%;
-  border: 1px solid var(--line);
+  border: 2px solid var(--bronze);
   background: radial-gradient(circle at 50% 40%, #3a1410, #120c0a);
+  box-shadow: 0 2px 6px #000, inset 0 0 0 2px var(--bg);
 }
-.tile__emblem--art::before { display: none; }
-.tile__emblem--art img {
+.tile__emblem--framed::before { display: none; }
+.tile__emblem--framed > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+/* Inner ring drawn over the image, so it frames the art rather than sitting behind it. */
+.tile__emblem--framed::after {
+  content: '';
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px rgba(7, 5, 5, 0.85), inset 0 0 0 3px var(--line), inset 0 0 10px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+.tile:not(.tile--on) .tile__emblem--framed > img { filter: saturate(0.8) brightness(0.88); }
+.tile--on .tile__emblem--framed { border-color: var(--blood-text); box-shadow: 0 0 12px #8e1c14, inset 0 0 0 2px var(--bg); }
+@media (hover: hover) { .tile:not(.tile--on):hover .tile__emblem--framed { border-color: #f0d49a; } }
+
+/* Portrait crops (no icon yet): show the head and shoulders. */
+.tile__emblem--art > img {
   object-position: 50% 0;
   transform: scale(1.5);
   transform-origin: 50% 12%;
@@ -886,7 +898,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .tile__emblem--icon img { position: relative; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px #000); }
 .tile:not(.tile--on) .tile__emblem--icon img { filter: drop-shadow(0 2px 4px #000) saturate(0.75) brightness(0.85); }
 .tile--on .tile__emblem--icon img { filter: drop-shadow(0 0 10px #e25a45) drop-shadow(0 2px 4px #000); }
-.tile__emblem--art img.tile__focus {
+.tile__emblem--art > img.tile__focus {
   inset: auto;
   left: 50%;
   top: 50%;
@@ -895,7 +907,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   object-fit: fill;
   transform-origin: 0 0;
 }
-.tile--on .tile__emblem--art { border-color: var(--blood-text); box-shadow: 0 0 12px #8e1c14; }
 .tile__letter { position: relative; font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--text-soft); }
 .tile__name { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-muted); }
 

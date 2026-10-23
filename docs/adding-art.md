@@ -25,17 +25,20 @@ You can add art one image at a time. Anything without its own art falls back as 
 | `<kind>-<slug>.png` | Portrait (`kind` is `ancestry` or `class`) |
 | `<kind>-<slug>-icon.png` | Tile icon |
 
+**Class icons** are finished round emblems with their own ring, so send them with transparent corners. **Ancestry icons** can be any picture, square or not: the app clips them to a circle and draws the ring, so every ancestry tile looks the same. Keep the face near the middle.
+
 Slugs are listed [below](#slugs). PNG, JPG and WebP all work as input.
 
 `art:import` saves web-ready WebP files in `client/src/assets/art/` with the same names:
 
 - **Portraits** are trimmed to the figure and capped at 1200px tall.
-- **Icons** are trimmed and fitted into 192 × 192.
+- **Class icons** are trimmed and fitted into 192 × 192, keeping their transparency.
+- **Ancestry icons** are cropped to fill a 192 × 192 square, centered on the most detailed area (usually the face).
 
 It warns you about:
 - files named in a way it doesn't recognize (those are skipped),
 - slugs that aren't in the imported books yet (those are kept for later),
-- icons whose area outside the circle isn't transparent, which would show as a box behind them.
+- class icons whose area outside the circle isn't transparent, which would show as a box behind them.
 
 You can also save finished WebP files straight into `client/src/assets/art/` yourself. The script is only a convenience.
 
@@ -43,9 +46,9 @@ You can also save finished WebP files straight into `client/src/assets/art/` you
 
 | | Portrait | Icon |
 | --- | --- | --- |
-| **Background** | Transparent | Transparent outside the circle |
+| **Background** | Transparent | Class: transparent outside the circle. Ancestry: anything |
 | **Shape** | Portrait, roughly 2:3 | Square, about 512 × 512 or larger |
-| **Framing** | Full body, head near the top | The emblem filling the square |
+| **Framing** | Full body, head near the top | Class: the emblem filling the square. Ancestry: the face near the middle, no ring |
 
 Portraits are anchored to the top of a 2:3 panel with an even margin, so heads line up across options.
 

@@ -1,8 +1,9 @@
 // Converts art for the builder into web-ready files in client/src/assets/art/.
 //   npm run art:import -- <folder>
 // Name each PNG/JPG/WebP in <folder> after its target, e.g. class-wizard.png or
-// ancestry-elf-icon.png. Portraits are trimmed and capped at 1200px tall; icons are
-// trimmed and fitted into 192x192. Both keep transparency and become WebP.
+// ancestry-elf-icon.png. Portraits are trimmed and capped at 1200px tall. Class icons
+// (finished round emblems) are fitted into 192x192 with transparency. Ancestry icons
+// are cropped to fill a 192x192 square, since the app draws their circular frame.
 import { readdirSync, readFileSync } from 'node:fs';
 import { basename, dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -33,16 +34,19 @@ for (const file of files) {
     continue;
   }
   const [, kind, slug, icon] = m;
+  const framed = icon && kind === 'ancestry';
   const image = sharp(join(input, file)).ensureAlpha().trim({ threshold: 1 });
-  const resized = icon
-    ? image.resize(192, 192, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-    : image.resize({ height: 1200, withoutEnlargement: true });
+  const resized = !icon
+    ? image.resize({ height: 1200, withoutEnlargement: true })
+    : framed
+      ? image.resize(192, 192, { fit: 'cover', position: 'attention' })
+      : image.resize(192, 192, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } });
   const dest = join(OUT, `${name}.webp`);
   const info = await resized.webp({ quality: icon ? 85 : 82, alphaQuality: icon ? 95 : 90, effort: 6 }).toFile(dest);
 
   // Round icons need everything outside the circle transparent, or a box shows behind them.
   let opaqueCorner = false;
-  if (icon) {
+  if (icon && !framed) {
     const { data: px, info: dim } = await sharp(dest).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     const r = dim.width / 2;
     let outside = 0;

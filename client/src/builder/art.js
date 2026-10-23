@@ -60,4 +60,10 @@ export const PLACEHOLDER_ART = placeholder;
 export const artFor = (kind, slug) => ART[kind]?.[slug] ?? PLACEHOLDER_ART;
 export const hasOwnArt = (kind, slug) => Boolean(ART[kind]?.[slug]);
 export const iconFor = (kind, slug) => ICONS[kind]?.[slug] ?? null;
+
+// Ancestry icons are plain artwork; the app clips them to a circle and draws the
+// ring, so every tile matches whatever shape the source image is. Class icons are
+// finished emblems with their own painted ring, so they're shown as-is.
+const FRAMED_ICONS = { ancestry: true, class: false };
+export const iconIsFramed = (kind) => Boolean(FRAMED_ICONS[kind]);
 export const tileFocusFor = (kind, slug) => TILE_FOCUS[kind]?.[slug] ?? null;

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { artFor, hasOwnArt, iconFor, tileFocusFor } from './art.js';
+import { artFor, hasOwnArt, iconFor, iconIsFramed, tileFocusFor } from './art.js';
 import { sourceTag } from './labels.js';
 
 const firstParagraph = (html = '') => /<p>[\s\S]*?<\/p>/.exec(html)?.[0] ?? '';
@@ -82,11 +82,11 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
               onKeyDown={(e) => onKeyDown(e, i)}
             >
               {iconFor(kind, item.slug) ? (
-                <span className="tile__emblem tile__emblem--icon" aria-hidden="true">
+                <span className={`tile__emblem ${iconIsFramed(kind) ? 'tile__emblem--framed' : 'tile__emblem--icon'}`} aria-hidden="true">
                   <img src={iconFor(kind, item.slug)} alt="" loading="lazy" />
                 </span>
               ) : (
-                <span className={`tile__emblem ${hasOwnArt(kind, item.slug) ? 'tile__emblem--art' : ''}`} aria-hidden="true">
+                <span className={`tile__emblem ${hasOwnArt(kind, item.slug) ? 'tile__emblem--framed tile__emblem--art' : ''}`} aria-hidden="true">
                   {hasOwnArt(kind, item.slug) ? (
                     <img src={artFor(kind, item.slug)} alt="" loading="lazy" {...focusProps(tileFocusFor(kind, item.slug))} />
                   ) : (
