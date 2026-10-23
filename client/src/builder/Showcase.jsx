@@ -42,7 +42,7 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
   };
 
   const art = current ? artFor(kind, current.slug) : artFor(kind, null);
-  const showArt = !brokenArt[art];
+  const showArt = Boolean(art) && !brokenArt[art];
 
   return (
     <section className="showcase" aria-label={label}>

@@ -791,8 +791,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   animation: showcase-reveal 450ms ease-out both;
 }
 .showcase__monogram {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   font-family: var(--display);
   font-size: clamp(96px, 20vw, 180px);
   font-weight: 900;

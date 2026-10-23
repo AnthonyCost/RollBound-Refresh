@@ -64,7 +64,7 @@ The sheet screen can download the character as Paizo's official fillable Remaste
 
 ## Builder art
 
-The ancestry and class steps show portrait art. To add your own, see [docs/adding-art.md](docs/adding-art.md).
+The ancestry and class steps show portrait art and tile icons, found by file name in `client/src/assets/art/`. To add more, run `npm run art:import -- <folder>`; see [docs/adding-art.md](docs/adding-art.md).
 
 ## Image uploads
 

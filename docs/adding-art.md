@@ -1,73 +1,75 @@
 # Adding ancestry and class art
 
-The character builder's **Ancestry** and **Class** steps show a large portrait of whatever is selected. Anything without its own art falls back to the placeholder. If the placeholder file is also missing, the builder shows a large letter instead.
+The character builder's **Ancestry** and **Class** steps use two images per option:
 
-Adding art for one ancestry or class takes two steps:
+- **Portrait**: full-length art shown in the large panel when the option is selected.
+- **Icon**: a round emblem shown on the option's selection tile.
 
-1. Put the image file in `client/public/art/`.
-2. Add one line for it to `client/src/builder/art.js`.
+Art is found by file name, so adding it needs no code changes:
 
-You can add art one image at a time. Every ancestry and class you haven't covered keeps using the placeholder.
+1. Name each image after what it's for, for example `class-wizard.png` or `ancestry-elf-icon.png`.
+2. Put the images in a folder and run:
 
-## What's in place
+   ```bash
+   npm run art:import -- path/to/folder
+   ```
 
-Every class has art: Paizo's Remaster iconics, saved as `client/public/art/class-<slug>.webp`. Seven more images are ready for classes RollBound doesn't offer yet: animist, commander, exemplar, guardian, gunslinger, inventor and kineticist. Those are registered in `art.js` under the class names Foundry uses, so they show up automatically once those classes are imported.
+3. Restart `npm run dev:client` if it's running. The new art shows up on its own.
 
-Class tiles show round emblem icons from the Adventure Card Game, saved as `class-<slug>-icon.webp` and registered in `ICONS` in `art.js`. All 16 classes have icons. Gunslinger, magus and summoner icons are saved for later.
+You can add art one image at a time. Anything without its own art falls back as described in [Fallbacks](#fallbacks).
 
-Ancestries don't have art yet and still use the placeholder. Ancestry icons will follow the same `ancestry-<slug>-icon.webp` pattern.
+## File names
 
-## 1. Prepare the image
+| File | Used for |
+| --- | --- |
+| `<kind>-<slug>.png` | Portrait (`kind` is `ancestry` or `class`) |
+| `<kind>-<slug>-icon.png` | Tile icon |
 
-| | Recommendation | Why |
+Slugs are listed [below](#slugs). PNG, JPG and WebP all work as input.
+
+`art:import` saves web-ready WebP files in `client/src/assets/art/` with the same names:
+
+- **Portraits** are trimmed to the figure and capped at 1200px tall.
+- **Icons** are trimmed and fitted into 192 × 192.
+
+It warns you about:
+- files named in a way it doesn't recognize (those are skipped),
+- slugs that aren't in the imported books yet (those are kept for later),
+- icons whose area outside the circle isn't transparent, which would show as a box behind them.
+
+You can also save finished WebP files straight into `client/src/assets/art/` yourself. The script is only a convenience.
+
+## Preparing images
+
+| | Portrait | Icon |
 | --- | --- | --- |
-| **Background** | Transparent | The figure sits on the builder's dark ember glow. A white or colored background shows up as a box. |
-| **Format** | PNG, or WebP to keep the file small | These formats support transparency. JPEG doesn't. |
-| **Shape** | Portrait, roughly 2:3 (for example 750 × 1180 px) | The art panel is tall. Wide images get shrunk to fit. |
-| **Framing** | Full body, feet near the bottom edge, a little space above the head | The art is anchored to the bottom of the panel, over the glow. |
-| **File size** | Aim for under 500 KB | Every visitor downloads it. Use a compressor such as [Squoosh](https://squoosh.app) if needed. |
+| **Background** | Transparent | Transparent outside the circle |
+| **Shape** | Portrait, roughly 2:3 | Square, about 512 × 512 or larger |
+| **Framing** | Full body, head near the top | The emblem filling the square |
+
+Portraits are anchored to the top of a 2:3 panel with an even margin, so heads line up across options.
 
 To remove a background, use your editor's "remove background" tool (Photoshop, Affinity, GIMP) or a service like remove.bg. Check the gaps between the arms and the body, since background color often survives there.
 
-## 2. Name the file and put it in place
+## What's in place
 
-Save it in `client/public/art/` and name it `<kind>-<slug>.<ext>`, for example:
+- **Classes:** all 16 have a portrait (Paizo's Remaster iconics) and an icon (Adventure Card Game emblems).
+- **Saved for later:** portraits for animist, commander, exemplar, guardian, gunslinger, inventor and kineticist, and icons for gunslinger, magus and summoner. They appear automatically once those classes are imported.
+- **Ancestries:** none have their own art yet. Eight borrow a class iconic's portrait for now (see below), and the rest use the fallbacks.
 
-```
-client/public/art/class-wizard.png
-client/public/art/ancestry-elf.webp
-```
+## Fallbacks
 
-The name doesn't have to follow this pattern, but it keeps the folder tidy.
+When an option has no art of its own:
 
-## 3. Register it in `art.js`
+1. **Borrowed portrait:** `BORROWED` in `client/src/builder/art.js` can point an option at another image, such as Human at `class-fighter` (Valeros). Once the option gets its own file, that file wins and the entry is ignored, so delete it then.
+2. **Placeholder:** `placeholder-hero.png` in `client/src/assets/art/`, if present.
+3. **Letter:** if there's no placeholder either, the panel and tile show the option's first letter.
 
-Open `client/src/builder/art.js` and add an entry under `ancestry` or `class`. The key is the **slug** from the tables below, and the value is the file's path starting at `/art/`:
+A tile without an icon shows a round crop from the top of the portrait. If that crop misses the face, `TILE_FOCUS` in `art.js` can recenter it, for example `human: { x: 45, y: 10, zoom: 2.6 }`:
+- `x` and `y` are the point to center on, as a percentage across and down the image,
+- `zoom` is how many tiles wide the image is drawn.
 
-```js
-const ART = {
-  ancestry: {
-    elf: '/art/ancestry-elf.webp',
-    dwarf: '/art/ancestry-dwarf.png',
-  },
-  class: {
-    wizard: '/art/class-wizard.png',
-  },
-};
-```
-
-Each image you register is used in two places:
-
-- **The large portrait** when that option is selected.
-- **The option's small tile**, which shows a crop of the top of the image instead of a letter. Keep the face in the upper part of the image so the crop looks good.
-
-## 4. Check it
-
-Run `npm run dev:client`, open **New character**, and select the ancestry or class. If you still see the placeholder, check that:
-
-- the slug matches the tables below exactly (lowercase),
-- the path starts with `/art/`, not `/public/art/` or `client/...`,
-- the file name in `art.js` matches the file on disk, including its extension.
+An icon file makes this unnecessary.
 
 ## Slugs
 
@@ -103,14 +105,10 @@ If new books are imported later, their slugs are the `slug` fields in `packages/
 node -e 'const d=require("./packages/rules/data/pf2e-level1.json");console.log(d.ancestries.map(a=>a.slug).join(" "));console.log(d.classes.map(c=>c.slug).join(" "))'
 ```
 
-## Changing the placeholder
-
-The fallback image is `PLACEHOLDER_ART` in `art.js`, currently `/art/placeholder-hero.png`. To change it, point that at a different file.
-
 ## Licensing
 
-The class art is Paizo's iconic character art. If it came from Paizo's Community Use Package, the [Community Use Policy](https://paizo.com/licenses/communityuse) allows it in free, non-commercial fan projects, as long as the site shows Paizo's required notice. The notice says the site uses Paizo's trademarks and copyrights under that policy, isn't published or endorsed by Paizo, and doesn't charge for access. Check the policy page for the exact wording before publishing, and keep RollBound free while it uses this art.
+The class art is Paizo's iconic character art, and the icons are Adventure Card Game emblems. If they came from Paizo's Community Use Package, the [Community Use Policy](https://paizo.com/licenses/communityuse) allows them in free, non-commercial fan projects, as long as the site shows Paizo's required notice. The notice says the site uses Paizo's trademarks and copyrights under that policy, isn't published or endorsed by Paizo, and doesn't charge for access. Check the policy page for the exact wording before publishing, and keep RollBound free while it uses this art.
 
-Only add art you have the right to publish, such as art you made, commissioned, or licensed. The current placeholder is Monster Hunter art owned by Capcom, so it's listed in `.gitignore` and never committed. Don't publish the site with it. Art you own can be committed normally; just don't add it to `.gitignore`.
+Only add art you have the right to publish, such as art you made, commissioned, or licensed. Other Paizo art, such as illustrations from the rulebooks, isn't covered by the policy, so stick to the Community Use Package.
 
-Other Paizo art, such as illustrations from the rulebooks, isn't covered by the policy, so stick to the Community Use Package.
+The placeholder is Monster Hunter art owned by Capcom, so `client/src/assets/art/placeholder-hero.png` is listed in `.gitignore` and never committed. Don't publish the site with it. Art you own can be committed normally.

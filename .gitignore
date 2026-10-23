@@ -6,7 +6,7 @@ dist/
 *:Zone.Identifier
 
 # Third-party placeholder art (Monster Hunter, (c) Capcom): local use only, replace before publishing.
-client/public/art/placeholder-hero.png
+client/src/assets/art/placeholder-hero.png
 
 # Local stand-in for the S3 bucket
 server/uploads/
