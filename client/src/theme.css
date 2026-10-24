@@ -498,6 +498,48 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   text-align: center;
 }
 
+/* ---------- Saved encounters ---------- */
+
+.encounter-card__top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.encounter-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+.encounter-head__name { flex: 1 1 320px; }
+.encounter-head__name input { font-family: var(--display); font-size: 20px; letter-spacing: 1px; }
+.encounter-head__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.encounter-head__saved { font-size: 14px; color: var(--gold); }
+.encounter-head__unsaved { font-size: 14px; font-style: italic; color: var(--text-muted); }
+.encounter__name a { color: var(--text); }
+/* In a creature row the name is plain text, so the spaces around "· Level" stay. */
+.encounter__creature .encounter__name { display: block; }
+/* Phones: the name on its own line, then count, XP and remove. */
+@media (max-width: 560px) {
+  .encounter__list .encounter__creature { display: grid; grid-template-columns: auto 1fr auto; align-items: center; }
+  .encounter__list .encounter__creature .encounter__name { grid-column: 1 / -1; }
+  .encounter__list .encounter__creature .encounter__each { text-align: left; }
+}
+.encounter__creature .stepper .btn { min-height: 34px; width: 34px; }
+.encounter__notes { width: 100%; padding: 10px 12px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-family: var(--body); font-size: 16px; resize: vertical; }
+.party-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.party-tile { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 8px; border: 1px solid var(--line); background: var(--bg); }
+.party-tile--set { border-color: var(--bronze); }
+.party-tile__label { font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.party-tile input { width: 100%; max-width: 110px; min-height: 44px; padding: 0; border: 0; border-bottom: 1px solid transparent; background: none; color: var(--text); font-family: var(--display); font-size: 28px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.party-tile input:hover { border-bottom-color: var(--line); }
+.party-tile input:focus { outline: none; border-bottom-color: var(--bronze); }
+.party-tile__reset { padding: 2px 0; border: 0; background: none; color: var(--bronze); font-family: var(--body); font-size: 13px; text-decoration: underline; cursor: pointer; }
+.picker { display: flex; flex-direction: column; gap: 10px; }
+.picker .panel__title { margin: 0; }
+.picker__search, .homebrew input { width: 100%; min-height: 44px; padding: 0 10px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-family: var(--body); font-size: 16px; }
+.picker__nearby { margin: 0; font-size: 14px; }
+.picker__results { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; max-height: 420px; overflow-y: auto; }
+.picker__result { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 10px; border: 1px solid var(--line-soft); background: var(--bg); }
+.picker__info { display: flex; flex-direction: column; min-width: 0; font-size: 14px; }
+.picker__name { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text); text-decoration: none; }
+.picker__name:hover { text-decoration: underline; }
+.homebrew { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+.homebrew__row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.homebrew__row > input { flex: 1 1 180px; width: auto; }
+.xp-reference .xp-table, .xp-reference .rule-note { margin: 0 14px 12px; width: calc(100% - 28px); }
+
 /* ---------- Bestiary ---------- */
 
 .bestiary__head { display: flex; flex-direction: column; gap: 6px; }
@@ -700,8 +742,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .xp-table td:last-child { text-align: right; }
 .xp-table__even td { background: var(--panel); color: var(--text); }
 .xp-table .chip { min-height: 30px; padding: 0 10px; white-space: nowrap; }
-/* On one column (phones, tablets) the encounter being built comes first. */
-@media (max-width: 1023px) { .encounters .split__col:last-child { order: -1; } }
+
 .encounter__total { display: flex; align-items: baseline; gap: 12px; }
 .encounter__xp { font-family: var(--display); font-size: 30px; font-weight: 700; }
 .encounter__threat { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }

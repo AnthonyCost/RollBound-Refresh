@@ -10,9 +10,9 @@ import BuilderPage from './pages/BuilderPage.jsx';
 import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
 import CampaignLayout, { CampaignOverview } from './pages/CampaignPage.jsx';
 import { SessionLogEditor, SessionLogPage, SessionLogsPage } from './pages/SessionLogPages.jsx';
-import EncountersPage from './pages/EncountersPage.jsx';
+import { EncounterEditor, EncounterListPage } from './pages/EncountersPage.jsx';
 import BestiaryPage from './pages/BestiaryPage.jsx';
-import CreaturePage from './pages/CreaturePage.jsx';
+import CreaturePage, { CreatureByIdPage } from './pages/CreaturePage.jsx';
 import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import SharedSheetPage, { PartySheetPage } from './pages/SharedSheetPage.jsx';
@@ -100,6 +100,7 @@ export default function App() {
         <Route path="/create" element={<BuilderPage />} />
         <Route path="/characters/:characterId/edit" element={<BuilderPage />} />
         <Route path="/bestiary" element={<BestiaryPage />} />
+        <Route path="/bestiary/creature/:creatureId" element={<CreatureByIdPage />} />
         <Route path="/bestiary/:book/:slug" element={<CreaturePage />} />
         <Route path="/campaigns/new" element={<CampaignCreatePage />} />
         <Route path="/campaigns/:id" element={<CampaignLayout />}>
@@ -108,7 +109,9 @@ export default function App() {
           <Route path="logs/new" element={<SessionLogEditor />} />
           <Route path="logs/:logId" element={<SessionLogPage />} />
           <Route path="logs/:logId/edit" element={<SessionLogEditor />} />
-          <Route path="encounters" element={<EncountersPage />} />
+          <Route path="encounters" element={<EncounterListPage />} />
+          <Route path="encounters/new" element={<EncounterEditor />} />
+          <Route path="encounters/:encounterId" element={<EncounterEditor key="edit" />} />
         </Route>
         <Route path="/campaigns/:id/edit" element={<CampaignEditPage />} />
         {/* A party member's sheet; the server only shows it to the GM and the party. */}

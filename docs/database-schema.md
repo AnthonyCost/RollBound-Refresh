@@ -13,6 +13,7 @@ erDiagram
     campaigns ||--o{ join_requests : "receives"
     characters ||--o{ join_requests : "asks to join with"
     campaigns ||--o{ session_logs : "is recapped in"
+    campaigns ||--o{ encounters : "plans"
     users |o--o{ messages : "receives (none: everyone)"
     join_requests |o--o{ messages : "is announced by"
     users ||--o{ message_reads : "has read"
@@ -77,6 +78,17 @@ erDiagram
         int join_request_id FK
         timestamptz created_at
     }
+    encounters {
+        serial id PK
+        int campaign_id FK
+        text name
+        text notes
+        int party_size "null: follow the campaign"
+        int party_level "null: follow the campaign"
+        jsonb creatures "bestiary id or homebrew, level, count"
+        timestamptz created_at
+        timestamptz updated_at
+    }
     message_reads {
         int user_id PK, FK
         int message_id PK, FK
@@ -97,7 +109,7 @@ erDiagram
 | When this is deleted | These go with it | These stay, unlinked |
 | --- | --- | --- |
 | A user | their sessions, characters, messages, read marks, and pretend players (demo) | campaigns they ran (no GM)* |
-| A campaign | its join requests, session logs, and those requests' messages | its characters (in no campaign) |
+| A campaign | its join requests, session logs, encounters, and those requests' messages | its characters (in no campaign) |
 | A character | its join requests and their messages | |
 | A join request | its messages | |
 | A message | its read marks | |
@@ -116,4 +128,4 @@ erDiagram
 - **Rules data** (ancestries, classes, feats, spells, items): JSON files in `packages/rules/data/`, loaded by the server and client. A character's `data` stores the IDs of what was chosen.
 - **Adventure Paths**: `packages/rules/src/adventurePaths.js`. `campaigns.adventure_path` holds a slug from it.
 - **Uploaded images**: in S3 (or `server/uploads/` locally). The `*_key` columns hold where each one is.
-- **Encounter drafts**: in the GM's browser (`localStorage`) for now.
+- **Creatures**: `packages/rules/bestiary/`. An encounter's creatures hold a bestiary `creatureId` (or none, for homebrew) with a copy of the name and level.

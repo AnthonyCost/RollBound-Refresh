@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
 import { BESTIARY_LICENSE, bookByKey, creaturePath, loadBestiary } from '../state/bestiary.js';
 import { signed } from '../format.js';
@@ -124,4 +124,17 @@ export default function CreaturePage() {
       </article>
     </PageShell>
   );
+}
+
+/** /bestiary/creature/:creatureId, for links that only know a creature's id (saved encounters). */
+export function CreatureByIdPage() {
+  const { creatureId } = useParams();
+  const [to, setTo] = useState(null);
+  useEffect(() => {
+    loadBestiary().then(
+      (all) => setTo(all.find((c) => c.id === creatureId) ? creaturePath(all.find((c) => c.id === creatureId)) : '/bestiary'),
+      () => setTo('/bestiary'),
+    );
+  }, [creatureId]);
+  return to ? <Navigate to={to} replace /> : <PageShell crumbs={[{ label: 'Bestiary', to: '/bestiary' }]}><p className="muted italic center">Opening the tome…</p></PageShell>;
 }

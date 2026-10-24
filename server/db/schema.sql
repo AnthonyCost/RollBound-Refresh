@@ -130,3 +130,19 @@ CREATE INDEX IF NOT EXISTS session_logs_campaign_idx ON session_logs (campaign_i
 -- The Adventure Path a campaign runs (a slug from adventurePaths.js in the rules),
 -- or NULL for homebrew. Set when the campaign is created.
 ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS adventure_path TEXT;
+
+-- Encounters a campaign's GM builds and saves. party_size and party_level NULL mean
+-- "follow the campaign" (its characters and their levels). creatures is a list of
+-- { key, creatureId (a bestiary id, or null for a homebrew one), name, level, count }.
+CREATE TABLE IF NOT EXISTS encounters (
+  id          SERIAL PRIMARY KEY,
+  campaign_id INTEGER NOT NULL REFERENCES campaigns(id) ON DELETE CASCADE,
+  name        TEXT NOT NULL,
+  notes       TEXT NOT NULL DEFAULT '',
+  party_size  INTEGER CHECK (party_size BETWEEN 1 AND 8),
+  party_level INTEGER CHECK (party_level BETWEEN 1 AND 20),
+  creatures   JSONB NOT NULL DEFAULT '[]',
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS encounters_campaign_idx ON encounters (campaign_id, updated_at DESC);

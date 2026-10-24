@@ -212,12 +212,15 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - They belong to their campaign only, and deleting the campaign deletes them.
   - Routes: `/campaigns/:id/logs`, `logs/new`, `logs/:logId`, `logs/:logId/edit`. API: `GET|POST /api/campaigns/:id/logs`, `GET|PUT|DELETE /api/campaigns/:id/logs/:logId`.
   - DATE columns come back from Postgres as text (`db.js`), so a session's date can't shift by a day across time zones.
-- **Encounters** (`pages/EncountersPage.jsx`): the encounter-budget half of the old GM screen, which used the rules' `budgets`, `rateEncounter` and `dcByLevel`. The mock GM tab on character screens, with its made-up initiative list, is gone.
-  - The party's size and level start from the campaign and can be changed for planning.
-  - The XP budget lists each threat (trivial to extreme) with what it means at the table, and a table shows what a creature of each level is worth, with a button to add one.
-  - The encounter being built totals its XP, rates its threat on a bar marked with each budget, and warns about creatures beyond the table. Its creatures are a name, a level and a count.
-  - The draft is kept in `localStorage` per campaign until saved encounters arrive with the encounter tracker.
-  - Next: a bestiary (Monster Core, Monster Core 2, Adventure Path monsters) to pick creatures from.
+- **Encounters** (`encounters` table, `server/src/routes/encounters.js`, `pages/EncountersPage.jsx`), for the GM only: players don't get the tab, and the API answers 404 to anyone else.
+  - **The tab** lists the campaign's saved encounters, newest first, each with its creatures, XP and threat. **New encounter** opens the editor at `/campaigns/:id/encounters/new`; a saved one opens at `/campaigns/:id/encounters/:encounterId`.
+  - **The editor** has a name and notes. Creatures come from the bestiary or are homebrew (a name and a level); adding the same bestiary creature again raises its count. Each row has a count stepper, its XP, and Remove, and bestiary creatures link to their page (`/bestiary/creature/:id` finds them by ID).
+  - **Rating:** XP and threat update live on the budget bar. Up to 40 kinds of creature, 20 of each.
+  - **The bestiary picker** searches by name or trait and, by default, shows only creatures the budget can price (party level −4 to +4), nearest first.
+  - **The party** follows the campaign automatically: its characters' count and their average level, or four at the campaign's party level before anyone joins. The party panel shows both as two number tiles. Typing a number sets it for that encounter (the tile turns bronze, with **Reset to N**), and typing the party's own number goes back to following it. NULL in the database means "follow the party", so it keeps up as characters join, leave and level up.
+  - **Saving:** Save, Unsaved changes, and Delete with a confirm. The XP budget with what each threat means, a collapsible "what creatures are worth" table, and the level DC stay beside it.
+  - API: `GET|POST /api/campaigns/:id/encounters`, `GET|PUT|DELETE /api/campaigns/:id/encounters/:encounterId`. Deleting the campaign deletes its encounters.
+  - The mock GM tab on character screens, with its made-up initiative list, is gone. Running an encounter (initiative, turns) belongs to the encounter tracker, which will start from a saved encounter.
 
 ### 6c. Bestiary
 - **What:** every creature in Monster Core (445) and Monster Core 2 (395), levels −1 to 25, at `/bestiary`, linked from the ☰ menu. Signed-in users only.
@@ -227,7 +230,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - It's kept apart from the builder's rules data so it doesn't count toward the 5 MB budget or slow the builder. The client loads both books only when the Bestiary opens (about 400 KB compressed each).
 - **Checked:** the import compares Monster Core against Foundry VTT's independent copy. Of 418 creatures in both, 413 agree on level, HP, AC, Perception and saves; 5 don't (Air Scamp Fortitude, Dero Stalker AC, Giant Monitor Lizard AC, Centaur Herbalist HP and Will, Azuretzi HP), likely errata applied in one source and not the other. Foundry has no Monster Core 2 yet, so it's AoN only. `test/bestiary.test.js` checks every creature has its numbers and a clean stat block.
 - **Pages:** `pages/BestiaryPage.jsx` has search (name, old name, or trait), filters for level range, creature type, size, rarity and book, and Clear filters. The filters live in the address, so a filtered list can be bookmarked. It shows 60 at a time. `pages/CreaturePage.jsx` (`/bestiary/mc/:slug`, `/bestiary/mc2/:slug`) shows quick stats, lore, Recall Knowledge, sidebars, the stat block, the book and page, and the creature's family with a filtered-list link.
-- **Next:** pick creatures from the bestiary in the Encounters tab (the level and XP math already works with them).
+- **Used by** the Encounters tab's creature picker.
 
 ### 7. Image uploads and S3
 - **Three kinds:** campaign covers (`covers/`, 5 MB), profile pictures (`avatars/`, 2 MB), and character portraits (`portraits/`, 5 MB).
