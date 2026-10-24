@@ -19,6 +19,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 // Everything in here is generated, and replaced on every import.
 const OUT = join(here, '..', 'data');
 const CORRECTIONS = join(here, '..', 'corrections');
+// Hand-made books for titles Foundry doesn't have yet (see scripts/import-aon.js).
+const HAND_MADE = join(here, '..', 'books');
 const CACHE = join(here, '..', '..', '..', 'node_modules', '.cache', 'pf2e-import');
 
 const SKILLS = [
@@ -514,6 +516,7 @@ const ancestries = byPack(/^packs\/ancestries\//).map(mapAncestry).sort(byName);
 // Starting gear: items of your level or lower.
 const equipment = byPack(/^packs\/equipment\//).filter((e) => (e.system.level?.value ?? 0) <= 1);
 
+const skippedHandMade = [];
 const data = {
   meta: {
     source: `https://github.com/${REPO}`,
@@ -543,22 +546,49 @@ const data = {
   shields: equipment.filter((e) => e.type === 'shield').map(mapShield).sort(byName),
 };
 
+// ---------- Hand-made books ----------
+// Books Foundry doesn't have yet, converted from the Archives of Nethys. They're
+// merged here so everything below (corrections, links, report) treats them alike.
+// Once Foundry has a book, add it to BOOKS and delete its file here.
+
+const handMade = existsSync(HAND_MADE) ? (await readdir(HAND_MADE)).filter((f) => f.endsWith('.json')).sort() : [];
+for (const file of handMade) {
+  const hand = JSON.parse(await readFile(join(HAND_MADE, file), 'utf8'));
+  if (BOOKS.some((b) => b.replace(/^Pathfinder /, '') === hand.book)) {
+    throw new Error(`books/${file}: ${hand.book} is also imported from Foundry. Delete the hand-made file.`);
+  }
+  data.meta.books.push(hand.book);
+  if (!data.meta.license.includes('Archives of Nethys')) data.meta.license = data.meta.license.replace(/\.$/, ' and the Archives of Nethys.');
+  for (const type of ['classes', 'heritages', 'feats', 'spells', 'runes']) {
+    data[type] = [...(data[type] ?? []), ...(hand[type] ?? [])].sort(byName);
+  }
+  // Options for classes from other books, such as new wizard arcane schools.
+  for (const [key, options] of Object.entries(hand.subclassOptions ?? {})) {
+    const feature = data.classes.flatMap((c) => c.features).find((f) => f.choice?.key === key);
+    if (!feature) throw new Error(`books/${file}: no class has a "${key}" choice for its extra options`);
+    feature.choice.options = [...feature.choice.options, ...options].sort(byName);
+  }
+  for (const [type, names] of Object.entries(hand.skipped ?? {})) {
+    for (const name of names) skippedHandMade.push(`${name} (${hand.book} ${type.replace(/s$/, '')}): skipped, see books/${file}`);
+  }
+}
+
 // ---------- Corrections ----------
 // Rules Foundry's data doesn't encode, one file per book (see corrections/README.md).
 
 const bookFile = (title) => `${slugOf(title.replace(/^Pathfinder /, ''))}.json`;
 const CORRECTABLE = {
-  classes: { list: () => data.classes, fields: ['casting', 'divineFont', 'deityFavoredWeapon'] },
+  classes: { list: () => data.classes, fields: ['casting', 'divineFont', 'deityFavoredWeapon', 'lores', 'classFeatTraits', 'runes'] },
   subclassOptions: {
     list: () => data.classes.flatMap((c) => c.features.flatMap((f) => f.choice?.options ?? [])),
-    fields: ['proficiencies', 'keyAbility'],
+    fields: ['proficiencies', 'keyAbility', 'skills', 'traditionSkills'],
   },
   heritages: { list: () => data.heritages, fields: ['featAncestries'] },
   feats: { list: () => data.feats, fields: ['grantedOnlyIf'] },
 };
 
 const correctionFiles = new Set((await readdir(CORRECTIONS)).filter((f) => f.endsWith('.json')));
-for (const title of BOOKS) {
+for (const title of data.meta.books) {
   const file = bookFile(title);
   if (!correctionFiles.has(file)) continue;
   correctionFiles.delete(file);
@@ -607,6 +637,8 @@ for (const b of data.backgrounds) b.feats = linkFeats(b.feats, b.name);
 for (const h of data.heritages) h.feats = linkFeats(h.feats, h.name);
 for (const f of data.feats) f.feats = linkFeats(f.feats, f.name);
 for (const c of data.classes) {
+  // Spells a class always knows, e.g. the necromancer's harm (corrections: casting.grantedSpells).
+  if (c.casting?.grantedSpells) c.casting.grantedSpells = linkSpells(c.casting.grantedSpells, `${c.name}: spellcasting`);
   for (const f of c.features) {
     f.feats = linkFeats(f.feats, `${c.name}: ${f.name}`);
     for (const o of f.choice?.options ?? []) {
@@ -676,6 +708,7 @@ await writeFile(join(OUT, 'index.json'), `${JSON.stringify(index, null, 1)}\n`);
 
 const counts = Object.entries(data).filter(([, v]) => Array.isArray(v)).map(([k, v]) => `${k} ${v.length}`);
 console.log(`Wrote ${Object.keys(files).length} files to ${OUT}\n  ${counts.join(', ')}`);
+for (const note of skippedHandMade) console.log(`Note: ${note}`);
 if (needsReview.length) {
   console.log(`\nImport report: ${needsReview.length} thing(s) need a look (add corrections, see corrections/README.md):`);
   for (const line of needsReview) console.log(`  - ${line}`);

@@ -4,12 +4,13 @@
   "commit": "4cbdaa37d6c33e9519561bae2c59a23e0288cbce",
   "books": [
    "Player Core",
-   "Player Core 2"
+   "Player Core 2",
+   "Impossible Magic"
   ],
-  "license": "Game mechanics © Paizo Inc., used under the ORC License. Data via the Foundry VTT pf2e system.",
-  "generatedAt": "2026-10-24T00:48:33.705Z",
+  "license": "Game mechanics © Paizo Inc., used under the ORC License. Data via the Foundry VTT pf2e system and the Archives of Nethys.",
+  "generatedAt": "2026-10-24T01:28:20.970Z",
   "needsReview": [],
-  "version": "8ff29c871fa7"
+  "version": "82aa088f3da3"
  },
  "files": [
   {
@@ -61,6 +62,12 @@
    "count": 23
   },
   {
+   "path": "impossible-magic/classes.json",
+   "type": "classes",
+   "book": "Impossible Magic",
+   "count": 4
+  },
+  {
    "path": "player-core/classes.json",
    "type": "classes",
    "book": "Player Core",
@@ -77,6 +84,12 @@
    "type": "feats",
    "book": "Advanced Player's Guide",
    "count": 1
+  },
+  {
+   "path": "impossible-magic/feats.json",
+   "type": "feats",
+   "book": "Impossible Magic",
+   "count": 29
   },
   {
    "path": "player-core/feats.json",
@@ -103,6 +116,12 @@
    "count": 20
   },
   {
+   "path": "impossible-magic/spells.json",
+   "type": "spells",
+   "book": "Impossible Magic",
+   "count": 37
+  },
+  {
    "path": "player-core/spells.json",
    "type": "spells",
    "book": "Player Core",
@@ -113,6 +132,12 @@
    "type": "spells",
    "book": "Player Core 2",
    "count": 21
+  },
+  {
+   "path": "impossible-magic/runes.json",
+   "type": "runes",
+   "book": "Impossible Magic",
+   "count": 16
   },
   {
    "path": "player-core/weapons.json",

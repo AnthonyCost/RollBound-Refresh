@@ -1,0 +1,907 @@
+[
+ {
+  "id": "aon-spell-2630",
+  "slug": "animal-allies",
+  "name": "Animal Allies",
+  "rank": 1,
+  "traditions": [
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": "5-foot emanation",
+  "target": null,
+  "defense": "basic reflex",
+  "duration": null,
+  "description": "<p>You summon tiny, ordinary animals from the environment, such as insects, birds, or fish, to quickly lash out at nearby foes. The animals swarm around the creatures in the area, dealing 3d4 piercing damage to each creature with a basic Reflex save.</p>\n<p><strong>Heightened (+1)</strong> The damage increases by 3d4.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2631",
+  "slug": "approximate",
+  "name": "Approximate",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "detection",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "10 feet",
+  "area": "1 cubic foot",
+  "target": null,
+  "defense": null,
+  "duration": null,
+  "description": "<p>Your magic quickly flows over an area to help you count and catalog. Name a particular type of object you're looking for within the area. You gain an instant estimate of the quantity of the chosen objects that are clearly visible within the target area. The number is rounded to the largest digit. For example, you could look at a pile of 180 copper coins, and you would learn that it held about 200 coins, but you couldn't determine there were exactly 180 coins.</p>\n<p>The type of object you name can be as specific or general as you like—“dented copper coins” is as viable as “coins”—but the distinguishing features must be obvious at a glance, and the spell is fooled by objects disguised as other objects.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2632",
+  "slug": "artistic-recollection",
+  "name": "Artistic Recollection",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>You touch your finger to a blank surface and create an image of a person, place, or object. This image appears instantly in the style of a pastel-hued oil painting and disappears cleanly once the spell ends. The portrait is the size of one average sketchbook page and must represent a subject the caster has seen in person or has studied extensively.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2636",
+  "slug": "biting-words",
+  "name": "Biting Words",
+  "rank": 1,
+  "traditions": [
+   "occult"
+  ],
+  "traits": [
+   "attack",
+   "auditory",
+   "concentrate",
+   "linguistic",
+   "manipulate",
+   "sonic"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": "ac",
+  "duration": "1 minute",
+  "description": "<p>You entwine magic with your voice, causing your taunts and jibes to physically harm your enemies. You can attack with your words once when you finish Casting the Spell, and can repeat the attack once on each of your subsequent turns by taking a single action, which has the attack, concentrate, and linguistic traits. After your third attack total, the spell ends. When you attack with <em>biting words</em>, make a ranged spell attack roll against a creature within 30 feet, dealing 2d6 sonic damage if you hit (or double damage on a critical hit).</p>\n<p><strong>Heightened (+1)</strong> The damage increases by 2d6.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2640",
+  "slug": "blessing-of-vigor",
+  "name": "Blessing of Vigor",
+  "rank": 1,
+  "traditions": [
+   "divine"
+  ],
+  "traits": [
+   "concentrate",
+   "healing",
+   "manipulate",
+   "vitality",
+   "positive"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "30 feet",
+  "area": null,
+  "target": "you or 1 ally",
+  "defense": null,
+  "duration": "3 rounds",
+  "description": "<p>You pray for a small blessing to keep your target safe. The target gains fast healing 3.</p>\n<p><strong>Heightened (+1)</strong> The fast healing increases by 3.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2646",
+  "slug": "bone-shield",
+  "name": "Bone Shield",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "concentrate"
+  ],
+  "rarity": "common",
+  "actions": "1",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "description": "<p>You create an expendable shield of rough, raw bone in a free hand that can easily be replaced over and over again. When you Cast the Spell or the first time each round you Sustain this spell on subsequent rounds, you can Raise this Shield, granting you a +2 circumstance bonus to AC. While this spell is in effect, you gain the Shield Block reaction, but only with the bone shield. The bone shield has Hardness 3 and 1 HP (with no Broken Threshold). This shield also gains a +2 circumstance bonus to its Hardness against attacks that deal piercing or slashing damage. If the shield is destroyed, it's recreated already raised in a free hand when you Sustain the Spell.</p>\n<p><strong>Heightened (+2)</strong> The shield’s Hardness increases by 3.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2649",
+  "slug": "breadcrumbs",
+  "name": "Breadcrumbs",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "1 minute",
+  "range": "touch",
+  "area": null,
+  "target": "1 willing creature",
+  "defense": null,
+  "duration": "1 hour",
+  "description": "<p>You protect your target from going astray in hostile territory by tracking where they've already been, helping the target deduce where they still need to go. The target leaves a glittering trail behind them that lasts for the spell's duration. This trail doesn't denote the direction or the order of its path—it merely indicates where the target has moved during the spell's duration.</p>\n<p><strong>Heightened (2nd)</strong> The duration increases to 8 hours.</p>\n<p><strong>Heightened (3rd)</strong> The duration increases to last until your next daily preparations.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2655",
+  "slug": "cinder-scribe",
+  "name": "Cinder Scribe",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "fire",
+   "manipulate"
+  ],
+  "rarity": "uncommon",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "one object (see below)",
+  "defense": null,
+  "duration": "24 hours",
+  "description": "<p>Conjuring a quill of magical flame, you take an object and write a message onto it that disappears to the naked eye almost as soon as you finish writing it. If this message is written onto an object that can't withstand a burning fire, such as paper or leather, then the object is destroyed while you're writing it. If the inscribed object is thrust into a roaring fire, the writing on it is revealed for 1 minute before fading. The writing can be revealed this way any number of times, and it's erased only if it's counteracted by an effect similar to <em>dispel magic</em> or when the duration ends. Even if the object is destroyed, pieces of the message exist on its various parts. For example, if the object was turned to dust and recreated via remake, the message would remain intact.</p>\n<p><strong>Heightened (2nd)</strong> The duration increases to a year and a day.</p>\n<p><strong>Heightened (4th)</strong> The duration is unlimited.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2663",
+  "slug": "cradle-aloft",
+  "name": "Cradle Aloft",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "1",
+  "range": "touch",
+  "area": null,
+  "target": "1 held object of 2 Bulk or less",
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>You temporarily release gravity's hold on an object, allowing you to let go of it without dropping it to the floor. The object floats next to you in your space, following you if you move. You can Interact to retrieve the object on your turn as a free action. If you're within reach of another creature, that creature can spend a single action with the attack trait to attempt an Athletics check against your spell DC, retrieving the object out of the air on a success. The creature must have a free hand to attempt this check. The spell ends if a creature successfully retrieves the object. If the object is floating when the spell ends, it falls.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2664",
+  "slug": "create-earthen-facsimile",
+  "name": "Create Earthen Facsimile",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "earth",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "10 minutes",
+  "description": "<p>You hold a clump of soil, and it morphs into a small figurine in your hand. The soil transforms and hardens into a simple form of your choosing. While it does hold its shape if undisturbed, the figurine is brittle and will crumble under pressure or turn back to mush at the end of the spell's duration.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2670",
+  "slug": "decompose",
+  "name": "Decompose",
+  "rank": 1,
+  "traditions": [
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "1 Large or smaller corpse",
+  "defense": null,
+  "duration": null,
+  "description": "<p>You touch a corpse to speed up the decaying process. The target begins to rapidly decompose. After a day, any organic material will be gone, and after a week, any trace of the target will be gone.</p>\n<p><strong>Heightened (3rd)</strong> Organic material is gone within a minute, and any trace of the target is gone within an hour.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2680",
+  "slug": "dome-of-tranquility",
+  "name": "Dome of Tranquility",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "air",
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "1 minute",
+  "range": "30 feet",
+  "area": "30-foot burst",
+  "target": null,
+  "defense": null,
+  "duration": "1 hour",
+  "description": "<p>The air around you falls still and blocks out the sounds of the outside world. While you can clearly hear anything within this isolated dome, you can't hear anything outside of it. The opposite is also true, with no one outside of your dome being able to hear what's within. This dome doesn't block line of sight. If anything larger than 1 Bulk passes through it, the dome is automatically dispersed. You can Dismiss this spell.</p>\n<p><strong>Heightened (3rd)</strong> The duration increases to 8 hours.</p>\n<p><strong>Heightened (5th)</strong> The duration increases to 24 hours.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2685",
+  "slug": "echoing-weapon",
+  "name": "Echoing Weapon",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "sonic"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "1 weapon",
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>You channel energy into the target weapon, and the air around it faintly hums each time it strikes a blow, as the impact is absorbed into the weapon. If a creature is wielding the weapon at the end of its turn, the weapon discharges a burst of sound targeting one creature adjacent to the wielder. The sonic damage dealt is equal to the number of successful Strikes with the target weapon that the wielder made that turn (to a maximum of 4 sonic damage if the wielder hits with four Strikes).</p>\n<p><strong>Heightened (+2)</strong> The sonic damage increases by 1 per Strike (and the maximum damage increases by 4).</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2704",
+  "slug": "fishing-spot",
+  "name": "Fishing Spot",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "10 minutes",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": null,
+  "description": "<p>You conjure a fishing rod and an extraplanar pool teeming with fish. After 10 minutes of fishing, you catch a magical fish; roll 1d8 to see which fish you caught and the effects gained from eating it once it's cooked. The fish must be cooked and eaten (a process that takes about 30 minutes) within 1 hour of being caught, and the listed effect lasts for 1 hour after consumption. Each fish can feed only a single creature. <strong>Musical trout</strong> +2 status bonus to Performance checks<strong>Primordial bass</strong> +2 status bonus to Survival checks<strong>Ghoulfish</strong> +2 status bonus to Intimidation checks<strong>Burbling barbel</strong> +2 status bonus to Deception and Diplomacy checks<strong>Dashing dace</strong> +2 status bonus to Acrobatics checks<strong>Vigocarp</strong> +2 status bonus to Athletics checks to Climb and Swim<strong>Aggressive perch</strong> +2 status bonus to Athletics checks to Disarm, Grapple, Reposition, Shove, and Trip<strong>Scholar salmon</strong> +2 status bonus to checks to Recall Knowledge</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2723",
+  "slug": "gravitational-pull",
+  "name": "Gravitational Pull",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "single action to three actions",
+  "range": "30 feet",
+  "area": null,
+  "target": "1 creature",
+  "defense": "fortitude",
+  "duration": null,
+  "description": "<p>By suddenly altering gravity, you pull the target toward you. The target is pulled 10 feet closer to you unless it succeeds at a Fortitude save. On a critical failure, it's also knocked prone. The effects of this spell change depending on the number of actions you spend when you Cast this Spell.</p>\n<p>[single action] The spell targets one creature. [two actions] (concentrate) The spell targets one creature and pulls the target 20 feet instead of 10. [three actions] (concentrate) The spell targets up to five creatures.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2725",
+  "slug": "groom-companion",
+  "name": "Groom Companion",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "your companion or eidolon",
+  "defense": null,
+  "duration": "8 hours",
+  "description": "<p>Companions can easily become covered in blood, dirt, and other nasty substances, creating a poor impression in noncombat situations. When you Cast this Spell, you immediately clean your companion, trim their fur or nails as appropriate, and leave them smelling nice. Additionally, future dirt, grease, grime, and other nasty substances slide off the target, keeping them clean and groomed. Your companion gains a +1 status bonus to Performance checks. At the GM's discretion, your companion might be able to gain admittance to an establishment that wouldn't normally allow beasts for the duration of this spell.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2732",
+  "slug": "horizon-thunder-sphere",
+  "name": "Horizon Thunder Sphere",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "attack",
+   "concentrate",
+   "electricity",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "two actions to 2 rounds",
+  "range": "varies",
+  "area": null,
+  "target": "1 creature",
+  "defense": "ac",
+  "duration": null,
+  "description": "<p>You gather magical energy into your palm, forming a concentrated ball of electricity that crackles and rumbles like impossibly distant thunder. Make a ranged spell attack roll against your target's AC. On a success, you deal 3d6 electricity damage. On a critical success, the target takes double damage and is dazzled for 1 round. The number of actions you spend when Casting this Spell determines its range as well as other parameters.</p>\n<p>[two actions] This spell has a range of 30 feet. [three actions] This spell has a range of 60 feet and deals half damage on a failure (but not a critical failure) as the electricity lashes out and jolts the target.</p>\n<p><strong>Two Rounds</strong> If you spend 3 actions Casting the Spell, you can avoid finishing the spell and spend another 2 actions on your next turn to empower the spell even further. You can take other actions before finishing this spell, but the spell is lost if you Cast another Spell in between. After attacking the target, whether you hit or miss, the ball of lightning explodes, dealing 2d6 electricity damage to all other creatures in a 10-foot emanation around the target (basic Reflex save). Additionally, you spark with electricity for 1 minute, dealing 1 electricity damage to creatures that Grapple you or that hit you with an unarmed Strike or a non-reach melee weapon.</p>\n<p><strong>Heightened (+1)</strong> The initial damage on a hit, as well as the burst damage for 2-round casting time, each increase by 2d6, and the damage creatures take if they Grapple or hit you while you’re in your sparking state increases by 1.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2748",
+  "slug": "infectious-enthusiasm",
+  "name": "Infectious Enthusiasm",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "emotion",
+   "manipulate",
+   "mental"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 round",
+  "description": "<p>With enchanted gusto, you encourage yourself to get things done and share your motivation with your allies. You gain a +1 status bonus to your choice of attack rolls, Will saves, or Charisma-based skill checks. During the spell’s duration, an ally who observed you Casting this Spell and was within 30 feet when you did so can take a single action, which has the concentrate trait, to gain the same bonus you chose until the start of their next turn. Using this spell to influence someone in a social situation is typically considered a faux pas, negating the benefit on Charisma-based skills if the subject of the check observed you casting the spell.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2754",
+  "slug": "juvenile-companion",
+  "name": "Juvenile Companion",
+  "rank": 1,
+  "traditions": [
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "polymorph"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "your companion",
+  "defense": null,
+  "duration": "10 minutes",
+  "description": "<p>You transform your companion into its juvenile form, such as a cub, foal, kitten, puppy, or piglet, making the target appear small and harmless. It becomes Tiny (if it was larger), and its reach is reduced to 0 feet. All its Speeds are halved (to a minimum Speed of 5 feet), and it gains weakness 5 to physical damage. In all other ways, its abilities and statistics are unchanged. If your companion uses a hostile action, <em>juvenile companion</em> ends. This spell has no effect on a companion that doesn't have a juvenile form.</p>\n<p><strong>Heightened (2nd)</strong> The duration increases to 1 hour.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2760",
+  "slug": "lose-the-path",
+  "name": "Lose the Path",
+  "rank": 1,
+  "traditions": [
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "illusion",
+   "manipulate",
+   "mental",
+   "visual"
+  ],
+  "rarity": "common",
+  "actions": "reaction",
+  "range": "60 feet",
+  "area": null,
+  "target": "the triggering creature",
+  "defense": "will",
+  "duration": null,
+  "description": "<p>You surround a moving creature with lifelike illusions, shifting their perception of the terrain to subtly lead them off course. The target must attempt a Will save. Regardless of the result, the creature is immune to <em>lose the path</em> for 1 hour.</p>\n<p><strong>Success</strong> The creature is unaffected.</p>\n<p><strong>Failure</strong> The creature treats all squares as difficult terrain for its Stride.</p>\n<p><strong>Critical Failure</strong> As failure, except that you determine where the target moves during the Stride, though you can’t move it into hazardous terrain or to a place it can’t stand.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2766",
+  "slug": "metal-merged",
+  "name": "Metal Merged",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "metal",
+   "morph"
+  ],
+  "rarity": "common",
+  "actions": "1",
+  "range": null,
+  "area": null,
+  "target": "one metal weapon you are wielding",
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>You call forth the metal that flows through your veins, welding it together with the weapon you wield. For the duration of this spell, you can’t drop your weapon, and you gain a +4 circumstance bonus to your Reflex DC against attempts to Disarm you.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2774",
+  "slug": "musical-accompaniment",
+  "name": "Musical Accompaniment",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "auditory",
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>You’re surrounded by orchestral music that shifts and changes to match your behavior. This music provides a +1 status bonus to Performance checks. At the GM’s discretion, it provides this bonus to Deception, Diplomacy, and Intimidation checks as the music changes to support you in social situations, though some creatures are unaffected by such obvious attempts to use music to elicit specific emotions. This music moves with you and has a maximum volume equal to four humans shouting. You take a –4 circumstance penalty to Stealth checks while the music is playing. You can’t control the exact music this spell creates, and the music doesn’t create intelligible words or singing. You can Dismiss this spell.</p>\n<p><strong>Heightened (2nd)</strong> The duration increases to 10 minutes.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2775",
+  "slug": "necromancers-generosity",
+  "name": "Necromancer's Generosity",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "void",
+   "negative"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "30 feet",
+  "area": null,
+  "target": "1 undead minion you control",
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>You channel void energy through your magical connection to your undead minion to strengthen the creature. The target regains 1d8+4 Hit Points when you Cast the Spell, and it gains a +2 status bonus to saves against vitality effects for the duration.</p>\n<p><strong>Heightened (+1)</strong> The amount of healing increases by 1d8+4.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2777",
+  "slug": "nudge-the-odds",
+  "name": "Nudge the Odds",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "uncommon",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 hour",
+  "description": "<p>You bestow yourself supernaturally good luck at cards, dice, and other games of chance. You gain a +1 status bonus to Games Lore checks to gamble, and if you roll a critical failure on such a check, you get a failure instead; however, the spell is too short-lived to use for Earn Income checks from gambling. When you're under the effect of <em>nudge the odds</em>, one facial feature, such as a lock of hair or the iris of an eye, transforms to a distinctive golden color; the GM chooses which feature when you Cast the Spell. This change resists all magical efforts to conceal it, though it can be hidden or covered by mundane means. A creature noticing the feature can identify the spell using Recall Knowledge. Because it prevents losing big, gamblers consider <em>nudge the odds</em> a repugnant form of cheating. If you're caught using the spell, you're likely to suffer serious consequences depending on the nature of the gamblers you cheated.</p>\n<p><strong>Heightened (5th)</strong> The status bonus increases to +2, and the duration increases to lasting until the next time you make your daily preparations. If you continue spending your spell slot each day to keep the duration active, this allows you to apply the effect to a downtime check to Earn Income.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2792",
+  "slug": "propelling-air-stream",
+  "name": "Propelling Air Stream",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "air",
+   "attack",
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "30 feet",
+  "area": null,
+  "target": "1 creature",
+  "defense": "ac",
+  "duration": "until the end of your next turn",
+  "description": "<p>You shoot out a high-speed blast of air that propels you into the air. Make a ranged spell attack against a target’s AC. On a success, the target takes 2d6 bludgeoning damage (or double damage on a critical hit). Regardless of whether you hit, you gain a fly Speed of 15 feet until the end of your next turn.</p>\n<p><strong>Heightened (+1)</strong> The damage increases by 2d6.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2793",
+  "slug": "protect-companion",
+  "name": "Protect Companion",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate"
+  ],
+  "rarity": "common",
+  "actions": "1",
+  "range": "30 feet",
+  "area": null,
+  "target": "your eidolon, or a creature with the minion trait under your control",
+  "defense": null,
+  "duration": "until the start of your next turn",
+  "description": "<p>You extend your aura as a magical shield that protects your eidolon or minion. The target gains a +1 circumstance bonus to AC until the start of your next turn. You gain the following reaction; after using the reaction, the spell ends and you can't cast <em>protect companion</em> again for 10 minutes.</p>\n<p><strong>Life Block</strong> [reaction] <strong>Trigger</strong> The spell's target would take damage;<strong>Effect</strong> Reduce the triggering damage by 10, but you lose 5 Hit Points. Even if this reduces the damage to 0, the target still takes any effects that would come with the damage, such as the poison on a viper's fangs Strike.</p>\n<p><strong>Heightened (+2)</strong> The reaction reduces the damage by another 10, and you lose 5 more Hit Points. If you want to lose fewer Hit Points, you can choose to lower the damage reduction and HP lost to what any lower-rank version of the spell could do without lowering the spell’s actual rank.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2872",
+  "slug": "pyroclastic-truth",
+  "name": "Pyroclastic Truth",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "fire",
+   "impossible",
+   "manipulate"
+  ],
+  "rarity": "unique",
+  "actions": "3",
+  "range": "500 feet",
+  "area": "100-foot burst",
+  "target": null,
+  "defense": "basic reflex",
+  "duration": "1 minute",
+  "description": "<p>This impossible spell is more devious and insistent than most. While all impossible spells long to be used, this spell relentlessly urges those who learn it to destroy everything in their path. The blast of liquid fire created by this spell brands the soul of those who are touched by its flames, dealing 2d12 fire damage to all creatures, structures, and unattended objects in the area. All creatures damaged by this spell are marked by fire for the duration of the spell. When you Fuel <em>Pyroclastic Truth</em>, all creatures marked by fire take 1d12 persistent fire damage.</p>\n<p><strong>Lethologic Mark</strong> You understand the true desire of fire to burn away your soul. Whenever you take fire damage, you become frightened 1. Additionally, if you're reduced to 0 Hit Points by a fire effect, you instantly die and are turned to ash, and your soul is cast into the Plane of Fire to burn for eternity. To heal this mark, you must perform an <em>atone</em> ritual in both the Plane of Fire and the Plane of Water.</p>\n<p><strong>Heightened (+1)</strong> The initial fire damage increases by 2d12, and the persistent fire damage increases by 1d12.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2797",
+  "slug": "quick-sort",
+  "name": "Quick Sort",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "3",
+  "range": "10 feet",
+  "area": null,
+  "target": "up to 200 unattended objects in range, each of light Bulk or less",
+  "defense": null,
+  "duration": "up to 1 minute",
+  "description": "<p>You magically sort a group of objects into neat stacks or piles. You can sort the objects in two different ways. The first option is to separate them into different piles depending on an easily observed factor, such as color or shape. Alternatively, you can sort the objects into ordered stacks depending on a clearly indicated notation, such as a page number, title, or date. The objects sort themselves throughout the duration, though it takes less time per object to sort a smaller number of objects, down to a single round for 30 or fewer objects.</p>\n<p><strong>Heightened (3rd)</strong> The spell can sort up to 500 objects in a minute, or 75 objects in a round.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2798",
+  "slug": "read-the-air",
+  "name": "Read the Air",
+  "rank": 0,
+  "traditions": [
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "subtle"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>You survey a social situation, showing courtesy to all around you as your intuition swiftly picks up clues about social contexts and unspoken assumptions of behavior. Your body language subconsciously changes to take advantage of this information and use it in your own interactions with those creatures. As part of Casting this Spell, you Recall Knowledge using Society to gain information about the social situation. You also gain a +1 status bonus to your next Diplomacy check to Make an Impression on those creatures present when you Cast this Spell, as long as the check occurs during the duration of the spell. You can <em>read the air</em> only once in a given social situation; casting it again has no effect.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2803",
+  "slug": "restyle",
+  "name": "Restyle",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "1 minute",
+  "range": "touch",
+  "area": null,
+  "target": "1 piece of clothing currently worn by you or an ally",
+  "defense": null,
+  "duration": "unlimited",
+  "description": "<p>You permanently change the appearance of one piece of clothing currently worn by you or an ally to better fit your aesthetic sensibilities. You can change its color, texture, pattern, and other minor parts of its design, but the changes can’t alter the clothing’s overall shape, size, or purpose. The changes can’t increase the quality of the craftsmanship or artistry of the piece of clothing, but particularly gauche choices for the new color and pattern might decrease its aesthetic appeal. This spell transforms existing materials into the desired appearance and never alters the material or creates more material than what’s originally part of the object. The object’s statistics also remain unchanged.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2810",
+  "slug": "seashell-of-stolen-sound",
+  "name": "Seashell of Stolen Sound",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "sonic"
+  ],
+  "rarity": "common",
+  "actions": "reaction",
+  "range": "30 feet",
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "until your next daily preparations",
+  "description": "<p>You store a sound in a seashell to use as you will: the last words of a loved one, a dragon’s mighty roar, the compromising conversation between two powerful diplomats, or even something stranger and secret. As part of Casting this Spell, you must present an unbroken seashell. When you Cast the Spell, magic swirls around the triggering creature, copying the sounds it makes, as well as any background noise, for the next minute and storing them in the seashell.</p>\n<p>You or another creature can then play the sound back from the seashell during the spell’s duration by Interacting with the seashell, but once the sounds have been played back, the seashell shatters, and the spell ends.</p>\n<p>As normal for spells with a duration until your next daily preparations, you can choose to continue expending the spell slot to prolong the duration of an existing <em>seashell of stolen sound</em> for another day. While the spell faithfully copies the sounds around the target, it doesn’t reproduce any special auditory or sonic effects of the sound.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2816",
+  "slug": "sky-sight",
+  "name": "Sky Sight",
+  "rank": 1,
+  "traditions": [
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 hour",
+  "description": "<p>You gaze up and see the sky clearly despite environmental conditions. You can see through weather and physical obstructions such as a forest canopy, building material, and cave walls. This can be used to spot flying creatures or navigate by the stars even when you otherwise couldn’t see them.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2829",
+  "slug": "stick-on",
+  "name": "Stick On",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "morph"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "1 creature or object",
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>The skin on your hand begins to ooze a strange adhesive that causes it to stick to a target. You and the target become inseparable for the spell’s duration or until the target Escapes. If the creature is smaller than you, it’s immobilized and pulled along with you as you move. If the target is the same size as you, you’re both pulled along with each other as either moves, but you both treat all spaces as difficult terrain. If the target is larger than you, you’re immobilized and pulled along as the target moves. You can Dismiss this spell.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2834",
+  "slug": "synchronize",
+  "name": "Synchronize",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "up to 5 willing creatures",
+  "defense": null,
+  "duration": "up to 24 hours",
+  "description": "<p>You harmlessly place your unique magic sigil in the shape of your choice, which is about 1 square inch in size, on your targets. When you Cast the Spell, you set the duration by choosing a time at which point the sigil flashes dimly three times. After that point, the spell ends. Even though spell durations aren’t normally exact, the effects of <em>synchronize</em> are precise to the second. The timer is based on the place where the spell was cast, so entering a plane or area where time flows differently changes how the time elapses in sometimes unpredictable ways.</p>\n<p><strong>Heightened (2nd)</strong> The spell can target up to 20 willing creatures.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2836",
+  "slug": "tame",
+  "name": "Tame",
+  "rank": 0,
+  "traditions": [
+   "occult",
+   "primal"
+  ],
+  "traits": [
+   "auditory",
+   "concentrate",
+   "manipulate",
+   "mental"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "10 feet",
+  "area": null,
+  "target": "1 non-hostile domesticated animal",
+  "defense": "will",
+  "duration": "1 minute",
+  "description": "<p>As you make comforting sounds and gestures, you approach the target in a friendly manner combining caution and confidence. You improve the target’s attitude to you by one step (unfriendly to neutral, neutral to friendly, friendly to helpful) for the duration of the spell unless it succeeds at a Will save. Afterward, the target is temporarily immune for 1 day.</p>\n<p>This spell works only on domesticated animals; for example, you could use it on guard dogs or stray dogs but not feral dogs or wolves. If the socialization of the animal is in question, the decision is up to the GM.</p>\n<p><strong>Heightened (3rd)</strong> The duration becomes 10 minutes.</p>\n<p><strong>Heightened (6th)</strong> The duration becomes 1 hour.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2840",
+  "slug": "thicket-of-knives",
+  "name": "Thicket of Knives",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "illusion",
+   "manipulate",
+   "visual"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>You create numerous phantom copies of your weapon arm, hiding your true movements and rendering your attacks unpredictable. You gain a +2 status bonus to Deception checks. If you’re untrained in Deception, you can use the Feint action anyway as well as add your level as your proficiency bonus despite being untrained.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-spell-2863",
+  "slug": "wash-your-luck",
+  "name": "Wash Your Luck",
+  "rank": 0,
+  "traditions": [
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "fortune",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>Some practitioners argue this spell literally washes your fortunes of all influences, malign or benign, while others claim it simply cleanses your mind of obsessions about luck and destiny. You adjust your garments, change the posture of your chair, fidget with a religious symbol, or make some other innocuous and personally significant action to wash away bad luck.</p>\n<p>Once during the spell’s duration, before rolling a check, you can cancel out a misfortune effect on that roll, as normal when a fortune and misfortune effect apply to the same roll. After canceling out the misfortune effect, the spell ends, and you’re then temporarily immune to <em>wash your luck</em> for 10 minutes.</p>",
+  "source": "Impossible Magic"
+ }
+]

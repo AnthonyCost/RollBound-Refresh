@@ -44,14 +44,15 @@ sudo service postgresql start        # Postgres often stops after a WSL restart
 npm run db:setup                     # tables, seed data, invite codes, build upgrades (safe to re-run)
 npm run dev:server                   # API on :3001
 npm run dev:client                   # app on :5173 (second terminal)
-npm test                             # 116 rules tests, including the full build sweep
+npm test                             # 136 rules tests, including the full build sweep
 ```
 
 Other commands:
 
 | Command | What it does |
 | --- | --- |
-| `npm run data:import` | Re-imports rules data from Foundry, prints the corrections report, then runs the tests and build sweep |
+| `npm run data:import` | Re-imports rules data from Foundry plus the hand-made books, prints the corrections report, then runs the tests and build sweep |
+| `npm run data:aon --workspace @rollbound/rules -- "<Book>"` | Converts a book Foundry doesn't have from the Archives of Nethys into `packages/rules/books/` |
 | `npm run art:import -- <folder>` | Converts art named like `class-wizard.png` into the app |
 | `npm run db:migrate-builds --workspace @rollbound/server` | Upgrades saved characters' builds on their own |
 | `npm run dev:client -- --host` | Opens the dev server to your phone on the same Wi-Fi |
@@ -133,7 +134,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ### 4. Rules data import
 - **Source:** the Foundry VTT pf2e system's open data, filtered to the books in `BOOKS` (Player Core and Player Core 2) and pinned to an upstream commit recorded in `meta.commit`.
-- **Impossible Magic:** Foundry has no Necromancer or Runesmith yet. Add the book's exact title to `BOOKS` when it appears; the importer logs skipped titles mentioning "Impossible".
+- **Impossible Magic:** Foundry doesn't have it, so it comes from the Archives of Nethys as a hand-made book (`packages/rules/books/`, see section 12). When Foundry adds it, follow `books/README.md` to switch over.
 - **Deities:** these come from Foundry's `core-gods` folder, which is Player Core's list.
 - **Corrections:** rules Foundry encodes only in its own code come from `packages/rules/corrections/<book>.json`. After each import, a report lists anything that looks like it needs a correction.
 
@@ -200,7 +201,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
   The builder converts drafts on load, and `db:setup` converts saved characters.
 - **Verification:** 23,632 sample characters produced identical sheets before and after the refactor.
-- **Step 6, the build sweep:** `packages/rules/test/sweep.test.js` builds a character for every class with every ancestry and heritage, every background, every subclass option and every compatible deity (about 4,400 builds, ~3 seconds). It runs:
+- **Step 6, the build sweep:** `packages/rules/test/sweep.test.js` builds a character for every class with every ancestry and heritage, every background, every combination of subclass options (a wizard's school and thesis, a necromancer's fatal method and grim fascination), every tradition where an option offers a choice (a dragon eidolon), and every compatible deity (about 5,600 builds, ~5 seconds). New classes and books are included automatically, since it reads the class list from the data. It runs:
   - with `npm test`,
   - after every `npm run data:import`,
   - on every push and pull request on GitHub (`.github/workflows/ci.yml`, which also builds the client).
@@ -219,6 +220,30 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - The builder loads `EARLY_TYPES` first (about 100 KB compressed of the 181 KB total), so Ancestry, Background and Class show before feats, spells and gear arrive. Checked in Chrome with those files held back 3 seconds.
   - **Postgres is deferred on purpose.** The data is 0.7 MB, and the plan was to move at about 5 MB. `test/data.test.js` fails past 5 MB with a message pointing here, so CI says when it's time.
   - The `books` filter is ready for step 5.
+
+### 12. Impossible Magic (the first hand-made book)
+- **Source:** Foundry doesn't have the book, so `scripts/import-aon.js` converts it from the Archives of Nethys: one request to AoN's search index, cached, written to `books/impossible-magic.json`. The importer merges hand-made books before corrections, so everything downstream treats them like Foundry's books. Guide: `packages/rules/books/README.md`.
+- **Cross-checked against the PDF** (your copy, kept out of the repo): every feat, spell and rune name and level, class HP and proficiencies, and subclass options. The PDF filled one gap AoN left blank: the Dragon eidolon's skills.
+- **What's in:**
+  - the Magus, Necromancer, Runesmith and Summoner, with their 1st-level features and choices: 7 hybrid studies, 2 fatal methods, 4 grim fascinations and 13 eidolons;
+  - 25 class feats at 1st level, 37 cantrips and 1st-rank spells, 16 runes;
+  - 4 new wizard arcane schools.
+- **Engine additions,** all driven by `corrections/impossible-magic.json`:
+  - a spellcasting attribute separate from the key attribute (magus: Int),
+  - spells a class always knows (necromancer: *harm*),
+  - class Lore skills (Undead Lore),
+  - a trait filter on the 1st-level class feat (summoner: evolution),
+  - tradition-dependent subclass skills (dragon eidolon),
+  - runes, a new data type with a picker on the Spells step ("Runes" for runesmiths), on the sheet and in the PDF's class features box.
+- **Prerequisite phrasings:** "You aren't holy/unholy" and "Trained in X, Trained in Y, or …" are now understood.
+- **Not in yet:**
+  - the two Automaton heritages and four Automaton feats, because the Automaton ancestry isn't imported;
+  - focus spells (conflux, grave, link), which are feature text, as with every class;
+  - eidolon and thrall stat blocks;
+  - art for the Necromancer and Runesmith, which show letters for now.
+- **Verified:**
+  - 136 rules tests, including the sweep over all 20 classes;
+  - in Chrome, a character of each new class built and saved, with matching numbers on the sheet. The magus spell DC shows "Intelligence".
 
 ---
 
@@ -250,7 +275,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Testing and verification
 
-- `npm test`: 116 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, the data files and their size budget, and an empty import report.
+- `npm test`: 136 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, the data files and their size budget, and an empty import report.
 - **Build sweep** (`test/sweep.test.js`): every class with every ancestry, heritage, background, subclass option and deity must produce a valid character with a complete sheet. A failure names the combinations that broke.
 - **GitHub Actions** runs the tests and a client build on every push and pull request.
 - **UI checks:** done with headless Windows Chrome screenshots from WSL, using a small proxy that sets demo or sign-in state. Tap-specific behavior wasn't testable this way.
@@ -277,7 +302,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - [ ] Before publishing, add a **site footer** with the ORC credit and Paizo's Community Use notice, using the exact wording from Paizo's page.
 - [ ] Decide on the **PDF sheet template** for a public deploy: get permission, or design a RollBound sheet.
 - [ ] Set up **AWS S3** using `docs/aws-s3-setup.md`, then run its checklist.
-- [ ] Add **Impossible Magic** once Foundry publishes it: add its title to `BOOKS`, import, and work through the report.
+- [ ] When Foundry publishes **Impossible Magic**, switch from the hand-made book (`packages/rules/books/README.md`), ideally mapping AoN IDs to Foundry IDs so nobody has to re-pick.
+- [ ] Send **art for the Necromancer and Runesmith** (portrait and icon), named `class-necromancer.png` and so on.
 
 **Small features:**
 - [ ] Use the campaign's party level on the GM screen (it uses the character's level today).

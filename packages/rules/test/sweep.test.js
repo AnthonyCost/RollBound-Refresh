@@ -22,7 +22,7 @@ const deitiesFor = (build) => {
 };
 
 /** Makes the choices a player would, picking the n-th option wherever there's a choice. */
-function autoBuild({ cls, ancestry, heritage, background, n, deity }) {
+function autoBuild({ cls, ancestry, heritage, background, n, deity, choices = {}, tradition }) {
   const b = { ...R.emptyBuild(), name: 'Sweep', ancestry: ancestry.id, heritage: heritage.id, background: background.id, class: cls.id };
   if (heritage.skillChoice) b.heritageSkill = heritage.skillChoice[n % heritage.skillChoice.length];
   const lore = background.lore[0] ? R.loreOptions(background.lore[0]) : null;
@@ -30,10 +30,10 @@ function autoBuild({ cls, ancestry, heritage, background, n, deity }) {
   if (cls.skillChoice) b.classSkill = cls.skillChoice[n % cls.skillChoice.length];
   for (const f of cls.features) {
     if (!f.choice) continue;
-    const o = f.choice.options[n % f.choice.options.length];
+    const o = choices[f.choice.key] ?? f.choice.options[n % f.choice.options.length];
     b.classChoices[f.choice.key] = o.id;
     if (o.skillChoice) b.classChoiceSkills[f.choice.key] = o.skillChoice[0];
-    if (o.traditionChoice) b.tradition = R.TRADITIONS[n % R.TRADITIONS.length];
+    if (o.traditionChoice) b.tradition = tradition ?? R.TRADITIONS[n % R.TRADITIONS.length];
   }
   if (cls.deity) {
     const options = deitiesFor(b);
@@ -59,6 +59,11 @@ function autoBuild({ cls, ancestry, heritage, background, n, deity }) {
     const o = R.spellOptions(b, data);
     b.cantrips = o.cantrips.slice(0, casting.cantrips).map((s) => s.id);
     b.spells = o.spells.slice(0, casting.spells).map((s) => s.id);
+  }
+  const runes = R.runesOf(b, data);
+  if (runes) {
+    const options = R.runeOptions(b, data);
+    b.runes = Array.from({ length: runes.known }, (_, i) => options[(n + i) % options.length].id);
   }
   const weapons = data.weapons.filter((w) => w.price <= 200);
   b.weapons = [weapons[n % weapons.length].id];
@@ -100,7 +105,11 @@ function sweep(builds) {
 }
 
 const name = (...items) => items.map((x) => x.name).join(' / ');
-const optionCount = (cls) => Math.max(1, ...cls.features.filter((f) => f.choice).map((f) => f.choice.options.length));
+/** Every combination of a class's subclass choices, as { [choice key]: option }. */
+const combinations = (cls) =>
+  cls.features
+    .filter((f) => f.choice)
+    .reduce((combos, f) => combos.flatMap((c) => f.choice.options.map((o) => ({ ...c, [f.choice.key]: o }))), [{}]);
 
 describe('build sweep', () => {
   it('offers every ancestry its own heritages', () => {
@@ -132,19 +141,26 @@ describe('build sweep', () => {
         );
       });
 
-      it('works with every subclass option and deity', () => {
+      // Every combination of the class's choices (a wizard's school and thesis, a
+      // necromancer's fatal method and grim fascination), every tradition where an
+      // option lets you pick one (a dragon eidolon), and every deity that fits.
+      it('works with every combination of subclass options, tradition and deity', () => {
         const ancestry = data.ancestries.find((a) => a.slug === 'human') ?? data.ancestries[0];
         const heritage = heritagesFor(ancestry)[0];
         const background = data.backgrounds[0];
-        const base = { cls, ancestry, heritage, background };
-        sweep(
-          Array.from({ length: optionCount(cls) }, (_, n) => {
-            const options = cls.features.filter((f) => f.choice).map((f) => f.choice.options[n % f.choice.options.length]);
-            const label = options.map((o) => o.name).join(' / ') || cls.name;
-            if (!cls.deity) return [{ ...base, label, n }];
-            return deitiesFor(autoBuild({ ...base, n })).map((deity) => ({ ...base, label: `${label} / ${deity.name}`, n, deity }));
-          }).flat(),
-        );
+        const base = { cls, ancestry, heritage, background, n: 0 };
+        const builds = combinations(cls).flatMap((choices) => {
+          const options = Object.values(choices);
+          const label = options.map((o) => o.name).join(' / ') || cls.name;
+          const traditions = options.some((o) => o.traditionChoice) ? R.TRADITIONS : [undefined];
+          return traditions.flatMap((tradition) => {
+            const one = { ...base, choices, tradition, label: tradition ? `${label} (${tradition})` : label };
+            if (!cls.deity) return [one];
+            return deitiesFor(autoBuild(one)).map((deity) => ({ ...one, label: `${one.label} / ${deity.name}`, deity }));
+          });
+        });
+        assert.equal(builds.length >= combinations(cls).length, true);
+        sweep(builds);
       });
     });
   }

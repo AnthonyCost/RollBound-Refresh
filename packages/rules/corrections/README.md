@@ -12,11 +12,16 @@ Entries are keyed by the item's **slug** within that book. The importer fails if
 
 | Section | Field | Meaning |
 | --- | --- | --- |
-| `classes` | `casting` | 1st-level spellcasting: `kind` (`repertoire`, `prepared`, `spellbook`, `familiar`, or `focus`), `tradition` (`null` if a subclass sets it), how many `cantrips` and `spells` you choose, `slots` per day, and optional `prepares` for casters who prepare from a larger collection |
+| `classes` | `casting` | 1st-level spellcasting: `kind` (`repertoire`, `prepared`, `spellbook`, `familiar`, or `focus`), `tradition` (`null` if a subclass sets it), how many `cantrips` and `spells` you choose, `slots` per day, and optional `prepares` for casters who prepare from a larger collection. Optional: `ability` when spells use a different attribute than the key attribute (magus: `"int"`), `grantedSpells` the class always knows (necromancer: `["harm"]`), and `listName` for the spell collection (`"dirge"`) |
 | `classes` | `divineFont` | `true` if the class chooses a heal/harm font from its deity |
 | `classes` | `deityFavoredWeapon` | Proficiency rank with the deity's favored weapon, e.g. `"trained"` |
+| `classes` | `lores` | Lore skills the class trains, e.g. `["Undead Lore"]` |
+| `classes` | `classFeatTraits` | Traits the 1st-level class feat must have, e.g. `["evolution"]` for the summoner |
+| `classes` | `runes` | A runic repertoire instead of spells: `{ "known": 4 }` |
 | `subclassOptions` | `proficiencies` | Ranks granted at 1st level, e.g. `{ "defenses.medium": "trained", "saves.fortitude": "expert" }`. Paths: `defenses.<category>`, `attacks.<category>`, `saves.<save>`, `perception` |
 | `subclassOptions` | `keyAbility` | An extra key attribute this option allows, e.g. `"str"` |
+| `subclassOptions` | `skills` | Skills the option trains, when the data has none |
+| `subclassOptions` | `traditionSkills` | A skill that depends on the chosen tradition, e.g. a dragon eidolon's `{ "arcane": "arcana", "occult": "occultism", ... }` |
 | `heritages` | `featAncestries` | Other ancestries whose feats this heritage can take, e.g. `["elf"]` |
 | `feats` | `grantedOnlyIf` | When something grants this feat automatically, only grant it if this condition holds. Known conditions: `deity-favored-weapon-simple` |
 

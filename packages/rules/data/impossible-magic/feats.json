@@ -1,0 +1,579 @@
+[
+ {
+  "id": "aon-feat-9221",
+  "slug": "advanced-weaponry",
+  "name": "Advanced Weaponry",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "evolution",
+   "summoner"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your eidolon’s attack evolves. Choose one of your eidolon’s starting melee unarmed attacks to gain one of the following traits, chosen when you gain the feat: disarm; grapple; nonlethal; shove; trip; or versatile B, P, or S.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9044",
+  "slug": "arcane-fists",
+  "name": "Arcane Fists",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "magus"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your physical training encompasses unarmed combat forms. The damage die for your fist changes to 1d6 instead of 1d4. You don’t take the normal –2 circumstance penalty when making a lethal attack with your fist or any other unarmed attacks. Your unarmed attacks gain the arcane trait, making them magical. At 5th level, you also gain the critical specialization effects of unarmed attacks in the brawling group and weapons in the brawling group, using your spell DC instead of class DC.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9168",
+  "slug": "backup-runic-enhancement",
+  "name": "Backup Runic Enhancement",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "runesmith"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Trained in Arcana, Trained in Nature, Trained in Occultism, or Trained in Religion"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>While you are not a spellcaster, you have a working knowledge of the most fundamental runic magic. You can cast the <em>sigil</em> cantrip as an innate spell at will. In addition, choose either <em>runic body</em> or <em>runic weapon</em>. You can cast this spell once per day as an innate spell. The rank of these spells is equal to half your level, rounded up, and the tradition can be any tradition for which you are at least trained in the related skill (Arcana for arcane, Nature for primal, Occultism for occult, and Religion for divine).</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9092",
+  "slug": "death-speaker",
+  "name": "Death Speaker",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "necromancer"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your voice and magic speak to the core existence within undead creatures, circumventing the need for the creature to comprehend. Your spells and abilities ignore the mindless trait and any immunity to emotion, fear, or mental effects when targeting or affecting undead creatures. Additionally, you gain a +1 circumstance bonus when you attempt to Make an Impression on and make a Request of an undead creature.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9222",
+  "slug": "dual-studies",
+  "name": "Dual Studies",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "summoner"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You and your eidolon learn different skills. Choose two skills. Your eidolon becomes trained in one of those skills, and you become trained in the other skill. At 7th level, you each become an expert in the chosen skills. Unlike other skill proficiencies, these proficiencies are not shared between you and your eidolon.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9223",
+  "slug": "energy-heart",
+  "name": "Energy Heart",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "evolution",
+   "summoner"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your eidolon’s heart beats with energy. Choose acid, cold, electricity, or fire. One of their unarmed attacks changes its damage type to the chosen type, and they gain resistance to that type equal to half your level (minimum 1).</p>\n<p>Dual Energy Heart, Energy Resistance</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9169",
+  "slug": "engraving-strike",
+  "name": "Engraving Strike",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You draw a rune onto the surface of your weapon in reverse, the mark branding or bruising itself into your target at the moment of impact. Make a melee Strike with the weapon. On a success, you Trace a Rune onto the target of the Strike</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9224",
+  "slug": "expanded-senses",
+  "name": "Expanded Senses",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "evolution",
+   "summoner"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your eidolon evolves more acute senses. Your eidolon gains low-light vision and darkvision, as well as scent as an imprecise sense with a range of 30 feet.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9396",
+  "slug": "expressive-face",
+  "name": "Expressive Face",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your face is constructed to move organically and show your emotions, making you more relatable to organic creatures. You become trained in Diplomacy. If you are already trained in Diplomacy, you instead become trained in a skill of your choice. Additionally, you gain the Glad-Hand skill feat, even if you do not meet its prerequisites.</p>\n<p><strong>Enhancement</strong> You are particularly skilled at pouring your heart out to others. You gain the Plaintive Plea action.</p>\n<p><strong>Plaintive Plea</strong> [single action] (fortune) <strong>Frequency</strong> once per day; <strong>Effect</strong> You make an emotional appeal to convince someone during a diplomatic encounter. If your next activity is to attempt a Diplomacy check to Make an Impression or Request, or to attempt to influence a creature during an influence encounter, you can roll twice and take the better result.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9225",
+  "slug": "extend-boost",
+  "name": "Extend Boost",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "summoner"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can increase the duration of your eidolon’s boosts. You learn the <em>extend boost</em> link spell.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9226",
+  "slug": "glider-form",
+  "name": "Glider Form",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "eidolon",
+   "evolution",
+   "move",
+   "summoner"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your eidolon evolves wings, a buoyant body, or some other means to control descent. They glide slowly toward the ground, 5 feet down and up to 25 feet forward through the air. As long as they spend at least 1 action gliding each round and have not yet reached the ground, they remain in the air at the end of your turn.</p>\n<p>Airborne Form</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9170",
+  "slug": "glyph-familiar",
+  "name": "Glyph Familiar",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "runesmith"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have taken a living rune as a familiar to aid you in your adventures. You gain a familiar. You choose one familiar or master ability per day instead of two, but your familiar also always has three additional familiar abilities: construct, flier, and tough.</p>\n<p>Enhanced Glyph Familiar</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9045",
+  "slug": "maguss-analysis",
+  "name": "Magus's Analysis",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "magus"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Spellstrike"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You make an assessment informed by your knowledge of how a creature fights. Attempt a check to Recall Knowledge about a creature, then recharge your Spellstrike. You gain a +1 circumstance bonus to your check if you previously hit the creature with a Strike this turn. The subject of your check is temporarily immune to Magus’s Analysis for 1 day.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9227",
+  "slug": "meld-into-eidolon",
+  "name": "Meld Into Eidolon",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "summoner"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 3,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your physical form can combine with that of your eidolon. You Manifest your Eidolon, but instead of summoning them into an adjacent open space, you become them. You can also Meld into Eidolon while your eidolon is manifested in an adjacent space. While Manifested in this way, you use your eidolon’s statistics, and you can’t act except to direct the eidolon to use Manifest an Eidolon to unmanifest themself. Your eidolon is affected by <em>boost eidolon</em> while Manifested in this way.</p>\n<p>Since you can’t act, you can’t cast spells, activate or benefit from magic items that normally benefit you and not your eidolon, perform actions that have the tandem trait, or use other abilities that require you, and not the eidolon, to act. You can’t be separately targeted while you are melded into the eidolon. When you reach 0 HP, your eidolon unmanifests, leaving your body behind, unconscious and dying.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9397",
+  "slug": "messenger",
+  "name": "Messenger",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were built with a special ability to relay private messages to your fellow automatons, but you can luckily use it with anyone you would like. You gain <em>message</em> as an innate arcane cantrip.</p>\n<p><strong>Enhancement</strong> You can target up to five creatures at once when you cast <em>message</em>.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9398",
+  "slug": "powerful-tail",
+  "name": "Powerful Tail",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You resemble an animal or a type of humanoid who has a tail. You gain a tail unarmed attack that deals 1d6 bludgeoning damage. This tail is in the brawling group.</p>\n<p><strong>Enhancement</strong> Your tail is not only powerful but also flexible. You gain a climb Speed of 10 feet, and you reduce the number of free hands required to Climb or Trip by one.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9046",
+  "slug": "raise-a-tome",
+  "name": "Raise a Tome",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "magus"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can flip open a book to simultaneously study and deflect attacks. When you Raise a Shield, you can raise a book you’re wielding instead of a shield. While you have a book raised, you gain a +2 circumstance bonus to AC and a +1 circumstance bonus to Recall Knowledge checks to identify creatures using a skill related to the subject of the book (Arcana if you’re using your spellbook). If consulting the book normally grants an item bonus to the check for consulting the book, you gain this bonus as well.</p>\n<p>If you have Shield Block, you can use a raised tome for that feat as though it were a shield. The tome has Hardness 3, HP 12, and BT 6.</p>\n<p>In addition, you can inscribe the <em>reinforcing rune</em> into your spellbook to strengthen your tomes, using the same process as transferring a rune. The rune takes the form of a specialized diagram in your spellbook, occupying one page. The rune’s benefits apply to any one tome in your possession chosen during your daily preparations. If your spellbook leaves your possession, the rune-granting benefit is suppressed until you get the book back.</p>\n<p>Shielded Tome</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9094",
+  "slug": "reach-of-the-dead",
+  "name": "Reach of the Dead",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "concentrate",
+   "necromancer",
+   "spellshape",
+   "metamagic"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You channel your necrotic magic through a thrall, expending it in the process. If the next action you use is to Cast a Spell that has range, you cast that spell from one of your thralls within 60 feet. That thrall becomes the point of origin for your spell; calculate range and cover from its space instead of yours. The thrall is then destroyed.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9171",
+  "slug": "remote-detonation",
+  "name": "Remote Detonation",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "invocation",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You whisper an invocation over your ammunition as you shoot it, and the hissing of the projectile sounds just like your murmured voice. Make a ranged Strike that uses physical ammunition against a target within the first range increment of your weapon. If it hits, you Invoke Runes on the target as whisper of the ammunition’s flight sets off the runes. You can invoke up to two runes this way, but all the runes must be on the target of your Strike. On a critical hit, the target takes a –1 circumstance penalty on any saving throws against the runes invoked by your Remote Detonation.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9172",
+  "slug": "rune-ward",
+  "name": "Rune Ward",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "runesmith"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You quickly sketch a rune in the air to gain a modicum of protection against the triggering magic. You gain a +1 circumstance bonus to your saving throw and AC against the spell.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9173",
+  "slug": "rune-singer",
+  "name": "Rune-Singer",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "runesmith"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Trained in Performance"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You practice the lost art of using music to guide your runecarving, singing the runes into existence as much as crafting them. You can use Performance instead of Crafting when attempting Crafting checks related to runes.</p>\n<p>Once per 10 minutes, you can Trace a Rune with song alone. When you do, you use the 2-action version of Trace Rune as a single action without needing an artisan's toolkit, and you remove the action's manipulate trait. You don't need to be able to move your hands when Tracing a Rune using song, but you do need to be able to sing in a clear voice.</p>\n<p>Prodigal Rune-Singer, Song of Glorious Invocation</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9174",
+  "slug": "seek-the-hidden-glyphs",
+  "name": "Seek the Hidden Glyphs",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "runesmith"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are well-versed in the use of magical runes in traps and hazards. You gain a +1 circumstance bonus to Perception checks to find magical traps. Even if you aren’t Searching, you get a check to find magical traps that normally require you to be Searching. You still need to meet any other requirements to find the trap. As long as you are holding or wearing an artisan’s toolkit, you can use Crafting instead of Thievery to disable a magical trap, treating your proficiency in Crafting as your proficiency in Thievery for requirements.</p>\n<p>In addition, if you trigger a trap by critically failing a check to Disable it, you can Trace a Rune on yourself as a reaction, gaining the benefits of the rune before the trap affects you.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9175",
+  "slug": "smithing-weapons",
+  "name": "Smithing Weapons",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "runesmith"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Though you are an artisan, you are well versed in using the tools of your trade to fend off enemies. While wielding a weapon in the hammer, knife, and pick weapon group, you can use that weapon to etch runes without an artisan's toolkit. Additionally, a Strike with a hammer, knife, or pick deals 1 additional fire damage to an enemy bearing one of your runes as sparks fly on impact like a hammer to an anvil.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9093",
+  "slug": "the-hallowed-dead",
+  "name": "The Hallowed Dead",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "holy",
+   "necromancer"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "You aren’t unholy"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>While many necromancers seek unholy and perverse power, you have dedicated yourself to the practice of necromancy to stop the creation of permanent undead and the corruption of souls. You and your thralls gain the holy trait. Strikes your thralls make gain the holy trait and deal 1 additional spirit damage. This additional spirit damage increases to 2 at 10th level. You also gain the following anathema: “purposefully create undead to do undue harm.”</p>\n<p>Hallowed Earth</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9096",
+  "slug": "the-unholy-dead",
+  "name": "The Unholy Dead",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "necromancer",
+   "unholy"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "You aren’t holy"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have turned your necromancy against the divine powers that seek to stop you from achieving your unholy goals. You and your thralls gain the unholy trait. Strikes your thralls make gain the unholy trait and deal 1 additional spirit damage. This additional spirit damage increases to 2 at 10th level. You also gain the following anathema: “destroy undead of no harm to you.”</p>\n<p>Corrupted Ground</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9095",
+  "slug": "undead-familiar",
+  "name": "Undead Familiar",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "necromancer"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain the ability to raise an undead familiar who will serve you as your loyal and sometimes expendable partner as you explore your necromantic magic. You gain a familiar. It has the undead trait instead of the animal trait and is immune to bleed, death effects, disease, mental, and poison. You can choose only one familiar ability per day for this familiar instead of two, and you can’t choose an ability that changes the creature’s trait (such as construct or dragon). Additionally, this familiar can be targeted by spells and abilities that target your thralls. If you destroy your familiar, you can raise them back to undeath during your next daily preparations.</p>\n<p>Enhanced Undead Familiar</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9399",
+  "slug": "undead-hunter",
+  "name": "Undead Hunter",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Newly Minted Automaton heritage"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were created by a Nexian mage specifically for the purpose of fighting undead, and you are infused with vitality magic. You gain <em>vitality lash</em> as an innate divine cantrip.</p>\n<p><strong>Enhancement</strong> You can infuse your attacks with vitality. You can cast <em>infuse vitality</em> as a 3rd-rank arcane innate spell once per day, targeting only yourself.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9228",
+  "slug": "unfetter-eidolon",
+  "name": "Unfetter Eidolon",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "summoner"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can allow your eidolon to travel far from your side. You learn the <em>unfetter eidolon</em> link spell.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-feat-9097",
+  "slug": "widespread-fascination",
+  "name": "Widespread Fascination",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "necromancer"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are not content to restrict yourself to one field. Instead, you've studied a wider range of necromantic magic to better expand your horizons and explore your unscrupulous fascinations. You learn the grave spell for a grim fascination other than yours. You must have access to that fascination. Access can be gained from independent study or sought-out tutelage.</p>\n<p><strong>Special</strong> You can select this feat more than once, choosing a different grave spell each time.</p>",
+  "source": "Impossible Magic"
+ }
+]

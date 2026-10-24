@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { STEPS, BUILD_VERSION, EARLY_TYPES, emptyBuild, buildProblems, buildCharacter, migrateBuild, dropMissingChoices, reviewCharacter } from '@rollbound/rules';
+import { STEPS, BUILD_VERSION, EARLY_TYPES, runesOf, emptyBuild, buildProblems, buildCharacter, migrateBuild, dropMissingChoices, reviewCharacter } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
@@ -61,6 +61,12 @@ const STEP_INFO = {
   },
 };
 
+const RUNES_INFO = {
+  ...STEP_INFO.spells,
+  title: 'Runes',
+  note: 'Runesmiths carve magic into the world with runes instead of casting spells. You know a handful of runes and can apply them to allies, enemies, and gear.',
+};
+
 // Whether the player has chosen anything on each step yet (not whether it's complete).
 const STEP_TOUCHED = {
   ancestry: (b) => Boolean(b.ancestry || b.heritage),
@@ -69,7 +75,7 @@ const STEP_TOUCHED = {
   attributes: (b) => b.altAncestryBoosts || b.freeBoosts.length > 0 || [...b.ancestryBoosts, ...b.backgroundBoosts].some(Boolean) || Boolean(b.keyAbility),
   skills: (b) => b.skills.length > 0 || b.languages.length > 0,
   feats: (b) => Boolean(b.ancestryFeat || b.classFeat || Object.values(b.bonusFeats).some(Boolean)),
-  spells: (b) => b.cantrips.length > 0 || b.spells.length > 0,
+  spells: (b) => b.cantrips.length > 0 || b.spells.length > 0 || b.runes?.length > 0,
   gear: (b) => Boolean(b.armor || b.shield || b.weapons.length),
   review: (b) => Boolean(b.name.trim()),
 };
@@ -180,7 +186,9 @@ export default function BuilderPage() {
   };
 
   const index = STEPS.indexOf(step);
-  const info = STEP_INFO[step];
+  // A runesmith picks runes where spellcasters pick spells.
+  const infoFor = (s) => (s === 'spells' && data && runesOf(build, data) ? RUNES_INFO : STEP_INFO[s]);
+  const info = infoFor(step);
   const problems = data ? buildProblems(build, data) : [];
   const touched = (s) => STEP_TOUCHED[s](build);
   const anyTouched = STEPS.some(touched);
@@ -248,7 +256,7 @@ export default function BuilderPage() {
             type="button"
             className={`steps__pip ${touched(s) ? 'steps__pip--touched' : ''}`}
             aria-current={s === step ? 'step' : undefined}
-            aria-label={`Step ${i + 1}: ${STEP_INFO[s].title}${touched(s) ? ' (started)' : ''}`}
+            aria-label={`Step ${i + 1}: ${infoFor(s).title}${touched(s) ? ' (started)' : ''}`}
             onClick={() => goTo(s)}
           />
         ))}
@@ -276,14 +284,14 @@ export default function BuilderPage() {
             <ul className="notice__list">
               {editing.repick.map((m) => (
                 <li key={`${m.kind}-${m.id}`}>
-                  <strong>{m.name ?? `A ${m.kind}`}</strong> ({m.kind}, {STEP_INFO[m.step].title} step)
+                  <strong>{m.name ?? `A ${m.kind}`}</strong> ({m.kind}, {infoFor(m.step).title} step)
                 </li>
               ))}
             </ul>
             <div className="notice__steps">
               {[...new Set(editing.repick.map((m) => m.step))].map((s) => (
                 <button key={s} type="button" className="btn" aria-current={s === step ? 'step' : undefined} onClick={() => goTo(s)}>
-                  {STEP_INFO[s].title}
+                  {infoFor(s).title}
                 </button>
               ))}
             </div>
@@ -307,7 +315,7 @@ export default function BuilderPage() {
       <footer className="builder__footer">
         <button type="button" className="btn" disabled={index === 0} onClick={() => goTo(STEPS[index - 1])}>Back</button>
         <button type="button" className="btn btn--blood btn--grow" disabled={index === STEPS.length - 1} onClick={() => goTo(STEPS[index + 1])}>
-          {index < STEPS.length - 1 ? `Next: ${STEP_INFO[STEPS[index + 1]].title}` : 'Last step'}
+          {index < STEPS.length - 1 ? `Next: ${infoFor(STEPS[index + 1]).title}` : 'Last step'}
         </button>
       </footer>
     </div>

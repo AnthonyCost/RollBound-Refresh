@@ -425,3 +425,67 @@ describe('data updates', () => {
     assert.ok(review.problems.some((p) => p.step === 'ancestry'));
   });
 });
+
+describe('Impossible Magic', () => {
+  const book = (build) => named({ ...emptyBuild(), ancestry: 'human', heritage: 'skilled-human', heritageSkill: 'medicine', background: 'guard', lore: 'Warfare Lore', ...build });
+  const option = (cls, slug) => data.classes.find((c) => c.slug === cls).features.flatMap((f) => f.choice?.options ?? []).find((o) => o.slug === slug);
+
+  it('adds the four classes from the hand-made book', () => {
+    assert.ok(data.meta.books.includes('Impossible Magic'));
+    for (const slug of ['magus', 'necromancer', 'runesmith', 'summoner']) {
+      assert.equal(data.classes.find((c) => c.slug === slug)?.source, 'Impossible Magic', slug);
+    }
+    assert.equal(data.classes.find((c) => c.slug === 'wizard').features.find((f) => f.choice?.key === 'wizard-arcane-school').choice.options.filter((o) => o.source === 'Impossible Magic').length, 4);
+  });
+
+  it('has the magus cast with Intelligence while its key attribute is Strength or Dexterity', () => {
+    const b = book({ class: 'magus', keyAbility: 'str', freeBoosts: ['str', 'dex', 'con', 'int'], classChoices: { 'magus-hybrid-study': option('magus', 'twisting-tree').id } });
+    const casting = R.spellcastingOf(b, data);
+    assert.equal(casting.ability, 'int');
+    assert.equal(casting.cantrips, 8);
+    assert.deepEqual(casting.prepares, { cantrips: 5, spells: 1 });
+  });
+
+  it('gives the necromancer harm in their dirge and Undead Lore', () => {
+    const b = book({ class: 'necromancer' });
+    assert.deepEqual(R.spellcastingOf(b, data).granted.map((s) => s.slug), ['harm']);
+    assert.ok(!R.spellOptions(b, data).spells.some((s) => s.slug === 'harm'), 'harm is known, not one of the picks');
+    assert.deepEqual(R.loresOf(b, data), ['Warfare Lore', 'Undead Lore']);
+  });
+
+  it('trains a reaper necromancer in martial weapons and medium armor', () => {
+    const p = R.proficienciesOf(book({ class: 'necromancer', classChoices: { 'necromancer-fatal-method': option('necromancer', 'reaper').id } }), data);
+    assert.equal(p.weapons.martial, 'trained');
+    assert.equal(p.armor.medium, 'trained');
+  });
+
+  it('limits the summoner’s 1st-level feat to evolution feats', () => {
+    const feats = classFeatOptions(book({ class: 'summoner' }), data);
+    assert.ok(feats.length >= 4);
+    assert.ok(feats.every((f) => f.traits.includes('evolution')));
+  });
+
+  it('trains a dragon summoner in Intimidation and the skill of the chosen tradition', () => {
+    const b = book({ class: 'summoner', classChoices: { 'summoner-eidolon': option('summoner', 'dragon').id }, tradition: 'occult' });
+    const skills = R.grantedSkills(b, data).filter((g) => g.from === 'Dragon').map((g) => g.skill);
+    assert.deepEqual(skills.sort(), ['intimidation', 'occultism']);
+  });
+
+  it('has the runesmith choose four 1st-level runes', () => {
+    const b = book({ class: 'runesmith' });
+    assert.equal(R.runesOf(b, data).known, 4);
+    assert.equal(R.runeOptions(b, data).length, 16);
+    assert.ok(R.buildProblems(b, data).some((p) => p.message.startsWith('Choose 4 runes')));
+    const picked = { ...b, runes: R.runeOptions(b, data).slice(0, 4).map((r) => r.id) };
+    assert.ok(!R.buildProblems(picked, data).some((p) => /runes/.test(p.message)));
+  });
+
+  it('reads the book’s new prerequisite wording', () => {
+    const deity = data.deities.find((d) => R.sanctificationOptions(d).includes('unholy'));
+    const cleric = book({ class: 'cleric', deity: deity.slug, sanctification: 'unholy' });
+    assert.equal(R.checkPrerequisite('You aren’t unholy', cleric, data), false);
+    assert.equal(R.checkPrerequisite('You aren’t holy', cleric, data), true);
+    const occult = book({ class: 'runesmith', classSkill: 'occultism' });
+    assert.equal(R.checkPrerequisite('Trained in Arcana, Trained in Nature, Trained in Occultism, or Trained in Religion', occult, data), true);
+  });
+});

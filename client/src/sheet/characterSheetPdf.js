@@ -203,6 +203,8 @@ function fillAbilities(w, c) {
     'classFeats1',
     [
       ...(c.classFeatures ?? []).map((f) => (f.choice ? `${f.name}: ${f.choice}` : f.name)),
+      // The sheet has no box for a runesmith's runes; they're part of the class.
+      ...(c.runes?.length ? [`Runic repertoire: ${c.runes.map((r) => r.name.split(',')[0]).join(', ')}`] : []),
       ...feats.filter((f) => f.from === 'Class feat').map((f) => `${f.name} (class feat)`),
       ...feats.filter((f) => !isAncestry(f) && !isBackground(f) && f.from !== 'Class feat').map((f) => `${f.name} (from ${f.from})`),
     ].join('\n'),

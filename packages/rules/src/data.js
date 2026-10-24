@@ -5,7 +5,7 @@
 // shape the rest of the engine uses: { meta, skills, languages, ancestries, ... }.
 
 /** Every list in the rules data, in the order they're stored. */
-export const DATA_TYPES = ['skills', 'languages', 'ancestries', 'heritages', 'backgrounds', 'classes', 'feats', 'deities', 'spells', 'weapons', 'armor', 'shields'];
+export const DATA_TYPES = ['skills', 'languages', 'ancestries', 'heritages', 'backgrounds', 'classes', 'feats', 'deities', 'spells', 'runes', 'weapons', 'armor', 'shields'];
 
 /** What the builder's first steps (ancestry, background, class) need; the rest can load behind them. */
 export const EARLY_TYPES = ['skills', 'languages', 'ancestries', 'heritages', 'backgrounds', 'classes', 'deities'];

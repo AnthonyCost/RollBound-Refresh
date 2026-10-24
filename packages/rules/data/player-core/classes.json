@@ -1172,6 +1172,24 @@
        "source": "Player Core"
       },
       {
+       "id": "aon-arcane-school-31",
+       "slug": "school-of-breathtaking-influence",
+       "name": "School of Breathtaking Influence",
+       "tags": [
+        "wizard-arcane-school"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p><strong>Source</strong> Impossible Magic pg. 108</p>\n<p>You have sway in powerful social circles and pride yourself on being able to predict and manipulate opponents. Less scrupulous academies openly teach this curriculum to aspiring politicians, while other colleges frame it as the study of countering mental manipulation. These spells are staples in Quantium, where ambition and ruthlessness are measures of success.</p>\n<p><strong>Curriculum</strong> - Cantrips: Daze, Infectious Enthusiasm - 1st: Command, Fear, Sleep - 2nd: Blood Vendetta, Phantom Crowd - 3rd: Enthrall, Mind of Menace - 4th: Confusion, Outcast's Curse - 5th: Subconscious Suggestion, Wave of Despair - 6th: Dominate, Never Mind - 7th: Contingency, Puppet Strings - 8th: Dream Council, Hidden Mind - 9th: Telepathic Demand</p>\n<p><strong>School Spells</strong> - Initial: Appeal to Authority - Advanced: Hot Air</p>",
+       "source": "Impossible Magic"
+      },
+      {
        "id": "YZ2XPmx1WHyWtM0g",
        "slug": "school-of-civic-wizardry",
        "name": "School of Civic Wizardry",
@@ -1188,6 +1206,24 @@
        "grantedSpells": [],
        "description": "<p>Whether you studied in Manaket's Occularium or the Academy of Applied Magic, you learned that the fruits of arcane studies—like any other field—should ultimately help the common citizen. You've learned the humble art of construction, of finding lost people and things, of moving speedily among buildings and moats—yet these same arts can be turned to demolition, and the constructs you animate to build bridges can just as easily tear them down.</p>\n<p><strong>Curriculum</strong></p>\n<ul>\n<li><strong>cantrips:</strong> Prestidigitation, Read Aura</li>\n<li><strong>1st:</strong> Hydraulic Push, Pummeling Rubble, Summon Construct</li>\n<li><strong>2nd:</strong> Revealing Light, Water Walk</li>\n<li><strong>3rd:</strong> Cozy Cabin, Safe Passage</li>\n<li><strong>4th:</strong> Creation, Unfettered Movement</li>\n<li><strong>5th:</strong> Control Water, Wall of Stone</li>\n<li><strong>6th:</strong> Disintegrate, Wall of Force</li>\n<li><strong>7th:</strong> Planar Palace, Retrocognition</li>\n<li><strong>8th:</strong> Earthquake, Pinpoint</li>\n<li><strong>9th:</strong> Foresight</li>\n</ul>\n<p><strong>School Spells</strong> initial: Earthworks; advanced: Community Restoration</p>",
        "source": "Player Core"
+      },
+      {
+       "id": "aon-arcane-school-32",
+       "slug": "school-of-keen-inquiry",
+       "name": "School of Keen Inquiry",
+       "tags": [
+        "wizard-arcane-school"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p><strong>Source</strong> Impossible Magic pg. 108</p>\n<p>You’re a scholar of truth, seeking knowledge about the nature of existence and events past, present, and future. Whether you share or obfuscate that truth—best reserve judgment until you know what you’re working with. Quantium’s elite claim agents of Her Most Keen Eye, Nex’s network of spies, developed this curriculum, but it’s a staple in many politically oriented colleges.</p>\n<p><strong>Curriculum</strong> - Cantrips: Detect Magic, Sigil - 1st: Disguise Magic, Illusory Disguise, Mindlink - 2nd: Knock, See the Unseen - 3rd: Clairaudience, Locate - 4th: Clairvoyance, Detect Scrying - 5th: Mind Probe, Scouting Eye - 6th: Scrying, Truesight - 7th: Retrocognition, True Target - 8th: Disappearance, Pinpoint - 9th: Foresight</p>\n<p><strong>School Spells</strong> - Initial: Fact Check - Advanced: Unsettling Perspective</p>",
+       "source": "Impossible Magic"
       },
       {
        "id": "L5FiuXsfW6Sa31gO",
@@ -1208,6 +1244,24 @@
        "source": "Player Core"
       },
       {
+       "id": "aon-arcane-school-33",
+       "slug": "school-of-nexian-spaces",
+       "name": "School of Nexian Spaces",
+       "tags": [
+        "wizard-arcane-school"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p><strong>Source</strong> Impossible Magic pg. 108</p>\n<p>Whether your goal is immortality or creating a world with every detail tailored to your liking, retracing Nex’s experiments with demiplanes is the road to achieving your desires. Your formal learning starts with reshaping your current reality and drawing power from other planes of existence. You graduate to creating extraplanar spaces and traveling between planes, making time and space yours to mold like clay.</p>\n<p><strong>Curriculum</strong> - Cantrips: Phase Bolt, Warp Step - 1st: Alarm, Pet Cache, Thoughtful Gift - 2nd: Dimensional Drop, Vanish Weapon - 3rd: Cozy Cabin, Far Reach - 4th: Flicker, Liminal Doorway - 5th: Banishment, Space Fold Gate - 6th: Collective Transposition, Proximal Shift - 7th: Interplanar Teleport, Planar Palace - 8th: Quandary, Stars of Another Sky - 9th: Resplendent Mansion</p>\n<p><strong>School Spells</strong> - Initial: Extradimensional Cover - Advanced: Unbounded Sphere</p>",
+       "source": "Impossible Magic"
+      },
+      {
        "id": "ZBFICTkzUjE4BDGJ",
        "slug": "school-of-protean-form",
        "name": "School of Protean Form",
@@ -1224,6 +1278,24 @@
        "grantedSpells": [],
        "description": "<p>The uninitiated often think of wizards as cerebral, focused on their studies more than the body, yet your school of magic taught of the relationship between the two. Your magic, whether learned at a storied institution like Kintargo's Alabaster Academy or someplace more sinister, like the Fleshforges of Nex, focuses on the ways that living matter can be convinced into another shape for a time, allowing you to polymorph a seed into a vine, a human into a beast, or a harmless germ into a deadly toxin.</p>\n<p><strong>Curriculum</strong></p>\n<ul>\n<li><strong>cantrips:</strong> Gouging Claw, Tangle Vine</li>\n<li><strong>1st:</strong> Jump, Pest Form, Spider Sting</li>\n<li><strong>2nd:</strong> Enlarge, Humanoid Form</li>\n<li><strong>3rd:</strong> Feet to Fins, Vampiric Feast</li>\n<li><strong>4th:</strong> Mountain Resilience, Vapor Form</li>\n<li><strong>5th:</strong> Elemental Form, Toxic Cloud</li>\n<li><strong>6th:</strong> Cursed Metamorphosis, Petrify</li>\n<li><strong>7th:</strong> Duplicate Foe, Fiery Body</li>\n<li><strong>8th:</strong> Desiccate, Monstrosity Form</li>\n<li><strong>9th:</strong> Metamorphosis</li>\n</ul>\n<p><strong>School Spells</strong> initial: Scramble Body; advanced: Shifting Form</p>",
        "source": "Player Core"
+      },
+      {
+       "id": "aon-arcane-school-34",
+       "slug": "school-of-quantic-control",
+       "name": "School of Quantic Control",
+       "tags": [
+        "wizard-arcane-school"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p><strong>Source</strong> Impossible Magic pg. 108</p>\n<p>You’re an architect, but not merely of buildings. You call upon elemental forces to control the building blocks of reality itself, reshaping the environment and moving creatures like the world is a diorama for you to perfect. Your curriculum draws heavily upon the experience of the geniekin of Quantium’s Wish, who maintain the infrastructure of Nex’s capital in seeming defiance of physics itself.</p>\n<p><strong>Curriculum</strong> - Cantrips: Gale Blast, Scatter Scree - 1st: Cradle Aloft, Gentle Landing, Pummeling Rubble - 2nd: Dismantle, Unrelenting Gravity - 3rd: Chosen Gravity, Inertia Lock - 4th: Containment, Living Terrain - 5th: Control Water, Wall of Stone - 6th: Repulsion, Wall of Force - 7th: Infinitesimal Collapse Field, Planar Seal - 8th: Arctic Rift, Earthbreaker Stride - 9th: Implosion</p>\n<p><strong>School Spells</strong> - Initial: Circle of Weakness - Advanced: Quantic Dampening</p>",
+       "source": "Impossible Magic"
       },
       {
        "id": "ZpFCZnVzIfZLfNii",

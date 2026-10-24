@@ -130,7 +130,7 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
 
   return (
     <>
-      <Ornament label={casting ? `${casting.tradition.toUpperCase()} SPELLS` : 'CLASS DC'} />
+      <Ornament label={casting ? `${casting.tradition.toUpperCase()} SPELLS` : character.runes ? 'RUNES' : 'CLASS DC'} />
       <div className="stats stats--3" role="group" aria-label="Class and spell DCs">
         {Object.entries(stats).map(([key, s]) => (
           <button key={key} type="button" className="stat" aria-pressed={selected === key} onClick={() => onSelect(selected === key ? null : key)}>
@@ -165,6 +165,23 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
               You prepare {casting.prepares.cantrips} cantrips and {casting.prepares.spells} of these spells each morning.
             </p>
           )}
+        </section>
+      )}
+
+      {character.runes?.length > 0 && (
+        <section className="panel">
+          <h2 className="panel__title">Runic repertoire</h2>
+          <ul className="log">
+            {character.runes.map((r) => (
+              <li key={r.slug}>
+                <strong>{r.name}</strong>
+                {r.usage && <span className="muted"> · {r.usage}</span>}
+              </li>
+            ))}
+          </ul>
+          <p className="rule-note" style={{ margin: '8px 0 0' }}>
+            Trace a rune as an action, or etch up to 2 during your daily preparations. Runes that call for a saving throw use your class DC.
+          </p>
         </section>
       )}
     </>

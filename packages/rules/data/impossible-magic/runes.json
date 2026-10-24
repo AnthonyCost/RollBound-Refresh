@@ -1,0 +1,252 @@
+[
+ {
+  "id": "aon-runesmith-rune-1",
+  "slug": "atryl-rune-of-fire",
+  "name": "Atryl, Rune of Fire",
+  "level": 1,
+  "traits": [
+   "fire",
+   "primal",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature or object",
+  "description": "<p>This rune is often placed on a stone in a hearth, its power ensuring the stone remains warm through the night. The bearer’s fire resistance, if any, is reduced by 5. Its immunities are unaffected.</p>\n<p><strong>Invocation</strong> The bearer takes 1d8 fire damage with a basic Fortitude save. On a critical failure, it's also dazzled for 1 round.</p>\n<p><strong>Level (+2)</strong> The reduction in fire resistance increases by 1, and the damage of the invocation increases by 1d8.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-2",
+  "slug": "baruiel-rune-of-holds-bravery",
+  "name": "Baruiel, Rune of Hold's Bravery",
+  "level": 1,
+  "traits": [
+   "emotion",
+   "magical",
+   "mental",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a willing creature",
+  "description": "<p>This scratched rune reminds the bearer to stand strong against fear when near allies. As long as the rune-bearer is within 10 feet of one of its allies, whenever it would reduce its frightened condition by 1, it instead reduces it by 2.</p>\n<p><strong>Invocation</strong> The essence of the rune is released outward, easing the minds of others. Each ally of the rune-bearer within a 10-foot emanation reduces their frightened condition by 2.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-3",
+  "slug": "camonica-rune-of-perplexity",
+  "name": "Camonica, Rune of Perplexity",
+  "level": 1,
+  "traits": [
+   "mental",
+   "occult",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature",
+  "description": "<p>This rune of looping swirls is difficult to look straight at and stirs up a psychic cacophony in a foe's mind. The first time each round the rune-bearer takes an action with the concentrate trait, the turmoil increases, dealing it 2 mental damage.</p>\n<p><strong>Invocation</strong> The cacophony fragments and expands rapidly in a mental explosion, dealing 1d4 mental damage to the rune- bearer with a basic Will save. On a failure, the rune-bearer is stupefied 1  for 1 round (or stupefied 2 on a critical failure).</p>\n<p><strong>Level (+2)</strong> The damage from the mental turmoil increases by 1 and the damage of the invocation increases by 1d4.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-4",
+  "slug": "esvadir-rune-of-whetstones",
+  "name": "Esvadir, Rune of Whetstones",
+  "level": 1,
+  "traits": [
+   "magical",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a weapon or unarmed attack that deals piercing or slashing damage",
+  "description": "<p>This cuspate rune, when placed on a blade, ensures it won't go dull. Strikes with the weapon or unarmed attack deal an extra 2 persistent bleed damage per weapon damage die.</p>\n<p><strong>Invocation</strong> A blast of cutting energy is released outward from the rune, dealing 1d8 slashing damage to a creature adjacent to the rune-bearer, with a basic Reflex save.</p>\n<p><strong>Level (+2)</strong> The damage of the invocation increases by 1d8.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-5",
+  "slug": "holtrik-rune-of-dwarven-ramparts",
+  "name": "Holtrik, Rune of Dwarven Ramparts",
+  "level": 1,
+  "traits": [
+   "magical",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a shield",
+  "description": "<p>Similarity in the Dwarven words for “wall” and “shield” ensure that this angular rune, once used to shore up tunnels, can apply equally well in the heat of battle. A creature that has the shield raised gains a +1 status bonus to AC.</p>\n<p><strong>Invocation</strong> You call the shield to its rightful place. You Raise the Shield bearing the rune, as if the rune-bearer had used Raise a Shield, and the shield's status bonus to AC lasts until the beginning of the creature's next turn.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-6",
+  "slug": "ledria-rune-of-appeal",
+  "name": "Ledria, Rune of Appeal",
+  "level": 1,
+  "traits": [
+   "occult",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature",
+  "description": "<p>No matter what skin, shell, or scale this rune is drawn on, it shines like gold. The rune-bearer gains a +1 status bonus to Deception, Diplomacy, and Performance checks.</p>\n<p><strong>Invocation</strong> The rune draws creatures closer to the bearer. Each creature within 30 feet of the rune-bearer can Step closer to the rune-bearer as a free action.</p>\n<p><strong>Level (9th)</strong> The bonus increases to +2.</p>\n<p><strong>Level (17th)</strong> The bonus increases to +3.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-7",
+  "slug": "lyskel-rune-of-frost",
+  "name": "Lyskel, Rune of Frost",
+  "level": 1,
+  "traits": [
+   "cold",
+   "primal",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature or object",
+  "description": "<p>This rune is often placed on chests and boxes to keep their contents from spoiling, even in the hottest of climates. The rune-bearer takes a –5-foot circumstance penalty to its Speeds and becomes so cold that movement becomes dangerous; if the bearer takes a move action, it becomes clumsy 1 until the beginning of its next turn.</p>\n<p><strong>Invocation</strong> The rune-bearer takes 1d4 cold damage, with a basic Fortitude save. All squares on the ground in the bearer's space and adjacent squares are covered in snow, becoming difficult terrain for 1 round.</p>\n<p><strong>Level (+2)</strong> The damage of the invocation increases by 1d4.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-8",
+  "slug": "marssyl-rune-of-impact",
+  "name": "Marssyl, Rune of Impact",
+  "level": 1,
+  "traits": [
+   "magical",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a weapon or unarmed attack that deals bludgeoning damage",
+  "description": "<p>This rune magnifies force many times over as it passes through the rune's concentric rings. The weapon or unarmed attack deals 1 bludgeoning splash damage per weapon damage die. If the rune is on a melee weapon or melee unarmed attack, you and the rune-bearer are immune to this splash damage.</p>\n<p><strong>Invocation</strong> The rune vibrates as power concentrates within it. The next successful Strike made with the weapon or unarmed attack before the end of its wielder's next turn deals an additional die of damage, and the target must succeed at a Fortitude save against your class DC or be pushed 10 feet away from the attacker (20 feet on a critical failure).</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-9",
+  "slug": "oljinex-rune-of-cowards-bane",
+  "name": "Oljinex, Rune of Cowards' Bane",
+  "level": 1,
+  "traits": [
+   "arcane",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a shield",
+  "description": "<p>This rune resembles a broken arrow. The shield bearing the rune gains a +2 status bonus to its Hardness against physical damage from ranged attacks.</p>\n<p><strong>Invocation</strong> (illusion, mental, visual) The rune creates an illusion in the minds of all creatures adjacent to the rune-bearer that lasts for 1 round. The illusion is of a large, impassable wall blocking all paths away from the rune-bearer. Creatures affected by this invocation can't willingly move farther away from the rune-bearer for 1 round or until they disbelieve the illusion, usually by using a Seek action.</p>\n<p><strong>Level (+4)</strong> The status bonus to Hardness increases by 1.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-10",
+  "slug": "pluuna-rune-of-illumination",
+  "name": "Pluuna, Rune of Illumination",
+  "level": 1,
+  "traits": [
+   "light",
+   "magical",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature or armor",
+  "description": "<p>While many runes emit a faint glow, illumination is the focus of this simple rune. The rune sheds bright light in a 20-foot emanation (and dim light to 40 feet). Creatures in the emanation take a –1 item penalty to Stealth checks.</p>\n<p><strong>Invocation</strong> Each creature in the light must succeed at a Fortitude save against your class DC or be dazzled for 1 round. The light fades, but the target still sheds dim light in a 20-foot emanation for 1 round.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-11",
+  "slug": "ranshu-rune-of-thunder",
+  "name": "Ranshu, Rune of Thunder",
+  "level": 1,
+  "traits": [
+   "electricity",
+   "primal",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature or object",
+  "description": "<p>This vertical rune is often carved on tall towers to draw lightning and shield the buildings below it. If the rune-bearer doesn't take a move action at least once on its turn, a small bolt of static finds it, dealing 3 electricity damage.</p>\n<p><strong>Invocation</strong> The preliminary streaks of lightning braid together into a powerful bolt. The rune-bearer takes 1d8 electricity damage with a basic Fortitude save.</p>\n<p><strong>Level (+2)</strong> The damage from the bolt of static increases by 1, and the damage of the invocation increases by 1d8.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-12",
+  "slug": "rehgog-rune-of-bestial-might",
+  "name": "Rehgog, Rune of Bestial Might",
+  "level": 1,
+  "traits": [
+   "morph",
+   "primal",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a willing creature",
+  "description": "<p>The jagged edges of this rune evoke the claws and talons of mighty beasts. The target's nose becomes an animal-like snout, giving the rune-bearer scent as an imprecise scent with a range of 30 feet.</p>\n<p><strong>Invocation</strong> The rune-bearer's muscles bulge with the strength of a ferocious beast. The bearer can immediately Step as a free action. The next unarmed Strike the bearer attempts before the start of your next turn deals an additional die of damage.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-13",
+  "slug": "sertum-rune-of-preparedness",
+  "name": "Sertum, Rune of Preparedness",
+  "level": 1,
+  "traits": [
+   "primal",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature",
+  "description": "<p>The wavy lines of this rune evoke fields of reeds, the branches of trees blowing in the wind, or other natural phenomena. The rune-bearer gains a +1 status bonus to Survival checks and to Lore checks related to a type of terrain or specific natural location you choose as you draw the rune. The rune-bearer can use Survival to roll initiative, and the status bonus applies to this roll.</p>\n<p><strong>Invocation</strong> The rune reaches out to the surrounding terrain, shifting it to the rune-bearer's advantage. The rune-bearer can Step up to three times as a free action.</p>\n<p><strong>Level (9th)</strong> The bonus increases to +2.</p>\n<p><strong>Level (17th)</strong> The bonus increases to +3.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-14",
+  "slug": "thullax-rune-of-corrosion",
+  "name": "Thullax, Rune of Corrosion",
+  "level": 1,
+  "traits": [
+   "acid",
+   "arcane",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature or object",
+  "description": "<p>The swooping lines of this rune seem to melt into each other as if their edges were hazy and indistinct, though the meaning is clear to you. The rune-bearer's resistance to each physical damage type is reduced by 1 (if it has any such resistances). Its immunities are unaffected.</p>\n<p><strong>Invocation</strong> The bearer takes 1d6 acid damage with a basic Fortitude save; on a critical failure, it takes 1 persistent acid damage.</p>\n<p><strong>Level (+2)</strong>  The reduction in physical resistance increases by 1, the damage of the invocation increases by 1d6, and the persistent damage increases by 1.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-15",
+  "slug": "tilus-rune-of-vocabulary",
+  "name": "Tilus, Rune of Vocabulary",
+  "level": 1,
+  "traits": [
+   "arcane",
+   "mental",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature",
+  "description": "<p>Upon close inspection, this rune comprises hundreds of smaller characters of various runic languages. When you etch or trace this rune, choose one language you know. The rune-bearer can speak and understand the chosen language and gains a +1 status bonus to Society checks and to Lore checks related to writing (such as Library Lore and Scribing Lore).</p>\n<p><strong>Invocation</strong> The rune-bearer's voice rings clear and true, allowing them to automatically succeed at any flat check that could disrupt an auditory action (such as the one imposed by the deafened condition) for 1 round. During this time, the bearer can also speak their true mind even if they are currently confused, controlled, or otherwise unable to speak.</p>\n<p><strong>Level (9th)</strong> The bonus increases to +2.</p>\n<p><strong>Level (17th)</strong> The bonus increases to +3.</p>",
+  "source": "Impossible Magic"
+ },
+ {
+  "id": "aon-runesmith-rune-16",
+  "slug": "zohk-rune-of-homecoming",
+  "name": "Zohk, Rune of Homecoming",
+  "level": 1,
+  "traits": [
+   "arcane",
+   "rune",
+   "runesmith"
+  ],
+  "rarity": "common",
+  "usage": "drawn on a creature",
+  "description": "<p>This circular mark allows travelers to always find their way home. The rune-bearer gains a +15-foot status bonus to its Speeds, but only when its movement would end closer to you than where the creature started its turn.</p>\n<p><strong>Invocation</strong> (teleportation) You call the rune-bearer to your side. You teleport the target to any unoccupied square adjacent to you. If the bearer is unwilling, it must succeed at a Will save to negate the effect.</p>",
+  "source": "Impossible Magic"
+ }
+]

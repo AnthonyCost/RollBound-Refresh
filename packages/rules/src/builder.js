@@ -54,6 +54,7 @@ export function emptyBuild() {
     bonusFeats: {},
     cantrips: [],
     spells: [],
+    runes: [],
     armor: null,
     shield: null,
     weapons: [],
@@ -197,7 +198,8 @@ export function ancestryFeatOptions(build, data) {
 export function classFeatOptions(build, data) {
   const { cls } = lookup(build, data);
   if (!cls?.classFeatAt1) return [];
-  return featPool(data, { category: 'class', traits: [cls.slug] });
+  // Some classes' 1st-level feat must have a trait, e.g. the summoner's evolution feat.
+  return featPool(data, { category: 'class', traits: [cls.slug, ...(cls.classFeatTraits ?? [])] });
 }
 
 /** Named conditions a correction can attach to a granted feat. */
@@ -282,6 +284,8 @@ export function grantedSkills(build, data) {
   for (const { key, option } of chosenOptions(build, data)) {
     for (const s of option.skills) add(s, option.name);
     if (option.skillChoice) add(build.classChoiceSkills[key], option.name);
+    // A skill that depends on the spell tradition, e.g. a dragon eidolon's.
+    if (option.traditionSkills) add(option.traditionSkills[spellcastingOf(build, data)?.tradition], option.name);
   }
   if (cls?.deity && deity) add(deity.skills[0], deity.name);
   for (const s of heritage?.skills ?? []) add(s, heritage.name);
@@ -339,7 +343,7 @@ export function checkPrerequisite(text, build, data) {
   const t = text.trim().toLowerCase();
   const { ancestry, heritage, cls, deity } = lookup(build, data);
   const skills = trainedSkills(build, data);
-  const lores = build.lore ? [build.lore.toLowerCase()] : [];
+  const lores = loresOf(build, data).map((l) => l.toLowerCase());
   const feats = featSummary(build, data).owned;
   const options = chosenOptions(build, data).map((c) => c.option.name.toLowerCase());
 
@@ -348,7 +352,7 @@ export function checkPrerequisite(text, build, data) {
     if (m[1] === 'at least one skill') return skills.size > 0;
     if (m[1] === 'lore') return lores.length > 0;
     if (m[1] === 'a skill with the recall knowledge action') return lores.length > 0 || RECALL_KNOWLEDGE_SKILLS.some((s) => skills.has(s));
-    const parts = m[1].split(/,\s*(?:or\s+)?|\s+or\s+/).map((p) => p.trim()).filter(Boolean);
+    const parts = m[1].split(/,\s*(?:or\s+)?|\s+or\s+/).map((p) => p.trim().replace(/^trained in /, '')).filter(Boolean);
     return parts.some((p) => skills.has(p) || lores.includes(p));
   }
 
@@ -365,6 +369,8 @@ export function checkPrerequisite(text, build, data) {
   if (t === 'healing font') return fontOf(build, data) === 'heal';
   if (t === 'harmful font') return fontOf(build, data) === 'harm';
   if (t === 'holy or unholy trait') return ['holy', 'unholy'].includes(sanctificationOf(build, data));
+  m = /^you aren['’]t (holy|unholy)$/.exec(t);
+  if (m) return sanctificationOf(build, data) !== m[1];
   if (t === 'spellcasting class feature') return Boolean(cls?.casting && cls.casting.kind !== 'focus');
   if (t === 'low-light vision') {
     return ['low-light-vision', 'darkvision'].includes(ancestry?.vision) || (heritage?.senses ?? []).length > 0;
@@ -404,7 +410,8 @@ export function spellcastingOf(build, data) {
   if (!base) return null;
   const option = chosenOptions(build, data).find((c) => c.option.tradition || c.option.traditionChoice)?.option;
   const tradition = option?.traditionChoice ? build.tradition : base.tradition ?? option?.tradition ?? null;
-  const granted = (option?.grantedSpells ?? []).map((s) => find(data.spells, s)).filter(Boolean);
+  // Spells you know without choosing them: the class's (necromancer's harm) and the subclass's.
+  const granted = [...(base.grantedSpells ?? []), ...(option?.grantedSpells ?? [])].map((s) => find(data.spells, s)).filter(Boolean);
   return { ...base, tradition, traditionChoice: Boolean(option?.traditionChoice), granted };
 }
 
@@ -417,6 +424,27 @@ export function spellOptions(build, data) {
     cantrips: pool.filter((s) => s.rank === 0 && !granted.has(s.id)),
     spells: pool.filter((s) => s.rank === 1 && !granted.has(s.id)),
   };
+}
+
+// ---------- Runes ----------
+
+/** The runesmith's 1st-level runic repertoire: { known } or null for other classes. */
+export function runesOf(build, data) {
+  return lookup(build, data).cls?.runes ?? null;
+}
+
+export function runeOptions(build, data) {
+  if (!runesOf(build, data)) return [];
+  return (data.runes ?? []).filter((r) => r.level <= 1 && r.rarity === 'common');
+}
+
+// ---------- Lore ----------
+
+/** Lore skills: the background's choice plus any a class grants (necromancer: Undead Lore). */
+export function loresOf(build, data) {
+  const lores = build.lore?.trim() ? [build.lore.trim()] : [];
+  for (const l of lookup(build, data).cls?.lores ?? []) if (!lores.includes(l)) lores.push(l);
+  return lores;
 }
 
 // ---------- Gear ----------
@@ -534,10 +562,13 @@ export function buildProblems(build, data) {
 
   const casting = spellcastingOf(build, data);
   if (casting && casting.kind !== 'focus') {
-    const unit = casting.kind === 'prepared' ? 'to prepare' : casting.kind === 'repertoire' ? 'for your repertoire' : `for your ${casting.kind}`;
+    const unit = casting.kind === 'prepared' ? 'to prepare' : casting.kind === 'repertoire' ? 'for your repertoire' : `for your ${casting.listName ?? casting.kind}`;
     if (build.cantrips.length !== casting.cantrips) add('spells', `Choose ${casting.cantrips} cantrips ${unit} (${build.cantrips.length} chosen).`);
     if (build.spells.length !== casting.spells) add('spells', `Choose ${casting.spells} 1st-rank spells ${unit} (${build.spells.length} chosen).`);
   }
+  const runes = runesOf(build, data);
+  const runeCount = build.runes?.length ?? 0;
+  if (runes && runeCount !== runes.known) add('spells', `Choose ${runes.known} runes for your runic repertoire (${runeCount} chosen).`);
 
   if (gearCost(build, data) > STARTING_GOLD_CP) add('gear', 'Your gear costs more than your 15 gp.');
 
@@ -590,7 +621,7 @@ export function buildCharacter(build, data) {
     abilities: mods,
     proficiencies: proficienciesOf(build, data),
     skills,
-    lores: build.lore.trim() ? [build.lore.trim()] : [],
+    lores: loresOf(build, data),
     languages: [...languagePicks(build, data).granted, ...build.languages],
     classFeatures: cls.features.map((f) => ({
       name: f.name,
@@ -604,7 +635,8 @@ export function buildCharacter(build, data) {
       spellcasting: {
         kind: casting.kind,
         tradition: casting.tradition,
-        ability: keyAbilityOf(build, data),
+        // Usually the key attribute; the magus casts with Intelligence instead.
+        ability: casting.ability ?? keyAbilityOf(build, data),
         slots: casting.slots,
         ...(casting.prepares && { prepares: casting.prepares }),
         cantrips: [...casting.granted.filter((s) => s.rank === 0), ...build.cantrips.map((s) => find(data.spells, s))].filter(Boolean).map(toSpell),
@@ -622,6 +654,9 @@ export function buildCharacter(build, data) {
       traits: armor.traits,
     },
     shield: shield && { name: shield.name, acBonus: shield.acBonus, hardness: shield.hardness, hp: shield.hp },
+    ...(runesOf(build, data) && {
+      runes: (build.runes ?? []).map((r) => find(data.runes ?? [], r)).filter(Boolean).map(({ id, slug, name, traits, usage }) => ({ id, slug, name, traits, usage })),
+    }),
     weapons: weapons.length ? weapons : [FIST],
     heroPoints: 1,
     build,
@@ -669,6 +704,7 @@ function choiceRefs(build, data) {
   }
   many('spells', 'cantrip', 'cantrips', data.spells);
   many('spells', 'spell', 'spells', data.spells);
+  many('spells', 'rune', 'runes', data.runes ?? []);
   one('gear', 'armor', 'armor', data.armor);
   one('gear', 'shield', 'shield', data.shields);
   many('gear', 'weapon', 'weapons', data.weapons);
@@ -760,5 +796,6 @@ export function migrateBuild(build, data) {
   out.armor = toId(data.armor, build.armor);
   out.shield = toId(data.shields, build.shield);
   out.weapons = ids(data.weapons, build.weapons);
+  out.runes = ids(data.runes ?? [], build.runes);
   return out;
 }

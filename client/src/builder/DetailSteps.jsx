@@ -10,6 +10,8 @@ import {
   featPrerequisites,
   spellcastingOf,
   spellOptions,
+  runesOf,
+  runeOptions,
   proficienciesOf,
   spellDc,
   classDc,
@@ -306,11 +308,46 @@ const SPELL_NOTE = {
 
 const spellMeta = (s) => [actionLabel(s.actions), s.range, s.area, s.defense && `${cap(s.defense)} save`].filter(Boolean).join(' · ');
 
+/** A runesmith's runic repertoire: the runes they know and can trace or etch. */
+function RunesPicker({ build, update, data, known }) {
+  const picked = build.runes ?? [];
+  const toggle = (id) => {
+    if (picked.includes(id)) update({ runes: picked.filter((r) => r !== id) });
+    else if (picked.length < known) update({ runes: [...picked, id] });
+  };
+  return (
+    <>
+      <section className="panel">
+        <h2 className="panel__title">Runic repertoire</h2>
+        <p className="rule-note" style={{ margin: 0 }}>
+          Runesmiths don't cast spells. You learn runes, which you trace in the air with the Trace Rune action or etch onto
+          allies and gear during your daily preparations (up to 2 at a time at 1st level). Invoking a rune unleashes a
+          stronger effect and uses it up.
+        </p>
+      </section>
+      <h2 className="panel__title builder__subhead">
+        1st-level runes · {picked.length}/{known}
+      </h2>
+      <OptionList
+        label="Runes"
+        items={runeOptions(build, data)}
+        selected={picked}
+        multiple
+        onSelect={toggle}
+        meta={(r) => r.usage && r.usage[0].toUpperCase() + r.usage.slice(1)}
+        blocked={(r) => (!picked.includes(r.id) && picked.length >= known ? `You've chosen ${known}` : null)}
+      />
+    </>
+  );
+}
+
 export function SpellsStep({ build, update, data }) {
   const casting = spellcastingOf(build, data);
   const { cls } = lookup(build, data);
+  const runes = runesOf(build, data);
 
   if (!cls) return <p className="rule-note">Choose a class first.</p>;
+  if (runes) return <RunesPicker build={build} update={update} data={data} known={runes.known} />;
   if (!casting) return <p className="rule-note">{cls.name}s don't cast spells at 1st level. Skip ahead to gear.</p>;
   if (casting.kind === 'focus') {
     return <p className="rule-note">Champions don't choose spells: your devotion spells come from your cause. They're listed in your class features.</p>;
@@ -331,7 +368,7 @@ export function SpellsStep({ build, update, data }) {
     <>
       <section className="panel">
         <h2 className="panel__title">
-          {SPELL_LIST_NAME[casting.kind]} · {cap(casting.tradition)}
+          {casting.listName ? cap(casting.listName) : SPELL_LIST_NAME[casting.kind]} · {cap(casting.tradition)}
         </h2>
         <p className="rule-note" style={{ margin: 0 }}>
           {SPELL_NOTE[casting.kind]} You have {casting.slots} 1st-rank spell slots a day; cantrips are free to cast.
@@ -341,7 +378,7 @@ export function SpellsStep({ build, update, data }) {
 
       {casting.granted.length > 0 && (
         <section className="panel">
-          <h2 className="panel__title">Granted by your {traditionFeature}</h2>
+          <h2 className="panel__title">Always known</h2>
           <ul className="log">
             {casting.granted.map((s) => (
               <li key={s.id}>
