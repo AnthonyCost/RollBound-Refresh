@@ -279,6 +279,82 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .hp-tracker__amount input { width: 72px; padding: 0 6px; font-family: var(--display); font-size: 18px; text-align: center; }
 .hp-tracker__full { align-self: center; }
 
+/* ---------- Spell Book, Inventory, Lore tabs ---------- */
+
+.coins input, .inventory__note-field input, .add-item input, .add-item select, .backstory__input {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+}
+.coins input:focus, .inventory__note-field input:focus, .add-item input:focus, .add-item select:focus, .backstory__input:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
+
+.spellbook__head, .coins, .add-item, .backstory, .origins, .background { display: flex; flex-direction: column; gap: 10px; }
+.spellbook__head .panel__title, .spellbook__head .rule-note, .coins .panel__title, .add-item .panel__title,
+.backstory .panel__title, .origins .panel__title, .background .panel__title { margin: 0; }
+.spellbook__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 0; }
+.spellbook__stats div { padding: 8px; border: 1px solid var(--line); background: var(--bg); text-align: center; }
+.spellbook__stats dt { font-family: var(--display); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.spellbook__stats dd { margin: 2px 0 0; font-family: var(--display); font-size: 20px; font-weight: 700; }
+.spellbook__rank { display: flex; flex-direction: column; gap: 8px; }
+.spellbook__rank .eyebrow { margin: 4px 0 0; }
+.spellbook__list, .inventory, .add-item__results { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.spell summary, .inventory__item summary { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.spell__actions, .inventory__meta { flex: none; display: inline-flex; gap: 10px; font-family: var(--body); font-size: 13px; font-weight: 400; letter-spacing: 0; text-transform: none; font-style: italic; color: var(--text-muted); }
+.spell__body, .inventory__body { display: flex; flex-direction: column; gap: 8px; padding: 0 14px 12px; }
+.spell__body .option__desc, .inventory__body .option__desc { padding: 0; }
+.spell__traits { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; }
+.spell__facts, .inventory__facts { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; font-size: 14px; color: var(--text-soft); }
+.spell__facts strong { font-family: var(--display); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--bronze); }
+
+.coins__head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.coins__row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.coin { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border: 1px solid var(--line); background: var(--bg); }
+.coin__name { font-family: var(--display); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+.coin input { width: 100%; min-width: 0; padding: 0 4px; text-align: center; font-family: var(--display); font-size: 18px; }
+.coin__value { font-family: var(--display); font-size: 20px; font-weight: 700; min-height: 44px; display: grid; place-items: center; }
+.coin__abbr { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.coin--pp .coin__abbr { color: #cfd8e3; }
+.coin--gp .coin__abbr { color: var(--gold); }
+.coin--sp .coin__abbr { color: #b9bec4; }
+.coin--cp .coin__abbr { color: #c98a5a; }
+
+.bulk { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; font-size: 14px; }
+.bulk strong { font-family: var(--display); font-size: 16px; }
+.bulk .rule-note { flex-basis: 100%; margin: 0; }
+
+.inventory__name { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; overflow-wrap: anywhere; }
+.inventory__controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.stepper { display: inline-flex; align-items: center; gap: 4px; }
+.stepper .btn { min-height: 40px; width: 40px; padding: 0; font-size: 18px; }
+.stepper__value { min-width: 36px; text-align: center; font-family: var(--display); font-size: 18px; font-weight: 700; }
+.inventory__remove { min-height: 40px; }
+.inventory__note-field { display: flex; flex-direction: column; gap: 4px; }
+.inventory__note { margin: 0; font-style: italic; color: var(--text-soft); }
+
+.add-item__search input { width: 100%; }
+.add-item__result { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border: 1px solid var(--line-soft); background: var(--bg); }
+.add-item__info { display: flex; flex-direction: column; min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
+.add-item__result .btn { min-height: 40px; padding: 0 12px; }
+.add-item__custom { display: flex; flex-direction: column; gap: 6px; padding-top: 6px; border-top: 1px solid var(--line-soft); }
+.add-item__custom-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.add-item__custom-name { flex: 1 1 100%; display: flex; }
+.add-item__custom-name input { flex: 1; min-width: 0; }
+.add-item__custom-row input[type='number'] { width: 72px; }
+.add-item__custom-row .btn { flex: 1; min-height: 44px; }
+
+.backstory__input { width: 100%; padding: 10px 12px; resize: vertical; line-height: 1.5; }
+.backstory__text { margin: 0; white-space: pre-wrap; line-height: 1.6; color: var(--text-soft); overflow-wrap: anywhere; }
+.backstory__foot { display: flex; justify-content: space-between; gap: 8px; margin: 0; font-size: 13px; color: var(--text-soft); }
+.origins__list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin: 0; }
+.origins__list div { display: flex; gap: 10px; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--line-soft); }
+.origins__list dt { font-family: var(--display); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding-top: 3px; }
+.origins__list dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.background .background__desc { padding: 0; }
+
 .share { display: flex; flex-direction: column; gap: 10px; }
 .share .panel__title, .share .rule-note { margin: 0; }
 .share__row { display: flex; gap: 8px; }

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
   mira,
   maxHp,
@@ -13,6 +13,8 @@ import { api } from '../api.js';
 import { DEMO_ID_PREFIX, getDemoCharacter } from './demoCharacters.js';
 import { demoPortraitUrl } from './portraits.js';
 import { demoMemberships } from './demoCampaigns.js';
+import { demoExtras, saveDemoExtras } from './demoExtras.js';
+import { useDelayedSave } from './useDelayedSave.js';
 
 const TableContext = createContext(null);
 
@@ -28,8 +30,12 @@ const STARTING_CONDITIONS = [{ id: 'frightened', value: 1 }];
  */
 const ENCOUNTER_ACTIVE = false;
 
-/** How long to wait after the last hit point change before saving it. */
+/** How long to wait after the last change before saving it. */
 const HP_SAVE_DELAY = 500;
+const INVENTORY_SAVE_DELAY = 600;
+const BACKSTORY_SAVE_DELAY = 1000;
+
+const isDemoId = (id) => id === DEMO_CHARACTER_ID || id.startsWith(DEMO_ID_PREFIX);
 
 /**
  * Holds everything happening "at the table" for one character: hit points,
@@ -44,7 +50,9 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
   const [campaign, setCampaign] = useState(null);
   const [shareId, setShareId] = useState(null);
   const [storedHp, setStoredHp] = useState(null);
-  const [hpError, setHpError] = useState(null);
+  // null until first edited: the Inventory tab starts from the builder's gear.
+  const [inventory, setStoredInventory] = useState(null);
+  const [backstory, setStoredBackstory] = useState('');
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -56,13 +64,17 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
   const [lastRoll, setLastRoll] = useState(null);
 
   useEffect(() => {
-    if (!readOnly && (characterId === DEMO_CHARACTER_ID || characterId.startsWith(DEMO_ID_PREFIX))) {
+    if (!readOnly && isDemoId(characterId)) {
       const local = characterId === DEMO_CHARACTER_ID ? mira : getDemoCharacter(characterId)?.data;
       if (local) {
         const joined = demoMemberships()[characterId];
+        const extras = demoExtras(characterId);
         setCharacter(local);
+        setStoredHp(extras.currentHp ?? null);
+        setStoredInventory(extras.inventory ?? null);
+        setStoredBackstory(extras.backstory ?? '');
         setPortraitUrl(demoPortraitUrl(characterId));
-        setCampaign(joined ? { id: joined.id, name: joined.name } : null);
+        setCampaign(joined ? { id: joined.id, name: joined.name, books: joined.books ?? null } : null);
       } else setNotFound(true);
       setLoading(false);
       return;
@@ -73,9 +85,11 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
         if (cancelled) return;
         setCharacter(row.data);
         setPortraitUrl(row.portraitUrl);
-        setCampaign(row.campaignName ? { id: row.campaignId ?? null, name: row.campaignName } : null);
+        setCampaign(row.campaignName ? { id: row.campaignId ?? null, name: row.campaignName, books: row.campaignBooks ?? null } : null);
         setShareId(row.shareId ?? null);
         setStoredHp(row.currentHp);
+        setStoredInventory(row.inventory ?? null);
+        setStoredBackstory(row.backstory ?? '');
       })
       .catch(() => !cancelled && setNotFound(true))
       .finally(() => !cancelled && setLoading(false));
@@ -84,41 +98,45 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
     };
   }, [characterId, sharedId, readOnly]);
 
-  // Hit points: null means full. Demo characters keep them for this visit only;
-  // saved characters save them shortly after the last change.
+  // Changes save a moment after the last edit: to the server, or to this tab for
+  // demo characters. The shared view never saves.
+  const saver = (field, send) => (value) =>
+    isDemoId(characterId)
+      ? saveDemoExtras(characterId, { [field]: value }) ? Promise.resolve() : Promise.reject(new Error('storage blocked'))
+      : send(characterId, value);
+  const [scheduleHp, hpStatus] = useDelayedSave(saver('currentHp', api.setHp), HP_SAVE_DELAY);
+  const [scheduleInventory, inventoryStatus] = useDelayedSave(saver('inventory', api.setInventory), INVENTORY_SAVE_DELAY);
+  const [scheduleBackstory, backstoryStatus] = useDelayedSave(saver('backstory', api.setBackstory), BACKSTORY_SAVE_DELAY);
+
+  // Hit points: null means full.
   const max = character ? maxHp(character) : 0;
   const currentHp = Math.min(storedHp ?? max, max);
-  const saveTimer = useRef(null);
-  const unsaved = useRef(null);
-  const saveHp = useCallback(() => {
-    clearTimeout(saveTimer.current);
-    if (unsaved.current === null) return;
-    const hp = unsaved.current;
-    unsaved.current = null;
-    api.setHp(characterId, hp).catch(() => setHpError("Couldn't save hit points. Check your connection and try again."));
-  }, [characterId]);
   const setHp = useCallback(
     (value) => {
       if (readOnly) return;
       const hp = Math.max(0, Math.min(max, Math.round(value)));
       setStoredHp(hp);
-      setHpError(null);
-      if (characterId === DEMO_CHARACTER_ID || characterId.startsWith(DEMO_ID_PREFIX)) return;
-      unsaved.current = hp;
-      clearTimeout(saveTimer.current);
-      saveTimer.current = setTimeout(saveHp, HP_SAVE_DELAY);
+      scheduleHp(hp);
     },
-    [readOnly, max, characterId, saveHp],
+    [readOnly, max, scheduleHp],
   );
-  // Leaving the character, or closing or reloading the tab, saves a change still
-  // waiting on the timer.
-  useEffect(() => {
-    window.addEventListener('pagehide', saveHp);
-    return () => {
-      window.removeEventListener('pagehide', saveHp);
-      saveHp();
-    };
-  }, [saveHp]);
+  const setInventory = useCallback(
+    (next) => {
+      if (readOnly) return;
+      setStoredInventory(next);
+      scheduleInventory(next);
+    },
+    [readOnly, scheduleInventory],
+  );
+  const setBackstory = useCallback(
+    (text) => {
+      if (readOnly) return;
+      setStoredBackstory(text);
+      scheduleBackstory(text);
+    },
+    [readOnly, scheduleBackstory],
+  );
+  const hpError = hpStatus === 'error' ? "Couldn't save hit points. Check your connection and try again." : null;
 
   const strikesSoFar = used.filter((a) => a.id === 'strike').length;
   const actionsLeft = 3 - used.length;
@@ -205,6 +223,12 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
       currentHp,
       setHp,
       hpError,
+      inventory,
+      setInventory,
+      inventoryStatus,
+      backstory,
+      setBackstory,
+      backstoryStatus,
       loading,
       notFound,
       round,
@@ -222,7 +246,7 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
       cycleCondition,
       resetEncounter,
     }),
-    [character, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

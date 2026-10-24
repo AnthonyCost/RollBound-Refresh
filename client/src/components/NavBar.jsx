@@ -21,11 +21,32 @@ const icon = {
     </>
   ),
   gm: <path d="M4 6h16M4 12h16M4 18h10" />,
+  spells: (
+    <>
+      <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" />
+      <path d="M4 19V5M19 19v2H6M12 7l1 2 2 .5-1.5 1.5.5 2-2-1-2 1 .5-2L9 9.5l2-.5z" />
+    </>
+  ),
+  inventory: (
+    <>
+      <path d="M6 8h12l-1 12H7z" />
+      <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+    </>
+  ),
+  lore: (
+    <>
+      <path d="M7 4h11a2 2 0 0 1 0 4h-1v10a2 2 0 0 1-2 2H6a2 2 0 0 1 0-4h1z" />
+      <path d="M10 9h4M10 13h4" />
+    </>
+  ),
 };
 
 // encounter: shown only while the character is in an active encounter.
 const LINKS = [
   { to: 'sheet', label: 'Sheet', icon: 'sheet' },
+  { to: 'spells', label: 'Spell Book', icon: 'spells' },
+  { to: 'inventory', label: 'Inventory', icon: 'inventory' },
+  { to: 'lore', label: 'Lore', icon: 'lore' },
   { to: 'turn', label: 'Turn', icon: 'turn', encounter: true },
   { to: 'roll', label: 'Roll', icon: 'roll', encounter: true },
   { to: 'gm', label: 'GM', icon: 'gm', encounter: true },
@@ -34,8 +55,6 @@ const LINKS = [
 export default function NavBar() {
   const { encounterActive } = useTable();
   const links = LINKS.filter((l) => encounterActive || !l.encounter);
-  // The sheet on its own needs no tabs.
-  if (links.length < 2) return null;
   return (
     <nav className="nav" aria-label="Main" style={{ gridTemplateColumns: `repeat(${links.length}, minmax(0, 1fr))` }}>
       {links.map((l) => (

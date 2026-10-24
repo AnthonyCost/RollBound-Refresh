@@ -10,9 +10,9 @@
    "Impossible Magic"
   ],
   "license": "Game mechanics © Paizo Inc., used under the ORC License. Data via the Foundry VTT pf2e system and the Archives of Nethys.",
-  "generatedAt": "2026-10-24T01:46:31.532Z",
+  "generatedAt": "2026-10-24T03:02:52.786Z",
   "needsReview": [],
-  "version": "66703af0432c"
+  "version": "7c71a83eb89c"
  },
  "files": [
   {
@@ -242,6 +242,24 @@
    "type": "shields",
    "book": "Player Core",
    "count": 4
+  },
+  {
+   "path": "guns-gears/items.json",
+   "type": "items",
+   "book": "Guns & Gears",
+   "count": 221
+  },
+  {
+   "path": "player-core/items.json",
+   "type": "items",
+   "book": "Player Core",
+   "count": 119
+  },
+  {
+   "path": "player-core-2/items.json",
+   "type": "items",
+   "book": "Player Core 2",
+   "count": 196
   }
  ]
 }

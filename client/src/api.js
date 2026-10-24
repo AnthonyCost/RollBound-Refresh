@@ -7,9 +7,12 @@ export class ApiError extends Error {
 }
 
 async function request(path, options = {}) {
+  // Browsers refuse keepalive requests with bodies over 64 KB, so big ones go without it.
+  const keepalive = options.keepalive && (options.body?.length ?? 0) < 60_000;
   const res = await fetch(`/api${path}`, {
     headers: { 'Content-Type': 'application/json' },
     ...options,
+    keepalive,
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
@@ -33,6 +36,8 @@ export const api = {
   createCharacter: (data) => post('/characters', data),
   // keepalive lets the save finish even if the tab is closing.
   setHp: (id, currentHp) => request(`/characters/${id}/hp`, { method: 'PUT', body: JSON.stringify({ currentHp }), keepalive: true }),
+  setInventory: (id, inventory) => request(`/characters/${id}/inventory`, { method: 'PUT', body: JSON.stringify(inventory), keepalive: true }),
+  setBackstory: (id, backstory) => request(`/characters/${id}/backstory`, { method: 'PUT', body: JSON.stringify({ backstory }), keepalive: true }),
   resetShareLink: (id) => post(`/characters/${id}/share-link`, {}),
   getSharedSheet: (shareId) => request(`/sheets/${encodeURIComponent(shareId)}`),
   setPortrait: (id, portraitKey) => request(`/characters/${id}/portrait`, { method: 'PUT', body: JSON.stringify({ portraitKey }) }),

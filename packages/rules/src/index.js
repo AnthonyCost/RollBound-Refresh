@@ -6,3 +6,4 @@ export * from './gm.js';
 export { mira } from './sample.js';
 export * from './builder.js';
 export * from './data.js';
+export * from './inventory.js';

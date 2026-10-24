@@ -1,9 +1,9 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import { TableProvider, useTable } from '../state/TableContext.jsx';
 import { useAuth } from '../state/AuthContext.jsx';
-import SheetPage from './SheetPage.jsx';
+import NavBar from '../components/NavBar.jsx';
 
-/** A character sheet opened from its share link: read-only, no sign-in needed. */
+/** A character opened from its share link: every tab, read-only, no sign-in needed. */
 export default function SharedSheetPage() {
   const { shareId } = useParams();
   return (
@@ -19,7 +19,7 @@ function SharedSheet() {
   const signedIn = status === 'user' || status === 'demo';
 
   return (
-    <div className="app">
+    <div className="app app--play">
       <header className="topbar">
         <Link to="/" className="wordmark">ROLLBOUND</Link>
         <div className="topbar__right">
@@ -35,8 +35,10 @@ function SharedSheet() {
             This sheet link doesn't work. Its owner may have made a new one; ask them for the latest link.
           </p>
         )}
-        {!loading && !notFound && <SheetPage />}
+        {!loading && !notFound && <Outlet />}
       </main>
+
+      {!loading && !notFound && <NavBar />}
     </div>
   );
 }

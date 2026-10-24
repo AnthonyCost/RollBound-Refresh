@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { armorClass, maxHp } from '@rollbound/rules';
+import { LIMITS, armorClass, inventoryProblems, maxHp } from '@rollbound/rules';
 import { pool } from '../db.js';
 import { requireUser } from '../auth.js';
 import { storage } from '../storage/index.js';
@@ -27,6 +27,8 @@ const toJson = (row) => ({
   // Derived on the way out so every client sees the same math.
   summary: { maxHp: maxHp(row.data), ac: armorClass(row.data).total },
   currentHp: currentHp(row),
+  inventory: row.inventory ?? null,
+  backstory: row.backstory ?? '',
   updatedAt: row.updated_at,
 });
 
@@ -116,4 +118,31 @@ characters.post('/:id/share-link', async (req, res) => {
   const { rows } = await pool.query('UPDATE characters SET share_id = $1 WHERE id = $2 AND owner_id = $3 RETURNING share_id', [generateShareId(), req.params.id, req.user.id]);
   if (!rows.length) return res.status(404).json({ errors: ['Character not found.'] });
   res.json({ shareId: rows[0].share_id });
+});
+
+// Replace the inventory: { items, coins } (see inventoryProblems in the rules).
+characters.put('/:id/inventory', async (req, res) => {
+  if (!isId(req.params.id)) return res.status(404).json({ errors: ['Character not found.'] });
+  const errors = inventoryProblems(req.body);
+  if (errors.length) return res.status(400).json({ errors: errors.slice(0, 5) });
+  const { items, coins } = req.body;
+  const clean = {
+    items: items.map(({ key, kind, id, name, qty, bulk, price, note }) => ({ key, kind, id: kind === 'custom' ? null : id, name: name.trim(), qty, bulk, price, note })),
+    coins: { pp: coins.pp, gp: coins.gp, sp: coins.sp, cp: coins.cp },
+  };
+  const { rowCount } = await pool.query('UPDATE characters SET inventory = $1 WHERE id = $2 AND owner_id = $3', [clean, req.params.id, req.user.id]);
+  if (!rowCount) return res.status(404).json({ errors: ['Character not found.'] });
+  res.json({ inventory: clean });
+});
+
+// Set the backstory: { backstory } of up to LIMITS.backstory characters.
+characters.put('/:id/backstory', async (req, res) => {
+  if (!isId(req.params.id)) return res.status(404).json({ errors: ['Character not found.'] });
+  const backstory = req.body?.backstory;
+  if (typeof backstory !== 'string' || backstory.length > LIMITS.backstory) {
+    return res.status(400).json({ errors: [`Backstory must be ${LIMITS.backstory.toLocaleString('en-US')} characters or fewer.`] });
+  }
+  const { rowCount } = await pool.query('UPDATE characters SET backstory = $1 WHERE id = $2 AND owner_id = $3', [backstory, req.params.id, req.user.id]);
+  if (!rowCount) return res.status(404).json({ errors: ['Character not found.'] });
+  res.json({ backstory });
 });

@@ -28,5 +28,7 @@ sheets.get('/:shareId', async (req, res) => {
     data: row.data,
     summary: { maxHp: maxHp(row.data), ac: armorClass(row.data).total },
     currentHp: currentHp(row),
+    inventory: row.inventory ?? null,
+    backstory: row.backstory ?? '',
   });
 });

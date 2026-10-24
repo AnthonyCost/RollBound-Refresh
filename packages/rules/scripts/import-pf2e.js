@@ -1,7 +1,9 @@
 // Builds the rules data in data/ from the Foundry VTT pf2e system's open data:
 // one file per book and type (e.g. data/player-core/feats.json) plus data/index.json.
 // Usage: npm run data:import --workspace @rollbound/rules
-// Set GITHUB_TOKEN to raise the GitHub API rate limit.
+// Set GITHUB_TOKEN to raise the GitHub API rate limit. Set PF2E_COMMIT to a commit
+// sha to re-import from that commit instead of the latest master (the current
+// data's commit is meta.commit in data/index.json).
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -411,6 +413,28 @@ function mapShield(sh) {
   };
 }
 
+// Foundry item types that are general gear: adventuring gear and worn or held
+// items, consumables (potions, scrolls, ammunition), containers, kits and treasure.
+const GEAR_TYPES = ['equipment', 'consumable', 'backpack', 'kit', 'treasure'];
+
+function mapItem(i) {
+  const s = i.system;
+  return {
+    id: i._id,
+    slug: s.slug ?? slugOf(i.name),
+    name: i.name,
+    level: s.level?.value ?? 0,
+    category: i.type === 'backpack' ? 'container' : i.type,
+    traits: s.traits?.value ?? [],
+    rarity: s.traits?.rarity ?? 'common',
+    price: priceCp(s.price?.value),
+    bulk: s.bulk?.value ?? 0,
+    usage: s.usage?.value ?? null,
+    description: cleanDescription(s.description?.value ?? ''),
+    source: source(i),
+  };
+}
+
 function mapDeity(d) {
   const s = d.system;
   return {
@@ -452,7 +476,7 @@ function mapSpell(sp) {
 
 // ---------- Main ----------
 
-const commit = await getJson(`https://api.github.com/repos/${REPO}/commits/${BRANCH}`);
+const commit = await getJson(`https://api.github.com/repos/${REPO}/commits/${process.env.PF2E_COMMIT || BRANCH}`);
 const sha = commit.sha;
 console.log(`Foundry pf2e @ ${sha.slice(0, 10)} (${commit.commit.committer.date})`);
 
@@ -544,6 +568,8 @@ const data = {
     .map(mapArmor)
     .sort(byName),
   shields: equipment.filter((e) => e.type === 'shield').map(mapShield).sort(byName),
+  // Every level, so characters can carry what they find later, not just starting gear.
+  items: byPack(/^packs\/equipment\//).filter((e) => GEAR_TYPES.includes(e.type)).map(mapItem).sort(byName),
 };
 
 // ---------- Hand-made books ----------
@@ -690,7 +716,7 @@ for (const c of data.classes) {
 
 // IDs must be unique within each list, or a saved choice could point at the wrong thing.
 const idLists = {
-  ...Object.fromEntries(['ancestries', 'heritages', 'backgrounds', 'classes', 'feats', 'deities', 'spells', 'weapons', 'armor', 'shields'].map((k) => [k, data[k]])),
+  ...Object.fromEntries(['ancestries', 'heritages', 'backgrounds', 'classes', 'feats', 'deities', 'spells', 'weapons', 'armor', 'shields', 'items'].map((k) => [k, data[k]])),
   subclassOptions: CORRECTABLE.subclassOptions.list(),
 };
 for (const [kind, list] of Object.entries(idLists)) {

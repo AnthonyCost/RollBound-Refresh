@@ -13,6 +13,9 @@ import CampaignPage from './pages/CampaignPage.jsx';
 import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import SharedSheetPage from './pages/SharedSheetPage.jsx';
+import SpellBookPage from './pages/SpellBookPage.jsx';
+import InventoryPage from './pages/InventoryPage.jsx';
+import LorePage from './pages/LorePage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
 import AccountLink from './components/AccountLink.jsx';
@@ -104,13 +107,22 @@ export default function App() {
         <Route path="/play/:characterId" element={<Play />}>
           <Route index element={<Navigate to="sheet" replace />} />
           <Route path="sheet" element={<SheetPage />} />
+          <Route path="spells" element={<SpellBookPage />} />
+          <Route path="inventory" element={<InventoryPage />} />
+          <Route path="lore" element={<LorePage />} />
           <Route path="turn" element={<EncounterOnly><TurnPage /></EncounterOnly>} />
           <Route path="roll" element={<EncounterOnly><RollPage /></EncounterOnly>} />
           <Route path="gm" element={<EncounterOnly><GmPage /></EncounterOnly>} />
         </Route>
       </Route>
       {/* Anyone with a share link, signed in or not. */}
-      <Route path="/sheets/:shareId" element={<SharedSheetPage />} />
+      <Route path="/sheets/:shareId" element={<SharedSheetPage />}>
+        <Route index element={<Navigate to="sheet" replace />} />
+        <Route path="sheet" element={<SheetPage />} />
+        <Route path="spells" element={<SpellBookPage />} />
+        <Route path="inventory" element={<InventoryPage />} />
+        <Route path="lore" element={<LorePage />} />
+      </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -138,6 +138,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Source:** the Foundry VTT pf2e system's open data, filtered to the books in `BOOKS` (Player Core, Player Core 2 and Guns & Gears) and pinned to an upstream commit recorded in `meta.commit`.
 - **Hand-made books:** Impossible Magic and Dark Archive (Remastered) aren't in Foundry (or only in an older edition), so they come from the Archives of Nethys (`packages/rules/books/`, sections 12–13). When Foundry adds it, follow `books/README.md` to switch over.
 - **Deities:** these come from Foundry's `core-gods` folder, which is Player Core's list.
+- **Items:** general gear of every level (`items`: adventuring gear, consumables, containers, kits, treasure; 536 across Player Core, Player Core 2 and Guns & Gears) for the Inventory tab. Weapons, armor and shields stay level 0–1 for the builder. The hand-made books don't have items yet.
+- **Re-importing the same commit:** `PF2E_COMMIT=<sha> npm run data:import -w @rollbound/rules` re-imports from that commit instead of the latest master. That's how items were added without changing anything else; the current sha is `meta.commit` in `data/index.json`.
 - **Corrections:** rules Foundry encodes only in its own code come from `packages/rules/corrections/<book>.json`. After each import, a report lists anything that looks like it needs a correction.
 
 ### 5. Playing a character
@@ -146,6 +148,11 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Edit character:** the owner's sheet links to the builder's edit mode (`/characters/:id/edit`). Only the owner can load or save a character (the server checks), and the shared link never shows the button. Characters without saved builder choices (the sample Mira, seeded characters) can't be edited, so they don't get the button.
 - **Campaign:** the sheet names the one campaign the character is in, linked to its page ("No campaign yet" otherwise).
 - **Share link:** every character has a random `share_id` (16 URL-safe characters, 96 bits, so links can't be guessed). `/sheets/:shareId` shows the sheet read-only to anyone, signed in or not, through the public `GET /api/sheets/:shareId`. That returns only what the sheet shows: no owner, user or campaign ids. The shared view has no HP controls, portrait editor, rules notice, share panel or play tabs, and starts with no conditions. The owner's sheet has a Share panel with Copy and **Make a new link**, which replaces the link (`POST /api/characters/:id/share-link`) so the old one stops working. `db:setup` gives older characters a link. Demo characters can't be shared.
+- **Tabs:** Sheet, Spell Book, Inventory and Lore, at `/play/:id/sheet|spells|inventory|lore`. The shared link has the same four at `/sheets/:shareId/...`, read-only.
+- **Spell Book:** every spell the character knows (`character.spellcasting` cantrips and rank 1), grouped by rank, with spell attack, DC, slots and how the class casts. Opening a spell shows its traits, range, area, targets, defense, duration and full rules text, looked up in the rules data by id. Non-casters get a short note.
+- **Inventory:** items and coins (pp, gp, sp, cp) in `characters.inventory`, via `PUT /api/characters/:id/inventory` and checked by `inventoryProblems` (`packages/rules/src/inventory.js`). Until first edited (NULL) it shows `startingInventory`: the builder's gear and what's left of the 15 gp. Search the rules' gear to **Add** it, or **Buy** it, which pays from the coins and makes change (`payCoins`); custom items take a name, quantity and Bulk. Rows open for quantity, a note, Remove, and the item's rules text. Bulk totals the Pathfinder way (10 L = 1) against the encumbered (5 + Str) and maximum (10 + Str) limits. The campaign's books limit what can be added; custom items are always allowed. The inventory is separate from the sheet's weapons and armor: removing the longsword here doesn't change Strikes or AC yet.
+- **Lore:** the player's backstory (`characters.backstory`, up to 20,000 characters, `PUT /api/characters/:id/backstory`), which saves a second after you stop typing. Below it are the character's origins and their background's rules text, attribute boosts (and the ones chosen), trained skills and skill feat.
+- **Saving:** HP, inventory and backstory all go through `useDelayedSave` (`client/src/state/useDelayedSave.js`): a moment after the last change, and again when leaving or closing the tab. Builder edits don't touch them. Demo characters keep them in the tab (`demoExtras.js`).
 - **Encounter screens (hidden for now):** Turn, Roll and GM below only show while the character is in an active encounter. `ENCOUNTER_ACTIVE` in `TableContext.jsx` is `false` until the campaign manager gets its encounter tracker. Then it should be true when the character's campaign has an encounter with an active status that includes them. While it's false, the tab bar and round counter are hidden and `/play/:id/turn|roll|gm` go back to the sheet (`EncounterOnly` in `App.jsx`).
 - **Turn:** the 3-action economy, the multiple attack penalty, and conditions.
 - **Roll:** degrees of success, with the correct Strength damage for melee, thrown, propulsive and ranged weapons.
@@ -357,6 +364,10 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - [ ] Bonus spells from domains, the deity, wizard curriculum, and the witch's lesson.
 - [ ] Record the specific Lore subcategory from feats like Additional Lore.
 - [ ] Optional GM approval of uncommon and rare options.
+- [ ] Backgrounds with a skill choice (Scholar: Arcana, Nature, Occultism or Religion) and a chosen skill feat: the builder doesn't ask, so the Lore tab lists only the fixed Lore.
+- [ ] Link the inventory to the sheet: equip weapons, armor and a shield from it, so Strikes and AC follow.
+- [ ] Item batches (ammunition's Bulk is per 10, not each), and items for the hand-made books.
+- [ ] Put the inventory and backstory on the PDF export.
 
 ---
 
