@@ -41,6 +41,7 @@ export default function SideNav({ open, onClose }) {
         {link('/home', 'home', 'Home')}
         {link('/home?mode=player', 'shield', 'Your characters')}
         {link('/home?mode=gm', 'map', 'Your campaigns')}
+        {link('/bestiary', 'book', 'Bestiary')}
         <div className="sidenav__divider" />
         {link('/create', 'plus', 'New character')}
         {link('/campaigns/new', 'plus', 'New campaign')}

@@ -1,0 +1,25 @@
+{
+ "source": "Archives of Nethys (2e.aonprd.com), checked against the Foundry VTT pf2e system",
+ "license": "Game mechanics © Paizo Inc., used under the ORC License.",
+ "generatedAt": "2026-10-24T20:47:21.805Z",
+ "books": [
+  {
+   "book": "Monster Core",
+   "file": "monster-core.json",
+   "count": 445,
+   "levels": [
+    -1,
+    25
+   ]
+  },
+  {
+   "book": "Monster Core 2",
+   "file": "monster-core-2.json",
+   "count": 395,
+   "levels": [
+    -1,
+    24
+   ]
+  }
+ ]
+}

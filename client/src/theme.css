@@ -498,6 +498,92 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   text-align: center;
 }
 
+/* ---------- Bestiary ---------- */
+
+.bestiary__head { display: flex; flex-direction: column; gap: 6px; }
+.bestiary__head .rule-note { margin: 0; max-width: 70ch; }
+.bestiary__filters { display: flex; flex-direction: column; gap: 12px; }
+.bestiary__search input, .bestiary__selects select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+  color-scheme: dark;
+}
+.bestiary__search input:focus, .bestiary__selects select:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
+.bestiary__selects { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.bestiary__selects label { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.bestiary__selects label > span:first-child { font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.bestiary__range { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-muted); }
+.bestiary__range select { flex: 1; min-width: 0; padding: 0 6px; }
+.bestiary__family { margin: 0; font-size: 14px; }
+.bestiary__count { margin: 0; font-size: 14px; color: var(--text-muted); }
+.bestiary__clear { color: var(--bronze); }
+.bestiary__more { align-self: center; min-width: 220px; }
+.creatures { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 8px; }
+.creature-card { display: flex; gap: 12px; align-items: center; height: 100%; padding: 10px 12px; border: 1px solid var(--line-soft); background: var(--panel); color: var(--text); text-decoration: none; }
+@media (hover: hover) { .creature-card:hover { border-color: var(--bronze); background: var(--panel-hot); } }
+.creature-card__level { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid var(--line); background: var(--bg); font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.creature-card__level small { font-size: 8px; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 2px; }
+.creature-card__body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.creature-card__name { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; overflow-wrap: anywhere; }
+.creature-card__tags, .creature__traits { display: flex; flex-wrap: wrap; gap: 4px; }
+.creature-card__stats { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.tag.tag--rarity-uncommon { border-color: #b8743a; color: #e0a06a; }
+.tag.tag--rarity-rare { border-color: #3a5fa8; color: #8fb3d9; }
+.tag.tag--rarity-unique { border-color: #7a3aa8; color: #c08fe6; }
+
+.creature { display: flex; flex-direction: column; gap: 18px; }
+.creature__head { display: flex; flex-direction: column; gap: 8px; }
+.creature__head .rule-note { margin: 0; }
+.creature__title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.creature__level { font-family: var(--display); font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--bronze); }
+.creature__traits { margin: 0; }
+.creature__quick { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin: 0; }
+@media (max-width: 520px) { .creature__quick { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.creature__quick div { padding: 8px 4px; border: 1px solid var(--line); background: var(--panel); text-align: center; }
+.creature__quick dt { font-family: var(--display); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.creature__quick dd { margin: 2px 0 0; font-family: var(--display); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.creature__lore { font-size: 16px; line-height: 1.7; color: var(--text-soft); }
+.creature__lore p { margin: 0 0 0.8em; }
+.creature__recall { display: flex; flex-direction: column; gap: 6px; }
+.creature__recall .panel__title { margin: 0; }
+.creature__recall ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.creature__recall li { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; padding: 4px 0; border-bottom: 1px solid var(--line-faint); }
+.creature__recall li:last-child { border-bottom: 0; }
+.creature__sidebar { padding: 12px 14px; border-left: 2px solid var(--bronze); background: var(--panel); font-size: 15px; line-height: 1.6; color: var(--text-soft); }
+.creature__sidebar .eyebrow { margin: 0 0 6px; color: var(--bronze); }
+.creature__sidebar p { margin: 0 0 0.6em; }
+/* The stat block, set like the book's: a dark header bar and rule-separated sections. */
+.statblock { border: 1px solid var(--line); background: var(--panel); }
+.statblock__head { display: flex; justify-content: space-between; gap: 12px; padding: 8px 14px; background: linear-gradient(#5a1a12, #3a0f0a); border-bottom: 1px solid var(--blood); font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #f7edda; }
+.statblock__body { padding: 10px 14px 12px; font-size: 15px; line-height: 1.55; color: var(--text-soft); overflow-wrap: anywhere; }
+.statblock__body p { margin: 0 0 5px; padding-left: 14px; text-indent: -14px; }
+.statblock__body strong { color: var(--text); }
+.statblock__body hr { margin: 8px 0; border: 0; border-top: 1px solid var(--line); }
+.statblock__body ul { margin: 0 0 6px; padding-left: 28px; }
+.statblock__body li { margin-bottom: 2px; }
+.statblock__body table { display: block; max-width: 100%; overflow-x: auto; margin: 6px 0; border-collapse: collapse; font-size: 14px; }
+.statblock__body td, .statblock__body th { padding: 3px 8px; border: 1px solid var(--line-soft); text-align: left; }
+/* Pathfinder's action symbols. */
+.act { display: inline-block; margin: 0 4px; font-family: 'Segoe UI Symbol', 'Noto Sans Symbols 2', 'DejaVu Sans', system-ui, sans-serif; font-size: 0.8em; font-weight: 400; line-height: 1; letter-spacing: 1px; text-indent: 0; color: var(--blood-text); vertical-align: 1px; }
+.act--1::before { content: '◆'; }
+.act--2::before { content: '◆◆'; }
+.act--3::before { content: '◆◆◆'; }
+.act--r::before { content: '↺'; letter-spacing: 0; }
+.act--f::before { content: '◇'; }
+.creature__source { margin: 8px 0 0; font-size: 14px; color: var(--text-muted); }
+.creature__source a { color: var(--bronze); }
+.creature__kin { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line-soft); }
+.creature__kin .eyebrow { margin: 0; }
+.creature__kin ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 15px; }
+.creature__kin a { color: var(--text-soft); }
+.creature__license { margin: 0; font-size: 12px; color: var(--text-muted); }
+
 /* ---------- Creating a campaign ---------- */
 
 .kind-choice { display: grid; gap: 10px; }

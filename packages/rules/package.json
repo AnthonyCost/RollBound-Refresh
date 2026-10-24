@@ -7,11 +7,13 @@
   "exports": {
     ".": "./src/index.js",
     "./load": "./src/load.js",
-    "./data/*": "./data/*"
+    "./data/*": "./data/*",
+    "./bestiary/*": "./bestiary/*"
   },
   "scripts": {
     "test": "node --test test/*.test.js",
     "data:aon": "node scripts/import-aon.js",
-    "data:import": "node scripts/import-pf2e.js && echo \"Checking the new data with the build sweep...\" && node --test test/*.test.js"
+    "data:import": "node scripts/import-pf2e.js && echo \"Checking the new data with the build sweep...\" && node --test test/*.test.js",
+    "data:bestiary": "node scripts/import-bestiary.js"
   }
 }

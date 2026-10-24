@@ -11,6 +11,8 @@ import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
 import CampaignLayout, { CampaignOverview } from './pages/CampaignPage.jsx';
 import { SessionLogEditor, SessionLogPage, SessionLogsPage } from './pages/SessionLogPages.jsx';
 import EncountersPage from './pages/EncountersPage.jsx';
+import BestiaryPage from './pages/BestiaryPage.jsx';
+import CreaturePage from './pages/CreaturePage.jsx';
 import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import SharedSheetPage, { PartySheetPage } from './pages/SharedSheetPage.jsx';
@@ -97,6 +99,8 @@ export default function App() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/create" element={<BuilderPage />} />
         <Route path="/characters/:characterId/edit" element={<BuilderPage />} />
+        <Route path="/bestiary" element={<BestiaryPage />} />
+        <Route path="/bestiary/:book/:slug" element={<CreaturePage />} />
         <Route path="/campaigns/new" element={<CampaignCreatePage />} />
         <Route path="/campaigns/:id" element={<CampaignLayout />}>
           <Route index element={<CampaignOverview />} />

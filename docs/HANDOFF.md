@@ -56,6 +56,7 @@ Other commands:
 | `npm run art:import -- <folder>` | Converts art named like `class-wizard.png` into the app |
 | `npm run db:migrate-builds --workspace @rollbound/server` | Upgrades saved characters' builds on their own |
 | `npm run dev:client -- --host` | Opens the dev server to your phone on the same Wi-Fi |
+| `npm run data:bestiary --workspace @rollbound/rules` | Rebuilds the bestiary from the Archives of Nethys (Monster Core and Monster Core 2), checking Monster Core against Foundry |
 | `npm run inbox:post -- --title "…" --body "…"` | Posts an announcement to everyone's inbox. Add `--kind patch-notes` for patch notes, or `--body-file notes.txt` for a longer body (line breaks are kept) |
 
 The settings go in `server/.env`; see `server/.env.example`. Key ones are `DATABASE_URL`, `UPLOAD_SECRET`, and the commented S3 block.
@@ -217,6 +218,16 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - The encounter being built totals its XP, rates its threat on a bar marked with each budget, and warns about creatures beyond the table. Its creatures are a name, a level and a count.
   - The draft is kept in `localStorage` per campaign until saved encounters arrive with the encounter tracker.
   - Next: a bestiary (Monster Core, Monster Core 2, Adventure Path monsters) to pick creatures from.
+
+### 6c. Bestiary
+- **What:** every creature in Monster Core (445) and Monster Core 2 (395), levels −1 to 25, at `/bestiary`, linked from the ☰ menu. Signed-in users only.
+- **Data** (`packages/rules/bestiary/`, one JSON file per book plus `index.json`): built by `npm run data:bestiary -w @rollbound/rules` (`scripts/import-bestiary.js`) from the Archives of Nethys search index, cached in `node_modules/.cache/aon-bestiary` (`--refresh` re-downloads).
+  - Each creature has its numbers for filtering and encounters: level, HP, AC, Perception, saves, attributes, size, rarity, traits, family, speed, immunities, resistances and weaknesses.
+  - It also has its lore, Recall Knowledge DCs, sidebars, book and page, an AoN link, its pre-Remaster name (an Adamant Sentinel was an Adamantine Golem), and the whole stat block as HTML with Pathfinder's action symbols.
+  - It's kept apart from the builder's rules data so it doesn't count toward the 5 MB budget or slow the builder. The client loads both books only when the Bestiary opens (about 400 KB compressed each).
+- **Checked:** the import compares Monster Core against Foundry VTT's independent copy. Of 418 creatures in both, 413 agree on level, HP, AC, Perception and saves; 5 don't (Air Scamp Fortitude, Dero Stalker AC, Giant Monitor Lizard AC, Centaur Herbalist HP and Will, Azuretzi HP), likely errata applied in one source and not the other. Foundry has no Monster Core 2 yet, so it's AoN only. `test/bestiary.test.js` checks every creature has its numbers and a clean stat block.
+- **Pages:** `pages/BestiaryPage.jsx` has search (name, old name, or trait), filters for level range, creature type, size, rarity and book, and Clear filters. The filters live in the address, so a filtered list can be bookmarked. It shows 60 at a time. `pages/CreaturePage.jsx` (`/bestiary/mc/:slug`, `/bestiary/mc2/:slug`) shows quick stats, lore, Recall Knowledge, sidebars, the stat block, the book and page, and the creature's family with a filtered-list link.
+- **Next:** pick creatures from the bestiary in the Encounters tab (the level and XP math already works with them).
 
 ### 7. Image uploads and S3
 - **Three kinds:** campaign covers (`covers/`, 5 MB), profile pictures (`avatars/`, 2 MB), and character portraits (`portraits/`, 5 MB).
@@ -438,6 +449,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - [ ] Optional GM approval of uncommon and rare options.
 - [ ] Backgrounds with a skill choice (Scholar: Arcana, Nature, Occultism or Religion) and a chosen skill feat: the builder doesn't ask, so the Lore tab lists only the fixed Lore.
 - [ ] Adventure Path covers: get permission to publish them (or design RollBound title cards), then stop ignoring `client/src/assets/adventure-paths/*.webp`.
+- [ ] Settle the 5 Monster Core creatures where AoN and Foundry disagree, against the book (listed in section 6c).
 - [ ] Hands: equipping doesn't check that weapons and a shield fit in two hands.
 - [ ] Item batches (ammunition's Bulk is per 10, not each), and items for the hand-made books.
 - [ ] Put the inventory and backstory on the PDF export.

@@ -14,6 +14,7 @@ Built with the PERN stack: **Postgres, Express, React, Node**.
 | **Inbox** | Next to your profile picture: announcements, patch notes, join requests for your campaigns (accept or reject), and the answers to yours. |
 | **Session logs** | A campaign's GM writes, edits and deletes blog-style recaps of each session; the party reads them, numbered by the date played. |
 | **Encounters** | The GM's encounter builder: XP budgets for the party, what each creature level is worth, and an encounter that rates its own threat. A bestiary is next. |
+| **Bestiary** | All 840 creatures from Monster Core and Monster Core 2, with search, filters by level, type, size and rarity, and full stat blocks. |
 | **Sheet** | Tap AC, a save, or Perception to see the breakdown: ability, proficiency rank + level, item bonus, armor's Dex cap, and condition penalties. The health globe fills to current HP; take damage or heal from the sheet. Shows the character's campaign, has a share link anyone can open read-only, and lets the owner reopen the character in the builder to edit it. Lists Strikes for the equipped weapons. |
 | **Spell Book** | Every spell the character knows, by rank, with spell attack and DC and each spell's full rules text. |
 | **Inventory** | Items and coins. Equip weapons and wear armor or a shield, and the sheet's Strikes and AC follow. Search the rules' gear to add or buy (paying from the coins), add custom items, and track quantity, notes and Bulk against your limits. |
