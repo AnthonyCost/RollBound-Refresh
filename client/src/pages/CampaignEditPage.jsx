@@ -38,9 +38,10 @@ export default function CampaignEditPage() {
     }
   };
 
-  const cancel = <Link to={`/campaigns/${id}`} className="topbar__signout">Cancel</Link>;
+  const cancel = <Link to={`/campaigns/${id}`} className="btn btn--small">Cancel</Link>;
+  const crumbs = [{ label: 'Campaigns', to: '/home?mode=gm' }, { label: campaign?.name ?? 'Campaign', to: `/campaigns/${id}` }, { label: 'Edit' }];
   return (
-    <PageShell actions={cancel}>
+    <PageShell crumbs={crumbs} actions={cancel}>
       <header className="builder__header">
         <span className="eyebrow">Game master</span>
         <h1 className="title">Edit campaign</h1>

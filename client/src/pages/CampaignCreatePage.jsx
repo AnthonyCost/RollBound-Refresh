@@ -13,7 +13,10 @@ export default function CampaignCreatePage() {
   };
 
   return (
-    <PageShell actions={<Link to="/home" className="topbar__signout">Cancel</Link>}>
+    <PageShell
+      crumbs={[{ label: 'Campaigns', to: '/home?mode=gm' }, { label: 'New campaign' }]}
+      actions={<Link to="/home" className="btn btn--small">Cancel</Link>}
+    >
       <header className="builder__header">
         <span className="eyebrow">Game master</span>
         <h1 className="title">New campaign</h1>

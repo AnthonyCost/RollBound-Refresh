@@ -16,7 +16,6 @@ export default function AccountPage() {
   const [saved, setSaved] = useState(false);
   const { state } = useLocation();
 
-  const back = <Link to="/home" className="topbar__signout">Hub</Link>;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -38,7 +37,7 @@ export default function AccountPage() {
   };
 
   return (
-    <PageShell actions={back}>
+    <PageShell crumbs={[{ label: 'Your account' }]}>
       <header className="builder__header">
         <Avatar url={user.avatarUrl} name={user.displayName} size={88} className="avatar--hero" />
         <h1 className="title">{user.displayName}</h1>

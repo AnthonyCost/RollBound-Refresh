@@ -18,7 +18,7 @@ import InventoryPage from './pages/InventoryPage.jsx';
 import LorePage from './pages/LorePage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
-import AccountLink from './components/AccountLink.jsx';
+import TopBar from './components/TopBar.jsx';
 import DemoBanner from './components/DemoBanner.jsx';
 
 function Loading() {
@@ -59,19 +59,16 @@ function EncounterOnly({ children }) {
 }
 
 function PlayShell() {
-  const { round, loading, notFound, encounterActive } = useTable();
+  const { round, loading, notFound, encounterActive, character } = useTable();
 
   return (
     <div className="app app--play">
-      <header className="topbar">
-        <Link to="/home" className="wordmark">ROLLBOUND</Link>
-        <div className="topbar__right">
-          {encounterActive && <span className="eyebrow">Round {round}</span>}
-          <AccountLink />
-          <Link to="/home" className="topbar__signout">Hub</Link>
-        </div>
-      </header>
+      <TopBar
+        crumbs={[{ label: 'Characters', to: '/home?mode=player' }, { label: character?.name ?? 'Character' }]}
+        actions={encounterActive && <span className="eyebrow">Round {round}</span>}
+      />
 
+      {!notFound && <NavBar />}
       <DemoBanner />
 
       <main className="app__main">
@@ -83,8 +80,6 @@ function PlayShell() {
         )}
         {!loading && !notFound && <Outlet />}
       </main>
-
-      {!notFound && <NavBar />}
     </div>
   );
 }

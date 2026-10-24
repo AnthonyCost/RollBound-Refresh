@@ -116,14 +116,13 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 ### 2. Hub
 - A **Player Mode / Game Master Mode** switch (tabs with counts). Both views render from one load; switching only hides the other, so there's no fetch or reload. The last choice is remembered in `localStorage` (`rollbound.hubMode`), defaulting to Player.
 - **Player Mode:** your characters with portrait, HP and AC, plus **New character**; the campaigns your characters are in (including ones you also run), each naming your characters in it; and the join-a-campaign box.
-- **Game Master Mode:** the campaigns you run, plus **New campaign**.
-- Shows your avatar in the top bar.
+- **Game Master Mode:** your campaigns (the ones you run), plus **New campaign**.
 - Each character opens at `/play/:id/sheet|turn|roll|gm`. Anyone with a character's share link can view it at `/sheets/:shareId`.
 
 ### 3. Character builder (`/create`)
 - **Nine steps:** Ancestry, Background, Class, Attributes, Skills, Feats, Spells, Gear, Review.
 - **Teaching:** each step has a short note explaining its rule.
-- **Drafts:** the draft is saved in `localStorage`, and Reset (top bar) clears it.
+- **Drafts:** the draft is saved in `localStorage`, and Reset (in the header) clears it.
 - **Step diamonds:** empty means nothing chosen yet, gold means started, and red is the current step.
 - **Rules covered:**
   - ancestry and versatile heritages,
@@ -163,7 +162,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Inventory:** items and coins (pp, gp, sp, cp) in `characters.inventory`, via `PUT /api/characters/:id/inventory` and checked by `inventoryProblems` (`packages/rules/src/inventory.js`). Until first edited (NULL) it shows `startingInventory`: the builder's gear and what's left of the 15 gp. Search the rules' gear to **Add** it, or **Buy** it, which pays from the coins and makes change (`payCoins`); custom items take a name, quantity and Bulk. Rows open for quantity, a note, Remove, and the item's rules text. Bulk totals the Pathfinder way (10 L = 1) against the encumbered (5 + Str) and maximum (10 + Str) limits. The campaign's books limit what can be added; custom items are always allowed. **Equipping:** weapons, armor and shields have Equip/Unequip (Wear/Take off for armor), with any number of weapons and one armor and one shield at a time (`toggleEquipped`). The sheet everyone reads is `equipCharacter(built sheet, inventory, gear data)`: Strikes from the equipped weapons (a fist if none), AC from the worn armor and shield. `TableContext` exposes it as `character`, and keeps the built sheet as `baseCharacter` for rules updates and the builder. The server uses it for the hub card's AC (`equippedSheet` in `routes/characters.js`). The builder's gear starts equipped, and so does gear from an inventory saved before equipping existed (no `equipped` flags). The client spells out every flag when it saves. Armor or weapons the character isn't trained with get an **Untrained** tag and a warning, since wearing untrained armor can lower AC.
 - **Lore:** the player's backstory (`characters.backstory`, up to 20,000 characters, `PUT /api/characters/:id/backstory`), which saves a second after you stop typing. Below it are the character's origins and their background's rules text, attribute boosts (and the ones chosen), trained skills and skill feat.
 - **Saving:** HP, inventory and backstory all go through `useDelayedSave` (`client/src/state/useDelayedSave.js`): a moment after the last change, and again when leaving or closing the tab. Builder edits don't touch them.
-- **Encounter screens (hidden for now):** Turn, Roll and GM below only show while the character is in an active encounter. `ENCOUNTER_ACTIVE` in `TableContext.jsx` is `false` until the campaign manager gets its encounter tracker. Then it should be true when the character's campaign has an encounter with an active status that includes them. While it's false, the tab bar and round counter are hidden and `/play/:id/turn|roll|gm` go back to the sheet (`EncounterOnly` in `App.jsx`).
+- **Encounter screens (hidden for now):** Turn, Roll and GM below only show while the character is in an active encounter. `ENCOUNTER_ACTIVE` in `TableContext.jsx` is `false` until the campaign manager gets its encounter tracker. Then it should be true when the character's campaign has an encounter with an active status that includes them. While it's false, those tabs and the round counter are hidden and `/play/:id/turn|roll|gm` go back to the sheet (`EncounterOnly` in `App.jsx`).
 - **Turn:** the 3-action economy, the multiple attack penalty, and conditions.
 - **Roll:** degrees of success, with the correct Strength damage for melee, thrown, propulsive and ranged weapons.
 - **GM:** encounter budget and initiative. It still uses the character's level, not the campaign's party level.
@@ -207,9 +206,17 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ### 9. Responsive design
 - **Approach:** mobile first, with the layout switching at 768px (tablet) and 1024px (desktop).
-- **Desktop:** two columns, the play-screen nav becomes top tabs, and the content area widens to 1180px.
+- **Desktop:** two columns, and the content area widens to 1180px.
 - **Components:** sized by the space they actually have (container queries).
 - **Touch and comfort:** larger tap targets on touch screens, hover effects only with a mouse, phone notch and home-bar areas respected, and reduced-motion support.
+
+### 9b. Header (laid out like GitHub's)
+- **One header everywhere:** `components/TopBar.jsx`, used by `PageShell`, the hub, the play screens, the builder and the read-only sheets.
+- **Left:** the ☰ button opens a side menu (`SideNav.jsx`): Home, Your characters, Your campaigns, New character, New campaign, Your account, Sign out / Exit demo. Next come the ROLLBOUND wordmark (home) and breadcrumbs, such as `Characters / Mira Ashvale` or `Campaigns / Ashen Road / Edit`. Each page passes its crumbs; the hub has none. Phones show only the last crumb, and hide the wordmark when there's a crumb to make room.
+- **Right:** page actions (Edit, Cancel, Reset, Close, View only), the **+** menu (New character, New campaign), the inbox, and the avatar menu (name, Your account, Your characters, Your campaigns, Sign out / Exit demo). Signed out (a shared sheet), it shows only the wordmark, crumbs and Sign in.
+- **Menus** (`Menu.jsx`): Escape or a click outside closes them, arrow keys move between items, and focus returns to the button.
+- **Tabs:** the character tabs (Sheet, Spell Book, Inventory, Lore) sit under the header on every screen size as an underlined row, scrolling sideways on narrow phones. They used to be a bottom bar on phones.
+- **Hub modes from links:** `/home?mode=player` and `/home?mode=gm` open the hub in that mode, and the side menu, avatar menu and breadcrumbs use them.
 
 ### 10. Builder art
 - **Classes:** portraits are Paizo's Remaster iconics, and the 16 tile icons are Adventure Card Game emblems. The Investigator and Swashbuckler icons were cut from coin photos.
@@ -312,7 +319,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 ---
 
 ### 15. Inbox and join requests
-- **Inbox:** a button next to your avatar in every top bar (`components/Inbox.jsx`, placed by `AccountLink`), with an unread badge. It loads on page load, every minute, when the tab comes back into view, and when something changes (`state/inbox.js` sends a window event). Opening it marks what's there as read. The panel drops down on desktop and spans the screen on phones; Escape or a click outside closes it.
+- **Inbox:** a button next to your avatar in every top bar (`components/Inbox.jsx`, in the header), with an unread badge. It loads on page load, every minute, when the tab comes back into view, and when something changes (`state/inbox.js` sends a window event). Opening it marks what's there as read. The panel drops down on desktop and spans the screen on phones; Escape or a click outside closes it.
 - **Messages** (`messages` table): `user_id` NULL is for everyone (`announcement`, `patch-notes`); otherwise it's one user's (`join-request`, `join-accepted`, `join-rejected`). `message_reads` records who read what. Messages for everyone from before you signed up count as read, so new accounts don't open to a backlog. The newest 100 show. `GET /api/inbox`, `POST /api/inbox/read { ids }`.
 - **Posting announcements and patch notes:** `npm run inbox:post` (see Running it). There's no admin screen yet.
 - **Join requests** (`join_requests` table, `server/src/joinRequests.js`):

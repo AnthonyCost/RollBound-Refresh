@@ -63,17 +63,18 @@ export default function CampaignPage() {
     }
   };
 
-  const back = <Link to="/home" className="topbar__signout">Hub</Link>;
+  // Players reach their campaigns from Player Mode, GMs from Game Master Mode.
+  const crumbs = [{ label: 'Campaigns', to: campaign?.isGm === false ? '/home?mode=player' : '/home?mode=gm' }, { label: campaign?.name ?? 'Campaign' }];
   if (missing) {
     return (
-      <PageShell actions={back}>
+      <PageShell crumbs={crumbs}>
         <p className="muted italic center">This campaign doesn't exist, or you're not part of it. <Link to="/home">Back to the hub</Link></p>
       </PageShell>
     );
   }
   if (!campaign) {
     return (
-      <PageShell actions={back}>
+      <PageShell crumbs={crumbs}>
         <FormErrors errors={errors} />
         {!errors.length && <p className="muted italic center">Unrolling the map…</p>}
       </PageShell>
@@ -83,12 +84,11 @@ export default function CampaignPage() {
   const others = campaign.characters.filter((c) => !c.mine);
   const actions = (
     <>
-      {campaign.isGm && <Link to={`/campaigns/${id}/edit`} className="topbar__signout">Edit</Link>}
-      {back}
+      {campaign.isGm && <Link to={`/campaigns/${id}/edit`} className="btn btn--small">Edit</Link>}
     </>
   );
   return (
-    <PageShell actions={actions}>
+    <PageShell crumbs={crumbs} actions={actions}>
       {state?.created && (
         <p className="panel panel--hot center" role="status">
           Your campaign is ready. Share the invite code below with your players.

@@ -17,6 +17,7 @@ import {
 } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
+import TopBar from '../components/TopBar.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { AncestryStep, BackgroundStep, ClassStep } from '../builder/IdentitySteps.jsx';
 import { AttributesStep, SkillsStep, FeatsStep, SpellsStep, GearStep, ReviewStep } from '../builder/DetailSteps.jsx';
@@ -360,17 +361,22 @@ export default function BuilderPage() {
 
   return (
     <div className="app">
-      <header className="topbar">
-        <Link to="/home" className="wordmark">ROLLBOUND</Link>
-        <div className="topbar__right">
-          {anyTouched && (
-            <button type="button" className="topbar__signout" onClick={() => setConfirmReset(true)}>
-              Reset
-            </button>
-          )}
-          <Link to={editId ? `/play/${editId}/sheet` : '/home'} className="topbar__signout">Close</Link>
-        </div>
-      </header>
+      <TopBar
+        crumbs={[
+          { label: 'Characters', to: '/home?mode=player' },
+          ...(editId ? [{ label: editing?.name ?? 'Character', to: `/play/${editId}/sheet` }, { label: 'Edit' }] : [{ label: 'New character' }]),
+        ]}
+        actions={
+          <>
+            {anyTouched && (
+              <button type="button" className="btn btn--small" onClick={() => setConfirmReset(true)}>
+                Reset
+              </button>
+            )}
+            <Link to={editId ? `/play/${editId}/sheet` : '/home'} className="btn btn--small">Close</Link>
+          </>
+        }
+      />
 
       {confirmReset && (
         <div className="confirm" role="alertdialog" aria-labelledby="reset-title">

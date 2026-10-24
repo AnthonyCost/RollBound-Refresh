@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import Ornament from '../components/Ornament.jsx';
 import { useCampaignService } from '../state/campaignService.js';
 import JoinCampaign from '../components/JoinCampaign.jsx';
 import Avatar from '../components/Avatar.jsx';
-import AccountLink from '../components/AccountLink.jsx';
+import TopBar from '../components/TopBar.jsx';
 import Portrait from '../components/Portrait.jsx';
 import { isOutdated } from '../state/rulesData.js';
 import DemoBanner from '../components/DemoBanner.jsx';
@@ -99,12 +99,24 @@ function ModeSwitch({ mode, onChange, counts }) {
 }
 
 export default function HubPage() {
-  const { user, isDemo, logout } = useAuth();
+  const { user, isDemo } = useAuth();
   const service = useCampaignService();
   const [hub, setHub] = useState(null);
   const [failed, setFailed] = useState(false);
   const [mode, setMode] = useState(savedMode);
   const { state } = useLocation();
+  // The header's menus link to /home?mode=player or ?mode=gm.
+  const [search] = useSearchParams();
+  const asked = search.get('mode');
+  useEffect(() => {
+    if (asked !== 'player' && asked !== 'gm') return;
+    setMode(asked);
+    try {
+      localStorage.setItem(MODE_KEY, asked);
+    } catch {
+      // Not remembered; the choice still holds for this visit.
+    }
+  }, [asked]);
 
   const load = useCallback(() => {
     let cancelled = false;
@@ -136,15 +148,7 @@ export default function HubPage() {
 
   return (
     <div className="app">
-      <header className="topbar">
-        <Link to="/home" className="wordmark">ROLLBOUND</Link>
-        <div className="topbar__right">
-          <AccountLink />
-          <button type="button" className="topbar__signout" onClick={logout}>
-            {isDemo ? 'Exit demo' : 'Sign out'}
-          </button>
-        </div>
-      </header>
+      <TopBar />
 
       <DemoBanner />
 
@@ -210,7 +214,7 @@ export default function HubPage() {
             </div>
 
             <section className="hub__panel" role="tabpanel" id="hub-panel-gm" aria-labelledby="hub-tab-gm" hidden={mode !== 'gm'}>
-              <Ornament label="CAMPAIGNS YOU RUN" />
+              <Ornament label="YOUR CAMPAIGNS" />
               {hub.campaigns.running.length ? (
                 <ul className="hub__list">
                   {hub.campaigns.running.map((c) => <CampaignCard key={c.id} campaign={c} />)}
