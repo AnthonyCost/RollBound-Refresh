@@ -9,9 +9,10 @@ const serverCampaignService = {
   list: () => api.listCampaigns(),
   get: (id) => api.getCampaign(id),
 
-  async create({ name, backstory, partyLevel, cover, books = null }) {
+  // adventurePath: an Adventure Path's slug, or null for homebrew.
+  async create({ name, backstory, partyLevel, cover, books = null, adventurePath = null }) {
     const coverKey = cover.file ? await api.uploadImage(cover.file, 'cover') : null;
-    return api.createCampaign({ name, backstory, partyLevel, coverKey, books });
+    return api.createCampaign({ name, backstory, partyLevel, coverKey, books, adventurePath });
   },
 
   async update(id, { name, backstory, partyLevel, cover, books = null }) {

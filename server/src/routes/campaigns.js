@@ -4,7 +4,7 @@ import { requireUser } from '../auth.js';
 import { generateInviteCode, normalizeInviteCode } from '../inviteCode.js';
 import { storage } from '../storage/index.js';
 import { checkImageKey, swapImages } from '../images.js';
-import { bookIssues, campaignBooks, migrateBuild } from '@rollbound/rules';
+import { adventurePath, bookIssues, campaignBooks, migrateBuild } from '@rollbound/rules';
 import { rulesData } from '../rules.js';
 import { sheetJson } from './sheets.js';
 import { requestJoin, withdrawRequests } from '../joinRequests.js';
@@ -27,6 +27,8 @@ const toJson = (row, userId) => {
     coverUrl: storage.publicUrl(row.cover_key),
     partyLevel: row.party_level,
     books: row.books ?? null,
+    // An Adventure Path's slug, or null for homebrew.
+    adventurePath: row.adventure_path ?? null,
     characterCount: row.character_count ?? undefined,
     gmName: row.gm_name ?? undefined,
     gmAvatarUrl: storage.publicUrl(row.gm_avatar_key ?? null),
@@ -69,17 +71,19 @@ async function validCampaign(body, userId) {
     errors.push(`Books must be a list of: ${allBooks.join(', ')}.`);
   }
   const books = errors.length ? null : campaignBooks(rawBooks, allBooks);
-  return { errors, name, backstory, partyLevel, coverKey, books };
+  const path = body?.adventurePath ?? null;
+  if (path !== null && !adventurePath(path)) errors.push("That isn't an Adventure Path RollBound knows.");
+  return { errors, name, backstory, partyLevel, coverKey, books, adventurePath: path };
 }
 
 /** Inserts with a fresh invite code, retrying in the (astronomically rare) case of a collision. */
-async function insertCampaign({ name, backstory, partyLevel, coverKey, books }, userId) {
+async function insertCampaign({ name, backstory, partyLevel, coverKey, books, adventurePath: path }, userId) {
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
       const { rows } = await pool.query(
-        `INSERT INTO campaigns (name, backstory, party_level, cover_key, gm_user_id, invite_code, books)
-         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-        [name, backstory, partyLevel, coverKey ?? null, userId, generateInviteCode(), books],
+        `INSERT INTO campaigns (name, backstory, party_level, cover_key, gm_user_id, invite_code, books, adventure_path)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+        [name, backstory, partyLevel, coverKey ?? null, userId, generateInviteCode(), books, path],
       );
       return rows[0];
     } catch (err) {

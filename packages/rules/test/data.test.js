@@ -87,3 +87,28 @@ describe('campaign books', () => {
     assert.equal(R.dropBookIssues(build, data, ['Player Core']).class, null);
   });
 });
+
+describe('adventure paths', () => {
+  it('has unique slugs, sensible levels and a synopsis that fits a backstory', async () => {
+    const { ADVENTURE_PATHS, THEMES, adventurePath, pathThemes } = await import('../src/adventurePaths.js');
+    assert.equal(new Set(ADVENTURE_PATHS.map((p) => p.slug)).size, ADVENTURE_PATHS.length);
+    for (const p of ADVENTURE_PATHS) {
+      assert.ok(p.levels[0] >= 1 && p.levels[1] <= 20 && p.levels[0] < p.levels[1], p.name);
+      assert.ok(p.synopsis.length > 100 && p.synopsis.length <= 5000, p.name);
+      assert.ok(['released', 'upcoming'].includes(p.status), p.name);
+      if (p.sequelTo) assert.ok(adventurePath(p.sequelTo), `${p.name} follows a known path`);
+      assert.ok(p.themes?.length, `${p.name} has themes`);
+      for (const t of pathThemes(p)) assert.ok(THEMES[t], `${p.name}: unknown theme ${t}`);
+    }
+    // High level is worked out from the starting level, not written by hand.
+    assert.ok(pathThemes(adventurePath('curtain-call')).includes('high-level'));
+    assert.ok(!pathThemes(adventurePath('abomination-vaults')).includes('high-level'));
+    assert.ok(ADVENTURE_PATHS.every((p) => !p.themes.includes('high-level')));
+    // Newest first, so the builder can list them as they are.
+    const dates = ADVENTURE_PATHS.map((p) => p.released);
+    assert.deepEqual(dates, [...dates].sort().reverse());
+    // Everything from before the Remaster (Player Core, November 2023) is tagged.
+    assert.ok(ADVENTURE_PATHS.filter((p) => p.released < '2023-11-01').every((p) => p.preRemaster));
+    assert.equal(adventurePath('nope'), null);
+  });
+});

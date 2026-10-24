@@ -8,6 +8,7 @@ import Ornament from '../components/Ornament.jsx';
 import Portrait from '../components/Portrait.jsx';
 import Avatar from '../components/Avatar.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
+import { adventurePath } from '@rollbound/rules';
 import { booksLabel } from '../state/rulesData.js';
 import { api } from '../api.js';
 import { inboxChanged, onInboxChanged } from '../state/inbox.js';
@@ -173,6 +174,17 @@ export function CampaignOverview() {
 
       <div className="split">
         <section className="split__col" aria-label="Backstory">
+          {adventurePath(campaign.adventurePath) && (
+            <>
+              <Ornament label="ADVENTURE PATH" />
+              <p className="campaign-path">
+                <strong>{adventurePath(campaign.adventurePath).name}</strong>
+                <span className="muted">
+                  {' '}· Levels {adventurePath(campaign.adventurePath).levels.join('–')} · {adventurePath(campaign.adventurePath).setting}
+                </span>
+              </p>
+            </>
+          )}
           <Ornament label="BACKSTORY" />
           {campaign.backstory ? (
             <p className="backstory">{campaign.backstory}</p>

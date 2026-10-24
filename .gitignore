@@ -13,3 +13,6 @@ server/uploads/
 
 # Paizo character sheet template (personal-use license): add locally, see docs/character-sheet-pdf.md
 client/public/sheets/*.pdf
+
+# Adventure Path covers (Paizo art with the Pathfinder logo): local use only, see client/src/assets/adventure-paths/README.md
+client/src/assets/adventure-paths/*.webp

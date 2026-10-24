@@ -498,6 +498,68 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   text-align: center;
 }
 
+/* ---------- Creating a campaign ---------- */
+
+.kind-choice { display: grid; gap: 10px; }
+@media (min-width: 640px) { .kind-choice { grid-template-columns: 1fr 1fr; } }
+.kind-card, .path-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.kind-card[aria-checked='true'], .path-card[aria-checked='true'] { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 18px #4a120c, 0 0 14px var(--glow); }
+@media (hover: hover) { .kind-card:hover, .path-card:hover { border-color: var(--bronze); } }
+.kind-card__title { font-family: var(--display); font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+.kind-card__text { font-size: 15px; line-height: 1.5; color: var(--text-soft); }
+
+.paths { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); align-items: start; gap: 10px; }
+.path-card { padding: 0; gap: 0; overflow: hidden; }
+.path-card__art { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.path-card__art--plain {
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: radial-gradient(ellipse at 50% 30%, #3a1410, #0c0504);
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--bronze);
+}
+.path-card__body { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px 14px; }
+.path-card__name { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+.path-card__meta { font-size: 14px; color: var(--text-soft); }
+.path-card__tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag.tag--theme { border-color: var(--line); color: var(--text-soft); }
+.tag.tag--theme-beginner { border-color: var(--gold); color: var(--gold); }
+.theme-filter { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.theme-filter .chip[aria-pressed='true'].chip--theme-beginner { border-color: var(--gold); color: var(--gold); }
+.theme-filter__about { margin: 0; text-align: center; }
+/* Phones: one row that scrolls sideways, so the paths start right away. */
+@media (max-width: 640px) {
+  .theme-filter { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+  .theme-filter::-webkit-scrollbar { display: none; }
+  .theme-filter .chip { flex: none; }
+}
+.path-card__more { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+.path-card__synopsis { font-size: 15px; line-height: 1.6; color: var(--text-soft); }
+.path-card__note { font-size: 13px; font-style: italic; color: var(--bronze); }
+/* The chosen path's card spans the row, so its premise has room. */
+@media (min-width: 640px) { .paths li:has(.path-card[aria-checked='true']) { grid-column: span 2; } }
+/* Keep Back and Run in reach while scrolling the list. */
+.path-actions { position: sticky; bottom: 0; z-index: 5; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, var(--bg) 30%); }
+.prefill-note, .form-field > .prefill-note { margin: 0; padding: 8px 10px; border-left: 2px solid var(--bronze); background: var(--panel); font-size: 13px; font-style: italic; letter-spacing: 0; text-transform: none; font-family: var(--body); font-weight: 400; color: var(--text-soft); }
+.campaign-path { margin: 0; }
+
 /* ---------- Campaign: session logs ---------- */
 
 .combatant__tag { font-family: var(--display); font-size: 11px; letter-spacing: 1px; color: var(--bronze); }

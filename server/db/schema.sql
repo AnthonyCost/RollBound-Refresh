@@ -126,3 +126,7 @@ CREATE TABLE IF NOT EXISTS session_logs (
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS session_logs_campaign_idx ON session_logs (campaign_id, played_on DESC, created_at DESC);
+
+-- The Adventure Path a campaign runs (a slug from adventurePaths.js in the rules),
+-- or NULL for homebrew. Set when the campaign is created.
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS adventure_path TEXT;

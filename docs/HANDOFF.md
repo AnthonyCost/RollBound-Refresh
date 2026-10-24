@@ -179,6 +179,27 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Party sheets:** each party card's portrait and name open that character's sheet. Your own opens your playable sheet (`/play/:id`). Anyone else's opens read-only at `/campaigns/:id/characters/:characterId`, with all four tabs. The server (`GET /api/campaigns/:id/characters/:characterId`) only returns it to the campaign's GM and players with a character in it, which includes the character's own player. The public share link (`/sheets/:shareId`) is separate: it's for owners sharing outside the campaign.
 - **GM controls:** **Remove** on other players' characters, with a confirm (`POST /api/campaigns/:id/remove`). The character stays with its player, in no campaign, and its player can rejoin with the code. **Delete campaign** is at the bottom of the Edit page, with a confirm (`DELETE /api/campaigns/:id`). Its characters stay with their players, in no campaign; the cover image is deleted and the hub says so. Players can still Leave with their own characters.
 
+### 6a. Creating a campaign, step by step
+- **Steps** (`pages/CampaignCreatePage.jsx`), with diamonds like the character builder's:
+  1. Adventure Path or Homebrew.
+  2. For an Adventure Path, which one.
+  3. The details (the same `CampaignForm` as before, with a Back button).
+
+  Homebrew skips step 2.
+- **Adventure Paths** (`packages/rules/src/adventurePaths.js`): all 26 Second Edition Adventure Paths, newest first. That's 14 for the Remastered rules plus the 12 written before it (Age of Ashes, 2019, through Sky King's Tomb, 2023), which are flagged `preRemaster` and tagged **Pre-Remaster**. The Remastered ones run from Seven Dooms for Sandpoint and Wardens of Wildwood (2024) through Bastion of Blasphemies (July 2026), the remastered Gatewalkers and Season of Ghosts hardcovers, and Vaultlines (out 4 November 2026, marked Coming soon).
+  - Each has its level range, setting, the first volume's date (or the hardcover's for one-book editions), and flags for mythic rules, editions, sequels and `preRemaster` (with a note when chosen).
+  - Gatewalkers and Season of Ghosts appear once, as their remastered hardcovers.
+  - Tests keep the list newest first and check that everything from before November 2023 is tagged Pre-Remaster.
+  - Facts are from PathfinderWiki and the Archives of Nethys. Add new paths there as Paizo releases them; a test checks the list.
+- **Themes:** each path has theme tags from `THEMES` (Beginner friendly, Dungeon crawl, Horror, Mystery, War, Rebellion, Diplomacy, Intrigue, Wilderness, Exploration, Small town, City, Kingdom building, Heist, Magic school, Tournament, Mythology). The filter buttons start with **Remastered** and **Pre-Remaster**. **High level** is added automatically for paths starting at level 10 or more (`pathThemes`). Buttons above the grid filter by theme; on phones they're one row that scrolls sideways.
+  - **Beginner friendly** is only on paths Paizo's store points new players to: Abomination Vaults and Season of Ghosts.
+  - The other tags come from each path's researched premise. Adjust them in `adventurePaths.js`; a test checks every tag is known.
+- **Choosing one** opens its premise in its card, with notes: the starting level when it isn't 1 (the builder only makes level 1 characters), mythic rules RollBound doesn't track, an upcoming release, or a story it continues.
+- **Prefilled, never final:** the details step fills in the title (the path's name), the party level (its starting level), the backstory (its premise) and the cover (its cover, if there is one). Notes say they're a starting point, and **start from blank** clears the backstory. Nothing is saved until **Create campaign**, and the cover uploads like one the GM picked.
+- **Premises** are our own, short and spoiler-free, because players read a campaign's backstory. Paizo's product text is theirs, and their GM synopses give away twists.
+- **Covers aren't included.** They're Paizo art with the Pathfinder logo, which neither the ORC license nor the Community Use Policy covers. Add them locally with `npm run art:import` (`adventure-<slug>.jpg`), which turns each portrait cover into a 1600×900 wide one. The files are git-ignored; see `client/src/assets/adventure-paths/README.md`. Without a cover, the path shows a title card and the campaign starts with no cover.
+- **Stored:** `campaigns.adventure_path` (the slug, or NULL for homebrew), set at creation. The Overview shows it with its levels and setting.
+
 ### 6b. Campaign tabs: Session logs and Encounters
 - **Tabs:** a campaign has **Overview** (the page it always had), **Session logs**, and **Encounters** for the GM only, in GitHub's underlined style under the header. `CampaignLayout` in `pages/CampaignPage.jsx` loads the campaign once and hands it to each tab (`useCampaign()`), and each tab adds its own breadcrumbs (`useCampaignCrumbs`).
 - **Session logs** (`session_logs` table, `server/src/routes/sessionLogs.js`, `pages/SessionLogPages.jsx`):
@@ -414,6 +435,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - [ ] Record the specific Lore subcategory from feats like Additional Lore.
 - [ ] Optional GM approval of uncommon and rare options.
 - [ ] Backgrounds with a skill choice (Scholar: Arcana, Nature, Occultism or Religion) and a chosen skill feat: the builder doesn't ask, so the Lore tab lists only the fixed Lore.
+- [ ] Adventure Path covers: get permission to publish them (or design RollBound title cards), then stop ignoring `client/src/assets/adventure-paths/*.webp`.
 - [ ] Hands: equipping doesn't check that weapons and a shield fit in two hands.
 - [ ] Item batches (ammunition's Bulk is per 10, not each), and items for the hand-made books.
 - [ ] Put the inventory and backstory on the PDF export.

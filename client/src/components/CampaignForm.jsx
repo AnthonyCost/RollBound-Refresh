@@ -46,14 +46,19 @@ function BooksField({ books, onChange }) {
   );
 }
 
-/** Title, party level, books, backstory, and cover, with a live preview. Used to create and edit. */
-export default function CampaignForm({ initial, submitLabel, onSubmit }) {
+/**
+ * Title, party level, books, backstory, and cover, with a live preview. Used to
+ * create and edit. prefill names where suggested values came from (an Adventure
+ * Path), so the form can say they're only a starting point: { from, backstory,
+ * cover (a File) }. Nothing is saved until the form is submitted.
+ */
+export default function CampaignForm({ initial, prefill, submitLabel, onSubmit, children }) {
   const [name, setName] = useState(initial?.name ?? '');
   const [partyLevel, setPartyLevel] = useState(initial?.partyLevel ?? 1);
-  const [backstory, setBackstory] = useState(initial?.backstory ?? '');
+  const [backstory, setBackstory] = useState(initial?.backstory ?? prefill?.backstory ?? '');
   // An "only these books" list that ends up with every book is stored as "every book".
   const [books, setBooks] = useState(initial?.books ?? null);
-  const [cover, setCover] = useState({});
+  const [cover, setCover] = useState(prefill?.cover ? { file: prefill.cover } : {});
   const [previewUrl, setPreviewUrl] = useState(initial?.coverUrl ?? null);
   const [errors, setErrors] = useState([]);
   const [status, setStatus] = useState(null);
@@ -98,6 +103,12 @@ export default function CampaignForm({ initial, submitLabel, onSubmit }) {
 
         <label className="form-field">
           <span>Backstory</span>
+          {prefill?.backstory && backstory === prefill.backstory && (
+            <span className="prefill-note">
+              Filled in from {prefill.from}'s premise as a starting point. Your players will see it, so make it yours, or{' '}
+              <button type="button" className="link-button" onClick={() => setBackstory('')}>start from blank</button>.
+            </span>
+          )}
           <textarea
             rows={9}
             maxLength={BACKSTORY_MAX}
@@ -109,11 +120,17 @@ export default function CampaignForm({ initial, submitLabel, onSubmit }) {
         </label>
 
         <ImagePicker label="Cover image" hint="wide images work best" value={cover} currentUrl={initial?.coverUrl ?? null} onChange={setCover} />
+        {prefill?.cover && cover.file === prefill.cover && (
+          <p className="prefill-note">This is {prefill.from}'s cover. Keep it, choose your own, or remove it.</p>
+        )}
 
         <FormErrors errors={errors} />
-        <button type="submit" className="btn btn--blood" disabled={Boolean(status) || !name.trim()}>
-          {status ?? submitLabel}
-        </button>
+        <div className="btn-row">
+          {children}
+          <button type="submit" className="btn btn--blood btn--grow" disabled={Boolean(status) || !name.trim()}>
+            {status ?? submitLabel}
+          </button>
+        </div>
       </form>
 
       <aside className="split__col" aria-label="Preview">
