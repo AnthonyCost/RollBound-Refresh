@@ -70,6 +70,8 @@ The settings go in `server/.env`; see `server/.env.example`. Key ones are `DATAB
 
 ## How the code is organized
 
+The database's tables and how they connect are drawn in [database-schema.md](database-schema.md). Update it when `server/db/schema.sql` changes.
+
 ```
 packages/rules/        Rules engine: pure functions, no dependencies. Shared by client and server.
   src/                   proficiency, character stats, combat, conditions, GM math, builder.js,
