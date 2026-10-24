@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useOutletContext, useParams } from 'react-router-dom';
 import { useCampaignService } from '../state/campaignService.js';
 import PageShell from '../components/PageShell.jsx';
 import CampaignCover from '../components/CampaignCover.jsx';
@@ -12,12 +12,61 @@ import { booksLabel } from '../state/rulesData.js';
 import { api } from '../api.js';
 import { inboxChanged, onInboxChanged } from '../state/inbox.js';
 
-export default function CampaignPage() {
+/** What each tab under a campaign gets: { campaign, reload, setCrumbs }. */
+export const useCampaign = () => useOutletContext();
+
+/**
+ * Sets the breadcrumbs after "Campaigns / <name>" while a tab is open, e.g.
+ * [{ label: 'Session logs', to: '…' }, { label: 'Session 3' }].
+ */
+export function useCampaignCrumbs(crumbs) {
+  const { setCrumbs } = useCampaign();
+  const key = JSON.stringify(crumbs);
+  useEffect(() => {
+    setCrumbs(JSON.parse(key));
+    return () => setCrumbs([]);
+  }, [key, setCrumbs]);
+}
+
+const TAB_ICONS = {
+  overview: <path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z" />,
+  logs: (
+    <>
+      <path d="M7 4h11a2 2 0 0 1 0 4h-1v10a2 2 0 0 1-2 2H6a2 2 0 0 1 0-4h1z" />
+      <path d="M10 9h4M10 13h4" />
+    </>
+  ),
+  encounters: <path d="M5 19L19 5M15 5h4v4M5 5l14 14M9 19H5v-4" />,
+};
+
+/** The tabs under a campaign's header, like a GitHub repository's. Encounters is the GM's alone. */
+function CampaignTabs({ id, isGm }) {
+  const tabs = [
+    { to: `/campaigns/${id}`, label: 'Overview', icon: 'overview', end: true },
+    { to: `/campaigns/${id}/logs`, label: 'Session logs', icon: 'logs' },
+    ...(isGm ? [{ to: `/campaigns/${id}/encounters`, label: 'Encounters', icon: 'encounters' }] : []),
+  ];
+  return (
+    <nav className="nav" aria-label="Campaign">
+      {tabs.map((t) => (
+        <NavLink key={t.to} to={t.to} end={t.end}>
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+            {TAB_ICONS[t.icon]}
+          </svg>
+          {t.label.toUpperCase()}
+        </NavLink>
+      ))}
+    </nav>
+  );
+}
+
+/** A campaign's frame: loads it once, then the header, tabs, and the open tab. */
+export default function CampaignLayout() {
   const { id } = useParams();
-  const { state } = useLocation();
   const [campaign, setCampaign] = useState(null);
   const [errors, setErrors] = useState([]);
   const [missing, setMissing] = useState(false);
+  const [crumbs, setCrumbs] = useState([]);
   const service = useCampaignService();
 
   const load = useCallback(() => {
@@ -30,6 +79,44 @@ export default function CampaignPage() {
   useEffect(load, [load]);
   // Answering a request from the inbox updates the party here too.
   useEffect(() => onInboxChanged(load), [load]);
+
+  // Players reach their campaigns from Player Mode, GMs from Game Master Mode.
+  const all = [
+    { label: 'Campaigns', to: campaign?.isGm === false ? '/home?mode=player' : '/home?mode=gm' },
+    { label: campaign?.name ?? 'Campaign', to: `/campaigns/${id}` },
+    ...crumbs,
+  ];
+  if (missing) {
+    return (
+      <PageShell crumbs={all}>
+        <p className="muted italic center">This campaign doesn't exist, or you're not part of it. <Link to="/home">Back to the hub</Link></p>
+      </PageShell>
+    );
+  }
+  if (!campaign) {
+    return (
+      <PageShell crumbs={all}>
+        <FormErrors errors={errors} />
+        {!errors.length && <p className="muted italic center">Unrolling the map…</p>}
+      </PageShell>
+    );
+  }
+
+  const actions = campaign.isGm && <Link to={`/campaigns/${id}/edit`} className="btn btn--small">Edit</Link>;
+  return (
+    <PageShell crumbs={all} actions={actions} tabs={<CampaignTabs id={id} isGm={campaign.isGm} />}>
+      <Outlet context={{ campaign, reload: load, setCrumbs }} />
+    </PageShell>
+  );
+}
+
+/** The Overview tab: cover, backstory, books, invite code, requests and the party. */
+export function CampaignOverview() {
+  const { id } = useParams();
+  const { state } = useLocation();
+  const { campaign, reload: load } = useCampaign();
+  const [errors, setErrors] = useState([]);
+  const service = useCampaignService();
 
   const answer = async (requestId, accept) => {
     setErrors([]);
@@ -63,32 +150,9 @@ export default function CampaignPage() {
     }
   };
 
-  // Players reach their campaigns from Player Mode, GMs from Game Master Mode.
-  const crumbs = [{ label: 'Campaigns', to: campaign?.isGm === false ? '/home?mode=player' : '/home?mode=gm' }, { label: campaign?.name ?? 'Campaign' }];
-  if (missing) {
-    return (
-      <PageShell crumbs={crumbs}>
-        <p className="muted italic center">This campaign doesn't exist, or you're not part of it. <Link to="/home">Back to the hub</Link></p>
-      </PageShell>
-    );
-  }
-  if (!campaign) {
-    return (
-      <PageShell crumbs={crumbs}>
-        <FormErrors errors={errors} />
-        {!errors.length && <p className="muted italic center">Unrolling the map…</p>}
-      </PageShell>
-    );
-  }
-
   const others = campaign.characters.filter((c) => !c.mine);
-  const actions = (
-    <>
-      {campaign.isGm && <Link to={`/campaigns/${id}/edit`} className="btn btn--small">Edit</Link>}
-    </>
-  );
   return (
-    <PageShell crumbs={crumbs} actions={actions}>
+    <>
       {state?.created && (
         <p className="panel panel--hot center" role="status">
           Your campaign is ready. Share the invite code below with your players.
@@ -214,6 +278,6 @@ export default function CampaignPage() {
           )}
         </section>
       </div>
-    </PageShell>
+    </>
   );
 }

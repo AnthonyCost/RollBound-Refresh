@@ -20,7 +20,6 @@ const icon = {
       <path d="M12 2v20M3 7l18 10M21 7L3 17" />
     </>
   ),
-  gm: <path d="M4 6h16M4 12h16M4 18h10" />,
   spells: (
     <>
       <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" />
@@ -49,7 +48,6 @@ const LINKS = [
   { to: 'lore', label: 'Lore', icon: 'lore' },
   { to: 'turn', label: 'Turn', icon: 'turn', encounter: true },
   { to: 'roll', label: 'Roll', icon: 'roll', encounter: true },
-  { to: 'gm', label: 'GM', icon: 'gm', encounter: true },
 ];
 
 export default function NavBar() {

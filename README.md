@@ -12,13 +12,14 @@ Built with the PERN stack: **Postgres, Express, React, Node**.
 | **Builder** | Step-by-step level 1 character creation from Player Core and Player Core 2: ancestry, heritage, background, class and subclass, deity, attribute boosts, skills, languages, feats (with prerequisite checks and bonus feats), spells, and 15 gp of gear. Each step explains the rule it applies. Demo users can build and play a character for the rest of their session. |
 | **Campaigns** | GMs create and edit a campaign's title, party level, backstory, and cover image, and get a permanent invite code only they can see. They can remove characters from the party or delete the campaign. Party members and the GM can open each other's sheets, read-only. Players enter the code on their hub to ask to bring a character in, and the GM accepts or rejects the request from their inbox. Demo users can try the whole flow; their campaigns last until the tab closes. |
 | **Inbox** | Next to your profile picture: announcements, patch notes, join requests for your campaigns (accept or reject), and the answers to yours. |
+| **Session logs** | A campaign's GM writes, edits and deletes blog-style recaps of each session; the party reads them, numbered by the date played. |
+| **Encounters** | The GM's encounter builder: XP budgets for the party, what each creature level is worth, and an encounter that rates its own threat. A bestiary is next. |
 | **Sheet** | Tap AC, a save, or Perception to see the breakdown: ability, proficiency rank + level, item bonus, armor's Dex cap, and condition penalties. The health globe fills to current HP; take damage or heal from the sheet. Shows the character's campaign, has a share link anyone can open read-only, and lets the owner reopen the character in the builder to edit it. Lists Strikes for the equipped weapons. |
 | **Spell Book** | Every spell the character knows, by rank, with spell attack and DC and each spell's full rules text. |
 | **Inventory** | Items and coins. Equip weapons and wear armor or a shield, and the sheet's Strikes and AC follow. Search the rules' gear to add or buy (paying from the coins), add custom items, and track quantity, notes and Bulk against your limits. |
 | **Lore** | The player's backstory, plus the character's origins and background rules. |
 | **Turn** | *(Hidden until the encounter tracker exists; shows during an active encounter.)* The 3-action economy. Strikes show the multiple attack penalty as it grows; conditions like Frightened apply to the numbers and tick down when you end your turn. |
 | **Roll** | *(Hidden, like Turn.)* Rolls a Strike against the GM's target AC and shows where it landed on the four degrees of success, including natural 20/1 shifts and crit damage. |
-| **GM** | *(Hidden, like Turn.)* Encounter XP budget for your party size and level, initiative order, and the DC for a level-appropriate challenge. |
 
 ## Project layout
 

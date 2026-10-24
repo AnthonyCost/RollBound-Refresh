@@ -3,13 +3,14 @@ import NavBar from './components/NavBar.jsx';
 import SheetPage from './pages/SheetPage.jsx';
 import TurnPage from './pages/TurnPage.jsx';
 import RollPage from './pages/RollPage.jsx';
-import GmPage from './pages/GmPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import HubPage from './pages/HubPage.jsx';
 import BuilderPage from './pages/BuilderPage.jsx';
 import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
-import CampaignPage from './pages/CampaignPage.jsx';
+import CampaignLayout, { CampaignOverview } from './pages/CampaignPage.jsx';
+import { SessionLogEditor, SessionLogPage, SessionLogsPage } from './pages/SessionLogPages.jsx';
+import EncountersPage from './pages/EncountersPage.jsx';
 import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import SharedSheetPage, { PartySheetPage } from './pages/SharedSheetPage.jsx';
@@ -97,7 +98,14 @@ export default function App() {
         <Route path="/create" element={<BuilderPage />} />
         <Route path="/characters/:characterId/edit" element={<BuilderPage />} />
         <Route path="/campaigns/new" element={<CampaignCreatePage />} />
-        <Route path="/campaigns/:id" element={<CampaignPage />} />
+        <Route path="/campaigns/:id" element={<CampaignLayout />}>
+          <Route index element={<CampaignOverview />} />
+          <Route path="logs" element={<SessionLogsPage />} />
+          <Route path="logs/new" element={<SessionLogEditor />} />
+          <Route path="logs/:logId" element={<SessionLogPage />} />
+          <Route path="logs/:logId/edit" element={<SessionLogEditor />} />
+          <Route path="encounters" element={<EncountersPage />} />
+        </Route>
         <Route path="/campaigns/:id/edit" element={<CampaignEditPage />} />
         {/* A party member's sheet; the server only shows it to the GM and the party. */}
         <Route path="/campaigns/:id/characters/:characterId" element={<PartySheetPage />}>
@@ -115,7 +123,6 @@ export default function App() {
           <Route path="lore" element={<LorePage />} />
           <Route path="turn" element={<EncounterOnly><TurnPage /></EncounterOnly>} />
           <Route path="roll" element={<EncounterOnly><RollPage /></EncounterOnly>} />
-          <Route path="gm" element={<EncounterOnly><GmPage /></EncounterOnly>} />
         </Route>
       </Route>
       {/* Anyone with a share link, signed in or not. */}

@@ -30,7 +30,7 @@ RollBound is a Pathfinder 2e (Remaster) table companion that **teaches the rules
 **What a player can do today:**
 - create an account (with an optional profile picture), or try a demo, which makes a temporary account,
 - build a level 1 character in a 9-step builder using Player Core and Player Core 2,
-- play that character on four screens: Sheet, Turn, Roll and GM,
+- play that character from its sheet (Sheet, Spell Book, Inventory, Lore), with Turn and Roll waiting for the encounter tracker,
 - export the character to Paizo's fillable PDF character sheet,
 - create, edit and join campaigns with invite codes, cover images and portraits.
 
@@ -117,7 +117,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - A **Player Mode / Game Master Mode** switch (tabs with counts). Both views render from one load; switching only hides the other, so there's no fetch or reload. The last choice is remembered in `localStorage` (`rollbound.hubMode`), defaulting to Player.
 - **Player Mode:** your characters with portrait, HP and AC, plus **New character**; the campaigns your characters are in (including ones you also run), each naming your characters in it; and the join-a-campaign box.
 - **Game Master Mode:** your campaigns (the ones you run), plus **New campaign**.
-- Each character opens at `/play/:id/sheet|turn|roll|gm`. Anyone with a character's share link can view it at `/sheets/:shareId`.
+- Each character opens at `/play/:id/sheet` (with `spells`, `inventory`, `lore`, and the hidden `turn` and `roll`). Anyone with a character's share link can view it at `/sheets/:shareId`.
 
 ### 3. Character builder (`/create`)
 - **Nine steps:** Ancestry, Background, Class, Attributes, Skills, Feats, Spells, Gear, Review.
@@ -162,7 +162,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Inventory:** items and coins (pp, gp, sp, cp) in `characters.inventory`, via `PUT /api/characters/:id/inventory` and checked by `inventoryProblems` (`packages/rules/src/inventory.js`). Until first edited (NULL) it shows `startingInventory`: the builder's gear and what's left of the 15 gp. Search the rules' gear to **Add** it, or **Buy** it, which pays from the coins and makes change (`payCoins`); custom items take a name, quantity and Bulk. Rows open for quantity, a note, Remove, and the item's rules text. Bulk totals the Pathfinder way (10 L = 1) against the encumbered (5 + Str) and maximum (10 + Str) limits. The campaign's books limit what can be added; custom items are always allowed. **Equipping:** weapons, armor and shields have Equip/Unequip (Wear/Take off for armor), with any number of weapons and one armor and one shield at a time (`toggleEquipped`). The sheet everyone reads is `equipCharacter(built sheet, inventory, gear data)`: Strikes from the equipped weapons (a fist if none), AC from the worn armor and shield. `TableContext` exposes it as `character`, and keeps the built sheet as `baseCharacter` for rules updates and the builder. The server uses it for the hub card's AC (`equippedSheet` in `routes/characters.js`). The builder's gear starts equipped, and so does gear from an inventory saved before equipping existed (no `equipped` flags). The client spells out every flag when it saves. Armor or weapons the character isn't trained with get an **Untrained** tag and a warning, since wearing untrained armor can lower AC.
 - **Lore:** the player's backstory (`characters.backstory`, up to 20,000 characters, `PUT /api/characters/:id/backstory`), which saves a second after you stop typing. Below it are the character's origins and their background's rules text, attribute boosts (and the ones chosen), trained skills and skill feat.
 - **Saving:** HP, inventory and backstory all go through `useDelayedSave` (`client/src/state/useDelayedSave.js`): a moment after the last change, and again when leaving or closing the tab. Builder edits don't touch them.
-- **Encounter screens (hidden for now):** Turn, Roll and GM below only show while the character is in an active encounter. `ENCOUNTER_ACTIVE` in `TableContext.jsx` is `false` until the campaign manager gets its encounter tracker. Then it should be true when the character's campaign has an encounter with an active status that includes them. While it's false, those tabs and the round counter are hidden and `/play/:id/turn|roll|gm` go back to the sheet (`EncounterOnly` in `App.jsx`).
+- **Encounter screens (hidden for now):** Turn and Roll below only show while the character is in an active encounter. `ENCOUNTER_ACTIVE` in `TableContext.jsx` is `false` until the campaign manager gets its encounter tracker. Then it should be true when the character's campaign has an encounter with an active status that includes them. While it's false, those tabs and the round counter are hidden and `/play/:id/turn|roll` go back to the sheet (`EncounterOnly` in `App.jsx`).
 - **Turn:** the 3-action economy, the multiple attack penalty, and conditions.
 - **Roll:** degrees of success, with the correct Strength damage for melee, thrown, propulsive and ranged weapons.
 - **GM:** encounter budget and initiative. It still uses the character's level, not the campaign's party level.
@@ -178,6 +178,22 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Campaign page:** cover, backstory, the party (portraits and player avatars), and the invite code (GM only).
 - **Party sheets:** each party card's portrait and name open that character's sheet. Your own opens your playable sheet (`/play/:id`). Anyone else's opens read-only at `/campaigns/:id/characters/:characterId`, with all four tabs. The server (`GET /api/campaigns/:id/characters/:characterId`) only returns it to the campaign's GM and players with a character in it, which includes the character's own player. The public share link (`/sheets/:shareId`) is separate: it's for owners sharing outside the campaign.
 - **GM controls:** **Remove** on other players' characters, with a confirm (`POST /api/campaigns/:id/remove`). The character stays with its player, in no campaign, and its player can rejoin with the code. **Delete campaign** is at the bottom of the Edit page, with a confirm (`DELETE /api/campaigns/:id`). Its characters stay with their players, in no campaign; the cover image is deleted and the hub says so. Players can still Leave with their own characters.
+
+### 6b. Campaign tabs: Session logs and Encounters
+- **Tabs:** a campaign has **Overview** (the page it always had), **Session logs**, and **Encounters** for the GM only, in GitHub's underlined style under the header. `CampaignLayout` in `pages/CampaignPage.jsx` loads the campaign once and hands it to each tab (`useCampaign()`), and each tab adds its own breadcrumbs (`useCampaignCrumbs`).
+- **Session logs** (`session_logs` table, `server/src/routes/sessionLogs.js`, `pages/SessionLogPages.jsx`):
+  - The GM writes, edits and deletes blog-style recaps: a title, the date played, and the text (up to 50,000 characters; a blank line starts a new paragraph).
+  - The GM and players with a character in the campaign read them; anyone else gets a 404, and players get a 403 for writing.
+  - Logs are numbered "Session 1, 2, …" by the date played (undated ones last), and the list shows them newest first with an excerpt.
+  - They belong to their campaign only, and deleting the campaign deletes them.
+  - Routes: `/campaigns/:id/logs`, `logs/new`, `logs/:logId`, `logs/:logId/edit`. API: `GET|POST /api/campaigns/:id/logs`, `GET|PUT|DELETE /api/campaigns/:id/logs/:logId`.
+  - DATE columns come back from Postgres as text (`db.js`), so a session's date can't shift by a day across time zones.
+- **Encounters** (`pages/EncountersPage.jsx`): the encounter-budget half of the old GM screen, which used the rules' `budgets`, `rateEncounter` and `dcByLevel`. The mock GM tab on character screens, with its made-up initiative list, is gone.
+  - The party's size and level start from the campaign and can be changed for planning.
+  - The XP budget lists each threat (trivial to extreme) with what it means at the table, and a table shows what a creature of each level is worth, with a button to add one.
+  - The encounter being built totals its XP, rates its threat on a bar marked with each budget, and warns about creatures beyond the table. Its creatures are a name, a level and a count.
+  - The draft is kept in `localStorage` per campaign until saved encounters arrive with the encounter tracker.
+  - Next: a bestiary (Monster Core, Monster Core 2, Adventure Path monsters) to pick creatures from.
 
 ### 7. Image uploads and S3
 - **Three kinds:** campaign covers (`covers/`, 5 MB), profile pictures (`avatars/`, 2 MB), and character portraits (`portraits/`, 5 MB).

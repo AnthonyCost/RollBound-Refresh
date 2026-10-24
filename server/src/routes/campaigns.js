@@ -9,9 +9,11 @@ import { rulesData } from '../rules.js';
 import { sheetJson } from './sheets.js';
 import { requestJoin, withdrawRequests } from '../joinRequests.js';
 import { canJoin } from '../demo.js';
+import { sessionLogs } from './sessionLogs.js';
 
 export const campaigns = Router();
 campaigns.use(requireUser);
+campaigns.use('/:id/logs', sessionLogs);
 
 const NAME_MAX = 80;
 const BACKSTORY_MAX = 5000;

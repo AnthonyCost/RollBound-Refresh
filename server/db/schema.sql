@@ -113,3 +113,16 @@ CREATE TABLE IF NOT EXISTS message_reads (
 ALTER TABLE users ADD COLUMN IF NOT EXISTS is_demo BOOLEAN NOT NULL DEFAULT false;
 ALTER TABLE users ADD COLUMN IF NOT EXISTS demo_owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE;
 CREATE INDEX IF NOT EXISTS users_demo_idx ON users (created_at) WHERE is_demo AND demo_owner_id IS NULL;
+
+-- Session logs: the GM's write-ups of each session, read by the campaign's party.
+-- They belong to their campaign and go with it.
+CREATE TABLE IF NOT EXISTS session_logs (
+  id          SERIAL PRIMARY KEY,
+  campaign_id INTEGER NOT NULL REFERENCES campaigns(id) ON DELETE CASCADE,
+  title       TEXT NOT NULL,
+  played_on   DATE,
+  body        TEXT NOT NULL DEFAULT '',
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS session_logs_campaign_idx ON session_logs (campaign_id, played_on DESC, created_at DESC);
