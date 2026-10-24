@@ -1,13 +1,17 @@
 // A character's inventory: what they carry and their coins. It's kept apart from
 // the sheet the builder makes, so editing a character never touches it. Shape:
-// { items: [{ key, kind, id, name, qty, bulk, price, note }], coins: { pp, gp, sp, cp } }
+// { items: [{ key, kind, id, name, qty, bulk, price, note, equipped }], coins: { pp, gp, sp, cp } }
 // kind is weapon, armor, shield or item for rules data (id points at it), or custom.
-import { STARTING_GOLD_CP, gearCost } from './builder.js';
+// Equipped weapons, armor and shield are what the sheet's Strikes and AC use.
+import { FIST, STARTING_GOLD_CP, gearCost, toArmor, toShield, toWeapon } from './builder.js';
 
 export const COINS = ['pp', 'gp', 'sp', 'cp'];
 export const COIN_NAMES = { pp: 'Platinum', gp: 'Gold', sp: 'Silver', cp: 'Copper' };
 const COIN_CP = { pp: 1000, gp: 100, sp: 10, cp: 1 };
 export const ITEM_KINDS = ['weapon', 'armor', 'shield', 'item', 'custom'];
+/** Kinds the sheet can use: any number of weapons, one armor and one shield. */
+export const EQUIPPABLE = ['weapon', 'armor', 'shield'];
+const ONE_AT_A_TIME = ['armor', 'shield'];
 
 export const LIMITS = { items: 300, name: 120, note: 300, qty: 9999, bulk: 100, coins: 10_000_000, backstory: 20_000 };
 
@@ -35,39 +39,100 @@ export function payCoins(coins, price) {
 }
 
 /** An inventory entry for a rules item: kind is weapon, armor, shield or item. */
-export function inventoryItem(kind, item, qty = 1) {
-  return { key: newKey(), kind, id: item.id, name: item.name, qty, bulk: item.bulk ?? 0, price: item.price ?? null, note: '' };
+export function inventoryItem(kind, item, qty = 1, equipped = false) {
+  return { key: newKey(), kind, id: item.id, name: item.name, qty, bulk: item.bulk ?? 0, price: item.price ?? null, note: '', equipped: EQUIPPABLE.includes(kind) && equipped };
 }
 
 /** An inventory entry the player makes up: loot, a keepsake, anything not in the rules data. */
 export function customItem(name, qty = 1, bulk = 0) {
-  return { key: newKey(), kind: 'custom', id: null, name: name.trim(), qty, bulk, price: null, note: '' };
+  return { key: newKey(), kind: 'custom', id: null, name: name.trim(), qty, bulk, price: null, note: '', equipped: false };
 }
 
 /**
- * The inventory a character starts with before anyone edits it: the gear chosen in
- * the builder, and whatever's left of the 15 gp. data needs weapons, armor and
- * shields. Characters without builder choices start with their sheet's gear and no coins.
+ * The inventory a character starts with before anyone edits it: their gear,
+ * equipped, and whatever's left of the 15 gp. data needs weapons, armor and
+ * shields. Characters without builder choices (the sample) match their sheet's
+ * gear to the rules by name and start with no coins.
  */
 export function startingInventory(character, data) {
   const build = character.build;
-  if (build && data?.weapons && data.armor && data.shields) {
+  if (build) {
     const items = [
-      ...build.weapons.map((id) => find(data.weapons, id)).filter(Boolean).map((w) => inventoryItem('weapon', w)),
-      ...[find(data.armor, build.armor)].filter(Boolean).map((a) => inventoryItem('armor', a)),
-      ...[find(data.shields, build.shield)].filter(Boolean).map((s) => inventoryItem('shield', s)),
+      ...build.weapons.map((id) => find(data.weapons, id)).filter(Boolean).map((w) => inventoryItem('weapon', w, 1, true)),
+      ...[find(data.armor, build.armor)].filter(Boolean).map((a) => inventoryItem('armor', a, 1, true)),
+      ...[find(data.shields, build.shield)].filter(Boolean).map((s) => inventoryItem('shield', s, 1, true)),
     ];
     return { items, coins: coinsFromCp(Math.max(0, STARTING_GOLD_CP - gearCost(build, data))) };
   }
-  const named = (kind, x) => ({ key: newKey(), kind: 'custom', id: null, name: x.name, qty: 1, bulk: kind === 'armor' ? 2 : 1, price: null, note: '' });
+  const byName = (kind, list, x) => {
+    const rule = list.find((r) => r.name.toLowerCase() === x.name.toLowerCase());
+    return rule ? inventoryItem(kind, rule, 1, true) : { ...customItem(x.name, 1, kind === 'armor' ? 2 : 1) };
+  };
   return {
     items: [
-      ...(character.weapons ?? []).filter((w) => w.name !== 'Fist').map((w) => named('weapon', w)),
-      ...(character.armor ? [named('armor', character.armor)] : []),
-      ...(character.shield ? [named('shield', character.shield)] : []),
+      ...(character.weapons ?? []).filter((w) => w.name !== FIST.name).map((w) => byName('weapon', data.weapons, w)),
+      ...(character.armor ? [byName('armor', data.armor, character.armor)] : []),
+      ...(character.shield ? [byName('shield', data.shields, character.shield)] : []),
     ],
     coins: { pp: 0, gp: 0, sp: 0, cp: 0 },
   };
+}
+
+/**
+ * Whether each item is equipped. Inventories saved before equipping existed have
+ * no equipped flags; for those, every weapon and the first armor and shield count,
+ * which is what the sheet showed then.
+ */
+function equippedKeys(inv) {
+  const legacy = !inv.items.some((i) => 'equipped' in i);
+  const on = new Set();
+  const taken = new Set();
+  for (const i of inv.items) {
+    if (!EQUIPPABLE.includes(i.kind) || !(legacy || i.equipped)) continue;
+    if (ONE_AT_A_TIME.includes(i.kind)) {
+      if (taken.has(i.kind)) continue;
+      taken.add(i.kind);
+    }
+    on.add(i.key);
+  }
+  return on;
+}
+
+/** The inventory with every item's equipped flag spelled out (see equippedKeys). */
+export function withEquipped(inv) {
+  const on = equippedKeys(inv);
+  return { ...inv, items: inv.items.map((i) => ({ ...i, equipped: on.has(i.key) })) };
+}
+
+/** Equips or unequips an item. Putting on armor or a shield takes off the one you had. */
+export function toggleEquipped(inv, key) {
+  const items = withEquipped(inv).items;
+  const item = items.find((i) => i.key === key);
+  if (!item || !EQUIPPABLE.includes(item.kind)) return inv;
+  const wearing = !item.equipped;
+  return {
+    ...inv,
+    items: items.map((i) => {
+      if (i.key === key) return { ...i, equipped: wearing };
+      if (wearing && ONE_AT_A_TIME.includes(item.kind) && i.kind === item.kind) return { ...i, equipped: false };
+      return i;
+    }),
+  };
+}
+
+/**
+ * The sheet as the inventory has it: Strikes from the equipped weapons (a fist if
+ * none), AC from the equipped armor and shield. With no inventory yet, or without
+ * weapons, armor and shields in data, the sheet is unchanged.
+ */
+export function equipCharacter(character, inv, data) {
+  if (!inv || !data?.weapons || !data.armor || !data.shields) return character;
+  const on = equippedKeys(inv);
+  const equipped = (kind, list) => inv.items.filter((i) => i.kind === kind && on.has(i.key)).map((i) => find(list, i.id)).filter(Boolean);
+  const weapons = equipped('weapon', data.weapons).map(toWeapon);
+  const [armor] = equipped('armor', data.armor);
+  const [shield] = equipped('shield', data.shields);
+  return { ...character, weapons: weapons.length ? weapons : [FIST], armor: armor ? toArmor(armor) : null, shield: shield ? toShield(shield) : null };
 }
 
 /**
@@ -106,7 +171,12 @@ export function inventoryProblems(inv) {
     if (typeof i.bulk !== 'number' || !(i.bulk >= 0 && i.bulk <= LIMITS.bulk)) errors.push(`${at}: Bulk must be from 0 to ${LIMITS.bulk}.`);
     if (i.price !== null && (!Number.isInteger(i.price) || i.price < 0)) errors.push(`${at}: price must be whole copper pieces, or null.`);
     if (typeof i.note !== 'string' || i.note.length > LIMITS.note) errors.push(`${at}: note must be ${LIMITS.note} characters or fewer.`);
+    if (i.equipped !== undefined && typeof i.equipped !== 'boolean') errors.push(`${at}: equipped must be true or false.`);
+    if (i.equipped && !EQUIPPABLE.includes(i.kind)) errors.push(`${at}: only weapons, armor and shields can be equipped.`);
   });
+  for (const kind of ONE_AT_A_TIME) {
+    if (inv.items.filter((i) => i?.kind === kind && i.equipped).length > 1) errors.push(`Only one ${kind === 'armor' ? 'suit of armor' : 'shield'} can be equipped.`);
+  }
   for (const c of COINS) {
     const v = inv.coins?.[c];
     if (!Number.isInteger(v) || v < 0 || v > LIMITS.coins) errors.push(`${COIN_NAMES[c]} pieces must be a whole number from 0 to ${LIMITS.coins.toLocaleString('en-US')}.`);

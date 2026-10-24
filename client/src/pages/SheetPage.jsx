@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc } from '@rollbound/rules';
+import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import Portrait from '../components/Portrait.jsx';
@@ -21,6 +21,7 @@ export default function SheetPage() {
   const [selected, setSelected] = useState('ac');
   const [skill, setSkill] = useState(null);
   const [magic, setMagic] = useState(null);
+  const [strike, setStrike] = useState(null);
 
   const opts = { conditions, shieldRaised };
   const stats = {
@@ -99,6 +100,8 @@ export default function SheetPage() {
 
       <Breakdown title={current.title} stat={current.stat} signTotal={current.signed !== false} />
 
+      <Strikes character={character} opts={opts} readOnly={readOnly} selected={strike} onSelect={setStrike} />
+
       <div className="abilities">
         {ABILITIES.map((a) => (
           <div key={a} className="ability" title={abilityName(a)}>
@@ -134,6 +137,42 @@ export default function SheetPage() {
       {!readOnly && <ShareSheet />}
       </div>
     </div>
+  );
+}
+
+/** The equipped weapons' attack bonus and damage; tap one for the math. */
+function Strikes({ character, opts, readOnly, selected, onSelect }) {
+  const weapons = character.weapons ?? [];
+  // Selected by position: someone can carry two of the same weapon.
+  const current = weapons[selected];
+  return (
+    <>
+      <Ornament label="STRIKES" />
+      <ul className="strikes">
+        {weapons.map((w, i) => {
+          const mod = damageModifier(w, character.abilities);
+          return (
+            <li key={`${w.slug}-${i}`}>
+              <button type="button" className="strike" aria-pressed={selected === i} onClick={() => onSelect(selected === i ? null : i)}>
+                <span className="strike__main">
+                  <span className="strike__name">{w.name}</span>
+                  <span className="strike__damage">
+                    1d{w.die}{mod ? ` ${signed(mod)}` : ''} {w.damageType}
+                    {w.ranged && w.range ? ` · ${w.range} ft` : ''}
+                  </span>
+                  {w.traits?.length > 0 && <span className="strike__traits">{w.traits.join(', ')}</span>}
+                </span>
+                <span className="strike__bonus">{signed(strikeBonus(character, w, opts).total)}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      {weapons.length === 1 && weapons[0].slug === 'fist' && (
+        <p className="rule-note">{readOnly ? 'No weapons equipped.' : 'No weapons equipped. Equip one on the Inventory tab.'}</p>
+      )}
+      {current && <Breakdown title={`${current.name} attack`} stat={strikeBonus(character, current, opts)} />}
+    </>
   );
 }
 

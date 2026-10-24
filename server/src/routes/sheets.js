@@ -3,7 +3,7 @@ import { armorClass, maxHp } from '@rollbound/rules';
 import { pool } from '../db.js';
 import { storage } from '../storage/index.js';
 import { isShareId } from '../shareId.js';
-import { currentHp } from './characters.js';
+import { currentHp, equippedSheet } from './characters.js';
 
 // Shared character sheets: anyone with a character's share link can view it, signed
 // in or not. Read-only, and only what the sheet shows (no owner or campaign ids).
@@ -26,7 +26,7 @@ sheets.get('/:shareId', async (req, res) => {
     campaignName: row.campaign_name ?? null,
     portraitUrl: storage.publicUrl(row.portrait_key),
     data: row.data,
-    summary: { maxHp: maxHp(row.data), ac: armorClass(row.data).total },
+    summary: { maxHp: maxHp(row.data), ac: armorClass(equippedSheet(row)).total },
     currentHp: currentHp(row),
     inventory: row.inventory ?? null,
     backstory: row.backstory ?? '',

@@ -331,7 +331,12 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .stepper { display: inline-flex; align-items: center; gap: 4px; }
 .stepper .btn { min-height: 40px; width: 40px; padding: 0; font-size: 18px; }
 .stepper__value { min-width: 36px; text-align: center; font-family: var(--display); font-size: 18px; font-weight: 700; }
-.inventory__remove { min-height: 40px; }
+.inventory__remove, .inventory__controls .btn-row .btn { min-height: 40px; }
+.inventory__controls { flex-wrap: wrap; }
+.inventory__item--equipped .feature { border-color: var(--bronze); }
+.tag.tag--equipped { border-color: var(--gold); color: var(--gold); }
+.tag.tag--warn { border-color: var(--blood); color: var(--blood-text); }
+.inventory__equip-note { margin: 0; }
 .inventory__note-field { display: flex; flex-direction: column; gap: 4px; }
 .inventory__note { margin: 0; font-style: italic; color: var(--text-soft); }
 
@@ -1351,6 +1356,26 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 
 .sheet__edit { min-height: 44px; }
+
+.strikes { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.strike {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  text-align: left;
+}
+.strike[aria-pressed='true'] { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 18px #4a120c; }
+.strike__main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.strike__name { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; overflow-wrap: anywhere; }
+.strike__damage { font-size: 14px; color: var(--text-soft); }
+.strike__traits { font-size: 12px; font-style: italic; color: var(--text-muted); overflow-wrap: anywhere; }
+.strike__bonus { flex: none; font-family: var(--display); font-size: 22px; font-weight: 700; }
 .export { display: flex; flex-direction: column; gap: 6px; }
 .export .btn { min-height: 44px; }
 .export__alt { align-self: center; font-size: 13px; }

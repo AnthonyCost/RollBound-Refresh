@@ -13,7 +13,8 @@ const STEP_TITLES = { ancestry: 'Ancestry', background: 'Background', class: 'Cl
  * update; choices that disappeared or no longer fit ask the player to re-pick.
  */
 export default function RulesUpdateNotice() {
-  const { character, characterId, setCharacter } = useTable();
+  // The sheet as built, not as equipped: that's what's saved and re-checked.
+  const { baseCharacter: character, characterId, setCharacter } = useTable();
   const [review, setReview] = useState(null);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState([]);

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { armorClass, maxHp, mira } from '@rollbound/rules';
+import { armorClass, equipCharacter, maxHp, mira } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import { DEMO_CHARACTER_ID } from '../state/TableContext.jsx';
@@ -13,13 +13,18 @@ import Avatar from '../components/Avatar.jsx';
 import AccountLink from '../components/AccountLink.jsx';
 import Portrait from '../components/Portrait.jsx';
 import { demoPortraitUrl } from '../state/portraits.js';
-import { isOutdated } from '../state/rulesData.js';
+import { isOutdated, loadRules } from '../state/rulesData.js';
+import { demoExtras } from '../state/demoExtras.js';
 
 const summary = (data) => ({ maxHp: maxHp(data), ac: armorClass(data).total });
 
-/** Demo characters (Mira plus any built this session) shaped like the API's character list. */
-function demoCharacterCards() {
+/**
+ * Demo characters (Mira plus any built this session) shaped like the API's
+ * character list, with AC from their equipped gear like the server's.
+ */
+async function demoCharacterCards() {
   const memberships = demoMemberships();
+  const gear = await loadRules({ types: ['weapons', 'armor', 'shields'] }).catch(() => null);
   return [{ id: DEMO_CHARACTER_ID, data: mira }, ...listDemoCharacters()].map(({ id, data }) => ({
     id,
     name: data.name,
@@ -28,7 +33,7 @@ function demoCharacterCards() {
     campaignName: memberships[id]?.name ?? null,
     portraitUrl: demoPortraitUrl(id),
     data,
-    summary: summary(data),
+    summary: summary(equipCharacter(data, demoExtras(id).inventory ?? null, gear)),
   }));
 }
 

@@ -13,6 +13,11 @@ import {
   inventoryItem,
   payCoins,
   startingInventory,
+  toggleEquipped,
+  withEquipped,
+  EQUIPPABLE,
+  toWeapon,
+  weaponRank,
 } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import { useRules } from '../state/useRules.js';
@@ -28,13 +33,14 @@ const savedLabel = { waiting: 'Saving…', saving: 'Saving…', saved: 'Saved', 
 
 /** What the character carries and their coins. The owner can change both. */
 export default function InventoryPage() {
-  const { character, readOnly, campaign, inventory, setInventory, inventoryStatus } = useTable();
+  const { character, baseCharacter, readOnly, campaign, inventory, setInventory, inventoryStatus } = useTable();
   const rules = useRules(GEAR_TYPES);
   // The campaign's books limit what can be added from the rules; custom items are always allowed.
   const view = useMemo(() => (rules && !rules.error ? campaignData(rules, campaign?.books ?? null) : null), [rules, campaign]);
   // Until the first edit, the builder's gear and leftover gold; saved on the first change.
-  const starting = useMemo(() => (rules && !rules.error ? startingInventory(character, rules) : null), [character, rules]);
-  const inv = inventory ?? starting;
+  const starting = useMemo(() => (rules && !rules.error ? startingInventory(baseCharacter, rules) : null), [baseCharacter, rules]);
+  // Every equipped flag spelled out, including for inventories saved before equipping.
+  const inv = useMemo(() => (inventory ?? starting) && withEquipped(inventory ?? starting), [inventory, starting]);
 
   if (!inv) {
     return (
@@ -107,7 +113,9 @@ export default function InventoryPage() {
               item={item}
               rule={rules?.[LIST_OF[item.kind]]?.find((x) => x.id === item.id)}
               readOnly={readOnly}
+              character={baseCharacter}
               onChange={(changes) => setItem(item.key, changes)}
+              onToggleEquipped={() => setInventory(toggleEquipped(inv, item.key))}
               onRemove={() => update({ items: inv.items.filter((i) => i.key !== item.key) })}
             />
           ))}
@@ -132,14 +140,37 @@ export default function InventoryPage() {
   );
 }
 
-function InventoryRow({ item, rule, readOnly, onChange, onRemove }) {
+/** What equipping does, by kind. */
+const EQUIP_NOTE = {
+  weapon: 'Equipped weapons are your Strikes on the Sheet.',
+  armor: 'Your AC uses the armor you wear. Wearing this takes off any other armor.',
+  shield: 'Your AC uses this shield when you Raise a Shield. Equipping it puts away any other shield.',
+};
+
+/** Why equipping this would hurt: armor or a weapon the character isn't trained with. */
+function untrainedNote(item, rule, character) {
+  if (!rule) return null;
+  if (item.kind === 'armor' && rule.category !== 'unarmored' && (character.proficiencies.armor?.[rule.category] ?? 'untrained') === 'untrained') {
+    return `${character.name} isn't trained in ${rule.category} armor, so it adds no proficiency to AC. Wearing it can lower AC.`;
+  }
+  if (item.kind === 'weapon' && weaponRank(character, toWeapon(rule)) === 'untrained') {
+    return `${character.name} isn't trained with ${rule.category} weapons, so Strikes with it add no proficiency.`;
+  }
+  return null;
+}
+
+function InventoryRow({ item, rule, readOnly, character, onChange, onRemove, onToggleEquipped }) {
+  const equippable = EQUIPPABLE.includes(item.kind);
+  const untrained = equippable && untrainedNote(item, rule, character);
   return (
-    <li className="inventory__item">
+    <li className={`inventory__item ${item.equipped ? 'inventory__item--equipped' : ''}`}>
       <details className="feature">
         <summary>
           <span className="inventory__name">
             {item.name}
             {item.kind !== 'item' && <span className="tag">{item.kind}</span>}
+            {item.equipped && <span className="tag tag--equipped">{item.kind === 'armor' ? 'Worn' : 'Equipped'}</span>}
+            {untrained && <span className="tag tag--warn">Untrained</span>}
           </span>
           <span className="inventory__meta">
             {item.qty > 1 && <span>×{item.qty}</span>}
@@ -154,9 +185,18 @@ function InventoryRow({ item, rule, readOnly, onChange, onRemove }) {
                 <span className="stepper__value">{item.qty}</span>
                 <button type="button" className="btn" aria-label="One more" disabled={item.qty >= LIMITS.qty} onClick={() => onChange({ qty: item.qty + 1 })}>+</button>
               </div>
-              <button type="button" className="btn inventory__remove" onClick={onRemove}>Remove</button>
+              <span className="btn-row">
+                {equippable && (
+                  <button type="button" className={`btn ${item.equipped ? '' : 'btn--blood'}`} aria-pressed={item.equipped} onClick={onToggleEquipped}>
+                    {item.equipped ? (item.kind === 'armor' ? 'Take off' : 'Unequip') : item.kind === 'armor' ? 'Wear' : 'Equip'}
+                  </button>
+                )}
+                <button type="button" className="btn inventory__remove" onClick={onRemove}>Remove</button>
+              </span>
             </div>
           )}
+          {!readOnly && equippable && <p className="rule-note inventory__equip-note">{EQUIP_NOTE[item.kind]}</p>}
+          {untrained && <p className="rule-note rule-note--warn inventory__equip-note">{untrained}</p>}
           <p className="inventory__facts muted">
             {item.price != null && <span>Price {formatPrice(item.price)}</span>}
             <span>Bulk {bulkLabel(item.bulk)} each</span>

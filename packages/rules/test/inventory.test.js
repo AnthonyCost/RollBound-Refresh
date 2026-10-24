@@ -18,14 +18,14 @@ describe('inventory', () => {
   it("starts with the builder's gear and what's left of 15 gp", () => {
     const build = { ...R.emptyBuild(), weapons: [byName(data.weapons, 'Longsword').id], armor: byName(data.armor, 'Chain Mail').id };
     const inv = R.startingInventory({ build }, data);
-    assert.deepEqual(inv.items.map((i) => [i.kind, i.name]), [['weapon', 'Longsword'], ['armor', 'Chain Mail']]);
+    assert.deepEqual(inv.items.map((i) => [i.kind, i.name, i.equipped]), [['weapon', 'Longsword', true], ['armor', 'Chain Mail', true]]);
     assert.equal(R.coinValue(inv.coins), R.STARTING_GOLD_CP - R.gearCost(build, data));
     assert.deepEqual(R.inventoryProblems(inv), []);
   });
 
-  it('starts characters without builder choices with their sheet gear and no coins', () => {
+  it('starts characters without builder choices with their sheet gear, matched to the rules, and no coins', () => {
     const inv = R.startingInventory(R.mira, data);
-    assert.deepEqual(inv.items.map((i) => i.name), ['Longsword', 'Chain mail']);
+    assert.deepEqual(inv.items.map((i) => [i.kind, i.name, i.equipped]), [['weapon', 'Longsword', true], ['armor', 'Chain Mail', true]]);
     assert.equal(R.coinValue(inv.coins), 0);
   });
 
@@ -48,6 +48,52 @@ describe('inventory', () => {
     assert.deepEqual(R.payCoins({ pp: 1, gp: 0, sp: 0, cp: 5 }, 5), { pp: 1, gp: 0, sp: 0, cp: 0 });
     assert.deepEqual(R.payCoins({ pp: 1, gp: 0, sp: 0, cp: 0 }, 1), { pp: 0, gp: 9, sp: 9, cp: 9 });
     assert.equal(R.payCoins({ pp: 0, gp: 0, sp: 4, cp: 0 }, 50), null);
+  });
+
+  it('equips and unequips: the sheet follows', () => {
+    const start = R.startingInventory(R.mira, data);
+    // As started, the sheet is the same as before.
+    const same = R.equipCharacter(R.mira, start, data);
+    assert.equal(R.armorClass(same).total, R.armorClass(R.mira).total);
+    assert.deepEqual(same.weapons.map((w) => w.name), ['Longsword']);
+    // Take the armor off: AC drops to unarmored.
+    const chain = start.items.find((i) => i.kind === 'armor');
+    const off = R.toggleEquipped(start, chain.key);
+    assert.equal(R.equipCharacter(R.mira, off, data).armor, null);
+    assert.ok(R.armorClass(R.equipCharacter(R.mira, off, data)).total < R.armorClass(R.mira).total);
+    // Removing the longsword leaves a fist.
+    const noSword = { ...start, items: start.items.filter((i) => i.kind !== 'weapon') };
+    assert.deepEqual(R.equipCharacter(R.mira, noSword, data).weapons.map((w) => w.name), ['Fist']);
+    // A second weapon adds a Strike.
+    const dagger = R.inventoryItem('weapon', byName(data.weapons, 'Dagger'));
+    const two = R.toggleEquipped({ ...start, items: [...start.items, dagger] }, dagger.key);
+    assert.deepEqual(R.equipCharacter(R.mira, two, data).weapons.map((w) => w.name), ['Longsword', 'Dagger']);
+    assert.deepEqual(R.inventoryProblems(two), []);
+  });
+
+  it('wears one armor and one shield at a time', () => {
+    const start = R.startingInventory(R.mira, data);
+    const leather = R.inventoryItem('armor', byName(data.armor, 'Leather Armor'));
+    const swapped = R.toggleEquipped({ ...start, items: [...start.items, leather] }, leather.key);
+    assert.deepEqual(swapped.items.filter((i) => i.equipped).map((i) => i.name), ['Longsword', 'Leather Armor']);
+    assert.equal(R.equipCharacter(R.mira, swapped, data).armor.name, 'Leather Armor');
+    const both = { ...swapped, items: swapped.items.map((i) => (i.kind === 'armor' ? { ...i, equipped: true } : i)) };
+    assert.ok(R.inventoryProblems(both).some((e) => /one suit of armor/.test(e)));
+    const custom = R.customItem('Locket');
+    assert.equal(R.toggleEquipped({ ...start, items: [custom] }, custom.key).items[0].equipped, false);
+    assert.ok(R.inventoryProblems({ ...start, items: [{ ...custom, equipped: true }] }).some((e) => /only weapons/.test(e)));
+  });
+
+  it('treats inventories saved before equipping as wearing their gear', () => {
+    const start = R.startingInventory(R.mira, data);
+    const legacy = { ...start, items: start.items.map(({ equipped, ...i }) => i) };
+    assert.equal(R.armorClass(R.equipCharacter(R.mira, legacy, data)).total, R.armorClass(R.mira).total);
+    assert.deepEqual(R.withEquipped(legacy).items.map((i) => i.equipped), [true, true]);
+  });
+
+  it('leaves the sheet alone with no inventory or no gear data', () => {
+    assert.equal(R.equipCharacter(R.mira, null, data), R.mira);
+    assert.equal(R.equipCharacter(R.mira, R.startingInventory(R.mira, data), { spells: [] }), R.mira);
   });
 
   it('rejects bad inventories', () => {

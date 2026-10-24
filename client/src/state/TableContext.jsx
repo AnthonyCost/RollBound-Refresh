@@ -8,6 +8,8 @@ import {
   damageModifier,
   rollDie,
   endOfTurn,
+  equipCharacter,
+  withEquipped,
 } from '@rollbound/rules';
 import { api } from '../api.js';
 import { DEMO_ID_PREFIX, getDemoCharacter } from './demoCharacters.js';
@@ -15,12 +17,15 @@ import { demoPortraitUrl } from './portraits.js';
 import { demoMemberships } from './demoCampaigns.js';
 import { demoExtras, saveDemoExtras } from './demoExtras.js';
 import { useDelayedSave } from './useDelayedSave.js';
+import { useRules } from './useRules.js';
 
 const TableContext = createContext(null);
 
 export const DEMO_CHARACTER_ID = 'demo';
 
-const STARTING_CONDITIONS = [{ id: 'frightened', value: 1 }];
+// Characters start with no conditions. (This used to be a sample Frightened 1 to
+// show off condition math; with the Turn tab hidden there'd be no way to clear it.)
+const STARTING_CONDITIONS = [];
 
 /**
  * Whether the character is in an active encounter. The Turn, Roll and GM screens
@@ -35,6 +40,9 @@ const HP_SAVE_DELAY = 500;
 const INVENTORY_SAVE_DELAY = 600;
 const BACKSTORY_SAVE_DELAY = 1000;
 
+// What equipping from the inventory needs from the rules data.
+const GEAR_TYPES = ['weapons', 'armor', 'shields'];
+
 const isDemoId = (id) => id === DEMO_CHARACTER_ID || id.startsWith(DEMO_ID_PREFIX);
 
 /**
@@ -45,7 +53,8 @@ const isDemoId = (id) => id === DEMO_CHARACTER_ID || id.startsWith(DEMO_ID_PREFI
  */
 export function TableProvider({ characterId, shareId: sharedId, children }) {
   const readOnly = Boolean(sharedId);
-  const [character, setCharacter] = useState(null);
+  // The sheet as built (saved, and replaced by rules updates or builder edits).
+  const [baseCharacter, setCharacter] = useState(null);
   const [portraitUrl, setPortraitUrl] = useState(null);
   const [campaign, setCampaign] = useState(null);
   const [shareId, setShareId] = useState(null);
@@ -57,7 +66,7 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
   const [notFound, setNotFound] = useState(false);
 
   const [round, setRound] = useState(1);
-  const [conditions, setConditions] = useState(readOnly ? [] : STARTING_CONDITIONS);
+  const [conditions, setConditions] = useState(STARTING_CONDITIONS);
   const [shieldRaised, setShieldRaised] = useState(false);
   const [used, setUsed] = useState([]);
   const [targetAC, setTargetAC] = useState(15);
@@ -98,6 +107,15 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
     };
   }, [characterId, sharedId, readOnly]);
 
+  // The sheet everyone reads: the built sheet with the inventory's equipped weapons,
+  // armor and shield. With an inventory, wait for the gear data so AC doesn't jump.
+  const gear = useRules(GEAR_TYPES);
+  const gearReady = !inventory || Boolean(gear);
+  const character = useMemo(
+    () => (baseCharacter && inventory && gear && !gear.error ? equipCharacter(baseCharacter, inventory, gear) : baseCharacter),
+    [baseCharacter, inventory, gear],
+  );
+
   // Changes save a moment after the last edit: to the server, or to this tab for
   // demo characters. The shared view never saves.
   const saver = (field, send) => (value) =>
@@ -121,8 +139,10 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
     [readOnly, max, scheduleHp],
   );
   const setInventory = useCallback(
-    (next) => {
+    (changed) => {
       if (readOnly) return;
+      // Spell out every equipped flag, so an inventory from before equipping keeps its gear on.
+      const next = withEquipped(changed);
       setStoredInventory(next);
       scheduleInventory(next);
     },
@@ -209,6 +229,7 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
   const value = useMemo(
     () => ({
       character,
+      baseCharacter,
       characterId,
       setCharacter,
       readOnly,
@@ -229,7 +250,7 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
       backstory,
       setBackstory,
       backstoryStatus,
-      loading,
+      loading: loading || !gearReady,
       notFound,
       round,
       conditions,
@@ -246,7 +267,7 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
       cycleCondition,
       resetEncounter,
     }),
-    [character, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

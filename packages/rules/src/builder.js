@@ -16,7 +16,7 @@ const RECALL_KNOWLEDGE_SKILLS = ['arcana', 'crafting', 'medicine', 'nature', 'oc
 /** Bumped when the shape of a build changes; migrateBuild() upgrades older ones. */
 export const BUILD_VERSION = 2;
 
-const FIST = {
+export const FIST = {
   slug: 'fist',
   name: 'Fist',
   category: 'unarmed',
@@ -587,7 +587,8 @@ export function buildProblems(build, data) {
 
 // ---------- Output ----------
 
-function toWeapon(w) {
+/** A rules weapon as the sheet's Strikes use it. */
+export function toWeapon(w) {
   return {
     slug: w.slug,
     name: w.name,
@@ -600,6 +601,21 @@ function toWeapon(w) {
     ...(w.range != null && { range: w.range }),
   };
 }
+
+/** Rules armor as the sheet's AC uses it. */
+export const toArmor = (a) => ({
+  name: a.name,
+  category: a.category,
+  acBonus: a.acBonus,
+  dexCap: a.dexCap,
+  strength: a.strength,
+  checkPenalty: a.checkPenalty,
+  speedPenalty: a.speedPenalty,
+  traits: a.traits,
+});
+
+/** A rules shield as the sheet uses it. */
+export const toShield = (s) => ({ name: s.name, acBonus: s.acBonus, hardness: s.hardness, hp: s.hp });
 
 const toSpell = (s) => ({ id: s.id, slug: s.slug, name: s.name, rank: s.rank, actions: s.actions, traits: s.traits, defense: s.defense, range: s.range });
 
@@ -656,17 +672,8 @@ export function buildCharacter(build, data) {
         spells: [...casting.granted.filter((s) => s.rank === 1), ...build.spells.map((s) => find(data.spells, s))].filter(Boolean).map(toSpell),
       },
     }),
-    armor: armor && {
-      name: armor.name,
-      category: armor.category,
-      acBonus: armor.acBonus,
-      dexCap: armor.dexCap,
-      strength: armor.strength,
-      checkPenalty: armor.checkPenalty,
-      speedPenalty: armor.speedPenalty,
-      traits: armor.traits,
-    },
-    shield: shield && { name: shield.name, acBonus: shield.acBonus, hardness: shield.hardness, hp: shield.hp },
+    armor: armor && toArmor(armor),
+    shield: shield && toShield(shield),
     ...(runesOf(build, data) && {
       runes: (build.runes ?? []).map((r) => find(data.runes ?? [], r)).filter(Boolean).map(({ id, slug, name, traits, usage }) => ({ id, slug, name, traits, usage })),
     }),

@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { LIMITS, armorClass, inventoryProblems, maxHp } from '@rollbound/rules';
+import { LIMITS, armorClass, equipCharacter, inventoryProblems, maxHp } from '@rollbound/rules';
+import { rulesData } from '../rules.js';
 import { pool } from '../db.js';
 import { requireUser } from '../auth.js';
 import { storage } from '../storage/index.js';
@@ -13,6 +14,9 @@ characters.use(requireUser);
 /** Hit points right now: stored damage, kept within the sheet's current maximum. */
 export const currentHp = (row) => Math.min(row.current_hp ?? Infinity, maxHp(row.data));
 
+/** The sheet with the inventory's equipped gear (see equipCharacter), for numbers the server reports. */
+export const equippedSheet = (row) => equipCharacter(row.data, row.inventory, rulesData());
+
 const toJson = (row) => ({
   id: row.id,
   shareId: row.share_id,
@@ -25,7 +29,7 @@ const toJson = (row) => ({
   portraitUrl: storage.publicUrl(row.portrait_key),
   data: row.data,
   // Derived on the way out so every client sees the same math.
-  summary: { maxHp: maxHp(row.data), ac: armorClass(row.data).total },
+  summary: { maxHp: maxHp(row.data), ac: armorClass(equippedSheet(row)).total },
   currentHp: currentHp(row),
   inventory: row.inventory ?? null,
   backstory: row.backstory ?? '',
@@ -127,7 +131,7 @@ characters.put('/:id/inventory', async (req, res) => {
   if (errors.length) return res.status(400).json({ errors: errors.slice(0, 5) });
   const { items, coins } = req.body;
   const clean = {
-    items: items.map(({ key, kind, id, name, qty, bulk, price, note }) => ({ key, kind, id: kind === 'custom' ? null : id, name: name.trim(), qty, bulk, price, note })),
+    items: items.map(({ key, kind, id, name, qty, bulk, price, note, equipped }) => ({ key, kind, id: kind === 'custom' ? null : id, name: name.trim(), qty, bulk, price, note, equipped: Boolean(equipped) })),
     coins: { pp: coins.pp, gp: coins.gp, sp: coins.sp, cp: coins.cp },
   };
   const { rowCount } = await pool.query('UPDATE characters SET inventory = $1 WHERE id = $2 AND owner_id = $3', [clean, req.params.id, req.user.id]);
