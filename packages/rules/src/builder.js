@@ -476,6 +476,7 @@ export function buildProblems(build, data) {
 
   if (!ancestry) add('ancestry', 'Choose an ancestry.');
   if (!heritage) add('ancestry', 'Choose a heritage.');
+  else if (heritage.ancestry && heritage.ancestry !== build.ancestry) add('ancestry', `${heritage.name} isn't a ${ancestry?.name ?? 'matching'} heritage.`);
   else if (heritage.skillChoice && !build.heritageSkill) add('ancestry', `Choose the skill from ${heritage.name}.`);
   if (!background) add('background', 'Choose a background.');
   else if (background.lore.length && !build.lore.trim()) add('background', 'Choose your Lore skill.');

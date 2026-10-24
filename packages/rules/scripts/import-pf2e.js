@@ -592,6 +592,13 @@ const linker = (list, label) => {
 };
 const linkFeats = linker(data.feats, 'feat');
 const linkSpells = linker(data.spells, 'spell');
+const ancestryIds = new Map(data.ancestries.map((a) => [a.slug, a.id]));
+for (const h of data.heritages) {
+  if (!h.ancestry) continue; // versatile heritages fit any ancestry
+  const id = ancestryIds.get(h.ancestry);
+  if (!id) needsReview.push(`${h.name}: belongs to ancestry "${h.ancestry}", which wasn't found`);
+  h.ancestry = id ?? null;
+}
 for (const b of data.backgrounds) b.feats = linkFeats(b.feats, b.name);
 for (const h of data.heritages) h.feats = linkFeats(h.feats, h.name);
 for (const f of data.feats) f.feats = linkFeats(f.feats, f.name);

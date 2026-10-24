@@ -2,6 +2,19 @@
 
 Hello! I am writing this log to keep track of the bugs I have caught, my reasoning to fix them, and what next steps I took for the project to improve.
 
+
+## Test Runs
+
+To the suggestion of Claude, we will have a Github action that will run before every push to the main branch that will generate roughly 42,000 test characters to make sure nothing is broken. For each of the 16 classes it builds about 4,400 characters, which takes about 3 seconds:
+
+- every ancestry with each heritage the builder offers,
+- every background,
+- every subclass option, and for classes with a deity, every deity that fits.
+
+Each character must come out with no builder errors and a complete sheet with real numbers. If something breaks, the test names the combinations, like "Elf / Ancient Elf / Acolyte: …".
+
+These tests did find a bug on the initial run, so already paying off!
+
 ## Demo Account
 
 L

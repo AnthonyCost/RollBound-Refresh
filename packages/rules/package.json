@@ -10,6 +10,6 @@
   },
   "scripts": {
     "test": "node --test test/*.test.js",
-    "data:import": "node scripts/import-pf2e.js"
+    "data:import": "node scripts/import-pf2e.js && echo \"Checking the new data with the build sweep...\" && node --test test/*.test.js"
   }
 }
