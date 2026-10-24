@@ -1,11 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import * as R from '../src/index.js';
+import { loadRulesData } from '../src/load.js';
 
 const { emptyBuild, loreOptions, maxHp, armorClass, savingThrow, skillCheck, strikeBonus, damageModifier, spellDc, classDc, migrateBuild } = R;
 
-const data = JSON.parse(readFileSync(new URL('../data/pf2e-level1.json', import.meta.url)));
+const data = loadRulesData();
 
 // Test builds name items by slug ("human", "fighter") so they stay readable. Each
 // call converts them to IDs with migrateBuild, which also exercises the migration.
@@ -377,9 +377,7 @@ describe('data updates', () => {
   });
 
   it('versions the data by its contents', () => {
-    const version = JSON.parse(readFileSync(new URL('../data/version.json', import.meta.url)));
     assert.match(data.meta.version, /^[0-9a-f]{12}$/);
-    assert.equal(version.version, data.meta.version);
   });
 
   it('leaves characters built from the current data alone', () => {

@@ -1,0 +1,700 @@
+[
+ {
+  "id": "0ZfBP7Tp2P3WN7Dp",
+  "slug": "amnesiac",
+  "name": "Amnesiac",
+  "boosts": [
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [],
+  "lore": [
+   "GM choice free skill boost"
+  ],
+  "feats": [],
+  "rarity": "rare",
+  "description": "<p>Your background is... well... honestly, you can't remember! You might have inklings deep within your mind, undercurrents of unusual emotions or unexpected responses to certain people or situations, but ultimately you don't know who you once were. You might be adventuring specifically to help discover yourself. It's up to you and the GM how to handle the truth of your character's backstory. You could leave it to the GM so it's a secret, work together with the GM, or even choose to leave it undecided until later. In any case, you and your GM should determine a few noteworthy details about your character or their belongings to get the first clues to your past.</p>\n<p>You gain three free attribute boosts. You choose two, and the GM chooses the third based on their first inklings of your character's possible history.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "3YQ1Wcjzk8ftoyo7",
+  "slug": "astrologer",
+  "name": "Astrologer",
+  "boosts": [
+   [
+    "int",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "occultism"
+  ],
+  "lore": [
+   "Astrology Lore"
+  ],
+  "feats": [
+   "hDGosy2ZTwnyctEP"
+  ],
+  "rarity": "common",
+  "description": "<p>Astrologers look to the stars for signs and portents, using their positions in the heavens to chart courses for those living beneath them. As the celestial spheres move, so does fate itself. You studied the stars and learned to divine your path based on their guidance. Whether the stars directly called you to a life of adventure or you use the stars to guide your wanderlust, you're living out the stars' guidance in a life of adventure.</p>\n<p>Choose two attribute boosts. One must be to <strong>Intelligence</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in Occultism and Astrology Lore. You gain the Oddity Identification skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "wudDO9OEsRjJsqhU",
+  "slug": "barber",
+  "name": "Barber",
+  "boosts": [
+   [
+    "dex",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "medicine"
+  ],
+  "lore": [
+   "Surgery Lore"
+  ],
+  "feats": [
+   "bkZgWFSFV4cAf5Ot"
+  ],
+  "rarity": "common",
+  "description": "<p>Haircuts, dentistry, bloodletting, and surgery—if it takes a steady hand and a razor, you can do it. You may have taken to the road to expand your skills or test yourself against a world that leaves your patients so battered and bruised.</p>\n<p>Choose two attribute boosts. One must be to <strong>Dexterity</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Medicine skill and the Surgery Lore skill. You gain the Risky Surgery skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "9pK15dQJVypSCjzO",
+  "slug": "blessed",
+  "name": "Blessed",
+  "boosts": [
+   [
+    "cha",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [],
+  "lore": [
+   "<Deity> or <GM Choice> Lore"
+  ],
+  "feats": [],
+  "rarity": "rare",
+  "description": "<p>You have been blessed by a divinity. For an unknown reason, and irrespective of your actual beliefs, a deity has granted you a boon to use for good or ill. Your blessing grants wisdom and insight to aid you in your struggles. You may or may not even know the identity of the being who blessed you, and the blessing might come with a cost you discover later on.</p>\n<p>Choose two attribute boosts. One must be to <strong>Wisdom</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You are trained in a Lore skill associated with the deity who blessed you (such as Shelyn Lore) if you know their identity, or else in a Lore skill of the GM's choice if you don't. Either you can cast Guidance as a divine innate spell at will, or you gain a similar blessing determined by the GM.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "o1lhSKOpKPamTITI",
+  "slug": "bookkeeper",
+  "name": "Bookkeeper",
+  "boosts": [
+   [
+    "int",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "society"
+  ],
+  "lore": [
+   "Accounting Lore"
+  ],
+  "feats": [
+   "0N8TtGSk5enoLBZ8"
+  ],
+  "rarity": "common",
+  "description": "<p>You ran the numbers on a large farm, for a merchant's endeavors, or with a major guild in the city. You kept track of expenses, payroll, profits, and anything else that had to do with money, for better or worse. If better, you might be adventuring to learn how others ply this trade. If worse, you may be fleeing from impending consequences in the hope that no one finds you.</p>\n<p>Choose two attribute boosts. One must be to <strong>Intelligence</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Society skill and the Accounting Lore skill. You gain the Eye for Numbers skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "DBxOUwM7qhGH8MrF",
+  "slug": "courier",
+  "name": "Courier",
+  "boosts": [
+   [
+    "dex",
+    "int"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "society"
+  ],
+  "lore": [
+   "<City> Lore"
+  ],
+  "feats": [
+   "WeQGWvlWdeLeOlCN"
+  ],
+  "rarity": "common",
+  "description": "<p>In your youth, you earned coin running messages for persons of wealth and influence, darting through crowded city streets. Your dogged commitment to deliver your message was good training for the life of an adventurer.</p>\n<p>Choose two attribute boosts. One must be to <strong>Dexterity</strong> or <strong>Intelligence</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Society skill and the Lore skill for the city in which you were raised. You gain the Glean Contents skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "j2G71vQahw1DiWpO",
+  "slug": "cursed",
+  "name": "Cursed",
+  "boosts": [
+   [
+    "cha",
+    "int"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "occultism"
+  ],
+  "lore": [
+   "Curse Lore"
+  ],
+  "feats": [],
+  "rarity": "rare",
+  "description": "<p>You are the victim of a personal or hereditary curse. Through great effort and occult study, you have learned to fend off the curse's worst effects and, by extension, you can protect yourself against other harmful magic. However, the curse still hangs over you and sometimes manifests in dangerous ways.</p>\n<p>Choose two attribute boosts. One must be to <strong>Intelligence</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You are trained in Occultism and Curse Lore. You gain the Warding Sign reaction. You and the GM should determine the full effects of the curse, though you've staved most of them off for now. The GM determines the curse's lingering manifestations on you, which usually include at least a constant or very frequent thematic effect and occasional more dangerous effects.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Q2brdDtEoI3cmpuD",
+  "slug": "feral-child",
+  "name": "Feral Child",
+  "boosts": [
+   [
+    "con",
+    "dex",
+    "str"
+   ]
+  ],
+  "skills": [
+   "nature",
+   "survival"
+  ],
+  "lore": [],
+  "feats": [
+   "8qebBeOJsyRIchcu"
+  ],
+  "rarity": "rare",
+  "description": "<p>You spent your youth in the wilderness, living close to or perhaps raised by animals. You have a close, mystical connection with these animals and gained certain abilities from them, though this limited your well-roundedness in mental pursuits.</p>\n<p>Choose one ability boost. It must be <strong>Strength</strong>, <strong>Dexterity</strong>, or <strong>Constitution</strong>.</p>\n<p>You are trained in Nature and Survival. You gain low-light vision (or darkvision if you already had low-light vision), imprecise scent with a range of 30 feet, and the Forager skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "ppBGlWl0UkBKkJgE",
+  "slug": "feybound",
+  "name": "Feybound",
+  "boosts": [
+   [
+    "cha",
+    "dex"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [],
+  "lore": [
+   "Fey Lore"
+  ],
+  "feats": [],
+  "rarity": "rare",
+  "description": "<p>You have spent time in the First World or another realm of the fey and aren't entirely the same person you were before. Perhaps you made a purchase at the legendary Witchmarket or partook deeply of fey food and wine. Whatever the case, willingly or inadvertently, you made a bargain with the fey, the benefits of which come at a price.</p>\n<p>Choose two attribute boosts. One must be to <strong>Dexterity</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You are trained in Fey Lore and gain the Fey's Fortune free action. You must follow some rule or limitation as part of your pact with the fey. If you violate the rule, you lose Fey's Fortune until you receive the effects of a successful Atone ritual using the Nature skill. The exact limitation is up to you and the GM, but the most common requirement is that you must fulfill a single request from any fey who knows your name.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "pGOlKz4Krnh7MyUM",
+  "slug": "haunted",
+  "name": "Haunted",
+  "boosts": [
+   [
+    "cha",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "occultism"
+  ],
+  "lore": [
+   "GM choice free skill boost"
+  ],
+  "feats": [],
+  "rarity": "rare",
+  "description": "<p>You are followed by a spirit or entity, either from childhood or since a momentous event. You and others may have seen this entity. You have studied esoteric subjects trying to understand your situation, but this presence in your life remains a mystery. Whatever this entity is or wants, it influences your life in subtle ways, and not always for the better. Sometimes the entity helps you, but at other times, its influence is malevolent or harmful. The entity is most likely to surface in stressful situations.</p>\n<p>Choose two attribute boosts. One must be to <strong>Wisdom</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You are trained in Occultism and an additional skill in which the haunting entity is well-versed, determined by the GM. Any time you attempt a skill check for the entity's skill, the GM can offer you a +1 circumstance bonus to the check, as though the entity were Aiding you. If you accept but fail the check, you are Frightened 2 (Frightened 4 on a critical failure). The initial Frightened value can't be reduced by effects that would reduce or prevent the condition (such as a fighter's bravery).</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "HdnmIaLadhRfZq8X",
+  "slug": "insurgent",
+  "name": "Insurgent",
+  "boosts": [
+   [
+    "str",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "deception"
+  ],
+  "lore": [
+   "Warfare Lore"
+  ],
+  "feats": [
+   "HEBXaS656MZTiWFu"
+  ],
+  "rarity": "common",
+  "description": "<p>You were more than a rebel; you were a revolutionary, fighting for the promise of a new or better country. You may or may not still believe in the cause, or perhaps victory or exile has led you on this new journey to trumpet your glory... or to escape the consequences of your defeat.</p>\n<p>Choose two attribute boosts. One must be to <strong>Strength</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Deception skill and the Warfare Lore skill. You gain the Lengthy Diversion skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "dAvFZ5QmbAHgXcNp",
+  "slug": "outrider",
+  "name": "Outrider",
+  "boosts": [
+   [
+    "con",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "nature"
+  ],
+  "lore": [
+   "Plains Lore"
+  ],
+  "feats": [
+   "gArdEleFCvUHtdGk"
+  ],
+  "rarity": "common",
+  "description": "<p>In your youth, you galloped on horseback over vast prairies, serving as a vanguard for your settlement, an army, or another group. Seeing so many different lands built a thirst in you to adventure and explore the world instead of just racing past it.</p>\n<p>Choose two attribute boosts. One must be to <strong>Constitution</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Nature skill and the Plains Lore skill. You gain the Express Rider skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "r9fzNQEz33HyKTxm",
+  "slug": "pilgrim",
+  "name": "Pilgrim",
+  "boosts": [
+   [
+    "cha",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "religion"
+  ],
+  "lore": [
+   "<Deity> Lore"
+  ],
+  "feats": [
+   "BqceQIKE0lwIS98s"
+  ],
+  "rarity": "common",
+  "description": "<p>In your youth, you made several pilgrimages to important shrines and sacred sites. You might have been a mendicant friar, a seller of religious relics (real or fraudulent), or just a simple farmer following the dictates of your faith. Whatever the aims of your wanderings now, your faith still protects you on the road.</p>\n<p>Choose two attribute boosts. One must be to <strong>Wisdom</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Religion skill and the Lore skill for your patron deity. You gain the Pilgrim's Token skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "i28Z9JXhEvoc7BX5",
+  "slug": "refugee-pc2",
+  "name": "Refugee (PC2)",
+  "boosts": [
+   [
+    "con",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "society"
+  ],
+  "lore": [
+   "<City> Lore"
+  ],
+  "feats": [
+   "X2jGFfLU5qI5XVot"
+  ],
+  "rarity": "common",
+  "description": "<p>You come from a land very distant from the one you now find yourself in, driven by war, plague, or simply in the pursuit of opportunity. Regardless of your origin or the reason you left your home, you find yourself an outsider in this new land. Adventuring is a way to support yourself while offering hope to those who need it most.</p>\n<p>Choose two attribute boosts. One must be to <strong>Constitution</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Society skill and a Lore skill related to the settlement you came from. You gain the Streetwise skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "rzyRtasSTfHS3e0y",
+  "slug": "returned",
+  "name": "Returned",
+  "boosts": [
+   [
+    "con",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [],
+  "lore": [
+   "**Boneyard Lore (with Additional Lore perks)"
+  ],
+  "feats": [
+   "I0BhPWqYf1bbzEYg",
+   "BocFD2KV0qgUC76x"
+  ],
+  "rarity": "rare",
+  "description": "<p>You died and miraculously returned with knowledge of the realms beyond death and a stronger link to life. Some dead and undead souls might feel a strange, instinctual kinship with you.</p>\n<p>Choose two attribute boosts. One must be to <strong>Constitution</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You gain the Diehard feat and the Additional Lore feat for Boneyard Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "ns9BOvCyjdapYhI0",
+  "slug": "root-worker",
+  "name": "Root Worker",
+  "boosts": [
+   [
+    "int",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "occultism"
+  ],
+  "lore": [
+   "Herbalism Lore"
+  ],
+  "feats": [
+   "22P7IFyhrF7Fbw8B"
+  ],
+  "rarity": "common",
+  "description": "<p>Some ailments can't be cured by herbs alone. You learned ritual remedies as well, calling on nature spirits to soothe aches and ward off the evil eye. Taking up with adventurers has given you company on the road, as well as protection from those who would brand you a fake—or worse.</p>\n<p>Choose two attribute boosts. One must be to <strong>Intelligence</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Occultism skill and the Herbalism Lore skill. You gain the Root Magic skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "uC6D2nmDTATxXrV6",
+  "slug": "royalty",
+  "name": "Royalty",
+  "boosts": [
+   [
+    "cha",
+    "int"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "society"
+  ],
+  "lore": [],
+  "feats": [
+   "JtjnFsOToBLnSRO9"
+  ],
+  "rarity": "rare",
+  "description": "<p>You are a prominent member of a royal family. You have eschewed the daily routines of royal life and taken up an adventurous quest—perhaps you're a deposed queen hoping to regain her throne, a prince seeking a more exciting life, or a sovereign's heir on a secret mission.</p>\n<p>Choose two attribute boosts. One must be to <strong>Intelligence</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You are trained in Society. You gain the Courtly Graces skill feat and can influence commoners in your family's territory, as well as nobility anywhere. If you later gain the Leverage Connections skill feat, you automatically have common and noble connections within any community in your royal family's territory and have noble connections in large communities outside your territory.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "4Vc8uXVHonrasFnU",
+  "slug": "saboteur",
+  "name": "Saboteur",
+  "boosts": [
+   [
+    "dex",
+    "str"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "thievery"
+  ],
+  "lore": [
+   "Engineering"
+  ],
+  "feats": [
+   "B9cQLRHtXoLlF0iR"
+  ],
+  "rarity": "common",
+  "description": "<p>Whether you do it for personal enjoyment or at the behest of a mercenary company or military organization, you have a knack for destroying things. You have a sense for an object or structure's weak spots and know where to deliver a hammer strike or alchemical bomb. You adventure to hone your skills or complete a particular mission.</p>\n<p>Choose two attribute boosts. One must be to <strong>Strength</strong> or <strong>Dexterity</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Thievery skill and the Engineering Lore skill. You gain the Concealing Legerdemain skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "vHeP960qjhfob4Je",
+  "slug": "scavenger",
+  "name": "Scavenger",
+  "boosts": [
+   [
+    "int",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "survival"
+  ],
+  "lore": [
+   "<City> Lore"
+  ],
+  "feats": [
+   "8qebBeOJsyRIchcu"
+  ],
+  "rarity": "common",
+  "description": "<p>You've made a living sorting through the things society throws away. You might have scavenged simply to survive, or plied a trade as a ragpicker, dung carter, or the like. While you've left that life behind, you still keep one eye on the ground out of habit.</p>\n<p>Choose two attribute boosts. One must be to <strong>Intelligence</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Survival skill and the Lore skill for the settlement you grew up scavenging in. You gain the Forager skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "UdOUj7i8XGTI72Zc",
+  "slug": "servant",
+  "name": "Servant",
+  "boosts": [
+   [
+    "cha",
+    "dex"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "society"
+  ],
+  "lore": [
+   "Labor Lore"
+  ],
+  "feats": [
+   "yUuU9xyotrpwpTyC"
+  ],
+  "rarity": "common",
+  "description": "<p>You held a role of servitude, waiting on nobles and engendering their trust as one of the confidantes of the household. You might have walked away on good terms, or perhaps you know dangerous secrets about your former employers. Regardless, you're adventuring for a change and finding that in this new role, the skills you've learned now serve you.</p>\n<p>Choose two attribute boosts. One must be to <strong>Dexterity</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Society skill and the Labor Lore skill. You gain the Read Lips skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "qbvzNG8hMjb8f66D",
+  "slug": "squire",
+  "name": "Squire",
+  "boosts": [
+   [
+    "con",
+    "str"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "athletics"
+  ],
+  "lore": [
+   "Heraldry Lore or Warfare Lore"
+  ],
+  "feats": [
+   "Lc4dJZivRwU3QEmT"
+  ],
+  "rarity": "common",
+  "description": "<p>You trained at the feet of a knight, maintaining their gear and supporting them at tourneys and in battle. Now you search for a challenge that will prove you worthy of full knighthood, or you've spurned pomp and ceremony to test yourself in honest, albeit less formal, combat.</p>\n<p>Choose two attribute boosts. One must be to <strong>Strength</strong> or <strong>Constitution</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Athletics skill and your choice of the Heraldry Lore or Warfare Lore skill. You gain the Armor Assist skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "ixluAGUDZciLEHtb",
+  "slug": "tax-collector",
+  "name": "Tax Collector",
+  "boosts": [
+   [
+    "cha",
+    "str"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "intimidation"
+  ],
+  "lore": [
+   "<City> Lore"
+  ],
+  "feats": [
+   "ar2DUlvDK4LDcH9J"
+  ],
+  "rarity": "common",
+  "description": "<p>Reviled but required, you were sent when taxes were due. Performing your job might have required travel and persuasion, or perhaps you were responsible for collecting taxes on trade. Either way, it sometimes meant dirty hands, and adventuring seemed the next logical step to you.</p>\n<p>Choose two attribute boosts. One must be to <strong>Strength</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Intimidation skill and the Lore skill for the settlement that employed you. You gain the Quick Coercion skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "IXxdCzBS0xP20ckw",
+  "slug": "ward",
+  "name": "Ward",
+  "boosts": [
+   [
+    "cha",
+    "con"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "skills": [
+   "performance"
+  ],
+  "lore": [
+   "Genealogy Lore"
+  ],
+  "feats": [
+   "7LB00jkh6JaJr3vS"
+  ],
+  "rarity": "common",
+  "description": "<p>When you were young, you became the ward of another house—boarded, fed, and educated, but never quite a part of the family. Perhaps you had to tend to their needs in return for feeding and raising you, or perhaps you were provided for but disregarded. Now, adventuring is your chance to grow and roam free.</p>\n<p>Choose two attribute boosts. One must be to <strong>Constitution</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Performance skill and the Genealogy Lore skill. You gain the Fascinating Performance skill feat.</p>",
+  "source": "Player Core 2"
+ }
+]

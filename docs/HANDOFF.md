@@ -44,7 +44,7 @@ sudo service postgresql start        # Postgres often stops after a WSL restart
 npm run db:setup                     # tables, seed data, invite codes, build upgrades (safe to re-run)
 npm run dev:server                   # API on :3001
 npm run dev:client                   # app on :5173 (second terminal)
-npm test                             # 112 rules tests, including the full build sweep
+npm test                             # 116 rules tests, including the full build sweep
 ```
 
 Other commands:
@@ -70,11 +70,12 @@ The settings go in `server/.env`; see `server/.env.example`. Key ones are `DATAB
 
 ```
 packages/rules/        Rules engine: pure functions, no dependencies. Shared by client and server.
-  src/                   proficiency, character stats, combat, conditions, GM math, builder.js
-  data/pf2e-level1.json  Imported rules data (committed)
+  src/                   proficiency, character stats, combat, conditions, GM math, builder.js,
+                         data.js (how the data is split and reassembled), load.js (Node loader)
+  data/                  Imported rules data (committed): <book>/<type>.json plus index.json
   corrections/           Per-book rule corrections (see below)
   scripts/import-pf2e.js The importer
-  test/                  rules.test.js, builder.test.js
+  test/                  rules.test.js, builder.test.js, sweep.test.js, data.test.js
 client/                React app (Vite)
   src/pages/             Login, Register, Hub, Account, Builder, Campaign pages, Sheet/Turn/Roll/GM
   src/builder/           Builder steps, Showcase (character select), OptionList, art.js
@@ -189,7 +190,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Ancestries:** eight borrow a class iconic for now (`BORROWED` in `art.js`), and the rest use the placeholder or a letter. Human uses Valeros, with a hand-tuned tile crop in `TILE_FOCUS`.
 - **Adding art:** files are found by name in `client/src/assets/art/`, as `<kind>-<slug>.webp` for portraits and `<kind>-<slug>-icon.webp` for icons. `npm run art:import` converts them and warns about icons whose corners aren't transparent. Full guide: `docs/adding-art.md`.
 
-### 11. Scalability work (steps 0–3 and 6 of the roadmap)
+### 11. Scalability work (steps 0–4 and 6 of the roadmap)
 - **Step 0, art discovered by file name:** see above.
 - **Step 1, corrections files:** all book-specific rules moved out of the engine into per-book JSON. The importer applies them and reports gaps.
 - **Step 2, stable IDs:**
@@ -206,12 +207,18 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
   Writing it caught a step 2 bug: heritages still named their ancestry by slug, so the Ancestry step showed only the versatile heritages. The importer now links them by ID, and `buildProblems` rejects a heritage from another ancestry.
 - **Step 3, rules-data versions:**
-  - Each import gets a `meta.version`, a fingerprint of the rules content, also written to the tiny `data/version.json`. The same data always gets the same version.
+  - Each import gets a `meta.version`, a fingerprint of the rules content, kept in the tiny `data/index.json`. The same data always gets the same version.
   - `buildCharacter` stamps every sheet with `dataVersion` and `choiceNames` (the name of each chosen item, so a removed one can still be named).
   - `reviewCharacter(character, data)` sorts an outdated character into `restamp` (nothing changed), `refresh` (numbers or text changed) or `repick` (choices gone or no longer valid).
   - On the sheet, `RulesUpdateNotice` checks only when the stamp differs: it restamps quietly, offers **Update sheet**, or lists the lost choices with **Re-pick in the builder**. The hub marks outdated characters "Rules updated".
   - The builder has an edit mode at `/characters/:id/edit`. It opens a saved character with the missing choices cleared, starts on the first step needing attention, and saves over the same character, keeping its portrait and campaign. Drafts left over from before an update also have stale picks cleared.
   - Checked in Chrome in demo mode. Account mode uses the existing `PUT /characters/:id` but wasn't run live (Postgres was down).
+- **Step 4, split data:**
+  - The importer writes one file per book and type (`data/player-core/feats.json`, 21 files today) plus `data/index.json` with the meta, version and file list. `src/data.js` splits and reassembles; reassembled data is identical to the old single file, and the version didn't change.
+  - Loaders take an optional filter, `{ types, books }`: `loadRulesData()` from `@rollbound/rules/load` in Node, and `loadRules()` in `client/src/state/rulesData.js` in the browser, where each file is its own chunk, downloaded once.
+  - The builder loads `EARLY_TYPES` first (about 100 KB compressed of the 181 KB total), so Ancestry, Background and Class show before feats, spells and gear arrive. Checked in Chrome with those files held back 3 seconds.
+  - **Postgres is deferred on purpose.** The data is 0.7 MB, and the plan was to move at about 5 MB. `test/data.test.js` fails past 5 MB with a message pointing here, so CI says when it's time.
+  - The `books` filter is ready for step 5.
 
 ---
 
@@ -243,7 +250,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Testing and verification
 
-- `npm test`: 112 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, and an empty import report.
+- `npm test`: 116 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, the data files and their size budget, and an empty import report.
 - **Build sweep** (`test/sweep.test.js`): every class with every ancestry, heritage, background, subclass option and deity must produce a valid character with a complete sheet. A failure names the combinations that broke.
 - **GitHub Actions** runs the tests and a client build on every push and pull request.
 - **UI checks:** done with headless Windows Chrome screenshots from WSL, using a small proxy that sets demo or sign-in state. Tap-specific behavior wasn't testable this way.
@@ -283,7 +290,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Scalability roadmap
 
-From the planning discussion. Steps 0–3 and 6 are done.
+From the planning discussion. Steps 0–4 and 6 are done.
 
 | Step | What | Status |
 | --- | --- | --- |
@@ -292,8 +299,8 @@ From the planning discussion. Steps 0–3 and 6 are done.
 | 2 | Stable IDs for saved choices, plus migration | Done |
 | 6 | The build sweep as a committed test that runs on every push (GitHub Actions) and after every import | Done |
 | 3 | Stamp characters with the data version they were built with; flag choices that disappear after a re-import; "please re-pick" on the sheet | Done |
-| 4 | Split the data file per book and type; load per step; move to Postgres at about 5 MB | **Next**, before the third book or leveling |
-| 5 | Each campaign chooses its allowed books; the builder filters by them | When GMs run games |
+| 4 | Split the data file per book and type; load per step; move to Postgres at about 5 MB | Done; Postgres waits for the 5 MB test to fail |
+| 5 | Each campaign chooses its allowed books; the builder filters by them | **Next**, when GMs run games |
 | 7 | Show licenses per item, a site footer, and refuse non-redistributable books by default | Before a public launch |
 
 The biggest future jump is **leveling from 2 to 20**. It multiplies the feats, spells and features handled, so steps 1 and 6 matter even more then.

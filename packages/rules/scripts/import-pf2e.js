@@ -1,11 +1,13 @@
-// Builds data/pf2e-level1.json from the Foundry VTT pf2e system's open data.
+// Builds the rules data in data/ from the Foundry VTT pf2e system's open data:
+// one file per book and type (e.g. data/player-core/feats.json) plus data/index.json.
 // Usage: npm run data:import --workspace @rollbound/rules
 // Set GITHUB_TOKEN to raise the GitHub API rate limit.
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { splitData } from '../src/data.js';
 
 // Add "Impossible Magic" here once the Foundry data includes it; the run logs
 // any skipped title containing "Impossible" so you can copy the exact string.
@@ -14,9 +16,8 @@ const BOOKS = ['Pathfinder Player Core', 'Pathfinder Player Core 2'];
 const REPO = 'foundryvtt/pf2e';
 const BRANCH = 'master';
 const here = dirname(fileURLToPath(import.meta.url));
-const OUT = join(here, '..', 'data', 'pf2e-level1.json');
-// Just the version, so screens can spot outdated characters without loading the data.
-const VERSION_OUT = join(here, '..', 'data', 'version.json');
+// Everything in here is generated, and replaced on every import.
+const OUT = join(here, '..', 'data');
 const CORRECTIONS = join(here, '..', 'corrections');
 const CACHE = join(here, '..', '..', '..', 'node_modules', '.cache', 'pf2e-import');
 
@@ -663,12 +664,18 @@ data.meta.needsReview = needsReview;
 const { meta, ...content } = data;
 meta.version = createHash('sha256').update(JSON.stringify(content)).digest('hex').slice(0, 12);
 
-await mkdir(dirname(OUT), { recursive: true });
-await writeFile(OUT, `${JSON.stringify(data, null, 1)}\n`);
-await writeFile(VERSION_OUT, `${JSON.stringify({ version: meta.version, books: meta.books }, null, 1)}\n`);
+// One file per book and type, so a campaign can load only its books and the
+// builder only what each step needs (see src/data.js).
+const { index, files } = splitData(data);
+await rm(OUT, { recursive: true, force: true });
+for (const [path, list] of Object.entries(files)) {
+  await mkdir(dirname(join(OUT, path)), { recursive: true });
+  await writeFile(join(OUT, path), `${JSON.stringify(list, null, 1)}\n`);
+}
+await writeFile(join(OUT, 'index.json'), `${JSON.stringify(index, null, 1)}\n`);
 
 const counts = Object.entries(data).filter(([, v]) => Array.isArray(v)).map(([k, v]) => `${k} ${v.length}`);
-console.log(`Wrote ${OUT}\n  ${counts.join(', ')}`);
+console.log(`Wrote ${Object.keys(files).length} files to ${OUT}\n  ${counts.join(', ')}`);
 if (needsReview.length) {
   console.log(`\nImport report: ${needsReview.length} thing(s) need a look (add corrections, see corrections/README.md):`);
   for (const line of needsReview) console.log(`  - ${line}`);

@@ -20,7 +20,7 @@ Built with the PERN stack: **Postgres, Express, React, Node**.
 
 ```
 packages/rules   Pure-function rules engine (no dependencies) + tests
-                 data/pf2e-level1.json: imported character-creation data
+                 data/: imported character-creation data, one file per book and type
 client           Vite + React app (gothic dark-fantasy theme)
 server           Express API + Postgres schema and seed data
 ```
@@ -50,7 +50,7 @@ Open http://localhost:5173 to reach the sign-in page. Create an account, or choo
 
 ## Rules data
 
-The builder reads `packages/rules/data/pf2e-level1.json`, generated from the open data in the [Foundry VTT pf2e system](https://github.com/foundryvtt/pf2e). The file is committed, so you only need to regenerate it to pick up upstream fixes or new books:
+The builder reads the rules data in `packages/rules/data/`, generated from the open data in the [Foundry VTT pf2e system](https://github.com/foundryvtt/pf2e). It's one file per book and type (such as `player-core/feats.json`), plus `index.json`, which lists them and holds the data version. In code, load it with `loadRulesData()` from `@rollbound/rules/load` (Node) or `loadRules()` in `client/src/state/rulesData.js` (browser). The files are committed, so you only need to regenerate them to pick up upstream fixes or new books:
 
 ```bash
 npm run data:import    # set GITHUB_TOKEN to avoid API rate limits

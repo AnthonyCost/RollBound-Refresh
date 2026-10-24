@@ -102,10 +102,10 @@ An icon file makes this unnecessary.
 | `fighter` | Fighter | `swashbuckler` | Swashbuckler |
 | `witch` | Witch | `wizard` | Wizard |
 
-If new books are imported later, their slugs are the `slug` fields in `packages/rules/data/pf2e-level1.json`. You can also list them with:
+If new books are imported later, their slugs are the `slug` fields in the `ancestries.json` and `classes.json` files under `packages/rules/data/`. You can also list them with:
 
 ```bash
-node -e 'const d=require("./packages/rules/data/pf2e-level1.json");console.log(d.ancestries.map(a=>a.slug).join(" "));console.log(d.classes.map(c=>c.slug).join(" "))'
+node --input-type=module -e 'import { loadRulesData } from "@rollbound/rules/load"; const d = loadRulesData({ types: ["ancestries", "classes"] }); console.log(d.ancestries.map((a) => a.slug).join(" ")); console.log(d.classes.map((c) => c.slug).join(" "))'
 ```
 
 ## Licensing

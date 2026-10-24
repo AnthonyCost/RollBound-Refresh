@@ -1,0 +1,641 @@
+[
+ {
+  "id": "d56paSkcwvll2OhR",
+  "slug": "abadar",
+  "name": "Abadar",
+  "font": [
+   "harm",
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy",
+    "unholy"
+   ]
+  },
+  "skills": [
+   "society"
+  ],
+  "weapons": [
+   "crossbow"
+  ],
+  "domains": [
+   "cities",
+   "earth",
+   "travel",
+   "wealth"
+  ],
+  "attribute": [
+   "con",
+   "int"
+  ],
+  "description": "<p>Abadar is worshipped among most as a god of commerce, civilization, and order. He values dispassionate, impartial neutrality, and courts disparate divine allies as a means of learning all perspectives and using all available resources, whether or not he agrees with them. While most of his followers interpret his holy mandates by uplifting their communities and upholding law and order, his doctrine is easily twisted to objectivism and prosperity theology by those who wish to enrich themselves. He is also the Master of the First Vault, a divine trove that holds the perfect version of every type of creature and object.</p>\n<p><strong>Title</strong> Master of the First Vault</p>\n<p><strong>Areas of Concern</strong> cities, law, merchants, wealth</p>\n<p><strong>Edicts</strong> bring civilization to the frontiers, earn wealth through hard work and trade, follow the rule of law</p>\n<p><strong>Anathema</strong> engage in banditry or piracy, steal, undermine a law-abiding court</p>\n<p><strong>Religious Symbol</strong> golden key</p>\n<p><strong>Sacred Animal</strong> monkey</p>\n<p><strong>Sacred Colors</strong> gold, silver</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "HtRxo4J3elFteIqu",
+  "slug": "arazni",
+  "name": "Arazni",
+  "font": [
+   "harm",
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy",
+    "unholy"
+   ]
+  },
+  "skills": [
+   "intimidation"
+  ],
+  "weapons": [
+   "rapier"
+  ],
+  "domains": [
+   "confidence",
+   "freedom",
+   "pain",
+   "protection"
+  ],
+  "attribute": [
+   "con",
+   "int"
+  ],
+  "description": "<p>Arazni's transformation from mortal to true god has tested the bounds of the possible. As a mortal, she fought unceasingly to better the lives of her Arcadian compatriots. She so impressed the god Aroden that, after her untimely death, he elevated her to be his herald, the Red Crusader, and she continued to fight for humanity. Yet in 3823 ar, the Knights of Ozem fatefully chose to bind her to their will as they rallied against the Whispering Tyrant. Despite her heroism in leading the charge, the Whispering Tyrant prevailed, and he took particular delight in capturing, humiliating, torturing, and finally killing her. Although the Knights of Ozem recovered her body, they—and Aroden—failed her again when the necromancer Geb had her body stolen and then reanimated against her will, turning her into a lich. In thrall to Geb for over a thousand years, she ruled his nation, all the while suffering torments that changed her profoundly. She endured all of them.</p>\n<p>Not long ago, Arazni decided to risk allying with mortals once again and, with their help, succeeded in tricking the Whispering Tyrant into destroying the magic that bound her to lichdom and to Geb. During her time on Geb's throne, she had been worshipped as a god, though few of the Gebbite masses who paid her obeisance were sincere. Arazni dismissed most of her true believers as sycophants, but for those trapped by unwilling bonds and other believers beyond Geb's borders, Arazni was a paragon of resilience and determination that reflected their own fierce struggles. Perhaps owing to their devotion, ending her lichdom didn't end her. She reemerged not just as a demigod, but as a full-fledged deity resplendent with power.</p>\n<p><strong>Title</strong> The Unyielding</p>\n<p><strong>Areas of Concern</strong> the abused, dignity, unwilling undeath</p>\n<p><strong>Edicts</strong> act with dignity, do whatever it takes to survive, despise and never forgive those who have hurt you</p>\n<p><strong>Anathema</strong> create unwilling undead, insult Arazni</p>\n<p><strong>Religious Symbol</strong> winged rapier</p>\n<p><strong>Sacred Animal</strong> red fox</p>\n<p><strong>Sacred Colors</strong> crimson, gray</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "QRkcFciCOmFoxF1B",
+  "slug": "asmodeus",
+  "name": "Asmodeus",
+  "font": [
+   "harm"
+  ],
+  "sanctification": {
+   "modal": "must",
+   "what": [
+    "unholy"
+   ]
+  },
+  "skills": [
+   "deception"
+  ],
+  "weapons": [
+   "mace"
+  ],
+  "domains": [
+   "confidence",
+   "fire",
+   "trickery",
+   "tyranny"
+  ],
+  "attribute": [],
+  "description": "<p>The many titles of Asmodeus—the Dark Prince, the First, the Lord of Darkness and Law to name a few—suit this ruler of Hell. The God-Fiend's concerns include contracts, tyranny, pride, and oppression. He maintains that a supreme order exists with him at the top, so he strives to bend mortal souls to eventually bring them all under his sway. When people believe they deserve power and wealth, and are willing to undertake any means to acquire them, one of Asmodeus's devils will be there to broker a deal that leads to that mortal's damnation.</p>\n<p><strong>Title</strong> The Prince of Darkness</p>\n<p><strong>Areas of Concern</strong> contracts, oppression, pride, tyranny</p>\n<p><strong>Edicts</strong> negotiate contracts to your best advantage, rule tyrannically and torture weaker beings, show subservience to your betters</p>\n<p><strong>Anathema</strong> break a contract, share power with the weak, insult Asmodeus by showing mercy to your enemies</p>\n<p><strong>Religious Symbol</strong> red pentagram</p>\n<p><strong>Sacred Animal</strong> serpent</p>\n<p><strong>Sacred Colors</strong> black, red</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "AlL9GtlTldbqNoVm",
+  "slug": "calistria",
+  "name": "Calistria",
+  "font": [
+   "harm",
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy",
+    "unholy"
+   ]
+  },
+  "skills": [
+   "deception"
+  ],
+  "weapons": [
+   "whip"
+  ],
+  "domains": [
+   "pain",
+   "passion",
+   "secrecy",
+   "trickery"
+  ],
+  "attribute": [
+   "cha",
+   "dex"
+  ],
+  "description": "<p>Calistria is as sharp as the three daggers of her holy symbol, ever ready with a quick quip or backhanded compliment. She is the god of lust, trickery, and revenge. She considers herself above the arbitrary moral and societal sensibilities of mortals, and she encourages her followers to act the same. Though Calistria isn't exclusively an elven deity, she is among the most widespread of elven gods and attracts followers from all over Golarion.</p>\n<p>Trickery is one of Calistria's concerns, but her schemes far surpass the designation of mere pranks or pettiness. At first, Calistria's vengeance resembles kindness and even generosity as she leads the transgressor into false happiness with pleasant events and good fortune. Only once it's too late does Calistria reveal herself as the architect of the culprit's doom and shatters their idyllic life.</p>\n<p><strong>Title</strong> The Savored Sting</p>\n<p><strong>Areas of Concern</strong> lust, revenge, trickery</p>\n<p><strong>Edicts</strong> pursue your personal freedom, seek hedonistic thrills, take revenge</p>\n<p><strong>Anathema</strong> become too consumed by love or a need for revenge, let a slight go unanswered</p>\n<p><strong>Religious Symbol</strong> three daggers</p>\n<p><strong>Sacred Animal</strong> wasp</p>\n<p><strong>Sacred Colors</strong> black, yellow</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "v67fHklTZ6LoU54q",
+  "slug": "cayden-cailean",
+  "name": "Cayden Cailean",
+  "font": [
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy"
+   ]
+  },
+  "skills": [
+   "athletics"
+  ],
+  "weapons": [
+   "rapier"
+  ],
+  "domains": [
+   "cities",
+   "freedom",
+   "indulgence",
+   "might"
+  ],
+  "attribute": [
+   "cha",
+   "con"
+  ],
+  "description": "<p>Cayden Cailean is the deity of freedom, bravery, and alcoholic drinks. Alongside Iomedae and Norgorber, he is one of the Ascended—three mortals who reached godhood after conquering the Test of the Starstone. In life, Cayden Cailean was a sellsword notorious for his indomitable spirit, adherence to his moral code, and unbridled revelry. It was precisely during a night of riotous celebration that he entered the Starstone Cathedral as part of a dare, first to the amusement and later to the concern of his fellow partygoers. Three days later, he emerged from the deadly maze, laughing, still intoxicated, and having achieved divinity. Deific power did little to change Cayden Cailean's personality and habits. He continued enjoying a good drink while surrounded by allies and friends, flirting with people, roaming the land in search of adventure, and defending underdogs.</p>\n<p><strong>Title</strong> The Accidental God</p>\n<p><strong>Areas of Concern</strong> ale, bravery, freedom, wine</p>\n<p><strong>Edicts</strong> drink, aid the oppressed, seek glory and adventure</p>\n<p><strong>Anathema</strong> waste alcohol, be mean or standoffish when drunk, oppress the vulnerable</p>\n<p><strong>Religious Symbol</strong> tankard</p>\n<p><strong>Sacred Animal</strong> hound</p>\n<p><strong>Sacred Colors</strong> silver, tan</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "JgqH3BhuEuA4Zyqs",
+  "slug": "desna",
+  "name": "Desna",
+  "font": [
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy"
+   ]
+  },
+  "skills": [
+   "acrobatics"
+  ],
+  "weapons": [
+   "starknife"
+  ],
+  "domains": [
+   "dreams",
+   "luck",
+   "moon",
+   "travel"
+  ],
+  "attribute": [
+   "cha",
+   "dex"
+  ],
+  "description": "<p>Desna is one of the oldest goddesses, a divinity who predates mortal life, yet one who has come to adore it for its beauty, capacity for diversity, and pursuit of growth. According to legend, Desna placed the stars in the night sky of the Universe, an act that Sarenrae found so inspiring that she chose her favorite stars to become the suns of countless worlds. When mortal life rose on those worlds, Desna's first gift to them was a beacon of hope, for she made the first star and her home, Cynosure, the brightest in the sky, giving those on the countless worlds something to gaze upon, to use in navigation, and to inspire their dreams.</p>\n<p><strong>Title</strong> Song of the Spheres</p>\n<p><strong>Areas of Concern</strong> dreams, luck, stars, travelers</p>\n<p><strong>Edicts</strong> aid fellow travelers, explore new places, express yourself through art and song, find what life has to offer</p>\n<p><strong>Anathema</strong> foster despair or terror in the innocent, cast nightmare or use similar magic to corrupt dreams, engage in bigoted behavior</p>\n<p><strong>Religious Symbol</strong> butterfly</p>\n<p><strong>Sacred Animal</strong> butterfly</p>\n<p><strong>Sacred Colors</strong> blue, white</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "mm1j6UbHqFCI8fwB",
+  "slug": "erastil",
+  "name": "Erastil",
+  "font": [
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy"
+   ]
+  },
+  "skills": [
+   "survival"
+  ],
+  "weapons": [
+   "longbow"
+  ],
+  "domains": [
+   "earth",
+   "family",
+   "nature",
+   "wealth"
+  ],
+  "attribute": [
+   "con",
+   "wis"
+  ],
+  "description": "<p>Erastil is an old deity. Originally an elk-headed god of the hunt, he changed long ago to his current purview of family, farming, and trade, yet still holds to a few of the ancient ways. Currently, Erastil's concerns lie with community and the work that sustains those communities. Farming serves the basic needs of a people and requires them to maintain the crops. Families are the most basic unit of a community, with one generation caring for another. Trade requires enough to serve other communities, thus creating bonds of familiarity and interdependence. Yet behind this idyllic image lies the hard, oaken core of primal woods and steaming skin. This gives Erastil a multifaceted history, and while worshippers near cities and newer settlements worship the \"softer\" image of Erastil (an old man of the worshipper's ancestry), people in the wilderness or from very old civilizations still have the elk-headed depictions in their homes.</p>\n<p><strong>Title</strong> Old Deadeye</p>\n<p><strong>Areas of Concern</strong> family, farming, hunting, trade</p>\n<p><strong>Edicts</strong> care for your home and family, fulfill your duties, keep the peace, protect the community</p>\n<p><strong>Anathema</strong> abandon your home in its time of need, choose yourself over your community, tarnish your reputation, tell lies</p>\n<p><strong>Religious Symbol</strong> bow and arrow</p>\n<p><strong>Sacred Animal</strong> stag</p>\n<p><strong>Sacred Colors</strong> brown, green</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "swwwP7eVmlNuWTb7",
+  "slug": "gozreh",
+  "name": "Gozreh",
+  "font": [
+   "heal"
+  ],
+  "sanctification": null,
+  "skills": [
+   "survival"
+  ],
+  "weapons": [
+   "trident"
+  ],
+  "domains": [
+   "air",
+   "nature",
+   "travel",
+   "water"
+  ],
+  "attribute": [
+   "con",
+   "wis"
+  ],
+  "description": "<p>When the wind first rippled the waves of the primordial ocean, Gozreh was born. This timeless, inscrutable entity is a being of dualities: wind and wave, male and female, generous and ravenous, benevolent and disastrous. Mortal kind has marveled at Gozreh from the beginning, as they've been lashed by storms, paying visceral witness to the Wind and the Waves in a manner more immediate than the abstract reality of most gods. Then and now, worshippers reverently slip offerings overboard or burn incense that wafts aloft, hoping to please Gozreh but content to avoid the god's displeasure. Even followers who successfully placate the tempestuous god know better than to trust their favor for long, as Gozreh's pleasure waxes and wanes like the tide, and their forbearance passes swiftly as a gust. Gozreh's pique is just as temporary. Storms pass, and the sea calms. With the god's attention on all the world's waters and winds, Gozreh's fury is unlikely to linger in one place for long.</p>\n<p><strong>Title</strong> The Wind and the Waves</p>\n<p><strong>Areas of Concern</strong> nature, the sea, weather</p>\n<p><strong>Edicts</strong> cherish, protect, respect nature in all its forms</p>\n<p><strong>Anathema</strong> bring civilization to intrude on the wild, create undead, despoil areas of natural beauty</p>\n<p><strong>Religious Symbol</strong> dripping leaf</p>\n<p><strong>Sacred Animal</strong> all</p>\n<p><strong>Sacred Colors</strong> blue, green</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "eErEiVmBqltYXFJ6",
+  "slug": "iomedae",
+  "name": "Iomedae",
+  "font": [
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "must",
+   "what": [
+    "holy"
+   ]
+  },
+  "skills": [
+   "intimidation"
+  ],
+  "weapons": [
+   "longsword"
+  ],
+  "domains": [
+   "confidence",
+   "might",
+   "truth",
+   "zeal"
+  ],
+  "attribute": [
+   "con",
+   "str"
+  ],
+  "description": "<p>Most recent of the once-mortal gods to ascend to prominence via the Starstone, Iomedae represents honor, justice, rulership, and valor. Called the Light of the Sword by some, the goddess attracts the worship of those who seek to drive back villainy, chaos, and wickedness. Iomedae focuses on supporting benevolent order for the virtuous and meting out merciful justice to the selfish, tyrannical, and destructive. While she and her followers would rather convince the errant to change their ways with words or generous deeds, they don't falter when they strike at the hearts of the unrepentant, the allies of fiends, and those who pay lip service to the \"greater good\" while committing despicable acts. Iomedae is the patron of choice for those who wish to take an active hand in the battle to protect the innocent and punish the guilty.</p>\n<p><strong>Title</strong> The Inheritor</p>\n<p><strong>Areas of Concern</strong> honor, justice, rulership, valor</p>\n<p><strong>Edicts</strong> be temperate, fight for justice and honor, hold valor in your heart</p>\n<p><strong>Anathema</strong> abandon a companion in need, dishonor yourself, refuse a challenge from an equal</p>\n<p><strong>Religious Symbol</strong> sword and sun</p>\n<p><strong>Sacred Animal</strong> lion</p>\n<p><strong>Sacred Colors</strong> red, white</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "qqqrbq4uCrelQvgH",
+  "slug": "irori",
+  "name": "Irori",
+  "font": [
+   "harm",
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy",
+    "unholy"
+   ]
+  },
+  "skills": [
+   "athletics"
+  ],
+  "weapons": [
+   "fist"
+  ],
+  "domains": [
+   "knowledge",
+   "might",
+   "perfection",
+   "truth"
+  ],
+  "attribute": [
+   "int",
+   "wis"
+  ],
+  "description": "<p>As a mortal, Irori attained true enlightenment, allowing him to break free of the shackles of mortality and achieve divinity. As a god, he is the Master of Masters and promotes discipline and teaches that one who can master themself finds the greatest benefits the world can provide.</p>\n<p><strong>Title</strong> Master of Masters</p>\n<p><strong>Areas of Concern</strong> history, knowledge, self-perfection</p>\n<p><strong>Edicts</strong> be humble; help others perfect themselves; hone your body, mind, and spirit to a more perfect state; practice discipline</p>\n<p><strong>Anathema</strong> destroy an important historical text, engage in overly unhealthy or self-destructive behaviors, repeatedly fail to maintain self-control</p>\n<p><strong>Divine Symbol</strong> blue hand</p>\n<p><strong>Sacred Animal</strong> snail</p>\n<p><strong>Sacred Colors</strong> blue, white</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "aipkJQxP4GBsTaGq",
+  "slug": "lamashtu",
+  "name": "Lamashtu",
+  "font": [
+   "harm",
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "unholy"
+   ]
+  },
+  "skills": [
+   "survival"
+  ],
+  "weapons": [
+   "falchion"
+  ],
+  "domains": [
+   "family",
+   "might",
+   "nightmares",
+   "trickery"
+  ],
+  "attribute": [
+   "con",
+   "str"
+  ],
+  "description": "<p>Lamashtu is the goddess of nightmares and aberrance. She was the first demon lord to achieve true godhood. After murdering Curchanus, a now mostly forgotten god of beasts, travel, and endurance, she wrested his dominion over beasts from his dying body to gain divinity. Now, she's revered as the Mother of Monsters and the Queen of Demons. Legends say that nearly all Golarion's foul creatures sprang from her polluted womb. Loathsome monsters account for most of her worshippers, though she also resonates with individuals who consider themselves outcasts from the world or seek to transform all mortalkind into ravenous beasts.</p>\n<p><strong>Title</strong> Mother of Monsters</p>\n<p><strong>Areas of Concern</strong> aberrance, monsters, nightmares</p>\n<p><strong>Edicts</strong> bring power to outcasts and the downtrodden, indoctrinate others in Lamashtu's teachings, make the beautiful monstrous, reveal the corruption and flaws in all things</p>\n<p><strong>Anathema</strong> attempt to change that which makes you different, provide succor to Lamashtu's enemies</p>\n<p><strong>Religious Symbol</strong> three-eyed jackal</p>\n<p><strong>Sacred Animal</strong> jackal</p>\n<p><strong>Sacred Colors</strong> red, yellow</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "9EKyWmjLUu42evxC",
+  "slug": "nethys",
+  "name": "Nethys",
+  "font": [
+   "harm",
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy",
+    "unholy"
+   ]
+  },
+  "skills": [
+   "arcana"
+  ],
+  "weapons": [
+   "staff"
+  ],
+  "domains": [
+   "destruction",
+   "knowledge",
+   "magic",
+   "protection"
+  ],
+  "attribute": [
+   "int",
+   "wis"
+  ],
+  "description": "<p>Ancient Osirion legends speak of the god-king Nethys, an ancient mortal who studied under the greatest Osirian priest scribes, who in turn were eager to nurse his love of knowledge and magic. He was a mortal man who later mastered the divine, then the occult, then searched all planes of existence to one day learn all knowledge of magic that there could ever be. No one knows how long this journey took, only that he succeeded, and at once realized that his mortal body could not possibly contain all the knowledge and power at his disposal. He ascended to godhood immediately upon this realization, since he had the knowledge of how to do so already. This allowed him to retain his magic and perfect knowledge without having to lose any of it to mental degradation. For Nethys, godhood was a necessity, a way to maintain what he had learned, never to lose a memory ever again.</p>\n<p><strong>Title</strong> The All-Seeing Eye</p>\n<p><strong>Areas of Concern</strong> magic</p>\n<p><strong>Edicts</strong> seek out magical power and use it</p>\n<p><strong>Anathema</strong> continually pursue mundane paths over magical ones</p>\n<p><strong>Religious Symbol</strong> two-toned mask</p>\n<p><strong>Sacred Animal</strong> zebra</p>\n<p><strong>Sacred Colors</strong> black, white</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "GX6PF9ifR47Xyjg9",
+  "slug": "norgorber",
+  "name": "Norgorber",
+  "font": [
+   "harm"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "unholy"
+   ]
+  },
+  "skills": [
+   "stealth"
+  ],
+  "weapons": [
+   "shortsword"
+  ],
+  "domains": [
+   "death",
+   "secrecy",
+   "trickery",
+   "wealth"
+  ],
+  "attribute": [
+   "dex",
+   "int"
+  ],
+  "description": "<p>As befits a god of secrets, Norgorber's life before his ascension is a mystery, but his goals since assuming godhood are clear—to embolden those who use hidden or forbidden knowledge for domination, control, and personal gain. Norgorber does this work in many guises, each designed to build the faith of his followers as they work in the shadows—and help him to accomplish his own unknown and unknowable goals.</p>\n<p><strong>Title</strong> Blackfingers, Father Skinsaw, the Gray Master, the Reaper of Reputation</p>\n<p><strong>Areas of Concern</strong> greed, murder, poison, secrets</p>\n<p><strong>Edicts</strong> keep your true identity secret, sacrifice anyone necessary, take every advantage in a fight, work from the shadows</p>\n<p><strong>Anathema</strong> allow your true identity to be connected to your foul dealings, share a secret freely, show mercy</p>\n<p><strong>Religious Symbol</strong> one-eyed mask</p>\n<p><strong>Sacred Animal</strong> spider</p>\n<p><strong>Sacred Colors</strong> black, gray</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "QZD0u1jxwz0kj8uI",
+  "slug": "pharasma",
+  "name": "Pharasma",
+  "font": [
+   "heal"
+  ],
+  "sanctification": null,
+  "skills": [
+   "medicine"
+  ],
+  "weapons": [
+   "dagger"
+  ],
+  "domains": [
+   "death",
+   "fate",
+   "healing",
+   "knowledge"
+  ],
+  "attribute": [
+   "con",
+   "wis"
+  ],
+  "description": "<p>Before there was time, or even a sun or moon by which to measure it, there was a beginning. That beginning had an end, which led to another fresh start. This spiral of time winds out forever, glimmering in the space between spaces. At the center of that spiral sits the Spire, and atop that Spire sits Pharasma, the Lady of Graves, goddess of death, birth, fate, and prophecy. The Lady of Graves is often depicted in a triptych of her three forms—an older midwife with silver hair pulled back into a harsh braid to keep it out of her face, a young prophet with wild hair that frames her face, and a tall, regal woman in black robes atop a throne of skulls, holding an hourglass full of blood red sand. Across all forms, Pharasma's silver hair, ashen skin, and white eyes are a constant.</p>\n<p><strong>Title</strong> The Lady of Graves</p>\n<p><strong>Areas of Concern</strong> birth, death, fate, prophecy, time</p>\n<p><strong>Edicts</strong> strive to understand ancient prophecies, destroy undead, lay bodies to rest</p>\n<p><strong>Anathema</strong> create undead, desecrate a corpse, take from the dead in bad faith</p>\n<p><strong>Religious Symbol</strong> spiraling comet</p>\n<p><strong>Sacred Animal</strong> whippoorwill</p>\n<p><strong>Sacred Colors</strong> blue, white</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "Bhxji0kxIbMKqdkw",
+  "slug": "rovagug",
+  "name": "Rovagug",
+  "font": [
+   "harm"
+  ],
+  "sanctification": {
+   "modal": "must",
+   "what": [
+    "unholy"
+   ]
+  },
+  "skills": [
+   "athletics"
+  ],
+  "weapons": [
+   "greataxe"
+  ],
+  "domains": [
+   "air",
+   "destruction",
+   "earth",
+   "zeal"
+  ],
+  "attribute": [
+   "con",
+   "str"
+  ],
+  "description": "<p>Known by titles such as the Rough Beast, the Imprisoned King, the Tide of Fangs, the Unmaker, and the Worldbreaker, Rovagug is the god of destruction, disaster, and wrath. The Rough Beast is not a benevolent or kind deity. Among the other gods, Rovagug has no allies and almost every mortal fears and despises him; not that he would care. Rovagug's only desire is to consume all that lives and crush the rest. It's what he was born to do, is all he cares about, and nothing can sway him from his goal. Left unchecked, he might have destroyed all of creation millennia ago. Most mortals would therefore consider it lucky that the qlippoth lord has been imprisoned since the Age of Creation.</p>\n<p><strong>Title</strong> The Rough Beast</p>\n<p><strong>Areas of Concern</strong> destruction, disaster, wrath</p>\n<p><strong>Edicts</strong> destroy all things, free Rovagug from his prison</p>\n<p><strong>Anathema</strong> create something new, let material ties restrain you, torture a victim or otherwise delay its destruction</p>\n<p><strong>Religious Symbol</strong> fanged spider</p>\n<p><strong>Sacred Animal</strong> scorpion</p>\n<p><strong>Sacred Colors</strong> brown, red</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "BNycwu3I21dTh4D9",
+  "slug": "sarenrae",
+  "name": "Sarenrae",
+  "font": [
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy"
+   ]
+  },
+  "skills": [
+   "medicine"
+  ],
+  "weapons": [
+   "scimitar"
+  ],
+  "domains": [
+   "fire",
+   "healing",
+   "sun",
+   "truth"
+  ],
+  "attribute": [
+   "con",
+   "wis"
+  ],
+  "description": "<p>Like the light of dawn, Sarenrae spreads warmth across the world and into the hearts of its inhabitants. Burning passion, exuberant joviality, and fierce determination all rise at the goddess's influence. Sarenrae is one of the most popular deities on Golarion, with vast amounts of worshippers found from Tian Xia to Taldor. Beyond her warmth, her focus on redemption draws many to her faith. There is always room under her roof for those who have seen the error of their ways and wish to make amends, especially if they'll also pass their story onto others to prevent them from making the same mistakes.</p>\n<p><strong>Title</strong> The Dawnflower</p>\n<p><strong>Areas of Concern</strong> healing, honest redemption, the sun</p>\n<p><strong>Edicts</strong> destroy the Spawn of Rovagug, protect allies, provide aid to the sick and wounded, seek and allow redemption</p>\n<p><strong>Anathema</strong> create undead, lie, deny a repentant creature an opportunity for redemption, fail to strike down evil</p>\n<p><strong>Religious Symbol</strong> angelic ankh</p>\n<p><strong>Sacred Animal</strong> dove</p>\n<p><strong>Sacred Colors</strong> blue, gold</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "gxwmzxUWBOhdgFSN",
+  "slug": "shelyn",
+  "name": "Shelyn",
+  "font": [
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy"
+   ]
+  },
+  "skills": [
+   "crafting",
+   "performance"
+  ],
+  "weapons": [
+   "glaive"
+  ],
+  "domains": [
+   "creation",
+   "family",
+   "passion",
+   "protection"
+  ],
+  "attribute": [
+   "cha",
+   "wis"
+  ],
+  "description": "<p>To know Shelyn is to love her, for Shelyn embodies love, as well as beauty, art, and music. She seeks to spread these pursuits across Golarion, teaching that they are the best way to find peace and happiness. Her passion is such that even the most basic attempts at art delight her—the greatest marble sculptures of Taldor or kholo chants from the Mwangi Expanse are as beloved to her as the meanest sketches of a young orphan in Isger or the crude sand art of a Thuvian child. Beauty, for Shelyn, is a quality of being, not a specific set of characteristics, and she encourages people to find and accept many definitions of it.</p>\n<p><strong>Title</strong> The Eternal Rose</p>\n<p><strong>Areas of Concern</strong> art, beauty, love, music</p>\n<p><strong>Edicts</strong> be peaceful, choose and perfect an art, lead by example, see the beauty in all things</p>\n<p><strong>Anathema</strong> destroy art or allow it to be destroyed, unless saving a life or pursuing greater art; refuse to accept surrender</p>\n<p><strong>Religious Symbol</strong> multicolored songbird</p>\n<p><strong>Sacred Animal</strong> songbird</p>\n<p><strong>Sacred Colors</strong> all</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "sZrdzh0ANQnZGXJb",
+  "slug": "torag",
+  "name": "Torag",
+  "font": [
+   "heal"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "holy"
+   ]
+  },
+  "skills": [
+   "crafting"
+  ],
+  "weapons": [
+   "warhammer"
+  ],
+  "domains": [
+   "creation",
+   "earth",
+   "family",
+   "protection"
+  ],
+  "attribute": [
+   "con",
+   "wis"
+  ],
+  "description": "<p>\"Subtle as a hammer\" is a phrase commonly uttered about both worshippers of Torag and the god himself. Torag, while not the only dwarven deity, is arguably the most well-known among the other peoples of Golarion. His is the most general of worship within the dwarven pantheon, less focused on specific aspects of worship and more the bedrock upon which the others depend. He is often depicted as an older dwarf man, obviously rugged and mighty in his scarred, runic armor. His hammer, Kaglemros, is etched with his imposing visage, eyes blazing with the inner fire hotter than any forge. He counts crafters among his most ardent followers, be they workers of metal, stone, or cloth. Not to be outshone, soldiers and mercenaries often pray to Torag in his aspect as protector, praying that no harm will come to them or their companions as they take the fight to those who wish harm upon what they defend. In his secondary aspect as a defensive strategist, he grants battle wisdom to his followers, allowing them to see strategies and exploit opponents' vulnerabilities on the field of combat.</p>\n<p><strong>Title</strong> Father of Creation</p>\n<p><strong>Areas of Concern</strong> forge, protection, strategy</p>\n<p><strong>Edicts</strong> be honorable and forthright, keep your word, respect the forge, serve your people</p>\n<p><strong>Anathema</strong> tell lies or cheat someone, intentionally create inferior works, show continued mercy to the enemies of your people when such enemies prove they are undeserving</p>\n<p><strong>Religious Symbol</strong> iron hammer</p>\n<p><strong>Sacred Animal</strong> badger</p>\n<p><strong>Sacred Colors</strong> gold, gray</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "22n3N47sqbqbDxbp",
+  "slug": "urgathoa",
+  "name": "Urgathoa",
+  "font": [
+   "harm"
+  ],
+  "sanctification": {
+   "modal": "must",
+   "what": [
+    "unholy"
+   ]
+  },
+  "skills": [
+   "intimidation"
+  ],
+  "weapons": [
+   "scythe"
+  ],
+  "domains": [
+   "indulgence",
+   "magic",
+   "might",
+   "undeath"
+  ],
+  "attribute": [
+   "con",
+   "wis"
+  ],
+  "description": "<p>May you dine forever. All things decay and are ultimately consumed, but for followers of Urgathoa there's divinity in the consumption and deterioration. Once a mortal, Urgathoa embraced life and all its pleasures. She never denied herself, and questioned the tenets of deities preaching that a person should restrain themselves while on the mortal plane, holding fast to a promise of eternal pleasures after death. Instead, she believed that Golarion housed a vast buffet of delights made for the living to feast upon. Urgathoa so loved satiating her life's appetites that in death, she spat in the face of Pharasma's judgment, murdered the psychopomp assigned to aid her transition to the afterlife, and tore herself from the Boneyard with a feat of will that not only returned her to the mortal Universe but also transformed her into the first undead creature and a god.</p>\n<p><strong>Title</strong> The Pallid Princess</p>\n<p><strong>Areas of Concern</strong> disease, gluttony, undeath</p>\n<p><strong>Edicts</strong> become undead upon death, create or protect the undead, sate your appetites</p>\n<p><strong>Anathema</strong> deny your appetites, destroy undead of no harm to you, sacrifice your life</p>\n<p><strong>Religious Symbol</strong> skull-decorated fly</p>\n<p><strong>Sacred Animal</strong> fly</p>\n<p><strong>Sacred Colors</strong> red, green</p>",
+  "source": "Lost Omens Divine Mysteries"
+ },
+ {
+  "id": "ZfN7jkK6boU1FuiS",
+  "slug": "zon-kuthon",
+  "name": "Zon-Kuthon",
+  "font": [
+   "harm"
+  ],
+  "sanctification": {
+   "modal": "can",
+   "what": [
+    "unholy"
+   ]
+  },
+  "skills": [
+   "intimidation"
+  ],
+  "weapons": [
+   "spiked-chain"
+  ],
+  "domains": [
+   "ambition",
+   "darkness",
+   "destruction",
+   "pain"
+  ],
+  "attribute": [
+   "con",
+   "wis"
+  ],
+  "description": "<p>A being of pure malevolence that embodies and exalts pain, shadow, and mutilation, Zon-Kuthon is one of the most terrifying entities to inspire worship on Golarion. The Midnight Lord teaches that darkness and envy, loss and pain are sacraments. Through inflicting and enduring torment, the worshipper seizes true strength. Experiencing pain in all of its forms allows the devout to cut away the weakness of the body, mind, and spirit. Instead of fearing or avoiding pain, the Kuthite embraces it, yields to it, wields it. Beyond pain comes release, power, and mastery.</p>\n<p><strong>Title</strong> The Midnight Lord</p>\n<p><strong>Areas of Concern</strong> darkness, envy, loss, pain</p>\n<p><strong>Edicts</strong> bring pain to the world, mutilate your body</p>\n<p><strong>Anathema</strong> create permanent or long-lasting sources of light, provide comfort to those who suffer</p>\n<p><strong>Religious Symbol</strong> chained skull</p>\n<p><strong>Sacred Animal</strong> bat</p>\n<p><strong>Sacred Colors</strong> dark gray, red</p>",
+  "source": "Lost Omens Divine Mysteries"
+ }
+]

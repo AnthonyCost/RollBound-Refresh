@@ -1,0 +1,142 @@
+{
+ "meta": {
+  "source": "https://github.com/foundryvtt/pf2e",
+  "commit": "4cbdaa37d6c33e9519561bae2c59a23e0288cbce",
+  "books": [
+   "Player Core",
+   "Player Core 2"
+  ],
+  "license": "Game mechanics © Paizo Inc., used under the ORC License. Data via the Foundry VTT pf2e system.",
+  "generatedAt": "2026-10-24T00:48:33.705Z",
+  "needsReview": [],
+  "version": "8ff29c871fa7"
+ },
+ "files": [
+  {
+   "path": "common/skills.json",
+   "type": "skills",
+   "book": null,
+   "count": 16
+  },
+  {
+   "path": "common/languages.json",
+   "type": "languages",
+   "book": null,
+   "count": 25
+  },
+  {
+   "path": "player-core/ancestries.json",
+   "type": "ancestries",
+   "book": "Player Core",
+   "count": 8
+  },
+  {
+   "path": "player-core-2/ancestries.json",
+   "type": "ancestries",
+   "book": "Player Core 2",
+   "count": 8
+  },
+  {
+   "path": "player-core/heritages.json",
+   "type": "heritages",
+   "book": "Player Core",
+   "count": 49
+  },
+  {
+   "path": "player-core-2/heritages.json",
+   "type": "heritages",
+   "book": "Player Core 2",
+   "count": 57
+  },
+  {
+   "path": "player-core/backgrounds.json",
+   "type": "backgrounds",
+   "book": "Player Core",
+   "count": 40
+  },
+  {
+   "path": "player-core-2/backgrounds.json",
+   "type": "backgrounds",
+   "book": "Player Core 2",
+   "count": 23
+  },
+  {
+   "path": "player-core/classes.json",
+   "type": "classes",
+   "book": "Player Core",
+   "count": 8
+  },
+  {
+   "path": "player-core-2/classes.json",
+   "type": "classes",
+   "book": "Player Core 2",
+   "count": 8
+  },
+  {
+   "path": "advanced-players-guide/feats.json",
+   "type": "feats",
+   "book": "Advanced Player's Guide",
+   "count": 1
+  },
+  {
+   "path": "player-core/feats.json",
+   "type": "feats",
+   "book": "Player Core",
+   "count": 202
+  },
+  {
+   "path": "player-core-2/feats.json",
+   "type": "feats",
+   "book": "Player Core 2",
+   "count": 150
+  },
+  {
+   "path": "secrets-of-magic/feats.json",
+   "type": "feats",
+   "book": "Secrets of Magic",
+   "count": 3
+  },
+  {
+   "path": "lost-omens-divine-mysteries/deities.json",
+   "type": "deities",
+   "book": "Lost Omens Divine Mysteries",
+   "count": 20
+  },
+  {
+   "path": "player-core/spells.json",
+   "type": "spells",
+   "book": "Player Core",
+   "count": 83
+  },
+  {
+   "path": "player-core-2/spells.json",
+   "type": "spells",
+   "book": "Player Core 2",
+   "count": 21
+  },
+  {
+   "path": "player-core/weapons.json",
+   "type": "weapons",
+   "book": "Player Core",
+   "count": 81
+  },
+  {
+   "path": "player-core-2/weapons.json",
+   "type": "weapons",
+   "book": "Player Core 2",
+   "count": 22
+  },
+  {
+   "path": "player-core/armor.json",
+   "type": "armor",
+   "book": "Player Core",
+   "count": 11
+  },
+  {
+   "path": "player-core/shields.json",
+   "type": "shields",
+   "book": "Player Core",
+   "count": 4
+  }
+ ]
+}

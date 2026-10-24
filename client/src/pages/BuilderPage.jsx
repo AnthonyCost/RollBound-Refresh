@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { STEPS, emptyBuild, buildProblems, buildCharacter, migrateBuild, dropMissingChoices, reviewCharacter } from '@rollbound/rules';
+import { STEPS, BUILD_VERSION, EARLY_TYPES, emptyBuild, buildProblems, buildCharacter, migrateBuild, dropMissingChoices, reviewCharacter } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
@@ -76,6 +76,9 @@ const STEP_TOUCHED = {
 
 const BLANK = { build: emptyBuild(), step: STEPS[0] };
 
+// Steps that only need EARLY_TYPES, so they can show before feats, spells and gear arrive.
+const EARLY_STEPS = ['ancestry', 'background', 'class'];
+
 /** The saved draft under this key, or null if there isn't one. */
 function loadDraft(key) {
   try {
@@ -114,6 +117,7 @@ export default function BuilderPage() {
   const { characterId: editId } = useParams();
   const draftKey = editId ? `${DRAFT_KEY}:${editId}` : DRAFT_KEY;
   const [data, setData] = useState(null);
+  const [early, setEarly] = useState(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [hadDraft] = useState(() => Boolean(loadDraft(draftKey)));
   const [{ build, step }, setDraft] = useState(() => loadDraft(draftKey) ?? BLANK);
@@ -123,7 +127,12 @@ export default function BuilderPage() {
   const [errors, setErrors] = useState([]);
   const [portrait, setPortrait] = useState({});
 
+  // The first steps' data loads first; everything else follows behind it. Files
+  // are shared, so the full load reuses what the early one fetched.
   useEffect(() => {
+    loadRules({ types: EARLY_TYPES })
+      .then(setEarly)
+      .catch(() => {}); // The full load below reports failures.
     loadRules()
       .then(setData)
       .catch(() => setLoadFailed(true));
@@ -156,6 +165,10 @@ export default function BuilderPage() {
   }, [editId, data, hadDraft]);
 
   const ready = Boolean(data) && (!editId || Boolean(editing));
+  // A new character can start on the early data. Edits and older drafts wait for
+  // everything, since they're checked against the full rules first.
+  const earlyOk = !editId && build.v >= BUILD_VERSION && EARLY_STEPS.includes(step);
+  const stepData = ready ? data : earlyOk ? early : null;
   useEffect(() => {
     if (ready) saveDraft(draftKey, { build, step });
   }, [ready, draftKey, build, step]);
@@ -255,7 +268,7 @@ export default function BuilderPage() {
             {editId ? "Couldn't open this character for editing. Try refreshing." : "Couldn't load the rules data. Try refreshing."}
           </p>
         )}
-        {!ready && !loadFailed && <p className="muted italic center">Opening the rulebooks…</p>}
+        {!stepData && !loadFailed && <p className="muted italic center">Opening the rulebooks…</p>}
         {editing?.repick.length > 0 && (
           <section className="notice" aria-labelledby="repick-title">
             <h2 id="repick-title" className="notice__title">Re-pick for {editing.name}</h2>
@@ -277,7 +290,7 @@ export default function BuilderPage() {
           </section>
         )}
 
-        {ready && <info.Component build={build} update={update} data={data} goTo={goTo} />}
+        {stepData && <info.Component build={build} update={update} data={stepData} goTo={goTo} />}
 
         {step === 'review' && (
           <>

@@ -1,0 +1,392 @@
+[
+ {
+  "id": "BYj5ZvlXZdpaEgA6",
+  "slug": "dwarf",
+  "name": "Dwarf",
+  "hp": 10,
+  "size": "med",
+  "speed": 20,
+  "vision": "darkvision",
+  "boosts": [
+   [
+    "con"
+   ],
+   [
+    "wis"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "cha"
+  ],
+  "languages": [
+   "common",
+   "dwarven"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "gnomish",
+    "goblin",
+    "jotun",
+    "orcish",
+    "petran",
+    "sakvroth"
+   ]
+  },
+  "traits": [
+   "dwarf",
+   "humanoid"
+  ],
+  "rarity": "common",
+  "description": "<p><em>Dwarves have a well-earned reputation as a stoic and stern people, ensconced within citadels and cities carved from solid rock. While some see them as dour and humorless crafters of stone and metal, dwarves and those who have spent time among them understand their unbridled zeal for their work, caring far more about quality than quantity. To a stranger, they can seem untrusting and clannish, but to their friends and family, they are warm and caring, their halls filled with the sounds of laughter and hammers hitting anvils.</em></p>\n<p><em>Dwarf</em></p>",
+  "source": "Player Core"
+ },
+ {
+  "id": "PgKmsA2aKdbLU6O0",
+  "slug": "elf",
+  "name": "Elf",
+  "hp": 6,
+  "size": "med",
+  "speed": 30,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "dex"
+   ],
+   [
+    "int"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "con"
+  ],
+  "languages": [
+   "common",
+   "elven"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "draconic",
+    "empyrean",
+    "fey",
+    "gnomish",
+    "goblin",
+    "kholo",
+    "orcish"
+   ]
+  },
+  "traits": [
+   "elf",
+   "humanoid"
+  ],
+  "rarity": "common",
+  "description": "<p><em>As an ancient people, elves have seen great change and have the perspective that can come only from watching the arc of history. After leaving the world in ancient times, they returned to a changed land, and they still struggle to reclaim their ancestral homes, most notably from terrible demons that have invaded parts of their lands. To some, the elves are objects of awe—graceful and beautiful, with immense talent and knowledge. Among themselves, however, the elves place far more importance on personal freedom than on living up to these ideals.</em></p>\n<p><em>Elf</em></p>",
+  "source": "Player Core"
+ },
+ {
+  "id": "CYlfsYLJcBOgqKtD",
+  "slug": "gnome",
+  "name": "Gnome",
+  "hp": 8,
+  "size": "sm",
+  "speed": 25,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "cha"
+   ],
+   [
+    "con"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "str"
+  ],
+  "languages": [
+   "common",
+   "fey",
+   "gnomish"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "draconic",
+    "dwarven",
+    "elven",
+    "goblin",
+    "jotun",
+    "orcish"
+   ]
+  },
+  "traits": [
+   "gnome",
+   "humanoid"
+  ],
+  "rarity": "common",
+  "description": "<p><em>Long ago, early gnome ancestors emigrated from the First World, realm of the fey. While it's unclear why the first gnomes wandered to Golarion, this lineage manifests in modern gnomes as bizarre reasoning, eccentricity, obsessive tendencies, and what some see as naivete. These qualities are further reflected in their physical characteristics, such as spindly limbs, brightly colored hair, and childlike and extremely expressive facial features that further reflect their otherworldly origins.</em></p>\n<p><em>Gnome</em></p>",
+  "source": "Player Core"
+ },
+ {
+  "id": "sQfjTMDaZbT9DThq",
+  "slug": "goblin",
+  "name": "Goblin",
+  "hp": 6,
+  "size": "sm",
+  "speed": 25,
+  "vision": "darkvision",
+  "boosts": [
+   [
+    "cha"
+   ],
+   [
+    "dex"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "wis"
+  ],
+  "languages": [
+   "common",
+   "goblin"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "draconic",
+    "dwarven",
+    "gnomish",
+    "halfling",
+    "kholo",
+    "orcish"
+   ]
+  },
+  "traits": [
+   "goblin",
+   "humanoid"
+  ],
+  "rarity": "common",
+  "description": "<p><em>The convoluted histories other people cling to don't interest goblins. These small folk live in the moment, and they prefer tall tales over factual records. The wars of a few decades ago might as well be from the ancient past. Misunderstood by other people, goblins are happy how they are. Goblin virtues are about being present, creative, and honest. They strive to lead fulfilled lives, rather than worrying about how their journeys will end. To tell stories, not nitpick the facts. To be small, but dream big.</em></p>\n<p><em>Goblin</em></p>",
+  "source": "Player Core"
+ },
+ {
+  "id": "GgZAHbrjnzWOZy2v",
+  "slug": "halfling",
+  "name": "Halfling",
+  "hp": 6,
+  "size": "sm",
+  "speed": 25,
+  "vision": "normal",
+  "boosts": [
+   [
+    "dex"
+   ],
+   [
+    "wis"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "str"
+  ],
+  "languages": [
+   "common",
+   "halfling"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "dwarven",
+    "elven",
+    "gnomish",
+    "goblin"
+   ]
+  },
+  "traits": [
+   "halfling",
+   "humanoid"
+  ],
+  "rarity": "common",
+  "description": "<p><em>Claiming no place as their own, halflings control few settlements larger than villages. Instead, they frequently live among humans within the walls of larger cities, carving out small communities alongside taller folk. Many halflings lead perfectly fulfilling lives in the shadows of their larger neighbors, while others prefer a nomadic existence, traveling the world and taking advantage of opportunities and adventures as they come.</em></p>\n<p><em>Halfling</em></p>",
+  "source": "Player Core"
+ },
+ {
+  "id": "IiG7DgeLWYrSNXuX",
+  "slug": "human",
+  "name": "Human",
+  "hp": 8,
+  "size": "med",
+  "speed": 25,
+  "vision": "normal",
+  "boosts": [
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [],
+  "languages": [
+   "common"
+  ],
+  "additionalLanguages": {
+   "count": 1,
+   "options": []
+  },
+  "traits": [
+   "human",
+   "humanoid"
+  ],
+  "rarity": "common",
+  "description": "<p><em>As unpredictable and varied as any of Golarion's peoples, humans have exceptional drive and the capacity to endure and expand. Though many civilizations thrived before humanity rose to prominence, humans have built some of the greatest and the most terrible societies throughout the course of history, and today they are the most populous people in the realms around the Inner Sea.</em></p>\n<p><em>Human</em></p>",
+  "source": "Player Core"
+ },
+ {
+  "id": "cdhgByGG1WtuaK73",
+  "slug": "leshy",
+  "name": "Leshy",
+  "hp": 8,
+  "size": "sm",
+  "speed": 25,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "con"
+   ],
+   [
+    "wis"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "int"
+  ],
+  "languages": [
+   "common",
+   "fey"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "draconic",
+    "elven",
+    "gnomish",
+    "goblin",
+    "halfling",
+    "sakvroth"
+   ]
+  },
+  "traits": [
+   "leshy",
+   "plant"
+  ],
+  "rarity": "common",
+  "description": "<p><em>Guardians and emissaries of the environment, leshies are immortal spirits of nature temporarily granted a physical form.</em></p>\n<p><em>Leshy</em></p>",
+  "source": "Player Core"
+ },
+ {
+  "id": "lSGWXjcbOa6O5fTx",
+  "slug": "orc",
+  "name": "Orc",
+  "hp": 10,
+  "size": "med",
+  "speed": 25,
+  "vision": "darkvision",
+  "boosts": [
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ],
+   [
+    "cha",
+    "con",
+    "dex",
+    "int",
+    "str",
+    "wis"
+   ]
+  ],
+  "flaws": [],
+  "languages": [
+   "common",
+   "orcish"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "goblin",
+    "jotun",
+    "petran",
+    "sakvroth"
+   ]
+  },
+  "traits": [
+   "humanoid",
+   "orc"
+  ],
+  "rarity": "common",
+  "description": "<p><em>Orcs are forged in the fires of violence and conflict, often from the moment they are born. As they live lives that are frequently cut brutally short, orcs revel in testing their strength against worthy foes, whether by challenging a higher-ranking member of their community for dominance or raiding a neighboring settlement. Many orcs seek glory as soon as they can walk and carry a blade or club, taming wild beasts or hunting deadly monsters.</em></p>\n<p><em>Orc</em></p>",
+  "source": "Player Core"
+ }
+]

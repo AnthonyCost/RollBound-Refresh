@@ -5,3 +5,4 @@ export * from './combat.js';
 export * from './gm.js';
 export { mira } from './sample.js';
 export * from './builder.js';
+export * from './data.js';

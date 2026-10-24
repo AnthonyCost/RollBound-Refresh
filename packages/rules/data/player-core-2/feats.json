@@ -1,0 +1,3092 @@
+[
+ {
+  "id": "f0faBEUPtspdutKx",
+  "slug": "acrobatic-performer",
+  "name": "Acrobatic Performer",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Acrobatics"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're an incredible acrobat, evoking wonder and enrapturing audiences with your prowess. You can roll an Acrobatics check instead of a Performance check when using the Perform action. If you are trained in both Acrobatics and Performance, you gain a +1 circumstances bonus on Acrobatics checks made to Perform.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "YdpGPLN0QFTZIhbk",
+  "slug": "acute-vision",
+  "name": "Acute Vision",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "barbarian"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>When you are raging, your visual senses improve, granting you darkvision.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "BBj6jrdyff7QOgjH",
+  "slug": "adrenaline-rush",
+  "name": "Adrenaline Rush",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "barbarian",
+   "rage"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>In the heat of battle, you are capable of amazing feats of strength.</p>\n<p>While you are Raging, increase your encumbered and maximum Bulk limits by 2; you also gain a +1 status bonus to Athletics checks to lift heavy objects, Escape, and Force Open.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "ypir96PNY6LBSIWT",
+  "slug": "alchemical-assessment",
+  "name": "Alchemical Assessment",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "alchemist"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Crafting"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can identify alchemical items quickly. When using the Crafting skill to Identify Alchemy on an alchemical item you hold, you can do so as a single action, rather than spending 10 minutes.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "loC0wIyIrsG43Zrd",
+  "slug": "alchemical-familiar",
+  "name": "Alchemical Familiar",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "alchemist"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have used alchemy to create life, a simple creature formed from alchemical materials, reagents, and a bit of your own blood. You gain a familiar, which has the Construct familiar ability; this is permanent, doesn't require the familiar to have the Tough familiar ability, and doesn't count against your usual limit of familiar abilities (typically 2). The familiar uses your Intelligence modifier to determine its Perception, Acrobatics, and Stealth modifiers.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "nyNsIePvpovlDAws",
+  "slug": "alchemical-scholar",
+  "name": "Alchemical Scholar",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [
+   "is3Oz9wt11lNq62K"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain the Alchemical Crafting feat. If you would automatically gain that feat (from your background or the alchemist class, for example), you instead gain a different 1st-level Crafting skill feat. Add an additional common 1st-level alchemical formula to your formula book when you take this feat. Each time you gain a level beyond 1st, add one common alchemical formula of that level to your formula book.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "oqWclVuvEOh7R5og",
+  "slug": "arcane-dragonblood",
+  "name": "Arcane Dragonblood",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood",
+   "lineage"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "arcana"
+  ],
+  "feats": [
+   "blMeVamjGz4ODWxq"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You descend from a dragon that wields mastery of their magical abilities, such as a fortune dragon or mirage dragon. As such, you can instinctively grasp the intricacies of magic. You gain the trained proficiency rank in Arcana. If you would automatically become trained in Arcana (from your background or class, for example), you instead become trained in a skill of your choice. You gain the Arcane Sense skill feat. If you choose a draconic exemplar, you must choose an arcane dragon.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Lc4dJZivRwU3QEmT",
+  "slug": "armor-assist",
+  "name": "Armor Assist",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Athletics or Warfare Lore"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>After your service aiding armored combatants, you are practiced in helping yourself and others don heavy gear.</p>\n<p>You can attempt an Athletics or Warfare Lore check with a DC determined by the GM (but usually 15 for common armor, DC 20 for uncommon armor, and DC 25 for rare armor) to halve the time you take to don armor.</p>\n<p>You can halve an ally's time to don armor by working with them to don the armor and succeeding at an Athletics or Warfare Lore check against the same DC.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Om6WLsTsIt6Ku3JQ",
+  "slug": "ask-the-bones",
+  "name": "Ask the Bones",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "gnoll"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p><hr><p>You keep the bone of an ancestor or a friend to call upon for advice. Attempt to Recall Knowledge. If the bones belonged to a person particularly knowledgeable on the subject, you gain a +1 circumstance bonus to your check.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "zrSOBBQZoeewqkUk",
+  "slug": "blood-rising",
+  "name": "Blood Rising",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "sorcerer"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> A creature targets you with a spell of the same tradition as your bloodline.</p><hr><p>The magic in your blood surges in response to your foe's spell. You generate a blood magic effect you know, even if you are already under the effects of blood magic. The target must be either you or the creature that triggered Blood Rising. If the blood magic effect grants you a bonus to AC or the appropriate saving throw, that bonus applies against the triggering spell. If the effect has a duration, it instead lasts until the beginning of your next turn.</p><hr><p><strong>Special</strong> This feat has the trait corresponding to the tradition of your bloodline.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "QZ00D2xdJnbWFzml",
+  "slug": "blowgun-poisoner",
+  "name": "Blowgun Poisoner",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "alchemist"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can capably deliver toxins with a Blowgun. Your blowgun Strikes can apply injury poisons even if they deal no damage due to a creature's resistance. If you critically succeed at a blowgun Strike using a poisoned dart, the target's initial save against the poison is one degree of success worse than the creature rolls; this is a misfortune effect.</p>\n<p>In addition, if you make a blowgun Strike while Hidden or Undetected, you don't automatically become Observed. Instead, immediately attempt a Stealth check check against the Perception DC of the target. If you succeed, you don't become observed, and are hidden (if you were undetected, you still become hidden rather than remaining undetected).</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "0GF2j54roPFIDmXf",
+  "slug": "bon-mot",
+  "name": "Bon Mot",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "auditory",
+   "concentrate",
+   "emotion",
+   "general",
+   "linguistic",
+   "mental",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Diplomacy"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You launch an insightful quip at a foe, distracting them. Choose a foe within 30 feet and roll a Diplomacy check against the target's Will DC.</p><hr><p><strong>Critical Success</strong> The target is distracted and takes a –3 status penalty to Perception and Will saves for 1 minute.</p>\n<p>The target can end the effect early with a retort to your Bon Mot. This can either be a single action that has the concentrate trait or an appropriate skill action to frame their retort. The GM determines which skill actions qualify, though they must take at least 1 action. Typically, the retort needs to use a linguistic Charisma-based skill action.</p>\n<p><strong>Success</strong> As critical success, but the penalty is –2.</p>\n<p><strong>Critical Failure</strong> Your quip is atrocious. You take the same penalty an enemy would take had you succeeded. This ends after 1 minute or if you issue another Bon Mot and succeed.</p>\n<p>Effect: Bon Mot</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "fLDhS0e6fBDjiCUA",
+  "slug": "bone-magic",
+  "name": "Bone Magic",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lizardfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your connection to your iruxi ancestors manifests as a simple primal spell that you cast using a fragment of an ancestor's bones. Choose one cantrip from either the occult spell list or the primal spell list. You can cast this cantrip as an innate spell at will, and it's heightened to a spell rank equal to half your level rounded up.</p><hr><p><strong>Special</strong> Choose when you gain this feat whether your innate spells are primal or occult; this choice applies to all innate spells you gain from lizardfolk ancestry feats that have Bone Magic as a prerequisite.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "7y8DKd24c7eqzJGV",
+  "slug": "breath-of-the-dragon-dragonblood",
+  "name": "Breath of the Dragon (Dragonblood)",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood",
+   "magical"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Tapping into the physiology of your draconic ancestor, you can exhale a torrent of energy in a 15-foot  or a 30-foot , dealing 1d4 damage. Each creature in the area must attempt a basic saving throw against the higher of your class DC or spell DC. You can't use this ability again for 1d4 rounds.</p>\n<p>At 3rd level and every 2 levels thereafter, the damage increases by 1d4. The shape of the breath, the damage type, and the saving throw match those of your draconic exemplar. This ability has the trait associated with the type of damage it deals.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "BA7fzRbqpmeWrgqg",
+  "slug": "brilliant-flash",
+  "name": "Brilliant Flash",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "grandeur cause"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your light cleanses souls of fear. When you use Flash of Grandeur, the attacker is also Off-Guard for 1 round.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "0qshtd4mBcjFAxA8",
+  "slug": "cantorian-reinforcement",
+  "name": "Cantorian Reinforcement",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>The life energy that helped create the first hobgoblins is particularly potent in you, protecting you from ongoing maladies. If you roll a success on a saving throw against a disease or poison, you get a critical success instead. If you have a different ability that would improve the save in this way (such as the Battle Hardened fighter class feature), if you roll a critical failure on the save you get a failure instead.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "zvtYsz9jk8tPvlpS",
+  "slug": "cat-nap",
+  "name": "Cat Nap",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "catfolk",
+   "concentrate",
+   "exploration"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per hour</p><hr><p>You can regain your energy quickly with a brief nap. You sleep for 10 minutes, after which you gain temporary Hit Points equal to your level that last for 1 hour.</p>\n<p>Effect: Cat Nap</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "7qBuzHY8kEG8SdEP",
+  "slug": "cats-luck",
+  "name": "Cat's Luck",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "catfolk",
+   "fortune"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p>\n<p><strong>Trigger</strong> You fail a Reflex saving throw.</p>\n<hr>\n<p>You instinctively twist away from danger. You can reroll the triggering saving throw and use the better result.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Iqv8qj7ym63YjexN",
+  "slug": "catfolk-dance",
+  "name": "Catfolk Dance",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "catfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have a habit of always being in the way when other creatures attempt to move. Attempt an Acrobatics check check against an adjacent creature's Reflex DC.</p>\n<p>Effect: Catfolk Dance</p>\n<hr>\n<p><strong>Critical Success</strong> The target creature gains a -2 circumstance penalty to Reflex saves and is Off-Guard until the start of your next turn.</p>\n<p><strong>Success</strong> The target creature gains a -2 circumstance penalty to Reflex saves until the start of your next turn.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "eqBWab1J5Be24YAl",
+  "slug": "catfolk-lore",
+  "name": "Catfolk Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "catfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "acrobatics",
+   "survival"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Growing up among catfolk has taught you the traditional values of freedom, stewardship, and quick reactions to trouble. You gain the trained proficiency rank in Acrobatics and Survival. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Catfolk Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "bEh5qUgX5eFaQwzU",
+  "slug": "catfolk-weapon-familiarity",
+  "name": "Catfolk Weapon Familiarity",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "catfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain access to all uncommon weapons with the catfolk trait. You have familiarity with weapons with the catfolk trait plus the kama, kukri, scimitar, and sickle—for the purpose of proficiency, you treat any of these that are martial weapons as simple weapons and any that are advanced weapons as martial weapons.</p>\n<p>At 5th level, whenever you get a critical hit with one of these weapons, you get its critical specialization effect.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "uiNRrdnJe0GOzy6Q",
+  "slug": "chance-death",
+  "name": "Chance Death",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "duskwalker",
+   "fortune"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p>\n<p><strong>Trigger</strong> You would die as a result of a failed recovery check or saving throw.</p><hr><p>Your previous life ended due to sheer poor luck, struck by lightning or choking on a fish bone. You can reroll the triggering recovery check or saving throw, but you must use the new result, even if it's worse.</p><hr><p><strong>Special</strong> You can select this feat only at 1st level, and you can't retrain into or out of this feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Pox93XMBaFmeLIDM",
+  "slug": "cheek-pouches",
+  "name": "Cheek Pouches",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "ratfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your cheeks are stretchy, and you can store up to four items of light Bulk or less in these cheek pouches. None of these items can have a dimension longer than 1 foot. As long as you have at least one item in your cheek pouches, your speech is noticeably difficult to understand. Placing an item in your cheek pouch or retrieving one is an Interact action. You can empty your mouth with a single action, causing everything you had stored in your cheek pouches to fall to the ground in your square.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "B9cQLRHtXoLlF0iR",
+  "slug": "concealing-legerdemain",
+  "name": "Concealing Legerdemain",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Thievery"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Rather than hide an object somewhere the inspectors won't search, you're skilled at keeping the object on the move so it's never where they look.</p>\n<p>When you Conceal an Object of light Bulk or less, you can use Thievery instead of Stealth for your checks and for the DC of an active searcher's Perception check. You roll the check only once, but you must continue to use actions to Conceal an Object throughout the process.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "voYr7ygVcWmlg1f4",
+  "slug": "crafters-appraisal",
+  "name": "Crafter's Appraisal",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Crafting"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your knowledge of items' construction allows you to discern their magical effects as well. You can use Crafting instead of a skill associated with a magic tradition to Identify Magic on magic items, though not on any other sorts of magic.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "bf7NCeKqDClaqhTR",
+  "slug": "crane-stance",
+  "name": "Crane Stance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk",
+   "stance"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "You are unarmoured"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are unarmored</p><hr><p>Your arms flutter like a crane's wings.</p>\n<p>You gain a +1 circumstance bonus to AC, but the only Strikes you can make are crane wing attacks. These deal 1d6 bludgeoning damage; are in the brawling group; and have the agile, finesse, nonlethal, and unarmed traits.</p>\n<p>While in Crane Stance, reduce the DC for High Jump and Long Jump by 5, and when you Leap, you can move an additional 5 feet horizontally or 2 feet vertically.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "WoKiYMCXV27szBdy",
+  "slug": "cringe",
+  "name": "Cringe",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "emotion",
+   "kobold",
+   "mental",
+   "visual"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> A creature you are aware of critically succeeds on a Strike against you and would deal damage to you.</p><hr><p>With pitiful posturing, you cause your foe to pull back a deadly attack. The attacking creature takes a circumstance penalty to the damage of the triggering Strike equal to your level + 2. This penalty applies after doubling the damage for a critical hit. The attacker is then immune to your Cringe for 24 hours.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "FCGUAdseGVq6nhUw",
+  "slug": "croak-talker",
+  "name": "Croak Talker",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "grippli"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can communicate with the simplest of frogs and other similar creatures using long-winded croaks. You can ask questions of, receive answers from, and use the Diplomacy skill with animals that are amphibians (most amphibians have the amphibious trait).</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "aOhZUMCn0o2ZMkdW",
+  "slug": "crunch",
+  "name": "Crunch",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "gnoll"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your jaws can crush bone and bite through armor. Your jaws unarmed attack deals 1d8 piercing damage instead of 1d6 and gains the grapple trait</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "r7cgrrHh75R8UEqN",
+  "slug": "deceptive-worship",
+  "name": "Deceptive Worship",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Occultism"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Members of your cult frequently pass themselves off as worshippers of other religions. You can use Occultism instead of Deception to Impersonate a typical worshipper of another faith or to Lie specifically to claim you are a member of the faith you are Impersonating. You still need to use the Deception skill to Impersonate a specific worshipper or to perform other deceptive actions, such as attempting to Lie about any other matter.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "117d4Me9nAn1GMry",
+  "slug": "defensive-advance",
+  "name": "Defensive Advance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion",
+   "flourish"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>With the protection of your shield, you dive into battle! You Raise your Shield and Stride. If you end your movement within melee reach of at least one enemy, you can make a melee Strike against that enemy.</p>\n<p>You can use Defensive Advance while Burrowing, Climbing, Flying, or Swimming instead of Striding if you have the corresponding movement type.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "FXKIALDXAzEBfj5A",
+  "slug": "deitys-domain",
+  "name": "Deity's Domain",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You embody an aspect of your deity. Choose one of your deity's domains. You gain the domain's initial domain spell as a devotion spell.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "30e9SdbmI3t5OJQE",
+  "slug": "deliberate-death",
+  "name": "Deliberate Death",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "duskwalker"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p>\n<p><strong>Trigger</strong> You are about to gain the dying condition as a result of another creature's attack or ability, and that creature is within your melee reach.</p><hr><p>Once, you died because someone—murderer, monster, or soldier—chose to strike you down. Just before losing consciousness, make a melee Strike against the triggering creature.</p><hr><p><strong>Special</strong> You can select this feat only at 1st level, and you can't retrain into or out of this feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "WYaKRREZUSH0jel5",
+  "slug": "desperate-prayer",
+  "name": "Desperate Prayer",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p>\n<p><strong>Trigger</strong> You begin your turn and have no Focus Points.</p><hr><p>You call out to your deity in a plea for their aid. You gain 1 Focus Point, which you can spend only to cast a devotion spell. If you don't spend this Focus Point by the end of this turn, it is lost</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "5eNKs6738aykAhK2",
+  "slug": "dirty-trick",
+  "name": "Dirty Trick",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "attack",
+   "general",
+   "manipulate",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Thievery"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You have a hand free and are within melee reach of an opponent.</p><hr><p>You hook a foe's bootlaces together, pull their hat over their eyes, loosen their belt, or otherwise confound their mobility through an underhanded tactic. Attempt a Thievery check check against the target's Reflex DC.</p><hr><p><strong>Critical Success</strong> The target is Clumsy 1 until they use an Interact action to end the impediment</p>\n<p><strong>Success</strong> As critical success, but the condition ends automatically after 1 round.</p>\n<p><strong>Critical Failure</strong> You fall Prone as your attempt backfires.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "1MWL2uEmyiOfYtJn",
+  "slug": "disarming-flair",
+  "name": "Disarming Flair",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You knock weapons from the hands of your foes with style. When you Disarm, the action gains the bravado trait.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "axDwTLGN32Qfv0SD",
+  "slug": "divine-dragonblood",
+  "name": "Divine Dragonblood",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood",
+   "lineage"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "religion"
+  ],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can trace your lineage to a dragon with almost deific powers, such as a diabolic dragon or empyreal dragon. You are blessed with a small bit of divine protection. You gain the trained proficiency rank in Religion. If you would automatically become trained in Religion (from your background or class, for example), you instead become trained in a skill of your choice. In addition, you are endowed quick reactions. You gain a +1 circumstance bonus to initiative rolls. If you choose a draconic exemplar, you must choose a divine dragon.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "EOmTf95t03y4IGdp",
+  "slug": "draconic-arrogance",
+  "name": "Draconic Arrogance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "barbarian",
+   "rage"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "dragon instinct"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Few can sway you from your goals while the fury of combat fills you. While raging, you gain a +2 status bonus to saving throws against emotion effects.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "U38YThMudfDihnj1",
+  "slug": "draconic-aspect",
+  "name": "Draconic Aspect",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have an obvious draconic feature, such as sharp claws, a snout full of sharp teeth, or strong reptilian tail, that you can use offensively. You gain your choice of one of the following unarmed attacks. The attack is in the brawling group and has the listed damage die and traits.</p><ul><li><strong>Claw</strong> 1d4 slashing (agile, finesse, unarmed)</li><li><strong>Jaws</strong> 1d6 piercing (forceful, unarmed)</li><li><strong>Tail</strong> 1d6 bludgeoning (sweep, trip, unarmed)</li></ul><hr><p><strong>Special</strong> You can select this feat only at 1st level, and you can't retrain into or out of this feat, nor can you change the type of attack you gained.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "mI6dFvu28r66SfY0",
+  "slug": "draconic-resistance",
+  "name": "Draconic Resistance",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Draconic magic safeguards you against harm. You gain resistance equal to half your level (minimum 1) to the damage type associated with your draconic exemplar. Double this resistance against damage of that type dealt to you by dragons.</p>\n<p>If your draconic exemplar is associated with bludgeoning, piercing, or slashing damage, instead of gaining resistance to that type you can choose acid, cold, fire, electricity, or sonic.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "8JyyB66LK0pOpnYv",
+  "slug": "draconic-sight",
+  "name": "Draconic Sight",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have a fraction of the senses of your draconic forebear. You gain low-light vision, or you gain darkvision if your ancestry already grants you low-light vision.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "vXNWjiUxu79S2vUN",
+  "slug": "dragon-lore",
+  "name": "Dragon Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "diplomacy",
+   "intimidation"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've set your mind on learning more about your ancestor and their kin, and perhaps you were even raised by a dragon parent. You've come to understand how dragons can invoke fear but also how they've contributed to society as a whole. You gain the trained proficiency rank in Diplomacy and Intimidation. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Dragon Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "8sy3sHwOHS4ImwvJ",
+  "slug": "dragon-stance",
+  "name": "Dragon Stance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk",
+   "stance"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "You are unarmored"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are unarmored</p>\n<hr>\n<p>You enter the stance of a dragon and make powerful leg strikes like a lashing dragon's tail. You can make dragon tail attacks that deal 1d10 bludgeoning damage. They are in the brawling group and have the backswing, nonlethal, and unarmed traits.</p>\n<p>While in Dragon Stance, you can ignore the first square of difficult terrain while Striding.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "SPyvwsiSghySIEw2",
+  "slug": "dragons-presence",
+  "name": "Dragon's Presence",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "kobold"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "dragonscaled kobold heritage"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>As kin to dragonkind, you project unflappable confidence (that collapses catastrophically against the deadliest foes). When you roll a success on a saving throw against a fear effect, you get a critical success instead. When you roll a failure against a fear effect, you get a critical failure instead.</p>\n<p>In addition, when you attempt to Demoralize a foe of your level or lower, you gain a +1 circumstance bonus to the Intimidation check.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "O5v8yaeCbjKeXfyi",
+  "slug": "duskwalker-lore",
+  "name": "Duskwalker Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "duskwalker"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "medicine",
+   "religion"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You either found another duskwalker who taught you the secrets of your kind, or you managed to research your unusual heritage. You gain the trained proficiency rank in Medicine and Religion. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Boneyard Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "8rKlptZ7ArtJ6cI8",
+  "slug": "duskwalker-weapon-familiarity",
+  "name": "Duskwalker Weapon Familiarity",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "duskwalker"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have familiarity with the bo staff, longbow, composite longbow, scythe, and staff—for the purpose of proficiency, you treat any of these that are martial weapons as simple weapons and any that are advanced weapons as martial weapons.</p>\n<p>At 5th level, whenever you get a critical hit with one of these weapons, you get its critical specialization effect.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "C5tSxOwDILefw4zq",
+  "slug": "elegant-buckler",
+  "name": "Elegant Buckler",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've learned a flexible way to position your Buckler to provide more protection. When you Raise a Shield to gain a circumstance bonus to AC from a buckler, increase the bonus from +1 to +2.</p>\n<p>While you have a buckler raised, if a creature critically misses you with a Strike, you gain panache until the end of your next turn.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "wNr02jsG5nRF23YO",
+  "slug": "eliminate-red-herrings",
+  "name": "Eliminate Red Herrings",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "investigator"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have a keen sense for avoiding spurious lines of inquiry. When you roll a critical failure on a skill check to Recall Knowledge related to a question about one of your active investigations, you get a failure instead.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "gArdEleFCvUHtdGk",
+  "slug": "express-rider",
+  "name": "Express Rider",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "exploration",
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Nature"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can encourage your mount to cover ground quickly. When calculating your travel Speed for the day while mounted, you can attempt a Nature check to Command an Animal to increase your mount's travel Speed. The DC is determined by the GM, but is typically based on the mount's level or the difficulty of the environment, whichever is harder. On a success, increase your mount's travel Speed by half. This has no effect on your mount's movement in encounters. This benefit extends to up to six other allies traveling with you, as long as all such allies are also mounted, or are quadrupeds with a Speed of at least 30 feet.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "WcY7H7mRiK2VDquV",
+  "slug": "extravagant-parry",
+  "name": "Extravagant Parry",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding one or more one-handed weapons</p><hr><p>You use one-handed weapons to parry with style. You gain a +1 circumstance bonus to AC until the start of your next turn, or a +2 circumstance bonus if you have a free hand or are wielding a weapon with the parry trait. You lose this circumstance bonus if you no longer meet this feat's requirement. If a creature misses you with a Strike while you have this bonus, you gain panache until the end of your next turn.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "5EpkOj9CFOjt8vsK",
+  "slug": "eyes-of-night",
+  "name": "Eyes of Night",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dhampir"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "low-light vision"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can see in the darkness as easily as a true vampire. You gain darkvision.</p><hr><p><strong>Special</strong> You can select this feat only at 1st level, and you can't retrain into or out of this feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "9umJBQEcV1Fax4bd",
+  "slug": "faithful-steed",
+  "name": "Faithful Steed",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain the service of a young animal companion as a mount. See Animal Companions. If you have the holy or unholy trait, your mount gains it as well, as do the mount's Strikes. Typically, the steed is an animal companion with the mount ability (such as a horse). The GM might allow another animal companion option, or allow the creature to have a different appearance that thematically fits your deity.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Y8sKn8NH1wC7Mrui",
+  "slug": "fangs",
+  "name": "Fangs",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dhampir"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your incisors have grown into true fangs: long, sharp, and well-suited to drawing blood. You gain a fangs unarmed attack that deals 1d6 piercing damage. Your fangs are in the brawling group and have the grapple and unarmed traits.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "BJHsCiBLdjgJo6zM",
+  "slug": "far-lobber",
+  "name": "Far Lobber",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "alchemist"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've learned how to throw a longer distance. When you throw an alchemical bomb, it has a range increment of 30 feet instead of the usual 20 feet.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "TnYHtN9gQASqOnii",
+  "slug": "flashy-dodge",
+  "name": "Flashy Dodge",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> A creature you can see targets you with an attack.</p>\n<p><strong>Requirements</strong> You aren't encumbered.</p><hr><p>You deftly dodge out of the way, gaining a +2 circumstance bonus to AC against the triggering attack. If the Strike misses, you gain panache until the end of your next turn</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "9bgl6qYWKHzqWZj0",
+  "slug": "flexible-studies",
+  "name": "Flexible Studies",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "investigator"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've collected a cross-section of information on various disciplines you can refer to when preparing for various tasks. During your daily preparations, you can cram on a certain subject to become temporarily trained in one skill of your choice. This proficiency lasts until you prepare again. As this proficiency is temporary, you can't use it as a prerequisite for a permanent character option like a skill increase or a feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "qgNc5XwjsaWET0Op",
+  "slug": "flying-blade",
+  "name": "Flying Blade",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "precise strike"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You apply your flashy techniques to thrown weapons as easily as melee attacks. You apply your Precise Strike damage on ranged Strikes you make with a thrown weapon within that weapon's first range increment. The thrown weapon must be an agile or finesse weapon. This also allows you to make a thrown weapon ranged Strike for Confident Finisher and any other finisher that includes a Strike that can benefit from your precise strike.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "5GqjEM22n78Vmdpe",
+  "slug": "focused-fascination",
+  "name": "Focused Fascination",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Fascinating Performance"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>When you use Fascinating Performance in a combat encounter, you need only a success, rather than a critical success, to Fascinate your target. This works only if you're attempting to fascinate one target. For example, if you were an expert in Performance, you could choose to target multiple creatures normally or target one creature and fascinate it on a success.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Ws9JlysHcFoz6WAQ",
+  "slug": "forensic-acumen",
+  "name": "Forensic Acumen",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Medicine"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You understand the principles of forensic medicine, making you better at examining a body to determine the cause of death or injury.</p>\n<p>You can perform a forensic examination on a body, as described under Recall Knowledge in the Medicine skill, in half the normal amount of time it would take (to a minimum of 5 minutes).</p>\n<p>If you succeed at your check, you can attempt an immediate check to Recall Knowledge to follow up on something you found, with a +2 circumstance bonus.</p>\n<p>This check is usually related to the cause of injury or death, such as a Crafting check to identify a poison or weapon that was used or an additional Medicine check to identify a specific disease. If you prefer, you can instead attempt to Recall Knowledge about the type of creature whose body you were examining, using the appropriate skill and gaining the same circumstance bonus.</p>\n<p>The circumstance bonus increases to +3 if you have master proficiency in Medicine and +4 if you have legendary proficiency.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "CuVvDrBaVP9nYJlt",
+  "slug": "foretell-harm",
+  "name": "Foretell Harm",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "cursebound",
+   "divine",
+   "oracle"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per round</p>\n<p><strong>Requirements</strong> Your previous action was to Cast a non-cantrip Spell that dealt damage.</p><hr><p>Your magic echoes ominously as you glimpse injury in the target's future. At the beginning of your target's next turn, it takes damage equal to twice the triggering spell's rank as a seemingly random and minor misfortune finds it. The damage and type of misfortune is of a type matching the spell; for instance, if you dealt fire damage, a flame might spontaneous ignite on them or they might burn a hand on their torch. The target is then temporarily immune to Foretell Harm for 24 hours.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "DGtUIMliflzGXc6E",
+  "slug": "ghost-hunter",
+  "name": "Ghost Hunter",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "duskwalker"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your connection to the Boneyard ensures that your blows strike true against spectral beings. Your weapon and unarmed Strikes against incorporeal creatures become magical. If they are already magical, they instead gain the effects of a <em>ghost touch</em> property rune.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "WeQGWvlWdeLeOlCN",
+  "slug": "glean-contents",
+  "name": "Glean Contents",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Society"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are adept at quickly scanning loose papers and carefully discerning the contents of sealed letters without damaging the seal. You can attempt Society checks to Decipher Writing on a message that is only partially glimpsed, upside down or reversed from your perspective, and gain a +1 circumstance bonus to the check when doing so. You can also use this feat to decipher sealed letters, adding the manipulate trait to your attempt to Decipher Writing. This doesn't prevent witnesses from noticing your efforts; you might need to attempt Deception or Stealth checks to avoid being noticed. In either use of this feat, the recipient is made aware of your efforts on a critical failure (for instance, you might be caught rubbernecking or you might disturb the papers in a way their owner notices).</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "MJW4VP7PjVAX131C",
+  "slug": "glean-lore",
+  "name": "Glean Lore",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "divine",
+   "oracle",
+   "secret"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You tap into the collected lore of the divine, accessing a variety of potentially useful information.</p>\n<p>Attempt a Religion check check to understand the information you gain. The GM sets the DC (similar to the DC to Recall Knowledge), potentially adjusting the DC of the check for topics far removed from your mystery.</p>\n<hr>\n<p><strong>Critical Success</strong> You comprehend the lore accurately or gain a useful clue from the divine about your situation.</p>\n<p><strong>Success</strong> You learn two pieces of information about the topic, one true and one erroneous, but you don't know which is which.</p>\n<p><strong>Failure</strong> You recall incorrect information or gain an erroneous or misleading clue.</p>\n<p><strong>Critical Failure</strong> You recall two pieces of incorrect information or gain two erroneous or misleading clues.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "hXYnwpi95E77qfAu",
+  "slug": "goading-feint",
+  "name": "Goading Feint",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Deception"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your tricks make foes overextend their attacks. On a Feint, you can use the following success and critical success effects instead of any other effects you would gain when you Feint; if you do, other abilities that adjust the normal effects of your Feint no longer apply. You can choose whether to use the Goading Feint benefits or the normal benefits each time you Feint a given foe.</p><hr><p><strong>Critical Success</strong> The target takes a –2 circumstance penalty to all attack rolls against you before the end of its next turn.</p>\n<p><strong>Success</strong> The target takes a –2 circumstance penalty to its next attack roll against you before the end of its next turn.</p>\n<p>Effect: Goading Feint</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "hxCqQPjlyVI57vQt",
+  "slug": "gravesight",
+  "name": "Gravesight",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "duskwalker"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "low-light vision"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can see in the darkness as easily as a psychopomp. You gain darkvision.</p><hr><p><strong>Special</strong> You can select this feat only at 1st level, and you can't retrain into or out of this feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "13zaW8ZHRWnRe2pj",
+  "slug": "hobgoblin-lore",
+  "name": "Hobgoblin Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "athletics",
+   "crafting"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've studied traditional hobgoblin exercises and fieldcraft, all of which have a militaristic bent. You gain the trained proficiency rank in Athletics and Crafting. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You gain the Additional Lore general feat for Hobgoblin Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "n9CBjyiB17srkyr4",
+  "slug": "hobgoblin-weapon-familiarity",
+  "name": "Hobgoblin Weapon Familiarity",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain access to all uncommon weapons with the hobgoblin trait. You have familiarity with weapons with the hobgoblin trait plus the composite longbow, composite shortbow, glaive, longbow, longsword, and shortbow—for the purpose of proficiency, you treat any of these that are martial weapons as simple weapons and any that are advanced weapons as martial weapons.</p>\n<p>At 5th level, whenever you get a critical hit with one of these weapons, you get its critical specialization effect.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "KYTSvAEqK7KAyVwi",
+  "slug": "hunters-defense",
+  "name": "Hunter's Defense",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "grippli"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Nature"
+  ],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per hour</p>\n<p><strong>Trigger</strong> A creature with the animal, beast, elemental, fey, fungus, or plant trait attacks you, and you can see the attacker.</p><hr><p>Your canny understanding of natural and primal creatures helps you predict and dodge their attacks. The triggering attack roll targets your Nature DC instead of your AC. Though this allows you to avoid taking penalties to your AC, it doesn't remove any conditions or other effects causing such penalties. For example, an enemy with sneak attack would still deal extra damage to you for being Off-Guard, even though you wouldn't take the –2 circumstance penalty against the attack.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "5vipJDU5hGs0SejD",
+  "slug": "hyena-familiar",
+  "name": "Hyena Familiar",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "gnoll"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Hyenas serve kholo as pets and trackers. Some kholos, such as yourself, draw the attention of smaller hyenas that are vessels for magical spirits. You gain a Tiny hyena as a familiar.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "3HChkcD1IRqv4DbA",
+  "slug": "improvise-tool",
+  "name": "Improvise Tool",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Crafting"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can jury-rig solutions when you don't have the proper tools on hand. You can attempt to Repair damaged items without a repair kit.</p>\n<p>If you have the raw materials available, you can Craft a basic Caltrop set, Candle, Compass, Crowbar, Fishing Tackle, Flint and Steel, Hammer, Ladder, Piton, Rope, Ten-Foot Pole, Replacement Thieves Picks, Long Tool or Short Tool, or Torch as if you had their formulas.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "sMCpihnBEpx18GBD",
+  "slug": "inoculation",
+  "name": "Inoculation",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "healing",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Medicine"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have practice combating plague, and your patients are less likely to succumb to the same disease again for a time.</p>\n<p>When you successfully Treat a Disease on someone and they fully recover from the disease, they gain a +2 circumstance bonus to saving throws against that same disease for 1 week.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "XttSGDuAsRDTuvgS",
+  "slug": "iron-repercussions",
+  "name": "Iron Repercussions",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "obedience cause"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Disobeying your Iron Command has lasting consequences. If an enemy refuses to kneel to you, you can deal ternarygte@actor.level,19,6,ternarygte@actor.level,16,5,ternarygte@actor.level,12,4,ternarygte@actor.level,9,3,ternarygte@actor.level,5,2,1d6[persistent,mental]{persistent mental damage} instead of normal mental damage. You must decide whether the mental damage will be persistent before your enemy chooses whether to kneel or not. The amount of damage is unchanged.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "VatkAzfBYjA6z6OP",
+  "slug": "iruxi-armaments",
+  "name": "Iruxi Armaments",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lizardfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your weapons are those you were born with. Choose one of the following options:</p><ul><li><strong>Claws</strong> Your claw attack deals 1d6 slashing damage instead of 1d4 and gains the versatile P trait.</li><li><strong>Fangs</strong> You gain a fangs unarmed attack that deals 1d8 piercing damage and is in the brawling group.</li><li><strong>Tail</strong> You gain a tail unarmed attack that deals 1d6 bludgeoning damage, is in the brawling group, and has the sweep trait.</li></ul><p>At 5th level, whenever you get a critical hit with one of the unarmed attacks you have gained or improved with this feat, you get its critical specialization effect.</p><hr><p><strong>Special</strong> You can take this feat multiple times, choosing a different unarmed attack option each time.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "M41PGiFlLE2tByUL",
+  "slug": "jungle-strider",
+  "name": "Jungle Strider",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "grippli"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are adept at dodging roots, foliage, and other jungle obstacles. You ignore difficult terrain in forests and jungles. In addition, when you use the Acrobatics skill to Balance on narrow surfaces or uneven ground made of plant material, you aren't Off-Guard, and when you roll a success at one of these Acrobatics checks, you get a critical success instead.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "rWiddU8fHl0TraoN",
+  "slug": "kholo-lore",
+  "name": "Kholo Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "gnoll"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "stealth",
+   "survival"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You paid close attention to the senior hunters in your clan to learn their tricks. You gain the trained proficiency rank in Stealth and Survival. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Kholo Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "zb7F0M3H8PN3XsdX",
+  "slug": "kholo-weapon-familiarity",
+  "name": "Kholo Weapon Familiarity",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "gnoll"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain access to all uncommon weapons with the kholo trait. You have familiarity with weapons with the kholo trait plus the flail, khopesh, mambele, and war flail—for the purpose of proficiency, you treat any of these that are martial weapons as simple weapons and any that are advanced weapons as martial weapons.</p>\n<p>At 5th level, whenever you get a critical hit with one of these weapons, you get its critical specialization effect.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "iWvpq3uDZcXvBJj8",
+  "slug": "known-weaknesses",
+  "name": "Known Weaknesses",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "investigator"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Whenever you Devise a Stratagem, you can also attempt a check to Recall Knowledge as part of that action before rolling the d20. If you critically succeed at the Recall Knowledge check, you notice a weakness and can convey the information to allies to grant each of them a +1 circumstance bonus to their next attack roll against the subject, as long as their attack is made before the beginning of your next turn. If you choose an attack stratagem, this bonus applies to that attack roll too.</p>\n<p>Effect: Known Weakness</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "IElFaS5i10MFYIvq",
+  "slug": "kobold-lore",
+  "name": "Kobold Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "kobold"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "stealth",
+   "thievery"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You attentively learned key kobold survival strategies from your elders. You gain the trained proficiency rank in Stealth and Thievery. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Kobold Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "OTjRxyCtwPoqNFP2",
+  "slug": "kobold-weapon-familiarity",
+  "name": "Kobold Weapon Familiarity",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "kobold"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain access to all uncommon weapons with the kobold trait. You have familiarity with weapons with the kobold trait plus the greatpick, light pick, and pick—for the purposes of proficiency, you treat any of these that are martial weapons as simple weapons and any that are advanced weapons as martial weapons.</p>\n<p>At 5th level, whenever you get a critical hit with one of these weapons, you get its critical specialization effect.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "OZtoTusMmCJymObT",
+  "slug": "leech-clip",
+  "name": "Leech-Clip",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are trained to capture deserters, or \"leeches.\" Make a melee Strike with weapon from the flail group. On a hit, the target takes a –10-foot status penalty to its Speed (or a –15-foot status penalty on a critical hit). The penalty lasts for 1 round. It applies only if the target has a land Speed and depends on legs or other targetable appendages to use its land Speed. As with all penalties to Speed, this can't reduce a creature's Speed below 5 feet.</p>\n<p>Effect: Leech-Clip</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "FhCsnHjdIUyKteCM",
+  "slug": "lizardfolk-lore",
+  "name": "Lizardfolk Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lizardfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "nature",
+   "survival"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You listened carefully to the tales passed down among your community. You gain the trained proficiency rank in Survival and either Nature or Occultism. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for either Astrology Lore or Lizardfolk Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "TmaxLWraJrvSQOkY",
+  "slug": "mariners-fire",
+  "name": "Mariner's Fire",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "tengu"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You conjure uncanny orbs of spiritual flame that float above or below the water's surface. You can cast the Ignition cantrip as a primal innate spell at will, heightened to a spell rank equal to half your level rounded up. Your ignition spell takes the form of orbs of fire, and you can cast it underwater.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "itjTPh76mZfJCBxQ",
+  "slug": "marsh-runner",
+  "name": "Marsh Runner",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lizardfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "You have a swim Speed"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>When you use the Step action, you can ignore difficult terrain caused by flooding, swamps, or quicksand. In addition, when you use the Acrobatics skill to Balance on narrow surfaces or uneven marshy ground, you aren't Off-Guard, and if you roll a success on the Acrobatics check, you get a critical success instead.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "vRXPsMbyuvoPvbAQ",
+  "slug": "moment-of-clarity",
+  "name": "Moment of Clarity",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "barbarian",
+   "concentrate",
+   "rage"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You push back your rage for a moment in order to think clearly. Until the end of this turn, you can use actions with the concentrate trait even if those actions don't have the rage trait.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "YG2RxXE9SMfwo6wP",
+  "slug": "monastic-archer-stance",
+  "name": "Monastic Archer Stance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk",
+   "stance"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are unarmored and wielding a longbow, shortbow, or a bow with the monk trait.</p>\n<hr>\n<p>You enter a specialized stance for a unique martial art centered around the use of a bow. While in this stance, the only Strikes you can make are those using longbows, shortbows, or bows with the monk trait.</p>\n<p>You can use Flurry of Blows with these bows. You can use your other monk feats or monk abilities that normally require unarmed attacks with these bows when attacking within half the first range increment (normally 50 feet for a longbow and 30 feet for a shortbow), so long as the feat or ability doesn't require a single, specific Strike.</p>\n<p>Stance: Monastic Archer Stance</p>\n<hr>\n<p><strong>Special</strong> When you select this feat, you become trained in the longbow, shortbow, and any simple and martial bows with the monk trait. If you gain the expert strikes class feature, your proficiency rank for these weapons increases to expert, and if you gain the master strikes class feature, your proficiency rank for these weapons increases to master.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "YW4FdWgzTwRFneFF",
+  "slug": "monastic-weaponry",
+  "name": "Monastic Weaponry",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have trained with the weaponry of your monastery or school. You gain access to uncommon weapons with the monk trait and become trained in simple and martial monk weapons. When your proficiency for unarmed attacks increases to expert or master, your proficiency rank for these weapons increases to expert or master as well. If you have familiarity with an agile or finesse weapon (such as from the Catfolk Weapon Familiarity feat), that weapon also gains the monk trait for you. You can use melee monk weapons with any of your monk feats or monk abilities that normally require unarmed attacks, though not if the feat or ability requires you to use a single specific type of attack, such as Crane Stance. If you gain the critical specialization benefit for unarmed attacks—with the expert strikes class feature, for example—you also gain it with monk weapons.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "ZL5UU9quCTvcWzfY",
+  "slug": "mountain-stance",
+  "name": "Mountain Stance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk",
+   "stance"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are unarmored and touching the ground</p><hr><p>You enter the stance of an implacable mountain—a technique created by dwarven monks—allowing you to strike with the weight of an avalanche and block blows with your garments. The only Strikes you can make are falling stone unarmed attacks. These deal 1d8[bludgeoning] damage; are in the brawling group; and have the forceful, nonlethal, and unarmed traits.</p>\n<p>While in Mountain Stance, you gain a +4 item bonus to AC and a +2 circumstance bonus to any defenses against Reposition, Shove, Trip, and other forced movement effects. You have a Dexterity modifier cap to your AC of +0, meaning you don't add your Dexterity to your AC, and your Speeds are all reduced by 5 feet. The item bonus to AC from Mountain Stance is cumulative with armor potency runes on your explorer's clothing, mystic armor, and bands of force.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "iTdbkP07UFMOo1rI",
+  "slug": "nimble-reprisal",
+  "name": "Nimble Reprisal",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "justice cause"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can use Retributive Strike at greater distance. You can use a ranged weapon to make a ranged Strike instead of a melee Strike for Retributive Strike. The enemy needs to be in range, but not in reach, and it must still be in your champion's aura.</p>\n<p>You can also make melee Strikes against enemies a bit farther away. If the enemy that triggered your reaction is outside your reach but is within 5 feet of your reach, as part of your reaction you can Step to put the enemy in your reach before making a melee Retributive Strike.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "BNIAfaJPNCWKs3FN",
+  "slug": "nocturnal-tripkee",
+  "name": "Nocturnal Tripkee",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "grippli"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You tend to do most of your hunting and work at night and have adapted to the requirements of nocturnal life. You gain darkvision, allowing you to see in darkness and dim light just as well as you can in bright light. However, in darkness, you see in black-and-white only.</p><hr><p><strong>Special</strong> You can take this feat only at 1st level, and you can't retrain out of this feat or into this feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "acJkVtpX2GUvl90E",
+  "slug": "nudge-the-scales",
+  "name": "Nudge the Scales",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "cursebound",
+   "divine",
+   "healing",
+   "oracle",
+   "spirit"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You lay a finger on the scales of life and death to heal a creature, regardless of whether it's living or undead. You restore 2*1+@actor.level[healing] Hit Points to one creature within 30 feet.</p>\n<p>In addition, you can mediate during your daily preparations to place yourself on one side of the scales. Choose life or death. If you align yourself with life, you are healed by vitality healing effects, as normal for most living creatures; if you align yourself with death, you gain the void healing ability, causing you to be healed by void effects that restore Hit Points and any other effects that restore Hit Points to undead creatures.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "4xP7rC0gmEb66bAY",
+  "slug": "occult-dragonblood",
+  "name": "Occult Dragonblood",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood",
+   "lineage"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "occultism"
+  ],
+  "feats": [
+   "hDGosy2ZTwnyctEP"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your blood contains a tiny fragment of unusual or inexplicable power from a mysterious dragon, such as a conspirator dragon or omen dragon. You are drawn to the stranger parts of the world and can generally spot them with a glance. You gain the trained proficiency rank in Occultism. If you would automatically become trained in Occultism (from your background or class, for example), you instead become trained in a skill of your choice. You gain the Oddity Identification skill feat. If you choose a draconic exemplar, you must choose an occult dragon.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "bCizH4ByTwbLcYA1",
+  "slug": "one-for-all",
+  "name": "One for All",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "auditory",
+   "concentrate",
+   "emotion",
+   "linguistic",
+   "mental",
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Diplomacy"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>With precisely the right words of encouragement, you bolster an ally's efforts. Designate an ally within 30 feet; this action counts as sufficient preparation to Aid that ally. When you use the Aid reaction to help that ally, you can roll Diplomacy check in place of the usual check and the action gains the bravado trait</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "fD3RSV9nIkJsW6lD",
+  "slug": "one-toed-hop",
+  "name": "One-Toed Hop",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "tengu"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Assuming a peculiar stance, you make a short hop on each toe. You make a vertical Leap without triggering reactions that can be triggered by move actions or upon leaving or entering a square.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "MRMW0EiuOO20pzG2",
+  "slug": "ongoing-selfishness",
+  "name": "Ongoing Selfishness",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "desecration cause"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your powerful personality and incredible ego demand that you protect yourself above all else. After you use Selfish Shield, you gain resistance to all further damage from the triggering enemy until the end of the turn on which you used the reaction. This resistance is equal to half your Selfish Shield resistance.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Gcliatty0MGYbTVV",
+  "slug": "oracular-warning",
+  "name": "Oracular Warning",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "auditory",
+   "cursebound",
+   "divine",
+   "emotion",
+   "mental",
+   "oracle"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> You are about to roll initiative.</p><hr><p>You have a premonition about impending danger that you use to warn your allies. Each ally within 20 feet gains a +2 status bonus to their initiative roll and gains temporary Hit Points equal to half your level, which last for 1 minute. If you are Cursebound 2 when you use Oracular Warning, the bonus increases to +3, and if you are cursebound 3, the bonus increases to +4.</p>\n<p>Effect: Oracular Warning</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "aGpH394T1xr2ey88",
+  "slug": "pack-hunter",
+  "name": "Pack Hunter",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "gnoll"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were taught how to hunt as part of a pack. You gain a +2 circumstance bonus to checks to Aid, and your allies gain a +2 circumstance bonus to checks to Aid you.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "hc4lWhWekIVb0wjL",
+  "slug": "pack-rat",
+  "name": "Pack Rat",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "ratfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've learned how to cram vast quantities into small spaces. You can fit an additional 50% of the listed Bulk capacity into mundane storage containers or vehicles. For example, you can fit 6 Bulk in a backpack, or 12 Bulk in a chest. This doesn't alter the items' Bulk, nor does it change how much you can store in a magical or extradimensional storage space, such as a <em>spacious pouch</em>.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "U12Sh43QuY85Prdm",
+  "slug": "parthenogenic-hatchling",
+  "name": "Parthenogenic Hatchling",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lizardfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were hatched from an unfertilized egg during hard times for your people, and are a biological copy of your mother. You gain a +1 circumstance bonus to saving throws against diseases. If you roll a success on a saving throw against a disease, you get a critical success instead. If you have a different ability that would improve the save in this way (such as the Battle Hardened fighter class feature), if you roll a critical failure on the save you get a failure instead.</p>\n<p>You take damage only every 2 hours from thirst and every 2 days from starvation, rather than every hour and every day.</p><hr><p><strong>Special</strong> You can select this feat only at 1st level.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "BqceQIKE0lwIS98s",
+  "slug": "pilgrims-token",
+  "name": "Pilgrim's Token",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Religion",
+   "follower of a specific religion"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You carry a small token of protection from a site holy to your faith. You gain a wooden religious symbol for your deity for free. As long as this religious symbol is in your possession, when you tie an adversary's initiative roll, you go first.</p>\n<p>If you lose this religious symbol, you must purchase or Craft a replacement and attune it. Such a token usually costs at least 1 sp, and the attunement takes 10 minutes of prayer. You can also attune a different religious symbol with the same amount of time, but you lose the benefit of the previous religious symbol.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "I9m5XxKzazrqDKu6",
+  "slug": "plummeting-roll",
+  "name": "Plummeting Roll",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "swashbuckler"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Acrobatics"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [
+   "LQw0yIMDUJJkq1nD"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Through nimble movements, a graceful landing, and a bit of luck, you can manage to fall from spectacular heights without a scratch. You gain the Cat Fall skill feat and the Plummeting Roll reaction.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "XAsPe0mfxfQpgvCR",
+  "slug": "primal-dragonblood",
+  "name": "Primal Dragonblood",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood",
+   "lineage"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "nature"
+  ],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>A dragon with a deep connection to the natural world, such as an adamantine dragon or a horned dragon, resides somewhere on your family tree. You tend to trust your instincts and might take on the role of a protector of the wilderness. You gain the trained proficiency rank in Nature. If you would automatically become trained in Nature (from your background or class, for example), you instead become trained in a skill of your choice. You can use Nature to Sense Direction and Subsist in the wilds. If you choose a draconic exemplar, you must choose a primal dragon.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "yA9tsWT9uzL2REnw",
+  "slug": "qi-spells",
+  "name": "Qi Spells",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have cultivated your qi to produce magical effects. You gain Inner Upheaval, Qi Rush, or another 1st-rank monk qi spell you have access to.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "xbg1scOIT7RI9Fij",
+  "slug": "quick-bomber",
+  "name": "Quick Bomber",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "alchemist"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You keep your bombs and bomb-related reagents in easy-toreach pouches from which you draw without thinking. You Interact to draw a bomb, draw a versatile vial, or use Quick Alchemy to create a bomb, then Strike with the bomb. If you have the ability to create more than one bomb at a time with Quick Alchemy (such as from the double brew class feature), you can Strike with only one of the bombs you create with this action.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "XseJI9XhKNtZN8pv",
+  "slug": "raging-intimidation",
+  "name": "Raging Intimidation",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "barbarian"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your fury fills your foes with fear. While you are raging, your Demoralize and Scare to Death actions (from the Intimidation skill and an Intimidation skill feat, respectively) gain the rage trait, allowing you to use them while raging. As soon as you meet the prerequisites for the skill feats Intimidating Glare and Scare to Death, you gain these feats.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "5pGMffGKkBTZKvjw",
+  "slug": "raging-thrower",
+  "name": "Raging Thrower",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "barbarian"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Thrown weapons become especially deadly in your fury. You apply the additional damage from Rage to your thrown weapon attacks. If you have the Brutal Critical feat or the Devastator class feature, apply their benefits to thrown weapon attacks.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "W2LmEXJH75tyeCSn",
+  "slug": "rat-familiar",
+  "name": "Rat Familiar",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "ratfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have a pet rat that has become magically bonded to you. You gain a familiar, and this familiar must be a rat. It still gets the benefits of familiar abilities, but its base form remains a rat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "mQYO501xyMgtIQ3W",
+  "slug": "ratfolk-lore",
+  "name": "Ratfolk Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "ratfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "acrobatics",
+   "stealth"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Years of experience among ratfolk communities have made you nimble, and you've learned to run and hide when enemies threaten. You gain the trained proficiency rank in Acrobatics and Stealth. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Ratfolk Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "VDiMapgJoFI3CCol",
+  "slug": "ratspeak",
+  "name": "Ratspeak",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "ratfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can ask questions of, receive answers from, and use the Diplomacy skill with rodents, including beavers, mice, porcupines, rats, and squirrels, but not with other mammals, such as dogs or bats. The GM determines which animals count as rodents.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "iRztLGEK5OfjZTPg",
+  "slug": "remorseless-lash",
+  "name": "Remorseless Lash",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're skilled at beating an enemy when their morale is already breaking. When you succeed at a melee weapon Strike against a Frightened enemy, that enemy can't reduce their frightened condition below 1 until the beginning of your next turn.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "GEvaoKgQteMrd4ub",
+  "slug": "reptile-speaker",
+  "name": "Reptile Speaker",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lizardfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You hear the sounds of reptiles as language. You can ask questions of, receive answers from, and use the Diplomacy skill with animals that are reptiles (the GM determines which animals count as reptiles).</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "bkZgWFSFV4cAf5Ot",
+  "slug": "risky-surgery",
+  "name": "Risky Surgery",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Medicine"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your surgery can bring a patient back from the brink of death, but might push them over the edge. When you Treat Wounds, you can deal 1d8[slashing] damage to your patient just before applying the effects of Treat Wounds.</p>\n<p>If you do, you gain a +2 circumstance bonus to your Medicine check to Treat Wounds, and if you roll a success, you get a critical success instead.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "22P7IFyhrF7Fbw8B",
+  "slug": "root-magic",
+  "name": "Root Magic",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Occultism"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your talismans ward against foul magic. During your daily preparations, you can assemble a small pouch with bits of herbs, hair, sacred oils, and other ritual ingredients, which you give to one ally; the ally cannot be yourself. The first time that day the ally attempts a saving throw against a spell or haunt, they gain a +1 circumstance bonus to the roll. This bonus increases to +2 if you're an expert in Occultism or +3 if you're legendary.</p>\n<p>Effect: Root Magic</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "AL2KD88ddEl5AetZ",
+  "slug": "saber-teeth",
+  "name": "Saber Teeth",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "catfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have long fangs, natural or augmented. You gain a jaws unarmed attack that deals 1d6 piercing damage. Your jaws are in the brawling group and have the unarmed trait.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Vp00zw92L5yGqBHB",
+  "slug": "scaly-hide",
+  "name": "Scaly Hide",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dragonblood"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were born with a layer of scales across your entire body that resemble those of your draconic progenitor. When you're unarmored, the scales give you a +1 item bonus to AC with a Dexterity cap of +3. The item bonus to AC increases to +2 at 5th level. The item bonus to AC from these scales is cumulative with armor potency runes on your explorer's clothing, the Mystic Armor spell, or Bands of Force.</p><hr><p><strong>Special</strong> You can select this feat only at 1st level, and you can't retrain into or out of this feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "xzpMQ2ZRn9zC23XG",
+  "slug": "scamper",
+  "name": "Scamper",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "kobold"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are adjacent to at least one enemy.</p><hr><p>You Stride up to your Speed, with a +5-foot status bonus to your Speed, and you gain a +2 circumstance bonus to AC against reactions triggered by this movement. You must end this movement in a space that's not adjacent to any enemy.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "zaGD9Og2p8Opa0oJ",
+  "slug": "scavengers-search",
+  "name": "Scavenger's Search",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "tengu"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're always on the lookout for supplies and valuables. You gain a +2 circumstance bonus to locate objects (including secret doors and hazards) you search for within 30 feet with a Seek action.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "jOwZMv5jtwdKSfLS",
+  "slug": "sensitive-nose",
+  "name": "Sensitive Nose",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "gnoll"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your large black nose isn't just for show. You can pick up on the faintest scents near you and track them down. You gain imprecise scent with a range of 30 feet.</p><hr><p><strong>Special</strong> You can take this feat only at 1st level, and you can't retrain out of this feat or into this feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "DMetdzt1VJL2Y62i",
+  "slug": "snare-crafting",
+  "name": "Snare Crafting",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "skill"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Crafting"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can use the Craft activity to create snares. When you select this feat, you add the formulas for four common 1st-level snares to your formula book.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "eMmdBpbMrpIuGowo",
+  "slug": "snare-setter",
+  "name": "Snare Setter",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "kobold"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Crafting"
+  ],
+  "actions": null,
+  "skills": [
+   "crafting"
+  ],
+  "feats": [
+   "DMetdzt1VJL2Y62i"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are adept at the time-honored kobold art of making traps. You gain the trained proficiency in Crafting. If you were already trained in Crafting, you instead become trained in a skill of your choice. You gain access to all uncommon kobold snares. You gain the Snare Crafting feat, though when choosing your formulas for that feat, you can also choose from uncommon kobold snares, as well as common snares.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "augNhQ51eSlZyead",
+  "slug": "sneaky",
+  "name": "Sneaky",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Stealth is an important tool in your arsenal. You can move 5 feet farther when you take the Sneak action, up to your Speed.</p>\n<p>In addition, as long as you continue to use Sneak actions and succeed at your Stealth check, you don't become observed if you don't have cover or greater cover and aren't Concealed at the end of the Sneak action, as long as you have cover or greater cover or are concealed at the end of your turn.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "BAsKBwlbJAQ6sLhN",
+  "slug": "soothing-vials",
+  "name": "Soothing Vials",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "alchemist"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>The healing chemicals in your versatile vials also help calm a patient's mind. When a living creature affected by a mental effect regains Hit Points from one of your versatile vials, it can immediately attempt a new Will saving throw to end one mental effect of its choice. It gains a +1 item bonus to the saving throw.</p>\n<p>Effect: Soothing Vials</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "CCmiEmS7ZgyQUfhn",
+  "slug": "squawk",
+  "name": "Squawk!",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "tengu"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> You critically fail a Deception, Diplomacy, or Intimidation check against a creature that doesn't have the tengu trait.</p><hr><p>You let out an awkward squawk, ruffle your feathers, or fake some other birdlike tic to cover up a social misstep or faux pas. You get a failure on the triggering check, rather than a critical failure. All creatures that witnessed you Squawk are temporarily immune for 24 hours.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Nn80wBZYJZxcuKsJ",
+  "slug": "stone-face",
+  "name": "Stone Face",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've mastered the art of composure, even in the face of fear. You gain a +1 circumstance bonus to saves against effects with the fear trait and a +2 circumstance bonus to your Will DC against Intimidation skill actions, such as Demoralize.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "bWyY9NtLU5wXr03y",
+  "slug": "storms-lash",
+  "name": "Storm's Lash",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "tengu"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Wind and lightning have always been friends to you. You can cast the Electric Arc cantrip as a primal innate spell at will. A cantrip is heightened to a spell rank equal to half your level rounded up.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "PVkAEBlRSJHe3JCz",
+  "slug": "straveika",
+  "name": "Straveika",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dhampir",
+   "lineage"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You descend from one of the truly ancient vampires, a nosferatu cursed to eternal life but not eternal youth. People call you straveika, or ancient-born. The vestiges of your forebear's powers of domination have left you with an understanding of how a creature's intentions change its behaviors. You gain a +1 circumstance bonus to Perception checks to Sense Motive and Perception DCs against attempts to Lie to you.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "7FRYyKXDKjGoANYj",
+  "slug": "stumbling-stance",
+  "name": "Stumbling Stance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk",
+   "stance"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Deception"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You enter a seemingly unfocused stance that mimics the movements of the inebriated-bobbing, weaving, leaving false openings, and distracting your enemies from your true movements.</p>\n<p>While in this stance, you gain a +1 circumstance bonus to Deception checks to Feint. The only Strikes you can make are stumbling swing unarmed attacks. These deal 1d8 bludgeoning damage; are in the brawling group; and have the agile, backstabber, finesse, nonlethal, and unarmed traits.</p>\n<p>If an enemy hits you with a melee Strike while in this stance, it becomes Off-Guard against the next stumbling swing Strike you make against it before the end of your next turn.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "P1dk0LTWkQ1LT1ai",
+  "slug": "svetocher",
+  "name": "Svetocher",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dhampir",
+   "lineage"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "diplomacy"
+  ],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were born to a moroi, the most common vampires, and you share their supernatural fortitude and power of persuasion. When you have the Drained condition, calculate the penalty to your Fortitude saves and your Hit Point reduction as though the condition value were 1 lower. You're trained in Diplomacy. If you would automatically be trained in it, you instead become trained in a skill of your choice.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "yPWNbTqOIKdkwaVq",
+  "slug": "takedown-expert",
+  "name": "Takedown Expert",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "investigator"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've mastered combat practices that let you get up close and bring down perpetrators alive. You can use your Intelligence modifier on attack rolls for an attack stratagem if you're using a weapon of the club group in one hand (like a club or staff), in addition to the usual weapons, and those Strikes qualify for your strategic strike. Additionally, you can make any of your Strikes nonlethal without taking the normal –2 penalty.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "nA1yG3NJFK6pFE0a",
+  "slug": "tap-into-blood",
+  "name": "Tap into Blood",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "concentrate",
+   "sorcerer"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are benefiting from a blood magic effect</p><hr><p>The power in your blood allows you to perform minor feats of magic. You can perform one of the following actions depending on the tradition of your bloodline.</p><ul><li><strong>Arcane</strong> Your mind temporarily opens to the secrets of the world. Attempt to Recall Knowledge; you can use Arcana instead of the skill normally needed for that subject. If you critically fail at this check, you get a failure instead.</li><li><strong>Divine</strong> Whatever divine provenance is in your lineage guides you to instinctively move yourself or others out of harm's way. You Step, or you Reposition a target within your reach using Religion for the check.</li><li><strong>Occult</strong> Strange mists or swirling colors hide your movement. You Step up to 10 feet.</li><li><strong>Primal</strong> The immense power of nature echoes in your voice. You can attempt a Nature check to Demoralize a target.</li></ul>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "GjQZMmw2sz8OyLxj",
+  "slug": "tengu-lore",
+  "name": "Tengu Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "tengu"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "society",
+   "survival"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You learned skills for surviving in the place where your people were dispersed. You gain the trained proficiency rank in Society and Survival. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Tengu Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "AmFv3ClkAVRowHLI",
+  "slug": "tengu-weapon-familiarity",
+  "name": "Tengu Weapon Familiarity",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "tengu"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain access to all uncommon weapons with the tengu trait plus the katana, khakkara, temple sword, and wakizashi. You have familiarity with these weapons—for the purpose of proficiency, you treat any of these that are martial weapons as simple weapons and any that are advanced weapons as martial weapons.</p>\n<p>During your daily preparations, you can practice with a weapon from the sword group that's in your possession. You gain familiarity with that weapon as well. This lasts until you practice with a different sword in the same way.</p>\n<p>At 5th level, whenever you get a critical hit with one of these weapons, you get its critical specialization effect.</p>\n<p>Effect: Sword Practice</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "T8tNZANOWUZiXuzO",
+  "slug": "terrifying-croak",
+  "name": "Terrifying Croak",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "grippli"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Intimidation"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You release a haunting croak that reminds those around you of their fears. Attempt an Intimidation check to Demoralize a creature within 30 feet; you do not take a penalty to this check for not speaking a language. If the check is successful, the target cannot reduce their frightened condition below 1 for 1 round.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "pIHjH1x0AVtiX5Tv",
+  "slug": "thats-odd",
+  "name": "That's Odd",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "investigator"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>When you enter a new location, such as a room or corridor, you immediately notice one thing out of the ordinary. The GM determines what it is, or whether there's nothing reasonable to pick up, skipping obvious clues that can be easily noticed without a check or specifically looking for them. You learn only that an area or object is suspicious, but not why it's suspicious. For example, if you entered a study with a large bloodstain on the ground, the bloodstain is so obviously suspicious it's evident to you already, so the GM might note that there's something suspicious about the desk drawer instead. You would then need to investigate the drawer further to find out what specifically is out of the ordinary. If you wish, you can Pursue a Lead concerning this detail even if you have Pursed a Lead less than 10 minutes ago.</p>\n<p>That's Odd doesn't reveal whether creatures are suspicious. You don't typically get any benefit when you leave and come back to a place, though if a major change has happened there and time has passed, the GM might determine that you do.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "VCjAlOvjNvFJOsG5",
+  "slug": "tiger-stance",
+  "name": "Tiger Stance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk",
+   "stance"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are unarmored</p>\n<hr>\n<p>You enter the stance of a tiger and can make tiger claw attacks. These deal 1d8 slashing damage; are in the brawling group; and have the agile, finesse, nonlethal, and unarmed traits.</p>\n<p>On a critical success with your tiger claws, if you deal damage, the target takes 1d4 persistent bleed damage.</p>\n<p>As long as your Speed is at least 20 feet while in Tiger Stance, you can Step 10 feet.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "wTT8ieLvfWsZZaWT",
+  "slug": "tinkering-fingers",
+  "name": "Tinkering Fingers",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "ratfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "crafting"
+  ],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're trained in Crafting. If you are trained in Crafting from another source (from your background or class, for example), you instead become trained in a skill of your choice. You can Repair an item without using a repair toolkit without taking the –2 circumstance penalty, improvising tools from whatever you have at hand. You gain a +1 circumstance bonus to Crafting checks to Repair an item when you have a repair toolkit.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "5VWItcyt3Mx6mbSK",
+  "slug": "tripkee-lore",
+  "name": "Tripkee Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "grippli"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "nature",
+   "stealth"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are well versed in tripkee culture and tactics. You gain the trained proficiency in Nature and Stealth. If you would automatically become trained in one of those skills, you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Tripkee Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "CvtJ98EZvBGSCLOX",
+  "slug": "tripkee-weapon-familiarity",
+  "name": "Tripkee Weapon Familiarity",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "grippli"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain access to all uncommon weapons with the tripkee trait. You have familiarity with weapons with the tripkee trait plus the blowgun, dart, hatchet, scythe, and shortbow—for the purpose of proficiency, you treat any of these that are martial weapons as simple weapons and any that are advanced weapons as martial weapons.</p>\n<p>At 5th level, whenever you get a critical hit with one of these weapons, you get its critical specialization effect.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "qpVB9F9DURW4Lti1",
+  "slug": "uncanny-agility",
+  "name": "Uncanny Agility",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "tengu"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [
+   "CnqMJR8e9jqJR7MM"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have near-supernatural poise that lets you move swiftly across the most unsteady surfaces. You gain the Steady Balance skill feat. You can Step into difficult terrain caused by uneven ground, such as a rocky field, hilly incline, or rocking ship.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "pgIrr8xrlCXbRAeo",
+  "slug": "underworld-investigator",
+  "name": "Underworld Investigator",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "investigator"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your work as an investigator makes you familiar with the criminal element. You might be a criminal yourself, or you might have gained an understanding of how they operate from the outside. You become trained in Underworld Lore, and you gain your Pursue a Lead investigation bonus to Thievery checks to investigate a case (such as checks to Steal a clue from a suspect or Pick a Lock to open a safe with damning documents).</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "epfQ2PwNDLwyY31t",
+  "slug": "unimpeded-step",
+  "name": "Unimpeded Step",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "liberation cause"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>With a burst of divine liberation, your ally's movement from your Liberating Step is unaffected by difficult terrain, greater difficult terrain, narrow surfaces, and uneven ground. If you have the exalted reaction benefit, this applies to everyone who Steps.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "i0iyW1I7TylEgpV6",
+  "slug": "vampire-lore",
+  "name": "Vampire Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dhampir"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "society",
+   "religion"
+  ],
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were raised by your vampiric parent, or you've invested substantial time and energy researching the secrets of your undead progenitors. You're trained in Religion and Society. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>You also gain the Additional Lore general feat for Vampire Lore.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "QHwajD5n8P3oS9Wb",
+  "slug": "vicious-incisors",
+  "name": "Vicious Incisors",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "ratfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your jaws unarmed attack deals 1d6 piercing damage instead of 1d4, and gains the backstabber trait. You can file down your teeth and regrow them later on, enabling you to select this feat at any level, and to retrain into and out of this feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "KaCpXuYuho3nnDUy",
+  "slug": "vicious-vengeance",
+  "name": "Vicious Vengeance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "iniquity cause"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>While your vengeance is painful for both you and your foe, none can doubt that your enemies suffer more. You gain a circumstance bonus to the damage you deal from Destructive Vengeance equal to the number of damage dice from the reaction. This only applies to the damage the enemy takes, not the damage to yourself or the extra damage you gain after using the reaction.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "D2tyUKQiDSq3JO1Z",
+  "slug": "vigorous-health",
+  "name": "Vigorous Health",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "hobgoblin"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can withstand blood loss startlingly well. Whenever you would gain the Drained condition, you can attempt a Flat check. On a success, you don't gain the drained condition.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "5VkVWZq7ZqH6RaAW",
+  "slug": "voice-of-the-night",
+  "name": "Voice of the Night",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "dhampir"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You hear and understand the words of creatures you share the darkness with. You can ask questions of, receive answers from, and use the Diplomacy skill with bats, rats, and wolves. You also gain a +1 circumstance bonus to Make an Impression on such animals.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "9Orkgjgfx8AILuqD",
+  "slug": "warren-navigator",
+  "name": "Warren Navigator",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "ratfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "survival"
+  ],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You gain the trained proficiency rank in Survival. If you would automatically become trained in Survival (from your background or class, for example), you become trained in another skill of your choice. When you Sense Direction or attempt a roll against a Quandary spell, you get a result one degree of success better than you rolled. You don't take a penalty to Sense Direction when you lack a compass.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "2c9awqDem5OLK47S",
+  "slug": "weight-of-guilt",
+  "name": "Weight of Guilt",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "champion"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "redemption cause"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Guilt clouds the minds of those who ignore your Glimpse of Redemption. Instead of making the triggering creature enfeebled 2, you can make it Stupefied 2 for the same duration.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "9t4x8vRmQikEl4vP",
+  "slug": "well-met-traveler",
+  "name": "Well-Met Traveler",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "catfolk"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [
+   "diplomacy"
+  ],
+  "feats": [
+   "4RjDxgvNXNl5GG9d"
+  ],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You naturally adopt a pleasant and affable demeanor when meeting others. You are trained in Diplomacy. If you would automatically become trained in Diplomacy (from your background or class, for example), you instead become trained in a skill of your choice.</p>\n<p>In addition, you gain the Hobnobber skill feat.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "55WR55op9BIdgF1B",
+  "slug": "whispers-of-weakness",
+  "name": "Whispers of Weakness",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "cursebound",
+   "divine",
+   "oracle"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Voices whisper to you how to best lay a creature low. You target one creature within 60 feet; if it has any weaknesses, you learn them, as well as which of its saving throw modifiers is lowest. You also come to understand its movements, gaining a +2 status bonus to your next attack roll (or skill check made as part of an attack action) against that foe before the end of your turn. The target is then temporarily immune for 1 day.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "AN9jY1JVcU20Qdw6",
+  "slug": "wolf-stance",
+  "name": "Wolf Stance",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "monk",
+   "stance"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are unarmored</p><hr><p>You enter the stance of a wolf, low to the ground with your hands held like fangs. You can make wolf jaw unarmed attacks. These deal 1d8[piercing] damage; are in the brawling group; and have the agile, backstabber, finesse, nonlethal, and unarmed traits.</p>\n<p>If you're flanking a target while in Wolf Stance, your wolf jaw unarmed attacks also gain the trip trait.</p>",
+  "source": "Player Core 2"
+ }
+]

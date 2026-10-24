@@ -1,0 +1,54 @@
+[
+ {
+  "id": "1k3AsSW7lpU0kEpY",
+  "slug": "buckler",
+  "name": "Buckler",
+  "acBonus": 1,
+  "hardness": 3,
+  "hp": 6,
+  "traits": [],
+  "rarity": "common",
+  "price": 100,
+  "bulk": 0.1,
+  "source": "Player Core"
+ },
+ {
+  "id": "Yr9yCuJiAlFh3QEB",
+  "slug": "steel-shield",
+  "name": "Steel Shield",
+  "acBonus": 2,
+  "hardness": 5,
+  "hp": 20,
+  "traits": [],
+  "rarity": "common",
+  "price": 200,
+  "bulk": 1,
+  "source": "Player Core"
+ },
+ {
+  "id": "ltundBNFAnP7bgPr",
+  "slug": "tower-shield",
+  "name": "Tower Shield",
+  "acBonus": 2,
+  "hardness": 5,
+  "hp": 20,
+  "traits": [],
+  "rarity": "common",
+  "price": 1000,
+  "bulk": 4,
+  "source": "Player Core"
+ },
+ {
+  "id": "ezVp13Uw8cWW08Da",
+  "slug": "wooden-shield",
+  "name": "Wooden Shield",
+  "acBonus": 2,
+  "hardness": 3,
+  "hp": 12,
+  "traits": [],
+  "rarity": "common",
+  "price": 100,
+  "bulk": 1,
+  "source": "Player Core"
+ }
+]

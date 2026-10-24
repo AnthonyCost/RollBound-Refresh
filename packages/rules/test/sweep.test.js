@@ -4,10 +4,10 @@
 // data breaks a combination, this names it.
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import * as R from '../src/index.js';
+import { loadRulesData } from '../src/load.js';
 
-const data = JSON.parse(readFileSync(new URL('../data/pf2e-level1.json', import.meta.url)));
+const data = loadRulesData();
 
 // Heritages offered for an ancestry, matching the builder's Ancestry step.
 const heritagesFor = (ancestry) => data.heritages.filter((h) => h.ancestry === ancestry.id || !h.ancestry);

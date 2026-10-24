@@ -4,14 +4,14 @@
 // ancestry-elf-icon.png. Portraits are trimmed and capped at 1200px tall. Class icons
 // (finished round emblems) are fitted into 192x192 with transparency. Ancestry icons
 // are cropped to fill a 192x192 square, since the app draws their circular frame.
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync } from 'node:fs';
 import { basename, dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { loadRulesData } from '@rollbound/rules/load';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = join(here, '..', 'src', 'assets', 'art');
-const DATA = join(here, '..', '..', 'packages', 'rules', 'data', 'pf2e-level1.json');
 const NAME = /^(ancestry|class)-([a-z0-9-]+?)(-icon)?$/;
 
 const input = process.argv[2];
@@ -20,7 +20,7 @@ if (!input) {
   process.exit(1);
 }
 
-const data = JSON.parse(readFileSync(DATA, 'utf8'));
+const data = loadRulesData({ types: ['ancestries', 'classes'] });
 const known = { ancestry: new Set(data.ancestries.map((a) => a.slug)), class: new Set(data.classes.map((c) => c.slug)) };
 
 const files = readdirSync(input).filter((f) => /\.(png|jpe?g|webp)$/i.test(f));

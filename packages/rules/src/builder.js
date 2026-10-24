@@ -1,5 +1,5 @@
 // Level 1 character building (Player Core ch. 1). Pure functions over a
-// "build" (the player's choices) and the imported data in data/pf2e-level1.json.
+// "build" (the player's choices) and the imported rules data (see data.js).
 // Builds refer to rules items by their Foundry ID, which stays the same across
 // imports and renames. Book-specific rules come from the data (corrections/), so
 // nothing here is special-cased by name.

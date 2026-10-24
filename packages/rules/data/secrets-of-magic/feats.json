@@ -1,0 +1,65 @@
+[
+ {
+  "id": "yOloZIGkulrrPYG4",
+  "slug": "fire-lung",
+  "name": "Fire Lung",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "druid"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "flame order"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>A lifetime of proximity to flames has inured your lungs and eyes to smoke. You can breathe normally in areas of ash and smoke without risk of suffocation, and you ignore the Concealed condition from smoke.</p>\n<p>You need only a successful DC 10 flat check to recover from persistent fire damage, rather than DC 15 (and the DC when receiving particularly effective assistance is Flat check instead of 10).</p>",
+  "source": "Secrets of Magic"
+ },
+ {
+  "id": "kS4wxSKrZxcOvSNK",
+  "slug": "shore-step",
+  "name": "Shore Step",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "druid"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "wave order"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>The shallows and tide pools have always called to you and let you pass unhindered. You ignore difficult terrain resulting from shallow water.</p>\n<p>In addition, if you roll a success on an Acrobatics check to Balance on a slippery or wet surface, or on an Athletics check to Swim, you get a critical success instead.</p>",
+  "source": "Secrets of Magic"
+ },
+ {
+  "id": "QEOe9AhQzdqIx1ei",
+  "slug": "steadying-stone",
+  "name": "Steadying Stone",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "druid"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "stone order"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>The earth has taught you how to remain unyielding and firm. If you roll a success on an Acrobatics check made to Balance on uneven ground composed of earth or rock, you get a critical success instead.</p>\n<p>As long as you remain on the ground, you gain a +2 circumstance bonus to your Fortitude or Reflex DC against attempts to Shove or Trip you. This bonus also applies to saving throws against spells or effects that would attempt to knock you prone. If you're a rock dwarf, this bonus increases to +3.</p>",
+  "source": "Secrets of Magic"
+ }
+]

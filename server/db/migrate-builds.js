@@ -2,15 +2,13 @@
 // (version 2 refers to rules items by Foundry ID instead of slug). Safe to re-run:
 // already-current builds are skipped. Runs as part of `npm run db:setup`, or alone
 // with `npm run db:migrate-builds`.
-import { readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
 import { BUILD_VERSION, migrateBuild } from '@rollbound/rules';
+import { loadRulesData } from '@rollbound/rules/load';
 import { pool } from '../src/db.js';
 
 export async function migrateBuilds() {
-  const dataPath = createRequire(import.meta.url).resolve('@rollbound/rules/data/pf2e-level1.json');
-  const rules = JSON.parse(await readFile(dataPath, 'utf8'));
+  const rules = loadRulesData();
   const { rows } = await pool.query("SELECT id, data FROM characters WHERE data ? 'build'");
   let upgraded = 0;
   for (const { id, data } of rows) {

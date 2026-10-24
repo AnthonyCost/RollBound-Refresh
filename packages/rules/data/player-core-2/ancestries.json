@@ -1,0 +1,406 @@
+[
+ {
+  "id": "972EkpJOPv9KkQIW",
+  "slug": "catfolk",
+  "name": "Catfolk",
+  "hp": 8,
+  "size": "med",
+  "speed": 25,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "cha"
+   ],
+   [
+    "dex"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "wis"
+  ],
+  "languages": [
+   "amurrun",
+   "common"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "draconic",
+    "elven",
+    "fey",
+    "gnomish",
+    "goblin",
+    "halfling",
+    "iruxi",
+    "jotun"
+   ]
+  },
+  "traits": [
+   "catfolk",
+   "humanoid"
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Curious and gregarious wanderers, catfolk combine the features of felines and humanoids in both appearance and temperament. They enjoy learning new things, collecting new tales and trinkets, and ensuring their loved ones are safe and happy. Catfolk view themselves as the chosen guardians of natural places in the world and are often recklessly brave, even in the face of overwhelming opposition. They believe that strong communities, breadth of experience, and continual self-improvement aid them in this fight.</em></p>\n<p><em>Catfolk</em></p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "piNLXUrm9iaGqD2i",
+  "slug": "hobgoblin",
+  "name": "Hobgoblin",
+  "hp": 8,
+  "size": "med",
+  "speed": 25,
+  "vision": "darkvision",
+  "boosts": [
+   [
+    "con"
+   ],
+   [
+    "int"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "wis"
+  ],
+  "languages": [
+   "common",
+   "goblin"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "draconic",
+    "dwarven",
+    "halfling",
+    "jotun",
+    "kholo",
+    "orcish"
+   ]
+  },
+  "traits": [
+   "hobgoblin",
+   "humanoid"
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Taller and stronger than their goblin kin, hobgoblins are equals in strength and size to humans, with broad shoulders and long, powerful arms.</em></p>\n<p><em>Hobgoblin</em></p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "vxbQ1Yw4qwgjTzqo",
+  "slug": "kholo",
+  "name": "Kholo",
+  "hp": 8,
+  "size": "med",
+  "speed": 25,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "str"
+   ],
+   [
+    "int"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "wis"
+  ],
+  "languages": [
+   "common",
+   "kholo"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "draconic",
+    "elven",
+    "fey",
+    "iruxi",
+    "necril",
+    "orcish"
+   ]
+  },
+  "traits": [
+   "gnoll",
+   "humanoid"
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Kholo have bad reputations as brutal raiders and demon-worshipers. Many believe that kholo are witches, cannibals, and worse. The truth is more complex. Kholo are eminently practical and pragmatic hunters and raiders. To them, honor is just another word for pointless risk. Any loss of a kholo affects not just the individual, but their packmates and kin as well. Wasting time on anything but victory, whether it's mercy or cruelty, is seen as little shy of immoral. Kholo are masters of ambushes, tactical feints, and psychological warfare. Equally misunderstood is the kholo practice of ancestor worship and endocannibalism. Kholo consume their dead as a sign of reverence, holding a grand feast and transforming the bones into art or weapons. Kholo extend this honor to respected foes, hoping to bring their enemy's cunning or strength into the clan.</em></p>\n<p><em>xBV8oGvecw7abZxc</em></p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "7oQxL6wgsokD3QXG",
+  "slug": "kobold",
+  "name": "Kobold",
+  "hp": 6,
+  "size": "sm",
+  "speed": 25,
+  "vision": "darkvision",
+  "boosts": [
+   [
+    "cha"
+   ],
+   [
+    "dex"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "con"
+  ],
+  "languages": [
+   "common",
+   "sakvroth"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "aklo",
+    "diabolic",
+    "draconic",
+    "dwarven",
+    "empyrean",
+    "fey",
+    "gnomish",
+    "petran"
+   ]
+  },
+  "traits": [
+   "humanoid",
+   "kobold"
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Every kobold instinctively understands the importance of power, and many are inclined to venerate those who have it, whether they be mighty dragons, cruel fiends, imperious fey, or even ancient artifacts. Kobolds seek out these alliances out of a sense of pragmatism—after all, who would dare bully a kobold who serves an ancient dragon?—but also because kobold eggs incubated near such loci of power take on physical traits (and sometimes abilities) similar to those of the warren's benefactor. On their own, kobolds are ingenious crafters and devoted allies, but outsiders who trespass into their territory find them to be inspired skirmishers and clever ambushers. However, these reptilian opportunists prove happy to cooperate with other humanoids when it's to their benefit, combining caution and cunning to make their fortunes in the wider world.</em></p>\n<p><em>Kobold</em></p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "HWEgF7Gmoq55VhTL",
+  "slug": "lizardfolk",
+  "name": "Lizardfolk",
+  "hp": 8,
+  "size": "med",
+  "speed": 25,
+  "vision": "normal",
+  "boosts": [
+   [
+    "str"
+   ],
+   [
+    "wis"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "int"
+  ],
+  "languages": [
+   "common",
+   "iruxi"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "amurrun",
+    "boggard",
+    "draconic",
+    "elven",
+    "fey",
+    "jotun",
+    "thalassic"
+   ]
+  },
+  "traits": [
+   "humanoid",
+   "lizardfolk"
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Lizardfolk are consummate survivors, heirs to empires considered ancient even by the elves.</em></p>\n<p><em>Lizardfolk</em></p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "P6PcVnCkh4XMdefw",
+  "slug": "ratfolk",
+  "name": "Ratfolk",
+  "hp": 6,
+  "size": "sm",
+  "speed": 25,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "dex"
+   ],
+   [
+    "int"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "str"
+  ],
+  "languages": [
+   "common",
+   "ysoki"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "aklo",
+    "draconic",
+    "dwarven",
+    "gnomish",
+    "goblin",
+    "halfling",
+    "kholo",
+    "orcish",
+    "sakvroth"
+   ]
+  },
+  "traits": [
+   "humanoid",
+   "ratfolk"
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Ysoki are beings that most surface-dwelling humanoids refer to as \"ratfolk.\" They are a communal people who prefer cramped conditions, with up to 100 individuals living in a given home. If they can't find homes in town, ratfolk may instead live in caves and cavern complexes, as these provide great storage for the many and varied goods they bring back from trading expeditions.</em></p>\n<p>Ratfolk</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "18xDKYPDBLEv2myX",
+  "slug": "tengu",
+  "name": "Tengu",
+  "hp": 6,
+  "size": "med",
+  "speed": 25,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "dex"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [],
+  "languages": [
+   "common",
+   "tengu"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "dwarven",
+    "elven",
+    "fey",
+    "gnomish",
+    "goblin",
+    "halfling"
+   ]
+  },
+  "traits": [
+   "humanoid",
+   "tengu"
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Tengu are survivalists and conversationalists, equally at home living off the wilderness and finding a niche in dense cities. They accumulate knowledge, tools, and companions, adding them to their collection as they travel.</em></p>\n<p>Tengu</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "hXM5jXezIki1cMI2",
+  "slug": "tripkee",
+  "name": "Tripkee",
+  "hp": 6,
+  "size": "sm",
+  "speed": 25,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "dex"
+   ],
+   [
+    "wis"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [
+   "str"
+  ],
+  "languages": [
+   "common",
+   "grippli"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "boggard",
+    "chthonian",
+    "draconic",
+    "elven",
+    "fey",
+    "iruxi",
+    "thalassic"
+   ]
+  },
+  "traits": [
+   "grippli",
+   "humanoid"
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Tripkees are a shy and cautious people who generally seek to avoid being drawn into the affairs of others. Despite their cautious outlook and small stature, adventurous tripkees still take bold and noble action when the situation demands it.</em></p>\n<p>FhIJtKcINEe7fipX</p>",
+  "source": "Player Core 2"
+ }
+]

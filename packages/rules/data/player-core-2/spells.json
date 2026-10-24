@@ -1,0 +1,509 @@
+[
+ {
+  "id": "W02bHXylIpoXbO4e",
+  "slug": "bullhorn",
+  "name": "Bullhorn",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "auditory",
+   "concentrate",
+   "illusion",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "10 minutes",
+  "description": "<p>You amplify your voice, loud enough for you to be heard easily at a great distance. For the duration, your voice can be heard loudly and clearly by all listeners within 500 feet, even if other ambient noise would otherwise block the sound. Despite the volume, this doesn't make your voice jarring or distracting. This doesn't increase the range or area of other auditory or linguistic effects, and physical barriers such as walls and doors still block or muffle your voice as normal.</p>\n<p>Your loud voice makes it easier to Coerce others, and the acoustics assist in Performing at a large venue. You gain a +1 status bonus to checks to Coerce and auditory Performance checks to Perform at a large venue. You can Dismiss the spell.</p>\n<p>Spell Effect: Bullhorn</p><hr><p><strong>Heightened (5th)</strong> Your voice can be heard clearly up to 1,200 feet away.</p>\n<p><strong>Heightened (7th)</strong> Your voice can be heard clearly up to 1 mile away.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "LvezN4a3kYf1OHMg",
+  "slug": "carryall",
+  "name": "Carryall",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "force",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "8 hours",
+  "description": "<p>A small platform of magical force materializes adjacent to you to carry cargo. It is Invisible or has a ghostly appearance, is 2 feet in diameter, and follows 5 feet behind you, floating just above the ground. It holds up to 5 Bulk of objects (if they can fit on it). Any objects atop the platform fall to the ground when the spell ends. You can Sustain the spell to move the platform up to 30 feet along the ground, to make it stay in place, or to have it return to you and resume following you. The spell ends if a creature tries to ride atop the platform, if the platform is overloaded, if anyone tries to lift or force the platform higher above the ground, or if you move more than 60 feet away from the platform.</p><hr><p><strong>Heightened (4th)</strong> The platform can carry 10 Bulk, creatures can ride atop it, and it can hover in the air, not just on the ground</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "8TQiFzGf4feoHeH0",
+  "slug": "chilling-spray",
+  "name": "Chilling Spray",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "cold",
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": "15-foot cone",
+  "target": null,
+  "defense": "reflex",
+  "duration": null,
+  "description": "<p>A cone of icy shards bursts from your spread hands and coats the targets in a layer of frost. You deal 2d4 cold damage to creatures in the area; they must each attempt a Reflex save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and takes a –5-foot status penalty to its Speeds for 2 rounds.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and takes a –10-foot status penalty to its Speeds for 2 rounds.</p><hr><p><strong>Heightened (+1)</strong> The damage increases by 2d4.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "TSyFZNAbqfkRrcq0",
+  "slug": "concordant-choir",
+  "name": "Concordant Choir",
+  "rank": 1,
+  "traditions": [
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "sonic"
+  ],
+  "rarity": "common",
+  "actions": "1 to 3",
+  "range": "30 feet",
+  "area": null,
+  "target": "varies",
+  "defense": "basic fortitude",
+  "duration": null,
+  "description": "<p>You unleash a dangerous consonance of reverberating sound, focusing on a single target or spreading out to damage many foes. The number of actions you spend Casting this Spell determines its targets, range, area, and other parameters.</p><hr><p>1 The spell deals 1d4 sonic damage to a single enemy, with a basic Fortitude save.</p>\n<p>2 (manipulate) The spell deals 2d4 sonic damage to all creatures in a 10-foot , with a basic Fortitude save.</p>\n<p>3 (manipulate) The spell deals 2d4 sonic damage to all creatures in a 30-foot , with a basic Fortitude save.</p><hr><p><strong>Heightened (+1)</strong> The damage increases by 1d4 for the 1-action version, or 2d4 for the other versions.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "rerNA6YZsdxuJYt3",
+  "slug": "d-j-vu",
+  "name": "Déjà Vu",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "incapacitation",
+   "manipulate",
+   "mental"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "100 feet",
+  "area": null,
+  "target": "1 creature",
+  "defense": "will",
+  "duration": "2 rounds",
+  "description": "<p>You loop a thought process in the target's mind, forcing it to repeat a moment's worth of actions. The target must attempt a Will save. If the target fails, whatever actions the target uses on its next turn, it must repeat on its following turn. The actions must be repeated in the same order and as close to the same specifics as possible. For example, if the target makes an attack, it must repeat the attack against the same creature, if possible, and if the target moves, it must move the same distance and direction, if possible, on its next turn.</p>\n<p>If the target can't repeat an action, such as Casting a Spell that has been exhausted or needing to target a creature that has died, it can act as it chooses for that action but becomes Stupefied 1 until the end of its turn.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "dDiOnjcsBFbAvP6t",
+  "slug": "gale-blast",
+  "name": "Gale Blast",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "air",
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": "5-foot emanation",
+  "target": null,
+  "defense": "fortitude",
+  "duration": null,
+  "description": "<p>Wind flows from your outstretched hands and whirls around you in a 5-foot emanation. Each creature in the area takes 1d6 bludgeoning damage, with a Fortitude save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is pushed 5 feet away from you.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and is pushed 10 feet away from you.</p><hr><p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "b5BQbwmuBhgPXTyi",
+  "slug": "haunting-hymn",
+  "name": "Haunting Hymn",
+  "rank": 0,
+  "traditions": [
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "auditory",
+   "concentrate",
+   "manipulate",
+   "sonic"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": "15-foot cone",
+  "target": null,
+  "defense": "basic fortitude",
+  "duration": null,
+  "description": "<p>You echo a jarring hymn that only creatures in the area can hear. The hymn deals 1d8 sonic damage, with a basic Fortitude save. If a target critically fails the save, it's also Deafened for 1 minute.</p>\n<hr>\n<p><strong>Heightened (+2)</strong> The damage increases by 1d8.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "WJOQryAODgYmrL6g",
+  "slug": "imprint-message",
+  "name": "Imprint Message",
+  "rank": 1,
+  "traditions": [
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "1 object",
+  "defense": null,
+  "duration": null,
+  "description": "<p>You project psychic vibrations onto the target object, imprinting it with a short message or emotional theme of your design. This imprinted sensation is revealed to a creature who casts Object Reading on the target object, replacing any emotional events the item was present for. If the object is in the area of a Retrocognition spell, the imprinted messages appear as major events in the timeline, but they don't interfere with any other visions.</p>\n<p>If the object is targeted with Read Aura of a higher spell rank than <em>imprint message</em>, the caster learns that the object has been magically modified. When you Cast this Spell, any prior vibrations placed on an object by previous castings of <em>imprint message</em> fade.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "nX85Brzax9f650aK",
+  "slug": "invisible-item",
+  "name": "Invisible Item",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "illusion",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "1 object",
+  "defense": null,
+  "duration": "1 hour",
+  "description": "<p>You make the object Invisible. This makes it Undetected to all creatures, though the creatures can attempt to find the target, making it Hidden to them instead if they succeed. If the item is used as part of a hostile action, the spell ends after that hostile action is completed. Making a weapon invisible typically doesn't give any advantage to the attack, except that an invisible thrown weapon or piece of ammunition can be used for an attack without necessarily giving information about the attacker's hiding place unless the weapon returns to the attacker.</p><hr><p><strong>Heightened (3rd)</strong> The duration is until the next time you make your daily preparations.</p>\n<p><strong>Heightened (7th)</strong> The duration is unlimited.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "2tHYKoVc5YhSewDO",
+  "slug": "leaden-steps",
+  "name": "Leaden Steps",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "metal",
+   "morph"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "30 feet",
+  "area": null,
+  "target": "1 creature",
+  "defense": "fortitude",
+  "duration": "1 minute",
+  "description": "<p>You partially transform a foe's feet into unwieldy slabs of metal, slowing their steps. The target attempts a Fortitude saving throw.</p><hr><p><strong>Critical Success</strong> The target is unaffected.</p>\n<p><strong>Success</strong> The target is Encumbered and has weakness 2 to electricity until the end of your next turn. The spell can't be sustained.</p>\n<p><strong>Failure</strong> The target is encumbered and has weakness 2 to electricity.</p>\n<p><strong>Critical Failure</strong> The target is encumbered and has weakness 3 to electricity.</p>\n<p>Spell Effect: Leaden Steps</p><hr><p><strong>Heightened (+1)</strong> The weakness increases by 1.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "Vbj8bTQ1nwrOBbYF",
+  "slug": "live-wire",
+  "name": "Live Wire",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "attack",
+   "concentrate",
+   "electricity",
+   "manipulate",
+   "metal"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "30 feet",
+  "area": null,
+  "target": "1 creature",
+  "defense": null,
+  "duration": null,
+  "description": "<p>You conjure up a length of sharp copper filament humming with electrical current that strikes out at your foe. The wire deals 1d4 slashing damage and 1d4 electricity damage, depending on your spell attack roll against the target's AC.</p><hr><p><strong>Critical Success</strong> The target takes double damage and ceil@item.rank / 2d4[persistent,electricity] damage.</p>\n<p><strong>Success</strong> The target takes full damage.</p>\n<p><strong>Failure</strong> The target takes the electricity damage, but not the slashing damage.</p>\n<p><strong>Critical Failure</strong> The target is unaffected.</p><hr><p><strong>Heightened (+2)</strong> The slashing damage, initial electricity damage, and persistent electricity damage on a critical hit each increase by 1d4.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "yAiSNmz39qXOIlco",
+  "slug": "mud-pit",
+  "name": "Mud Pit",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "earth",
+   "manipulate",
+   "water"
+  ],
+  "rarity": "common",
+  "actions": "3",
+  "range": "60 feet",
+  "area": "15-foot burst",
+  "target": null,
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>Thick, clinging mud covers the ground, 1 foot deep. The mud is difficult terrain.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "1meVElIu1CEVYWkv",
+  "slug": "noxious-vapors",
+  "name": "Noxious Vapors",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "poison"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": "10-foot emanation",
+  "target": null,
+  "defense": "basic fortitude",
+  "duration": "1 round",
+  "description": "<p>You emit a cloud of toxic smoke that temporarily obscures you from sight. Each creature except you in the area when you Cast the Spell takes 1d6 poison damage (basic Fortitude save). A creature that critically fails the saving throw also becomes Sickened 1. All creatures in the area become Concealed, and all creatures outside the smoke become concealed to creatures within it. This smoke can be dispersed by a strong wind.</p><hr><p><strong>Heightened (+1)</strong> The damage increases by 1d6</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "5LYi9Efs6cko4GGL",
+  "slug": "object-reading",
+  "name": "Object Reading",
+  "rank": 1,
+  "traditions": [
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "touch",
+  "area": null,
+  "target": "1 object",
+  "defense": null,
+  "duration": null,
+  "description": "<p>You place a hand on an object to learn a piece of information about an emotional event that occurred involving the object within the past week, determined by the GM. If you cast <em>object reading</em> on the same item multiple times, you can either concentrate on a single event to gain additional pieces of information about that event, or you can gain a piece of information about another emotional event in the applicable time frame.</p>\n<hr>\n<p><strong>Heightened (2nd)</strong> You can learn about an event that occurred within the last month.</p>\n<p><strong>Heightened (4th)</strong> You can learn about an event that occurred within the last year.</p>\n<p><strong>Heightened (6th)</strong> You can learn about an event that occurred within the last decade.</p>\n<p><strong>Heightened (8th)</strong> You can learn about an event that occurred within the last century.</p>\n<p><strong>Heightened (9th)</strong> You can learn about an event that occurred within the entirety of the object's history.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "K9gI08enGtmih5X1",
+  "slug": "protector-tree",
+  "name": "Protector Tree",
+  "rank": 1,
+  "traditions": [
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "plant",
+   "wood"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "30 feet",
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>A Medium tree suddenly grows in an unoccupied square within range. The tree has AC 10 and 10 Hit Points. Whenever an ally adjacent to the tree is hit by a Strike, the tree interposes its branches and takes the damage first. Any additional damage beyond what it takes to reduce the tree to 0 Hit Points is dealt to the original target. The tree isn't large enough to impede movement through its square. If the tree is in soil and survives to the end of the spell's duration, it remains as an ordinary, non-magical tree and continues to grow and thrive. The GM might determine that the tree disappears immediately in certain inhospitable situations.</p><hr><p><strong>Heightened (+1)</strong> The tree has an additional 10 Hit Points.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "D7ZEhTNIDWDLC2J4",
+  "slug": "puff-of-poison",
+  "name": "Puff of Poison",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "poison"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "10 feet",
+  "area": null,
+  "target": "1 creature",
+  "defense": "fortitude",
+  "duration": null,
+  "description": "<p>You exhale a shimmering cloud of toxic breath at an enemy's face. The target takes 1d4 poison damage and ceil@item.level/2d4[persistent,poison], depending on its Fortitude save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The target takes half initial damage and no persistent damage.</p>\n<p><strong>Failure</strong> The target takes full initial and persistent damage.</p>\n<p><strong>Critical Failure</strong> The target takes double initial and persistent damage.</p><hr><p><strong>Heightened (+2)</strong> The initial poison damage increases by 1d4, and the persistent poison damage increases by 1d4.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "zA0jNIBRgLsyTpbm",
+  "slug": "scatter-scree",
+  "name": "Scatter Scree",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "earth",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "30 feet",
+  "area": "10-foot line",
+  "target": null,
+  "defense": "basic reflex",
+  "duration": "1 minute",
+  "description": "<p>A jumble of rocks cascades into the area. The scattering rocks deal 2d4 bludgeoning damage (basic Reflex save). The ground in the area becomes difficult terrain for the duration of the spell. A creature can Interact to clear a square of this scree.</p>\n<p>If you cast this spell again, any previous <em>scatter scree</em> you've cast ends.</p><hr><p><strong>Heightened (+1)</strong> The damage increases by 1d4.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "8E97SA9KAWCNdXfO",
+  "slug": "schadenfreude",
+  "name": "Schadenfreude",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "emotion",
+   "mental"
+  ],
+  "rarity": "common",
+  "actions": "reaction",
+  "range": "30 feet",
+  "area": null,
+  "target": "the triggering foe",
+  "defense": "will",
+  "duration": null,
+  "description": "<p><strong>Trigger</strong> You critically fail a saving throw against a foe's effect.</p><hr><p>You distract your enemy with their feeling of smug pleasure when you fail catastrophically. They must attempt a Will save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature is distracted by its amusement and takes a -1 status penalty on Perception checks and Will saves for 1 round. Spell Effect: Schadenfreude (Success)</p>\n<p><strong>Failure</strong> The creature is overcome by its amusement and is Stupefied 1 for 1 round.</p>\n<p><strong>Critical Failure</strong> The creature is lost in its amusement and is Stupefied 2 for 1 round and Stunned 1.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "eSL5hVT9gXrnRLtd",
+  "slug": "spout",
+  "name": "Spout",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "primal"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "water"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "30 feet",
+  "area": "5-foot cube",
+  "target": null,
+  "defense": "basic reflex",
+  "duration": null,
+  "description": "<p>Water blasts upward, coming out of the ground, rising from a pool, or even manifesting from thin air. Any creatures in the area take 2d4 bludgeoning damage, with a basic Reflex saving throw. A creature that critically fails its save is disoriented by the explosion of water, becoming Off-Guard until the end of your next turn.</p>\n<p>You can change this spell's area to a 5-foot , provided you center the burst in a body of water. This body of water can be as small as a pond or creek, but not as small as a puddle or bathtub.</p><hr><p><strong>Heightened (+1)</strong> The damage increases by 1d4.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "B0FZLkoHsiRgw7gv",
+  "slug": "summon-lesser-servitor",
+  "name": "Summon Lesser Servitor",
+  "rank": 1,
+  "traditions": [
+   "divine"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate",
+   "summon"
+  ],
+  "rarity": "common",
+  "actions": "3",
+  "range": "30 feet",
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": "1 minute",
+  "description": "<p>While deities jealously guard their most powerful servants from the summoning spells of those who aren't steeped in the faith, this spell allows you to conjure an inhabitant of the Outer Sphere with or without the deity's permission. You summon a common celestial, fiend, or monitor of level –1. You can choose to instead summon a common animal of level –1 that hails from the Outer Sphere; you can choose for this animal to gain the celestial and holy traits, the fiend and unholy traits, or the monitor trait. It's anathema to summon a servitor if it has a holy or unholy trait that isn't allowed for your deity's sanctification. For example, Sarenrae's sanctification is \"can choose holy,\" so you couldn't summon an unholy creature, and Pharasma's is \"none,\" so you couldn't summon a holy or unholy creature. The GM might determine that your deity restricts specific types of creatures further, making it anathema to summon them as well.</p><hr><p><strong>Heightened (2nd)</strong> The creature can be level 1 or lower.</p>\n<p><strong>Heightened (3rd)</strong> The creature can be level 2 or lower.</p>\n<p><strong>Heightened (4th)</strong> The creature can be level 3 or lower.</p>",
+  "source": "Player Core 2"
+ },
+ {
+  "id": "qTr2oCgIXl703Whb",
+  "slug": "thoughtful-gift",
+  "name": "Thoughtful Gift",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "divine",
+   "occult"
+  ],
+  "traits": [
+   "manipulate",
+   "teleportation"
+  ],
+  "rarity": "common",
+  "actions": "1",
+  "range": "120 feet",
+  "area": null,
+  "target": "1 willing creature",
+  "defense": null,
+  "duration": null,
+  "description": "<p>You teleport one object of light or negligible Bulk held in your hand to the target. The object appears instantly in the target's hand if they have a free hand, or at their feet if they don't. The target knows what object you're attempting to send them. If the target is Unconscious or refuses to accept your gift, or if the spell would teleport a creature (even if the creature is inside an extradimensional container), the spell fails.</p><hr><p><strong>Heightened (3rd)</strong> The spell's range increases to 500 feet.</p>\n<p><strong>Heightened (5th)</strong> As 3rd level, and the object's maximum Bulk increases to 1. You can Cast the Spell with 3 actions instead of 1; doing so increases the range to 1 mile, and you don't need line of sight to the target, but you must be extremely familiar with the target.</p>",
+  "source": "Player Core 2"
+ }
+]
