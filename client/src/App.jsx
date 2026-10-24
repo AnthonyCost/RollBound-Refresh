@@ -5,7 +5,9 @@ import TurnPage from './pages/TurnPage.jsx';
 import RollPage from './pages/RollPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
-import HubPage from './pages/HubPage.jsx';
+import HomePage from './pages/HomePage.jsx';
+import CharactersPage from './pages/CharactersPage.jsx';
+import CampaignsPage from './pages/CampaignsPage.jsx';
 import BuilderPage from './pages/BuilderPage.jsx';
 import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
 import CampaignLayout, { CampaignOverview } from './pages/CampaignPage.jsx';
@@ -67,7 +69,7 @@ function PlayShell() {
   return (
     <div className="app app--play">
       <TopBar
-        crumbs={[{ label: 'Characters', to: '/home?mode=player' }, { label: character?.name ?? 'Character' }]}
+        crumbs={[{ label: 'Characters', to: '/characters' }, { label: character?.name ?? 'Character' }]}
         actions={encounterActive && <span className="eyebrow">Round {round}</span>}
       />
 
@@ -78,7 +80,7 @@ function PlayShell() {
         {loading && <p className="muted italic center">Summoning your character…</p>}
         {notFound && (
           <p className="muted italic center">
-            That character isn't on your roster. <Link to="/home">Back to the hub</Link>
+            That character isn't on your roster. <Link to="/characters">Back to your characters</Link>
           </p>
         )}
         {!loading && !notFound && <Outlet />}
@@ -95,7 +97,9 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
       </Route>
       <Route element={<SignedInOnly />}>
-        <Route path="/home" element={<HubPage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/characters" element={<CharactersPage />} />
+        <Route path="/campaigns" element={<CampaignsPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/create" element={<BuilderPage />} />
         <Route path="/characters/:characterId/edit" element={<BuilderPage />} />

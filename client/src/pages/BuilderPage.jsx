@@ -339,7 +339,7 @@ export default function BuilderPage() {
       const { id } = await api.createCharacter(character);
       saveDraft(draftKey, null);
       // The character is saved either way; a portrait that fails can be added from the sheet,
-      // and a campaign it couldn't ask to join can be asked again from the hub. For
+      // and a campaign it couldn't ask to join can be asked again from the Campaigns page. For
       // someone else's campaign this sends a join request; the GM's own joins directly.
       if (portrait.file) await savePortrait(id, portrait.file).catch(() => {});
       if (campaign) await service.join(campaign.code, id).catch(() => {});
@@ -363,7 +363,7 @@ export default function BuilderPage() {
     <div className="app">
       <TopBar
         crumbs={[
-          { label: 'Characters', to: '/home?mode=player' },
+          { label: 'Characters', to: '/characters' },
           ...(editId ? [{ label: editing?.name ?? 'Character', to: `/play/${editId}/sheet` }, { label: 'Edit' }] : [{ label: 'New character' }]),
         ]}
         actions={
@@ -373,7 +373,7 @@ export default function BuilderPage() {
                 Reset
               </button>
             )}
-            <Link to={editId ? `/play/${editId}/sheet` : '/home'} className="btn btn--small">Close</Link>
+            <Link to={editId ? `/play/${editId}/sheet` : '/characters'} className="btn btn--small">Close</Link>
           </>
         }
       />

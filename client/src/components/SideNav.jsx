@@ -17,15 +17,11 @@ export default function SideNav({ open, onClose }) {
   }, [open, onClose]);
 
   if (!open) return null;
-  // Home is highlighted on the hub; the hub's two modes are plain links into it.
-  const link = (to, icon, label) => {
-    const Tag = to.includes('?') ? Link : NavLink;
-    return (
-      <Tag to={to} end className="sidenav__link" onClick={onClose}>
-        <Icon name={icon} /> {label}
-      </Tag>
-    );
-  };
+  const link = (to, icon, label) => (
+    <NavLink to={to} end className="sidenav__link" onClick={onClose}>
+      <Icon name={icon} /> {label}
+    </NavLink>
+  );
   return (
     <div className="sidenav" role="presentation">
       <div className="sidenav__backdrop" onClick={onClose} />
@@ -39,14 +35,14 @@ export default function SideNav({ open, onClose }) {
           </button>
         </div>
         {link('/home', 'home', 'Home')}
-        {link('/home?mode=player', 'shield', 'Your characters')}
-        {link('/home?mode=gm', 'map', 'Your campaigns')}
+        {link('/characters', 'shield', 'Characters')}
+        {link('/campaigns', 'map', 'Campaigns')}
         {link('/bestiary', 'book', 'Bestiary')}
         <div className="sidenav__divider" />
-        {link('/create', 'plus', 'New character')}
-        {link('/campaigns/new', 'plus', 'New campaign')}
+        {link('/create', 'plus', 'New Character')}
+        {link('/campaigns/new', 'plus', 'New Campaign')}
         <div className="sidenav__divider" />
-        {user && link('/account', 'user', 'Your account')}
+        {user && link('/account', 'user', 'Your Account')}
         <button
           type="button"
           className="sidenav__link"
@@ -55,7 +51,7 @@ export default function SideNav({ open, onClose }) {
             logout();
           }}
         >
-          <Icon name="close" /> {isDemo ? 'Exit demo' : 'Sign out'}
+          <Icon name="close" /> {isDemo ? 'Exit Demo' : 'Sign Out'}
         </button>
       </nav>
     </div>

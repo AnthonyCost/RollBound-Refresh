@@ -20,7 +20,7 @@ export default function InviteCode({ code }) {
       <h2 className="panel__title">Invite code</h2>
       <p className="invite__code" aria-label={`Invite code ${code.split('').join(' ')}`}>{code}</p>
       <p className="rule-note center">
-        Players enter this code on their hub to bring a character into your campaign. Only you can see it, and it never changes.
+        Players enter this code on their Campaigns page to ask to bring a character in. Only you can see it, and it never changes.
       </p>
       <button type="button" className="btn btn--blood" onClick={copy}>
         {copied ? 'Copied' : 'Copy code'}

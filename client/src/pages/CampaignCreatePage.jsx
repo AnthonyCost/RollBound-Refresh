@@ -101,8 +101,8 @@ export default function CampaignCreatePage() {
   const selected = chosen && adventurePath(chosen);
   return (
     <PageShell
-      crumbs={[{ label: 'Campaigns', to: '/home?mode=gm' }, { label: 'New campaign' }]}
-      actions={<Link to="/home" className="btn btn--small">Cancel</Link>}
+      crumbs={[{ label: 'Campaigns', to: '/campaigns' }, { label: 'New Campaign' }]}
+      actions={<Link to="/campaigns" className="btn btn--small">Cancel</Link>}
     >
       <nav className="steps" aria-label="Campaign steps">
         {steps.map((s, i) => (

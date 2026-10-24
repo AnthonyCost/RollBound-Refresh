@@ -23,7 +23,7 @@ export function PartySheetPage() {
     <TableProvider key={`${id}/${characterId}`} party={{ campaignId: id, characterId }}>
       <ViewOnlyShell
         crumbs={(name, campaignName) => [
-          { label: 'Campaigns', to: '/home' },
+          { label: 'Campaigns', to: '/campaigns' },
           { label: campaignName ?? 'Campaign', to: `/campaigns/${id}` },
           { label: name },
         ]}

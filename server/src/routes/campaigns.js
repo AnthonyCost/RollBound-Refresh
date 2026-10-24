@@ -104,7 +104,17 @@ campaigns.get('/', async (req, res) => {
      ORDER BY c.name`,
     [req.user.id],
   );
-  const all = rows.map((r) => toJson(r, req.user.id));
+  // Each campaign's party, for the portraits on its card.
+  const { rows: members } = await pool.query(
+    `SELECT id, name, level, portrait_key, campaign_id, owner_id FROM characters WHERE campaign_id = ANY($1::int[]) ORDER BY name`,
+    [rows.map((r) => r.id)],
+  );
+  const all = rows.map((r) => ({
+    ...toJson(r, req.user.id),
+    party: members
+      .filter((m) => m.campaign_id === r.id)
+      .map((m) => ({ id: m.id, name: m.name, level: m.level, portraitUrl: storage.publicUrl(m.portrait_key), mine: m.owner_id === req.user.id })),
+  }));
   res.json({ running: all.filter((c) => c.isGm), playing: all.filter((c) => !c.isGm) });
 });
 

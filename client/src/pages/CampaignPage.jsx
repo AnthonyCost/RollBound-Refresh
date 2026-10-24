@@ -80,17 +80,15 @@ export default function CampaignLayout() {
   useEffect(load, [load]);
   // Answering a request from the inbox updates the party here too.
   useEffect(() => onInboxChanged(load), [load]);
-
-  // Players reach their campaigns from Player Mode, GMs from Game Master Mode.
   const all = [
-    { label: 'Campaigns', to: campaign?.isGm === false ? '/home?mode=player' : '/home?mode=gm' },
+    { label: 'Campaigns', to: '/campaigns' },
     { label: campaign?.name ?? 'Campaign', to: `/campaigns/${id}` },
     ...crumbs,
   ];
   if (missing) {
     return (
       <PageShell crumbs={all}>
-        <p className="muted italic center">This campaign doesn't exist, or you're not part of it. <Link to="/home">Back to the hub</Link></p>
+        <p className="muted italic center">This campaign doesn't exist, or you're not part of it. <Link to="/campaigns">Back to your campaigns</Link></p>
       </PageShell>
     );
   }

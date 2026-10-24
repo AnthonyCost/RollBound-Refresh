@@ -82,7 +82,7 @@ packages/rules/        Rules engine: pure functions, no dependencies. Shared by 
   scripts/import-pf2e.js The importer
   test/                  rules.test.js, builder.test.js, sweep.test.js, data.test.js
 client/                React app (Vite)
-  src/pages/             Login, Register, Hub, Account, Builder, Campaign pages, Sheet/Turn/Roll/GM
+  src/pages/             Login, Register, Characters, Campaigns, Account, Builder, Campaign pages, Sheet/Turn/Roll/GM
   src/builder/           Builder steps, Showcase (character select), OptionList, art.js
   src/sheet/             PDF export: fill logic, field map, open/download
   src/state/             Auth, table state, campaign service, portraits, inbox
@@ -116,10 +116,17 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - The demo needs the API running now; the old in-browser imitation is gone.
 - **Profile:** the Account page (`/account`) sets the display name and profile picture. Sign-up has an optional picture too; it uploads after the account exists, and if that fails the user lands on the Account page with a note.
 
-### 2. Hub
-- A **Player Mode / Game Master Mode** switch (tabs with counts). Both views render from one load; switching only hides the other, so there's no fetch or reload. The last choice is remembered in `localStorage` (`rollbound.hubMode`), defaulting to Player.
-- **Player Mode:** your characters with portrait, HP and AC, plus **New character**; the campaigns your characters are in (including ones you also run), each naming your characters in it; and the join-a-campaign box.
-- **Game Master Mode:** your campaigns (the ones you run), plus **New campaign**.
+### 2. Home, Characters and Campaigns pages
+- **Home** (`/home`, `pages/HomePage.jsx`) is where signing in lands and where the wordmark goes. It greets you, then shows three sections: **My Characters**, **Campaigns I'm Hosting** and **Campaigns I'm Playing**. Each has every card, a count, its main action (Create a Character, Create a Campaign) and **See All**; the section titles link to the full pages. It has no search, sort or join box; those are on the full pages. The cards are shared with those pages (`CharacterCard`, `CampaignCard`).
+- **Characters** (`/characters`, `pages/CharactersPage.jsx`) is the full list of your characters.
+  - It shows only your characters, as cards: class art behind the portrait, name, "Level · Ancestry · Class", campaign (plus "Asked to join …" or "Rules updated"), and HP and AC.
+  - Each card has **View** (the sheet), **Edit** (the builder; off for characters without builder choices) and **Delete** (asks first; `DELETE /api/characters/:id`).
+  - Search covers name, level, ancestry, class and campaign. Sort by name, level, or created newest or oldest; the choice is remembered (`rollbound.characterSort`). **Create a Character** sits top right.
+- **Campaigns** (`/campaigns`, `pages/CampaignsPage.jsx`) has two sections:
+  - **Campaigns I'm Hosting:** View, Edit, Encounters, and Delete (asks first). Deleting from the campaign's Edit page also lands here, with a notice.
+  - **Campaigns I'm Playing:** campaigns your characters are in, including any you also host, with View and Session Logs, followed by the join-a-campaign box.
+  - Cards show the cover, the party's portraits (up to six, then "+N"), Adventure Path or Homebrew, the start date, the player count, and your role ("Role: Game Master" or "Run by …"). The campaign list API now includes each campaign's party (`party`: id, name, level, portrait, and whether it's yours).
+- The old Player Mode / Game Master Mode toggle is gone; the header's menus and the breadcrumbs ("Characters", "Campaigns") lead to these pages.
 - Each character opens at `/play/:id/sheet` (with `spells`, `inventory`, `lore`, and the hidden `turn` and `roll`). Anyone with a character's share link can view it at `/sheets/:shareId`.
 
 ### 3. Character builder (`/create`)
@@ -265,11 +272,10 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ### 9b. Header (laid out like GitHub's)
 - **One header everywhere:** `components/TopBar.jsx`, used by `PageShell`, the hub, the play screens, the builder and the read-only sheets.
-- **Left:** the ☰ button opens a side menu (`SideNav.jsx`): Home, Your characters, Your campaigns, New character, New campaign, Your account, Sign out / Exit demo. Next come the ROLLBOUND wordmark (home) and breadcrumbs, such as `Characters / Mira Ashvale` or `Campaigns / Ashen Road / Edit`. Each page passes its crumbs; the hub has none. Phones show only the last crumb, and hide the wordmark when there's a crumb to make room.
-- **Right:** page actions (Edit, Cancel, Reset, Close, View only), the **+** menu (New character, New campaign), the inbox, and the avatar menu (name, Your account, Your characters, Your campaigns, Sign out / Exit demo). Signed out (a shared sheet), it shows only the wordmark, crumbs and Sign in.
+- **Left:** the ☰ button opens a side menu (`SideNav.jsx`): Home, Characters, Campaigns, Bestiary, New Character, New Campaign, Your Account, Sign Out / Exit Demo. Menu items are in Title Case. Next come the ROLLBOUND wordmark (home) and breadcrumbs, such as `Characters / Mira Ashvale` or `Campaigns / Ashen Road / Edit`. Each page passes its crumbs: "Characters" links to `/characters` and "Campaigns" to `/campaigns`. Phones show only the last crumb, and hide the wordmark when there's a crumb to make room.
+- **Right:** page actions (Edit, Cancel, Reset, Close, View only), the **+** menu (New Character, New Campaign), the inbox, and the avatar menu (name, Your Account, Home, Characters, Campaigns, Sign Out / Exit Demo). Signed out (a shared sheet), it shows only the wordmark, crumbs and Sign in.
 - **Menus** (`Menu.jsx`): Escape or a click outside closes them, arrow keys move between items, and focus returns to the button.
 - **Tabs:** the character tabs (Sheet, Spell Book, Inventory, Lore) sit under the header on every screen size as an underlined row, scrolling sideways on narrow phones. They used to be a bottom bar on phones.
-- **Hub modes from links:** `/home?mode=player` and `/home?mode=gm` open the hub in that mode, and the side menu, avatar menu and breadcrumbs use them.
 
 ### 10. Builder art
 - **Classes:** portraits are Paizo's Remaster iconics, and the 16 tile icons are Adventure Card Game emblems. The Investigator and Swashbuckler icons were cut from coin photos.

@@ -31,7 +31,7 @@ export default function CampaignEditPage() {
     setErrors([]);
     try {
       await campaigns.remove(id);
-      navigate('/home', { replace: true, state: { deleted: campaign.name } });
+      navigate('/campaigns', { replace: true, state: { deleted: campaign.name } });
     } catch (err) {
       setErrors(errorsFrom(err));
       setDeleting(false);
@@ -39,7 +39,7 @@ export default function CampaignEditPage() {
   };
 
   const cancel = <Link to={`/campaigns/${id}`} className="btn btn--small">Cancel</Link>;
-  const crumbs = [{ label: 'Campaigns', to: '/home?mode=gm' }, { label: campaign?.name ?? 'Campaign', to: `/campaigns/${id}` }, { label: 'Edit' }];
+  const crumbs = [{ label: 'Campaigns', to: '/campaigns' }, { label: campaign?.name ?? 'Campaign', to: `/campaigns/${id}` }, { label: 'Edit' }];
   return (
     <PageShell crumbs={crumbs} actions={cancel}>
       <header className="builder__header">

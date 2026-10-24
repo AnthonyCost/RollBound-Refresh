@@ -63,8 +63,8 @@ export default function TopBar({ crumbs = [], actions }) {
                 </>
               }
               items={[
-                { label: 'New character', to: '/create' },
-                { label: 'New campaign', to: '/campaigns/new' },
+                { label: 'New Character', to: '/create' },
+                { label: 'New Campaign', to: '/campaigns/new' },
               ]}
             />
             <Inbox />
@@ -75,15 +75,16 @@ export default function TopBar({ crumbs = [], actions }) {
               header={
                 <>
                   <strong>{user.displayName}</strong>
-                  <span className="muted">{isDemo ? 'Temporary demo account' : user.email}</span>
+                  <span className="muted">{isDemo ? 'Temporary Demo Account' : user.email}</span>
                 </>
               }
               items={[
-                { label: 'Your account', to: '/account' },
-                { label: 'Your characters', to: '/home?mode=player' },
-                { label: 'Your campaigns', to: '/home?mode=gm' },
+                { label: 'Your Account', to: '/account' },
+                { label: 'Home', to: '/home' },
+                { label: 'Characters', to: '/characters' },
+                { label: 'Campaigns', to: '/campaigns' },
                 'divider',
-                { label: isDemo ? 'Exit demo' : 'Sign out', onClick: logout },
+                { label: isDemo ? 'Exit Demo' : 'Sign Out', onClick: logout },
               ]}
             />
           </>

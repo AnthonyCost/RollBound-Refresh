@@ -40,6 +40,7 @@ export const api = {
 
   listCharacters: () => request('/characters'),
   getCharacter: (id) => request(`/characters/${id}`),
+  deleteCharacter: (id) => request(`/characters/${id}`, { method: 'DELETE' }),
   createCharacter: (data) => post('/characters', data),
   // keepalive lets the save finish even if the tab is closing.
   setHp: (id, currentHp) => request(`/characters/${id}/hp`, { method: 'PUT', body: JSON.stringify({ currentHp }), keepalive: true }),
