@@ -15,6 +15,8 @@ const toJson = (row) => ({
   level: row.level,
   campaignId: row.campaign_id,
   campaignName: row.campaign_name ?? null,
+  // The campaign's books (null: all), so the builder offers only those when editing.
+  campaignBooks: row.campaign_books ?? null,
   portraitUrl: storage.publicUrl(row.portrait_key),
   data: row.data,
   // Derived on the way out so every client sees the same math.
@@ -23,7 +25,7 @@ const toJson = (row) => ({
 });
 
 const SELECT_WITH_CAMPAIGN = `
-  SELECT ch.*, c.name AS campaign_name
+  SELECT ch.*, c.name AS campaign_name, c.books AS campaign_books
   FROM characters ch
   LEFT JOIN campaigns c ON c.id = ch.campaign_id`;
 

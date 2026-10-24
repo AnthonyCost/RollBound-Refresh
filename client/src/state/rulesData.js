@@ -8,6 +8,10 @@ import { api } from '../api.js';
 import { DEMO_ID_PREFIX, updateDemoCharacter } from './demoCharacters.js';
 
 export const RULES_VERSION = index.meta.version;
+/** Every book RollBound has, in order; campaigns choose from these. */
+export const ALL_BOOKS = index.meta.books;
+/** A campaign's books for display: null means every book. */
+export const booksLabel = (books) => (books ? books.join(' · ') : 'Every book');
 
 const FILES = import.meta.glob(['../../../packages/rules/data/**/*.json', '!**/index.json'], { import: 'default' });
 const loaders = Object.fromEntries(Object.entries(FILES).map(([path, load]) => [path.split('/data/')[1], load]));

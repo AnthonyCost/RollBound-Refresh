@@ -4,6 +4,8 @@ import { requireUser } from '../auth.js';
 import { generateInviteCode, normalizeInviteCode } from '../inviteCode.js';
 import { storage } from '../storage/index.js';
 import { checkImageKey, swapImages } from '../images.js';
+import { bookIssues, campaignBooks, migrateBuild } from '@rollbound/rules';
+import { rulesData } from '../rules.js';
 
 export const campaigns = Router();
 campaigns.use(requireUser);
@@ -19,6 +21,7 @@ const toJson = (row, userId) => {
     backstory: row.backstory,
     coverUrl: storage.publicUrl(row.cover_key),
     partyLevel: row.party_level,
+    books: row.books ?? null,
     characterCount: row.character_count ?? undefined,
     gmName: row.gm_name ?? undefined,
     gmAvatarUrl: storage.publicUrl(row.gm_avatar_key ?? null),
@@ -40,6 +43,7 @@ const isId = (s) => /^\d{1,9}$/.test(s);
 /**
  * Validates a campaign body. coverKey: undefined keeps the current cover (on edit),
  * null means no cover, and a string must be a finished upload by this same user.
+ * books: null (or omitted) allows every book; otherwise a list of book titles.
  */
 async function validCampaign(body, userId) {
   const errors = [];
@@ -54,17 +58,23 @@ async function validCampaign(body, userId) {
     const checked = await checkImageKey(coverKey, 'cover', userId);
     if (checked.error) errors.push(checked.error);
   }
-  return { errors, name, backstory, partyLevel, coverKey };
+  const allBooks = rulesData().meta.books;
+  const rawBooks = body?.books ?? null;
+  if (rawBooks !== null && (!Array.isArray(rawBooks) || rawBooks.some((b) => !allBooks.includes(b)))) {
+    errors.push(`Books must be a list of: ${allBooks.join(', ')}.`);
+  }
+  const books = errors.length ? null : campaignBooks(rawBooks, allBooks);
+  return { errors, name, backstory, partyLevel, coverKey, books };
 }
 
 /** Inserts with a fresh invite code, retrying in the (astronomically rare) case of a collision. */
-async function insertCampaign({ name, backstory, partyLevel, coverKey }, userId) {
+async function insertCampaign({ name, backstory, partyLevel, coverKey, books }, userId) {
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
       const { rows } = await pool.query(
-        `INSERT INTO campaigns (name, backstory, party_level, cover_key, gm_user_id, invite_code)
-         VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-        [name, backstory, partyLevel, coverKey ?? null, userId, generateInviteCode()],
+        `INSERT INTO campaigns (name, backstory, party_level, cover_key, gm_user_id, invite_code, books)
+         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+        [name, backstory, partyLevel, coverKey ?? null, userId, generateInviteCode(), books],
       );
       return rows[0];
     } catch (err) {
@@ -105,6 +115,17 @@ campaigns.get('/invites/:code', async (req, res) => {
   res.json(preview);
 });
 
+/** Messages for a character's choices from books the campaign doesn't allow (empty if none). */
+function outsideBooks(character, campaign) {
+  const build = character.data?.build;
+  if (!campaign.books || !build) return [];
+  const data = rulesData();
+  const issues = bookIssues(migrateBuild(build, data), data, campaign.books);
+  if (!issues.length) return [];
+  const list = issues.map((i) => `${i.name} (${i.book})`).join(', ');
+  return [`${campaign.name} uses only ${campaign.books.join(', ')}. ${character.name} has ${list}. Edit the character to choose something else first.`];
+}
+
 // Join with one of your characters. A character is in one campaign at a time.
 campaigns.post('/join', async (req, res) => {
   const code = normalizeInviteCode(req.body?.code);
@@ -112,8 +133,14 @@ campaigns.post('/join', async (req, res) => {
   if (!code) return res.status(400).json({ errors: ["That doesn't look like an invite code."] });
   if (!isId(characterId)) return res.status(400).json({ errors: ['Choose one of your characters.'] });
 
-  const { rows: found } = await pool.query('SELECT id FROM campaigns WHERE invite_code = $1', [code]);
+  const { rows: found } = await pool.query('SELECT id, name, books FROM campaigns WHERE invite_code = $1', [code]);
   if (!found.length) return res.status(404).json({ errors: ['No campaign uses that invite code.'] });
+
+  // A character can only join if everything they picked comes from the campaign's books.
+  const { rows: mine } = await pool.query('SELECT name, data FROM characters WHERE id = $1 AND owner_id = $2', [characterId, req.user.id]);
+  if (!mine.length) return res.status(404).json({ errors: ['Character not found.'] });
+  const errors = outsideBooks(mine[0], found[0]);
+  if (errors.length) return res.status(400).json({ errors });
 
   const { rowCount } = await pool.query(
     'UPDATE characters SET campaign_id = $1, updated_at = now() WHERE id = $2 AND owner_id = $3',
@@ -128,7 +155,7 @@ campaigns.get('/:id', async (req, res) => {
   const { rows } = await pool.query(`${SELECT_CAMPAIGN} WHERE c.id = $1`, [req.params.id]);
   const row = rows[0];
   const { rows: roster } = await pool.query(
-    `SELECT ch.id, ch.name, ch.level, ch.data->>'className' AS class_name, ch.data->'ancestry'->>'name' AS ancestry,
+    `SELECT ch.id, ch.name, ch.level, ch.data->>'className' AS class_name, ch.data->'ancestry'->>'name' AS ancestry, ch.data->'build' AS build,
             ch.owner_id, ch.portrait_key, u.display_name AS player, u.avatar_key AS player_avatar_key
      FROM characters ch JOIN users u ON u.id = ch.owner_id
      WHERE ch.campaign_id = $1 ORDER BY ch.name`,
@@ -149,6 +176,8 @@ campaigns.get('/:id', async (req, res) => {
       playerAvatarUrl: storage.publicUrl(r.player_avatar_key),
       portraitUrl: storage.publicUrl(r.portrait_key),
       mine: r.owner_id === req.user.id,
+      // Choices from books the campaign doesn't allow (it can change after they joined).
+      outsideBooks: bookIssues(migrateBuild(r.build, rulesData()), rulesData(), row.books).map((i) => `${i.name} (${i.book})`),
     })),
   });
 });
@@ -159,14 +188,16 @@ campaigns.patch('/:id', async (req, res) => {
   const input = await validCampaign(req.body, req.user.id);
   if (input.errors.length) return res.status(400).json({ errors: input.errors });
 
-  const { rows: before } = await pool.query('SELECT cover_key FROM campaigns WHERE id = $1 AND gm_user_id = $2', [req.params.id, req.user.id]);
+  const { rows: before } = await pool.query('SELECT cover_key, books FROM campaigns WHERE id = $1 AND gm_user_id = $2', [req.params.id, req.user.id]);
   if (!before.length) return res.status(404).json({ errors: ['Campaign not found.'] });
   const oldCover = before[0].cover_key;
   const newCover = input.coverKey === undefined ? oldCover : input.coverKey;
 
+  // books: omitted keeps the current list, so older clients can't erase it.
+  const books = req.body?.books === undefined ? before[0].books : input.books;
   await pool.query(
-    'UPDATE campaigns SET name = $1, backstory = $2, party_level = $3, cover_key = $4 WHERE id = $5',
-    [input.name, input.backstory, input.partyLevel, newCover, req.params.id],
+    'UPDATE campaigns SET name = $1, backstory = $2, party_level = $3, cover_key = $4, books = $5 WHERE id = $6',
+    [input.name, input.backstory, input.partyLevel, newCover, books, req.params.id],
   );
   await swapImages(oldCover, newCover);
 

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { DATA_TYPES, EARLY_TYPES, assembleData, dataFiles, splitData } from '../src/data.js';
 import { loadRulesData } from '../src/load.js';
+import * as R from '../src/index.js';
 
 const DATA_DIR = new URL('../data/', import.meta.url);
 const index = JSON.parse(readFileSync(new URL('index.json', DATA_DIR)));
@@ -42,7 +43,9 @@ describe('rules data files', () => {
     assert.deepEqual(early.classes, data.classes);
 
     const pc1 = loadRulesData({ books: ['Player Core'] });
-    assert.ok(pc1.feats.every((f) => f.source === 'Player Core'));
+    // Support books (feats Player Core classes borrow from older books) load with any selection.
+    assert.ok(pc1.feats.every((f) => f.source === 'Player Core' || !data.meta.books.includes(f.source)));
+    assert.ok(!pc1.classes.some((c) => c.source !== 'Player Core'));
     assert.deepEqual(pc1.skills, data.skills, 'lists that belong to no book always load');
     assert.ok(dataFiles(index, { books: ['Player Core'] }).length < index.files.length);
   });
@@ -50,5 +53,37 @@ describe('rules data files', () => {
   it(`stays under ${SIZE_BUDGET / 1024 / 1024} MB, the point to move it into Postgres`, () => {
     const total = onDisk().reduce((sum, p) => sum + statSync(new URL(p, DATA_DIR)).size, 0);
     assert.ok(total < SIZE_BUDGET, `Rules data is ${(total / 1024 / 1024).toFixed(1)} MB. Time for roadmap step 4's Postgres move (docs/HANDOFF.md).`);
+  });
+});
+
+describe('campaign books', () => {
+  const all = data.meta.books;
+
+  it('stores "every book" as null and always includes Player Core', () => {
+    assert.equal(R.campaignBooks(null, all), null);
+    assert.equal(R.campaignBooks([...all], all), null);
+    assert.deepEqual(R.campaignBooks(['Dark Archive (Remastered)', 'Not A Book'], all), ['Player Core', 'Dark Archive (Remastered)']);
+  });
+
+  it('keeps support books like Divine Mysteries whatever the campaign allows', () => {
+    const view = R.campaignData(data, ['Player Core']);
+    assert.equal(view.deities.length, data.deities.length);
+    assert.ok(view.classes.every((c) => c.source === 'Player Core'));
+    assert.ok(!view.classes.find((c) => c.slug === 'wizard').features.some((f) => f.choice?.options.some((o) => o.source === 'Impossible Magic')), 'no Impossible Magic arcane schools');
+  });
+
+  it('keeps feats an allowed option grants, even from a book the campaign leaves out', () => {
+    const view = R.campaignData(data, ['Player Core', 'Dark Archive (Remastered)']);
+    const hammer = view.backgrounds.find((b) => b.slug === 'legacy-of-the-hammer');
+    const granted = data.feats.find((f) => f.id === hammer.feats[0]);
+    assert.equal(granted.source, 'Player Core 2');
+    assert.ok(view.feats.some((f) => f.id === granted.id));
+  });
+
+  it('names choices from books a campaign leaves out', () => {
+    const build = { ...R.emptyBuild(), class: data.classes.find((c) => c.slug === 'gunslinger').id, ancestry: data.ancestries.find((a) => a.slug === 'human').id };
+    assert.deepEqual(R.bookIssues(build, data, null), []);
+    assert.deepEqual(R.bookIssues(build, data, ['Player Core']).map((i) => [i.kind, i.name, i.book]), [['class', 'Gunslinger', 'Guns & Gears']]);
+    assert.equal(R.dropBookIssues(build, data, ['Player Core']).class, null);
   });
 });

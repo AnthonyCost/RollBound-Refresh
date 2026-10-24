@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useCampaignService } from '../state/campaignService.js';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 import Avatar from './Avatar.jsx';
+import { Link } from 'react-router-dom';
+import { booksLabel } from '../state/rulesData.js';
 
 const format = (raw) => {
   const clean = raw.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
@@ -79,8 +81,14 @@ export default function JoinCampaign({ characters, onJoined }) {
             <p className="hub-card__sub hub-card__gm" style={{ margin: 0 }}>
               <Avatar url={preview.gmAvatarUrl} name={preview.gmName} size={18} /> Run by {preview.gmName}
             </p>
+            <p className="hub-card__tag" style={{ margin: '4px 0 0' }}>Books: {booksLabel(preview.books)}</p>
           </div>
         </div>
+      )}
+      {preview && (
+        <Link to={`/create?invite=${encodeURIComponent(code)}`} className="btn">
+          Build a new character for {preview.name}
+        </Link>
       )}
 
       {preview &&

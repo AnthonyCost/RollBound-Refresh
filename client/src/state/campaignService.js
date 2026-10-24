@@ -4,19 +4,20 @@ import { demoCampaignService } from './demoCampaigns.js';
 
 /**
  * Campaign operations against the API. `cover` is { file } for a new image,
- * { remove: true } to drop the current one, or {} to leave it alone.
+ * { remove: true } to drop the current one, or {} to leave it alone. `books` is
+ * null for every book, or a list of book titles (see campaignBooks in the rules).
  */
 const serverCampaignService = {
   list: () => api.listCampaigns(),
   get: (id) => api.getCampaign(id),
 
-  async create({ name, backstory, partyLevel, cover }) {
+  async create({ name, backstory, partyLevel, cover, books = null }) {
     const coverKey = cover.file ? await api.uploadImage(cover.file, 'cover') : null;
-    return api.createCampaign({ name, backstory, partyLevel, coverKey });
+    return api.createCampaign({ name, backstory, partyLevel, coverKey, books });
   },
 
-  async update(id, { name, backstory, partyLevel, cover }) {
-    const body = { name, backstory, partyLevel };
+  async update(id, { name, backstory, partyLevel, cover, books = null }) {
+    const body = { name, backstory, partyLevel, books };
     if (cover.file) body.coverKey = await api.uploadImage(cover.file, 'cover');
     else if (cover.remove) body.coverKey = null;
     return api.updateCampaign(id, body);

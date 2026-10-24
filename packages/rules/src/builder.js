@@ -5,6 +5,7 @@
 // nothing here is special-cased by name.
 
 import { RANKS } from './proficiency.js';
+import { bookAllowed } from './data.js';
 
 export const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 export const STARTING_GOLD_CP = 1500;
@@ -728,6 +729,25 @@ export function missingChoices(build, data) {
   return choiceRefs(build, data)
     .filter((r) => !r.item)
     .map(({ step, kind, id }) => ({ step, kind, id }));
+}
+
+/**
+ * Choices from books a campaign doesn't allow (books: its list, or null for all),
+ * as { step, kind, id, name, book }.
+ */
+export function bookIssues(build, data, books) {
+  if (!books || !build) return [];
+  return choiceRefs(build, data)
+    .filter((r) => r.item && !bookAllowed(r.item.source, books, data.meta.books))
+    .map(({ step, kind, id, item }) => ({ step, kind, id, name: item.name, book: item.source }));
+}
+
+/** The build without choices from books the campaign doesn't allow. */
+export function dropBookIssues(build, data, books) {
+  if (!books) return build;
+  return choiceRefs(build, data)
+    .filter((r) => r.item && !bookAllowed(r.item.source, books, data.meta.books))
+    .reduce((b, r) => r.clear(b), build);
 }
 
 /** The build with every missing choice cleared, so the builder asks for it again. */

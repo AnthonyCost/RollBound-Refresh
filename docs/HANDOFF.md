@@ -44,7 +44,7 @@ sudo service postgresql start        # Postgres often stops after a WSL restart
 npm run db:setup                     # tables, seed data, invite codes, build upgrades (safe to re-run)
 npm run dev:server                   # API on :3001
 npm run dev:client                   # app on :5173 (second terminal)
-npm test                             # 154 rules tests, including the full build sweep
+npm test                             # 162 rules tests, including the full build sweep
 ```
 
 Other commands:
@@ -191,7 +191,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Ancestries:** eight borrow a class iconic for now (`BORROWED` in `art.js`), and the rest use the placeholder or a letter. Human uses Valeros, with a hand-tuned tile crop in `TILE_FOCUS`.
 - **Adding art:** files are found by name in `client/src/assets/art/`, as `<kind>-<slug>.webp` for portraits and `<kind>-<slug>-icon.webp` for icons. `npm run art:import` converts them and warns about icons whose corners aren't transparent. Full guide: `docs/adding-art.md`.
 
-### 11. Scalability work (steps 0–4 and 6 of the roadmap)
+### 11. Scalability work (steps 0–6 of the roadmap)
 - **Step 0, art discovered by file name:** see above.
 - **Step 1, corrections files:** all book-specific rules moved out of the engine into per-book JSON. The importer applies them and reports gaps.
 - **Step 2, stable IDs:**
@@ -220,6 +220,27 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - The builder loads `EARLY_TYPES` first (about 100 KB compressed of the 181 KB total), so Ancestry, Background and Class show before feats, spells and gear arrive. Checked in Chrome with those files held back 3 seconds.
   - **Postgres is deferred on purpose.** The data is 0.7 MB, and the plan was to move at about 5 MB. `test/data.test.js` fails past 5 MB with a message pointing here, so CI says when it's time.
   - The `books` filter is ready for step 5.
+
+### 14. Campaign books (roadmap step 5)
+- **What the GM sees:** a "Books" field on the campaign form, either *every book, including ones added later* (the default) or *only these books* with Player Core always in.
+  - Stored in `campaigns.books` (`TEXT[]`, `NULL` = every book), and validated against the real book list.
+  - Shown on the campaign page and in the invite preview.
+  - Editing a campaign without sending `books` keeps the current list.
+- **Building for a campaign:**
+  - Open `/create?invite=CODE`, using the "Build a new character for…" link in the join panel or the GM's "Build a character for this campaign" button, or enter a code in the builder's campaign bar.
+  - The builder then offers only that campaign's books, clears choices from other books with a note saying which, and saving also joins the campaign.
+  - The draft remembers the campaign across reloads.
+- **Joining** is refused if a character picked anything from a book the campaign doesn't allow. The error names each choice, for example "Gunslinger (Guns & Gears)". The server checks this for accounts, and the demo store does the same check.
+- **When the GM narrows the books later:** the roster flags characters who no longer fit, and the owner gets an **Edit** link. Editing a character in a campaign offers only its books and lists the choices to re-pick, each with the reason.
+- **How the filtering works (`campaignData` in `src/data.js`):**
+  - It filters the *options* players pick from.
+  - Feats and spells that allowed content *grants* stay, whichever book prints them. For example, a Dark Archive background grants a Player Core 2 feat.
+  - Support books (Divine Mysteries' deities, older feats a class grants) always load.
+  - `bookIssues()` names the choices from outside books.
+- **Tests:** 162 in total. The sweep now also builds every book as its own campaign (Player Core plus that book) and checks nothing comes from outside it.
+- **Verified live:**
+  - The API was run against a real Postgres: a private instance in the scratch folder, since the system one needs sudo. That covered create, validation, invite preview, join refusal and acceptance, editing, and roster flags. `db:setup`, including the build migration, also ran cleanly there for the first time.
+  - The demo flow was clicked through in Chrome: 15 checks, from creating a campaign to editing a flagged character.
 
 ### 13. Guns & Gears and Dark Archive (Remastered)
 - **Guns & Gears** comes from Foundry, whose version is the remaster: it's in `BOOKS`. It adds the Gunslinger and Inventor, the Automaton ancestry (4 heritages), 39 backgrounds and firearms. One correction: the Gunslinger is expert with simple and martial firearms and crossbows and trained with advanced ones, so weapon proficiency can now be set by weapon group (`weaponGroups`).
@@ -292,7 +313,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Testing and verification
 
-- `npm test`: 154 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, the data files and their size budget, and an empty import report.
+- `npm test`: 162 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, the data files and their size budget, and an empty import report.
 - **Build sweep** (`test/sweep.test.js`): every class with every ancestry, heritage, background, subclass option and deity must produce a valid character with a complete sheet. A failure names the combinations that broke.
 - **GitHub Actions** runs the tests and a client build on every push and pull request.
 - **UI checks:** done with headless Windows Chrome screenshots from WSL, using a small proxy that sets demo or sign-in state. Tap-specific behavior wasn't testable this way.
@@ -302,7 +323,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Gotchas
 
-- **Postgres stops after WSL restarts.** Run `sudo service postgresql start`. Several features were finished while it was down, so their database parts are verified by tests rather than a live run: the GM avatar on campaigns, and converting saved character builds.
+- **Postgres stops after WSL restarts.** Run `sudo service postgresql start`. For testing without sudo, a throwaway instance works: `initdb -D <dir> -U rollbound --auth=trust`, then `pg_ctl -D <dir> -o "-p 5433 -c unix_socket_directories=''" start`, and point `DATABASE_URL` at `postgres://rollbound@localhost:5433/<db>`. That's how `db:setup` (including converting saved builds) and the campaign-books API were run live.
 - **Re-running the importer** pulls the latest Foundry data. Check the corrections report every time. The data file records which commit it came from.
 - **The PDF field map** is tied to the exact template. Replace the template, then re-run `map-sheet-fields.mjs`; it stops with an error if any field moved.
 - **The ancestry fallbacks** (`BORROWED`, `TILE_FOCUS` in `art.js`) stop mattering once real ancestry files exist. Delete those entries then.
@@ -334,7 +355,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Scalability roadmap
 
-From the planning discussion. Steps 0–4 and 6 are done.
+From the planning discussion. Steps 0–6 are done.
 
 | Step | What | Status |
 | --- | --- | --- |
@@ -344,7 +365,7 @@ From the planning discussion. Steps 0–4 and 6 are done.
 | 6 | The build sweep as a committed test that runs on every push (GitHub Actions) and after every import | Done |
 | 3 | Stamp characters with the data version they were built with; flag choices that disappear after a re-import; "please re-pick" on the sheet | Done |
 | 4 | Split the data file per book and type; load per step; move to Postgres at about 5 MB | Done; Postgres waits for the 5 MB test to fail |
-| 5 | Each campaign chooses its allowed books; the builder filters by them | **Next**, when GMs run games |
-| 7 | Show licenses per item, a site footer, and refuse non-redistributable books by default | Before a public launch |
+| 5 | Each campaign chooses its allowed books; the builder filters by them | Done |
+| 7 | Show licenses per item, a site footer, and refuse non-redistributable books by default | **Next**, before a public launch |
 
 The biggest future jump is **leveling from 2 to 20**. It multiplies the feats, spells and features handled, so steps 1 and 6 matter even more then.

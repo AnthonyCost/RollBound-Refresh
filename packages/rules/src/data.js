@@ -35,9 +35,70 @@ export function splitData(data) {
   return { index: { meta: data.meta, files: entries }, files };
 }
 
+/** The core rules: every campaign includes it. */
+export const CORE_BOOK = 'Player Core';
+
+/**
+ * A campaign's book list in its stored form: null means every book (including ones
+ * added later), otherwise the chosen books in data order, always with Player Core.
+ * Unknown titles are dropped.
+ */
+export function campaignBooks(selected, allBooks) {
+  if (!Array.isArray(selected)) return null;
+  const chosen = new Set([CORE_BOOK, ...selected]);
+  const books = allBooks.filter((b) => chosen.has(b));
+  return books.length === allBooks.length ? null : books;
+}
+
+/**
+ * Whether a book's content is allowed under a campaign's books. Only the books
+ * players choose (meta.books) are filtered; support books that other books borrow
+ * from (deities from Divine Mysteries, a feat a class grants) always load.
+ */
+export const bookAllowed = (book, books, allBooks) => !books || !book || !allBooks.includes(book) || books.includes(book);
+
+/**
+ * The rules data as a campaign sees it: options from books it doesn't allow are
+ * gone, including a book's extra subclass options for other books' classes. Feats
+ * and spells that allowed content grants stay, whichever book prints them (a Dark
+ * Archive background grants a Player Core 2 feat), so nobody loses what they're owed.
+ */
+export function campaignData(data, books) {
+  if (!books) return data;
+  const ok = (x) => bookAllowed(x.source, books, data.meta.books);
+  const out = { ...data };
+  for (const type of DATA_TYPES) if (data[type]?.length && typeof data[type][0] === 'object') out[type] = data[type].filter(ok);
+  out.classes = out.classes.map((c) => ({
+    ...c,
+    features: c.features.map((f) => (f.choice ? { ...f, choice: { ...f.choice, options: f.choice.options.filter(ok) } } : f)),
+  }));
+
+  // Partly loaded data (the builder's first steps) may not have feats or spells yet.
+  const add = (type, ids) => {
+    if (!data[type]) return 0;
+    const have = new Set(out[type].map((x) => x.id));
+    const missing = data[type].filter((x) => ids.includes(x.id) && !have.has(x.id));
+    if (missing.length) out[type] = [...out[type], ...missing].sort(byName);
+    return missing.length;
+  };
+  const options = out.classes.flatMap((c) => c.features.flatMap((f) => f.choice?.options ?? []));
+  add('spells', [...out.classes.flatMap((c) => c.casting?.grantedSpells ?? []), ...options.flatMap((o) => o.grantedSpells ?? [])]);
+  // Granted feats can grant more feats, so repeat until nothing new comes in.
+  while (
+    add('feats', [
+      ...(out.backgrounds ?? []).flatMap((b) => b.feats),
+      ...(out.heritages ?? []).flatMap((h) => h.feats),
+      ...out.classes.flatMap((c) => c.features.flatMap((f) => f.feats)),
+      ...options.flatMap((o) => o.feats),
+      ...(out.feats ?? []).flatMap((f) => f.feats),
+    ])
+  );
+  return out;
+}
+
 /** The index entries to load, optionally only some types and books (null means all). */
 export function dataFiles(index, { types = null, books = null } = {}) {
-  return index.files.filter((f) => (!types || types.includes(f.type)) && (!books || !f.book || books.includes(f.book)));
+  return index.files.filter((f) => (!types || types.includes(f.type)) && bookAllowed(f.book, books, index.meta.books));
 }
 
 /**

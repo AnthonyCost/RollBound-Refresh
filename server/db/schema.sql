@@ -56,3 +56,7 @@ ALTER TABLE characters ADD COLUMN IF NOT EXISTS portrait_key TEXT;
 
 CREATE INDEX IF NOT EXISTS characters_campaign_idx ON characters (campaign_id);
 CREATE INDEX IF NOT EXISTS characters_owner_idx ON characters (owner_id);
+
+-- The books a campaign allows. NULL means every book, including ones added later;
+-- otherwise a list of book titles (always including Player Core).
+ALTER TABLE campaigns ADD COLUMN IF NOT EXISTS books TEXT[];

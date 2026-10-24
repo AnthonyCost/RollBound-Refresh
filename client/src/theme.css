@@ -449,6 +449,25 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 .form-field input:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
 
+/* A campaign's books: radio for "every book" or a list, then checkboxes. */
+.books { margin: 0; padding: 0; border: 0; min-width: 0; }
+.books legend {
+  padding: 0;
+  margin-bottom: 6px;
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.books input[type='radio'],
+.books input[type='checkbox'] { min-height: 0; width: 18px; height: 18px; margin: 0; accent-color: var(--blood); flex: none; }
+.books__mode,
+.books__list label { display: flex; align-items: center; gap: 10px; min-height: 36px; color: var(--text-soft); cursor: pointer; }
+.books__list { margin: 0 0 4px; padding: 0 0 0 28px; list-style: none; }
+.books__list input:disabled + span { color: var(--text-muted); }
+
 .form-errors {
   margin: 0;
   padding: 10px 12px;
@@ -539,8 +558,12 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .notice__title { margin: 0; font-family: var(--display); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
 .notice__list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
 .notice__steps { display: flex; flex-wrap: wrap; gap: 8px; }
+.notice--quiet { border-color: var(--line); background: var(--panel); padding: 10px 14px; }
+.notice--quiet .chip { align-self: flex-start; }
+.builder__campaign { align-self: center; }
 .notice__steps .btn { min-height: 40px; }
 .hub-card__alert { color: var(--gold); }
+.hub-card__warn { font-size: 13px; font-style: italic; }
 
 .builder__header { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding-top: 6px; }
 .builder__subhead { margin: 6px 0 0; text-align: left; }

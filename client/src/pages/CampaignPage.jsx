@@ -10,6 +10,7 @@ import Avatar from '../components/Avatar.jsx';
 import { useAuth } from '../state/AuthContext.jsx';
 import { demoPortraitUrl } from '../state/portraits.js';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
+import { booksLabel } from '../state/rulesData.js';
 
 export default function CampaignPage() {
   const { id } = useParams();
@@ -99,10 +100,19 @@ export default function CampaignPage() {
           ) : (
             <p className="rule-note">No backstory yet.</p>
           )}
+          <Ornament label="BOOKS" />
+          <p className="rule-note">
+            {booksLabel(campaign.books)}. Characters are built from these, and characters using other books can't join.
+          </p>
         </section>
 
         <section className="split__col" aria-label="Party">
           {campaign.isGm && <InviteCode code={campaign.inviteCode} onRegenerate={regenerate} />}
+          {campaign.isGm && (
+            <Link to={`/create?invite=${encodeURIComponent(campaign.inviteCode)}`} className="btn">
+              Build a character for this campaign
+            </Link>
+          )}
 
           <Ornament label="THE PARTY" />
           {campaign.characters.length ? (
@@ -119,9 +129,13 @@ export default function CampaignPage() {
                       {!c.mine && <Avatar url={c.playerAvatarUrl} name={c.player} size={18} />}
                       {c.mine ? 'Your character' : `Played by ${c.player}`}
                     </span>
+                    {c.outsideBooks?.length > 0 && (
+                      <span className="hub-card__alert hub-card__warn">Uses books this campaign doesn't: {c.outsideBooks.join(', ')}</span>
+                    )}
                   </div>
                   {c.mine && (
                     <div className="hub-card__actions">
+                      {c.outsideBooks?.length > 0 && <Link to={`/characters/${c.id}/edit`} className="chip chip--link">Edit</Link>}
                       <Link to={`/play/${c.id}/sheet`} className="chip chip--link">Play</Link>
                       <button type="button" className="chip" onClick={() => leave(c.id)}>Leave</button>
                     </div>

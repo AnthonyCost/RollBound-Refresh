@@ -2,16 +2,57 @@ import { useEffect, useState } from 'react';
 import ImagePicker from './ImagePicker.jsx';
 import CampaignCover from './CampaignCover.jsx';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
+import { CORE_BOOK, campaignBooks } from '@rollbound/rules';
+import { ALL_BOOKS, booksLabel } from '../state/rulesData.js';
 
 const NAME_MAX = 80;
 const BACKSTORY_MAX = 5000;
 const LEVELS = Array.from({ length: 20 }, (_, i) => i + 1);
 
-/** Title, party level, backstory, and cover, with a live preview. Used to create and edit. */
+/**
+ * Which books players can build from. "Every book" (null) also covers books added
+ * later; otherwise the GM ticks books, and Player Core is always in.
+ */
+function BooksField({ books, onChange }) {
+  const picked = books ?? ALL_BOOKS;
+  const toggle = (book) =>
+    onChange(campaignBooks(picked.includes(book) ? picked.filter((b) => b !== book) : [...picked, book], ALL_BOOKS) ?? []);
+  return (
+    <fieldset className="form-field books">
+      <legend>Books</legend>
+      <label className="books__mode">
+        <input type="radio" name="books-mode" checked={!books} onChange={() => onChange(null)} />
+        <span>Every book, including ones added later</span>
+      </label>
+      <label className="books__mode">
+        <input type="radio" name="books-mode" checked={Boolean(books)} onChange={() => onChange(campaignBooks([], ALL_BOOKS))} />
+        <span>Only these books</span>
+      </label>
+      {books && (
+        <ul className="books__list">
+          {ALL_BOOKS.map((book) => (
+            <li key={book}>
+              <label>
+                <input type="checkbox" checked={picked.includes(book)} disabled={book === CORE_BOOK} onChange={() => toggle(book)} />
+                <span>{book}</span>
+                {book === CORE_BOOK && <small className="muted"> (the core rules, always in)</small>}
+              </label>
+            </li>
+          ))}
+        </ul>
+      )}
+      <small className="muted italic">Players can only build characters from these books, and characters using other books can't join.</small>
+    </fieldset>
+  );
+}
+
+/** Title, party level, books, backstory, and cover, with a live preview. Used to create and edit. */
 export default function CampaignForm({ initial, submitLabel, onSubmit }) {
   const [name, setName] = useState(initial?.name ?? '');
   const [partyLevel, setPartyLevel] = useState(initial?.partyLevel ?? 1);
   const [backstory, setBackstory] = useState(initial?.backstory ?? '');
+  // An "only these books" list that ends up with every book is stored as "every book".
+  const [books, setBooks] = useState(initial?.books ?? null);
   const [cover, setCover] = useState({});
   const [previewUrl, setPreviewUrl] = useState(initial?.coverUrl ?? null);
   const [errors, setErrors] = useState([]);
@@ -29,7 +70,7 @@ export default function CampaignForm({ initial, submitLabel, onSubmit }) {
     setErrors([]);
     setStatus(cover.file ? 'Uploading cover…' : 'Saving…');
     try {
-      await onSubmit({ name, partyLevel, backstory, cover });
+      await onSubmit({ name, partyLevel, backstory, cover, books: books && campaignBooks(books, ALL_BOOKS) });
     } catch (err) {
       setErrors(errorsFrom(err));
       setStatus(null);
@@ -52,6 +93,8 @@ export default function CampaignForm({ initial, submitLabel, onSubmit }) {
           </select>
           <small className="muted italic">The level your heroes are at. Raise it as the party levels up.</small>
         </label>
+
+        <BooksField books={books} onChange={setBooks} />
 
         <label className="form-field">
           <span>Backstory</span>
@@ -76,6 +119,7 @@ export default function CampaignForm({ initial, submitLabel, onSubmit }) {
       <aside className="split__col" aria-label="Preview">
         <span className="eyebrow">Preview</span>
         <CampaignCover name={name || 'Your campaign'} coverUrl={previewUrl} subtitle={`Party level ${partyLevel}`} />
+        <p className="rule-note">Books: {booksLabel(books && campaignBooks(books, ALL_BOOKS))}</p>
         {backstory.trim() ? <p className="backstory">{backstory}</p> : <p className="rule-note">Your backstory will appear here for your players.</p>}
       </aside>
     </div>
