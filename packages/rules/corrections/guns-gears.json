@@ -1,0 +1,11 @@
+{
+  "$comment": "Rules from Pathfinder Guns & Gears (Remastered) that Foundry's data doesn't encode. Checked against the Archives of Nethys. See README.md in this folder.",
+  "classes": {
+    "gunslinger": {
+      "weaponGroups": [
+        { "groups": ["firearm", "crossbow"], "categories": ["simple", "martial"], "rank": "expert" },
+        { "groups": ["firearm", "crossbow"], "categories": ["advanced"], "rank": "trained" }
+      ]
+    }
+  }
+}

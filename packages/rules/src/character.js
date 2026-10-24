@@ -94,9 +94,9 @@ export const SKILL_ABILITY = {
   thievery: 'dex',
 };
 
-/** A skill check, or a Lore check when `skill` isn't one of the 16 skills (Lore uses Int). */
+/** A skill check, or a Lore check when `skill` isn't one of the 16 skills (Lore uses Int unless noted). */
 export function skillCheck(character, skill, { conditions = [] } = {}) {
-  const ability = SKILL_ABILITY[skill] ?? 'int';
+  const ability = SKILL_ABILITY[skill] ?? character.loreAbilities?.[skill] ?? 'int';
   const rank = SKILL_ABILITY[skill]
     ? (character.skills?.[skill] ?? 'untrained')
     : character.lores?.includes(skill) ? 'trained' : 'untrained';

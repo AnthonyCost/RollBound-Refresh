@@ -1,0 +1,319 @@
+[
+ {
+  "id": "Z9li154CPNmun29Q",
+  "slug": "gunslinger",
+  "name": "Gunslinger",
+  "hp": 8,
+  "keyAbility": [
+   "dex"
+  ],
+  "perception": "expert",
+  "saves": {
+   "fortitude": "expert",
+   "reflex": "expert",
+   "will": "trained"
+  },
+  "attacks": {
+   "unarmed": "trained",
+   "simple": "trained",
+   "martial": "trained",
+   "advanced": "untrained"
+  },
+  "defenses": {
+   "unarmored": "trained",
+   "light": "trained",
+   "medium": "trained",
+   "heavy": "untrained"
+  },
+  "trainedSkills": [],
+  "skillChoice": null,
+  "additionalSkills": 3,
+  "classFeatAt1": true,
+  "deity": false,
+  "spellcasting": false,
+  "casting": null,
+  "divineFont": false,
+  "deityFavoredWeapon": null,
+  "features": [
+   {
+    "name": "Gunslinger's Way",
+    "description": "<p>All gunslingers have a particular way they follow, a combination of philosophy and combat style that defines both how they fight and the weapons they excel with. At 1st level, your way grants you an initial deed, a unique reload action called a slinger's reload, and proficiency with a particular skill. You also gain advanced and greater deeds at later levels, as well as access to way-specific feats.</p>\n<p><strong>Way of the Drifter</strong> You wander across the battlefield, equally at home in and out of the fray.</p>\n<p><strong>Way of the Pistolero</strong> You carefully maintain your distance at a duelist's 10 paces with pistol in hand.</p>\n<p><strong>Way of the Sniper</strong> You practice a methodical style of shooting, striking from far cover.</p>\n<p><strong>Way of the Vanguard</strong> You rely on a brutal combat style that uses heavy weapons and explosive attacks.</p>\n<p><strong>Way of the Triggerbrand</strong> You prefer firearms that work well as weapons in both melee and ranged combat</p>",
+    "feats": [],
+    "choice": {
+     "key": "gunslinger-way",
+     "options": [
+      {
+       "id": "a3pSIKkDVTvvNSRO",
+       "slug": "way-of-the-drifter",
+       "name": "Way of the Drifter",
+       "tags": [
+        "gunslinger-way"
+       ],
+       "skills": [
+        "acrobatics"
+       ],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>You're a wanderer traveling from land to land with your gun and a melee weapon as company. Maybe you learned to fight with blade and pistol as a Shackles pirate, mastered the hand cannon and katana in Minkai, or practiced with a hatchet and clan pistol in Dongun Hold. You win battles by relying on mobility and flexible use of your weapons.</p>\n<p><strong>Slinger's Reload</strong> Reloading Strike</p>\n<p><strong>Deeds</strong> <em>Initial</em> Into the Fray; <em>Advanced</em> Finish The Job; <em>Greater</em> Drifter's Wake</p>\n<p><strong>Way Skill</strong> Acrobatics</p>",
+       "source": "Guns & Gears"
+      },
+      {
+       "id": "qRLRrHf0kzaJ7xt0",
+       "slug": "way-of-the-pistolero",
+       "name": "Way of the Pistolero",
+       "tags": [
+        "gunslinger-way"
+       ],
+       "skills": [],
+       "skillChoice": [
+        "deception",
+        "intimidation"
+       ],
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Whether you're a professional duelist or a pistol-twirling entertainer, you have quick feet and quicker hands that never seem to let you down, and an equally sharp wit and tongue that jab your foes. You might leave a hand free or cultivate the ambidexterity for twin weapons. Either way, you stay close enough to your enemies to leverage your superior reflexes while leaving enough space to safely fire.</p>\n<p><strong>Slinger's Reload</strong> Raconteur's Reload</p>\n<p><strong>Deeds</strong> <em>Initial</em> Ten Paces; <em>Advanced</em> Pistolero's Retort; <em>Greater</em> Grim Swagger</p>\n<p><strong>Way Skill</strong> choose Deception or Intimidation</p>",
+       "source": "Guns & Gears"
+      },
+      {
+       "id": "QWXvksGJhOjXbBqi",
+       "slug": "way-of-the-sniper",
+       "name": "Way of the Sniper",
+       "tags": [
+        "gunslinger-way"
+       ],
+       "skills": [
+        "stealth"
+       ],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>You practice a style of shooting that relies on unerring accuracy and perfect placement of your first shot. You keep hidden or at a distance, staying out of the fray and bringing unseen death to your foes.</p>\n<p><strong>Slinger's Reload</strong> Covered Reload</p>\n<p><strong>Deeds</strong> <em>Initial</em> One Shot, One Kill; <em>Advanced</em> Vital Shot; <em>Greater</em> Ghost Shot</p>\n<p><strong>Way Skill</strong> Stealth</p>",
+       "source": "Guns & Gears"
+      },
+      {
+       "id": "OmgtSDV1FubDUqWR",
+       "slug": "way-of-the-spellshot",
+       "name": "Way of the Spellshot",
+       "tags": [
+        "class-archetype",
+        "gunslinger-way"
+       ],
+       "skills": [
+        "arcana"
+       ],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>You've learned the intricacies of magic and technology, blending the two together with deadly results. You combine a knowledge of arcane theories with a strong connection to your chosen weapon that allows you to manifest unique effects, combining deadly skill with a firearm alongside an array of moderate spellcasting. You can imbue energy into your weapon and conjure bullets from thin air. As you progress, you eventually learn to phase bullets through walls or even to teleport yourself along the path of your bullets. You must select Spellshot Dedication as your 2nd-level class feat.</p>\n<p><strong>Prerequisites</strong> You must be a gunslinger.</p>\n<p><strong>Spellshot Adjustments</strong> Instead of choosing a way from the options listed in the gunslinger class, you have the way of the spellshot. It has the following way skill, slinger's reload, and deeds. You gain these abilities at the same levels as normal for the class. You use Intelligence for your class DC.</p>\n<p><strong>Way Skill</strong> Arcana</p>\n<p><strong>Slinger's Reload</strong> Thoughtful Reload</p>\n<p><strong>Deeds</strong> <em>Initial</em> Energy Shot; <em>Advanced</em> Recall Ammunition; <em>Greater</em> Dispelling Bullet</p>",
+       "source": "Guns & Gears"
+      },
+      {
+       "id": "vB0yVFxJVZwalt2g",
+       "slug": "way-of-the-vanguard",
+       "name": "Way of the Vanguard",
+       "tags": [
+        "gunslinger-way"
+       ],
+       "skills": [
+        "athletics"
+       ],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>You practice a unique combat style originated by dwarven siege engineers, using heavy weapons with wide attack areas to blast holes through enemy lines, clear an opening for your allies, and defend the conquered territory.</p>\n<p><strong>Slinger's Reload</strong> Clear a Path</p>\n<p><strong>Deeds</strong> <em>Initial</em> Living Fortification; <em>Advanced</em> Spinning Crush; <em>Greater</em> Siegebreaker</p>\n<p><strong>Way Skill</strong> Athletics</p>",
+       "source": "Guns & Gears"
+      }
+     ]
+    }
+   },
+   {
+    "name": "Slinger's Precision",
+    "description": "<p>You deal an extra +2 precision damage with Strikes made using non-repeating crossbows and you deal an extra 1d4 precision damage on Strikes using non-repeating firearms.</p>\n<p>If you have gunslinging legend, you instead deal +3 additional precision damage with Strikes using non-repeating crossbows and an additional 1d6 precision damage with Strikes using non-repeating firearms.</p>\n<p>If you are using a combination weapon whose ranged form is a firearm or crossbow, you use your proficiency with firearms and crossbows for attacks made with the melee configuration of that weapon.</p>",
+    "feats": [],
+    "choice": null
+   }
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>While some fear projectile weapons, you savor the searing flash, wild kick, and cloying smoke that accompanies a gunshot, or snap of the cable and telltale thunk of your crossbow just before your bolt finds purchase. Ready to draw a bead on an enemy at every turn, you rely on your reflexes, steady hand, and knowledge of your weapons to riddle your foes with holes.</em></p>\n<p><em>Gunslinger</em></p>",
+  "source": "Guns & Gears",
+  "weaponGroups": [
+   {
+    "groups": [
+     "firearm",
+     "crossbow"
+    ],
+    "categories": [
+     "simple",
+     "martial"
+    ],
+    "rank": "expert"
+   },
+   {
+    "groups": [
+     "firearm",
+     "crossbow"
+    ],
+    "categories": [
+     "advanced"
+    ],
+    "rank": "trained"
+   }
+  ]
+ },
+ {
+  "id": "30qVs46dVNflgQNx",
+  "slug": "inventor",
+  "name": "Inventor",
+  "hp": 8,
+  "keyAbility": [
+   "int"
+  ],
+  "perception": "trained",
+  "saves": {
+   "fortitude": "expert",
+   "reflex": "trained",
+   "will": "expert"
+  },
+  "attacks": {
+   "unarmed": "trained",
+   "simple": "trained",
+   "martial": "trained",
+   "advanced": "untrained"
+  },
+  "defenses": {
+   "unarmored": "trained",
+   "light": "trained",
+   "medium": "trained",
+   "heavy": "untrained"
+  },
+  "trainedSkills": [
+   "crafting"
+  ],
+  "skillChoice": null,
+  "additionalSkills": 3,
+  "classFeatAt1": true,
+  "deity": false,
+  "spellcasting": false,
+  "casting": null,
+  "divineFont": false,
+  "deityFavoredWeapon": null,
+  "features": [
+   {
+    "name": "Peerless Inventor",
+    "description": "<p>You are constantly inventing, and your skill at crafting is unimpeachable. You gain the Inventor skill feat, even if you don't meet its prerequisites.</p>",
+    "feats": [
+     "XR95taODq1sq82Du"
+    ],
+    "choice": null
+   },
+   {
+    "name": "Shield Block",
+    "description": "<p>You gain the Shield Block general feat, a reaction that lets you reduce damage with your shield.</p>",
+    "feats": [
+     "jM72TjJ965jocBV8"
+    ],
+    "choice": null
+   },
+   {
+    "name": "Explode",
+    "description": "<p>Your innovation is a creation barely held together by your own engineering, always on the edge of completely falling apart. Though this adds risk, it also means you can coax it to perform far beyond its design specifications using special unstable actions. See the definition of the unstable trait and how it affects your innovation.</p>\n<p>While inventors can learn various unstable actions over their career, all at least know how to make their innovation Explode.</p>",
+    "feats": [],
+    "choice": null
+   },
+   {
+    "name": "Overdrive",
+    "description": "<p>You have a bevy of smaller devices of your own invention, from muscle stimulants to concussive pistons. When it's necessary, you can throw them into Overdrive.</p>",
+    "feats": [],
+    "choice": null
+   },
+   {
+    "name": "Innovation",
+    "description": "<p>While you're always creating inventions, there's one that represents your preeminent work, the one that you hope- with refinement-might change the world. Choose one of the below innovations. Your innovation's level is equal to your level. If your innovation is destroyed, you can spend 1 day of downtime and attempt a Crafting check with a high DC for your level; on a success, you rebuild it. An innovation only works due to your constant maintenance and tinkering, and therefore has no market Price.</p>",
+    "feats": [],
+    "choice": {
+     "key": "inventor-innovation",
+     "options": [
+      {
+       "id": "fpwtpm8pdwO1I6MO",
+       "slug": "armor-innovation",
+       "name": "Armor Innovation",
+       "tags": [
+        "inventor-innovation"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Your innovation is a cutting-edge suit of medium armor with a variety of attached gizmos and devices. Choose one of the sets of statistics on Innovation Armor Statistics table for your innovation armor (or choose another set of innovation armor statistics to which you have access). Your innovation armor can have fundamental and property runes added to it in the same way as ordinary armor. Because of the unique features of your innovation, everyone except you is untrained in it, even if they would normally be trained (or better) in medium armor. Choose one initial armor modification to apply to your innovation, either from the following or from other initial armor modifications to which you have access.</p><ul><li><strong>Harmonic Oscillator:</strong> You designed your armor to inaudibly thrum at just the right frequency to create interference against force and sound waves. You gain resistance equal to 3 + half your level to force and sonic damage. When under the effects of Overdrive, the resistance increases by 2.</li><li><strong>Metallic Reactance:</strong> The metals in your armor are carefully alloyed to ground electricity and protect from acidic chemical reactions. You gain resistance equal to 3 + half your level to acid and electricity damage. When under the effects of Overdrive, the resistance increases by 2.</li><li><strong>Muscular Exoskeleton (Power Suit only):</strong> Your armor supports your muscles with a carefully crafted exoskeleton. When you send your armor into overdrive, the exoskeleton supplements your feats of athletics as well. When under the effects of Overdrive, you gain a +1 circumstance bonus to Athletics checks; if you're a master in Crafting, this increases to a +2 circumstance bonus.</li><li><strong>Otherworldly Protection:</strong> Just because you prefer science doesn't mean you can't build your armor with materials and gizmos designed to protect against otherworldly attacks. You gain resistance equal to 3 + half your level to void damage, or to vitality damage if you have void healing (such as if you're a dhampir). You gain the same amount of resistance to spirit damage. If you are sanctified (such as by also being a champion or cleric dedicated to a deity who allows or enforces sanctification) this resistance applies to unholy damage (if you are sanctified holy) or holy damage (if you are sanctified unholy), regardless of what other traits the damage has.</li><li><strong>Phlogistonic Regulator:</strong> A layer of insulation within your armor protects you from rapid temperature fluctuations. You gain resistance equal to half your level to cold and fire damage. When under the effects of Overdrive, the resistance increases by 2.</li><li><p><strong>Speed Boosters:</strong> You have boosters in your armor that increase your Speed. You gain a +5-foot status bonus to your Speed, which increases to a +10-foot status bonus when under the effects of Overdrive.</p></li><li><p><strong>Subtle Dampeners</strong> <strong>(Subterfuge Suit only)</strong>: You've designed your armor to help you blend in and dampen noise slightly. When you send your armor into overdrive, the dampeners increase their effect, improving your Stealth. When under the effects of Overdrive, you gain a +1 circumstance bonus to Stealth checks. If you're a master in Crafting, this increases to a +2 circumstance bonus.</p></li></ul>",
+       "source": "Guns & Gears"
+      },
+      {
+       "id": "o70O2FysDd7BS9e0",
+       "slug": "construct-innovation",
+       "name": "Construct Innovation",
+       "tags": [
+        "inventor-innovation"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Your innovation is a mechanical creature, such as a clockwork construct made of cogs and gears. It's a prototype construct companion, and you can adjust most of its base statistics by taking feats at higher levels, such as Advanced Companion. If you use the Overdrive action, your construct gains the same Overdrive benefits you do, and it also takes the same amount of fire damage on a critical failure.</p>\n<p>You know how to spend additional time directing, controlling, or programming your construct innovation for a more complex plan of action. You can spend 2 actions to Command instead of 1 when commanding your construct companion; your construct companion can then use an additional action (normally 3 actions, rather than 2).</p>\n<p>Choose one initial construct modification to apply to your innovation, either from the following or from other initial construct modifications to which you have access. These modifications alter the construct's abilities or form.</p>\n<ul>\n<li><strong>Accelerated Mobility</strong> Actuated legs, efficient gears in the wheels or treads, or add-on boosters make your construct faster. Your innovation's Speed increases to 40 feet.</li>\n<li><strong>Amphibious Construction</strong> Increased buoyancy, rudders, and a means of propulsion like a fluked tail or powerful propeller make your construct able to travel in water. Your innovation gains a swim Speed of 25 feet.</li>\n<li><strong>Increased Size</strong> You built your construct innovation bigger than most. Your construct is Large. If you have this modification and your construct innovation becomes an advanced construct companion or otherwise gains the ability to become Large, you can immediately change increased size to a different initial construct modification.</li>\n<li><strong>Manual Dexterity</strong> Your construct innovation has articulated hands or similar appendages with significant manual dexterity. It can perform manipulate actions with up to two of its limbs. As normal for a companion, it still can't wield weapons or held items that don't have the companion trait, and it can't activate items.</li>\n<li><strong>Projectile Launcher</strong> Your construct has a mounted dart launcher, embedded cannon, or similar armament. Your innovation gains a ranged unarmed attack that deals 1d4 bludgeoning or piercing damage (you choose when you pick this modification). The attack has the propulsive trait and a range increment of 30 feet.</li>\n<li><strong>Sensory Array</strong> Additional sensory devices give your innovation low-light vision and darkvision, as well as imprecise tremorsense out to a range of 30 feet.</li>\n<li><strong>Wonder Gears</strong> You map specialized skills into your construct's crude intelligence. Your innovation becomes trained in Intimidation, Stealth, and Survival.</li>\n</ul>",
+       "source": "Guns & Gears"
+      },
+      {
+       "id": "bok3P78CMchFibxC",
+       "slug": "weapon-innovation",
+       "name": "Weapon Innovation",
+       "tags": [
+        "inventor-innovation"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Your innovation is a complex and impossible-looking weapon augmented by numerous mechanisms. It begins with the same statistics as a level 0 common simple or martial weapon of your choice, or another level 0 simple or martial weapon to which you have access. You can instead use the statistics of a level 0 advanced weapon of your choice; you treat this as a martial weapon for the purposes of proficiency, but you do not gain an initial weapon modification.</p>\n<p>An innovation weapon can have fundamental and property runes added to it in the same way as an ordinary weapon. Because of the unique features of your innovation, everyone except you is untrained in it, even if they would normally be trained (or better) in simple or martial weapons.</p>\n<p>If you use the Overdrive action, you can choose to change the additional damage from Overdrive to fire damage.</p>\n<p>Choose one initial weapon modification to apply to your innovation, either from the following or from other initial weapon modifications to which you have access. These modifications grant additional weapon traits, sometimes with extra abilities.</p>\n<p>A modification might give your weapon the versatile trait with a damage type that the weapon could already deal, either from its base damage type or from an existing versatile trait. In that case, if you select that modification, you can instead choose to give the weapon the versatile trait for a different damage type: bludgeoning, piercing, or slashing.</p><ul><li><strong>Blunt Shot (ranged only):</strong> Your weapon innovation can file the edges off your ammunition and adjust the blunt force of the shot to deliver an attack that can batter as much as pierce, or even knock an opponent right off their feet. Your innovation gains the concussive and ranged trip traits.</li><li><strong>Complex Simplicity (simple weapon only):</strong> Increase your innovation's weapon damage die by one step (d4 to d6, d6 to d8, d8 to d10, d10 to d12). In addition, it gains two of the following traits of your choice: versatile B, versatile P, versatile S, or razing.</li><li><strong>Dynamic Weighting (one-handed melee weapon only; can't have the agile, attached, or free-hand trait):</strong> Your weapon is modified to be heavier and easier to manipulate or retrieve. Your innovation gains the two-hand trait, with a damage die one size higher than the weapon's normal weapon damage die size (for instance, a longsword would gain the two-hand d10 trait). Your innovation also gains the versatile B trait. If it was a thrown weapon, it gains the tethered trait.</li><li><strong>Entangling Form (melee only):</strong> You've altered your weapon to including tangling wires or straps, or to have a flexible construction. Your innovation gains the disarm, grapple, and trip traits.</li><li><strong>Hampering Spikes (melee only):</strong> You've added long, snagging spikes to your weapon, which you can use to impede your foes' movement. Your innovation gains the hampering, trip, and versatile P traits.</li><li><strong>Hefty Composition (melee only):</strong> Blunt surfaces and sturdy construction make your weapon hefty and mace-like. Your innovation gains the shove, razing, and versatile B traits.</li><li><strong>Modular Head:</strong> You've constructed a multi-purpose, adjustable striking surface for your weapon, or you've made special ammunition you can swiftly alter. Your innovation gains the modular trait for bludgeoning, piercing, and slashing. When you Interact to use the modular trait, you can also choose to give the weapon the nonlethal trait if it doesn't currently have it, or to remove that trait if it's currently nonlethal.</li><li><strong>Pacification Tools (melee only):</strong> Softer materials make your weapon suited to knock out instead of kill, and special protrusions let you catch weapons and disarm your foes. Your innovation gains the disarm, hampering, and nonlethal traits. You can choose whether to apply the nonlethal trait on each attack with your innovation.</li><li><strong>Razor Prongs (melee only):</strong> You can knock down and slash your foes with sharp, curved blades. Your innovation gains the tearing, trip, and versatile S traits.</li><li><p><strong>Segmented Frame:</strong> Hinges, clamps, and telescoping parts make your innovation collapsible and adjustable. It gains the modular trait for bludgeoning, piercing, and slashing. You can Interact to collapse the item down to light Bulk or to return it to your normal form. When it's collapsed to light Bulk, it has the concealable trait, which grants you a +2 circumstance bonus to Stealth checks and DCs to hide or conceal the weapon.</p>\n</li></ul>",
+       "source": "Guns & Gears"
+      }
+     ]
+    }
+   }
+  ],
+  "rarity": "uncommon",
+  "description": "<p><em>Any tinkerer can follow a diagram to make a device, but you invent the impossible! Every strange contraption you dream up is a unique experiment pushing the edge of possibility, a mysterious machine that seems to work for only you. You're always on the verge of the next great breakthrough, and every trial and tribulation is another opportunity to test and tune. If you can dream it, you can build it.</em></p>\n<p><em>Inventor</em></p>",
+  "source": "Guns & Gears"
+ }
+]

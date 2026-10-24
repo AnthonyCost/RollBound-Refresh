@@ -1,0 +1,542 @@
+[
+ {
+  "id": "aon-class-68",
+  "slug": "psychic",
+  "name": "Psychic",
+  "hp": 6,
+  "keyAbility": [
+   "int",
+   "cha"
+  ],
+  "perception": "trained",
+  "saves": {
+   "fortitude": "trained",
+   "reflex": "trained",
+   "will": "expert"
+  },
+  "attacks": {
+   "unarmed": "trained",
+   "simple": "trained",
+   "martial": "untrained",
+   "advanced": "untrained"
+  },
+  "defenses": {
+   "unarmored": "trained",
+   "light": "untrained",
+   "medium": "untrained",
+   "heavy": "untrained"
+  },
+  "trainedSkills": [
+   "occultism"
+  ],
+  "skillChoice": null,
+  "additionalSkills": 3,
+  "classFeatAt1": false,
+  "deity": false,
+  "spellcasting": true,
+  "casting": {
+   "kind": "repertoire",
+   "tradition": "occult",
+   "cantrips": 3,
+   "spells": 1,
+   "slots": 1
+  },
+  "divineFont": false,
+  "deityFavoredWeapon": null,
+  "features": [
+   {
+    "name": "Psychic Spellcasting",
+    "description": "<p>You access the vast well of power that resides within your own mind, calling forth psychic magic with nothing but thought and will. You are a spellcaster and can cast occult spells using the Cast a Spell activity. You don't need to utter incantations to cast your spells, instead exerting your mind toward your intended effect as described in your subconscious mind class feature. Your spells still have clear and noticeable visual and auditory manifestations, as normal for a spellcaster. Each day, you can cast one 1st-rank spell. You must know spells to cast them, and you learn them via the spell repertoire class feature. The number of spells you can cast each day is called your spell slots.</p>\n<p>As you increase in level as a psychic, your number of spells per day increases, as does the highest rank of spells you can cast, as shown on the Psychic Spells per Day table. Some of your spells require you to attempt a spell attack roll to see how effective they are, or have your enemies roll against your spell DC (typically by attempting a saving throw), Since your key attribute is determined by your subconscious mind, your spell attack rolls and spell DCs use the modifier for the attribute stated in your subconscious mind.</p>\n<p>When you get spell slots of 2nd rank and higher, you can fill those slots with stronger versions of lower-rank spells. This increases the spell's rank, heightening it to match the spell slot. You must have a spell in your spell repertoire at the rank you want to cast in order to heighten it to that rank. Many spells have specific improvements when they are heightened to certain ranks. The signature spells class feature lets you heighten certain spells freely.</p>\n<p>Some of your spells are cantrips. A cantrip is a special type of spell that doesn't use spell slots. You can cast a cantrip at will, any number of times per day. A cantrip is automatically heightened to half your level rounded up— this is usually equal to the highest rank of psychic spell slot you have. For example, as a 1st-level psychic, your cantrips are 1st-rank spells, and as a 5th-level psychic, your cantrips are 3rd-rank spells. As a psychic, you get the ability to improve some of your cantrips with special benefits and psi amps. Over the course of your career, your choice of conscious mind class feature gives you extra cantrips, benefits and psi amps for cantrips, and a collection of unique psi cantrips.</p>",
+    "feats": [],
+    "choice": null
+   },
+   {
+    "name": "Spell Repertoire",
+    "description": "<p>The collection of spells you can cast is called your spell repertoire. At 1st level, you learn one 1st-rank occult spell of your choice and three occult cantrips of your choice. You choose these from the common spells from the occult list or from other occult spells to which you have access. You can cast any spell in your spell repertoire by using a spell slot of an appropriate spell rank. Your choice of conscious mind also grants you additional spells in your repertoire, starting with an additional 1st-rank spell and two cantrips listed in your conscious mind, which you cast as psi cantrips (see below),</p>\n<p>You add to this spell repertoire as you increase in level. Each time you get a spell slot (see the Psychic Spells per Day table), you add a spell to your spell repertoire of the same rank. At 2nd level, you select another 1st-rank spell; at 3rd level, you select one 2nd-rank spell, and so on. When you add spells, you might add a higher-rank version of a spell you already have, so you can cast a heightened version of that spell. Your conscious mind also adds additional spells to your repertoire as you gain spells of higher ranks. Though you gain them at the same rate, your spell slots and the spells in your spell repertoire are separate. If a feat or other ability adds a spell to your spell repertoire, such as the spells you gain from your conscious mind, it wouldn't give you another spell slot, and vice versa.</p>\n<p>As you gain new spells in your repertoire, you might want to replace some of the spells you previously learned. Each time you gain a level and learn new spells, you can swap out one of your old spells for a different spell of the same ranks. This spell can be a cantrip. You can also swap out spells by retraining during downtime.</p>",
+    "feats": [],
+    "choice": null
+   },
+   {
+    "name": "Psi Cantrips and Amps",
+    "description": "<p>The magic of your mind manifests as psi cantrips, which you can modify by spending Focus Points. Like other cantrips, you can cast psi cantrips as often as you like, and they are automatically heightened to half your level rounded up. Your psi cantrips are in addition to the cantrips you choose from the occult list as part of your psychic spellcasting. Generally, only feats can give you more psi cantrips. Unlike other cantrips, you can't swap out psi cantrips gained from psychic feats at a later level, unless you swap out the specific feat via retraining. At 1st level, you learn three psi cantrips determined by your choice of conscious mind; one is a unique psi cantrip and two are common cantrips, typically from the occult spellcasting tradition, that you always cast as psi cantrips. You automatically gain more psi cantrips as you progress in your career as a psychic.</p>\n<p>You start with a focus pool of 2 Focus Points. However, unlike other spellcasters, you don't gain focus spells that cost Focus Points to cast. Instead, you use your Focus Points to boost or modify your psi cantrips by applying amps—specialized thoughtforms that alter the expression of your psychic power. Each of your psi cantrips has a special amp heading. Whenever you cast a psi cantrip, you can amp it by spending 1 Focus Point as a free action. If the next action you take is to cast the psi cantrip, you add the amp effect. If the spell is a reaction or triggered free action, instead spend the Focus Point as part of that action to add the amped effect.You can also gain additional amps through feats, allowing you to substitute a psi cantrip's normal amp effect for another one. You choose which amp to use, if you choose to use any, each time you cast a psi cantrip. Unless otherwise noted, you can apply only one amp to a given psi cantrip.</p>\n<p>You refill your focus pool during your daily preparations, and you can regain Focus Points by spending 10 minutes using the Refocus activity to explore your mind, whether via meditation, practicing a craft or activity that gives you the mental space to self-reflect, or talking through your thoughts and feelings with yourself or another. If you've spent Focus Points only to amp psi cantrips or fuel psychic abilities since the last time you Refocused, you regain 2 Focus Points instead of 1. If you've spent Focus Points on focus spells or abilities other than those from the psychic class (for instance, to cast a focus spell you gained from an archetype), you regain only 1 Focus Point.</p>",
+    "feats": [],
+    "choice": null
+   },
+   {
+    "name": "Unleash Psyche",
+    "description": "<p>When one thins the barrier between their inner mind and the outer world, one can unleash true psychic power. However, the mind wasn’t meant to tap its full strength for long, leading to backlash once your unleashed psyche ends.</p>",
+    "feats": [],
+    "choice": null
+   },
+   {
+    "name": "Subconscious Mind",
+    "description": "<p>A psychic's power is born in the depths of their psyche, far from the surface. Your subconscious mind might represent the way your power comes to you naturally, or it may be a framework you use to safely access the infinite potential of your mind. Either way, your subconscious mind fundamentally shapes how you access and wield psychic magic. Choose a subconscious mind. This choice will determine your key attribute, thoughtforms you use while casting, and an action you can take while you have Unleashed your Psyche.</p>\n<p>Subconscious mind options can be found here.</p>",
+    "feats": [],
+    "choice": {
+     "key": "psychic-subconscious-mind",
+     "options": [
+      {
+       "id": "aon-subconscious-mind-5",
+       "slug": "emotional-acceptance",
+       "name": "Emotional Acceptance",
+       "tags": [
+        "psychic-subconscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "keyAbilityOnly": "cha",
+       "grantedSpells": [],
+       "description": "<p>The mind's truths come not in learned words or mathematical formulas but in deeper feelings and sensations. Emotions unlock the door to your power—you might consider your heart the source of your strength, or you might find that the infinite complexity felt in a moment expresses your power more efficiently than any string of mystic words ever could.</p>\n<p>Your thoughtforms are emotions. You might summon the sense of freedom to buoy you through the air or let fear grip your heart even as you plant it in another's mind. Emotion thoughtforms tend to impart abstract or vivid effects to your visual and auditory spell manifestations as well as more intangible flashes of emotion, such as swirls of joyous color or a sense of growing melancholy.</p>\n<p><strong>Key Attribute</strong> Your key attribute is Charisma.</p>\n<p><strong>Psyche Action</strong> Restore the Mind</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-subconscious-mind-6",
+       "slug": "gathered-lore",
+       "name": "Gathered Lore",
+       "tags": [
+        "psychic-subconscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "keyAbilityOnly": "int",
+       "grantedSpells": [],
+       "description": "<p>Many psychics are self-taught, frantically improvising how to best control their abilities before their power overwhelms them. Not you. Tutored by a mentor or classically trained at a facility for psychic development, you've learned techniques and teachings for best harnessing the mind, cataloging each expression of psychic power with a specific teaching, anecdote, or phrase.</p>\n<p>Your thoughtforms are mantras you associate with a given spell, which you mentally repeat as you cast. You might silently utter a teaching of resilience as you spin force into a barrier or hear the first three notes of a traveling song as you slip through space. Mantra thoughtforms often produce runes or symbols from your learnings that are unique to each spell you cast, causing your spell manifestations to resemble those of conventional spellcasters to a much greater degree than those of other psychics.</p>\n<p><strong>Key Attribute</strong> Your key attribute is Intelligence.</p>\n<p><strong>Psyche Action</strong> Recall the Teachings</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-subconscious-mind-7",
+       "slug": "precise-discipline",
+       "name": "Precise Discipline",
+       "tags": [
+        "psychic-subconscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "keyAbilityOnly": "int",
+       "grantedSpells": [],
+       "description": "<p>Determine intended outcome. Align thoughts. Identify and resolve distractions. Manifest. Intentional focus is the key to unleashing your abilities, whether that's because your power naturally tends to precise, discrete effects, or because you've adopted strict discipline to ensure your mind can change the world only when you intend it to.</p>\n<p>Your thoughtforms are calculations you make to determine the forces you need to call upon. Perhaps you mentally weigh the mass of an object against the force of gravity to levitate it or you might determine exactly how much energy is needed for an object to combust. Calculation thoughtforms tend to impart ordered visual and auditory effects to your spell manifestation, such as regular tessellations of light, mathematical spirals, or harmonic tones.</p>\n<p><strong>Key Attribute</strong> Your key attribute is Intelligence.</p>\n<p><strong>Psyche Action</strong> Calculate Threats</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-subconscious-mind-8",
+       "slug": "wandering-reverie",
+       "name": "Wandering Reverie",
+       "tags": [
+        "psychic-subconscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "keyAbilityOnly": "cha",
+       "grantedSpells": [],
+       "description": "<p>The subconscious is by definition buried below the surface. Thus, only by stripping away the clamor and interference of everyday thought can you bring this more fundamental part of your mind to bear. Whether through sleep, self-hypnosis, or special exercises to empty your mind, you've found a way to access a deeper, more chaotic state of free association that better channels your psychic power.</p>\n<p>Your thoughtforms come from your imagination, images, and sensations your mind freely associates. You might have a passing daydream of small creatures bringing you an object as you telekinetically attract it or you may blink to find you've teleported to your desired location. Spell manifestations from imagination thoughtforms have surreal or indistinct qualities, and the exact details fade quickly from observers' memory, as sensations from a dream.</p>\n<p><strong>Key Attribute</strong> Your key attribute is Charisma.</p>\n<p><strong>Psyche Action</strong> Fade into Daydreams</p>",
+       "source": "Dark Archive (Remastered)"
+      }
+     ]
+    }
+   },
+   {
+    "name": "Conscious Mind",
+    "description": "<p>Whatever the subconscious source of a psychic's power, all find that a specific external manifestation of their magic comes most easily to them. This conscious outward expression adds several additional spells to your spell repertoire and grants you three psi cantrips. Two of these cantrips are common spells, though you gain an extra benefit with them that other spellcasters don't get, and the last is unique to your conscious mind. You also get two more unique psi cantrips at higher levels. Choose a conscious.</p>\n<p>Conscious mind options can be found here</p>",
+    "feats": [],
+    "choice": {
+     "key": "psychic-conscious-mind",
+     "options": [
+      {
+       "id": "aon-conscious-mind-7",
+       "slug": "the-distant-grasp",
+       "name": "The Distant Grasp",
+       "tags": [
+        "psychic-conscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [
+        "aon-spell-2573",
+        "pwzdSlJgYqN7bs2w",
+        "60sgbuMWN0268dB7"
+       ],
+       "description": "<p>Motion characterizes the physical—a boulder falls, creatures move, the world turns. You believe the truest form of mind over matter is therefore to move things as well, wielding telekinesis as an arm that can grasp the furthest and finest of objects.</p>\n<p><strong>Granted Spells</strong> - <strong>1st</strong> Kinetic Ram - <strong>2nd</strong> Telekinetic Maneuver - <strong>3rd</strong> Gravity Well - <strong>4th</strong> Fly - <strong>5th</strong> Telekinetic Haul - <strong>6th</strong> Poltergeist's Fury - <strong>7th</strong> Telekinetic Bombardment - <strong>8th</strong> Falling Sky - <strong>9th</strong> Implosion</p>\n<p><strong>Standard Psi Cantrips</strong> Telekinetic Hand and Telekinetic Projectile</p>\n<p><strong>Surface Psi Cantrip</strong> Telekinetic Rend</p>\n<p><strong>Deeper Psi Cantrip (Level 6)</strong> Vector Screen</p>\n<p><strong>Deepest Psi Cantrip (Level 10)</strong> Dancing Blade</p>\n<p>Your <em>telekinetic hand</em> can carry up to 1 Bulk instead of only light Bulk. If the spell is heightened to 3rd rank or higher, its maximum Bulk is 2. If the spell is heightened to 7th rank or higher, its maximum Bulk is 3. It also gains the following amp.</p>\n<p><strong>Amp</strong> You create a multitude of telekinetic hands that grip onto a creature and move it about. Target a creature of Medium size or smaller with the amped spell instead of an object. You attempt to Shove the target in a direction of your choice, rolling a spell attack roll against its Fortitude DC instead of an Athletics check. The creature takes a –10-foot circumstance penalty to its Speeds until the spell ends. Starting the round after you Cast the Spell, the first time each round you Sustain the Spell, you can attempt to Shove the creature again.</p>\n<p><strong>Amp Heightened (4th)</strong> You can attempt to Disarm the creature instead of attempting to Shove it. If you knock an item out of the creature's grasp in this way, the telekinetic hand immediately grabs it. Any effect of the <em>telekinetic hand</em> on the creature ends, and the spell now carries the item, just like you had picked it up with an unamped <em>telekinetic hand</em>.</p>\n<p>Your <em>telekinetic projectiles</em> can fly much further away. Increase the range of <em>telekinetic projectile</em> to 60 feet. It also gains the following amp.</p>\n<p><strong>Amp</strong> You fling objects with even more force, driving your opponents backwards in a hail of objects. On a success, you push the target 5 feet away from you, and on a critical success, you push the target 10 feet away from you in addition to dealing double damage.</p>\n<p><strong>Amp Heightened (+1)</strong> The damage increases by 2d6 instead of by 1d6.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-conscious-mind-8",
+       "slug": "the-infinite-eye",
+       "name": "The Infinite Eye",
+       "tags": [
+        "psychic-conscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [
+        "Gb7SeieEvd0pL2Eh",
+        "gpzpAAAJ1Lza2JVl",
+        "izcxFQFwf3woCnFs"
+       ],
+       "description": "<p>The true strength of the mind lies in the knowledge it contains, with each new observation contributing to the totality of its experiences. To grow your experiences—and with them, your power—you devote yourself to observing as much as possible, casting your senses through space and time with clairvoyance and precognition.</p>\n<p><strong>Granted Spells</strong> - <strong>1st</strong> Sure Strike - <strong>2nd</strong> Augury - <strong>3rd</strong> Locate - <strong>4th</strong> Clairvoyance - <strong>5th</strong> Scouting Eye - <strong>6th</strong> Truesight - <strong>7th</strong> True Target - <strong>8th</strong> Unrelenting Observation - <strong>9th</strong> Foresight</p>\n<p><strong>Standard Psi Cantrips</strong> Detect Magic and Guidance</p>\n<p><strong>Surface Psi Cantrip</strong> Glimpse Weakness</p>\n<p><strong>Deeper Psi Cantrip (Level 6)</strong> Omnidirectional Scan</p>\n<p><strong>Deepest Psi Cantrip (Level 10)</strong> Foresee the Path</p>\n<p>You have the kind of fine control over your magical senses that other spellcasters can only dream of. When you cast <em>detect magic</em>, you're aware of any creature in the emanation affected by a spell or carrying a magic item, and you determine the main location of magic within any magical hazard in the emanation (with the normal restrictions on detecting illusions). This typically manifests as an alteration to your vision, such as seeing a soft aura around the creature or hazard. Sensing these phenomena doesn't make it clear which spell is on a creature, nor which of its items are magical. Your <em>detect magic</em> also gains the following amp.</p>\n<p><strong>Amp</strong> Your pulse of detection magic helps you gain a sense of nearby magic's strengths or weaknesses. When you detect the presence of magic on an enemy or hazard, you gain a +1 status bonus to saves against magic originating from that enemy or hazard for 3 rounds. If you find magic from multiple sources with a single casting of <em>detect magic</em>, you get the bonus against all of them.</p>\n<p><strong>Amp Heightened (7th)</strong> The status bonus to saves against magic increases to +2.</p>\n<p>Your clairvoyant gaze extends further than most, allowing you to guide your allies from a greater distance. The range of <em>guidance</em> increases to 120 feet. It also gains the following amp.</p>\n<p><strong>Amp</strong> You can project a flash of insight to your ally in the nick of time to save them from failure. Amped <em>guidance</em> doesn't cause a creature to become temporarily immune to <em>guidance</em>, and a creature can be targeted by amped guidance even if it is temporarily immune to <em>guidance</em>.</p>\n<p>You can cast an amped <em>guidance</em> spell as a reaction triggered when your ally fails or critically fails an attack roll, Perception check, saving throw, or skill check, and the bonus from guidance would change the failure to a success or the critical failure to a normal failure. The bonus from <em>guidance</em> applies retroactively to their check.</p>\n<p><strong>Amp Heightened (6th)</strong> The bonus from the spell increases to +2.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-conscious-mind-9",
+       "slug": "the-oscillating-wave",
+       "name": "The Oscillating Wave",
+       "tags": [
+        "psychic-conscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [
+        "y6rAdMK6EFlV6U0t",
+        "IxhGEKl63R4QBvkj",
+        "6DfLZBl8wKIV03Iq"
+       ],
+       "description": "<p>Energy can't be created or destroyed, only transferred or changed—whenever you use your magic to add or remove energy, you must then balance it with the opposing force. While this allows you to invert your spells to cast a scorching <em>frostbite</em> or frozen <em>fireball</em>, it also means your spells alternate between fire and cold in equal measure. The first time in an encounter that you cast a granted spell or standard psi cantrip from your conscious mind, decide whether you're adding energy or removing it. Once you add energy, you must remove energy the next time you cast one of these spells, and vice versa. When you Refocus, you restore yourself to a neutral state, allowing you to once again freely choose whether you add or remove energy on your next spell.</p>\n<p><strong>Granted Spells</strong> - <strong>1st</strong> Breathe Fire - <strong>2nd</strong> Blazing Bolt - <strong>3rd</strong> Fireball - <strong>4th</strong> Ice Storm - <strong>5th</strong> Howling Blizzard - <strong>6th</strong> Frozen Fog - <strong>7th</strong> Volcanic Eruption - <strong>8th</strong> Arctic Rift - <strong>9th</strong> Falling Stars</p>\n<p><strong>Standard Psi Cantrips</strong> Frostbite and Ignition</p>\n<p><strong>Surface Psi Cantrip</strong> Thermal Stasis</p>\n<p><strong>Deeper Psi Cantrip (Level 6)</strong> Entropic Wheel</p>\n<p><strong>Deepest Psi Cantrip (Level 10)</strong> Redistribute Potential</p>\n<p>Energy can't be created or destroyed, only transferred or changed—whenever you use your magic to add or remove energy, you must then balance it with the opposing force. While this allows you to invert your spells to cast a scorching <em>frostbite</em> or frozen <em>fireball</em>, it also means your spells alternate between fire and cold in equal measure. The first time in an encounter that you cast a granted spell or standard psi cantrip from your conscious mind, decide whether you're adding energy or removing it. Once you add energy, you must remove energy the next time you cast one of these spells, and vice versa. When you Refocus, you restore yourself to a neutral state, allowing you to once again freely choose whether you add or remove energy on your next spell.</p>\n<p><strong>Adding Energy:</strong> The ability gains the fire trait and any damage it deals is fire damage. It loses any traits matching damage types it no longer deals.</p>\n<p><strong>Removing Energy:</strong> The ability gains the cold trait and any damage it deals is cold damage. It loses any traits matching damage types it no longer deals.</p>\n<p><strong>Mindshift:</strong> When you use an action that has the mindshift trait, you can choose to add or remove energy to it instead of making it mental. Alter it as normal for adding or removing energy and change any save it requires to a Reflex save.</p>\n<p>You can freeze people from even farther away. The range of your <em>frostbite</em> increases to 120 feet. Your <em>frostbite</em> also gains the following amp.</p>\n<p><strong>Amp</strong> You drain thermal energy at a distance, using what you plunder to replenish yourself. The orb deals 3d4 cold damage. You gain temporary Hit Points equal to half the damage the target takes (after applying resistances and the like). You lose any remaining temporary Hit Points after 1 minute.</p>\n<p><strong>Amp Heightened (+1)</strong> The initial damage increases by 2d4 instead of 1d4. The weakness on a critical failure increases by 1.</p>\n<p>You can drastically increase the heat against targets at a distance. When using <em>ignition</em> as a ranged attack, increase the range to 60 feet. When using <em>ignition</em> as a melee attack, your reach increases by 5 feet. Your <em>ignition</em> also gains the following amp.</p>\n<p><strong>Amp</strong> You project pure heat that causes a target to combust. The initial damage changes to 1d10 fire damage plus 1 fire splash damage. When using amped <em>ignition</em> as a melee attack, increase the damage dice of the initial damage from d10s to d12s. You are not harmed by splash damage from amped <em>ignition</em>.</p>\n<p><strong>Amp Heightened (+1)</strong> Instead of using ignition's normal heightened entry, the initial damage increases by 1d10 (1d12 for melee) and the splash damage increases by 1. The persistent fire damage on a critical hit increases by 1d4.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-conscious-mind-10",
+       "slug": "the-silent-whisper",
+       "name": "The Silent Whisper",
+       "tags": [
+        "psychic-conscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [
+        "D442XMADp01qJ7Cs",
+        "4gBIw4IDrSfFHik4",
+        "vLzFcIaSXs7YTIqJ"
+       ],
+       "description": "<p>Every mind murmurs constantly, and the static from those nearby reverberates in your head like wind through leaves. What better focus for your magic then, than the very thoughts of those around you? Your versatile telepathic abilities let you soothe and communicate with your allies or control your enemies.</p>\n<p><strong>Granted Spells</strong> - <strong>1st</strong> Mindlink - <strong>2nd</strong> Stupefy - <strong>3rd</strong> Heroism - <strong>4th</strong> Telepathy - <strong>5th</strong> Synaptic Pulse - <strong>5th</strong> Sending - <strong>7th</strong> Visions of Danger - <strong>8th</strong> Uncontrollable Dance - <strong>9th</strong> Telepathic Demand</p>\n<p><strong>Standard Psi Cantrips</strong> Daze and Message</p>\n<p><strong>Surface Psi Cantrip</strong> Forbidden Thought</p>\n<p><strong>Deeper Psi Cantrip (Level 6)</strong> Shatter Mind</p>\n<p><strong>Deepest Psi Cantrip (Level 10)</strong> Contagious Idea</p>\n<p>You can <em>daze</em> from a great distance, your thoughts resounding like a siren in your foes' minds. The range increases to 120 feet. Your <em>daze</em> also gains the following amp.</p>\n<p><strong>Amp</strong> Your spell cracks the target's mental defenses, leaving it susceptible to further psychic attack. The spell's damage changes to 1d10. If the target fails its Will save, until the end of its next turn, it gains weakness 1 to mental damage and takes a –1 status penalty to Will saves. On a critical failure, the weakness is 3 (in addition to the target being stunned 1). The weakness applies before <em>daze</em> deals damage.</p>\n<p><strong>Amp Heightened (+2)</strong> The spell's damage increases by 2d10, and the weakness on a failure or critical failure increases by 1.</p>\n<p>Your <em>message</em> spell can travel up to 120 feet to reach the target, bending around walls and obstacles; this means you don't need a straight line of effect or line of sight to cast <em>message</em> as long as you know the target's space and there is an unblocked path of 120 feet or less that can reach them. You can cast <em>message</em> in a purely telepathic manner, causing the spell to lose the auditory trait. It also gains the following amp.</p>\n<p><strong>Amp</strong> Your telepathic message allows you to coordinate your actions while you pass on information. The target of the message can immediately spend its reaction to Step or Stride.</p>\n<p><strong>Amp Heightened (4th)</strong> The target of the message can choose to Shove, Strike, or Trip with its reaction instead.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-conscious-mind-11",
+       "slug": "the-tangible-dream",
+       "name": "The Tangible Dream",
+       "tags": [
+        "psychic-conscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [
+        "UKsIOWmMx4hSpafl",
+        "0zU8CPejjQFnhZFI",
+        "TVKNbcgTee19PXZR"
+       ],
+       "description": "<p>You pull colors and shapes from the depth of your mind, projecting impossible creations into the world as tapestries of astral thread or sculptures of force and light.</p>\n<p><strong>Granted Spells</strong> - <strong>1st</strong> Dizzying Colors - <strong>2nd</strong> Invisibility - <strong>3rd</strong> Sea of Thought - <strong>4th</strong> Containment - <strong>5th</strong> Etheric Shards - <strong>6th</strong> Scintillating Safeguard - <strong>7th</strong> Project Image - <strong>8th</strong> Confusing Colors - <strong>9th</strong> Resplendent Mansion</p>\n<p><strong>Standard Psi Cantrips</strong> Figment and Shield</p>\n<p><strong>Surface Psi Cantrip</strong> Imaginary Weapon</p>\n<p><strong>Deeper Psi Cantrip (Level 6)</strong> Astral Rain</p>\n<p><strong>Deepest Psi Cantrip (Level 10)</strong> Hologram Cage</p>\n<p>Your minor illusions shift and dance in a way that draws the eye. The range of <em>figment</em> increases to 60 feet. When you Sustain the spell, you can move the apparent sound or vision up to 15 feet. You can then attempt to Create a Diversion as usual. Those creatures who disbelieved the illusion aren't affected by this diversion. Your <em>figment</em> also gains the following amp.</p>\n<p><strong>Amp</strong> When you amp the spell, you can create a particularly distracting illusion as part of its normal effects. Choose an unoccupied square within the spell's range. The illusion in that square provides flanking for a single melee attack made before the beginning of your next turn. If you Sustain the spell, the details of the illusion change and shift to keep your enemies unsettled; the flanking illusion's duration extends until the beginning of your next turn and you can move it to any unoccupied square in the spell's range. The flanking illusion can't provide its benefit against any creature who has disbelieved the <em>figment</em>.</p>\n<p>Your <em>shield</em> spell can be deployed on behalf of others. When you cast <em>shield</em>, you can choose a target ally within 30 feet to gain the benefits of the spell instead of you. The option to Shield Block with the spell is up to you and uses your reaction, not the target's. Your <em>shield</em> also gains the following amp.</p>\n<p><strong>Amp</strong> You create a layered barrier of three <em>shields</em> to improve your defenses. The duration increases to sustained up to 1 minute. The shield still lowers at the start of each of your turns, but you can raise it again when you Sustain the Spell.</p>\n<p>When you Shield Block with this spell, one of the three layers breaks and you cease to gain the bonus to AC, but the spell doesn't end. You can keep using the spell until the final layer breaks; once it does, the spell ends and you can't cast shield or amped <em>shield</em> again for 10 minutes. You can choose to break additional layers when you Shield Block with this spell to improve your defenses. If you break two layers instead of one, increase the Hardness to 1-1/2 × the normal amount (7 at 1st rank, 15 at 3rd rank, 22 at 5th rank, 30 at 7th rank, and 37 at 9th rank). If you break all three layers, increase the Hardness to double the normal amount.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-conscious-mind-12",
+       "slug": "the-unbound-step",
+       "name": "The Unbound Step",
+       "tags": [
+        "psychic-conscious-mind"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [
+        "qTr2oCgIXl703Whb",
+        "aon-spell-2576",
+        "aon-spell-2583"
+       ],
+       "description": "<p>The mind can flit from thought to thought; why too shouldn't you? You focus on motion in a higher order of spatial dimensions, not just the typical three, allowing for versatile abilities that alter positioning.</p>\n<p><strong>Granted Spells</strong> - <strong>1st</strong> Thoughtful Gift - <strong>2nd</strong> Enlarge - <strong>3rd</strong> Rally Point - <strong>4th</strong> Translocate - <strong>5th</strong> Strange Geometry - <strong>6th</strong> Collective Transposition - <strong>7th</strong> Momentary Recovery - <strong>8th</strong> Quandary - <strong>9th</strong> Bilocation</p>\n<p><strong>Standard Psi Cantrips</strong> Phase Bolt and Warp Step</p>\n<p><strong>Surface Psi Cantrip</strong> Distortion Lens</p>\n<p><strong>Deeper Psi Cantrip (Level 6)</strong> Ghostly Shift</p>\n<p><strong>Deepest Psi Cantrip (Level 10)</strong> Tesseract Tunnel</p>\n<p>Your <em>phase bolt</em> temporarily sends the target's cover out of phase if it hits. On a success, reduce the target's circumstance bonus to AC (if any) by 1 until the beginning of your next turn. Your <em>phase bolt</em> also gains the following amp.</p>\n<p><strong>Amp</strong> Your bolt leaves phase completely, becoming invisible and intangible until it's already embedded in the target—giving the impression it simply teleported itself into place. The target is off-guard against the attack. Additionally, the bolt ignores an amount of Hardness or resistance to piercing damage equal to half the spell's rank. On a critical success, the target can't be affected by teleportation effects until the start of your next turn.</p>\n<p><strong>Amp Heightened (+1)</strong> The bolt’s damage increases by 2d4 instead of 1d4.</p>\n<p>You warp space more compactly, granting you a +10-foot status to your Speed instead of a +5-foot status bonus when you <em>warp step</em>. The spell also gains the following amp.</p>\n<p><strong>Amp</strong> Space contracts with hardly a thought, letting you Cast the Spell as a single action.</p>\n<p><strong>Amp Heightened (4th)</strong> You twist space so completely you don't need to travel the interposing distance. You can choose to instead teleport to a space within your line of sight and line of effect with a range equal to your double your Speed (after applying the status bonus from warp step). This grants the spell the teleportation trait.</p>",
+       "source": "Dark Archive (Remastered)"
+      }
+     ]
+    }
+   }
+  ],
+  "rarity": "common",
+  "description": "<p><em>The mind can perceive truths hidden to fine-tuned instruments, house more secrets than any tome, and move objects and hearts more deftly than any lever. By delving into both the conscious and subconscious aspects of your inner self, you have awoken to the might of psychic magic, allowing you to cast spells not through incantations or gestures but by the power of your will alone. While the thin line between your mind and reality means that a single errant thought could have unintended consequences for yourself and your companions, you know that anything is possible, if you can imagine it.</em></p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-class-69",
+  "slug": "thaumaturge",
+  "name": "Thaumaturge",
+  "hp": 8,
+  "keyAbility": [
+   "cha"
+  ],
+  "perception": "expert",
+  "saves": {
+   "fortitude": "expert",
+   "reflex": "trained",
+   "will": "expert"
+  },
+  "attacks": {
+   "unarmed": "trained",
+   "simple": "trained",
+   "martial": "trained",
+   "advanced": "untrained"
+  },
+  "defenses": {
+   "unarmored": "trained",
+   "light": "trained",
+   "medium": "trained",
+   "heavy": "untrained"
+  },
+  "trainedSkills": [
+   "arcana",
+   "nature",
+   "occultism",
+   "religion"
+  ],
+  "skillChoice": null,
+  "additionalSkills": 3,
+  "classFeatAt1": true,
+  "deity": false,
+  "spellcasting": false,
+  "casting": null,
+  "divineFont": false,
+  "deityFavoredWeapon": null,
+  "features": [
+   {
+    "name": "Esoteric Lore",
+    "description": "<p>Your experience with the unknown has taught you about strange phenomena of every kind. You become trained in Esoteric Lore, a special lore skill that can be used to Recall Knowledge regarding haunts, curses, and creatures of any type, but that can't be used to Recall Knowledge of other topics. Unlike a normal Lore skill, you use Charisma as your modifier on Esoteric Lore checks. You also gain the Dubious Knowledge skill feat.</p>\n<p>At 3rd level, you become an expert in Esoteric Lore; at 7th level, you become a master in Esoteric Lore; and at 15th level, you become legendary in Esoteric Lore.</p>",
+    "feats": [
+     "1Bt7uCW2WI4sM84P"
+    ],
+    "choice": null
+   },
+   {
+    "name": "First Implement and Esoterica",
+    "description": "<p>Your implement is a special object of symbolic importance: your badge as you treat with the supernatural and a powerful tool if things turn violent. Choose an implement. You begin play with a mundane item of that type, and you gain the initiate benefit for that implement. While an implement is useful to you, it typically has no value if sold. If you acquire a new object of the same general implement type, you can switch your implement to the new object by spending 1 day of downtime with the new item. As you advance as a thaumaturge, you will collect up to three implements and unlock the hidden potential stored within each, so you can mix and match their benefits to suit your situation.</p>\n<p>While your implements are your primary tools in your dealings with the supernatural, you know the value of always being prepared. You constantly collect and carry various smaller mystic objects, bits of materials with paranormal affinities, and items used in folk practices: your esoterica. These might include cold-iron nails, scraps of scrolls and scriptures, fragments of bones purportedly from a saint, and other similar objects. You keep your esoterica in easy-to-access places on your person and are well practiced in brandishing your implement and esoterica together, so you can draw and use esoterica with the same hand you're using to wield an implement.</p>\n<p>Implements can be found here</p>\n<p>You know that every creature, no matter how obscure, has a weakness. By identifying and empowering the right object, you can strike down even the most resilient of monsters.</p>\n<p>You gain the Exploit Vulnerability action.</p>\n<p>You can attempt to Exploit Vulnerabilities in one of two ways: either by invoking properties that repel that type of creature, or by attempting a more improvisational, ad-hoc method with your esoterica that can impose a custom weakness on any creature, albeit one that usually isn't as dire as a creature's existing weakness.</p>\n<p><strong>Mortal Weakness</strong> After identifying a creature's weakness, you use a thematically resonant bit of esoterica to attune your attacks to your discovery. Your unarmed and weapon Strikes activate the highest weakness you discovered with Exploit Vulnerability, even though the damage type your weapon deals doesn't change. This damage affects the target of your Exploit Vulnerability, as well as any other creatures of the exact same type, but not other creatures with the same weakness. For example, when fighting a pack of werewolves, you might use silver shavings or crushed moonstone to deal damage that applies their weakness to silver to your attacks against any of the werewolves, but you wouldn't apply this damage to any other monsters with a weakness to silver.</p>\n<p><strong>Personal Antithesis</strong> You improvise a custom weakness on a creature by forcefully presenting and empowering a piece of esoterica that repels it on an individual level; for instance, against a tyrant, you might procure a broken chain that once held a captive. This causes the target creature, and only the target creature, to gain a weakness against your unarmed and weapon Strikes equal to 2 + half your level.</p>",
+    "feats": [],
+    "choice": {
+     "key": "thaumaturge-first-implement-and-esoterica",
+     "options": [
+      {
+       "id": "aon-implement-17",
+       "slug": "amulet",
+       "name": "Amulet",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Amulets are items carried for good luck and protection. Your amulet might be a magical diagram, a religious symbol, a preserved body part such as a rabbit's foot, or a lucky coin. Amulet implements are associated with the harrow suit of shields and the astrological signs of the bridge and the ogre.</p>\n<p>The protective aspects of your amulet can shield you and your allies from harm. You gain the Amulet’s Abeyance reaction.</p>\n<p>Your amulet offers continued protection. When you use Amulet’s Abeyance, you or your ally chooses one type of damage dealt by the triggering attack and gains resistance 5 against that damage type until the start of your next turn. At 15th level, this lingering resistance increases from 5 to 10.</p>\n<p>Your amulet repels the creature’s attempts to harm you. You gain a +2 status bonus to AC and saves against the target of your Exploit Vulnerability.</p>\n<p>Your amulet provides sanctuary even against wide-scale attacks. When you use Amulet's Abeyance, you target yourself and all allies within 15 feet. Each target gains both the initial resistance against the triggering damage and the lingering resistance from your amulet's adept benefit; the allies gain the lingering resistance even if they would not have taken any of the initial triggering damage. If the foe's attack deals multiple damage types, each target can separately choose the damage type to gain lingering resistance against.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-implement-18",
+       "slug": "bell",
+       "name": "Bell",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Bells symbolize the power that sounds and emotions hold over others, soothing with one tone and startling with another. Bells, drums, finger cymbals, and other percussion instruments are most typical, but these implements can be any type of portable musical instrument that is played with one hand. Bell implements are associated with the astrological signs of the daughter and the blossom.</p>\n<p>You can use your bell implement to create three different kinds of music, each of which weakens a foe in a different way. You gain the Ring Bell activity.</p>\n<p>Your bell resonates powerfully, causing the effect to last longer. The conditions from Ring Bell last 3 rounds instead of 1 round.</p>\n<p>Your reinforced bell can reach into the most basal part of the target's mind, priming it to be vulnerable to the bell's effects. When you successfully Strike the target of your Exploit Vulnerability, your bell implement plays a haunting tone and the creature takes a –2 status penalty on saves against your Ring Bell for 1 round, or a –3 status penalty on a critical hit. This effect has the auditory trait</p>\n<p>With your mastery of your bell, you can affect many foes with ease. All the condition values from Ring Bell increase to 2 (or 3 on a critical failure). Ring Bell can trigger off the Strike or spell of any enemy, not just the target of your Exploit Vulnerability; however, in that case, the condition lasts only until the start of your next turn.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-implement-19",
+       "slug": "chalice",
+       "name": "Chalice",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Chalice implements are vessels that fill with liquid, associating them with healing, nourishment, and life. Your chalice might be a traditional cup or goblet, but it could also be a small amphora, a polished gourd, or even a hollowed-out skull. Chalice implements are associated with the astrological signs of the mother and the newlyweds, as well as the sea dragon.</p>\n<p>While holding your chalice, you can drink from it or feed its liquid to an ally to improve their health. You gain the Drink from the Chalice action.</p>\n<p>The life essence shed from blood empowers your chalice. If you or an ally within 30 feet takes piercing or slashing damage from a foe’s critical hit or takes persistent bleed damage, Drinking from the Chalice before the end of your next turn grants that injured creature greater restoration to make up for its lost vitality. On a sip, the temporary Hit Points granted to the creature increase to twice your level. When drained, the chalice heals the creature 5 Hit Points for each level you have.</p>\n<p>Your reinforced chalice can collect a creature’s life force from a distance to become empowered. While you’re within 30 feet of the target of your Exploit Vulnerability, you increase the effect if someone Drinks from the Chalice. Add additional temporary Hit Points equal to your level if the drinker sips, or add twice your level to the Hit Points regained if the drinker drains the chalice.</p>\n<p>When you or an ally drain the chalice, the overwhelming vitality it's collected helps you overcome many ailments. Reduce the drinker's clumsy, enfeebled, frightened, stupefied, and stunned values by 1. (This reduces the stunned condition only if it has a condition value, not when it has a duration.) The drinker also reduces its drained value by 1, but it can reduce its drained condition by Drinking from the Chalice only once per day.</p>\n<p>In addition, the chalice attempts to counteract all poisons, diseases, and curses afflicting the drinker, using half your level rounded up as the counteract rank and your class DC – 10 as the counteract modifier. If the chalice fails to counteract a given affliction for a drinker, it can't attempt to counteract that affliction again until midnight.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-implement-20",
+       "slug": "lantern",
+       "name": "Lantern",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Lantern implements shine the light of revelation to part shadows and expose truth. You might use a common glass lantern, torch, paper lantern, or other similar light source. Lantern implements are associated with the harrow suit of stars and the astrological signs of the lantern bearer and the archer.</p>\n<p>While you hold your lantern, its burning light leaves secrets no place to hide. You can light or extinguish your lantern with nothing but a thought, as a free action that has the concentrate trait. While lit, the lantern emits an aura of light in a 20-foot emanation; the aura has the light and magical traits. Everything in the aura is magically lit with bright light regardless of cover, and dim light extends beyond the aura an additional distance equal to the size of the aura. The aura's counteract rank against magical darkness is equal to half your level rounded up.</p>\n<p>The lantern's aura attempts to reveal the unseen. You and your allies in the lantern's aura gain a +1 status bonus to visual Perception checks to notice anything that is also within the aura and a +1 status bonus to checks to Recall Knowledge against creatures within the aura, as the light exposes their true natures. During exploration, even if you aren't Searching, the GM rolls a secret check for you to find traps, environmental hazards, haunts, and secrets (such as secret doors). The GM rolls each time a given hazard or secret comes within the lantern's aura. These effects have the magical and revelation traits.</p>\n<p>In addition to the initiate benefits, when you hold your lantern, its light reveals the invisible and the ethereal. The lantern's aura of light increases to a 30-foot emanation. While you're holding your lantern, invisible and ethereal creatures within the aura become visible as rippling distortions, though they're still concealed. This doesn't give you any special ability to affect a creature on the Ethereal Plane, but it ensures you're aware of the creatures' presence.</p>\n<p>Your lantern's light flares and burns bright, leaving no shadows in which secrets and enemies can hide. The emanation of your lantern's aura doubles in size. Against the target of your Exploit Vulnerability, the status bonuses from the lantern's initiate benefit increase to +2. The creature takes a –2 status penalty to Deception checks and Stealth checks as long as it's within the aura. Additionally, the target of your Exploit Vulnerability can't be concealed while it's in the lantern's aura, though it still can potentially become hidden or undetected using cover or means other than the concealed condition.</p>\n<p>In addition to the other benefits, your lantern reveals all things as they truly are. The lantern's aura of light increases to a 40-foot emanation. While you're holding your lantern, the GM rolls a secret counteract check against any illusion, morph, or polymorph effects that come within the lantern's aura, but only for the purpose of determining whether you and others can see through it (for instance, if the check succeeds against a polymorph spell, you can see the creature's true form, but you don't end the spell). Use half your level rounded up as the counteract rank and your class DC – 10 as the counteract modifier. On a failed counteract check, the lantern can't attempt to counteract that illusion, morph, or polymorph effect again until midnight. You can choose to leave any effect you discover intact instead of counteracting it.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-implement-21",
+       "slug": "mirror",
+       "name": "Mirror",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Mirror implements represent misdirection, illusion, and sleight of hand, bending and shifting a perspective and the way you look at things. While larger mirrors hold the same mystic connotations, thaumaturges always choose small, portable, handheld mirrors as implements so they can use them easily while adventuring. Mirror implements are associated with the harrow suit of keys, and the astrological signs of the stranger and the swallow.</p>\n<p>You learn how to use your mirror to project another version of yourself whose realness is a matter of perspective. You gain the Mirror’s Reflection action.</p>\n<p>Your mirror self shatters into punishing shards when damaged. When an enemy adjacent to one of your spaces damages you while your Mirror's Reflection is in effect, you can, as a free action, cause that version of you to explode into mirror shards. This ends Mirror's Reflection (establishing the remaining version of you as the real one) and deals slashing damage to all creatures in a 5-foot emanation around where your mirror self was. The damage is equal to 2 + half your level or the damage of the triggering attack, whichever is lower. You're immune to this damage.</p>\n<p>Reinforcing your mirror lets it play tricks on your enemy's senses as it bends light this way or that. You become concealed to the target of your Exploit Vulnerability as your mirror warps its perceptions. As normal for concealment where your overall location is still obvious, you can't use this concealment to Hide or Sneak.</p>\n<p>You've become so skilled at reflecting yourself that you can combine making a reflection with your other movements to act right away. When you use Mirror's Reflection, you can have one of your selves immediately Interact, Seek, or Strike.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-implement-22",
+       "slug": "regalia",
+       "name": "Regalia",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Regalia implements represent rulership, leadership, and social connections. While they differ in shape depending on regional customs and markers used to signify authority, common regalia implements are scepters, jeweled orbs, and heraldic banners. Regalia implements are associated with the harrow suit of crowns and the astrological signs of the patriarch and the sovereign dragon.</p>\n<p>While you hold your regalia, you gain an air of authority and bolster the courage of allies who believe in you. Your regalia aids you when you attempt to convince others. You gain a +1 circumstance bonus to Deception, Diplomacy, and Intimidation checks. Allies who can see you can use Follow the Expert to follow you even if you're only trained in a skill and not an expert, due to the competence you clearly exude. When they do, the circumstance bonus they gain from Following the Expert is +1.</p>\n<p>You stoke courage even against impossible odds. While holding your regalia, you gain an inspiring aura affecting you and all allies in a 15-foot emanation who can see you, granting them a +1 status bonus to saving throws against fear. At the end of your turn, at the same time you would reduce your frightened value by 1, you reduce the frightened value of all allies within your inspiring aura by 1. Your aura has the emotion, mental, and visual traits.</p>\n<p>Your regalia's power increases, and so do the abilities it grants. The circumstance bonus you gain to Deception, Diplomacy, and Intimidation increases to +2, as long as you have master proficiency in each skill. When others use Follow the Expert to follow you, you grant them a +2 circumstance bonus if you are trained, +3 if you have expert proficiency, or +4 if you have master or legendary proficiency.</p>\n<p>The courage your aura instills grows stronger. The +1 status bonus now applies to all saving throws against mental effects, rather than only against fear, and you and allies in your aura gain a +2 status bonus to damage rolls. At 11th level, this increases to a +3 status bonus to damage rolls, and at 17th level, this increases to a +4 status bonus to damage rolls.</p>\n<p>Your regalia implement makes you seem more confident and inspiring with each success. Whenever you successfully Strike the target of your Exploit Vulnerability, choose an ally that you can see. That ally gains a +1 circumstance bonus to its attack rolls against the creature until the beginning of your next turn. If the attack roll was a critical hit, the circumstance bonus increases to +2.</p>\n<p>Your regalia grants you the true gravitas of rulership, tying together the hearts and minds of your allies and making it impossible for you to leave a bad impression. If you roll a critical failure on a check to Coerce, Make an Impression, or Request, you get a failure instead. When others use Follow the Expert to follow you, you grant them a +3 circumstance bonus if you are trained or +4 if you are an expert or above.</p>\n<p>Allies in your inspiring aura aren't off-guard from being flanked unless you too are flanked. If one of your allies in the aura is clumsy, enfeebled, frightened, sickened, or stupefied, the status penalty your ally takes from the condition is 1 lower than the condition's value as long as the ally remains in the aura, unless you too are affected by the same condition.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-implement-23",
+       "slug": "tome",
+       "name": "Tome",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Tome implements embody lost knowledge and otherworldly insights. While a weathered book is most common, tome implements can have as many different form factors as there are ways to store knowledge, from carved clay tablets to bundles of knotted cords. Tome implements are associated with the harrow suit of books and the astrological signs of the stargazer and the underworld dragon.</p>\n<p>While you hold your tome, lines of text appear on the open pages, revealing useful information. While you hold your tome, you gain a +1 circumstance bonus to all skill checks to Recall Knowledge.</p>\n<p>During your daily preparations, you can gain the trained proficiency rank in two skills of your choice until you prepare again. You retain the benefit as long as the tome is on your person, even if you aren't holding it. At 3rd level, you're an expert in one of the skills and trained in the other, and at 5th level, you're an expert in both skills. Since these proficiencies are temporary, you can't use them as a prerequisite for a skill increase or a permanent character option like a feat.</p>\n<p>In addition to the initiate benefits, your tome inscribes insights into creatures that you can use to strike them down. While holding your tome, at the start of your turn each round, attempt a check to Recall Knowledge about a creature of your choice that you're observing. If this check succeeds, you gain a +1 circumstance bonus to your next attack roll against that creature before the start of your next turn. When you gain temporary skill proficiencies during your daily preparations, one is at expert proficiency and the other at master proficiency. At 9th level, you have master proficiency in both.</p>\n<p>Your tome's power not only reads a creature's present but even records its future actions. When you use Intensify Vulnerability, roll a d20 and set the result aside. At any time until the start of your next turn, you can use the d20 result you set aside for an attack roll to Strike the target of your Exploit Vulnerability, instead of rolling a new d20; this is a fortune effect.</p>\n<p>In addition to the other benefits, your tome's information alerts you to ambushes and attacks from your foes. While holding your tome, you can always roll a skill check for initiative against creatures or haunts using Esoteric Lore. If you do, you gain a +3 circumstance bonus to your initiative roll.</p>\n<p>The initiate benefit's circumstance bonus to Recall Knowledge from holding your tome increases from +1 to +2. When you succeed at the Recall Knowledge check granted by the tome's adept benefit, the bonus applies to all attack rolls you make before the start of your next turn, not just your next one. Lastly, when you gain temporary skill proficiencies, both are legendary.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-implement-24",
+       "slug": "wand",
+       "name": "Wand",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Wand implements are short, lightweight batons, usually made of wood but often incorporating other materials. Due to their association with spellcasters, wand implements are connected to magic and its practice, as well as the direction and manipulation of energy. Wand implements are associated with the astrological signs of the thrush and the sky dragon.</p>\n<p>Your wand slowly collects ambient magic, which you can project at a foe in a barely controlled display of charged energy. When you gain this implement, choose whether your wand is attuned to cold, electricity, or fire. You gain the Fling Magic activity.</p>\n<p>You gain versatility and additional benefits when you fire your wand. The range of Fling Magic increases to 120 feet. Choose a second damage type from the list; whenever you Fling Magic, you can select between either of the two damage types you have chosen. Fling Magic has an additional effect if the target fails its save and takes damage, depending on the type. Cold: The target becomes chilled, taking a –10-foot status penalty to its Speeds for 1 round.Electricity: The target is shocked, becoming off-guard until the end of your next turn.Fire: The target catches flame, taking 1d10 persistent fire damage (or 2d10 on a critical failure). If you have the wand paragon benefit, this increases to 2d10 persistent fire damage (or 4d10 on a critical failure).</p>\n<p>Your empowered wand surges with ever-more-powerful magic. When you Fling Magic to damage the target of your Exploit Vulnerability, Fling Magic gains a status bonus to its damage roll equal to your level.</p>\n<p>Your mastery of your wand grants you increased versatility, range, and area. The range of Fling Magic increases to 180 feet. You gain the ability to choose between all three damage types (cold, electricity, and fire) each time you use Fling Magic. When you Fling Magic, you can choose to target a single creature or to affect all creatures in a 20-foot burst.</p>",
+       "source": "Dark Archive (Remastered)"
+      },
+      {
+       "id": "aon-implement-25",
+       "slug": "weapon",
+       "name": "Weapon",
+       "tags": [
+        "thaumaturge-first-implement-and-esoterica"
+       ],
+       "skills": [],
+       "skillChoice": null,
+       "feats": [],
+       "proficiencies": {},
+       "tradition": null,
+       "traditionChoice": false,
+       "keyAbility": null,
+       "grantedSpells": [],
+       "description": "<p>Weapon implements are the most direct and confrontational, representing battle, struggle, and potentially violence. You can choose only a one-handed weapon as an implement, which allows you to channel energies into your weapon as well as hold your other implements once you gain them. Weapon implements are associated with the harrow suit of hammers and the astrological signs of the rider and the swordswoman.</p>\n<p>Your weapon trembles slightly in your hand, seeking out your foe's weakness to it and interrupting their actions. You gain the Implement's Interruption reaction.</p>\n<p>At 5th level, when you gain thaumaturgic weapon expertise, your instinctive knowledge of your weapon implement also grants you the weapon's critical specialization effect.</p>\n<p>When your implement lashes out at your foe, even a close miss brings the weapon close enough to do harm. When you use Implement’s Interruption and your Strikes fails (but doesn’t critically fail), you deal 1 damage of the weapon’s normal type, possibly applying any bonus damage due to the target’s weakness.</p>\n<p>Your weapon is drawn to your enemy’s vital spots, almost of its own accord. You gain a +2 status bonus to attack rolls against the target of your Exploit Vulnerability.</p>\n<p>The way your implement connects to your foe makes its interruptions incredibly disruptive. You now disrupt the triggering action on a hit with Implement’s Interruption, rather than needing a critical hit.</p>",
+       "source": "Dark Archive (Remastered)"
+      }
+     ]
+    }
+   },
+   {
+    "name": "Implement's Empowerment",
+    "description": "<p>The power of your implement can also be turned to the more common task of combat, its power adding to and amplifying the effects of runes and other magical empowerments. When you Strike, you can trace mystic patterns with an implement you're holding to empower the Strike, causing it to deal 2 additional damage per weapon damage die. Channeling the power requires full use of your hands. You don't gain the benefit of implement's empowerment if you are holding anything in either hand other than a single one-handed weapon, other implements, or esoterica, and you must be holding at least one implement to gain the benefit.</p>",
+    "feats": [],
+    "choice": null
+   }
+  ],
+  "rarity": "common",
+  "description": "<p><em>The world is full of the unexplainable: ancient magic, dead gods, and even stranger things. In response, you've scavenged the best parts of every magical tradition and built up a collection of esoterica—a broken holy relic here, a sprig of mistletoe there—that you can use to best any creature by exploiting their weaknesses and vulnerabilities. The mystic implement you carry is both badge and weapon, its symbolic weight helping you bargain with and subdue the supernatural. Every path to power has its restrictions and costs, but you turn them all to your advantage. You're a thaumaturge, and you work wonders.</em></p>",
+  "source": "Dark Archive (Remastered)",
+  "lores": [
+   "Esoteric Lore"
+  ],
+  "loreAbilities": {
+   "Esoteric Lore": "cha"
+  }
+ }
+]

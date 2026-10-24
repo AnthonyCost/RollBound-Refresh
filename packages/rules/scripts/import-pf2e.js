@@ -11,7 +11,7 @@ import { splitData } from '../src/data.js';
 
 // Add "Impossible Magic" here once the Foundry data includes it; the run logs
 // any skipped title containing "Impossible" so you can copy the exact string.
-const BOOKS = ['Pathfinder Player Core', 'Pathfinder Player Core 2'];
+const BOOKS = ['Pathfinder Player Core', 'Pathfinder Player Core 2', 'Pathfinder Guns & Gears'];
 
 const REPO = 'foundryvtt/pf2e';
 const BRANCH = 'master';
@@ -559,7 +559,7 @@ for (const file of handMade) {
   }
   data.meta.books.push(hand.book);
   if (!data.meta.license.includes('Archives of Nethys')) data.meta.license = data.meta.license.replace(/\.$/, ' and the Archives of Nethys.');
-  for (const type of ['classes', 'heritages', 'feats', 'spells', 'runes']) {
+  for (const type of ['classes', 'heritages', 'backgrounds', 'feats', 'spells', 'runes']) {
     data[type] = [...(data[type] ?? []), ...(hand[type] ?? [])].sort(byName);
   }
   // Options for classes from other books, such as new wizard arcane schools.
@@ -569,8 +569,43 @@ for (const file of handMade) {
     feature.choice.options = [...feature.choice.options, ...options].sort(byName);
   }
   for (const [type, names] of Object.entries(hand.skipped ?? {})) {
-    for (const name of names) skippedHandMade.push(`${name} (${hand.book} ${type.replace(/s$/, '')}): skipped, see books/${file}`);
+    const kind = { ancestries: 'ancestry', heritages: 'heritage' }[type] ?? type;
+    for (const name of names) skippedHandMade.push(`${name} (${hand.book}): AoN's ${kind} entry skipped, see books/${file}`);
   }
+}
+// A heritage needs its ancestry; hand-made heritages for ancestries no book provides wait.
+const ancestrySlugsHere = new Set(data.ancestries.map((a) => a.slug));
+data.heritages = data.heritages.filter((h) => {
+  if (!h.ancestry || ancestrySlugsHere.has(h.ancestry)) return true;
+  skippedHandMade.push(`${h.name} (${h.source} heritage): skipped, no ${h.ancestry} ancestry is imported`);
+  return false;
+});
+
+// Hand-made books can grant feats and spells printed in other books (Dark Archive's
+// Legacy of the Hammer grants Concealing Legerdemain). Bring those in from Foundry,
+// the same way as feats granted by Foundry's own books above.
+const allSpells = new Map();
+for (const { path, item } of items) {
+  if (!path.startsWith('packs/spells/')) continue;
+  const slug = item.system.slug ?? slugOf(item.name);
+  const current = allSpells.get(slug);
+  if (!current || featRank(item) > featRank(current)) allSpells.set(slug, item);
+}
+for (let pass = 0; pass < 3; pass++) {
+  const haveFeats = new Set(data.feats.map((f) => f.slug));
+  const haveSpells = new Set(data.spells.map((s) => s.slug));
+  const options = data.classes.flatMap((c) => c.features.flatMap((f) => f.choice?.options ?? []));
+  const wantFeats = [
+    ...data.backgrounds.flatMap((b) => b.feats),
+    ...data.heritages.flatMap((h) => h.feats),
+    ...data.feats.flatMap((f) => f.feats),
+    ...data.classes.flatMap((c) => c.features.flatMap((f) => f.feats)),
+    ...options.flatMap((o) => o.feats),
+  ].filter((s) => !haveFeats.has(s) && allFeats.has(s));
+  const wantSpells = options.flatMap((o) => o.grantedSpells).filter((s) => !haveSpells.has(s) && allSpells.has(s));
+  if (!wantFeats.length && !wantSpells.length) break;
+  data.feats = [...data.feats, ...[...new Set(wantFeats)].map((s) => mapFeat(allFeats.get(s)))].sort(byName);
+  data.spells = [...data.spells, ...[...new Set(wantSpells)].map((s) => mapSpell(allSpells.get(s)))].sort(byName);
 }
 
 // ---------- Corrections ----------
@@ -578,12 +613,16 @@ for (const file of handMade) {
 
 const bookFile = (title) => `${slugOf(title.replace(/^Pathfinder /, ''))}.json`;
 const CORRECTABLE = {
-  classes: { list: () => data.classes, fields: ['casting', 'divineFont', 'deityFavoredWeapon', 'lores', 'classFeatTraits', 'runes'] },
+  classes: {
+    list: () => data.classes,
+    fields: ['casting', 'divineFont', 'deityFavoredWeapon', 'lores', 'loreAbilities', 'classFeatTraits', 'runes', 'weaponGroups'],
+  },
   subclassOptions: {
     list: () => data.classes.flatMap((c) => c.features.flatMap((f) => f.choice?.options ?? [])),
-    fields: ['proficiencies', 'keyAbility', 'skills', 'traditionSkills'],
+    fields: ['proficiencies', 'keyAbility', 'keyAbilityOnly', 'skills', 'traditionSkills'],
   },
-  heritages: { list: () => data.heritages, fields: ['featAncestries'] },
+  heritages: { list: () => data.heritages, fields: ['featAncestries', 'ancestryHp'] },
+  backgrounds: { list: () => data.backgrounds, fields: ['lore'] },
   feats: { list: () => data.feats, fields: ['grantedOnlyIf'] },
 };
 
@@ -602,6 +641,7 @@ for (const title of data.meta.books) {
       const target = kind.list().find((x) => x.slug === slug && x.source === book);
       if (!target) throw new Error(`${file}: no ${section} entry "${slug}" in ${book}`);
       for (const [field, value] of Object.entries(fix)) {
+        if (field.startsWith('$')) continue; // notes, like "$comment"
         if (!kind.fields.includes(field)) throw new Error(`${file}: ${section}.${slug} can't correct "${field}"`);
         target[field] = field === 'proficiencies' ? { ...target.proficiencies, ...value } : value;
       }

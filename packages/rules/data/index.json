@@ -5,12 +5,14 @@
   "books": [
    "Player Core",
    "Player Core 2",
+   "Guns & Gears",
+   "Dark Archive (Remastered)",
    "Impossible Magic"
   ],
   "license": "Game mechanics © Paizo Inc., used under the ORC License. Data via the Foundry VTT pf2e system and the Archives of Nethys.",
-  "generatedAt": "2026-10-24T01:28:20.970Z",
+  "generatedAt": "2026-10-24T01:46:31.532Z",
   "needsReview": [],
-  "version": "82aa088f3da3"
+  "version": "66703af0432c"
  },
  "files": [
   {
@@ -23,7 +25,13 @@
    "path": "common/languages.json",
    "type": "languages",
    "book": null,
-   "count": 25
+   "count": 29
+  },
+  {
+   "path": "guns-gears/ancestries.json",
+   "type": "ancestries",
+   "book": "Guns & Gears",
+   "count": 1
   },
   {
    "path": "player-core/ancestries.json",
@@ -38,6 +46,24 @@
    "count": 8
   },
   {
+   "path": "dark-archive-remastered/heritages.json",
+   "type": "heritages",
+   "book": "Dark Archive (Remastered)",
+   "count": 1
+  },
+  {
+   "path": "guns-gears/heritages.json",
+   "type": "heritages",
+   "book": "Guns & Gears",
+   "count": 4
+  },
+  {
+   "path": "impossible-magic/heritages.json",
+   "type": "heritages",
+   "book": "Impossible Magic",
+   "count": 2
+  },
+  {
    "path": "player-core/heritages.json",
    "type": "heritages",
    "book": "Player Core",
@@ -50,6 +76,18 @@
    "count": 57
   },
   {
+   "path": "dark-archive-remastered/backgrounds.json",
+   "type": "backgrounds",
+   "book": "Dark Archive (Remastered)",
+   "count": 4
+  },
+  {
+   "path": "guns-gears/backgrounds.json",
+   "type": "backgrounds",
+   "book": "Guns & Gears",
+   "count": 39
+  },
+  {
    "path": "player-core/backgrounds.json",
    "type": "backgrounds",
    "book": "Player Core",
@@ -60,6 +98,18 @@
    "type": "backgrounds",
    "book": "Player Core 2",
    "count": 23
+  },
+  {
+   "path": "dark-archive-remastered/classes.json",
+   "type": "classes",
+   "book": "Dark Archive (Remastered)",
+   "count": 2
+  },
+  {
+   "path": "guns-gears/classes.json",
+   "type": "classes",
+   "book": "Guns & Gears",
+   "count": 2
   },
   {
    "path": "impossible-magic/classes.json",
@@ -86,6 +136,18 @@
    "count": 1
   },
   {
+   "path": "dark-archive-remastered/feats.json",
+   "type": "feats",
+   "book": "Dark Archive (Remastered)",
+   "count": 18
+  },
+  {
+   "path": "guns-gears/feats.json",
+   "type": "feats",
+   "book": "Guns & Gears",
+   "count": 25
+  },
+  {
    "path": "impossible-magic/feats.json",
    "type": "feats",
    "book": "Impossible Magic",
@@ -95,7 +157,7 @@
    "path": "player-core/feats.json",
    "type": "feats",
    "book": "Player Core",
-   "count": 202
+   "count": 203
   },
   {
    "path": "player-core-2/feats.json",
@@ -114,6 +176,12 @@
    "type": "deities",
    "book": "Lost Omens Divine Mysteries",
    "count": 20
+  },
+  {
+   "path": "dark-archive-remastered/spells.json",
+   "type": "spells",
+   "book": "Dark Archive (Remastered)",
+   "count": 4
   },
   {
    "path": "impossible-magic/spells.json",
@@ -140,6 +208,12 @@
    "count": 16
   },
   {
+   "path": "guns-gears/weapons.json",
+   "type": "weapons",
+   "book": "Guns & Gears",
+   "count": 48
+  },
+  {
    "path": "player-core/weapons.json",
    "type": "weapons",
    "book": "Player Core",
@@ -150,6 +224,12 @@
    "type": "weapons",
    "book": "Player Core 2",
    "count": 22
+  },
+  {
+   "path": "guns-gears/armor.json",
+   "type": "armor",
+   "book": "Guns & Gears",
+   "count": 3
   },
   {
    "path": "player-core/armor.json",

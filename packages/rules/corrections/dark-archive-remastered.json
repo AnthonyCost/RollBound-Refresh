@@ -1,0 +1,18 @@
+{
+  "$comment": "Rules from Pathfinder Dark Archive (Remastered) that the hand-made book (books/dark-archive-remastered.json, from the Archives of Nethys) doesn't encode. See README.md in this folder.",
+  "classes": {
+    "psychic": {
+      "casting": { "kind": "repertoire", "tradition": "occult", "cantrips": 3, "spells": 1, "slots": 1 }
+    },
+    "thaumaturge": {
+      "lores": ["Esoteric Lore"],
+      "loreAbilities": { "Esoteric Lore": "cha" }
+    }
+  },
+  "backgrounds": {
+    "reborn-soul": {
+      "$comment": "The book grants two Lore skills from your past life; the builder records one.",
+      "lore": ["<Past life> Lore"]
+    }
+  }
+}

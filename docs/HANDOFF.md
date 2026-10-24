@@ -44,7 +44,7 @@ sudo service postgresql start        # Postgres often stops after a WSL restart
 npm run db:setup                     # tables, seed data, invite codes, build upgrades (safe to re-run)
 npm run dev:server                   # API on :3001
 npm run dev:client                   # app on :5173 (second terminal)
-npm test                             # 136 rules tests, including the full build sweep
+npm test                             # 154 rules tests, including the full build sweep
 ```
 
 Other commands:
@@ -133,8 +133,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Saving:** sends the character to the API, or keeps it in the tab in demo mode, with an optional portrait.
 
 ### 4. Rules data import
-- **Source:** the Foundry VTT pf2e system's open data, filtered to the books in `BOOKS` (Player Core and Player Core 2) and pinned to an upstream commit recorded in `meta.commit`.
-- **Impossible Magic:** Foundry doesn't have it, so it comes from the Archives of Nethys as a hand-made book (`packages/rules/books/`, see section 12). When Foundry adds it, follow `books/README.md` to switch over.
+- **Source:** the Foundry VTT pf2e system's open data, filtered to the books in `BOOKS` (Player Core, Player Core 2 and Guns & Gears) and pinned to an upstream commit recorded in `meta.commit`.
+- **Hand-made books:** Impossible Magic and Dark Archive (Remastered) aren't in Foundry (or only in an older edition), so they come from the Archives of Nethys (`packages/rules/books/`, sections 12–13). When Foundry adds it, follow `books/README.md` to switch over.
 - **Deities:** these come from Foundry's `core-gods` folder, which is Player Core's list.
 - **Corrections:** rules Foundry encodes only in its own code come from `packages/rules/corrections/<book>.json`. After each import, a report lists anything that looks like it needs a correction.
 
@@ -221,6 +221,23 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - **Postgres is deferred on purpose.** The data is 0.7 MB, and the plan was to move at about 5 MB. `test/data.test.js` fails past 5 MB with a message pointing here, so CI says when it's time.
   - The `books` filter is ready for step 5.
 
+### 13. Guns & Gears and Dark Archive (Remastered)
+- **Guns & Gears** comes from Foundry, whose version is the remaster: it's in `BOOKS`. It adds the Gunslinger and Inventor, the Automaton ancestry (4 heritages), 39 backgrounds and firearms. One correction: the Gunslinger is expert with simple and martial firearms and crossbows and trained with advanced ones, so weapon proficiency can now be set by weapon group (`weaponGroups`).
+- **Dark Archive (Remastered)** is a hand-made book from AoN, since Foundry only has the 2022 original. It adds:
+  - the Psychic, whose subconscious mind sets the key attribute and whose conscious mind adds spells,
+  - the Thaumaturge, with Esoteric Lore rolled with Charisma and the Dubious Knowledge feat,
+  - Reflection, a versatile heritage that opens its own ancestry feats,
+  - 4 backgrounds, 18 feats and 4 spells.
+- **Automaton unlocked Impossible Magic's heritages:** Defensive Automaton (10 ancestry HP and Toughness) and Newly Minted Automaton, plus its 4 Automaton feats.
+- **Importer changes:**
+  - Feats and spells that a hand-made book grants from other books are pulled in from Foundry, for example *Kinetic Ram* and Concealing Legerdemain.
+  - Hand-made heritages wait until their ancestry exists.
+- **Engine fix:** granted spells now come from every chosen subclass option, not just the one that sets the tradition. The psychic's conscious mind needed this.
+- **Not checked against a PDF:** I didn't have Dark Archive. The Psychic's 1 spell slot at 1st level comes from AoN's text ("Each day, you can cast one 1st-rank spell"), since AoN doesn't show the spells-per-day table. Confirm it against your book if you have it.
+- **Partial:** Reborn Soul grants two Lores of your choice, and the builder records one.
+- **Verified:** 154 tests, with the sweep over 24 classes. In Chrome, a character of each new class plus a Defensive Automaton fighter was built and saved; HP, the gunslinger's expert pistol (+7), the thaumaturge's Charisma-based Esoteric Lore and the psychic's granted spells all match the engine.
+- **Art:** Gunslinger and Inventor use art you'd already provided. Psychic, Thaumaturge and Automaton show letters for now.
+
 ### 12. Impossible Magic (the first hand-made book)
 - **Source:** Foundry doesn't have the book, so `scripts/import-aon.js` converts it from the Archives of Nethys: one request to AoN's search index, cached, written to `books/impossible-magic.json`. The importer merges hand-made books before corrections, so everything downstream treats them like Foundry's books. Guide: `packages/rules/books/README.md`.
 - **Cross-checked against the PDF** (your copy, kept out of the repo): every feat, spell and rune name and level, class HP and proficiencies, and subclass options. The PDF filled one gap AoN left blank: the Dragon eidolon's skills.
@@ -275,7 +292,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Testing and verification
 
-- `npm test`: 136 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, the data files and their size budget, and an empty import report.
+- `npm test`: 154 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, the data files and their size budget, and an empty import report.
 - **Build sweep** (`test/sweep.test.js`): every class with every ancestry, heritage, background, subclass option and deity must produce a valid character with a complete sheet. A failure names the combinations that broke.
 - **GitHub Actions** runs the tests and a client build on every push and pull request.
 - **UI checks:** done with headless Windows Chrome screenshots from WSL, using a small proxy that sets demo or sign-in state. Tap-specific behavior wasn't testable this way.
@@ -303,7 +320,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - [ ] Decide on the **PDF sheet template** for a public deploy: get permission, or design a RollBound sheet.
 - [ ] Set up **AWS S3** using `docs/aws-s3-setup.md`, then run its checklist.
 - [ ] When Foundry publishes **Impossible Magic**, switch from the hand-made book (`packages/rules/books/README.md`), ideally mapping AoN IDs to Foundry IDs so nobody has to re-pick.
-- [ ] Send **art for the Necromancer and Runesmith** (portrait and icon), named `class-necromancer.png` and so on.
+- [ ] Send **art for the Necromancer, Runesmith, Psychic and Thaumaturge** (portrait and icon) and the **Automaton** ancestry, named `class-necromancer.png`, `ancestry-automaton.png` and so on.
+- [ ] Confirm the **Psychic's 1st-level spell slots** (1, from AoN's text) against Dark Archive (Remastered).
 
 **Small features:**
 - [ ] Use the campaign's party level on the GM screen (it uses the character's level today).

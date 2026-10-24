@@ -1,0 +1,118 @@
+[
+ {
+  "id": "aon-background-587",
+  "slug": "child-of-the-twin-village",
+  "name": "Child of the Twin Village",
+  "boosts": [
+   [
+    "con",
+    "cha"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "skills": [
+   "diplomacy"
+  ],
+  "lore": [
+   "Dreamlands"
+  ],
+  "feats": [],
+  "rarity": "rare",
+  "description": "<p>You were born in a village where everyone has a twin with a special link. You have moved to the wider world for reasons of your own, but you still have an unbreakable connection to your twin through your dreams.</p>\n<p>Choose two attribute boosts. One must be to <strong>Constitution</strong> or <strong>Charisma</strong>, and one is a free attribute boost.</p>\n<p>You're trained in Diplomacy and Dreamlands Lore. You gain the ability to communicate with your twin in your dreams. You and your twin gain the effects of <em>dream message</em> every night, only between the two of you; this isn't a spell, but a natural effect. Unless your twin is another PC, your GM roleplays your twin or summarizes your interaction during these dreams.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-background-588",
+  "slug": "empty-whispers",
+  "name": "Empty Whispers",
+  "boosts": [
+   [
+    "int",
+    "wis"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "skills": [
+   "occultism"
+  ],
+  "lore": [
+   "Planar Rift"
+  ],
+  "feats": [],
+  "rarity": "rare",
+  "description": "<p>You knew someone once, and now you know only a life stitched together and healed over, nary even a scar remaining. You hear voices of souls that have fallen through the cracks of reality, creatures who have been removed from memory, banished planar entities, and similar. Their whispers guide you.</p>\n<p>Choose two attribute boosts. One must be to <strong>Intelligence</strong> or <strong>Wisdom</strong>, and one is a free attribute boost.</p>\n<p>You're trained in the Occultism skill and the Planar Rift Lore skill. You get a Planar Rift Lore check to sense planar rifts, even if you aren't specifically Investigating or Searching for them, as well as locations where magic has been used to remove the memory of an object or creature from existence.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-background-589",
+  "slug": "legacy-of-the-hammer",
+  "name": "Legacy of the Hammer",
+  "boosts": [
+   [
+    "dex",
+    "cha"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "skills": [
+   "thievery"
+  ],
+  "lore": [
+   "Engineering"
+  ],
+  "feats": [
+   "B9cQLRHtXoLlF0iR"
+  ],
+  "rarity": "uncommon",
+  "description": "<p>Your introduction to the criminal life was spurred forward by  a seemingly innocuous hammer that provided you with all kinds of innovative criminal ideas. It has since left your possession, but every now and then you hear a faint whisper urging you toward crime.</p>\n<p>Choose two attribute boosts. One must be to Dexterity or Charisma, and one is a free attribute boost.</p>\n<p>You're trained in the Thievery skill, and the Engineering Lore skill. You gain the Concealing Legerdemain skill feat.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-background-590",
+  "slug": "reborn-soul",
+  "name": "Reborn Soul",
+  "boosts": [
+   [
+    "con",
+    "int"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "skills": [],
+  "lore": [
+   "<Past life> Lore"
+  ],
+  "feats": [],
+  "rarity": "rare",
+  "description": "<p>You were given a second opportunity at life by mysterious forces in the Lands of Second Souls. You remember your life before your death and now live with an extra lifetime of knowledge.</p>\n<p>Choose two attribute boosts. One must be to <strong>Constitution</strong> or <strong>Intelligence</strong>, and one is a free attribute boost.</p>\n<p>You become trained in two Lore skills, which you and your GM choose from Lore skills associated with your past life. At 3rd level, 7th level, and 15th level, you receive skill increases, which you can apply only to these Lore skills. In certain situations analogous to your past life, fragments of memories resurface, potentially helping or distracting you. The GM can offer you a +1 circumstance bonus on skill checks with either of these Lore skills or on other skill checks that echo your past life. If you accept but fail the check, you're stupefied 1 for 1 minute by the mental distraction of your past-life memories, or stupefied 2 for 1 minute on a critical failure.</p>",
+  "source": "Dark Archive (Remastered)"
+ }
+]

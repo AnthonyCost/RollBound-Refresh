@@ -1,0 +1,375 @@
+[
+ {
+  "id": "aon-feat-8353",
+  "slug": "ammunition-thaumaturgy",
+  "name": "Ammunition Thaumaturgy",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "thaumaturge"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're so used to handling your implement, weapon, and esoterica in the heat of combat that adding a few bullets or arrows to the mix is no extra burden. You can Interact to reload a weapon using the hand holding your implement.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8310",
+  "slug": "ancestral-mind",
+  "name": "Ancestral Mind",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "psychic"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>By unraveling memories and connections passed down from your progenitors and buried within your unconscious mind, you learn to convert your inherent magic into psychic power. You can cast any innate spells you know from an ancestry feat or heritage using your psychic spellcasting and thoughtforms. When you do so, the spell's tradition becomes occult, if it wasn't already, and you can use your psychic spellcasting attribute modifier instead of Charisma to determine your spell attack modifier and spell DC.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8433",
+  "slug": "clone-risen",
+  "name": "Clone-Risen",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lineage",
+   "reflection"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were formed from a <em>clone</em> ritual or alchemical experiment. Created as a vessel for another creature, you can suppress your sentience momentarily, making your mind harder to alter. You gain the Empty Vessel reaction.</p>\n<p><strong>Empty Vessel</strong> [reaction] (concentrate) <strong>Frequency</strong> once per day; <strong>Trigger</strong> You would take mental damage or be affected by a mental effect; <strong>Effect</strong> You gain a +2 circumstance bonus to Will saves and resistance to mental damage equal to your level against the triggering effect. This applies only to the initial effect, not successive saves, persistent mental damage, or other repeated effects.</p>\n<p>Replicate</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8311",
+  "slug": "counter-thought",
+  "name": "Counter Thought",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "occult",
+   "psychic"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>When a foe Casts a Spell that has the mental trait and you can see its manifestations, you can use your own mental magic to disrupt it. You expend one of your spell slots to counter the triggering creature's casting of a spell with the mental trait. You lose your spell slot as if you had cast the triggering spell; this spell slot must be one for which you could Cast a Spell with the mental trait. You then attempt to counteract the triggering spell.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8428",
+  "slug": "crystal-healing",
+  "name": "Crystal Healing",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "general",
+   "healing",
+   "manipulate",
+   "skill"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "Trained in Occultism"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You know how to stimulate a body's natural healing abilities through the application of resonant crystals. Doing so requires you to use at least two semiprecious stones with a total value of 5 gp or more in place of a healer's toolkit, which allows you to attempt to Treat Disease or Treat Poison using Occultism rather than Medicine.</p>\n<p>If you're an expert in Occultism and you use gems whose total value equals or exceeds 50 gp, you gain a +1 item bonus to your Occultism check. If you're a master and the gems' value equals or exceeds 700 gp, the item bonus increases to +2; if you're legendary in Occultism and the gems' value equals or exceeds 15,000 gp, the item bonus increases to +3.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8354",
+  "slug": "diverse-lore",
+  "name": "Diverse Lore",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "thaumaturge"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your wandering studies mean you've heard rumors or theories about almost every topic... though admittedly, your sources aren't always the most reliable. You can take a –2 penalty to your check to Recall Knowledge with Esoteric Lore to Recall Knowledge about any topic, not just the usual topics available for Esoteric Lore. Additionally, when you succeed at your check to Exploit a Vulnerability, compare the result of your Esoteric Lore check to the DC to Recall Knowledge for that creature; if that number would be a success or a critical success, you gain information as if you had succeeded at the Recall Knowledge check.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8355",
+  "slug": "divine-disharmony",
+  "name": "Divine Disharmony",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "divine",
+   "esoterica",
+   "manipulate",
+   "thaumaturge"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>From your collection of religious trinkets, you pull out opposing divine objects—such as the religious symbols of two deities that are hated enemies—and combine them in a display that causes discordant clashes of divine energy that are especially distracting to the faithful. Roll your choice of a Deception or Intimidation check against the Will DC of a creature you can see within 60 feet, with the following results. If the creature is particularly devoted to a deity, such as a cleric, celestial, monitor, fiend, or other creature with divine spells, you gain a +2 circumstance bonus to your skill check. The GM might determine that a creature that despises all deities, such as an alghollthu, is unaffected.</p>\n<p><strong>Critical Success</strong> The creature is off-guard to your attacks until the end of your next turn.</p>\n<p><strong>Success</strong> The creature is off-guard to your attacks until the end of your current turn.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8356",
+  "slug": "haunt-ingenuity",
+  "name": "Haunt Ingenuity",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "detection",
+   "divine",
+   "thaumaturge"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your cunning knowledge grants you the ability to notice the emotional echo of a soul that passed on, leaving a haunt in its wake. Even when you aren't Searching while in exploration mode, the GM rolls a secret check for you to notice haunts that usually require you to be Searching.</p>\n<p>You can disable haunts that require master proficiency in a skill as long as you're at least trained in the skill. If you have master proficiency in the skill, you can disable haunts that require a proficiency rank of legendary instead.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8312",
+  "slug": "mental-buffer",
+  "name": "Mental Buffer",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "psychic"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your mind deflects some amount of harm from attacks that induce pain or manipulate your mind directly. You gain resistance to mental damage equal to half your level (minimum 1). This resistance increases to equal to your level while your Psyche is Unleashed.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8434",
+  "slug": "mirror-risen",
+  "name": "Mirror-Risen",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lineage",
+   "reflection"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were created from magic involving mirrors and still retain some ability to seek refuge in reflected illusions. You gain the Mirror's Trickery reaction.</p>\n<p><strong>Mirror's Trickery</strong> [reaction] (concentrate, illusion, occult, visual) <strong>Frequency</strong> once per day; <strong>Trigger</strong> You would be hit by a Strike; <strong>Effect</strong> You create an illusory duplicate at the last instant and attempt to trick your foe into striking it instead of you. The attacker attempts a DC 11 flat check; on a failure, the attack hits the duplicate, changing the result from a critical success to a success or a success to a failure.</p>\n<p>Mirror Refuge, Reflective Pocket</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8435",
+  "slug": "morph-risen",
+  "name": "Morph-Risen",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "lineage",
+   "reflection"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You were once a shapeshifter or spellcaster using polymorph magic, but something went wrong, and you became trapped in the form of the creature you were imitating. This accident might have drained your power, or you might have retained some of your skills, but either way, your form resists further forced transformation. You gain a +1 circumstance bonus to saving throws against morph and polymorph effects, and if you roll a success on a saving throw against a hostile morph or polymorph effect, you get a critical success instead.</p>\n<p>Warp Likeness</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8436",
+  "slug": "progenitor-lore",
+  "name": "Progenitor Lore",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "reflection"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You didn't just inherit your physical form from your progenitor; you also retained some of their knowledge. You're trained in Deception and Occultism. If you would automatically become trained in one of those skills (from your background or class, for example), you instead become trained in a skill of your choice. You also become trained in a Lore corresponding to your ancestry (e. g., Elf Lore if your progenitor is an elf).</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8313",
+  "slug": "psychic-rapport",
+  "name": "Psychic Rapport",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "psychic"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your telepathic sensitivity intensifies when you're affected by mental magic, making it easier for you to link to other creatures. After you Cast a Spell with the mental trait, until the start of your next turn, you gain a +1 circumstance bonus to Deception, Diplomacy, and Intimidation checks, and to Perception checks to Sense Motive.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8431",
+  "slug": "read-psychometric-resonance",
+  "name": "Read Psychometric Resonance",
+  "level": 1,
+  "category": "skill",
+  "traits": [
+   "concentrate",
+   "emotion",
+   "exploration",
+   "general",
+   "mental",
+   "occult",
+   "skill"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "Trained in Occultism"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>With a touch, you can read the psychic impressions left on objects by their previous owners. This exploration activity functions similarly to Detect Magic in that you move at half your travel speed or slower while looking for psychometric resonance. You must brush your bare hands over any objects you pass while you do this. This detects objects with significant emotional resonance attached to them, such as the joy from a child's beloved teddy bear, the sorrow from a widower's wedding ring, or the fear from a victim's murder weapon. If you're looking for a particular type of emotional resonance, you can choose to ignore other emotions. If you find an item with that resonance, you can explore that resonance with the following action.</p>\n<p><strong>Psychometric Assessment</strong> (concentrate, emotion, exploration, mental, occult) <strong>Requirements</strong> Your bare hands are touching an object in which you detected psychometric resonance; <strong>Effect</strong> You spend 1 minute concentrating on the object to get a vision of the face of the person who imbued the item with such emotion in the first place. If the associated emotion is painfully negative, you might take 1d6 psychic damage, as determined by the GM.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8357",
+  "slug": "root-to-life",
+  "name": "Root to Life",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "esoterica",
+   "manipulate",
+   "primal",
+   "thaumaturge"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Marigold, spider lily, pennyroyal—many primal traditions connect flowers and plants with the boundary between life and death, and you can leverage this association to keep an ally on this side of the line. You place a small plant or similar symbol on an adjacent dying creature, immediately stabilizing them; the creature is no longer dying and is instead unconscious at 0 Hit Points.</p>\n<p>If you spend 2 actions instead of 1, you empower the act further by uttering a quick folk blessing to chase away ongoing pain, adding the auditory trait to the action. When you do so, attempt flat checks to remove each source of persistent damage affecting the target; due to the particularly effective assistance, the DC is 10 instead of the usual 15.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8358",
+  "slug": "scroll-thaumaturgy",
+  "name": "Scroll Thaumaturgy",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "thaumaturge"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your multidisciplinary study of magic means you know how to activate the magic in scrolls with ease. You can activate scrolls of any magical tradition, using your thaumaturge class DC for the scroll's DC, rather than a particular spell DC. If a spell is on the spell list for multiple traditions, you choose which tradition to use at the time you activate the scroll. You can draw and activate scrolls with the same hand holding an implement, much like you can for esoterica.</p>\n<p>Scroll Esoterica</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8526",
+  "slug": "trance-of-celerity",
+  "name": "Trance of Celerity",
+  "level": 1,
+  "category": "class",
+  "traits": [
+   "cursebound",
+   "divine",
+   "oracle"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your feet move faster, almost out of your conscious control. You gain a +5-foot status bonus to your Speeds for 1 minute.</p>\n<p>If you become cursebound 2 at any point during this duration, the bonus increases to a +10-foot status bonus. If you become cursebound 3 at any point during this duration, this bonus increases to +15-foot status bonus instead. Finally, if you become cursebound 4 at any point during this duration, this bonus increases to a +20-foot status bonus.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-feat-8437",
+  "slug": "warped-reflection",
+  "name": "Warped Reflection",
+  "level": 1,
+  "category": "ancestry",
+  "traits": [
+   "emotion",
+   "fear",
+   "mental",
+   "reflection",
+   "visual"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Due to your origins, your form is more flexible than most. You shift your appearance to resemble a creature within 30 feet but with an unsettling, horrifying twist. Though this transformation is momentary, witnessing it gives the target deep existential dread. It must succeed at a Will save against the higher of your class DC or spell DC or become frightened 1 (frightened 2 on a critical failure) and be stupefied 1 as long as the frightened condition lasts. Once you've used Warped Reflection against a creature, it's temporarily immune for 24 hours.</p>",
+  "source": "Dark Archive (Remastered)"
+ }
+]

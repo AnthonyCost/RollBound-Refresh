@@ -1,0 +1,55 @@
+[
+ {
+  "id": "N42lmp3Ft6EsSvzg",
+  "slug": "power-suit",
+  "name": "Power Suit",
+  "level": 0,
+  "category": "medium",
+  "acBonus": 5,
+  "dexCap": 1,
+  "strength": 3,
+  "checkPenalty": -2,
+  "speedPenalty": -5,
+  "traits": [],
+  "rarity": "unique",
+  "price": 0,
+  "bulk": 2,
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "U5IGgD7Z225OPnhK",
+  "slug": "reinforced-chassis",
+  "name": "Reinforced Chassis",
+  "level": 0,
+  "category": "unarmored",
+  "acBonus": 3,
+  "dexCap": 1,
+  "strength": null,
+  "checkPenalty": 0,
+  "speedPenalty": 0,
+  "traits": [
+   "comfort"
+  ],
+  "rarity": "rare",
+  "price": 0,
+  "bulk": 0,
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "56CTZheeNhNPpLo1",
+  "slug": "subterfuge-suit",
+  "name": "Subterfuge Suit",
+  "level": 0,
+  "category": "medium",
+  "acBonus": 2,
+  "dexCap": 4,
+  "strength": 0,
+  "checkPenalty": -1,
+  "speedPenalty": 0,
+  "traits": [],
+  "rarity": "unique",
+  "price": 0,
+  "bulk": 1,
+  "source": "Guns & Gears"
+ }
+]

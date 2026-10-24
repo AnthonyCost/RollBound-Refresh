@@ -32,7 +32,10 @@ export function damageModifier(weapon, abilities) {
 
 /** Your proficiency with a weapon: its category, or your deity's favored weapon if that's better. */
 export function weaponRank(character, weapon) {
-  const byCategory = character.proficiencies.weapons[weapon.category] ?? 'untrained';
+  let byCategory = character.proficiencies.weapons[weapon.category] ?? 'untrained';
+  for (const g of character.proficiencies.weaponGroups ?? []) {
+    if (g.groups.includes(weapon.group) && g.categories.includes(weapon.category) && RANKS.indexOf(g.rank) > RANKS.indexOf(byCategory)) byCategory = g.rank;
+  }
   const favored = character.proficiencies.favoredWeapons?.includes(weapon.slug);
   if (!favored) return byCategory;
   const favoredRank = character.proficiencies.favoredWeaponRank ?? 'trained';

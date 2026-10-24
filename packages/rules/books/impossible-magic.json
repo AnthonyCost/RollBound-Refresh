@@ -81,7 +81,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 13</p>\n<p>Once you begin along a path, nothing can stop you from reaching its end. You transform the mass of an enormous weapon into an unstoppable force to augment your own striking power or keep you standing on the battlefield.</p>\n<p>When you enter Arcane Cascade stance and at the start of each of your turns while you're in that stance, if you're wielding a melee weapon in two hands, you gain temporary Hit Points equal to half your level (minimum 1 temporary HP).</p>\n<p><strong>Conflux Spell</strong> Thunderous Strike</p>\n<p><strong>Studious Spell (7th)</strong> Enlarge</p>\n<p><strong>Studious Spell (11th)</strong> Earthbind</p>\n<p><strong>Studious Spell (13th)</strong> Planar Tether</p>",
+        "description": "<p>Once you begin along a path, nothing can stop you from reaching its end. You transform the mass of an enormous weapon into an unstoppable force to augment your own striking power or keep you standing on the battlefield.</p>\n<p>When you enter Arcane Cascade stance and at the start of each of your turns while you're in that stance, if you're wielding a melee weapon in two hands, you gain temporary Hit Points equal to half your level (minimum 1 temporary HP).</p>\n<p><strong>Conflux Spell</strong> Thunderous Strike</p>\n<p><strong>Studious Spell (7th)</strong> Enlarge</p>\n<p><strong>Studious Spell (11th)</strong> Earthbind</p>\n<p><strong>Studious Spell (13th)</strong> Planar Tether</p>",
         "source": "Impossible Magic"
        },
        {
@@ -99,7 +99,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 13</p>\n<p>Magic is freeing, a means to your ends, and you can use it to go where you want, do as you please, and avoid the consequences. You are a laughing shadow of spell and blade, always one step ahead of your foes, always with a trick up your sleeve.</p>\n<p>While in Arcane Cascade stance, you gain a +5-foot status bonus to your Speeds, or a +10-foot bonus if you're unarmored. If you Strike an off-guard creature while you're in the stance and have a free hand, that Strike's extra damage from Arcane Cascade is increased to 3. The increased extra damage is 5 if you have weapon specialization, or 7 if you have greater weapon specialization. You must have your other hand completely free; the extra damage doesn't apply if you have a free-hand weapon or other item in that hand, even if you would normally be able to use the hand for other things.</p>\n<p><strong>Conflux Spell</strong> Dimensional Assault</p>\n<p><strong>Studious Spell (7th)</strong> Blur</p>\n<p><strong>Studious Spell (11th)</strong> Ghostly Weapon</p>\n<p><strong>Studious Spell (13th)</strong> Translocate</p>",
+        "description": "<p>Magic is freeing, a means to your ends, and you can use it to go where you want, do as you please, and avoid the consequences. You are a laughing shadow of spell and blade, always one step ahead of your foes, always with a trick up your sleeve.</p>\n<p>While in Arcane Cascade stance, you gain a +5-foot status bonus to your Speeds, or a +10-foot bonus if you're unarmored. If you Strike an off-guard creature while you're in the stance and have a free hand, that Strike's extra damage from Arcane Cascade is increased to 3. The increased extra damage is 5 if you have weapon specialization, or 7 if you have greater weapon specialization. You must have your other hand completely free; the extra damage doesn't apply if you have a free-hand weapon or other item in that hand, even if you would normally be able to use the hand for other things.</p>\n<p><strong>Conflux Spell</strong> Dimensional Assault</p>\n<p><strong>Studious Spell (7th)</strong> Blur</p>\n<p><strong>Studious Spell (11th)</strong> Ghostly Weapon</p>\n<p><strong>Studious Spell (13th)</strong> Translocate</p>",
         "source": "Impossible Magic"
        },
        {
@@ -119,7 +119,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 13</p>\n<p>You've studied the applications of magic, training yourself to perform not just offensive maneuvers but defensive tactics as well. When magic flows through you, your shield can block impossible things, even a dragon's breath or a <em>force barrage</em>.</p>\n<p>You gain the general Shield Block feat.</p>\n<p>When you're in Arcane Cascade stance with your shield raised, your circumstance bonus to AC from your shield also applies to your saves against spells and other magical effects. In addition, damage you take from a spell or other magical effect while you're in Arcane Cascade can trigger your Shield Block reaction, even if the damage isn't physical. When blocking damage from a magical effect in this way, increase your shield's Hardness by an amount equal to the resistance you have from Arcane Cascade. These benefits apply whether you're using an actual shield, the <em>shield</em> spell, or something else that works like a shield (such as a raised tome if you have the Raise a Tome feat).</p>\n<p><strong>Conflux Spell</strong> Shielding Strike</p>\n<p><strong>Studious Spell (7th)</strong> Resist Energy</p>\n<p><strong>Studious Spell (11th)</strong> Warding Aggression</p>\n<p><strong>Studious Spell (13th)</strong> Mountain Resilience</p>",
+        "description": "<p>You've studied the applications of magic, training yourself to perform not just offensive maneuvers but defensive tactics as well. When magic flows through you, your shield can block impossible things, even a dragon's breath or a <em>force barrage</em>.</p>\n<p>You gain the general Shield Block feat.</p>\n<p>When you're in Arcane Cascade stance with your shield raised, your circumstance bonus to AC from your shield also applies to your saves against spells and other magical effects. In addition, damage you take from a spell or other magical effect while you're in Arcane Cascade can trigger your Shield Block reaction, even if the damage isn't physical. When blocking damage from a magical effect in this way, increase your shield's Hardness by an amount equal to the resistance you have from Arcane Cascade. These benefits apply whether you're using an actual shield, the <em>shield</em> spell, or something else that works like a shield (such as a raised tome if you have the Raise a Tome feat).</p>\n<p><strong>Conflux Spell</strong> Shielding Strike</p>\n<p><strong>Studious Spell (7th)</strong> Resist Energy</p>\n<p><strong>Studious Spell (11th)</strong> Warding Aggression</p>\n<p><strong>Studious Spell (13th)</strong> Mountain Resilience</p>",
         "source": "Impossible Magic"
        },
        {
@@ -137,7 +137,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 13</p>\n<p>With magic, the sky's the limit, and you can't be bound by the confines of physical proximity. Your power reaches as far as your senses can perceive, transcending the space between you and your target even with spells that normally require direct physical contact.</p>\n<p>When you use Spellstrike, you can make a ranged weapon or ranged unarmed Strike, as long as the target is within the first range increment of your ranged weapon or ranged unarmed attack. This overrides the actual range of the spell.</p>\n<p>While you're in Arcane Cascade stance, your ranged attacks ignore any lesser cover your allies would grant to your target.</p>\n<p><strong>Conflux Spell</strong> Shooting Star</p>\n<p><strong>Studious Spell (7th)</strong> Telekinetic Maneuver</p>\n<p><strong>Studious Spell (11th)</strong> Wall of Wind</p>\n<p><strong>Studious Spell (13th)</strong> Unfettered Movement</p>",
+        "description": "<p>With magic, the sky's the limit, and you can't be bound by the confines of physical proximity. Your power reaches as far as your senses can perceive, transcending the space between you and your target even with spells that normally require direct physical contact.</p>\n<p>When you use Spellstrike, you can make a ranged weapon or ranged unarmed Strike, as long as the target is within the first range increment of your ranged weapon or ranged unarmed attack. This overrides the actual range of the spell.</p>\n<p>While you're in Arcane Cascade stance, your ranged attacks ignore any lesser cover your allies would grant to your target.</p>\n<p><strong>Conflux Spell</strong> Shooting Star</p>\n<p><strong>Studious Spell (7th)</strong> Telekinetic Maneuver</p>\n<p><strong>Studious Spell (11th)</strong> Wall of Wind</p>\n<p><strong>Studious Spell (13th)</strong> Unfettered Movement</p>",
         "source": "Impossible Magic"
        },
        {
@@ -155,7 +155,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 14</p>\n<p>The staff is perhaps the simplest of weapons, but this simplicity belies its elegance and versatility. To you, a staff is casting implement and martial weapon alike—the foundation of a fighting style.</p>\n<p>While you wield a staff in one hand, the staff adjusts in shape and weight, gaining the agile trait and increasing its damage die size to 1d6. While you wield a staff in both hands, it lengthens, twists, and reshapes, gaining the parry, reach, and trip traits.</p>\n<p>While you're in Arcane Cascade stance, once per round you can Interact to change your grip on a staff as a free action.</p>\n<p><strong>Conflux Spell</strong> Spinning Staff</p>\n<p><strong>Studious Spell (7th)</strong> Oaken Resilience</p>\n<p><strong>Studious Spell (11th)</strong> Slow</p>\n<p><strong>Studious Spell (13th)</strong> Flicker</p>",
+        "description": "<p>The staff is perhaps the simplest of weapons, but this simplicity belies its elegance and versatility. To you, a staff is casting implement and martial weapon alike—the foundation of a fighting style.</p>\n<p>While you wield a staff in one hand, the staff adjusts in shape and weight, gaining the agile trait and increasing its damage die size to 1d6. While you wield a staff in both hands, it lengthens, twists, and reshapes, gaining the parry, reach, and trip traits.</p>\n<p>While you're in Arcane Cascade stance, once per round you can Interact to change your grip on a staff as a free action.</p>\n<p><strong>Conflux Spell</strong> Spinning Staff</p>\n<p><strong>Studious Spell (7th)</strong> Oaken Resilience</p>\n<p><strong>Studious Spell (11th)</strong> Slow</p>\n<p><strong>Studious Spell (13th)</strong> Flicker</p>",
         "source": "Impossible Magic"
        },
        {
@@ -173,7 +173,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 14</p>\n<p>Magic dances between the two weapons you wield with equally deadly grace. Fighting groups of enemies takes full advantage of your capabilities as you move from one foe to another.</p>\n<p>While in Arcane Cascade stance, if you make a Strike with a melee weapon you're holding, you can intensify the stance's power for another melee weapon of your choice you're holding in a different hand. Until the end of your turn, any extra damage the chosen weapon gains from Arcane Cascade is increased to 2. The extra damage increases to 4 if you have weapon specialization or 6 if you have greater weapon specialization.</p>\n<p><strong>Conflux Spell</strong> Force Fling</p>\n<p><strong>Studious Spell (7th)</strong> Blur</p>\n<p><strong>Studious Spell (11th)</strong> Gravity Well</p>\n<p><strong>Studious Spell (13th)</strong> Unfettered Movement</p>",
+        "description": "<p>Magic dances between the two weapons you wield with equally deadly grace. Fighting groups of enemies takes full advantage of your capabilities as you move from one foe to another.</p>\n<p>While in Arcane Cascade stance, if you make a Strike with a melee weapon you're holding, you can intensify the stance's power for another melee weapon of your choice you're holding in a different hand. Until the end of your turn, any extra damage the chosen weapon gains from Arcane Cascade is increased to 2. The extra damage increases to 4 if you have weapon specialization or 6 if you have greater weapon specialization.</p>\n<p><strong>Conflux Spell</strong> Force Fling</p>\n<p><strong>Studious Spell (7th)</strong> Blur</p>\n<p><strong>Studious Spell (11th)</strong> Gravity Well</p>\n<p><strong>Studious Spell (13th)</strong> Unfettered Movement</p>",
         "source": "Impossible Magic"
        },
        {
@@ -191,7 +191,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 14</p>\n<p>Your crashing spells meet their match with booming gunshots in a magical fusillade. By modifying your shots with your magic, you create explosions and cut through defenses.</p>\n<p>When you use Spellstrike, you can make a ranged firearm Strike, as long as the target is within the first range increment of your firearm. This overrides the actual range of the spell. If your firearm has the concussive trait, any damage from the spell you use in the Spellstrike uses the target's weakest resistance to any of the following: the spell's damage type, piercing, or bludgeoning. This benefit applies only to creatures you target with your firearm Strike during the Spellstrike, so it wouldn't apply to other creatures damaged with Expansive Spellstrike or similar abilities.</p>\n<p>In addition, you gain the Reloading Cascade action. <strong>Reloading Cascade</strong> [single action] You use Arcane Cascade and Interact to reload a firearm.</p>\n<p><strong>Conflux Spell</strong> Booming Blast</p>\n<p><strong>Studious Spell (7th)</strong> Entangling Flora</p>\n<p><strong>Studious Spell (11th)</strong> Earthbind</p>\n<p><strong>Studious Spell (13th)</strong> Seal Fate</p>",
+        "description": "<p>Your crashing spells meet their match with booming gunshots in a magical fusillade. By modifying your shots with your magic, you create explosions and cut through defenses.</p>\n<p>When you use Spellstrike, you can make a ranged firearm Strike, as long as the target is within the first range increment of your firearm. This overrides the actual range of the spell. If your firearm has the concussive trait, any damage from the spell you use in the Spellstrike uses the target's weakest resistance to any of the following: the spell's damage type, piercing, or bludgeoning. This benefit applies only to creatures you target with your firearm Strike during the Spellstrike, so it wouldn't apply to other creatures damaged with Expansive Spellstrike or similar abilities.</p>\n<p>In addition, you gain the Reloading Cascade action. <strong>Reloading Cascade</strong> [single action] You use Arcane Cascade and Interact to reload a firearm.</p>\n<p><strong>Conflux Spell</strong> Booming Blast</p>\n<p><strong>Studious Spell (7th)</strong> Entangling Flora</p>\n<p><strong>Studious Spell (11th)</strong> Earthbind</p>\n<p><strong>Studious Spell (13th)</strong> Seal Fate</p>",
         "source": "Impossible Magic"
        }
       ]
@@ -280,7 +280,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 29</p>\n<p>You prefer to study life and death from afar. You gain the Consume Thrall action and the thrall proliferation ability.</p>\n<p><strong>Consume Thrall</strong> [free action] (concentrate, necromancer, occult) <strong>Frequency</strong> once per day; <strong>Requirements</strong> You have 0 Focus Points and at least one thrall with 30 feet of you; <strong>Effects</strong> You destroy one thrall within 30 feet of you and regain 1 Focus Point. You can spend this focus point only to cast a grave spell.</p>\n<p><strong>Thrall Proliferation</strong> Once per round when you cast <em>create thrall</em>, you can create one additional thrall in range.</p>",
+        "description": "<p>You prefer to study life and death from afar. You gain the Consume Thrall action and the thrall proliferation ability.</p>\n<p><strong>Consume Thrall</strong> [free action] (concentrate, necromancer, occult) <strong>Frequency</strong> once per day; <strong>Requirements</strong> You have 0 Focus Points and at least one thrall with 30 feet of you; <strong>Effects</strong> You destroy one thrall within 30 feet of you and regain 1 Focus Point. You can spend this focus point only to cast a grave spell.</p>\n<p><strong>Thrall Proliferation</strong> Once per round when you cast <em>create thrall</em>, you can create one additional thrall in range.</p>",
         "source": "Impossible Magic"
        },
        {
@@ -298,7 +298,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 29</p>\n<p>You study flesh up close by clashing blade against bone. You gain the reaper’s edge and thrall teamwork abilities.</p>\n<p><strong>Reaper’s Edge</strong> You become trained in martial weapons and medium armor. At 11th level, you become an expert in martial weapons, and at 13th you become an expert in medium armor.</p>\n<p><strong>Thrall Teamwork</strong> Once per round after you cast <em>create thrall</em>, you can make a melee Strike as a free action against a creature within your melee reach that is adjacent to at least one of your thralls.</p>",
+        "description": "<p>You study flesh up close by clashing blade against bone. You gain the reaper’s edge and thrall teamwork abilities.</p>\n<p><strong>Reaper’s Edge</strong> You become trained in martial weapons and medium armor. At 11th level, you become an expert in martial weapons, and at 13th you become an expert in medium armor.</p>\n<p><strong>Thrall Teamwork</strong> Once per round after you cast <em>create thrall</em>, you can make a melee Strike as a free action against a creature within your melee reach that is adjacent to at least one of your thralls.</p>",
         "source": "Impossible Magic"
        }
       ]
@@ -326,7 +326,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 30</p>\n<p>Blood necromancers, also known as sanguimancers, manipulate their own blood and the flowing blood of their enemies. Your thralls often resemble vampiric spawn or constructs of hardened blood.</p>\n<p><strong>Grave Spell</strong> Blood Infusion</p>\n<p><strong>Thrall Enhancement</strong> Your thralls are enhanced with a drop of your blood, and when they fall, your blood returns to you. Whenever a thrall is destroyed, you regain 1 Hit Point. At 5th level and every 4 levels thereafter, the amount of Hit Points you regain when a thrall is destroyed increases by 1.</p>",
+        "description": "<p>Blood necromancers, also known as sanguimancers, manipulate their own blood and the flowing blood of their enemies. Your thralls often resemble vampiric spawn or constructs of hardened blood.</p>\n<p><strong>Grave Spell</strong> Blood Infusion</p>\n<p><strong>Thrall Enhancement</strong> Your thralls are enhanced with a drop of your blood, and when they fall, your blood returns to you. Whenever a thrall is destroyed, you regain 1 Hit Point. At 5th level and every 4 levels thereafter, the amount of Hit Points you regain when a thrall is destroyed increases by 1.</p>",
         "source": "Impossible Magic"
        },
        {
@@ -344,7 +344,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 30</p>\n<p>Bone necromancers, also known as osteomancers, craft what they desire from the skeletons of the dead or simply create new skeletons by expanding and shaping small bone pieces.</p>\n<p><strong>Grave Spell</strong> Bone Spear</p>\n<p><strong>Thrall Enhancement</strong> Your thralls are well constructed and nimble. Each of your thralls’ Speed is increased by 5 feet.</p>",
+        "description": "<p>Bone necromancers, also known as osteomancers, craft what they desire from the skeletons of the dead or simply create new skeletons by expanding and shaping small bone pieces.</p>\n<p><strong>Grave Spell</strong> Bone Spear</p>\n<p><strong>Thrall Enhancement</strong> Your thralls are well constructed and nimble. Each of your thralls’ Speed is increased by 5 feet.</p>",
         "source": "Impossible Magic"
        },
        {
@@ -362,7 +362,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 30</p>\n<p>Flesh necromancers, also known as caromancers, are experts at the destruction, production, and manipulation of flesh and muscles. Your thralls generally take on the form of zombies and other creatures of dead flesh.</p>\n<p><strong>Grave Spell</strong> Dead Weight</p>\n<p><strong>Thrall Enhancement</strong> You can still make use of a destroyed thrall’s flesh. Whenever one of your thralls is destroyed, you can cause the thrall to leave behind difficult terrain in the space it was destroyed. The difficult terrain lasts 10 minutes.</p>",
+        "description": "<p>Flesh necromancers, also known as caromancers, are experts at the destruction, production, and manipulation of flesh and muscles. Your thralls generally take on the form of zombies and other creatures of dead flesh.</p>\n<p><strong>Grave Spell</strong> Dead Weight</p>\n<p><strong>Thrall Enhancement</strong> You can still make use of a destroyed thrall’s flesh. Whenever one of your thralls is destroyed, you can cause the thrall to leave behind difficult terrain in the space it was destroyed. The difficult terrain lasts 10 minutes.</p>",
         "source": "Impossible Magic"
        },
        {
@@ -380,7 +380,7 @@
         "traditionChoice": false,
         "keyAbility": null,
         "grantedSpells": [],
-        "description": "<p><strong>Source</strong> Impossible Magic pg. 30</p>\n<p>Spirit necromancers, also known as vitamancers, seek the secrets of the soul and play with the eternal energies of the living and dead. Your thralls often resemble ghosts and spirits.</p>\n<p><strong>Grave Spell</strong> Life Tap</p>\n<p><strong>Thrall Enhancement</strong> Your thralls, while still being tied to the physical world, have an incorporeal essence. Whenever one of your thralls Strikes, you can choose for that damage to be spirit or void damage instead of physical damage.</p>",
+        "description": "<p>Spirit necromancers, also known as vitamancers, seek the secrets of the soul and play with the eternal energies of the living and dead. Your thralls often resemble ghosts and spirits.</p>\n<p><strong>Grave Spell</strong> Life Tap</p>\n<p><strong>Thrall Enhancement</strong> Your thralls, while still being tied to the physical world, have an incorporeal essence. Whenever one of your thralls Strikes, you can choose for that damage to be spirit or void damage instead of physical damage.</p>",
         "source": "Impossible Magic"
        }
       ]
@@ -817,7 +817,43 @@
    "source": "Impossible Magic"
   }
  ],
- "heritages": [],
+ "heritages": [
+  {
+   "id": "aon-heritage-438",
+   "slug": "defensive-automaton",
+   "name": "Defensive Automaton",
+   "ancestry": "automaton",
+   "traits": [],
+   "rarity": "common",
+   "senses": [],
+   "skills": [],
+   "skillChoice": null,
+   "feats": [
+    "toughness"
+   ],
+   "featAncestries": [],
+   "description": "<p>You are built particularly tough. You can withstand more damage than most other automatons. You gain 10 hit points from your ancestry instead of 8. You also gain the Toughness feat.</p>",
+   "source": "Impossible Magic"
+  },
+  {
+   "id": "aon-heritage-439",
+   "slug": "newly-minted-automaton",
+   "name": "Newly Minted Automaton",
+   "ancestry": "automaton",
+   "traits": [],
+   "rarity": "common",
+   "senses": [],
+   "skills": [],
+   "skillChoice": null,
+   "feats": [
+    "additional-lore"
+   ],
+   "featAncestries": [],
+   "description": "<p>You are a brand-new automaton, likely constructed in the city of Quantium. While your body is largely the same as those created many years ago, your mind is fresh, and you learn new information at a rapid pace. You gain the Additional Lore skill feat in one lore of your choice. You know one additional language from the languages that you have access to.</p>",
+   "source": "Impossible Magic"
+  }
+ ],
+ "backgrounds": [],
  "feats": [
   {
    "id": "aon-feat-9221",
@@ -2573,7 +2609,7 @@
     "traditionChoice": false,
     "keyAbility": null,
     "grantedSpells": [],
-    "description": "<p><strong>Source</strong> Impossible Magic pg. 108</p>\n<p>You have sway in powerful social circles and pride yourself on being able to predict and manipulate opponents. Less scrupulous academies openly teach this curriculum to aspiring politicians, while other colleges frame it as the study of countering mental manipulation. These spells are staples in Quantium, where ambition and ruthlessness are measures of success.</p>\n<p><strong>Curriculum</strong> - Cantrips: Daze, Infectious Enthusiasm - 1st: Command, Fear, Sleep - 2nd: Blood Vendetta, Phantom Crowd - 3rd: Enthrall, Mind of Menace - 4th: Confusion, Outcast's Curse - 5th: Subconscious Suggestion, Wave of Despair - 6th: Dominate, Never Mind - 7th: Contingency, Puppet Strings - 8th: Dream Council, Hidden Mind - 9th: Telepathic Demand</p>\n<p><strong>School Spells</strong> - Initial: Appeal to Authority - Advanced: Hot Air</p>",
+    "description": "<p>You have sway in powerful social circles and pride yourself on being able to predict and manipulate opponents. Less scrupulous academies openly teach this curriculum to aspiring politicians, while other colleges frame it as the study of countering mental manipulation. These spells are staples in Quantium, where ambition and ruthlessness are measures of success.</p>\n<p><strong>Curriculum</strong> - Cantrips: Daze, Infectious Enthusiasm - 1st: Command, Fear, Sleep - 2nd: Blood Vendetta, Phantom Crowd - 3rd: Enthrall, Mind of Menace - 4th: Confusion, Outcast's Curse - 5th: Subconscious Suggestion, Wave of Despair - 6th: Dominate, Never Mind - 7th: Contingency, Puppet Strings - 8th: Dream Council, Hidden Mind - 9th: Telepathic Demand</p>\n<p><strong>School Spells</strong> - Initial: Appeal to Authority - Advanced: Hot Air</p>",
     "source": "Impossible Magic"
    },
    {
@@ -2591,7 +2627,7 @@
     "traditionChoice": false,
     "keyAbility": null,
     "grantedSpells": [],
-    "description": "<p><strong>Source</strong> Impossible Magic pg. 108</p>\n<p>You’re a scholar of truth, seeking knowledge about the nature of existence and events past, present, and future. Whether you share or obfuscate that truth—best reserve judgment until you know what you’re working with. Quantium’s elite claim agents of Her Most Keen Eye, Nex’s network of spies, developed this curriculum, but it’s a staple in many politically oriented colleges.</p>\n<p><strong>Curriculum</strong> - Cantrips: Detect Magic, Sigil - 1st: Disguise Magic, Illusory Disguise, Mindlink - 2nd: Knock, See the Unseen - 3rd: Clairaudience, Locate - 4th: Clairvoyance, Detect Scrying - 5th: Mind Probe, Scouting Eye - 6th: Scrying, Truesight - 7th: Retrocognition, True Target - 8th: Disappearance, Pinpoint - 9th: Foresight</p>\n<p><strong>School Spells</strong> - Initial: Fact Check - Advanced: Unsettling Perspective</p>",
+    "description": "<p>You’re a scholar of truth, seeking knowledge about the nature of existence and events past, present, and future. Whether you share or obfuscate that truth—best reserve judgment until you know what you’re working with. Quantium’s elite claim agents of Her Most Keen Eye, Nex’s network of spies, developed this curriculum, but it’s a staple in many politically oriented colleges.</p>\n<p><strong>Curriculum</strong> - Cantrips: Detect Magic, Sigil - 1st: Disguise Magic, Illusory Disguise, Mindlink - 2nd: Knock, See the Unseen - 3rd: Clairaudience, Locate - 4th: Clairvoyance, Detect Scrying - 5th: Mind Probe, Scouting Eye - 6th: Scrying, Truesight - 7th: Retrocognition, True Target - 8th: Disappearance, Pinpoint - 9th: Foresight</p>\n<p><strong>School Spells</strong> - Initial: Fact Check - Advanced: Unsettling Perspective</p>",
     "source": "Impossible Magic"
    },
    {
@@ -2609,7 +2645,7 @@
     "traditionChoice": false,
     "keyAbility": null,
     "grantedSpells": [],
-    "description": "<p><strong>Source</strong> Impossible Magic pg. 108</p>\n<p>Whether your goal is immortality or creating a world with every detail tailored to your liking, retracing Nex’s experiments with demiplanes is the road to achieving your desires. Your formal learning starts with reshaping your current reality and drawing power from other planes of existence. You graduate to creating extraplanar spaces and traveling between planes, making time and space yours to mold like clay.</p>\n<p><strong>Curriculum</strong> - Cantrips: Phase Bolt, Warp Step - 1st: Alarm, Pet Cache, Thoughtful Gift - 2nd: Dimensional Drop, Vanish Weapon - 3rd: Cozy Cabin, Far Reach - 4th: Flicker, Liminal Doorway - 5th: Banishment, Space Fold Gate - 6th: Collective Transposition, Proximal Shift - 7th: Interplanar Teleport, Planar Palace - 8th: Quandary, Stars of Another Sky - 9th: Resplendent Mansion</p>\n<p><strong>School Spells</strong> - Initial: Extradimensional Cover - Advanced: Unbounded Sphere</p>",
+    "description": "<p>Whether your goal is immortality or creating a world with every detail tailored to your liking, retracing Nex’s experiments with demiplanes is the road to achieving your desires. Your formal learning starts with reshaping your current reality and drawing power from other planes of existence. You graduate to creating extraplanar spaces and traveling between planes, making time and space yours to mold like clay.</p>\n<p><strong>Curriculum</strong> - Cantrips: Phase Bolt, Warp Step - 1st: Alarm, Pet Cache, Thoughtful Gift - 2nd: Dimensional Drop, Vanish Weapon - 3rd: Cozy Cabin, Far Reach - 4th: Flicker, Liminal Doorway - 5th: Banishment, Space Fold Gate - 6th: Collective Transposition, Proximal Shift - 7th: Interplanar Teleport, Planar Palace - 8th: Quandary, Stars of Another Sky - 9th: Resplendent Mansion</p>\n<p><strong>School Spells</strong> - Initial: Extradimensional Cover - Advanced: Unbounded Sphere</p>",
     "source": "Impossible Magic"
    },
    {
@@ -2627,15 +2663,12 @@
     "traditionChoice": false,
     "keyAbility": null,
     "grantedSpells": [],
-    "description": "<p><strong>Source</strong> Impossible Magic pg. 108</p>\n<p>You’re an architect, but not merely of buildings. You call upon elemental forces to control the building blocks of reality itself, reshaping the environment and moving creatures like the world is a diorama for you to perfect. Your curriculum draws heavily upon the experience of the geniekin of Quantium’s Wish, who maintain the infrastructure of Nex’s capital in seeming defiance of physics itself.</p>\n<p><strong>Curriculum</strong> - Cantrips: Gale Blast, Scatter Scree - 1st: Cradle Aloft, Gentle Landing, Pummeling Rubble - 2nd: Dismantle, Unrelenting Gravity - 3rd: Chosen Gravity, Inertia Lock - 4th: Containment, Living Terrain - 5th: Control Water, Wall of Stone - 6th: Repulsion, Wall of Force - 7th: Infinitesimal Collapse Field, Planar Seal - 8th: Arctic Rift, Earthbreaker Stride - 9th: Implosion</p>\n<p><strong>School Spells</strong> - Initial: Circle of Weakness - Advanced: Quantic Dampening</p>",
+    "description": "<p>You’re an architect, but not merely of buildings. You call upon elemental forces to control the building blocks of reality itself, reshaping the environment and moving creatures like the world is a diorama for you to perfect. Your curriculum draws heavily upon the experience of the geniekin of Quantium’s Wish, who maintain the infrastructure of Nex’s capital in seeming defiance of physics itself.</p>\n<p><strong>Curriculum</strong> - Cantrips: Gale Blast, Scatter Scree - 1st: Cradle Aloft, Gentle Landing, Pummeling Rubble - 2nd: Dismantle, Unrelenting Gravity - 3rd: Chosen Gravity, Inertia Lock - 4th: Containment, Living Terrain - 5th: Control Water, Wall of Stone - 6th: Repulsion, Wall of Force - 7th: Infinitesimal Collapse Field, Planar Seal - 8th: Arctic Rift, Earthbreaker Stride - 9th: Implosion</p>\n<p><strong>School Spells</strong> - Initial: Circle of Weakness - Advanced: Quantic Dampening</p>",
     "source": "Impossible Magic"
    }
   ]
  },
  "skipped": {
-  "heritages": [
-   "Defensive Automaton",
-   "Newly Minted Automaton"
-  ]
+  "ancestries": []
  }
 }

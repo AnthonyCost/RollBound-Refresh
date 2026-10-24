@@ -1,0 +1,94 @@
+[
+ {
+  "id": "aon-spell-2573",
+  "slug": "kinetic-ram",
+  "name": "Kinetic Ram",
+  "rank": 1,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "force"
+  ],
+  "rarity": "common",
+  "actions": "single action to three actions",
+  "range": null,
+  "area": "varies",
+  "target": "1 or more creatures",
+  "defense": "fortitude",
+  "duration": null,
+  "description": "<p>Gathering kinetic energy, you either focus it in a straight line or disperse it as an encircling ripple. Any creature targeted by this spell must succeed at a Fortitude saving throw or be pushed 10 feet away from you (or 20 feet on a critical failure).</p>\n<p>The spell's area or range and how many creatures it affects is based on how many actions you spend when Casting the Spell. [single action] The spell targets one creature within 15 feet.[two actions] The spell targets one creature within 30 feet. The distance the target is pushed if it fails is doubled, and on a critical failure, the target is also knocked prone and takes 1d6 bludgeoning damage.[three actions] The spell targets all creatures in a 5-foot emanation.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-spell-2576",
+  "slug": "phase-bolt",
+  "name": "Phase Bolt",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "attack",
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": "60 feet",
+  "area": null,
+  "target": "1 creature",
+  "defense": "ac",
+  "duration": null,
+  "description": "<p>You point your finger and project a bolt of magical energy that stutters in and out of phase until it reaches the target. Make a ranged spell attack roll against your target's AC; if the target has any circumstance bonuses to AC (such as from a shield or cover), reduce that bonus by 2 for this attack. On a success, you deal 3d4 piercing damage.</p>\n<p><strong>Critical Success</strong> The target takes double damage.</p>\n<p><strong>Success</strong> The target takes full damage.</p>\n<p><strong>Heightened (+1)</strong> The bolt’s damage increases by 1d4.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-spell-2611",
+  "slug": "time-sense",
+  "name": "Time Sense",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate"
+  ],
+  "rarity": "common",
+  "actions": "1",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": null,
+  "description": "<p>When you Cast the Spell, you gain a perfect sense of time. You can learn exactly what time it is, down to the second. You can instead choose to gain a perfect sense of the calendar if you have knowledge in that area—if you're trained in Nature, you can learn exactly how long it is until sunrise and how many days until the next solstice. If you're trained in Astronomy Lore, you can learn precisely when any known predictable astronomical conjunction will begin and end, and so on.</p>\n<p>You can gain a +1 status bonus to one attack roll, Perception check, saving throw, or skill check you take on the same turn you cast <em>time sense</em> that requires extremely precise timing. If you choose to gain this bonus, you can't gain it again for 1 hour.</p>",
+  "source": "Dark Archive (Remastered)"
+ },
+ {
+  "id": "aon-spell-2583",
+  "slug": "warp-step",
+  "name": "Warp Step",
+  "rank": 0,
+  "traditions": [
+   "arcane",
+   "occult"
+  ],
+  "traits": [
+   "concentrate",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "actions": "2",
+  "range": null,
+  "area": null,
+  "target": null,
+  "defense": null,
+  "duration": null,
+  "description": "<p>When you walk, the earth warps beneath your feet—your steps extend, distance contracts, and everything is just a little bit closer. You gain a +5-foot status bonus to your Speed until the end of your turn. You then Stride twice. You can use warp step to Burrow, Climb, Fly, or Swim instead of Stride if you have the corresponding movement type.</p>",
+  "source": "Dark Archive (Remastered)"
+ }
+]

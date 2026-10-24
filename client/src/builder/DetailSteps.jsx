@@ -12,6 +12,7 @@ import {
   spellOptions,
   runesOf,
   runeOptions,
+  weaponRank,
   proficienciesOf,
   spellDc,
   classDc,
@@ -471,7 +472,7 @@ export function GearStep({ build, update, data }) {
             build.weapons[0] === w.id ? ' · Primary' : ''
           }`
         }
-        warn={(w) => untrained(prof?.weapons[w.category])}
+        warn={(w) => untrained(prof && weaponRank({ proficiencies: prof }, w))}
       />
     </>
   );

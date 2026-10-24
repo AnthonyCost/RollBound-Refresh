@@ -50,7 +50,7 @@ Open http://localhost:5173 to reach the sign-in page. Create an account, or choo
 
 ## Rules data
 
-The builder reads the rules data in `packages/rules/data/`, generated from the open data in the [Foundry VTT pf2e system](https://github.com/foundryvtt/pf2e). It's one file per book and type (such as `player-core/feats.json`), plus `index.json`, which lists them and holds the data version. In code, load it with `loadRulesData()` from `@rollbound/rules/load` (Node) or `loadRules()` in `client/src/state/rulesData.js` (browser). Books Foundry doesn't have yet (currently *Impossible Magic*) come from the Archives of Nethys as hand-made books in `packages/rules/books/`; see the README there. The files are committed, so you only need to regenerate them to pick up upstream fixes or new books:
+The builder reads the rules data in `packages/rules/data/`, generated from the open data in the [Foundry VTT pf2e system](https://github.com/foundryvtt/pf2e). It's one file per book and type (such as `player-core/feats.json`), plus `index.json`, which lists them and holds the data version. In code, load it with `loadRulesData()` from `@rollbound/rules/load` (Node) or `loadRules()` in `client/src/state/rulesData.js` (browser). Books Foundry doesn't have yet (currently *Impossible Magic* and *Dark Archive (Remastered)*) come from the Archives of Nethys as hand-made books in `packages/rules/books/`; see the README there. The files are committed, so you only need to regenerate them to pick up upstream fixes or new books:
 
 ```bash
 npm run data:import    # set GITHUB_TOKEN to avoid API rate limits

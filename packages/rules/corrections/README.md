@@ -18,11 +18,16 @@ Entries are keyed by the item's **slug** within that book. The importer fails if
 | `classes` | `lores` | Lore skills the class trains, e.g. `["Undead Lore"]` |
 | `classes` | `classFeatTraits` | Traits the 1st-level class feat must have, e.g. `["evolution"]` for the summoner |
 | `classes` | `runes` | A runic repertoire instead of spells: `{ "known": 4 }` |
+| `classes` | `loreAbilities` | Lores rolled with another attribute than Int, e.g. `{ "Esoteric Lore": "cha" }` |
+| `classes` | `weaponGroups` | Ranks for weapon groups within categories, e.g. a gunslinger's `[{ "groups": ["firearm", "crossbow"], "categories": ["simple", "martial"], "rank": "expert" }]` |
 | `subclassOptions` | `proficiencies` | Ranks granted at 1st level, e.g. `{ "defenses.medium": "trained", "saves.fortitude": "expert" }`. Paths: `defenses.<category>`, `attacks.<category>`, `saves.<save>`, `perception` |
 | `subclassOptions` | `keyAbility` | An extra key attribute this option allows, e.g. `"str"` |
 | `subclassOptions` | `skills` | Skills the option trains, when the data has none |
+| `subclassOptions` | `keyAbilityOnly` | The option sets the key attribute outright (a psychic's subconscious mind) |
 | `subclassOptions` | `traditionSkills` | A skill that depends on the chosen tradition, e.g. a dragon eidolon's `{ "arcane": "arcana", "occult": "occultism", ... }` |
 | `heritages` | `featAncestries` | Other ancestries whose feats this heritage can take, e.g. `["elf"]` |
+| `heritages` | `ancestryHp` | Ancestry Hit Points this heritage uses instead, e.g. `10` for Defensive Automaton |
+| `backgrounds` | `lore` | The background's Lore, e.g. `["<Past life> Lore"]` for a Lore the player names |
 | `feats` | `grantedOnlyIf` | When something grants this feat automatically, only grant it if this condition holds. Known conditions: `deity-favored-weapon-simple` |
 
 New kinds of correction need a small addition to the importer and engine. That happens once per kind of rule, not once per item.

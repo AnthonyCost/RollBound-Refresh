@@ -1,6 +1,6 @@
 # Hand-made books
 
-Books that Foundry's pf2e data doesn't have yet. Each file is one book's level 1 content (classes, feats, spells, runes, and extra subclass options for existing classes), converted from the [Archives of Nethys](https://2e.aonprd.com), Paizo's official online rules reference.
+Books that Foundry's pf2e data doesn't have yet, or has only in an older edition (Dark Archive). Prefer Foundry whenever it has the right edition: check `system.publication.remaster` on its items. Each file is one book's level 1 content (classes, feats, spells, runes, and extra subclass options for existing classes), converted from the [Archives of Nethys](https://2e.aonprd.com), Paizo's official online rules reference.
 
 `npm run data:import` merges these files with Foundry's data, so they go through the same corrections (`corrections/<book>.json`), import report, tests and split files.
 

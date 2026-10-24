@@ -118,7 +118,11 @@ export function ancestryFlaws(ancestry, alternate) {
 export function keyAbilityOptions(build, data) {
   const { cls } = lookup(build, data);
   if (!cls) return [];
-  const extra = chosenOptions(build, data).map((c) => c.option.keyAbility).filter(Boolean);
+  const options = chosenOptions(build, data);
+  // Some options set the key attribute outright (a psychic's subconscious mind).
+  const only = options.map((c) => c.option.keyAbilityOnly).find(Boolean);
+  if (only) return [only];
+  const extra = options.map((c) => c.option.keyAbility).filter(Boolean);
   return [...new Set([...cls.keyAbility, ...extra])];
 }
 
@@ -410,8 +414,10 @@ export function spellcastingOf(build, data) {
   if (!base) return null;
   const option = chosenOptions(build, data).find((c) => c.option.tradition || c.option.traditionChoice)?.option;
   const tradition = option?.traditionChoice ? build.tradition : base.tradition ?? option?.tradition ?? null;
-  // Spells you know without choosing them: the class's (necromancer's harm) and the subclass's.
-  const granted = [...(base.grantedSpells ?? []), ...(option?.grantedSpells ?? [])].map((s) => find(data.spells, s)).filter(Boolean);
+  // Spells you know without choosing them: the class's (necromancer's harm) and every chosen
+  // option's (a sorcerer's bloodline, a psychic's conscious mind).
+  const fromOptions = chosenOptions(build, data).flatMap((c) => c.option.grantedSpells ?? []);
+  const granted = [...new Set([...(base.grantedSpells ?? []), ...fromOptions])].map((s) => find(data.spells, s)).filter(Boolean);
   return { ...base, tradition, traditionChoice: Boolean(option?.traditionChoice), granted };
 }
 
@@ -473,6 +479,8 @@ export function proficienciesOf(build, data) {
     classDc: 'trained',
     armor: { ...cls.defenses },
     weapons: { ...cls.attacks },
+    // Ranks for weapon groups within categories, e.g. a gunslinger's expert firearms.
+    ...(cls.weaponGroups && { weaponGroups: cls.weaponGroups }),
   };
   for (const { option } of chosenOptions(build, data)) {
     for (const [path, rank] of Object.entries(option.proficiencies)) {
@@ -583,6 +591,7 @@ function toWeapon(w) {
     slug: w.slug,
     name: w.name,
     category: w.category,
+    ...(w.group && { group: w.group }),
     die: w.die,
     damageType: w.damageType,
     traits: w.traits,
@@ -611,7 +620,8 @@ export function buildCharacter(build, data) {
   return {
     name: build.name.trim(),
     level: 1,
-    ancestry: { slug: ancestry.slug, name: ancestry.name, hp: ancestry.hp, speed: ancestry.speed, size: ancestry.size, vision: ancestry.vision },
+    // A few heritages change the ancestry's Hit Points (Defensive Automaton: 10).
+    ancestry: { slug: ancestry.slug, name: ancestry.name, hp: heritage.ancestryHp ?? ancestry.hp, speed: ancestry.speed, size: ancestry.size, vision: ancestry.vision },
     heritage: heritage.name,
     background: background.name,
     className: cls.name,
@@ -622,6 +632,8 @@ export function buildCharacter(build, data) {
     proficiencies: proficienciesOf(build, data),
     skills,
     lores: loresOf(build, data),
+    // Lores that use another attribute than Int (a thaumaturge's Esoteric Lore uses Cha).
+    ...(cls.loreAbilities && { loreAbilities: cls.loreAbilities }),
     languages: [...languagePicks(build, data).granted, ...build.languages],
     classFeatures: cls.features.map((f) => ({
       name: f.name,

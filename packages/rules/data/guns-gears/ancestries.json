@@ -1,0 +1,51 @@
+[
+ {
+  "id": "kYsBAJ103T44agJF",
+  "slug": "automaton",
+  "name": "Automaton",
+  "hp": 8,
+  "size": "med",
+  "speed": 25,
+  "vision": "low-light-vision",
+  "boosts": [
+   [
+    "str"
+   ],
+   [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+   ]
+  ],
+  "flaws": [],
+  "languages": [
+   "common",
+   "utopian"
+  ],
+  "additionalLanguages": {
+   "count": 0,
+   "options": [
+    "chthonian",
+    "diabolic",
+    "dwarven",
+    "elven",
+    "empyrean",
+    "jistkan",
+    "petran",
+    "pyric",
+    "sussuran",
+    "thalassic"
+   ]
+  },
+  "traits": [
+   "automaton",
+   "construct"
+  ],
+  "rarity": "rare",
+  "description": "<p><em>These intelligent constructs house actual souls and represent what remains of a dying empire's last attempt at greatness. Automatons combine technological ingenuity with magical power, creating a blended being wholly unique to Golarion.</em></p>\n<p>Automaton</p>",
+  "source": "Guns & Gears"
+ }
+]

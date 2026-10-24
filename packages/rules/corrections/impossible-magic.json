@@ -16,6 +16,11 @@
       "classFeatTraits": ["evolution"]
     }
   },
+  "heritages": {
+    "defensive-automaton": {
+      "ancestryHp": 10
+    }
+  },
   "subclassOptions": {
     "reaper": {
       "proficiencies": { "attacks.martial": "trained", "defenses.medium": "trained" }

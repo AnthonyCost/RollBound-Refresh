@@ -489,3 +489,51 @@ describe('Impossible Magic', () => {
     assert.equal(R.checkPrerequisite('Trained in Arcana, Trained in Nature, Trained in Occultism, or Trained in Religion', occult, data), true);
   });
 });
+
+describe('Guns & Gears and Dark Archive', () => {
+  const base = (build) => named({ ...emptyBuild(), ancestry: 'human', heritage: 'skilled-human', heritageSkill: 'medicine', background: 'guard', lore: 'Warfare Lore', ...build });
+  const option = (cls, slug) => data.classes.find((c) => c.slug === cls).features.flatMap((f) => f.choice?.options ?? []).find((o) => o.slug === slug);
+  const weapon = (slug) => data.weapons.find((w) => w.slug === slug);
+
+  it('makes a gunslinger expert with simple and martial firearms and crossbows, trained with advanced ones', () => {
+    const c = { proficiencies: R.proficienciesOf(base({ class: 'gunslinger' }), data) };
+    assert.equal(R.weaponRank(c, weapon('flintlock-pistol')), 'expert');
+    assert.equal(R.weaponRank(c, weapon('arquebus')), 'expert');
+    assert.equal(R.weaponRank(c, weapon('crossbow')), 'expert');
+    assert.equal(R.weaponRank(c, weapon('dwarven-scattergun')), 'trained');
+    assert.equal(R.weaponRank(c, weapon('longsword')), 'trained', 'other martial weapons stay trained');
+  });
+
+  it('lets the psychic’s subconscious mind set the key attribute', () => {
+    const psychic = (mind) => base({ class: 'psychic', classChoices: { 'psychic-subconscious-mind': option('psychic', mind).id } });
+    assert.deepEqual(keyAbilityOptions(base({ class: 'psychic' }), data), ['int', 'cha']);
+    assert.deepEqual(keyAbilityOptions(psychic('emotional-acceptance'), data), ['cha']);
+    assert.deepEqual(keyAbilityOptions(psychic('gathered-lore'), data), ['int']);
+  });
+
+  it('adds a conscious mind’s spells to the psychic’s repertoire', () => {
+    const b = base({ class: 'psychic', classChoices: { 'psychic-conscious-mind': option('psychic', 'the-distant-grasp').id } });
+    assert.deepEqual(R.spellcastingOf(b, data).granted.map((s) => s.slug).sort(), ['kinetic-ram', 'telekinetic-hand', 'telekinetic-projectile']);
+  });
+
+  it('gives the thaumaturge Esoteric Lore, rolled with Charisma, and Dubious Knowledge', () => {
+    const b = base({ class: 'thaumaturge', freeBoosts: ['cha', 'dex', 'con', 'wis'], keyAbility: 'cha' });
+    const c = { ...R.buildCharacter({ ...b, name: 'T', skills: [], ancestryFeat: null, classFeat: null }, data) };
+    assert.ok(c.lores.includes('Esoteric Lore'));
+    const check = R.skillCheck(c, 'Esoteric Lore');
+    assert.equal(check.parts[0].label, 'Charisma');
+    assert.ok(R.featSummary(b, data).owned.some(({ feat }) => feat.slug === 'dubious-knowledge'));
+  });
+
+  it('gives a Defensive Automaton 10 ancestry Hit Points and Toughness', () => {
+    const b = named({ ...emptyBuild(), ancestry: 'automaton', heritage: 'defensive-automaton', background: 'guard', lore: 'Warfare Lore', class: 'fighter' });
+    assert.equal(R.buildCharacter({ ...b, name: 'A' }, data).ancestry.hp, 10);
+    assert.ok(R.featSummary(b, data).owned.some(({ feat }) => feat.slug === 'toughness'));
+  });
+
+  it('opens Reflection ancestry feats to a reflection of any ancestry', () => {
+    const feats = ancestryFeatOptions({ ancestry: 'elf', heritage: 'reflection' }, data).map((f) => f.slug);
+    assert.ok(feats.includes('mirror-risen'));
+    assert.ok(feats.some((s) => data.feats.find((f) => f.slug === s).traits.includes('elf')));
+  });
+});

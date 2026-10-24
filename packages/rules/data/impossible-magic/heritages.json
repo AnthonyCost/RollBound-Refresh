@@ -1,0 +1,37 @@
+[
+ {
+  "id": "aon-heritage-438",
+  "slug": "defensive-automaton",
+  "name": "Defensive Automaton",
+  "ancestry": "kYsBAJ103T44agJF",
+  "traits": [],
+  "rarity": "common",
+  "senses": [],
+  "skills": [],
+  "skillChoice": null,
+  "feats": [
+   "AmP0qu7c5dlBSath"
+  ],
+  "featAncestries": [],
+  "description": "<p>You are built particularly tough. You can withstand more damage than most other automatons. You gain 10 hit points from your ancestry instead of 8. You also gain the Toughness feat.</p>",
+  "source": "Impossible Magic",
+  "ancestryHp": 10
+ },
+ {
+  "id": "aon-heritage-439",
+  "slug": "newly-minted-automaton",
+  "name": "Newly Minted Automaton",
+  "ancestry": "kYsBAJ103T44agJF",
+  "traits": [],
+  "rarity": "common",
+  "senses": [],
+  "skills": [],
+  "skillChoice": null,
+  "feats": [
+   "BocFD2KV0qgUC76x"
+  ],
+  "featAncestries": [],
+  "description": "<p>You are a brand-new automaton, likely constructed in the city of Quantium. While your body is largely the same as those created many years ago, your mind is fresh, and you learn new information at a rapid pace. You gain the Additional Lore skill feat in one lore of your choice. You know one additional language from the languages that you have access to.</p>",
+  "source": "Impossible Magic"
+ }
+]

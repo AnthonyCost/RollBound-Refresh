@@ -1,0 +1,62 @@
+[
+ {
+  "id": "2kMltxs2rmxRSxfV",
+  "slug": "hunter-automaton",
+  "name": "Hunter Automaton",
+  "ancestry": "kYsBAJ103T44agJF",
+  "traits": [],
+  "rarity": "common",
+  "senses": [],
+  "skills": [],
+  "skillChoice": null,
+  "feats": [],
+  "featAncestries": [],
+  "description": "<p>You were designed to serve as a scout or assassin and have a body resembling a pack hunter like a large cat or wolf. Though you typically move like a quadruped, you can still stand and fight like a biped, allowing you to use all equipment normally. Your quadruped design allows you to move quickly; if you have both hands free, you can increase your Speed to 30 feet as you run on all fours.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "J0eAmntxXywr9sGt",
+  "slug": "mage-automaton",
+  "name": "Mage Automaton",
+  "ancestry": "kYsBAJ103T44agJF",
+  "traits": [],
+  "rarity": "common",
+  "senses": [],
+  "skills": [],
+  "skillChoice": null,
+  "feats": [],
+  "featAncestries": [],
+  "description": "<p>The chamber housing your core has a more direct connection to the rest of your humanoid shape, allowing you to tap into your core's magical energy. You gain one cantrip from the arcane spell list. You can cast this spell as an arcane innate spell at will. A cantrip is heightened to a spell rank equal to half your level rounded up.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "j1nzBc9Pui7vsJ9o",
+  "slug": "sharpshooter-automaton",
+  "name": "Sharpshooter Automaton",
+  "ancestry": "kYsBAJ103T44agJF",
+  "traits": [],
+  "rarity": "common",
+  "senses": [],
+  "skills": [],
+  "skillChoice": null,
+  "feats": [],
+  "featAncestries": [],
+  "description": "<p>Your lithe, humanoid shape is designed for speed and accuracy suitable for ranged combat. You gain the Automaton Aim action.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "y24ykEUfpIu5Gp6D",
+  "slug": "warrior-automaton",
+  "name": "Warrior Automaton",
+  "ancestry": "kYsBAJ103T44agJF",
+  "traits": [],
+  "rarity": "common",
+  "senses": [],
+  "skills": [],
+  "skillChoice": null,
+  "feats": [],
+  "featAncestries": [],
+  "description": "<p>Sporting a bulkier, powerful design, your body has been designed for combat. You have a bulky, humanoid shape. The damage die for your fist increases to 1d6 instead of 1d4. You don't take a penalty when making a lethal attack with your fist or any other unarmed attack.</p>",
+  "source": "Guns & Gears"
+ }
+]
