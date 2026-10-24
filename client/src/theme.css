@@ -486,6 +486,34 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .topbar__signout { text-decoration: none; }
 
 .hub__greeting { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 8px; text-align: center; }
+/* Player / Game Master switch: two halves of one bar, the chosen one lit. */
+.mode-switch { display: grid; grid-template-columns: 1fr 1fr; width: 100%; max-width: 560px; margin-inline: auto; border: 1px solid var(--line); background: var(--panel); }
+.mode-switch__tab {
+  min-height: 48px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.mode-switch__tab + .mode-switch__tab { border-left: 1px solid var(--line); }
+.mode-switch__tab[aria-selected='true'] { background: linear-gradient(#a8241b, var(--blood-dark)); color: #f7edda; box-shadow: inset 0 1px 0 var(--blood-text); }
+.mode-switch__count { min-width: 22px; padding: 1px 6px; border: 1px solid currentColor; font-size: 10px; letter-spacing: 0; opacity: 0.8; }
+/* Phones drop "Mode" so "Game Master" stays on one line. */
+@media (max-width: 419px) { .mode-switch__suffix { display: none; } }
+@media (hover: hover) { .mode-switch__tab[aria-selected='false']:hover { color: var(--text); background: var(--panel-hot); } }
+.hub__panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; container-type: inline-size; }
+.hub__action { align-self: center; width: 100%; max-width: 320px; }
+[hidden] { display: none !important; }
 .hub__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
 
 .hub-card {

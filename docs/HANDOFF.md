@@ -106,8 +106,10 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Profile:** the Account page (`/account`) sets the display name and profile picture. Sign-up has an optional picture too; it uploads after the account exists, and if that fails the user lands on the Account page with a note.
 
 ### 2. Hub
-- Lists your characters with portrait, HP and AC, and your campaigns, split into "you run" and "you play in".
-- Includes the join-a-campaign box, and shows your avatar in the top bar.
+- A **Player Mode / Game Master Mode** switch (tabs with counts). Both views render from one load; switching only hides the other, so there's no fetch or reload. The last choice is remembered in `localStorage` (`rollbound.hubMode`), defaulting to Player.
+- **Player Mode:** your characters with portrait, HP and AC, plus **New character**; the campaigns your characters are in (including ones you also run), each naming your characters in it; and the join-a-campaign box.
+- **Game Master Mode:** the campaigns you run, plus **New campaign**.
+- Shows your avatar in the top bar.
 - Each character opens at `/play/:id/sheet|turn|roll|gm`.
 
 ### 3. Character builder (`/create`)

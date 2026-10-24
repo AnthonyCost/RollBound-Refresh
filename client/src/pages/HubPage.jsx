@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { armorClass, maxHp, mira } from '@rollbound/rules';
 import { api } from '../api.js';
@@ -34,7 +34,8 @@ function demoCharacterCards() {
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
-function CampaignCard({ campaign }) {
+/** One campaign. members, when given, names the player's own characters in it. */
+function CampaignCard({ campaign, members }) {
   const body = (
     <>
       {campaign.coverUrl ? (
@@ -52,6 +53,7 @@ function CampaignCard({ campaign }) {
           )}
           Party level {campaign.partyLevel} · {plural(campaign.characterCount, 'character')}
         </span>
+        {members?.length > 0 && <span className="hub-card__tag">Playing {members.map((c) => c.name).join(', ')}</span>}
       </div>
       {campaign.isGm !== false && <span className="combatant__tag">GM</span>}
     </>
@@ -63,11 +65,66 @@ function CampaignCard({ campaign }) {
   );
 }
 
+const MODES = [
+  { id: 'player', label: 'Player' },
+  { id: 'gm', label: 'Game Master' },
+];
+const MODE_KEY = 'rollbound.hubMode';
+
+/** The mode last picked on this browser; storage can be blocked, so fall back to player. */
+function savedMode() {
+  try {
+    return localStorage.getItem(MODE_KEY) === 'gm' ? 'gm' : 'player';
+  } catch {
+    return 'player';
+  }
+}
+
+/**
+ * Switches between the player and GM views. Both are rendered from the same load;
+ * this only hides one, so switching never fetches anything.
+ */
+function ModeSwitch({ mode, onChange, counts }) {
+  const tabs = useRef({});
+  const onKeyDown = (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    const next = MODES[(MODES.findIndex((m) => m.id === mode) + 1) % MODES.length].id;
+    onChange(next);
+    tabs.current[next]?.focus();
+  };
+  return (
+    <div className="mode-switch" role="tablist" aria-label="Home view">
+      {MODES.map((m) => (
+        <button
+          key={m.id}
+          ref={(el) => (tabs.current[m.id] = el)}
+          type="button"
+          role="tab"
+          id={`hub-tab-${m.id}`}
+          aria-selected={mode === m.id}
+          aria-controls={`hub-panel-${m.id}`}
+          tabIndex={mode === m.id ? 0 : -1}
+          className="mode-switch__tab"
+          onClick={() => onChange(m.id)}
+          onKeyDown={onKeyDown}
+        >
+          <span>
+            {m.label}
+            <span className="mode-switch__suffix"> Mode</span>
+          </span>
+          <span className="mode-switch__count">{counts[m.id]}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function HubPage() {
   const { user, isDemo, logout } = useAuth();
   const service = useCampaignService();
   const [hub, setHub] = useState(null);
   const [failed, setFailed] = useState(false);
+  const [mode, setMode] = useState(savedMode);
 
   const load = useCallback(() => {
     let cancelled = false;
@@ -80,6 +137,22 @@ export default function HubPage() {
   }, [isDemo, service]);
 
   useEffect(load, [load]);
+
+  const chooseMode = (next) => {
+    setMode(next);
+    try {
+      localStorage.setItem(MODE_KEY, next);
+    } catch {
+      // Not remembered; the choice still holds for this visit.
+    }
+  };
+
+  // Campaigns the player is in through one of their characters, including any
+  // they also run, with the characters each one holds.
+  const membersOf = (campaign) => hub.characters.filter((c) => c.campaignId === campaign.id);
+  const playerCampaigns = hub
+    ? [...hub.campaigns.playing, ...hub.campaigns.running].filter((c) => membersOf(c).length).sort((a, b) => a.name.localeCompare(b.name))
+    : [];
 
   return (
     <div className="app">
@@ -105,40 +178,56 @@ export default function HubPage() {
         {!hub && !failed && <p className="muted italic center">Gathering your party…</p>}
 
         {hub && (
-          <div className="split hub__split">
-            <section className="split__col" aria-label="Characters">
-              <Ornament label="CHARACTERS" />
-              {hub.characters.length ? (
-                <ul className="hub__list">
-                  {hub.characters.map((c) => (
-                    <li key={c.id}>
-                      <Link to={`/play/${c.id}/sheet`} className="hub-card hub-card--link">
-                        <Portrait url={c.portraitUrl} name={c.name} size="sm" />
-                        <div className="hub-card__body">
-                          <span className="hub-card__name">{c.name}</span>
-                          <span className="hub-card__sub">
-                            {c.data.ancestry.name} {c.data.className} · Level {c.level}
-                          </span>
-                          <span className="hub-card__tag">
-                            {c.campaignName ?? 'No campaign'}
-                            {isOutdated(c.data) && <span className="hub-card__alert"> · Rules updated</span>}
-                          </span>
-                        </div>
-                        <div className="hub-card__stats">
-                          <span><small>HP</small>{c.summary.maxHp}</span>
-                          <span><small>AC</small>{c.summary.ac}</span>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="panel panel--dashed muted italic center">No characters yet. Characters you create will gather here.</p>
-              )}
-              <Link to="/create" className="btn btn--blood">New character</Link>
-            </section>
+          <>
+            <ModeSwitch mode={mode} onChange={chooseMode} counts={{ player: hub.characters.length, gm: hub.campaigns.running.length }} />
 
-            <section className="split__col" aria-label="Campaigns">
+            <div className="split hub__split" role="tabpanel" id="hub-panel-player" aria-labelledby="hub-tab-player" hidden={mode !== 'player'}>
+              <section className="split__col" aria-label="Characters">
+                <Ornament label="YOUR CHARACTERS" />
+                {hub.characters.length ? (
+                  <ul className="hub__list">
+                    {hub.characters.map((c) => (
+                      <li key={c.id}>
+                        <Link to={`/play/${c.id}/sheet`} className="hub-card hub-card--link">
+                          <Portrait url={c.portraitUrl} name={c.name} size="sm" />
+                          <div className="hub-card__body">
+                            <span className="hub-card__name">{c.name}</span>
+                            <span className="hub-card__sub">
+                              {c.data.ancestry.name} {c.data.className} · Level {c.level}
+                            </span>
+                            <span className="hub-card__tag">
+                              {c.campaignName ?? 'No campaign'}
+                              {isOutdated(c.data) && <span className="hub-card__alert"> · Rules updated</span>}
+                            </span>
+                          </div>
+                          <div className="hub-card__stats">
+                            <span><small>HP</small>{c.summary.maxHp}</span>
+                            <span><small>AC</small>{c.summary.ac}</span>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="panel panel--dashed muted italic center">No characters yet. Characters you create will gather here.</p>
+                )}
+                <Link to="/create" className="btn btn--blood">New character</Link>
+              </section>
+
+              <section className="split__col" aria-label="Campaigns you play in">
+                <Ornament label="CAMPAIGNS YOU PLAY IN" />
+                {playerCampaigns.length ? (
+                  <ul className="hub__list">
+                    {playerCampaigns.map((c) => <CampaignCard key={c.id} campaign={c} members={membersOf(c)} />)}
+                  </ul>
+                ) : (
+                  <p className="panel panel--dashed muted italic center">None of your characters are in a campaign yet. Ask your GM for an invite code.</p>
+                )}
+                <JoinCampaign characters={hub.characters} onJoined={load} />
+              </section>
+            </div>
+
+            <section className="hub__panel" role="tabpanel" id="hub-panel-gm" aria-labelledby="hub-tab-gm" hidden={mode !== 'gm'}>
               <Ornament label="CAMPAIGNS YOU RUN" />
               {hub.campaigns.running.length ? (
                 <ul className="hub__list">
@@ -147,23 +236,12 @@ export default function HubPage() {
               ) : (
                 <p className="panel panel--dashed muted italic center">No campaigns yet. Start one and invite your players.</p>
               )}
-              <Link to="/campaigns/new" className="btn">New campaign</Link>
-
-              {hub.campaigns.playing.length > 0 && (
-                <>
-                  <Ornament label="CAMPAIGNS YOU PLAY IN" />
-                  <ul className="hub__list">
-                    {hub.campaigns.playing.map((c) => <CampaignCard key={c.id} campaign={c} />)}
-                  </ul>
-                </>
-              )}
-
-              <JoinCampaign characters={hub.characters} onJoined={load} />
+              <Link to="/campaigns/new" className="btn btn--blood hub__action">New campaign</Link>
               {isDemo && (
                 <p className="rule-note center">Demo campaigns and codes only exist in this tab. Create an account to invite real players.</p>
               )}
             </section>
-          </div>
+          </>
         )}
       </main>
     </div>

@@ -8,7 +8,7 @@ Built with the PERN stack: **Postgres, Express, React, Node**.
 
 | Screen | What it teaches |
 | --- | --- |
-| **Hub** | Home after sign-in: your characters (with HP and AC at a glance) and the campaigns you run as GM. |
+| **Hub** | Home after sign-in, with a Player Mode / Game Master Mode switch. Player Mode shows your characters (with HP and AC at a glance) and the campaigns they're in; Game Master Mode shows the campaigns you run. |
 | **Builder** | Step-by-step level 1 character creation from Player Core and Player Core 2: ancestry, heritage, background, class and subclass, deity, attribute boosts, skills, languages, feats (with prerequisite checks and bonus feats), spells, and 15 gp of gear. Each step explains the rule it applies. Demo users can build and play a character for the rest of their session. |
 | **Campaigns** | GMs create and edit a campaign's title, party level, backstory, and cover image, and get a unique invite code to share. Players enter the code on their hub to bring a character in. Demo users can try the whole flow; their campaigns last until the tab closes. |
 | **Sheet** | Tap AC, a save, or Perception to see the breakdown: ability, proficiency rank + level, item bonus, armor's Dex cap, and condition penalties. |
