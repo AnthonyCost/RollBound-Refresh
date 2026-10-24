@@ -252,8 +252,22 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .orb__hp { position: relative; z-index: 1; font-family: var(--display); font-size: 24px; font-weight: 700; color: #f7edda; text-shadow: 0 1px 3px #000; }
 .orb--low { animation: orb-pulse 1.6s ease-in-out infinite; }
 .orb--down .orb__hp { color: var(--text-muted); }
+/* Healing: a brief gold glow, over the low-health pulse. */
+.orb--healed-0 { animation: orb-heal-a 1.2s ease-out; }
+.orb--healed-1 { animation: orb-heal-b 1.2s ease-out; }
+@keyframes orb-heal-a {
+  20% { box-shadow: 0 0 38px 6px var(--gold), inset 0 0 0 3px var(--gold), inset 0 0 0 5px var(--bg); }
+}
+@keyframes orb-heal-b {
+  20% { box-shadow: 0 0 38px 6px var(--gold), inset 0 0 0 3px var(--gold), inset 0 0 0 5px var(--bg); }
+}
 @keyframes orb-pulse { 50% { box-shadow: 0 0 34px #b3261a, inset 0 0 0 3px var(--line), inset 0 0 0 5px var(--bg); } }
-@media (prefers-reduced-motion: reduce) { .orb__fill { transition: none; } .orb--low { animation: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .orb__fill { transition: none; }
+  .orb--low { animation: none; }
+  /* Still show the heal, just without the motion. */
+  .orb--healed-0, .orb--healed-1 { animation: none; box-shadow: 0 0 30px 4px var(--gold), inset 0 0 0 3px var(--gold), inset 0 0 0 5px var(--bg); }
+}
 
 .hp-tracker { display: flex; flex-direction: column; gap: 10px; }
 .hp-tracker__head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -1260,6 +1274,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .hero__name { font-size: 18px; }
 }
 
+.sheet__edit { min-height: 44px; }
 .export { display: flex; flex-direction: column; gap: 6px; }
 .export .btn { min-height: 44px; }
 .export__alt { align-self: center; font-size: 13px; }

@@ -48,8 +48,14 @@ function Play() {
   );
 }
 
+/** Turn, Roll and GM screens: only during an active encounter, otherwise the sheet. */
+function EncounterOnly({ children }) {
+  const { encounterActive } = useTable();
+  return encounterActive ? children : <Navigate to="../sheet" replace />;
+}
+
 function PlayShell() {
-  const { round, loading, notFound } = useTable();
+  const { round, loading, notFound, encounterActive } = useTable();
   const { isDemo } = useAuth();
 
   return (
@@ -57,7 +63,7 @@ function PlayShell() {
       <header className="topbar">
         <Link to="/home" className="wordmark">ROLLBOUND</Link>
         <div className="topbar__right">
-          <span className="eyebrow">Round {round}</span>
+          {encounterActive && <span className="eyebrow">Round {round}</span>}
           <AccountLink />
           <Link to="/home" className="topbar__signout">Hub</Link>
         </div>
@@ -98,9 +104,9 @@ export default function App() {
         <Route path="/play/:characterId" element={<Play />}>
           <Route index element={<Navigate to="sheet" replace />} />
           <Route path="sheet" element={<SheetPage />} />
-          <Route path="turn" element={<TurnPage />} />
-          <Route path="roll" element={<RollPage />} />
-          <Route path="gm" element={<GmPage />} />
+          <Route path="turn" element={<EncounterOnly><TurnPage /></EncounterOnly>} />
+          <Route path="roll" element={<EncounterOnly><RollPage /></EncounterOnly>} />
+          <Route path="gm" element={<EncounterOnly><GmPage /></EncounterOnly>} />
         </Route>
       </Route>
       {/* Anyone with a share link, signed in or not. */}

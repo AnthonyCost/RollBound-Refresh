@@ -20,6 +20,14 @@ export const DEMO_CHARACTER_ID = 'demo';
 
 const STARTING_CONDITIONS = [{ id: 'frightened', value: 1 }];
 
+/**
+ * Whether the character is in an active encounter. The Turn, Roll and GM screens
+ * only show during one. Always false until the campaign manager's encounter
+ * tracker exists; then it should be true when this character's campaign has an
+ * encounter with an active status that includes them.
+ */
+const ENCOUNTER_ACTIVE = false;
+
 /** How long to wait after the last hit point change before saving it. */
 const HP_SAVE_DELAY = 500;
 
@@ -186,6 +194,7 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
       characterId,
       setCharacter,
       readOnly,
+      encounterActive: ENCOUNTER_ACTIVE && !readOnly,
       portraitUrl,
       setPortraitUrl,
       campaign,

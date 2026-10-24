@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { useTable } from '../state/TableContext.jsx';
 
 const icon = {
   sheet: (
@@ -22,17 +23,22 @@ const icon = {
   gm: <path d="M4 6h16M4 12h16M4 18h10" />,
 };
 
+// encounter: shown only while the character is in an active encounter.
 const LINKS = [
   { to: 'sheet', label: 'Sheet', icon: 'sheet' },
-  { to: 'turn', label: 'Turn', icon: 'turn' },
-  { to: 'roll', label: 'Roll', icon: 'roll' },
-  { to: 'gm', label: 'GM', icon: 'gm' },
+  { to: 'turn', label: 'Turn', icon: 'turn', encounter: true },
+  { to: 'roll', label: 'Roll', icon: 'roll', encounter: true },
+  { to: 'gm', label: 'GM', icon: 'gm', encounter: true },
 ];
 
 export default function NavBar() {
+  const { encounterActive } = useTable();
+  const links = LINKS.filter((l) => encounterActive || !l.encounter);
+  // The sheet on its own needs no tabs.
+  if (links.length < 2) return null;
   return (
-    <nav className="nav" aria-label="Main">
-      {LINKS.map((l) => (
+    <nav className="nav" aria-label="Main" style={{ gridTemplateColumns: `repeat(${links.length}, minmax(0, 1fr))` }}>
+      {links.map((l) => (
         <NavLink key={l.to} to={l.to}>
           <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
             {icon[l.icon]}

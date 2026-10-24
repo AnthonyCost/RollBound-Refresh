@@ -69,6 +69,12 @@ export default function SheetPage() {
 
       {!readOnly && <HpTracker />}
 
+      {/* Only the owner reaches this sheet (the server checks), and only characters
+          made in the builder keep the choices it needs to reopen them. */}
+      {!readOnly && character.build && (
+        <Link to={`/characters/${characterId}/edit`} className="btn sheet__edit">Edit character</Link>
+      )}
+
       <ExportSheetButton />
 
       {editingPortrait && (
