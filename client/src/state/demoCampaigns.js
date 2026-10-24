@@ -5,6 +5,7 @@ import { mira, bookIssues, campaignBooks, migrateBuild } from '@rollbound/rules'
 import { ALL_BOOKS, loadRules } from './rulesData.js';
 import { getDemoCharacter, listDemoCharacters } from './demoCharacters.js';
 import { imageToDataUrl } from '../imageData.js';
+import { demoPortraitUrl } from './portraits.js';
 
 const KEY = 'rollbound:demo-campaigns';
 const MIRA_ID = 'demo';
@@ -140,11 +141,24 @@ export const demoCampaignService = {
     return withCounts(updated, state.memberships);
   },
 
-  async regenerate(id) {
+  async remove(id) {
     const state = read();
-    const code = inviteCode();
-    write({ ...state, campaigns: state.campaigns.map((c) => (c.id === id ? { ...c, inviteCode: code } : c)) });
-    return { inviteCode: code };
+    if (!state.campaigns.some((c) => c.id === id)) throw notFound();
+    const memberships = Object.fromEntries(Object.entries(state.memberships).filter(([, campId]) => campId !== id));
+    write({ campaigns: state.campaigns.filter((c) => c.id !== id), memberships });
+  },
+
+  async removeCharacter(campaignId, characterId) {
+    return this.leave(campaignId, characterId);
+  },
+
+  /** A party member's sheet, like the server's members-only view. */
+  async character(campaignId, characterId) {
+    const { campaigns, memberships } = read();
+    const c = campaigns.find((x) => x.id === campaignId);
+    const data = memberships[characterId] === campaignId ? characterData(characterId) : null;
+    if (!c || !data) throw Object.assign(new Error('Character not found.'), { status: 404 });
+    return { name: data.name, level: data.level, campaignName: c.name, portraitUrl: demoPortraitUrl(characterId), data, mine: true };
   },
 
   async preview(code) {

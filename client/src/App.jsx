@@ -12,7 +12,7 @@ import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
 import CampaignPage from './pages/CampaignPage.jsx';
 import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
-import SharedSheetPage from './pages/SharedSheetPage.jsx';
+import SharedSheetPage, { PartySheetPage } from './pages/SharedSheetPage.jsx';
 import SpellBookPage from './pages/SpellBookPage.jsx';
 import InventoryPage from './pages/InventoryPage.jsx';
 import LorePage from './pages/LorePage.jsx';
@@ -104,6 +104,14 @@ export default function App() {
         <Route path="/campaigns/new" element={<CampaignCreatePage />} />
         <Route path="/campaigns/:id" element={<CampaignPage />} />
         <Route path="/campaigns/:id/edit" element={<CampaignEditPage />} />
+        {/* A party member's sheet; the server only shows it to the GM and the party. */}
+        <Route path="/campaigns/:id/characters/:characterId" element={<PartySheetPage />}>
+          <Route index element={<Navigate to="sheet" replace />} />
+          <Route path="sheet" element={<SheetPage />} />
+          <Route path="spells" element={<SpellBookPage />} />
+          <Route path="inventory" element={<InventoryPage />} />
+          <Route path="lore" element={<LorePage />} />
+        </Route>
         <Route path="/play/:characterId" element={<Play />}>
           <Route index element={<Navigate to="sheet" replace />} />
           <Route path="sheet" element={<SheetPage />} />

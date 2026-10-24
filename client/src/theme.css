@@ -281,7 +281,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 /* ---------- Spell Book, Inventory, Lore tabs ---------- */
 
-.coins input, .inventory__note-field input, .add-item input, .add-item select, .backstory__input {
+.coins input, .inventory__note-field input, .add-item input, .add-item select, .lore-backstory__input {
   min-height: 44px;
   padding: 0 10px;
   border: 1px solid var(--line);
@@ -290,11 +290,11 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-family: var(--body);
   font-size: 16px;
 }
-.coins input:focus, .inventory__note-field input:focus, .add-item input:focus, .add-item select:focus, .backstory__input:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
+.coins input:focus, .inventory__note-field input:focus, .add-item input:focus, .add-item select:focus, .lore-backstory__input:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
 
-.spellbook__head, .coins, .add-item, .backstory, .origins, .background { display: flex; flex-direction: column; gap: 10px; }
+.spellbook__head, .coins, .add-item, .lore-backstory, .origins, .background { display: flex; flex-direction: column; gap: 10px; }
 .spellbook__head .panel__title, .spellbook__head .rule-note, .coins .panel__title, .add-item .panel__title,
-.backstory .panel__title, .origins .panel__title, .background .panel__title { margin: 0; }
+.lore-backstory .panel__title, .origins .panel__title, .background .panel__title { margin: 0; }
 .spellbook__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 0; }
 .spellbook__stats div { padding: 8px; border: 1px solid var(--line); background: var(--bg); text-align: center; }
 .spellbook__stats dt { font-family: var(--display); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
@@ -351,9 +351,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .add-item__custom-row input[type='number'] { width: 72px; }
 .add-item__custom-row .btn { flex: 1; min-height: 44px; }
 
-.backstory__input { width: 100%; padding: 10px 12px; resize: vertical; line-height: 1.5; }
-.backstory__text { margin: 0; white-space: pre-wrap; line-height: 1.6; color: var(--text-soft); overflow-wrap: anywhere; }
-.backstory__foot { display: flex; justify-content: space-between; gap: 8px; margin: 0; font-size: 13px; color: var(--text-soft); }
+.lore-backstory__input { width: 100%; padding: 10px 12px; resize: vertical; line-height: 1.5; }
+.lore-backstory__text { margin: 0; white-space: pre-wrap; line-height: 1.6; color: var(--text-soft); overflow-wrap: anywhere; }
+.lore-backstory__foot { display: flex; justify-content: space-between; gap: 8px; margin: 0; font-size: 13px; color: var(--text-soft); }
 .origins__list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin: 0; }
 .origins__list div { display: flex; gap: 10px; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--line-soft); }
 .origins__list dt { font-family: var(--display); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding-top: 3px; }
@@ -1255,6 +1255,15 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   user-select: all;
 }
 .confirm--inline { margin: 0; }
+
+/* A party member on the campaign page: the portrait and name open their sheet. */
+.party-card { flex-wrap: wrap; }
+.party-card__open { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; }
+@media (hover: hover) { .party-card__open:hover .hub-card__name { color: var(--blood-text); text-decoration: underline; } }
+.party-card__confirm { flex-basis: 100%; }
+
+.danger { display: flex; flex-direction: column; gap: 10px; border-color: var(--blood); }
+.danger .panel__title, .danger p { margin: 0; }
 
 .join { display: flex; flex-direction: column; gap: 12px; }
 .join__find { display: flex; gap: 8px; }

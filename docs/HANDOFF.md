@@ -165,9 +165,12 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Invite codes:**
   - format `XXXX-XXXX`, with no look-alike characters (0/O, 1/I/L),
   - unique in the database, accepted in any case with or without the dash,
-  - the GM can replace a code, and the old one stops working.
+  - **permanent:** once generated a code never changes (the replace route and button are gone),
+  - only the GM sees it: the campaign page, list and invite preview leave it out for everyone else.
 - **Joining:** a player previews the campaign from its code, then picks which character joins. A character is in one campaign at a time.
 - **Campaign page:** cover, backstory, the party (portraits and player avatars), and the invite code (GM only).
+- **Party sheets:** each party card's portrait and name open that character's sheet. Your own opens your playable sheet (`/play/:id`). Anyone else's opens read-only at `/campaigns/:id/characters/:characterId`, with all four tabs. The server (`GET /api/campaigns/:id/characters/:characterId`) only returns it to the campaign's GM and players with a character in it, which includes the character's own player. The public share link (`/sheets/:shareId`) is separate: it's for owners sharing outside the campaign.
+- **GM controls:** **Remove** on other players' characters, with a confirm (`POST /api/campaigns/:id/remove`). The character stays with its player, in no campaign, and its player can rejoin with the code. **Delete campaign** is at the bottom of the Edit page, with a confirm (`DELETE /api/campaigns/:id`). Its characters stay with their players, in no campaign; the cover image is deleted and the hub says so. Players can still Leave with their own characters.
 - **Demo mode:** it all works within the tab.
 
 ### 7. Image uploads and S3
@@ -362,7 +365,6 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 **Small features:**
 - [ ] Use the campaign's party level on the GM screen (it uses the character's level today).
-- [ ] Delete a campaign.
 - [ ] Bonus spells from domains, the deity, wizard curriculum, and the witch's lesson.
 - [ ] Record the specific Lore subcategory from feats like Additional Lore.
 - [ ] Optional GM approval of uncommon and rare options.

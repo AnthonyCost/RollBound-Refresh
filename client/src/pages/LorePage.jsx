@@ -32,14 +32,14 @@ export default function LorePage() {
     <div className="narrow">
       <Ornament label="LORE" />
 
-      <section className="panel backstory" aria-labelledby="backstory-title">
+      <section className="panel lore-backstory" aria-labelledby="backstory-title">
         <h1 id="backstory-title" className="panel__title">Backstory</h1>
         {readOnly ? (
-          backstory.trim() ? <p className="backstory__text">{backstory}</p> : <p className="muted italic">No backstory written yet.</p>
+          backstory.trim() ? <p className="lore-backstory__text">{backstory}</p> : <p className="muted italic">No backstory written yet.</p>
         ) : (
           <>
             <textarea
-              className="backstory__input"
+              className="lore-backstory__input"
               rows={10}
               maxLength={LIMITS.backstory}
               value={backstory}
@@ -47,7 +47,7 @@ export default function LorePage() {
               onChange={(e) => setBackstory(e.target.value)}
               aria-label="Backstory"
             />
-            <p className="backstory__foot">
+            <p className="lore-backstory__foot">
               <span className={backstoryStatus === 'error' ? 'rule-note--warn' : ''} role="status">{savedLabel[backstoryStatus] ?? ''}</span>
               <span className="muted">{backstory.length.toLocaleString('en-US')} / {LIMITS.backstory.toLocaleString('en-US')}</span>
             </p>

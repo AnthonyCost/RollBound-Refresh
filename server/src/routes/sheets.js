@@ -19,8 +19,12 @@ sheets.get('/:shareId', async (req, res) => {
     [req.params.shareId],
   );
   if (!rows.length) return res.status(404).json({ error: 'Sheet not found' });
-  const row = rows[0];
-  res.json({
+  res.json(sheetJson(rows[0]));
+});
+
+/** A character as a read-only sheet: only what the sheet shows, no owner or campaign ids. */
+export function sheetJson(row) {
+  return {
     name: row.name,
     level: row.level,
     campaignName: row.campaign_name ?? null,
@@ -30,5 +34,5 @@ sheets.get('/:shareId', async (req, res) => {
     currentHp: currentHp(row),
     inventory: row.inventory ?? null,
     backstory: row.backstory ?? '',
-  });
-});
+  };
+}

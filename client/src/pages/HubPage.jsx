@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { armorClass, equipCharacter, maxHp, mira } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
@@ -130,6 +130,7 @@ export default function HubPage() {
   const [hub, setHub] = useState(null);
   const [failed, setFailed] = useState(false);
   const [mode, setMode] = useState(savedMode);
+  const { state } = useLocation();
 
   const load = useCallback(() => {
     let cancelled = false;
@@ -179,6 +180,7 @@ export default function HubPage() {
           <h1 className="title">{isDemo ? 'Adventurer' : user.displayName}</h1>
         </section>
 
+        {state?.deleted && <p className="panel panel--hot center" role="status">Deleted {state.deleted}. Its characters are still with their players.</p>}
         {failed && <p className="form-errors" role="alert">Couldn't load your table. Try refreshing.</p>}
         {!hub && !failed && <p className="muted italic center">Gathering your party…</p>}
 

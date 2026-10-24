@@ -48,7 +48,9 @@ export const api = {
   previewInvite: (code) => request(`/campaigns/invites/${encodeURIComponent(code)}`),
   joinCampaign: (code, characterId) => post('/campaigns/join', { code, characterId }),
   leaveCampaign: (campaignId, characterId) => post(`/campaigns/${campaignId}/leave`, { characterId }),
-  regenerateInvite: (campaignId) => post(`/campaigns/${campaignId}/invite-code`, {}),
+  deleteCampaign: (campaignId) => request(`/campaigns/${campaignId}`, { method: 'DELETE' }),
+  removeFromCampaign: (campaignId, characterId) => post(`/campaigns/${campaignId}/remove`, { characterId }),
+  getCampaignCharacter: (campaignId, characterId) => request(`/campaigns/${campaignId}/characters/${characterId}`),
 
   /**
    * Uploads an image the way S3 presigned uploads work: get a signed URL from the

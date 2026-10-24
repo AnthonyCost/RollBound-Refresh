@@ -24,6 +24,20 @@ export default function CampaignEditPage() {
     navigate(`/campaigns/${id}`, { replace: true });
   };
 
+  const [confirming, setConfirming] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const remove = async () => {
+    setDeleting(true);
+    setErrors([]);
+    try {
+      await campaigns.remove(id);
+      navigate('/home', { replace: true, state: { deleted: campaign.name } });
+    } catch (err) {
+      setErrors(errorsFrom(err));
+      setDeleting(false);
+    }
+  };
+
   const cancel = <Link to={`/campaigns/${id}`} className="topbar__signout">Cancel</Link>;
   return (
     <PageShell actions={cancel}>
@@ -35,6 +49,28 @@ export default function CampaignEditPage() {
       {campaign && !campaign.isGm && <p className="rule-note center">Only the GM can edit this campaign.</p>}
       {!campaign && !errors.length && <p className="muted italic center">Unrolling the map…</p>}
       {campaign?.isGm && <CampaignForm initial={campaign} submitLabel="Save changes" onSubmit={save} />}
+      {campaign?.isGm && (
+        <section className="panel danger narrow" aria-labelledby="delete-title">
+          <h2 id="delete-title" className="panel__title">Delete campaign</h2>
+          <p className="rule-note">
+            Deleting {campaign.name} can't be undone. Its {campaign.characterCount === 1 ? 'character stays' : 'characters stay'} with
+            {campaign.characterCount === 1 ? ' its player' : ' their players'}, in no campaign.
+          </p>
+          {confirming ? (
+            <div className="confirm confirm--inline" role="alertdialog" aria-label="Delete campaign">
+              <p>Delete {campaign.name} for everyone?</p>
+              <div className="btn-row">
+                <button type="button" className="btn btn--grow" onClick={() => setConfirming(false)}>Keep it</button>
+                <button type="button" className="btn btn--blood btn--grow" disabled={deleting} onClick={remove}>
+                  {deleting ? 'Deleting…' : 'Delete forever'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button type="button" className="btn" onClick={() => setConfirming(true)}>Delete campaign</button>
+          )}
+        </section>
+      )}
     </PageShell>
   );
 }

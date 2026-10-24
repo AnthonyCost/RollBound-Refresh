@@ -6,6 +6,7 @@ import { storage } from '../storage/index.js';
 import { checkImageKey, swapImages } from '../images.js';
 import { bookIssues, campaignBooks, migrateBuild } from '@rollbound/rules';
 import { rulesData } from '../rules.js';
+import { sheetJson } from './sheets.js';
 
 export const campaigns = Router();
 campaigns.use(requireUser);
@@ -205,22 +206,45 @@ campaigns.patch('/:id', async (req, res) => {
   res.json(toJson(rows[0], req.user.id));
 });
 
-// The GM can replace a leaked code; the old one stops working immediately.
-campaigns.post('/:id/invite-code', async (req, res) => {
+// Invite codes are permanent: there's no route to change one.
+
+// The GM deletes the campaign. Its characters stay with their players, in no campaign
+// (characters.campaign_id is ON DELETE SET NULL).
+campaigns.delete('/:id', async (req, res) => {
   if (!isId(req.params.id)) return res.status(404).json({ errors: ['Campaign not found.'] });
-  for (let attempt = 0; attempt < 5; attempt++) {
-    try {
-      const { rows } = await pool.query(
-        'UPDATE campaigns SET invite_code = $1 WHERE id = $2 AND gm_user_id = $3 RETURNING invite_code',
-        [generateInviteCode(), req.params.id, req.user.id],
-      );
-      if (!rows.length) return res.status(404).json({ errors: ['Campaign not found.'] });
-      return res.json({ inviteCode: rows[0].invite_code });
-    } catch (err) {
-      if (err.code !== '23505') throw err;
-    }
-  }
-  throw new Error('Could not generate a unique invite code');
+  const { rows } = await pool.query('DELETE FROM campaigns WHERE id = $1 AND gm_user_id = $2 RETURNING cover_key', [req.params.id, req.user.id]);
+  if (!rows.length) return res.status(404).json({ errors: ['Campaign not found.'] });
+  await swapImages(rows[0].cover_key, null);
+  res.status(204).end();
+});
+
+// The GM removes any character from the campaign; it stays with its player.
+campaigns.post('/:id/remove', async (req, res) => {
+  const characterId = String(req.body?.characterId ?? '');
+  if (!isId(req.params.id) || !isId(characterId)) return res.status(404).json({ errors: ['Character not found.'] });
+  const { rowCount } = await pool.query(
+    `UPDATE characters SET campaign_id = NULL, updated_at = now()
+     WHERE id = $1 AND campaign_id = $2 AND campaign_id IN (SELECT id FROM campaigns WHERE gm_user_id = $3)`,
+    [characterId, req.params.id, req.user.id],
+  );
+  if (!rowCount) return res.status(404).json({ errors: ['Character not found.'] });
+  res.status(204).end();
+});
+
+// A party member's sheet, read-only. Only the GM and players with a character in
+// the campaign can see it (which includes the character's own player).
+campaigns.get('/:id/characters/:characterId', async (req, res) => {
+  const { id, characterId } = req.params;
+  if (!isId(id) || !isId(characterId)) return res.status(404).json({ errors: ['Character not found.'] });
+  const { rows } = await pool.query(
+    `SELECT ch.*, c.name AS campaign_name
+     FROM characters ch JOIN campaigns c ON c.id = ch.campaign_id
+     WHERE ch.id = $1 AND c.id = $2
+       AND (c.gm_user_id = $3 OR EXISTS (SELECT 1 FROM characters mine WHERE mine.campaign_id = c.id AND mine.owner_id = $3))`,
+    [characterId, id, req.user.id],
+  );
+  if (!rows.length) return res.status(404).json({ errors: ['Character not found.'] });
+  res.json({ ...sheetJson(rows[0]), mine: rows[0].owner_id === req.user.id });
 });
 
 // A player removes their own character from a campaign.

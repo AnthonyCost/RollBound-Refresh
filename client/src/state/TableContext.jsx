@@ -18,6 +18,7 @@ import { demoMemberships } from './demoCampaigns.js';
 import { demoExtras, saveDemoExtras } from './demoExtras.js';
 import { useDelayedSave } from './useDelayedSave.js';
 import { useRules } from './useRules.js';
+import { useCampaignService } from './campaignService.js';
 
 const TableContext = createContext(null);
 
@@ -49,10 +50,12 @@ const isDemoId = (id) => id === DEMO_CHARACTER_ID || id.startsWith(DEMO_ID_PREFI
  * Holds everything happening "at the table" for one character: hit points,
  * conditions, the actions spent this turn, the last roll, and the GM-entered
  * target AC. Given a shareId instead of a characterId, it loads someone's shared
- * sheet read-only.
+ * sheet read-only; given party ({ campaignId, characterId }), a party member's
+ * sheet read-only, which only the campaign's GM and players can open.
  */
-export function TableProvider({ characterId, shareId: sharedId, children }) {
-  const readOnly = Boolean(sharedId);
+export function TableProvider({ characterId, shareId: sharedId, party, children }) {
+  const readOnly = Boolean(sharedId || party);
+  const campaigns = useCampaignService();
   // The sheet as built (saved, and replaced by rules updates or builder edits).
   const [baseCharacter, setCharacter] = useState(null);
   const [portraitUrl, setPortraitUrl] = useState(null);
@@ -89,7 +92,7 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
       return;
     }
     let cancelled = false;
-    (readOnly ? api.getSharedSheet(sharedId) : api.getCharacter(characterId))
+    (party ? campaigns.character(party.campaignId, party.characterId) : sharedId ? api.getSharedSheet(sharedId) : api.getCharacter(characterId))
       .then((row) => {
         if (cancelled) return;
         setCharacter(row.data);
@@ -105,7 +108,9 @@ export function TableProvider({ characterId, shareId: sharedId, children }) {
     return () => {
       cancelled = true;
     };
-  }, [characterId, sharedId, readOnly]);
+    // party is a new object each render; its ids are what matter.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [characterId, sharedId, readOnly, party?.campaignId, party?.characterId, campaigns]);
 
   // The sheet everyone reads: the built sheet with the inventory's equipped weapons,
   // armor and shield. With an inventory, wait for the gear data so AC doesn't jump.

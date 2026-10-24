@@ -23,7 +23,9 @@ const serverCampaignService = {
     return api.updateCampaign(id, body);
   },
 
-  regenerate: (id) => api.regenerateInvite(id),
+  remove: (id) => api.deleteCampaign(id),
+  removeCharacter: (campaignId, characterId) => api.removeFromCampaign(campaignId, characterId),
+  character: (campaignId, characterId) => api.getCampaignCharacter(campaignId, characterId),
   preview: (code) => api.previewInvite(code),
   join: (code, characterId) => api.joinCampaign(code, characterId),
   leave: (campaignId, characterId) => api.leaveCampaign(campaignId, characterId),

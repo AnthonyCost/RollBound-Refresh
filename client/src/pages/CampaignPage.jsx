@@ -30,10 +30,13 @@ export default function CampaignPage() {
 
   useEffect(load, [load]);
 
-  const regenerate = async () => {
+  // The GM removing someone's character asks first; this is the one being asked about.
+  const [removing, setRemoving] = useState(null);
+  const remove = async (characterId) => {
     try {
-      const { inviteCode } = await service.regenerate(id);
-      setCampaign((c) => ({ ...c, inviteCode }));
+      await service.removeCharacter(id, characterId);
+      setRemoving(null);
+      load();
     } catch (err) {
       setErrors(errorsFrom(err));
     }
@@ -107,7 +110,7 @@ export default function CampaignPage() {
         </section>
 
         <section className="split__col" aria-label="Party">
-          {campaign.isGm && <InviteCode code={campaign.inviteCode} onRegenerate={regenerate} />}
+          {campaign.isGm && <InviteCode code={campaign.inviteCode} />}
           {campaign.isGm && (
             <Link to={`/create?invite=${encodeURIComponent(campaign.inviteCode)}`} className="btn">
               Build a character for this campaign
@@ -118,26 +121,46 @@ export default function CampaignPage() {
           {campaign.characters.length ? (
             <ul className="hub__list">
               {campaign.characters.map((c) => (
-                <li key={c.id} className="hub-card">
-                  <Portrait url={isDemo ? demoPortraitUrl(c.id) : c.portraitUrl} name={c.name} size="sm" />
-                  <div className="hub-card__body">
-                    <span className="hub-card__name">{c.name}</span>
-                    <span className="hub-card__sub">
-                      {[c.ancestry, c.className].filter(Boolean).join(' ')} · Level {c.level}
-                    </span>
-                    <span className="hub-card__tag hub-card__player">
-                      {!c.mine && <Avatar url={c.playerAvatarUrl} name={c.player} size={18} />}
-                      {c.mine ? 'Your character' : `Played by ${c.player}`}
-                    </span>
-                    {c.outsideBooks?.length > 0 && (
-                      <span className="hub-card__alert hub-card__warn">Uses books this campaign doesn't: {c.outsideBooks.join(', ')}</span>
-                    )}
-                  </div>
+                <li key={c.id} className="hub-card party-card">
+                  {/* Your own character opens to play; anyone else's opens read-only, for the party and the GM. */}
+                  <Link
+                    to={c.mine ? `/play/${c.id}/sheet` : `/campaigns/${id}/characters/${c.id}/sheet`}
+                    className="party-card__open"
+                    aria-label={`${c.mine ? 'Play' : 'View'} ${c.name}'s sheet`}
+                  >
+                    <Portrait url={isDemo ? demoPortraitUrl(c.id) : c.portraitUrl} name={c.name} size="sm" />
+                    <div className="hub-card__body">
+                      <span className="hub-card__name">{c.name}</span>
+                      <span className="hub-card__sub">
+                        {[c.ancestry, c.className].filter(Boolean).join(' ')} · Level {c.level}
+                      </span>
+                      <span className="hub-card__tag hub-card__player">
+                        {!c.mine && <Avatar url={c.playerAvatarUrl} name={c.player} size={18} />}
+                        {c.mine ? 'Your character' : `Played by ${c.player}`}
+                      </span>
+                      {c.outsideBooks?.length > 0 && (
+                        <span className="hub-card__alert hub-card__warn">Uses books this campaign doesn't: {c.outsideBooks.join(', ')}</span>
+                      )}
+                    </div>
+                  </Link>
                   {c.mine && (
                     <div className="hub-card__actions">
                       {c.outsideBooks?.length > 0 && <Link to={`/characters/${c.id}/edit`} className="chip chip--link">Edit</Link>}
-                      <Link to={`/play/${c.id}/sheet`} className="chip chip--link">Play</Link>
                       <button type="button" className="chip" onClick={() => leave(c.id)}>Leave</button>
+                    </div>
+                  )}
+                  {!c.mine && campaign.isGm && removing !== c.id && (
+                    <div className="hub-card__actions">
+                      <button type="button" className="chip" onClick={() => setRemoving(c.id)}>Remove</button>
+                    </div>
+                  )}
+                  {removing === c.id && (
+                    <div className="confirm confirm--inline party-card__confirm" role="alertdialog" aria-label={`Remove ${c.name}`}>
+                      <p>Remove {c.name} from {campaign.name}? {c.player} keeps the character and can rejoin with the invite code.</p>
+                      <div className="btn-row">
+                        <button type="button" className="btn btn--grow" onClick={() => setRemoving(null)}>Keep</button>
+                        <button type="button" className="btn btn--blood btn--grow" onClick={() => remove(c.id)}>Remove</button>
+                      </div>
                     </div>
                   )}
                 </li>
