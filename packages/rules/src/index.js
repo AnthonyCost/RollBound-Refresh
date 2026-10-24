@@ -7,3 +7,4 @@ export { mira } from './sample.js';
 export * from './builder.js';
 export * from './data.js';
 export * from './inventory.js';
+export { SAMPLE_BUILDS } from './sampleBuilds.js';

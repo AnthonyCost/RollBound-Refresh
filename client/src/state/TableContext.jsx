@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
-  mira,
   maxHp,
   strikeBonus,
   degreeOfSuccess,
@@ -12,17 +11,12 @@ import {
   withEquipped,
 } from '@rollbound/rules';
 import { api } from '../api.js';
-import { DEMO_ID_PREFIX, getDemoCharacter } from './demoCharacters.js';
-import { demoPortraitUrl } from './portraits.js';
-import { demoMemberships } from './demoCampaigns.js';
-import { demoExtras, saveDemoExtras } from './demoExtras.js';
 import { useDelayedSave } from './useDelayedSave.js';
 import { useRules } from './useRules.js';
 import { useCampaignService } from './campaignService.js';
 
 const TableContext = createContext(null);
 
-export const DEMO_CHARACTER_ID = 'demo';
 
 // Characters start with no conditions. (This used to be a sample Frightened 1 to
 // show off condition math; with the Turn tab hidden there'd be no way to clear it.)
@@ -43,8 +37,6 @@ const BACKSTORY_SAVE_DELAY = 1000;
 
 // What equipping from the inventory needs from the rules data.
 const GEAR_TYPES = ['weapons', 'armor', 'shields'];
-
-const isDemoId = (id) => id === DEMO_CHARACTER_ID || id.startsWith(DEMO_ID_PREFIX);
 
 /**
  * Holds everything happening "at the table" for one character: hit points,
@@ -76,21 +68,6 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
   const [lastRoll, setLastRoll] = useState(null);
 
   useEffect(() => {
-    if (!readOnly && isDemoId(characterId)) {
-      const local = characterId === DEMO_CHARACTER_ID ? mira : getDemoCharacter(characterId)?.data;
-      if (local) {
-        const joined = demoMemberships()[characterId];
-        const extras = demoExtras(characterId);
-        setCharacter(local);
-        setStoredHp(extras.currentHp ?? null);
-        setStoredInventory(extras.inventory ?? null);
-        setStoredBackstory(extras.backstory ?? '');
-        setPortraitUrl(demoPortraitUrl(characterId));
-        setCampaign(joined ? { id: joined.id, name: joined.name, books: joined.books ?? null } : null);
-      } else setNotFound(true);
-      setLoading(false);
-      return;
-    }
     let cancelled = false;
     (party ? campaigns.character(party.campaignId, party.characterId) : sharedId ? api.getSharedSheet(sharedId) : api.getCharacter(characterId))
       .then((row) => {
@@ -121,15 +98,10 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     [baseCharacter, inventory, gear],
   );
 
-  // Changes save a moment after the last edit: to the server, or to this tab for
-  // demo characters. The shared view never saves.
-  const saver = (field, send) => (value) =>
-    isDemoId(characterId)
-      ? saveDemoExtras(characterId, { [field]: value }) ? Promise.resolve() : Promise.reject(new Error('storage blocked'))
-      : send(characterId, value);
-  const [scheduleHp, hpStatus] = useDelayedSave(saver('currentHp', api.setHp), HP_SAVE_DELAY);
-  const [scheduleInventory, inventoryStatus] = useDelayedSave(saver('inventory', api.setInventory), INVENTORY_SAVE_DELAY);
-  const [scheduleBackstory, backstoryStatus] = useDelayedSave(saver('backstory', api.setBackstory), BACKSTORY_SAVE_DELAY);
+  // Changes save a moment after the last edit. The read-only views never save.
+  const [scheduleHp, hpStatus] = useDelayedSave((v) => api.setHp(characterId, v), HP_SAVE_DELAY);
+  const [scheduleInventory, inventoryStatus] = useDelayedSave((v) => api.setInventory(characterId, v), INVENTORY_SAVE_DELAY);
+  const [scheduleBackstory, backstoryStatus] = useDelayedSave((v) => api.setBackstory(characterId, v), BACKSTORY_SAVE_DELAY);
 
   // Hit points: null means full.
   const max = character ? maxHp(character) : 0;

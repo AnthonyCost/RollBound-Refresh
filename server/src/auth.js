@@ -1,6 +1,7 @@
 import { createHash, randomBytes, scrypt, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 import { pool } from './db.js';
+import { DEMO_HOURS } from './demo.js';
 
 const scryptAsync = promisify(scrypt);
 
@@ -55,9 +56,11 @@ export async function requireUser(req, res, next) {
 export async function userForToken(token) {
   if (!token) return null;
   const { rows } = await pool.query(
-    `SELECT u.id, u.email, u.display_name, u.avatar_key
+    `SELECT u.id, u.email, u.display_name, u.avatar_key, u.is_demo, u.created_at
      FROM sessions s JOIN users u ON u.id = s.user_id
-     WHERE s.token_hash = $1 AND s.expires_at > now()`,
+     WHERE s.token_hash = $1 AND s.expires_at > now()
+       -- A demo ends at DEMO_HOURS on the dot; the hourly cleanup deletes it later.
+       AND NOT (u.is_demo AND u.created_at < now() - make_interval(hours => ${DEMO_HOURS}))`,
     [hashToken(token)],
   );
   return rows[0] ?? null;

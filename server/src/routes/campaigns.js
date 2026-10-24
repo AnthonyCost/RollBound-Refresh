@@ -7,6 +7,8 @@ import { checkImageKey, swapImages } from '../images.js';
 import { bookIssues, campaignBooks, migrateBuild } from '@rollbound/rules';
 import { rulesData } from '../rules.js';
 import { sheetJson } from './sheets.js';
+import { requestJoin, withdrawRequests } from '../joinRequests.js';
+import { canJoin } from '../demo.js';
 
 export const campaigns = Router();
 campaigns.use(requireUser);
@@ -111,13 +113,15 @@ campaigns.get('/invites/:code', async (req, res) => {
   const code = normalizeInviteCode(req.params.code);
   if (!code) return res.status(404).json({ errors: ["That doesn't look like an invite code."] });
   const { rows } = await pool.query(`${SELECT_CAMPAIGN} WHERE c.invite_code = $1`, [code]);
-  if (!rows.length) return res.status(404).json({ errors: ['No campaign uses that invite code.'] });
-  const { inviteCode: _hidden, ...preview } = toJson(rows[0], null);
+  // Demo accounts and real ones never meet: each only finds its own world's campaigns.
+  if (!rows.length || !(await canJoin(req.user.id, rows[0].gm_user_id))) return res.status(404).json({ errors: ['No campaign uses that invite code.'] });
+  // isGm tells the GM their own characters join straight away; the code itself stays hidden.
+  const { inviteCode: _hidden, ...preview } = toJson(rows[0], req.user.id);
   res.json(preview);
 });
 
 /** Messages for a character's choices from books the campaign doesn't allow (empty if none). */
-function outsideBooks(character, campaign) {
+export function outsideBooks(character, campaign) {
   const build = character.data?.build;
   if (!campaign.books || !build) return [];
   const data = rulesData();
@@ -127,28 +131,34 @@ function outsideBooks(character, campaign) {
   return [`${campaign.name} uses only ${campaign.books.join(', ')}. ${character.name} has ${list}. Edit the character to choose something else first.`];
 }
 
-// Join with one of your characters. A character is in one campaign at a time.
+// Ask to join with one of your characters: the GM gets an inbox message to accept
+// or reject (see joinRequests.js). A GM's own characters join their campaign
+// straight away. A character is in one campaign at a time.
 campaigns.post('/join', async (req, res) => {
   const code = normalizeInviteCode(req.body?.code);
   const characterId = String(req.body?.characterId ?? '');
   if (!code) return res.status(400).json({ errors: ["That doesn't look like an invite code."] });
   if (!isId(characterId)) return res.status(400).json({ errors: ['Choose one of your characters.'] });
 
-  const { rows: found } = await pool.query('SELECT id, name, books FROM campaigns WHERE invite_code = $1', [code]);
-  if (!found.length) return res.status(404).json({ errors: ['No campaign uses that invite code.'] });
+  const { rows: found } = await pool.query('SELECT id, name, books, gm_user_id FROM campaigns WHERE invite_code = $1', [code]);
+  if (!found.length || !(await canJoin(req.user.id, found[0].gm_user_id))) return res.status(404).json({ errors: ['No campaign uses that invite code.'] });
+  const campaign = found[0];
 
   // A character can only join if everything they picked comes from the campaign's books.
-  const { rows: mine } = await pool.query('SELECT name, data FROM characters WHERE id = $1 AND owner_id = $2', [characterId, req.user.id]);
+  const { rows: mine } = await pool.query('SELECT id, name, data, campaign_id FROM characters WHERE id = $1 AND owner_id = $2', [characterId, req.user.id]);
   if (!mine.length) return res.status(404).json({ errors: ['Character not found.'] });
-  const errors = outsideBooks(mine[0], found[0]);
+  const character = mine[0];
+  if (character.campaign_id === campaign.id) return res.status(400).json({ errors: [`${character.name} is already in ${campaign.name}.`] });
+  const errors = outsideBooks(character, campaign);
   if (errors.length) return res.status(400).json({ errors });
 
-  const { rowCount } = await pool.query(
-    'UPDATE characters SET campaign_id = $1, updated_at = now() WHERE id = $2 AND owner_id = $3',
-    [found[0].id, characterId, req.user.id],
-  );
-  if (!rowCount) return res.status(404).json({ errors: ['Character not found.'] });
-  res.json({ campaignId: found[0].id });
+  if (campaign.gm_user_id === req.user.id) {
+    await pool.query('UPDATE characters SET campaign_id = $1, updated_at = now() WHERE id = $2', [campaign.id, character.id]);
+    await withdrawRequests(character.id);
+    return res.json({ status: 'joined', campaignId: campaign.id, campaignName: campaign.name });
+  }
+  await requestJoin({ campaign, character, player: req.user.display_name });
+  res.status(202).json({ status: 'pending', campaignId: campaign.id, campaignName: campaign.name });
 });
 
 campaigns.get('/:id', async (req, res) => {
@@ -165,8 +175,26 @@ campaigns.get('/:id', async (req, res) => {
   const member = row && (row.gm_user_id === req.user.id || roster.some((r) => r.owner_id === req.user.id));
   if (!member) return res.status(404).json({ errors: ['Campaign not found.'] });
 
+  // The GM also sees who's waiting to join.
+  const { rows: waiting } = row.gm_user_id === req.user.id
+    ? await pool.query(
+        `SELECT jr.id, jr.created_at, ch.name, ch.level, ch.data->>'className' AS class_name, ch.data->'ancestry'->>'name' AS ancestry,
+                ch.portrait_key, u.display_name AS player, u.avatar_key AS player_avatar_key
+         FROM join_requests jr JOIN characters ch ON ch.id = jr.character_id JOIN users u ON u.id = ch.owner_id
+         WHERE jr.campaign_id = $1 AND jr.status = 'pending' ORDER BY jr.created_at`,
+        [req.params.id],
+      )
+    : { rows: [] };
+
   res.json({
     ...toJson(row, req.user.id),
+    requests: waiting.map((r) => ({
+      id: r.id,
+      createdAt: r.created_at,
+      character: { name: r.name, level: r.level, className: r.class_name, ancestry: r.ancestry, portraitUrl: storage.publicUrl(r.portrait_key) },
+      player: r.player,
+      playerAvatarUrl: storage.publicUrl(r.player_avatar_key),
+    })),
     characters: roster.map((r) => ({
       id: r.id,
       name: r.name,

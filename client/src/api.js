@@ -6,6 +6,9 @@ export class ApiError extends Error {
   }
 }
 
+/** Fired when the server answers 401 Not signed in. */
+export const SIGNED_OUT_EVENT = 'rollbound:signed-out';
+
 async function request(path, options = {}) {
   // Browsers refuse keepalive requests with bodies over 64 KB, so big ones go without it.
   const keepalive = options.keepalive && (options.body?.length ?? 0) < 60_000;
@@ -14,6 +17,9 @@ async function request(path, options = {}) {
     ...options,
     keepalive,
   });
+  // The server forgot this session (a demo ended, or the sign-in expired): tell
+  // AuthContext, which signs out if it thought we were signed in.
+  if (res.status === 401) window.dispatchEvent(new Event(SIGNED_OUT_EVENT));
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     const errors = body.errors ?? (body.error ? [body.error] : []);
@@ -27,6 +33,7 @@ const post = (path, data) => request(path, { method: 'POST', body: JSON.stringif
 export const api = {
   me: () => request('/auth/me'),
   login: (email, password) => post('/auth/login', { email, password }),
+  startDemo: () => post('/auth/demo', {}),
   register: (displayName, email, password) => post('/auth/register', { displayName, email, password }),
   logout: () => request('/auth/logout', { method: 'POST' }),
   updateProfile: (data) => request('/auth/me', { method: 'PATCH', body: JSON.stringify(data) }),
@@ -48,6 +55,9 @@ export const api = {
   previewInvite: (code) => request(`/campaigns/invites/${encodeURIComponent(code)}`),
   joinCampaign: (code, characterId) => post('/campaigns/join', { code, characterId }),
   leaveCampaign: (campaignId, characterId) => post(`/campaigns/${campaignId}/leave`, { characterId }),
+  inbox: () => request('/inbox'),
+  markRead: (ids) => post('/inbox/read', { ids }),
+  answerJoinRequest: (id, accept) => post(`/join-requests/${id}/${accept ? 'accept' : 'reject'}`, {}),
   deleteCampaign: (campaignId) => request(`/campaigns/${campaignId}`, { method: 'DELETE' }),
   removeFromCampaign: (campaignId, characterId) => post(`/campaigns/${campaignId}/remove`, { characterId }),
   getCampaignCharacter: (campaignId, characterId) => request(`/campaigns/${campaignId}/characters/${characterId}`),

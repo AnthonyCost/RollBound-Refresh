@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { LIMITS, armorClass, equipCharacter, inventoryProblems, maxHp } from '@rollbound/rules';
 import { rulesData } from '../rules.js';
+import { answerBotRequests } from '../demo.js';
 import { pool } from '../db.js';
 import { requireUser } from '../auth.js';
 import { storage } from '../storage/index.js';
@@ -24,6 +25,8 @@ const toJson = (row) => ({
   level: row.level,
   campaignId: row.campaign_id,
   campaignName: row.campaign_name ?? null,
+  // A campaign this character asked to join, while its GM hasn't answered.
+  joinRequest: row.requested_campaign_id ? { campaignId: row.requested_campaign_id, campaignName: row.requested_campaign_name } : null,
   // The campaign's books (null: all), so the builder offers only those when editing.
   campaignBooks: row.campaign_books ?? null,
   portraitUrl: storage.publicUrl(row.portrait_key),
@@ -37,13 +40,16 @@ const toJson = (row) => ({
 });
 
 const SELECT_WITH_CAMPAIGN = `
-  SELECT ch.*, c.name AS campaign_name, c.books AS campaign_books
+  SELECT ch.*, c.name AS campaign_name, c.books AS campaign_books, rc.id AS requested_campaign_id, rc.name AS requested_campaign_name
   FROM characters ch
-  LEFT JOIN campaigns c ON c.id = ch.campaign_id`;
+  LEFT JOIN campaigns c ON c.id = ch.campaign_id
+  LEFT JOIN join_requests jr ON jr.character_id = ch.id AND jr.status = 'pending'
+  LEFT JOIN campaigns rc ON rc.id = jr.campaign_id`;
 
 const isId = (s) => /^\d{1,9}$/.test(s);
 
 characters.get('/', async (req, res) => {
+  if (req.user.is_demo) await answerBotRequests(req.user.id);
   const { rows } = await pool.query(`${SELECT_WITH_CAMPAIGN} WHERE ch.owner_id = $1 ORDER BY ch.name`, [req.user.id]);
   res.json(rows.map(toJson));
 });

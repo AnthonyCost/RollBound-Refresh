@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { useAuth } from '../state/AuthContext.jsx';
 import { savePortrait } from '../state/portraits.js';
 import ImagePicker from './ImagePicker.jsx';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 
 /** Change or remove a character's portrait. */
 export default function PortraitEditor({ characterId, currentUrl, onSaved, onClose }) {
-  const { isDemo } = useAuth();
   const [value, setValue] = useState({});
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -16,7 +14,7 @@ export default function PortraitEditor({ characterId, currentUrl, onSaved, onClo
     setBusy(true);
     setErrors([]);
     try {
-      onSaved(await savePortrait(characterId, value.file ?? null, { isDemo }));
+      onSaved(await savePortrait(characterId, value.file ?? null));
       onClose();
     } catch (err) {
       setErrors(errorsFrom(err));

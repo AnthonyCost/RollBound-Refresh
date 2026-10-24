@@ -17,6 +17,8 @@ export default function JoinCampaign({ characters, onJoined }) {
   const [characterId, setCharacterId] = useState('');
   const [errors, setErrors] = useState([]);
   const [busy, setBusy] = useState(false);
+  // After asking: the GM decides, so say what happens next.
+  const [sent, setSent] = useState(null);
   const service = useCampaignService();
 
   const find = async (e) => {
@@ -37,7 +39,9 @@ export default function JoinCampaign({ characters, onJoined }) {
     setErrors([]);
     setBusy(true);
     try {
-      await service.join(code, characters.find((c) => String(c.id) === characterId)?.id ?? characterId);
+      const chosenCharacter = characters.find((c) => String(c.id) === characterId);
+      const result = await service.join(code, chosenCharacter?.id ?? characterId);
+      setSent(result.status === 'pending' ? { character: chosenCharacter?.name, campaign: preview.name } : null);
       setCode('');
       setPreview(null);
       setCharacterId('');
@@ -63,6 +67,7 @@ export default function JoinCampaign({ characters, onJoined }) {
           onChange={(e) => {
             setCode(format(e.target.value));
             setPreview(null);
+            setSent(null);
           }}
           placeholder="XXXX-XXXX"
           autoComplete="off"
@@ -72,6 +77,12 @@ export default function JoinCampaign({ characters, onJoined }) {
         />
         <button type="submit" className="btn" disabled={busy || code.length < 9}>Find</button>
       </form>
+
+      {sent && (
+        <p className="panel panel--hot join__sent" role="status">
+          Asked to bring {sent.character} into {sent.campaign}. Its GM will accept or reject the request, and you'll hear back in your inbox.
+        </p>
+      )}
 
       {preview && (
         <div className="join__preview">
@@ -109,9 +120,13 @@ export default function JoinCampaign({ characters, onJoined }) {
             {chosen?.campaignName && chosen.campaignId !== preview.id && (
               <p className="rule-note">A character plays in one campaign at a time, so {chosen.name} will leave {chosen.campaignName}.</p>
             )}
+            {chosen?.joinRequest && chosen.joinRequest.campaignId !== preview.id && (
+              <p className="rule-note">{chosen.name} is waiting to hear from {chosen.joinRequest.campaignName}. Asking here withdraws that request.</p>
+            )}
             <button type="button" className="btn btn--blood" disabled={busy || !characterId} onClick={join}>
-              Join {preview.name}
+              {preview.isGm ? `Join ${preview.name}` : `Ask to join ${preview.name}`}
             </button>
+            {!preview.isGm && <p className="rule-note">The GM of {preview.name} accepts or rejects each request.</p>}
           </>
         ) : (
           <p className="rule-note">Create a character first, then come back to join.</p>

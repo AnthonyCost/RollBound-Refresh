@@ -13,10 +13,19 @@ import {
 } from '../auth.js';
 import { storage } from '../storage/index.js';
 import { checkImageKey, swapImages } from '../images.js';
+import { DEMO_HOURS, allowDemo, createDemo, deleteDemo } from '../demo.js';
 
 export const auth = Router();
 
-const toJson = (u) => ({ id: u.id, email: u.email, displayName: u.display_name, avatarUrl: storage.publicUrl(u.avatar_key) });
+const toJson = (u) => ({
+  id: u.id,
+  // Demo accounts have a made-up address; nobody needs to see it.
+  email: u.is_demo ? null : u.email,
+  displayName: u.display_name,
+  avatarUrl: storage.publicUrl(u.avatar_key),
+  isDemo: Boolean(u.is_demo),
+  ...(u.is_demo && { demoExpiresAt: new Date(new Date(u.created_at).getTime() + DEMO_HOURS * 3600_000).toISOString() }),
+});
 
 const cookieOptions = {
   httpOnly: true,
@@ -75,9 +84,20 @@ auth.post('/login', async (req, res) => {
   res.json(toJson(user));
 });
 
+// Start a demo: a temporary account of your own, with sample content (see demo.js).
+auth.post('/demo', async (req, res) => {
+  if (!allowDemo(req.ip)) return res.status(429).json({ errors: ['Too many demos started from here. Try again in an hour, or create an account.'] });
+  const user = await createDemo();
+  await startSession(res, user);
+  res.status(201).json(toJson(user));
+});
+
 auth.post('/logout', async (req, res) => {
   const token = readSessionToken(req);
+  // Exiting the demo deletes the demo account and everything in it.
+  const user = token && (await userForToken(token));
   if (token) await deleteSession(token);
+  if (user?.is_demo) await deleteDemo(user.id);
   res.clearCookie(SESSION_COOKIE, cookieOptions);
   res.status(204).end();
 });

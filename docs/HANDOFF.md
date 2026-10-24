@@ -28,7 +28,7 @@ RollBound is a Pathfinder 2e (Remaster) table companion that **teaches the rules
 **Stack (PERN):** Postgres, Express, React (Vite), Node.
 
 **What a player can do today:**
-- create an account (with an optional profile picture), or try a demo with no account,
+- create an account (with an optional profile picture), or try a demo, which makes a temporary account,
 - build a level 1 character in a 9-step builder using Player Core and Player Core 2,
 - play that character on four screens: Sheet, Turn, Roll and GM,
 - export the character to Paizo's fillable PDF character sheet,
@@ -44,7 +44,7 @@ sudo service postgresql start        # Postgres often stops after a WSL restart
 npm run db:setup                     # tables, seed data, invite codes, build upgrades (safe to re-run)
 npm run dev:server                   # API on :3001
 npm run dev:client                   # app on :5173 (second terminal)
-npm test                             # 162 rules tests, including the full build sweep
+npm test                             # 173 rules tests, including the full build sweep
 ```
 
 Other commands:
@@ -56,6 +56,7 @@ Other commands:
 | `npm run art:import -- <folder>` | Converts art named like `class-wizard.png` into the app |
 | `npm run db:migrate-builds --workspace @rollbound/server` | Upgrades saved characters' builds on their own |
 | `npm run dev:client -- --host` | Opens the dev server to your phone on the same Wi-Fi |
+| `npm run inbox:post -- --title "…" --body "…"` | Posts an announcement to everyone's inbox. Add `--kind patch-notes` for patch notes, or `--body-file notes.txt` for a longer body (line breaks are kept) |
 
 The settings go in `server/.env`; see `server/.env.example`. Key ones are `DATABASE_URL`, `UPLOAD_SECRET`, and the commented S3 block.
 
@@ -81,7 +82,7 @@ client/                React app (Vite)
   src/pages/             Login, Register, Hub, Account, Builder, Campaign pages, Sheet/Turn/Roll/GM
   src/builder/           Builder steps, Showcase (character select), OptionList, art.js
   src/sheet/             PDF export: fill logic, field map, open/download
-  src/state/             Auth, table state, demo stores, campaign service, portraits
+  src/state/             Auth, table state, campaign service, portraits, inbox
   src/assets/art/        Class/ancestry portraits and icons (found by file name)
   scripts/               map-sheet-fields.mjs, import-art.mjs
 server/                Express API
@@ -102,7 +103,14 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - passwords are hashed with Node's built-in `scrypt`, so there's no extra dependency,
   - the session cookie is HTTP-only and lasts 30 days,
   - the database stores only a SHA-256 hash of each session token (`sessions` table).
-- **Demo mode:** a "Try the demo" button skips sign-in. Everything a demo user does lives in the browser tab (`sessionStorage`): characters, campaigns, portraits. It's cleared when they exit or close the tab.
+- **Demo mode:** "Try the demo" (`POST /api/auth/demo`) makes a real, temporary account for each visitor and signs them in, so the demo runs the same code as everyone else (`server/src/demo.js`).
+  - **What it comes with:** "Adventurer" runs *Wolves at the Ford* with Mira in the party. Mira is now built in the builder, so she can be edited. A pretend player, **Sam**, has asked to bring his ranger **Kestrel** in, so a join request waits in the inbox. Sam also runs *The Sunken Vault*; the welcome message gives its invite code, and Sam accepts requests to it about five seconds later (`answerBotRequests`, run when the inbox or character list loads). The characters' builds are `SAMPLE_BUILDS` in the rules package, and a test keeps them valid.
+  - **Separate worlds:** a demo only finds its own campaigns' invite codes, and nobody else finds them (`canJoin`).
+  - **Lifetime:** demo accounts are deleted, with Sam, their characters, campaigns, messages and uploads, when the visitor exits the demo, or after 24 hours (`scheduleDemoCleanup`, hourly and on start). The banner shows the hours left.
+  - **Ending:** a demo's sign-in stops working at exactly 24 hours (`userForToken`), and the hourly cleanup deletes it afterwards. In the last hour the banner turns red, counts down the minutes, and offers **Create an account**, which ends the demo and opens sign-up. When time runs out the banner checks with the server and the app signs out by itself.
+- **Signed out mid-session:** any "not signed in" (401) answer while the app thinks you're signed in sends you to sign-in with a note: "Your demo has ended…" for a demo, or "You were signed out…" for an account (`SIGNED_OUT_EVENT` in `api.js`, handled in `AuthContext`). The browser remembers whether it was last in a demo or an account (`rollbound.lastSession`), so someone returning after their demo ended sees the note too. Signing out on purpose shows nothing.
+  - **Limits:** 20 demos per IP address per hour (in memory). Demo accounts have a made-up `@demo.invalid` address that's never shown, and no password, so they can't sign in again after exiting.
+  - The demo needs the API running now; the old in-browser imitation is gone.
 - **Profile:** the Account page (`/account`) sets the display name and profile picture. Sign-up has an optional picture too; it uploads after the account exists, and if that fails the user lands on the Account page with a note.
 
 ### 2. Hub
@@ -132,7 +140,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - a large portrait in a fixed 2:3 panel, anchored to the top,
   - a grid of round icon tiles,
   - the selected option's stats and description.
-- **Saving:** sends the character to the API, or keeps it in the tab in demo mode, with an optional portrait.
+- **Saving:** sends the character to the API, with an optional portrait.
 
 ### 4. Rules data import
 - **Source:** the Foundry VTT pf2e system's open data, filtered to the books in `BOOKS` (Player Core, Player Core 2 and Guns & Gears) and pinned to an upstream commit recorded in `meta.commit`.
@@ -147,14 +155,14 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Hit points:** the globe fills to current over max HP (10 of 20 is half full), with max HP printed under it. It pulses at 25% or less, and glows gold for a moment whenever HP goes up. The Hit points panel takes damage, heals, or restores to full. Current HP is saved in `characters.current_hp` (NULL means full, so a higher max after a level-up stays full) via `PUT /api/characters/:id/hp`, half a second after the last change. A change still waiting is sent when you leave the character or close the tab (`keepalive`). Demo characters keep HP for the visit only.
 - **Edit character:** the owner's sheet links to the builder's edit mode (`/characters/:id/edit`). Only the owner can load or save a character (the server checks), and the shared link never shows the button. Characters without saved builder choices (the sample Mira, seeded characters) can't be edited, so they don't get the button.
 - **Campaign:** the sheet names the one campaign the character is in, linked to its page ("No campaign yet" otherwise).
-- **Share link:** every character has a random `share_id` (16 URL-safe characters, 96 bits, so links can't be guessed). `/sheets/:shareId` shows the sheet read-only to anyone, signed in or not, through the public `GET /api/sheets/:shareId`. That returns only what the sheet shows: no owner, user or campaign ids. The shared view has no HP controls, portrait editor, rules notice, share panel or play tabs, and starts with no conditions. The owner's sheet has a Share panel with Copy and **Make a new link**, which replaces the link (`POST /api/characters/:id/share-link`) so the old one stops working. `db:setup` gives older characters a link. Demo characters can't be shared.
+- **Share link:** every character has a random `share_id` (16 URL-safe characters, 96 bits, so links can't be guessed). `/sheets/:shareId` shows the sheet read-only to anyone, signed in or not, through the public `GET /api/sheets/:shareId`. That returns only what the sheet shows: no owner, user or campaign ids. The shared view has no HP controls, portrait editor, rules notice, share panel or play tabs, and starts with no conditions. The owner's sheet has a Share panel with Copy and **Make a new link**, which replaces the link (`POST /api/characters/:id/share-link`) so the old one stops working. `db:setup` gives older characters a link.
 - **Strikes:** the Sheet lists each equipped weapon's attack bonus, damage and traits; tapping one shows the attack math. With the Turn tab hidden, this is where attacks show.
 - **No starting conditions:** characters used to open with a sample Frightened 1. With the Turn tab hidden there was no way to clear it, so they now start with none.
 - **Tabs:** Sheet, Spell Book, Inventory and Lore, at `/play/:id/sheet|spells|inventory|lore`. The shared link has the same four at `/sheets/:shareId/...`, read-only.
 - **Spell Book:** every spell the character knows (`character.spellcasting` cantrips and rank 1), grouped by rank, with spell attack, DC, slots and how the class casts. Opening a spell shows its traits, range, area, targets, defense, duration and full rules text, looked up in the rules data by id. Non-casters get a short note.
 - **Inventory:** items and coins (pp, gp, sp, cp) in `characters.inventory`, via `PUT /api/characters/:id/inventory` and checked by `inventoryProblems` (`packages/rules/src/inventory.js`). Until first edited (NULL) it shows `startingInventory`: the builder's gear and what's left of the 15 gp. Search the rules' gear to **Add** it, or **Buy** it, which pays from the coins and makes change (`payCoins`); custom items take a name, quantity and Bulk. Rows open for quantity, a note, Remove, and the item's rules text. Bulk totals the Pathfinder way (10 L = 1) against the encumbered (5 + Str) and maximum (10 + Str) limits. The campaign's books limit what can be added; custom items are always allowed. **Equipping:** weapons, armor and shields have Equip/Unequip (Wear/Take off for armor), with any number of weapons and one armor and one shield at a time (`toggleEquipped`). The sheet everyone reads is `equipCharacter(built sheet, inventory, gear data)`: Strikes from the equipped weapons (a fist if none), AC from the worn armor and shield. `TableContext` exposes it as `character`, and keeps the built sheet as `baseCharacter` for rules updates and the builder. The server uses it for the hub card's AC (`equippedSheet` in `routes/characters.js`). The builder's gear starts equipped, and so does gear from an inventory saved before equipping existed (no `equipped` flags). The client spells out every flag when it saves. Armor or weapons the character isn't trained with get an **Untrained** tag and a warning, since wearing untrained armor can lower AC.
 - **Lore:** the player's backstory (`characters.backstory`, up to 20,000 characters, `PUT /api/characters/:id/backstory`), which saves a second after you stop typing. Below it are the character's origins and their background's rules text, attribute boosts (and the ones chosen), trained skills and skill feat.
-- **Saving:** HP, inventory and backstory all go through `useDelayedSave` (`client/src/state/useDelayedSave.js`): a moment after the last change, and again when leaving or closing the tab. Builder edits don't touch them. Demo characters keep them in the tab (`demoExtras.js`).
+- **Saving:** HP, inventory and backstory all go through `useDelayedSave` (`client/src/state/useDelayedSave.js`): a moment after the last change, and again when leaving or closing the tab. Builder edits don't touch them.
 - **Encounter screens (hidden for now):** Turn, Roll and GM below only show while the character is in an active encounter. `ENCOUNTER_ACTIVE` in `TableContext.jsx` is `false` until the campaign manager gets its encounter tracker. Then it should be true when the character's campaign has an encounter with an active status that includes them. While it's false, the tab bar and round counter are hidden and `/play/:id/turn|roll|gm` go back to the sheet (`EncounterOnly` in `App.jsx`).
 - **Turn:** the 3-action economy, the multiple attack penalty, and conditions.
 - **Roll:** degrees of success, with the correct Strength damage for melee, thrown, propulsive and ranged weapons.
@@ -167,11 +175,10 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - unique in the database, accepted in any case with or without the dash,
   - **permanent:** once generated a code never changes (the replace route and button are gone),
   - only the GM sees it: the campaign page, list and invite preview leave it out for everyone else.
-- **Joining:** a player previews the campaign from its code, then picks which character joins. A character is in one campaign at a time.
+- **Joining:** a player previews the campaign from its code, then picks a character and **asks to join**. The GM accepts or rejects it (section 15). The GM's own characters join their campaign directly. A character is in one campaign at a time.
 - **Campaign page:** cover, backstory, the party (portraits and player avatars), and the invite code (GM only).
 - **Party sheets:** each party card's portrait and name open that character's sheet. Your own opens your playable sheet (`/play/:id`). Anyone else's opens read-only at `/campaigns/:id/characters/:characterId`, with all four tabs. The server (`GET /api/campaigns/:id/characters/:characterId`) only returns it to the campaign's GM and players with a character in it, which includes the character's own player. The public share link (`/sheets/:shareId`) is separate: it's for owners sharing outside the campaign.
 - **GM controls:** **Remove** on other players' characters, with a confirm (`POST /api/campaigns/:id/remove`). The character stays with its player, in no campaign, and its player can rejoin with the code. **Delete campaign** is at the bottom of the Edit page, with a confirm (`DELETE /api/campaigns/:id`). Its characters stay with their players, in no campaign; the cover image is deleted and the hub says so. Players can still Leave with their own characters.
-- **Demo mode:** it all works within the tab.
 
 ### 7. Image uploads and S3
 - **Three kinds:** campaign covers (`covers/`, 5 MB), profile pictures (`avatars/`, 2 MB), and character portraits (`portraits/`, 5 MB).
@@ -247,7 +254,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - Editing a campaign without sending `books` keeps the current list.
 - **Building for a campaign:**
   - Open `/create?invite=CODE`, using the "Build a new character for…" link in the join panel or the GM's "Build a character for this campaign" button, or enter a code in the builder's campaign bar.
-  - The builder then offers only that campaign's books, clears choices from other books with a note saying which, and saving also joins the campaign.
+  - The builder then offers only that campaign's books, clears choices from other books with a note saying which, and saving also asks to join the campaign (or joins it, for the GM's own characters; see section 15).
   - The draft remembers the campaign across reloads.
 - **Joining** is refused if a character picked anything from a book the campaign doesn't allow. The error names each choice, for example "Gunslinger (Guns & Gears)". The server checks this for accounts, and the demo store does the same check.
 - **When the GM narrows the books later:** the roster flags characters who no longer fit, and the owner gets an **Edit** link. Editing a character in a campaign offers only its books and lists the choices to re-pick, each with the reason.
@@ -304,6 +311,21 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ---
 
+### 15. Inbox and join requests
+- **Inbox:** a button next to your avatar in every top bar (`components/Inbox.jsx`, placed by `AccountLink`), with an unread badge. It loads on page load, every minute, when the tab comes back into view, and when something changes (`state/inbox.js` sends a window event). Opening it marks what's there as read. The panel drops down on desktop and spans the screen on phones; Escape or a click outside closes it.
+- **Messages** (`messages` table): `user_id` NULL is for everyone (`announcement`, `patch-notes`); otherwise it's one user's (`join-request`, `join-accepted`, `join-rejected`). `message_reads` records who read what. Messages for everyone from before you signed up count as read, so new accounts don't open to a backlog. The newest 100 show. `GET /api/inbox`, `POST /api/inbox/read { ids }`.
+- **Posting announcements and patch notes:** `npm run inbox:post` (see Running it). There's no admin screen yet.
+- **Join requests** (`join_requests` table, `server/src/joinRequests.js`):
+  - Entering an invite code no longer joins. `POST /api/campaigns/join` checks the books and answers `202 { status: 'pending' }`, and the GM gets a message naming the character, their ancestry, class and level, and the player.
+  - **Accept** (in the inbox, or under **Waiting to join** on the campaign page) adds the character to the party. **Reject** doesn't. Either way the player gets a message back. `POST /api/join-requests/:id/accept|reject`, GM only.
+  - Accepting re-checks the campaign's books. If they changed since the request, it explains why and the request stays pending, so the GM can reject it.
+  - A character has one pending request at a time: asking another campaign withdraws the first (a unique index enforces it), and asking the same one again changes nothing.
+  - The GM's own characters join their own campaign straight away (`200 { status: 'joined' }`); the invite preview's `isGm` tells the client which button to show.
+  - The hub's character card says "Asked to join …" while waiting (`joinRequest` on the character).
+  - Deleting a campaign or character deletes its requests and their messages.
+- **Demo mode:** the demo comes with a real request from Sam to answer, and Sam answers the visitor's requests (section 1).
+- **Why:** a leaked invite code can no longer get a stranger into a party, since the GM decides who joins.
+
 ## Key decisions and why
 
 | Decision | Why |
@@ -313,7 +335,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 | Foundry IDs for saved choices | Names change and collide across books; IDs don't. |
 | Shared rules package | The client and server compute the same numbers. |
 | Presigned direct uploads | Files never pass through the API; the same flow for local and S3. |
-| Demo mode in the browser tab | No account needed, nothing to clean up on the server. |
+| Demo mode as a temporary server account | The demo runs the real code, with no copy to keep in sync, and can show features that need a second person (join requests). The cost: it needs the API, and the server cleans demos up. |
 | Server stores only key, never URL | Switching storage (local, S3, CloudFront) changes no data. |
 | PDF built in the browser | Works in demo mode, no server load, the template stays local. |
 | Art found by file name | Adding art needs no code changes. |

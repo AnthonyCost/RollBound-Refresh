@@ -8,7 +8,7 @@ import Avatar from '../components/Avatar.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 
 export default function AccountPage() {
-  const { user, isDemo, updateProfile } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [displayName, setDisplayName] = useState(user?.displayName ?? '');
   const [avatar, setAvatar] = useState({});
   const [errors, setErrors] = useState([]);
@@ -17,13 +17,6 @@ export default function AccountPage() {
   const { state } = useLocation();
 
   const back = <Link to="/home" className="topbar__signout">Hub</Link>;
-  if (isDemo) {
-    return (
-      <PageShell actions={back}>
-        <p className="panel panel--dashed rule-note center">Demo mode has no account. Create one to set a profile image and display name.</p>
-      </PageShell>
-    );
-  }
 
   const submit = async (e) => {
     e.preventDefault();
@@ -49,7 +42,7 @@ export default function AccountPage() {
       <header className="builder__header">
         <Avatar url={user.avatarUrl} name={user.displayName} size={88} className="avatar--hero" />
         <h1 className="title">{user.displayName}</h1>
-        <span className="rule-note">{user.email}</span>
+        <span className="rule-note">{user.isDemo ? 'Temporary demo account' : user.email}</span>
       </header>
 
       {state?.avatarFailed && !saved && (

@@ -536,6 +536,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   color: var(--text-muted);
 }
 
+.demo-banner--ending { border: 1px solid var(--blood); background: var(--panel-hot); color: var(--blood-text); }
+.demo-banner__link { padding: 0; font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--gold); }
+.auth__ended { margin: 0; font-size: 14px; }
+
 .auth {
   flex: 1;
   display: flex;
@@ -1314,6 +1318,63 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   color: var(--bronze);
 }
 .avatar--hero { border-color: var(--bronze); box-shadow: 0 0 20px var(--glow); }
+
+/* ---------- Inbox ---------- */
+.inbox { position: relative; display: flex; }
+.inbox__button { position: relative; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid transparent; background: none; color: var(--text-soft); cursor: pointer; }
+.inbox__button[aria-expanded='true'] { border-color: var(--line); background: var(--panel); color: var(--text); }
+@media (hover: hover) { .inbox__button:hover { color: var(--bronze); } }
+.inbox__badge {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--blood);
+  box-shadow: 0 0 0 2px var(--bg-deep);
+  color: #f7edda;
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+.inbox__panel {
+  position: fixed;
+  top: 64px;
+  left: 16px;
+  right: 16px;
+  z-index: 50;
+  max-height: min(70vh, 640px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: var(--bg-deep);
+  box-shadow: 0 18px 40px #000c, 0 0 0 1px #000;
+}
+@media (min-width: 560px) { .inbox__panel { position: absolute; top: calc(100% + 8px); left: auto; right: 0; width: 380px; } }
+.inbox__panel .panel__title { margin: 0; }
+.inbox__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.inbox__item { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1px solid var(--line-soft); background: var(--panel); }
+.inbox__item--unread { border-left: 3px solid var(--bronze); }
+.inbox__item--action { border-color: var(--blood); box-shadow: inset 0 0 14px #4a120c; }
+.inbox__meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; }
+.tag.inbox__kind--join-request { border-color: var(--blood); color: var(--blood-text); }
+.tag.inbox__kind--join-accepted { border-color: var(--gold); color: var(--gold); }
+.tag.inbox__kind--patch-notes, .tag.inbox__kind--announcement { border-color: var(--bronze); color: var(--bronze); }
+.inbox__title { margin: 0; font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text); overflow-wrap: anywhere; }
+.inbox__body { margin: 0; font-size: 14px; line-height: 1.5; white-space: pre-wrap; color: var(--text-soft); overflow-wrap: anywhere; }
+.inbox__who { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.inbox__status { margin: 0; font-size: 13px; font-style: italic; color: var(--text-muted); }
+.inbox__link { align-self: flex-start; font-size: 14px; color: var(--bronze); }
+.inbox__item .btn { min-height: 40px; }
+.chip--accept { border-color: var(--blood); color: var(--blood-text); }
+.join__sent { margin: 0; font-size: 14px; }
 
 .topbar__account { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-soft); min-height: 44px; }
 .topbar__account-name { font-family: var(--display); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; }

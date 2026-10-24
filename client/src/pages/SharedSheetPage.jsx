@@ -7,7 +7,7 @@ import NavBar from '../components/NavBar.jsx';
 export default function SharedSheetPage() {
   const { shareId } = useParams();
   const { status } = useAuth();
-  const signedIn = status === 'user' || status === 'demo';
+  const signedIn = status === 'user';
   return (
     <TableProvider key={shareId} shareId={shareId}>
       <ViewOnlyShell

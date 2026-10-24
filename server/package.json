@@ -7,7 +7,8 @@
     "dev": "node --watch --env-file-if-exists=.env src/index.js",
     "start": "node --env-file-if-exists=.env src/index.js",
     "db:setup": "node --env-file-if-exists=.env db/setup.js",
-    "db:migrate-builds": "node --env-file-if-exists=.env db/migrate-builds.js"
+    "db:migrate-builds": "node --env-file-if-exists=.env db/migrate-builds.js",
+    "inbox:post": "node --env-file-if-exists=.env db/post-message.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1156.0",

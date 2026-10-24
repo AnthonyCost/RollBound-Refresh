@@ -10,7 +10,8 @@ Built with the PERN stack: **Postgres, Express, React, Node**.
 | --- | --- |
 | **Hub** | Home after sign-in, with a Player Mode / Game Master Mode switch. Player Mode shows your characters (with HP and AC at a glance) and the campaigns they're in; Game Master Mode shows the campaigns you run. |
 | **Builder** | Step-by-step level 1 character creation from Player Core and Player Core 2: ancestry, heritage, background, class and subclass, deity, attribute boosts, skills, languages, feats (with prerequisite checks and bonus feats), spells, and 15 gp of gear. Each step explains the rule it applies. Demo users can build and play a character for the rest of their session. |
-| **Campaigns** | GMs create and edit a campaign's title, party level, backstory, and cover image, and get a permanent invite code only they can see. They can remove characters from the party or delete the campaign. Party members and the GM can open each other's sheets, read-only. Players enter the code on their hub to bring a character in. Demo users can try the whole flow; their campaigns last until the tab closes. |
+| **Campaigns** | GMs create and edit a campaign's title, party level, backstory, and cover image, and get a permanent invite code only they can see. They can remove characters from the party or delete the campaign. Party members and the GM can open each other's sheets, read-only. Players enter the code on their hub to ask to bring a character in, and the GM accepts or rejects the request from their inbox. Demo users can try the whole flow; their campaigns last until the tab closes. |
+| **Inbox** | Next to your profile picture: announcements, patch notes, join requests for your campaigns (accept or reject), and the answers to yours. |
 | **Sheet** | Tap AC, a save, or Perception to see the breakdown: ability, proficiency rank + level, item bonus, armor's Dex cap, and condition penalties. The health globe fills to current HP; take damage or heal from the sheet. Shows the character's campaign, has a share link anyone can open read-only, and lets the owner reopen the character in the builder to edit it. Lists Strikes for the equipped weapons. |
 | **Spell Book** | Every spell the character knows, by rank, with spell attack and DC and each spell's full rules text. |
 | **Inventory** | Items and coins. Equip weapons and wear armor or a shield, and the sheet's Strikes and AC follow. Search the rules' gear to add or buy (paying from the coins), add custom items, and track quantity, notes and Bulk against your limits. |
@@ -47,7 +48,7 @@ npm run dev:server
 npm run dev:client                    # in a second terminal
 ```
 
-Open http://localhost:5173 to reach the sign-in page. Create an account, or choose **Try the demo** to skip sign-in and play as the bundled sample character. Demo mode works even when the API isn't running.
+Open http://localhost:5173 to reach the sign-in page. Create an account, or choose **Try the demo** for a temporary account with sample characters and campaigns, deleted when you exit or after 24 hours. Both need the API running.
 
 `createdb` is a Postgres command-line tool, so run it in your terminal. If your OS user has no Postgres role, run `sudo -u postgres createdb rollbound` instead.
 

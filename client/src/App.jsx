@@ -19,6 +19,7 @@ import LorePage from './pages/LorePage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
 import AccountLink from './components/AccountLink.jsx';
+import DemoBanner from './components/DemoBanner.jsx';
 
 function Loading() {
   return (
@@ -59,7 +60,6 @@ function EncounterOnly({ children }) {
 
 function PlayShell() {
   const { round, loading, notFound, encounterActive } = useTable();
-  const { isDemo } = useAuth();
 
   return (
     <div className="app app--play">
@@ -72,7 +72,7 @@ function PlayShell() {
         </div>
       </header>
 
-      {isDemo && <p className="demo-banner">Demo mode · nothing you do here is saved</p>}
+      <DemoBanner />
 
       <main className="app__main">
         {loading && <p className="muted italic center">Summoning your character…</p>}

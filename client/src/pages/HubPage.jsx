@@ -1,41 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { armorClass, equipCharacter, maxHp, mira } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
-import { DEMO_CHARACTER_ID } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
-import { listDemoCharacters } from '../state/demoCharacters.js';
-import { demoMemberships } from '../state/demoCampaigns.js';
 import { useCampaignService } from '../state/campaignService.js';
 import JoinCampaign from '../components/JoinCampaign.jsx';
 import Avatar from '../components/Avatar.jsx';
 import AccountLink from '../components/AccountLink.jsx';
 import Portrait from '../components/Portrait.jsx';
-import { demoPortraitUrl } from '../state/portraits.js';
-import { isOutdated, loadRules } from '../state/rulesData.js';
-import { demoExtras } from '../state/demoExtras.js';
-
-const summary = (data) => ({ maxHp: maxHp(data), ac: armorClass(data).total });
-
-/**
- * Demo characters (Mira plus any built this session) shaped like the API's
- * character list, with AC from their equipped gear like the server's.
- */
-async function demoCharacterCards() {
-  const memberships = demoMemberships();
-  const gear = await loadRules({ types: ['weapons', 'armor', 'shields'] }).catch(() => null);
-  return [{ id: DEMO_CHARACTER_ID, data: mira }, ...listDemoCharacters()].map(({ id, data }) => ({
-    id,
-    name: data.name,
-    level: data.level,
-    campaignId: memberships[id]?.id ?? null,
-    campaignName: memberships[id]?.name ?? null,
-    portraitUrl: demoPortraitUrl(id),
-    data,
-    summary: summary(equipCharacter(data, demoExtras(id).inventory ?? null, gear)),
-  }));
-}
+import { isOutdated } from '../state/rulesData.js';
+import DemoBanner from '../components/DemoBanner.jsx';
 
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
@@ -134,13 +108,13 @@ export default function HubPage() {
 
   const load = useCallback(() => {
     let cancelled = false;
-    Promise.all([isDemo ? demoCharacterCards() : api.listCharacters(), service.list()])
+    Promise.all([api.listCharacters(), service.list()])
       .then(([characters, campaigns]) => !cancelled && setHub({ characters, campaigns }))
       .catch(() => !cancelled && setFailed(true));
     return () => {
       cancelled = true;
     };
-  }, [isDemo, service]);
+  }, [service]);
 
   useEffect(load, [load]);
 
@@ -172,12 +146,12 @@ export default function HubPage() {
         </div>
       </header>
 
-      {isDemo && <p className="demo-banner">Demo mode · nothing you do here is saved</p>}
+      <DemoBanner />
 
       <main className="app__main">
         <section className="hub__greeting">
           <span className="eyebrow">Welcome back</span>
-          <h1 className="title">{isDemo ? 'Adventurer' : user.displayName}</h1>
+          <h1 className="title">{user.displayName}</h1>
         </section>
 
         {state?.deleted && <p className="panel panel--hot center" role="status">Deleted {state.deleted}. Its characters are still with their players.</p>}
@@ -204,6 +178,7 @@ export default function HubPage() {
                             </span>
                             <span className="hub-card__tag">
                               {c.campaignName ?? 'No campaign'}
+                              {c.joinRequest && <span className="hub-card__alert"> · Asked to join {c.joinRequest.campaignName}</span>}
                               {isOutdated(c.data) && <span className="hub-card__alert"> · Rules updated</span>}
                             </span>
                           </div>
@@ -245,7 +220,7 @@ export default function HubPage() {
               )}
               <Link to="/campaigns/new" className="btn btn--blood hub__action">New campaign</Link>
               {isDemo && (
-                <p className="rule-note center">Demo campaigns and codes only exist in this tab. Create an account to invite real players.</p>
+                <p className="rule-note center">Demo campaigns are only for this demo. Create an account to invite real players.</p>
               )}
             </section>
           </>

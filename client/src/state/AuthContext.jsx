@@ -1,34 +1,49 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { api } from '../api.js';
-import { clearDemoCharacters } from './demoCharacters.js';
-import { clearDemoCampaigns } from './demoCampaigns.js';
-import { clearDemoPortraits } from './portraits.js';
+import { SIGNED_OUT_EVENT, api } from '../api.js';
 
 const AuthContext = createContext(null);
 
-const DEMO_KEY = 'rollbound:demo';
-
-function readDemoFlag() {
+// Remembers whether this browser was last signed in to a demo or an account, so a
+// visit after it ended can say why you're signed out. Cleared on signing out.
+const LAST_SESSION_KEY = 'rollbound.lastSession';
+const remember = (kind) => {
   try {
-    return sessionStorage.getItem(DEMO_KEY) === '1';
+    if (kind) localStorage.setItem(LAST_SESSION_KEY, kind);
+    else localStorage.removeItem(LAST_SESSION_KEY);
   } catch {
-    return false;
+    // Storage blocked: the note just won't show.
   }
-}
-
-function writeDemoFlag(on) {
+};
+const lastSession = () => {
   try {
-    if (on) sessionStorage.setItem(DEMO_KEY, '1');
-    else sessionStorage.removeItem(DEMO_KEY);
+    return localStorage.getItem(LAST_SESSION_KEY);
   } catch {
-    // Storage blocked: demo still works, it just won't survive a refresh.
+    return null;
   }
-}
+};
 
-/** status is 'loading' | 'signedOut' | 'user' | 'demo'. */
+/**
+ * status is 'loading' | 'signedOut' | 'user'. A demo is a real, temporary account
+ * on the server (user.isDemo), so it signs in like any other. endedReason says why
+ * a session ended without signing out: 'demo' or 'expired' (shown on sign-in).
+ */
 export function AuthProvider({ children }) {
-  const [status, setStatus] = useState(() => (readDemoFlag() ? 'demo' : 'loading'));
+  const [status, setStatus] = useState('loading');
   const [user, setUser] = useState(null);
+  const [endedReason, setEndedReason] = useState(null);
+
+  // The server stopped recognizing us mid-session: back to sign-in, saying why.
+  useEffect(() => {
+    if (status !== 'user') return undefined;
+    const ended = () => {
+      setEndedReason(user?.isDemo ? 'demo' : 'expired');
+      remember(null);
+      setUser(null);
+      setStatus('signedOut');
+    };
+    window.addEventListener(SIGNED_OUT_EVENT, ended);
+    return () => window.removeEventListener(SIGNED_OUT_EVENT, ended);
+  }, [status, user]);
 
   useEffect(() => {
     if (status !== 'loading') return;
@@ -37,17 +52,26 @@ export function AuthProvider({ children }) {
       .me()
       .then((u) => {
         if (cancelled) return;
+        remember(u.isDemo ? 'demo' : 'user');
         setUser(u);
         setStatus('user');
       })
-      .catch(() => !cancelled && setStatus('signedOut'));
+      .catch(() => {
+        if (cancelled) return;
+        // Signed out without signing out: the demo ended or the sign-in expired while away.
+        const last = lastSession();
+        if (last) setEndedReason(last === 'demo' ? 'demo' : 'expired');
+        remember(null);
+        setStatus('signedOut');
+      });
     return () => {
       cancelled = true;
     };
   }, [status]);
 
   const signIn = useCallback((u) => {
-    writeDemoFlag(false);
+    remember(u.isDemo ? 'demo' : 'user');
+    setEndedReason(null);
     setUser(u);
     setStatus('user');
   }, []);
@@ -59,30 +83,22 @@ export function AuthProvider({ children }) {
     [signIn],
   );
 
-  const enterDemo = useCallback(() => {
-    clearDemoCharacters();
-    clearDemoCampaigns();
-    clearDemoPortraits();
-    writeDemoFlag(true);
-    setUser(null);
-    setStatus('demo');
-  }, []);
+  const enterDemo = useCallback(async () => signIn(await api.startDemo()), [signIn]);
 
+  // Signing out of a demo deletes it on the server.
   const logout = useCallback(async () => {
-    if (status === 'user') await api.logout().catch(() => {});
-    clearDemoCharacters();
-    clearDemoCampaigns();
-    clearDemoPortraits();
-    writeDemoFlag(false);
+    await api.logout().catch(() => {});
+    remember(null);
+    setEndedReason(null);
     setUser(null);
     setStatus('signedOut');
-  }, [status]);
+  }, []);
 
   const updateProfile = useCallback(async (changes) => setUser(await api.updateProfile(changes)), []);
 
   const value = useMemo(
-    () => ({ status, user, isDemo: status === 'demo', login, register, enterDemo, logout, updateProfile }),
-    [status, user, login, register, enterDemo, logout, updateProfile],
+    () => ({ status, user, isDemo: Boolean(user?.isDemo), endedReason, login, register, enterDemo, logout, updateProfile }),
+    [status, user, endedReason, login, register, enterDemo, logout, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

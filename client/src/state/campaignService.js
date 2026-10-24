@@ -1,6 +1,4 @@
 import { api } from '../api.js';
-import { useAuth } from './AuthContext.jsx';
-import { demoCampaignService } from './demoCampaigns.js';
 
 /**
  * Campaign operations against the API. `cover` is { file } for a new image,
@@ -31,8 +29,7 @@ const serverCampaignService = {
   leave: (campaignId, characterId) => api.leaveCampaign(campaignId, characterId),
 };
 
-/** The right campaign backend for this session: the API, or the demo's in-tab store. */
+/** Campaign operations. (A hook so callers don't change if this ever needs session state.) */
 export function useCampaignService() {
-  const { isDemo } = useAuth();
-  return isDemo ? demoCampaignService : serverCampaignService;
+  return serverCampaignService;
 }

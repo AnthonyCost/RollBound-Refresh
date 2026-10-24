@@ -537,3 +537,13 @@ describe('Guns & Gears and Dark Archive', () => {
     assert.ok(feats.some((s) => data.feats.find((f) => f.slug === s).traits.includes('elf')));
   });
 });
+
+describe('demo sample builds', () => {
+  for (const [key, build] of Object.entries(R.SAMPLE_BUILDS)) {
+    it(`${build.name} (${key}) is a complete, valid character with the current rules data`, () => {
+      const current = R.migrateBuild(build, data);
+      assert.deepEqual(R.buildProblems(current, data).map((p) => p.message), []);
+      assert.equal(R.buildCharacter(current, data).name, build.name);
+    });
+  }
+});

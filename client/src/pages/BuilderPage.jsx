@@ -20,10 +20,8 @@ import { useAuth } from '../state/AuthContext.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { AncestryStep, BackgroundStep, ClassStep } from '../builder/IdentitySteps.jsx';
 import { AttributesStep, SkillsStep, FeatsStep, SpellsStep, GearStep, ReviewStep } from '../builder/DetailSteps.jsx';
-import { DEMO_ID_PREFIX, getDemoCharacter, saveDemoCharacter } from '../state/demoCharacters.js';
 import { booksLabel, isOutdated, loadRules, replaceCharacter } from '../state/rulesData.js';
 import { useCampaignService } from '../state/campaignService.js';
-import { demoMemberships } from '../state/demoCampaigns.js';
 import { savePortrait } from '../state/portraits.js';
 import ImagePicker from '../components/ImagePicker.jsx';
 
@@ -130,14 +128,10 @@ function saveDraft(key, draft) {
 }
 
 /**
- * Loads a saved character for editing, from demo storage or the server, with its
+ * Loads a saved character for editing, with its
  * campaign's name and books (null: every book).
  */
 async function fetchCharacter(id) {
-  if (id.startsWith(DEMO_ID_PREFIX)) {
-    const campaign = demoMemberships()[id];
-    return { data: getDemoCharacter(id)?.data ?? null, campaignName: campaign?.name ?? null, books: campaign?.books ?? null };
-  }
   const row = await api.getCharacter(id);
   return { data: row.data, campaignName: row.campaignName, books: row.campaignBooks ?? null };
 }
@@ -172,6 +166,9 @@ function CampaignBar({ campaign, removed, onChoose, onClear }) {
       <section className="notice notice--quiet" aria-label="Campaign">
         <p>
           Building for <strong>{campaign.name}</strong> · Books: {booksLabel(campaign.books)}
+        </p>
+        <p className="muted">
+          {campaign.isGm ? 'Saving adds this character to your party.' : "Saving asks its GM to let this character in; you'll hear back in your inbox."}
         </p>
         {removed.length > 0 && (
           <p className="muted">
@@ -286,7 +283,7 @@ export default function BuilderPage() {
 
   /** Builds this new character for a campaign, clearing choices from books it doesn't use. */
   const chooseCampaign = (code, c) => {
-    const chosen = { code, name: c.name, books: c.books ?? null };
+    const chosen = { code, name: c.name, books: c.books ?? null, isGm: Boolean(c.isGm) };
     setDraft((d) => {
       const gone = data ? bookIssues(d.build, data, chosen.books) : [];
       setRemoved(gone);
@@ -338,12 +335,12 @@ export default function BuilderPage() {
         navigate(`/play/${editId}/sheet`, { replace: true });
         return;
       }
-      const id = isDemo ? saveDemoCharacter(character) : (await api.createCharacter(character)).id;
-      if (!id) throw new Error('Your browser is blocking storage, so the demo can’t keep this character.');
+      const { id } = await api.createCharacter(character);
       saveDraft(draftKey, null);
       // The character is saved either way; a portrait that fails can be added from the sheet,
-      // and a campaign it couldn't join (say, the code changed) can be joined from the hub.
-      if (portrait.file) await savePortrait(id, portrait.file, { isDemo }).catch(() => {});
+      // and a campaign it couldn't ask to join can be asked again from the hub. For
+      // someone else's campaign this sends a join request; the GM's own joins directly.
+      if (portrait.file) await savePortrait(id, portrait.file).catch(() => {});
       if (campaign) await service.join(campaign.code, id).catch(() => {});
       navigate(`/play/${id}/sheet`, { replace: true });
     } catch (err) {
@@ -447,9 +444,9 @@ export default function BuilderPage() {
           <>
             {!editId && <ImagePicker label="Portrait (optional)" shape="square" hint="you can add or change it later from the sheet" value={portrait} onChange={setPortrait} />}
             <FormErrors errors={errors} />
-            {isDemo && !editId && <p className="rule-note center">In demo mode this character lasts until you close the tab. Create an account to keep it.</p>}
+            {isDemo && !editId && <p className="rule-note center">Demo characters are deleted with the demo. Create an account to keep yours.</p>}
             <button type="button" className="btn btn--blood" disabled={!ready || problems.length > 0 || saving} onClick={save}>
-              {saving ? 'Saving…' : editId ? 'Save changes' : isDemo ? 'Play this character' : 'Save character'}
+              {saving ? 'Saving…' : editId ? 'Save changes' : 'Save character'}
             </button>
           </>
         )}

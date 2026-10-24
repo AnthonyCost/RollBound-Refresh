@@ -7,10 +7,10 @@ import InviteCode from '../components/InviteCode.jsx';
 import Ornament from '../components/Ornament.jsx';
 import Portrait from '../components/Portrait.jsx';
 import Avatar from '../components/Avatar.jsx';
-import { useAuth } from '../state/AuthContext.jsx';
-import { demoPortraitUrl } from '../state/portraits.js';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { booksLabel } from '../state/rulesData.js';
+import { api } from '../api.js';
+import { inboxChanged, onInboxChanged } from '../state/inbox.js';
 
 export default function CampaignPage() {
   const { id } = useParams();
@@ -19,7 +19,6 @@ export default function CampaignPage() {
   const [errors, setErrors] = useState([]);
   const [missing, setMissing] = useState(false);
   const service = useCampaignService();
-  const { isDemo } = useAuth();
 
   const load = useCallback(() => {
     service
@@ -29,6 +28,19 @@ export default function CampaignPage() {
   }, [service, id]);
 
   useEffect(load, [load]);
+  // Answering a request from the inbox updates the party here too.
+  useEffect(() => onInboxChanged(load), [load]);
+
+  const answer = async (requestId, accept) => {
+    setErrors([]);
+    try {
+      await api.answerJoinRequest(requestId, accept);
+      inboxChanged();
+    } catch (err) {
+      setErrors(errorsFrom(err));
+      load();
+    }
+  };
 
   // The GM removing someone's character asks first; this is the one being asked about.
   const [removing, setRemoving] = useState(null);
@@ -117,6 +129,32 @@ export default function CampaignPage() {
             </Link>
           )}
 
+          {campaign.requests?.length > 0 && (
+            <>
+              <Ornament label="WAITING TO JOIN" />
+              <ul className="hub__list">
+                {campaign.requests.map((r) => (
+                  <li key={r.id} className="hub-card party-card request-card">
+                    <Portrait url={r.character.portraitUrl} name={r.character.name} size="sm" />
+                    <div className="hub-card__body">
+                      <span className="hub-card__name">{r.character.name}</span>
+                      <span className="hub-card__sub">
+                        {[r.character.ancestry, r.character.className].filter(Boolean).join(' ')} · Level {r.character.level}
+                      </span>
+                      <span className="hub-card__tag hub-card__player">
+                        <Avatar url={r.playerAvatarUrl} name={r.player} size={18} /> Played by {r.player}
+                      </span>
+                    </div>
+                    <div className="hub-card__actions">
+                      <button type="button" className="chip" onClick={() => answer(r.id, false)}>Reject</button>
+                      <button type="button" className="chip chip--accept" onClick={() => answer(r.id, true)}>Accept</button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
           <Ornament label="THE PARTY" />
           {campaign.characters.length ? (
             <ul className="hub__list">
@@ -128,7 +166,7 @@ export default function CampaignPage() {
                     className="party-card__open"
                     aria-label={`${c.mine ? 'Play' : 'View'} ${c.name}'s sheet`}
                   >
-                    <Portrait url={isDemo ? demoPortraitUrl(c.id) : c.portraitUrl} name={c.name} size="sm" />
+                    <Portrait url={c.portraitUrl} name={c.name} size="sm" />
                     <div className="hub-card__body">
                       <span className="hub-card__name">{c.name}</span>
                       <span className="hub-card__sub">

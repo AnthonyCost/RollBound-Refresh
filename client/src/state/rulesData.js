@@ -5,7 +5,6 @@
 import index from '@rollbound/rules/data/index.json';
 import { assembleData, dataFiles } from '@rollbound/rules';
 import { api } from '../api.js';
-import { DEMO_ID_PREFIX, updateDemoCharacter } from './demoCharacters.js';
 
 export const RULES_VERSION = index.meta.version;
 /** Every book RollBound has, in order; campaigns choose from these. */
@@ -39,11 +38,7 @@ export async function loadRules(filter) {
 /** Whether a saved character was built from different rules data than the current one. */
 export const isOutdated = (character) => Boolean(character?.build) && character.dataVersion !== RULES_VERSION;
 
-/** Saves a new sheet over an existing character, in demo storage or on the server. */
+/** Saves a new sheet over an existing character. */
 export async function replaceCharacter(id, data) {
-  if (id.startsWith(DEMO_ID_PREFIX)) {
-    if (!updateDemoCharacter(id, data)) throw new Error('Your browser is blocking storage, so the demo can’t update this character.');
-    return;
-  }
   await api.saveCharacter(id, data);
 }

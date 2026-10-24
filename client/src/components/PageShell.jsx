@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../state/AuthContext.jsx';
 import AccountLink from './AccountLink.jsx';
+import DemoBanner from './DemoBanner.jsx';
 
 /** The standard page frame: wordmark, optional actions on the right, demo banner, content. */
 export default function PageShell({ actions, children }) {
-  const { isDemo } = useAuth();
   return (
     <div className="app">
       <header className="topbar">
@@ -14,7 +13,7 @@ export default function PageShell({ actions, children }) {
           {actions}
         </div>
       </header>
-      {isDemo && <p className="demo-banner">Demo mode · nothing you do here is saved</p>}
+      <DemoBanner />
       <main className="app__main">{children}</main>
     </div>
   );

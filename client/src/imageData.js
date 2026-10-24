@@ -40,14 +40,6 @@ function drawScaled(img, maxSize, background) {
   return canvas;
 }
 
-/**
- * Shrinks an image to a JPEG data URL. Demo mode stores images in the tab's
- * session storage (a few MB in total), so they need to be small.
- */
-export async function imageToDataUrl(file, maxSize = 1280) {
-  return drawScaled(await loadImage(file), maxSize, '#0b0908').toDataURL('image/jpeg', 0.8);
-}
-
 /** Fetches any image (including WebP or a data URL) and re-encodes it as JPEG bytes. */
 export async function imageToJpegBytes(url, maxSize = 900) {
   const canvas = drawScaled(await loadImage(url), maxSize, '#ffffff');

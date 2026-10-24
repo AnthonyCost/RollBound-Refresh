@@ -3,6 +3,11 @@
 Hello! I am writing this log to keep track of the bugs I have caught, my reasoning to fix them, and what next steps I took for the project to improve.
 
 
+## The Inbox
+
+Upon refining the campaign page, I came across a thought of the invite code leaking and how that would affect the experience. And so the inbox came to be! From here, hosts can share their invite code with players. Players then submit that code and a request appears in the host's inbox. From there, they can accept or reject the request so in the event someone who gets the invite code is someone that the host does not want in their campaign, they will not automatically join. This also prevents the edge case of a player having the ability to constantly rejoin and be removed from a campaign. A block feature may be implemented at a later date, but for now this is suffecient.
+
+
 ## Test Runs
 
 To the suggestion of Claude, we will have a Github action that will run before every push to the main branch that will generate roughly 42,000 test characters to make sure nothing is broken. For each of the 16 classes it builds about 4,400 characters, which takes about 3 seconds:
@@ -17,7 +22,16 @@ These tests did find a bug on the initial run, so already paying off!
 
 ## Demo Account
 
-L
+This was a previously browser only account that does not interact with the server at all. I want a demo user to be able to fully interact with all the features during a session. So now when a user clicks try demo, it creates a temporary account for them to explore RollBound. All creations persist for the entire session and when a user exits / logs out, their demo account and creations are deleted from the database.
+
+A couple of interesting circumstances arose, they are listed below with their solutions:
+
+- What if a demo user has their browser open for longer than anticipated and never exit? The solution to this was to add a 24 hour timer to all demo accounts, where upon reaching the timer, it will log them out and clean their creations from the database.
+
+- What if two users use the demo at the exact same time? Every time the demo button is clicked on, it will create a unique temporary account for that session. That way two demos will never overlap or affect the other.
+
+
+Another question comes to mind though: How do I manage the custom image uploads from demos for S3? Is there a way where I can send a request for associated image uploads from demos so that they never crowd the bucket?
 
 ## Character Builder
 
@@ -44,3 +58,5 @@ Additionally, there were several issues with padding and spacing, so I made some
 I had Claude evaluate some opportunity areas on where the project could improve.
 
 ## AWS S3 Buckets
+
+Another question comes to mind though: How do I manage the custom image uploads from demos for S3? Is there a way where I can send a request for associated image uploads from demos so that they never crowd the bucket?
