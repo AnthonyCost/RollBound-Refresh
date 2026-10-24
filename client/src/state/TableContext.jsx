@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   mira,
   maxHp,
@@ -20,50 +20,97 @@ export const DEMO_CHARACTER_ID = 'demo';
 
 const STARTING_CONDITIONS = [{ id: 'frightened', value: 1 }];
 
+/** How long to wait after the last hit point change before saving it. */
+const HP_SAVE_DELAY = 500;
+
 /**
- * Holds everything happening "at the table" for one character: conditions,
- * the actions spent this turn, the last roll, and the GM-entered target AC.
+ * Holds everything happening "at the table" for one character: hit points,
+ * conditions, the actions spent this turn, the last roll, and the GM-entered
+ * target AC. Given a shareId instead of a characterId, it loads someone's shared
+ * sheet read-only.
  */
-export function TableProvider({ characterId, children }) {
+export function TableProvider({ characterId, shareId: sharedId, children }) {
+  const readOnly = Boolean(sharedId);
   const [character, setCharacter] = useState(null);
   const [portraitUrl, setPortraitUrl] = useState(null);
-  const [campaignName, setCampaignName] = useState(null);
+  const [campaign, setCampaign] = useState(null);
+  const [shareId, setShareId] = useState(null);
+  const [storedHp, setStoredHp] = useState(null);
+  const [hpError, setHpError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
   const [round, setRound] = useState(1);
-  const [conditions, setConditions] = useState(STARTING_CONDITIONS);
+  const [conditions, setConditions] = useState(readOnly ? [] : STARTING_CONDITIONS);
   const [shieldRaised, setShieldRaised] = useState(false);
   const [used, setUsed] = useState([]);
   const [targetAC, setTargetAC] = useState(15);
   const [lastRoll, setLastRoll] = useState(null);
 
   useEffect(() => {
-    if (characterId === DEMO_CHARACTER_ID || characterId.startsWith(DEMO_ID_PREFIX)) {
+    if (!readOnly && (characterId === DEMO_CHARACTER_ID || characterId.startsWith(DEMO_ID_PREFIX))) {
       const local = characterId === DEMO_CHARACTER_ID ? mira : getDemoCharacter(characterId)?.data;
       if (local) {
+        const joined = demoMemberships()[characterId];
         setCharacter(local);
         setPortraitUrl(demoPortraitUrl(characterId));
-        setCampaignName(demoMemberships()[characterId]?.name ?? null);
+        setCampaign(joined ? { id: joined.id, name: joined.name } : null);
       } else setNotFound(true);
       setLoading(false);
       return;
     }
     let cancelled = false;
-    api
-      .getCharacter(characterId)
+    (readOnly ? api.getSharedSheet(sharedId) : api.getCharacter(characterId))
       .then((row) => {
         if (cancelled) return;
         setCharacter(row.data);
         setPortraitUrl(row.portraitUrl);
-        setCampaignName(row.campaignName);
+        setCampaign(row.campaignName ? { id: row.campaignId ?? null, name: row.campaignName } : null);
+        setShareId(row.shareId ?? null);
+        setStoredHp(row.currentHp);
       })
       .catch(() => !cancelled && setNotFound(true))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
     };
+  }, [characterId, sharedId, readOnly]);
+
+  // Hit points: null means full. Demo characters keep them for this visit only;
+  // saved characters save them shortly after the last change.
+  const max = character ? maxHp(character) : 0;
+  const currentHp = Math.min(storedHp ?? max, max);
+  const saveTimer = useRef(null);
+  const unsaved = useRef(null);
+  const saveHp = useCallback(() => {
+    clearTimeout(saveTimer.current);
+    if (unsaved.current === null) return;
+    const hp = unsaved.current;
+    unsaved.current = null;
+    api.setHp(characterId, hp).catch(() => setHpError("Couldn't save hit points. Check your connection and try again."));
   }, [characterId]);
+  const setHp = useCallback(
+    (value) => {
+      if (readOnly) return;
+      const hp = Math.max(0, Math.min(max, Math.round(value)));
+      setStoredHp(hp);
+      setHpError(null);
+      if (characterId === DEMO_CHARACTER_ID || characterId.startsWith(DEMO_ID_PREFIX)) return;
+      unsaved.current = hp;
+      clearTimeout(saveTimer.current);
+      saveTimer.current = setTimeout(saveHp, HP_SAVE_DELAY);
+    },
+    [readOnly, max, characterId, saveHp],
+  );
+  // Leaving the character, or closing or reloading the tab, saves a change still
+  // waiting on the timer.
+  useEffect(() => {
+    window.addEventListener('pagehide', saveHp);
+    return () => {
+      window.removeEventListener('pagehide', saveHp);
+      saveHp();
+    };
+  }, [saveHp]);
 
   const strikesSoFar = used.filter((a) => a.id === 'strike').length;
   const actionsLeft = 3 - used.length;
@@ -138,10 +185,17 @@ export function TableProvider({ characterId, children }) {
       character,
       characterId,
       setCharacter,
+      readOnly,
       portraitUrl,
       setPortraitUrl,
-      campaignName,
-      hp: character ? maxHp(character) : 0,
+      campaign,
+      campaignName: campaign?.name ?? null,
+      shareId,
+      setShareId,
+      maxHp: max,
+      currentHp,
+      setHp,
+      hpError,
       loading,
       notFound,
       round,
@@ -159,7 +213,7 @@ export function TableProvider({ characterId, children }) {
       cycleCondition,
       resetEncounter,
     }),
-    [character, characterId, portraitUrl, campaignName, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

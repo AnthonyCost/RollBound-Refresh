@@ -31,6 +31,10 @@ export const api = {
   listCharacters: () => request('/characters'),
   getCharacter: (id) => request(`/characters/${id}`),
   createCharacter: (data) => post('/characters', data),
+  // keepalive lets the save finish even if the tab is closing.
+  setHp: (id, currentHp) => request(`/characters/${id}/hp`, { method: 'PUT', body: JSON.stringify({ currentHp }), keepalive: true }),
+  resetShareLink: (id) => post(`/characters/${id}/share-link`, {}),
+  getSharedSheet: (shareId) => request(`/sheets/${encodeURIComponent(shareId)}`),
   setPortrait: (id, portraitKey) => request(`/characters/${id}/portrait`, { method: 'PUT', body: JSON.stringify({ portraitKey }) }),
   listCampaigns: () => request('/campaigns'),
   getCampaign: (id) => request(`/campaigns/${id}`),

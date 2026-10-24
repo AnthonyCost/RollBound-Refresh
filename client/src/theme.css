@@ -220,14 +220,21 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .hero__meta { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--text-muted); }
 .hero__meta strong { color: var(--text); }
 
+.hero__campaign { margin: 6px 0 0; font-size: 14px; overflow-wrap: anywhere; }
+.hero__campaign .eyebrow { margin-right: 4px; }
+.hero__campaign a { color: var(--bronze); }
+
+/* Hit points: a glass globe the blood fills to match current over max. */
+.vitals { flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.vitals__max { font-family: var(--display); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+.vitals__max strong { color: var(--text); font-size: 12px; }
 .orb {
-  flex: none;
   width: 86px;
   height: 86px;
   border-radius: 50%;
   position: relative;
   overflow: hidden;
-  background: radial-gradient(circle at 40% 30%, #3a1410, #140806);
+  background: radial-gradient(circle at 40% 30%, #2a0f0c, #0c0504);
   box-shadow: 0 0 24px #5a140c, inset 0 0 0 3px var(--line), inset 0 0 0 5px var(--bg);
   display: grid;
   place-items: center;
@@ -236,11 +243,34 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   position: absolute;
   inset: auto 0 0 0;
   background: radial-gradient(circle at 40% 0%, var(--blood-text) 0%, var(--blood) 40%, #3a0a06 100%);
-  transition: height 300ms ease;
+  transition: height 450ms cubic-bezier(0.3, 0.7, 0.4, 1);
 }
-.orb__label { position: relative; display: flex; flex-direction: column; align-items: center; font-family: var(--display); color: #f7edda; }
-.orb__hp { font-size: 22px; font-weight: 700; }
-.orb__max { font-size: 10px; letter-spacing: 2px; }
+/* The blood's surface, so a part-full globe reads as a level. */
+.orb__fill::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: #ff8a6e; opacity: 0.55; filter: blur(1px); }
+/* Glass highlight over everything. */
+.orb::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 32% 24%, rgb(255 255 255 / 0.22), transparent 38%); box-shadow: inset 0 0 0 3px var(--line), inset 0 0 0 5px var(--bg); pointer-events: none; }
+.orb__hp { position: relative; z-index: 1; font-family: var(--display); font-size: 24px; font-weight: 700; color: #f7edda; text-shadow: 0 1px 3px #000; }
+.orb--low { animation: orb-pulse 1.6s ease-in-out infinite; }
+.orb--down .orb__hp { color: var(--text-muted); }
+@keyframes orb-pulse { 50% { box-shadow: 0 0 34px #b3261a, inset 0 0 0 3px var(--line), inset 0 0 0 5px var(--bg); } }
+@media (prefers-reduced-motion: reduce) { .orb__fill { transition: none; } .orb--low { animation: none; } }
+
+.hp-tracker { display: flex; flex-direction: column; gap: 10px; }
+.hp-tracker__head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.hp-tracker__head .panel__title { margin: 0; }
+.hp-tracker__now { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1px; }
+.hp-tracker__row { display: flex; gap: 8px; }
+.hp-tracker__row .btn { min-height: 44px; }
+.hp-tracker__amount input, .share__url { min-height: 44px; border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+.hp-tracker__amount input { width: 72px; padding: 0 6px; font-family: var(--display); font-size: 18px; text-align: center; }
+.hp-tracker__full { align-self: center; }
+
+.share { display: flex; flex-direction: column; gap: 10px; }
+.share .panel__title, .share .rule-note { margin: 0; }
+.share__row { display: flex; gap: 8px; }
+.share__url { flex: 1; min-width: 0; padding: 0 10px; font-family: var(--body); font-size: 14px; }
+.share__row .btn { min-height: 44px; }
+.share__reset { align-self: center; font-size: 13px; }
 
 .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 
@@ -1226,7 +1256,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .hero { gap: 10px; }
   .hero .portrait--lg { width: 64px; height: 64px; }
   .hero .orb { width: 64px; height: 64px; }
-  .hero .orb__hp { font-size: 17px; }
+  .hero .orb__hp { font-size: 18px; }
   .hero__name { font-size: 18px; }
 }
 

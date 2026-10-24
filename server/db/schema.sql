@@ -54,6 +54,13 @@ CREATE TABLE IF NOT EXISTS characters (
 
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS portrait_key TEXT;
 
+-- The id in a character's share link (/sheets/:shareId); anyone with the link can
+-- view the sheet. Filled in for older characters by db:setup.
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS share_id TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS characters_share_idx ON characters (share_id);
+-- Hit points right now. NULL means full.
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS current_hp INTEGER CHECK (current_hp >= 0);
+
 CREATE INDEX IF NOT EXISTS characters_campaign_idx ON characters (campaign_id);
 CREATE INDEX IF NOT EXISTS characters_owner_idx ON characters (owner_id);
 

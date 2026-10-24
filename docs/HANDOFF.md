@@ -110,7 +110,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Player Mode:** your characters with portrait, HP and AC, plus **New character**; the campaigns your characters are in (including ones you also run), each naming your characters in it; and the join-a-campaign box.
 - **Game Master Mode:** the campaigns you run, plus **New campaign**.
 - Shows your avatar in the top bar.
-- Each character opens at `/play/:id/sheet|turn|roll|gm`.
+- Each character opens at `/play/:id/sheet|turn|roll|gm`. Anyone with a character's share link can view it at `/sheets/:shareId`.
 
 ### 3. Character builder (`/create`)
 - **Nine steps:** Ancestry, Background, Class, Attributes, Skills, Feats, Spells, Gear, Review.
@@ -142,6 +142,9 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ### 5. Playing a character
 - **Sheet:** defenses, saves, Perception, skills (including the armor check penalty), class DC, and spell attack and DC. Tapping a number shows its breakdown. It also has the portrait editor and the PDF export button.
+- **Hit points:** the globe fills to current over max HP (10 of 20 is half full), with max HP printed under it. It pulses at 25% or less. The Hit points panel takes damage, heals, or restores to full. Current HP is saved in `characters.current_hp` (NULL means full, so a higher max after a level-up stays full) via `PUT /api/characters/:id/hp`, half a second after the last change. A change still waiting is sent when you leave the character or close the tab (`keepalive`). Demo characters keep HP for the visit only.
+- **Campaign:** the sheet names the one campaign the character is in, linked to its page ("No campaign yet" otherwise).
+- **Share link:** every character has a random `share_id` (16 URL-safe characters, 96 bits, so links can't be guessed). `/sheets/:shareId` shows the sheet read-only to anyone, signed in or not, through the public `GET /api/sheets/:shareId`. That returns only what the sheet shows: no owner, user or campaign ids. The shared view has no HP controls, portrait editor, rules notice, share panel or play tabs, and starts with no conditions. The owner's sheet has a Share panel with Copy and **Make a new link**, which replaces the link (`POST /api/characters/:id/share-link`) so the old one stops working. `db:setup` gives older characters a link. Demo characters can't be shared.
 - **Turn:** the 3-action economy, the multiple attack penalty, and conditions.
 - **Roll:** degrees of success, with the correct Strength damage for melee, thrown, propulsive and ranged weapons.
 - **GM:** encounter budget and initiative. It still uses the character's level, not the campaign's party level.

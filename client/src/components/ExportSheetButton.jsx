@@ -9,7 +9,7 @@ import { buildCharacterSheet, downloadFile, openPendingTab, showInTab, warmUpCha
  */
 export default function ExportSheetButton() {
   const { user } = useAuth();
-  const { character, portraitUrl, campaignName } = useTable();
+  const { character, portraitUrl, campaignName, readOnly } = useTable();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [note, setNote] = useState(null);
@@ -32,7 +32,7 @@ export default function ExportSheetButton() {
     setError(null);
     setNote(null);
     try {
-      const file = await buildCharacterSheet(character, { portraitUrl, playerName: user?.displayName, campaignName });
+      const file = await buildCharacterSheet(character, { portraitUrl, playerName: readOnly ? undefined : user?.displayName, campaignName });
       if (tab) showInTab(tab, file);
       else {
         downloadFile(file);

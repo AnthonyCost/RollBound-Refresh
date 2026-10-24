@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
@@ -8,12 +9,14 @@ import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import Breakdown from '../components/Breakdown.jsx';
 import Ornament from '../components/Ornament.jsx';
 import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
+import HpTracker from '../components/HpTracker.jsx';
+import ShareSheet from '../components/ShareSheet.jsx';
 import { signed, titleCase } from '../format.js';
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 
 export default function SheetPage() {
-  const { character, characterId, portraitUrl, setPortraitUrl, hp, conditions, shieldRaised } = useTable();
+  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, conditions, shieldRaised } = useTable();
   const [editingPortrait, setEditingPortrait] = useState(false);
   const [selected, setSelected] = useState('ac');
   const [skill, setSkill] = useState(null);
@@ -32,18 +35,24 @@ export default function SheetPage() {
   return (
     <div className="split">
       <div className="split__col">
-      <RulesUpdateNotice />
+      {!readOnly && <RulesUpdateNotice />}
       <section className="hero">
-        <button
-          type="button"
-          className="hero__portrait"
-          onClick={() => setEditingPortrait((v) => !v)}
-          aria-expanded={editingPortrait}
-          aria-label={portraitUrl ? 'Change portrait' : 'Add a portrait'}
-        >
-          <Portrait url={portraitUrl} name={character.name} size="lg" />
-          <span className="hero__portrait-hint">{portraitUrl ? 'Change' : 'Add portrait'}</span>
-        </button>
+        {readOnly ? (
+          <div className="hero__portrait">
+            <Portrait url={portraitUrl} name={character.name} size="lg" />
+          </div>
+        ) : (
+          <button
+            type="button"
+            className="hero__portrait"
+            onClick={() => setEditingPortrait((v) => !v)}
+            aria-expanded={editingPortrait}
+            aria-label={portraitUrl ? 'Change portrait' : 'Add a portrait'}
+          >
+            <Portrait url={portraitUrl} name={character.name} size="lg" />
+            <span className="hero__portrait-hint">{portraitUrl ? 'Change' : 'Add portrait'}</span>
+          </button>
+        )}
         <div className="hero__body">
           <h1 className="hero__name">{character.name}</h1>
           <p className="italic muted" style={{ margin: '2px 0 4px' }}>
@@ -53,9 +62,12 @@ export default function SheetPage() {
             <span>Speed <strong>{character.ancestry.speed} ft</strong></span>
             <span>Hero Points <strong>{character.heroPoints}</strong></span>
           </div>
+          <CampaignLine campaign={campaign} readOnly={readOnly} />
         </div>
-        <HealthOrb current={hp} max={hp} />
+        <HealthOrb current={currentHp} max={maxHp} />
       </section>
+
+      {!readOnly && <HpTracker />}
 
       <ExportSheetButton />
 
@@ -112,8 +124,21 @@ export default function SheetPage() {
       {skill && <Breakdown title={titleCase(skill)} stat={skillCheck(character, skill, opts)} />}
 
       {character.keyAbility && <MagicAndDcs character={character} opts={opts} selected={magic} onSelect={setMagic} />}
+
+      {!readOnly && <ShareSheet />}
       </div>
     </div>
+  );
+}
+
+/** The one campaign a character belongs to, linked for its player. */
+function CampaignLine({ campaign, readOnly }) {
+  if (!campaign) return readOnly ? null : <p className="hero__campaign muted">No campaign yet</p>;
+  return (
+    <p className="hero__campaign">
+      <span className="eyebrow">Campaign</span>{' '}
+      {campaign.id && !readOnly ? <Link to={`/campaigns/${campaign.id}`}>{campaign.name}</Link> : <strong>{campaign.name}</strong>}
+    </p>
   );
 }
 

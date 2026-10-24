@@ -12,6 +12,7 @@ import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
 import CampaignPage from './pages/CampaignPage.jsx';
 import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
+import SharedSheetPage from './pages/SharedSheetPage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
 import AccountLink from './components/AccountLink.jsx';
@@ -102,6 +103,8 @@ export default function App() {
           <Route path="gm" element={<GmPage />} />
         </Route>
       </Route>
+      {/* Anyone with a share link, signed in or not. */}
+      <Route path="/sheets/:shareId" element={<SharedSheetPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

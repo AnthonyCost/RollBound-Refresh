@@ -2,6 +2,7 @@
 import { readFile } from 'node:fs/promises';
 import { pool } from '../src/db.js';
 import { generateInviteCode } from '../src/inviteCode.js';
+import { generateShareId } from '../src/shareId.js';
 import { migrateBuilds } from './migrate-builds.js';
 
 const here = new URL('.', import.meta.url);
@@ -20,6 +21,14 @@ try {
   }
   await pool.query('ALTER TABLE campaigns ALTER COLUMN invite_code SET NOT NULL');
   if (rows.length) console.log(`Gave ${rows.length} campaign(s) an invite code`);
+
+  // Characters created before share links existed get one now.
+  const { rows: unshared } = await pool.query('SELECT id FROM characters WHERE share_id IS NULL');
+  for (const { id } of unshared) {
+    await pool.query('UPDATE characters SET share_id = $1 WHERE id = $2', [generateShareId(), id]);
+  }
+  await pool.query('ALTER TABLE characters ALTER COLUMN share_id SET NOT NULL');
+  if (unshared.length) console.log(`Gave ${unshared.length} character(s) a share link`);
 
   // Saved characters from older versions store their choices by name; convert them to IDs.
   const builds = await migrateBuilds();
