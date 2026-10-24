@@ -3,6 +3,7 @@
 // Set GITHUB_TOKEN to raise the GitHub API rate limit.
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -14,6 +15,8 @@ const REPO = 'foundryvtt/pf2e';
 const BRANCH = 'master';
 const here = dirname(fileURLToPath(import.meta.url));
 const OUT = join(here, '..', 'data', 'pf2e-level1.json');
+// Just the version, so screens can spot outdated characters without loading the data.
+const VERSION_OUT = join(here, '..', 'data', 'version.json');
 const CORRECTIONS = join(here, '..', 'corrections');
 const CACHE = join(here, '..', '..', '..', 'node_modules', '.cache', 'pf2e-import');
 
@@ -655,9 +658,14 @@ for (const h of data.heritages) {
   }
 }
 data.meta.needsReview = needsReview;
+// A fingerprint of the rules content: the same data always gets the same version,
+// and any change gets a new one. Saved characters record it (see reviewCharacter).
+const { meta, ...content } = data;
+meta.version = createHash('sha256').update(JSON.stringify(content)).digest('hex').slice(0, 12);
 
 await mkdir(dirname(OUT), { recursive: true });
 await writeFile(OUT, `${JSON.stringify(data, null, 1)}\n`);
+await writeFile(VERSION_OUT, `${JSON.stringify({ version: meta.version, books: meta.books }, null, 1)}\n`);
 
 const counts = Object.entries(data).filter(([, v]) => Array.isArray(v)).map(([k, v]) => `${k} ${v.length}`);
 console.log(`Wrote ${OUT}\n  ${counts.join(', ')}`);

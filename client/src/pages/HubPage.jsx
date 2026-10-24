@@ -13,6 +13,7 @@ import Avatar from '../components/Avatar.jsx';
 import AccountLink from '../components/AccountLink.jsx';
 import Portrait from '../components/Portrait.jsx';
 import { demoPortraitUrl } from '../state/portraits.js';
+import { isOutdated } from '../state/rulesData.js';
 
 const summary = (data) => ({ maxHp: maxHp(data), ac: armorClass(data).total });
 
@@ -118,7 +119,10 @@ export default function HubPage() {
                           <span className="hub-card__sub">
                             {c.data.ancestry.name} {c.data.className} · Level {c.level}
                           </span>
-                          <span className="hub-card__tag">{c.campaignName ?? 'No campaign'}</span>
+                          <span className="hub-card__tag">
+                            {c.campaignName ?? 'No campaign'}
+                            {isOutdated(c.data) && <span className="hub-card__alert"> · Rules updated</span>}
+                          </span>
                         </div>
                         <div className="hub-card__stats">
                           <span><small>HP</small>{c.summary.maxHp}</span>

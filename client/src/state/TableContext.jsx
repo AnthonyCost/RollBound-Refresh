@@ -137,6 +137,7 @@ export function TableProvider({ characterId, children }) {
     () => ({
       character,
       characterId,
+      setCharacter,
       portraitUrl,
       setPortraitUrl,
       campaignName,

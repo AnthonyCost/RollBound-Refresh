@@ -7,8 +7,9 @@
    "Player Core 2"
   ],
   "license": "Game mechanics © Paizo Inc., used under the ORC License. Data via the Foundry VTT pf2e system.",
-  "generatedAt": "2026-10-24T00:12:37.916Z",
-  "needsReview": []
+  "generatedAt": "2026-10-24T00:33:41.706Z",
+  "needsReview": [],
+  "version": "8ff29c871fa7"
  },
  "skills": [
   "acrobatics",

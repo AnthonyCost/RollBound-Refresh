@@ -44,7 +44,7 @@ sudo service postgresql start        # Postgres often stops after a WSL restart
 npm run db:setup                     # tables, seed data, invite codes, build upgrades (safe to re-run)
 npm run dev:server                   # API on :3001
 npm run dev:client                   # app on :5173 (second terminal)
-npm test                             # 105 rules tests, including the full build sweep
+npm test                             # 112 rules tests, including the full build sweep
 ```
 
 Other commands:
@@ -189,7 +189,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Ancestries:** eight borrow a class iconic for now (`BORROWED` in `art.js`), and the rest use the placeholder or a letter. Human uses Valeros, with a hand-tuned tile crop in `TILE_FOCUS`.
 - **Adding art:** files are found by name in `client/src/assets/art/`, as `<kind>-<slug>.webp` for portraits and `<kind>-<slug>-icon.webp` for icons. `npm run art:import` converts them and warns about icons whose corners aren't transparent. Full guide: `docs/adding-art.md`.
 
-### 11. Scalability work (steps 0–2 and 6 of the roadmap)
+### 11. Scalability work (steps 0–3 and 6 of the roadmap)
 - **Step 0, art discovered by file name:** see above.
 - **Step 1, corrections files:** all book-specific rules moved out of the engine into per-book JSON. The importer applies them and reports gaps.
 - **Step 2, stable IDs:**
@@ -205,6 +205,13 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - on every push and pull request on GitHub (`.github/workflows/ci.yml`, which also builds the client).
 
   Writing it caught a step 2 bug: heritages still named their ancestry by slug, so the Ancestry step showed only the versatile heritages. The importer now links them by ID, and `buildProblems` rejects a heritage from another ancestry.
+- **Step 3, rules-data versions:**
+  - Each import gets a `meta.version`, a fingerprint of the rules content, also written to the tiny `data/version.json`. The same data always gets the same version.
+  - `buildCharacter` stamps every sheet with `dataVersion` and `choiceNames` (the name of each chosen item, so a removed one can still be named).
+  - `reviewCharacter(character, data)` sorts an outdated character into `restamp` (nothing changed), `refresh` (numbers or text changed) or `repick` (choices gone or no longer valid).
+  - On the sheet, `RulesUpdateNotice` checks only when the stamp differs: it restamps quietly, offers **Update sheet**, or lists the lost choices with **Re-pick in the builder**. The hub marks outdated characters "Rules updated".
+  - The builder has an edit mode at `/characters/:id/edit`. It opens a saved character with the missing choices cleared, starts on the first step needing attention, and saves over the same character, keeping its portrait and campaign. Drafts left over from before an update also have stale picks cleared.
+  - Checked in Chrome in demo mode. Account mode uses the existing `PUT /characters/:id` but wasn't run live (Postgres was down).
 
 ---
 
@@ -236,7 +243,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Testing and verification
 
-- `npm test`: 105 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, and an empty import report.
+- `npm test`: 112 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, and an empty import report.
 - **Build sweep** (`test/sweep.test.js`): every class with every ancestry, heritage, background, subclass option and deity must produce a valid character with a complete sheet. A failure names the combinations that broke.
 - **GitHub Actions** runs the tests and a client build on every push and pull request.
 - **UI checks:** done with headless Windows Chrome screenshots from WSL, using a small proxy that sets demo or sign-in state. Tap-specific behavior wasn't testable this way.
@@ -276,7 +283,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ## Scalability roadmap
 
-From the planning discussion. Steps 0–2 and 6 are done.
+From the planning discussion. Steps 0–3 and 6 are done.
 
 | Step | What | Status |
 | --- | --- | --- |
@@ -284,8 +291,8 @@ From the planning discussion. Steps 0–2 and 6 are done.
 | 1 | Book-specific rules as corrections data, plus the import report | Done |
 | 2 | Stable IDs for saved choices, plus migration | Done |
 | 6 | The build sweep as a committed test that runs on every push (GitHub Actions) and after every import | Done |
-| 3 | Stamp characters with the data version they were built with; flag choices that disappear after a re-import; "please re-pick" on the sheet | **Next**, before the third book or leveling |
-| 4 | Split the data file per book and type; load per step; move to Postgres at about 5 MB | Before the third book or leveling |
+| 3 | Stamp characters with the data version they were built with; flag choices that disappear after a re-import; "please re-pick" on the sheet | Done |
+| 4 | Split the data file per book and type; load per step; move to Postgres at about 5 MB | **Next**, before the third book or leveling |
 | 5 | Each campaign chooses its allowed books; the builder filters by them | When GMs run games |
 | 7 | Show licenses per item, a site footer, and refuse non-redistributable books by default | Before a public launch |
 

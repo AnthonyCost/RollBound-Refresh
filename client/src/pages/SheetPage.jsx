@@ -7,6 +7,7 @@ import PortraitEditor from '../components/PortraitEditor.jsx';
 import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import Breakdown from '../components/Breakdown.jsx';
 import Ornament from '../components/Ornament.jsx';
+import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
 import { signed, titleCase } from '../format.js';
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
@@ -31,6 +32,7 @@ export default function SheetPage() {
   return (
     <div className="split">
       <div className="split__col">
+      <RulesUpdateNotice />
       <section className="hero">
         <button
           type="button"

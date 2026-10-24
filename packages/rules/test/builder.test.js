@@ -361,3 +361,69 @@ describe('corrections', () => {
     assert.deepEqual(data.meta.needsReview, []);
   });
 });
+
+describe('data updates', () => {
+  const { reviewCharacter, missingChoices, dropMissingChoices } = R;
+  const saved = () => JSON.parse(JSON.stringify(R.buildCharacter(named(fighterBuild()), data)));
+  // A re-import: the same data under a new version, with optional edits.
+  const reimport = (edit = (d) => d) => edit({ ...structuredClone(data), meta: { ...data.meta, version: 'next' } });
+  const without = (list, slug) => (d) => ({ ...d, [list]: d[list].filter((x) => x.slug !== slug) });
+
+  it('stamps sheets with the data version and the names of their choices', () => {
+    const c = saved();
+    assert.equal(c.dataVersion, data.meta.version);
+    assert.equal(c.choiceNames[c.build.ancestryFeat], 'Cooperative Nature');
+    assert.equal(c.choiceNames[c.build.weapons[0]], 'Longsword');
+  });
+
+  it('versions the data by its contents', () => {
+    const version = JSON.parse(readFileSync(new URL('../data/version.json', import.meta.url)));
+    assert.match(data.meta.version, /^[0-9a-f]{12}$/);
+    assert.equal(version.version, data.meta.version);
+  });
+
+  it('leaves characters built from the current data alone', () => {
+    assert.deepEqual(reviewCharacter(saved(), data), { status: 'current' });
+    assert.deepEqual(reviewCharacter({ ...saved(), build: undefined, dataVersion: 'old' }, data), { status: 'current' });
+  });
+
+  it('only restamps a character when a re-import changes nothing it uses', () => {
+    const c = saved();
+    // Postgres hands JSON back with its keys reordered; that isn't a change.
+    const shuffled = Object.fromEntries(Object.entries(c).reverse());
+    const review = reviewCharacter(shuffled, reimport());
+    assert.equal(review.status, 'restamp');
+    assert.equal(review.character.dataVersion, 'next');
+  });
+
+  it('offers a refreshed sheet when the numbers change', () => {
+    const tougher = reimport((d) => ({ ...d, ancestries: d.ancestries.map((a) => (a.slug === 'human' ? { ...a, hp: 10 } : a)) }));
+    const review = reviewCharacter(saved(), tougher);
+    assert.equal(review.status, 'refresh');
+    assert.equal(R.maxHp(review.character), R.maxHp(saved()) + 2);
+  });
+
+  it('names choices a re-import removed and asks for them again', () => {
+    const next = reimport((d) => without('weapons', 'longsword')(without('feats', 'cooperative-nature')(d)));
+    const review = reviewCharacter(saved(), next);
+    assert.equal(review.status, 'repick');
+    assert.deepEqual(
+      review.missing.map((m) => [m.step, m.kind, m.name]),
+      [['feats', 'feat', 'Cooperative Nature'], ['gear', 'weapon', 'Longsword']],
+    );
+
+    const cleared = dropMissingChoices(saved().build, next);
+    assert.equal(cleared.ancestryFeat, null);
+    assert.deepEqual(cleared.weapons, []);
+    assert.deepEqual(missingChoices(cleared, next), []);
+    assert.ok(R.buildProblems(cleared, next).some((p) => p.message === 'Choose an ancestry feat.'));
+  });
+
+  it('flags a choice that still exists but no longer fits', () => {
+    const moved = reimport((d) => ({ ...d, heritages: d.heritages.map((h) => (h.slug === 'skilled-human' ? { ...h, ancestry: 'elsewhere' } : h)) }));
+    const review = reviewCharacter(saved(), moved);
+    assert.equal(review.status, 'repick');
+    assert.deepEqual(review.missing, []);
+    assert.ok(review.problems.some((p) => p.step === 'ancestry'));
+  });
+});

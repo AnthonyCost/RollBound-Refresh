@@ -90,6 +90,7 @@ export default function App() {
         <Route path="/home" element={<HubPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/create" element={<BuilderPage />} />
+        <Route path="/characters/:characterId/edit" element={<BuilderPage />} />
         <Route path="/campaigns/new" element={<CampaignCreatePage />} />
         <Route path="/campaigns/:id" element={<CampaignPage />} />
         <Route path="/campaigns/:id/edit" element={<CampaignEditPage />} />

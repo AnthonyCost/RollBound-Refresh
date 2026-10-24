@@ -32,6 +32,13 @@ export function saveDemoCharacter(data) {
   return write([...read(), { id, data }]) ? id : null;
 }
 
+/** Replaces a demo character's sheet; false if it's gone or storage is blocked. */
+export function updateDemoCharacter(id, data) {
+  const list = read();
+  if (!list.some((c) => c.id === id)) return false;
+  return write(list.map((c) => (c.id === id ? { ...c, data } : c)));
+}
+
 export function clearDemoCharacters() {
   write([]);
 }

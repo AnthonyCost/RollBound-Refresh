@@ -625,7 +625,108 @@ export function buildCharacter(build, data) {
     weapons: weapons.length ? weapons : [FIST],
     heroPoints: 1,
     build,
+    // Which rules data this sheet was computed from, and the names of the items
+    // chosen, so a later re-import can name any that disappear (see reviewCharacter).
+    dataVersion: data.meta?.version ?? null,
+    choiceNames: Object.fromEntries(choiceRefs(build, data).map((r) => [r.id, r.item.name])),
   };
+}
+
+// ---------- Data updates ----------
+
+/**
+ * Every rules item a build points at, as { step, kind, id, item, clear }. item is
+ * null when the ID isn't in this data; clear(build) returns the build without it.
+ */
+function choiceRefs(build, data) {
+  const refs = [];
+  const one = (step, kind, field, list) => {
+    if (build[field]) refs.push({ step, kind, id: build[field], item: find(list, build[field]), clear: (b) => ({ ...b, [field]: null }) });
+  };
+  const many = (step, kind, field, list) => {
+    for (const id of build[field] ?? []) {
+      refs.push({ step, kind, id, item: find(list, id), clear: (b) => ({ ...b, [field]: b[field].filter((x) => x !== id) }) });
+    }
+  };
+  one('ancestry', 'ancestry', 'ancestry', data.ancestries);
+  one('ancestry', 'heritage', 'heritage', data.heritages);
+  one('background', 'background', 'background', data.backgrounds);
+  one('class', 'class', 'class', data.classes);
+  const options = find(data.classes, build.class)?.features.flatMap((f) => f.choice?.options ?? []) ?? [];
+  for (const [key, id] of Object.entries(build.classChoices ?? {})) {
+    if (!id) continue;
+    const clear = (b) => ({ ...b, classChoices: { ...b.classChoices, [key]: null }, classChoiceSkills: { ...b.classChoiceSkills, [key]: null } });
+    refs.push({ step: 'class', kind: 'class option', id, item: find(options, id), clear });
+  }
+  one('class', 'deity', 'deity', data.deities);
+  one('feats', 'feat', 'ancestryFeat', data.feats);
+  one('feats', 'feat', 'classFeat', data.feats);
+  for (const [parent, id] of Object.entries(build.bonusFeats ?? {})) {
+    if (!id) continue;
+    const clear = (b) => ({ ...b, bonusFeats: { ...b.bonusFeats, [parent]: null } });
+    // A bonus pick whose granting feat is gone has nowhere to go, so it counts as gone too.
+    refs.push({ step: 'feats', kind: 'feat', id, item: find(data.feats, parent) && find(data.feats, id), clear });
+  }
+  many('spells', 'cantrip', 'cantrips', data.spells);
+  many('spells', 'spell', 'spells', data.spells);
+  one('gear', 'armor', 'armor', data.armor);
+  one('gear', 'shield', 'shield', data.shields);
+  many('gear', 'weapon', 'weapons', data.weapons);
+  return refs;
+}
+
+/** Choices whose rules item isn't in this data (e.g. removed by a re-import). */
+export function missingChoices(build, data) {
+  return choiceRefs(build, data)
+    .filter((r) => !r.item)
+    .map(({ step, kind, id }) => ({ step, kind, id }));
+}
+
+/** The build with every missing choice cleared, so the builder asks for it again. */
+export function dropMissingChoices(build, data) {
+  return choiceRefs(build, data)
+    .filter((r) => !r.item)
+    .reduce((b, r) => r.clear(b), build);
+}
+
+// Compares two sheets as stored JSON, ignoring key order (Postgres reorders keys)
+// and the stamp fields, which change on every import.
+const STAMP_FIELDS = ['dataVersion', 'choiceNames'];
+const canonical = (value) => {
+  if (Array.isArray(value)) return value.map(canonical);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.keys(value).filter((k) => value[k] !== undefined).sort().map((k) => [k, canonical(value[k])]));
+  }
+  return value;
+};
+const sameSheet = (a, b) => {
+  const strip = (c) => JSON.stringify(canonical(Object.fromEntries(Object.entries(c).filter(([k]) => !STAMP_FIELDS.includes(k)))));
+  return strip(JSON.parse(JSON.stringify(a))) === strip(b);
+};
+
+/**
+ * Checks a saved character against the current rules data. status is:
+ *   'current': built from this data, or has no build to check (nothing to do),
+ *   'restamp': same sheet under the new data; `character` is it with the new stamp,
+ *   'refresh': every choice still works but the numbers or text changed; `character` is the new sheet,
+ *   'repick':  some choices are gone (`missing`, with their saved names) or no longer valid (`problems`).
+ */
+export function reviewCharacter(character, data) {
+  const build = character?.build;
+  const version = data.meta?.version ?? null;
+  if (!build || (version && character.dataVersion === version)) return { status: 'current' };
+
+  const current = migrateBuild(build, data);
+  const named = (id) =>
+    character.choiceNames?.[id] ??
+    [...(character.feats ?? []), ...(character.spellcasting?.cantrips ?? []), ...(character.spellcasting?.spells ?? []), ...(character.weapons ?? [])].find((x) => x.id === id)?.name ??
+    null;
+  const missing = missingChoices(current, data).map((m) => ({ ...m, name: named(m.id) }));
+  const problems = buildProblems(current, data);
+  if (missing.length || problems.length) return { status: 'repick', missing, problems };
+
+  const next = buildCharacter({ ...current, name: character.name ?? current.name }, data);
+  return { status: sameSheet(next, character) ? 'restamp' : 'refresh', character: next };
 }
 
 // ---------- Migration ----------

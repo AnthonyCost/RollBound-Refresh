@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { STEPS, emptyBuild, buildProblems, buildCharacter, migrateBuild } from '@rollbound/rules';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { STEPS, emptyBuild, buildProblems, buildCharacter, migrateBuild, dropMissingChoices, reviewCharacter } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { AncestryStep, BackgroundStep, ClassStep } from '../builder/IdentitySteps.jsx';
 import { AttributesStep, SkillsStep, FeatsStep, SpellsStep, GearStep, ReviewStep } from '../builder/DetailSteps.jsx';
-import { saveDemoCharacter } from '../state/demoCharacters.js';
+import { DEMO_ID_PREFIX, getDemoCharacter, saveDemoCharacter } from '../state/demoCharacters.js';
+import { isOutdated, loadRules, replaceCharacter } from '../state/rulesData.js';
 import { savePortrait } from '../state/portraits.js';
 import ImagePicker from '../components/ImagePicker.jsx';
 
@@ -73,48 +74,91 @@ const STEP_TOUCHED = {
   review: (b) => Boolean(b.name.trim()),
 };
 
-function loadDraft() {
+const BLANK = { build: emptyBuild(), step: STEPS[0] };
+
+/** The saved draft under this key, or null if there isn't one. */
+function loadDraft(key) {
   try {
-    const saved = JSON.parse(localStorage.getItem(DRAFT_KEY));
+    const saved = JSON.parse(localStorage.getItem(key));
     // Drafts saved before builds had a version are version 1 (slugs); they're
     // converted to IDs once the rules data has loaded (see below).
     if (saved?.build) return { build: { ...emptyBuild(), ...saved.build, v: saved.build.v ?? 1 }, step: STEPS.includes(saved.step) ? saved.step : STEPS[0] };
   } catch {
     // Unreadable or blocked storage: start fresh.
   }
-  return { build: emptyBuild(), step: STEPS[0] };
+  return null;
 }
 
-function saveDraft(draft) {
+function saveDraft(key, draft) {
   try {
-    if (draft) localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-    else localStorage.removeItem(DRAFT_KEY);
+    if (draft) localStorage.setItem(key, JSON.stringify(draft));
+    else localStorage.removeItem(key);
   } catch {
     // Storage blocked: the draft just won't survive a reload.
   }
 }
 
+/** Loads a saved character's sheet for editing, from demo storage or the server. */
+const fetchCharacter = (id) =>
+  id.startsWith(DEMO_ID_PREFIX) ? Promise.resolve(getDemoCharacter(id)?.data ?? null) : api.getCharacter(id).then((row) => row.data);
+
+/**
+ * The character builder. At /create it builds a new character; at
+ * /characters/:id/edit it edits a saved one, for example to re-pick choices a
+ * rules-data update removed. Each keeps its own draft, so leaving and coming
+ * back picks up where the player was.
+ */
 export default function BuilderPage() {
   const { isDemo } = useAuth();
   const navigate = useNavigate();
+  const { characterId: editId } = useParams();
+  const draftKey = editId ? `${DRAFT_KEY}:${editId}` : DRAFT_KEY;
   const [data, setData] = useState(null);
   const [loadFailed, setLoadFailed] = useState(false);
-  const [{ build, step }, setDraft] = useState(loadDraft);
+  const [hadDraft] = useState(() => Boolean(loadDraft(draftKey)));
+  const [{ build, step }, setDraft] = useState(() => loadDraft(draftKey) ?? BLANK);
+  // Edit mode: { name, original, repick } once the saved character has loaded.
+  const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState([]);
   const [portrait, setPortrait] = useState({});
 
   useEffect(() => {
-    import('@rollbound/rules/data/pf2e-level1.json')
-      .then((m) => setData(m.default))
+    loadRules()
+      .then(setData)
       .catch(() => setLoadFailed(true));
   }, []);
 
   useEffect(() => {
-    if (data) setDraft((d) => ({ ...d, build: migrateBuild(d.build, data) }));
+    // A draft saved before a rules update can point at items that are gone; clearing
+    // them makes their steps ask again.
+    if (data) setDraft((d) => ({ ...d, build: dropMissingChoices(migrateBuild(d.build, data), data) }));
   }, [data]);
 
-  useEffect(() => saveDraft({ build, step }), [build, step]);
+  // Edit mode: start from the saved character, with choices the rules data no longer
+  // has cleared so their steps ask again, on the first step that needs attention.
+  useEffect(() => {
+    if (!editId || !data) return;
+    let cancelled = false;
+    fetchCharacter(editId)
+      .then((c) => {
+        if (cancelled) return;
+        if (!c?.build) throw new Error('no build');
+        const original = dropMissingChoices(migrateBuild(c.build, data), data);
+        const repick = isOutdated(c) ? (reviewCharacter(c, data).missing ?? []) : [];
+        setEditing({ name: c.name, original, repick });
+        if (!hadDraft) setDraft({ build: original, step: buildProblems(original, data)[0]?.step ?? 'review' });
+      })
+      .catch(() => !cancelled && setLoadFailed(true));
+    return () => {
+      cancelled = true;
+    };
+  }, [editId, data, hadDraft]);
+
+  const ready = Boolean(data) && (!editId || Boolean(editing));
+  useEffect(() => {
+    if (ready) saveDraft(draftKey, { build, step });
+  }, [ready, draftKey, build, step]);
 
   const update = (patch) => setDraft((d) => ({ ...d, build: { ...d.build, ...patch } }));
   const goTo = (s) => {
@@ -134,9 +178,15 @@ export default function BuilderPage() {
     setErrors([]);
     try {
       const character = buildCharacter(build, data);
+      if (editId) {
+        await replaceCharacter(editId, character);
+        saveDraft(draftKey, null);
+        navigate(`/play/${editId}/sheet`, { replace: true });
+        return;
+      }
       const id = isDemo ? saveDemoCharacter(character) : (await api.createCharacter(character)).id;
       if (!id) throw new Error('Your browser is blocking storage, so the demo can’t keep this character.');
-      saveDraft(null);
+      saveDraft(draftKey, null);
       // The character is saved either way; a portrait that fails can be added from the sheet.
       if (portrait.file) await savePortrait(id, portrait.file, { isDemo }).catch(() => {});
       navigate(`/play/${id}/sheet`, { replace: true });
@@ -146,8 +196,9 @@ export default function BuilderPage() {
     }
   };
 
+  // Editing resets to the character as it was saved; a new character starts blank.
   const reset = () => {
-    setDraft({ build: emptyBuild(), step: STEPS[0] });
+    setDraft(editing ? { build: editing.original, step: STEPS[0] } : BLANK);
     setConfirmReset(false);
     setErrors([]);
     window.scrollTo(0, 0);
@@ -163,13 +214,13 @@ export default function BuilderPage() {
               Reset
             </button>
           )}
-          <Link to="/home" className="topbar__signout">Close</Link>
+          <Link to={editId ? `/play/${editId}/sheet` : '/home'} className="topbar__signout">Close</Link>
         </div>
       </header>
 
       {confirmReset && (
         <div className="confirm" role="alertdialog" aria-labelledby="reset-title">
-          <p id="reset-title">Reset every choice and start from a blank character?</p>
+          <p id="reset-title">{editing ? `Undo your changes and go back to ${editing.name} as saved?` : 'Reset every choice and start from a blank character?'}</p>
           <div className="btn-row">
             <button type="button" className="btn btn--grow" onClick={() => setConfirmReset(false)}>Keep my choices</button>
             <button type="button" className="btn btn--blood btn--grow" onClick={reset}>Reset</button>
@@ -199,17 +250,42 @@ export default function BuilderPage() {
           <p className="rule-note">{info.note}</p>
         </header>
 
-        {loadFailed && <p className="form-errors" role="alert">Couldn't load the rules data. Try refreshing.</p>}
-        {!data && !loadFailed && <p className="muted italic center">Opening the rulebooks…</p>}
-        {data && <info.Component build={build} update={update} data={data} goTo={goTo} />}
+        {loadFailed && (
+          <p className="form-errors" role="alert">
+            {editId ? "Couldn't open this character for editing. Try refreshing." : "Couldn't load the rules data. Try refreshing."}
+          </p>
+        )}
+        {!ready && !loadFailed && <p className="muted italic center">Opening the rulebooks…</p>}
+        {editing?.repick.length > 0 && (
+          <section className="notice" aria-labelledby="repick-title">
+            <h2 id="repick-title" className="notice__title">Re-pick for {editing.name}</h2>
+            <p>A rules update removed these choices. Pick something else on each step:</p>
+            <ul className="notice__list">
+              {editing.repick.map((m) => (
+                <li key={`${m.kind}-${m.id}`}>
+                  <strong>{m.name ?? `A ${m.kind}`}</strong> ({m.kind}, {STEP_INFO[m.step].title} step)
+                </li>
+              ))}
+            </ul>
+            <div className="notice__steps">
+              {[...new Set(editing.repick.map((m) => m.step))].map((s) => (
+                <button key={s} type="button" className="btn" aria-current={s === step ? 'step' : undefined} onClick={() => goTo(s)}>
+                  {STEP_INFO[s].title}
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {ready && <info.Component build={build} update={update} data={data} goTo={goTo} />}
 
         {step === 'review' && (
           <>
-            <ImagePicker label="Portrait (optional)" shape="square" hint="you can add or change it later from the sheet" value={portrait} onChange={setPortrait} />
+            {!editId && <ImagePicker label="Portrait (optional)" shape="square" hint="you can add or change it later from the sheet" value={portrait} onChange={setPortrait} />}
             <FormErrors errors={errors} />
-            {isDemo && <p className="rule-note center">In demo mode this character lasts until you close the tab. Create an account to keep it.</p>}
-            <button type="button" className="btn btn--blood" disabled={!data || problems.length > 0 || saving} onClick={save}>
-              {saving ? 'Saving…' : isDemo ? 'Play this character' : 'Save character'}
+            {isDemo && !editId && <p className="rule-note center">In demo mode this character lasts until you close the tab. Create an account to keep it.</p>}
+            <button type="button" className="btn btn--blood" disabled={!ready || problems.length > 0 || saving} onClick={save}>
+              {saving ? 'Saving…' : editId ? 'Save changes' : isDemo ? 'Play this character' : 'Save character'}
             </button>
           </>
         )}
