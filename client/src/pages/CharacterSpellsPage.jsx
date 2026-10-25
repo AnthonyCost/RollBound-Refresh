@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { spellAttack, spellDc } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import { useRules } from '../state/useRules.js';
@@ -19,7 +20,7 @@ const actionsLabel = (a) => (/^\d$/.test(a) ? `${a} action${a === '1' ? '' : 's'
 const rankLabel = (rank) => (rank === 0 ? 'Cantrips' : `Rank ${rank}`);
 
 /** Every spell the character knows or has, with its full rules text. */
-export default function SpellBookPage() {
+export default function CharacterSpellsPage() {
   const { character, conditions, shieldRaised } = useTable();
   const rules = useRules(SPELL_TYPES);
   const casting = character.spellcasting;
@@ -28,7 +29,7 @@ export default function SpellBookPage() {
   if (!casting) {
     return (
       <div className="narrow">
-        <Ornament label="SPELL BOOK" />
+        <Ornament label="SPELLS" />
         <p className="panel panel--dashed muted italic center">
           {character.name} doesn't cast spells. {character.runes?.length ? 'Their runes are on the Sheet tab.' : ''}
         </p>
@@ -42,7 +43,7 @@ export default function SpellBookPage() {
 
   return (
     <div className="narrow">
-      <Ornament label="SPELL BOOK" />
+      <Ornament label="SPELLS" />
       <section className="panel spellbook__head">
         <h1 className="panel__title">{titleCase(casting.tradition ?? 'Spells')} {casting.kind === 'focus' ? 'focus spells' : 'spells'}</h1>
         <p className="rule-note">{KIND[casting.kind] ?? ''}</p>
@@ -90,6 +91,7 @@ export default function SpellBookPage() {
                       {spell.description
                         ? <div className="option__desc" dangerouslySetInnerHTML={{ __html: spell.description }} />
                         : !rules && <p className="muted italic">Loading the rules text…</p>}
+                      {spell.slug && <Link to={`/spells/${spell.slug}`} className="spell__link">Open in the Spell Book</Link>}
                     </div>
                   </details>
                 </li>

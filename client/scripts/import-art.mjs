@@ -1,7 +1,8 @@
 // Converts art for the builder into web-ready files in client/src/assets/art/.
 //   npm run art:import -- <folder>
 // Name each PNG/JPG/WebP in <folder> after its target, e.g. class-wizard.png or
-// ancestry-elf-icon.png. Adventure Path covers (adventure-<slug>.jpg) become wide
+// ancestry-elf-icon.png. Class banners (class-wizard-banner.png) become 1200x450 character
+// card backgrounds. Adventure Path covers (adventure-<slug>.jpg) become wide
 // campaign covers in client/src/assets/adventure-paths/ (see the README there).
 // Portraits are trimmed and capped at 1200px tall. Class icons
 // (finished round emblems) are fitted into 192x192 with transparency. Ancestry icons
@@ -17,7 +18,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const OUT = join(here, '..', 'src', 'assets', 'art');
 const COVERS = join(here, '..', 'src', 'assets', 'adventure-paths');
 const COVER = { width: 1600, height: 900 };
-const NAME = /^(ancestry|class)-([a-z0-9-]+?)(-icon)?$/;
+const NAME = /^(ancestry|class)-([a-z0-9-]+?)(-icon|-banner)?$/;
+// Character card backgrounds: wide, cropped around the most detailed part.
+const BANNER = { width: 1200, height: 450 };
 
 const input = process.argv[2];
 if (!input) {
@@ -48,10 +51,17 @@ for (const file of files) {
   }
   const m = NAME.exec(name);
   if (!m) {
-    console.log(`skip   ${file}: name it like class-wizard.png, ancestry-elf-icon.png or adventure-wardens-of-wildwood.jpg`);
+    console.log(`skip   ${file}: name it like class-wizard.png, ancestry-elf-icon.png, class-wizard-banner.png or adventure-wardens-of-wildwood.jpg`);
     continue;
   }
-  const [, kind, slug, icon] = m;
+  const [, kind, slug, extra] = m;
+  if (extra === '-banner') {
+    const info = await sharp(join(input, file)).resize(BANNER.width, BANNER.height, { fit: 'cover', position: 'attention' }).webp({ quality: 82, effort: 6 }).toFile(join(OUT, `${name}.webp`));
+    const note = kind === 'class' && known.class.has(slug) ? '' : `  (no class "${slug}" in the imported books${kind === 'class' ? ' yet' : '; banners are for classes'})`;
+    console.log(`saved  ${name}.webp  ${info.width}x${info.height}  ${Math.round(info.size / 1024)} KB${note}`);
+    continue;
+  }
+  const icon = extra;
   const framed = icon && kind === 'ancestry';
   const image = sharp(join(input, file)).ensureAlpha().trim({ threshold: 1 });
   const resized = !icon

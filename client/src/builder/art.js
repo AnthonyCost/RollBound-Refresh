@@ -2,11 +2,13 @@
 // client/src/assets/art/ are found by name, so adding art needs no code:
 //   <kind>-<slug>.webp       full-length portrait (the large panel)
 //   <kind>-<slug>-icon.webp  round emblem (the selection tile)
+//   class-<slug>-banner.webp wide background for character cards (1200x450)
 // e.g. class-wizard.webp, ancestry-elf-icon.webp. Guide: docs/adding-art.md
 const files = import.meta.glob('../assets/art/*.{webp,png,jpg}', { eager: true, query: '?url', import: 'default' });
 
 const ART = {};
 const ICONS = {};
+const BANNERS = {};
 let placeholder = null;
 
 for (const [path, url] of Object.entries(files)) {
@@ -15,10 +17,10 @@ for (const [path, url] of Object.entries(files)) {
     placeholder = url;
     continue;
   }
-  const m = /^(ancestry|class)-([a-z0-9-]+?)(-icon)?$/.exec(name);
+  const m = /^(ancestry|class)-([a-z0-9-]+?)(-icon|-banner)?$/.exec(name);
   if (!m) continue;
-  const [, kind, slug, icon] = m;
-  const table = icon ? ICONS : ART;
+  const [, kind, slug, extra] = m;
+  const table = extra === '-icon' ? ICONS : extra === '-banner' ? BANNERS : ART;
   (table[kind] ??= {})[slug] = url;
 }
 
@@ -67,3 +69,6 @@ export const iconFor = (kind, slug) => ICONS[kind]?.[slug] ?? null;
 const FRAMED_ICONS = { ancestry: true, class: false };
 export const iconIsFramed = (kind) => Boolean(FRAMED_ICONS[kind]);
 export const tileFocusFor = (kind, slug) => TILE_FOCUS[kind]?.[slug] ?? null;
+
+/** A class's wide banner for character cards, or null when it has none. */
+export const bannerFor = (slug) => BANNERS.class?.[slug] ?? null;

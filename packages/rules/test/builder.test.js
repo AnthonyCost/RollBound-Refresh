@@ -547,3 +547,16 @@ describe('demo sample builds', () => {
     });
   }
 });
+
+describe('spell choices with every spell in the data', () => {
+  it('offers level 1 casters only ordinary cantrips and rank 1 spells', () => {
+    assert.ok(data.spells.some((s) => s.kind === 'focus') && data.spells.some((s) => s.kind === 'ritual') && data.spells.some((s) => s.rank > 1));
+    for (const cls of data.classes.filter((c) => c.casting && c.casting.kind !== 'focus')) {
+      const b = { ...R.emptyBuild(), class: cls.id, tradition: 'arcane' };
+      for (const f of cls.features) if (f.choice) b.classChoices[f.choice.key] = f.choice.options.find((o) => !o.traditionChoice)?.id ?? f.choice.options[0].id;
+      const { cantrips, spells } = R.spellOptions(b, data);
+      const offered = [...cantrips, ...spells];
+      assert.deepEqual(offered.filter((s) => s.kind !== 'spell' || s.rank > 1).map((s) => s.name), [], cls.name);
+    }
+  });
+});

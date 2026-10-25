@@ -219,12 +219,14 @@ function mapFeat(doc, classNames) {
   };
 }
 
+// kind: 'spell' (cantrips included), 'focus' (cast with Focus Points) or 'ritual'.
 function mapSpell(doc) {
-  const cantrip = doc.spell_type === 'Cantrip';
+  const cantrip = doc.spell_type === 'Cantrip' || (doc.trait ?? []).includes('Cantrip');
   return {
     id: idOf(doc),
     slug: slugOf(doc.name),
     name: doc.name,
+    kind: doc.spell_type === 'Ritual' ? 'ritual' : doc.spell_type === 'Focus' ? 'focus' : 'spell',
     rank: cantrip ? 0 : doc.level,
     traditions: lower(doc.tradition),
     traits: lower(doc.trait).filter((t) => !['cantrip', 'common', 'uncommon', 'rare', 'unique'].includes(t)),
@@ -307,7 +309,8 @@ const out = {
   heritages: docs.filter((d) => d.category === 'heritage').map(mapHeritage).sort(byName),
   backgrounds: docs.filter((d) => d.category === 'background').map(mapBackground).sort(byName),
   feats: docs.filter((d) => d.category === 'feat' && d.level === 1).map((d) => mapFeat(d, classNames)).sort(byName),
-  spells: docs.filter((d) => d.category === 'spell' && level1(d) && ['Spell', 'Cantrip'].includes(d.spell_type) && d.tradition?.length).map(mapSpell).sort(byName),
+  // Every spell in the book: each rank, focus spells and rituals (the builder only offers ordinary ones).
+  spells: docs.filter((d) => d.category === 'spell' && ['Spell', 'Cantrip', 'Focus', 'Ritual'].includes(d.spell_type)).map(mapSpell).sort(byName),
   runes: docs.filter((d) => d.category === 'runesmith-rune' && level1(d)).map(mapRune).sort(byName),
   subclassOptions: Object.fromEntries(
     Object.entries(EXTRA_OPTIONS).map(([category, key]) => [key, docs.filter((d) => d.category === category).map((d) => mapOption(d, key)).sort(byName)]),

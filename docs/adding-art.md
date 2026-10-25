@@ -24,8 +24,11 @@ You can add art one image at a time. Anything without its own art falls back as 
 | --- | --- |
 | `<kind>-<slug>.png` | Portrait (`kind` is `ancestry` or `class`) |
 | `<kind>-<slug>-icon.png` | Tile icon |
+| `class-<slug>-banner.png` | Background of that class's character cards (Home and Characters) |
 
 **Class icons** are finished round emblems with their own ring, so send them with transparent corners. **Ancestry icons** can be any picture, square or not: the app clips them to a circle and draws the ring, so every ancestry tile looks the same. Keep the face near the middle.
+
+**Class banners** sit behind a character's portrait, name and campaign on their card. Send them wide, about **1200 × 450** (8:3) or larger. The card shows a strip about 2.7 times as wide as it is tall, so a little of the top and bottom may be cut on narrow cards. The left side sits under the portrait and text, behind a dark fade, so keep the subject in the **right half**. A class without a banner falls back to its portrait, faded.
 
 Slugs are listed [below](#slugs). PNG, JPG and WebP all work as input.
 
@@ -34,6 +37,7 @@ Slugs are listed [below](#slugs). PNG, JPG and WebP all work as input.
 - **Portraits** are trimmed to the figure and capped at 1200px tall.
 - **Class icons** are trimmed and fitted into 192 × 192, keeping their transparency.
 - **Ancestry icons** are cropped to fill a 192 × 192 square, centered on the most detailed area (usually the face).
+- **Class banners** are cropped to fill 1200 × 450, centered on the most detailed area.
 
 It warns you about:
 - files named in a way it doesn't recognize (those are skipped),

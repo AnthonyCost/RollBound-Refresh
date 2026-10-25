@@ -40,7 +40,9 @@ const PACK_PATTERNS = [
   /^packs\/feats\/(ancestry|class|general|skill)\/.+\.json$/,
   /^packs\/equipment\/[^/]+\.json$/,
   /^packs\/deities\/.+\.json$/,
-  /^packs\/spells\/(cantrip|1st-rank)\/.+\.json$/,
+  // Every spell: each rank, plus focus spells and rituals (the Spell Book lists them all;
+  // the builder only offers ordinary cantrips and rank 1 spells).
+  /^packs\/spells\/.+\.json$/,
 ];
 
 const headers = { 'User-Agent': 'rollbound-import' };
@@ -452,6 +454,7 @@ function mapDeity(d) {
   };
 }
 
+// kind: 'spell' (cantrips included), 'focus' (cast with Focus Points) or 'ritual'.
 function mapSpell(sp) {
   const s = sp.system;
   const cantrip = s.traits.value.includes('cantrip');
@@ -459,6 +462,7 @@ function mapSpell(sp) {
     id: sp._id,
     slug: s.slug ?? slugOf(sp.name),
     name: sp.name,
+    kind: s.ritual ? 'ritual' : s.traits.value.includes('focus') ? 'focus' : 'spell',
     rank: cantrip ? 0 : s.level.value,
     traditions: s.traits.traditions ?? [],
     traits: s.traits.value.filter((t) => t !== 'cantrip'),

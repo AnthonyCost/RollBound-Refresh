@@ -15,8 +15,9 @@ Built with the PERN stack: **Postgres, Express, React, Node**.
 | **Session logs** | A campaign's GM writes, edits and deletes blog-style recaps of each session; the party reads them, numbered by the date played. |
 | **Encounters** | The GM saves encounters for their campaign: creatures from the bestiary (or homebrew) rated live against the XP budget for the party, which follows the campaign's characters and levels unless the GM sets it. |
 | **Bestiary** | All 840 creatures from Monster Core and Monster Core 2, with search, filters by level, type, size and rarity, and full stat blocks. |
+| **Spell Book** | All 1,028 spells: cantrips, ranks 1–10, focus spells and rituals, searchable by name or trait and filterable by type, rank, tradition, rarity and book, each with its own page. |
 | **Sheet** | Tap AC, a save, or Perception to see the breakdown: ability, proficiency rank + level, item bonus, armor's Dex cap, and condition penalties. The health globe fills to current HP; take damage or heal from the sheet. Shows the character's campaign, has a share link anyone can open read-only, and lets the owner reopen the character in the builder to edit it. Lists Strikes for the equipped weapons. |
-| **Spell Book** | Every spell the character knows, by rank, with spell attack and DC and each spell's full rules text. |
+| **Spells** | Every spell the character knows, by rank, with spell attack and DC and each spell's full rules text. |
 | **Inventory** | Items and coins. Equip weapons and wear armor or a shield, and the sheet's Strikes and AC follow. Search the rules' gear to add or buy (paying from the coins), add custom items, and track quantity, notes and Bulk against your limits. |
 | **Lore** | The player's backstory, plus the character's origins and background rules. |
 | **Turn** | *(Hidden until the encounter tracker exists; shows during an active encounter.)* The 3-action economy. Strikes show the multiple attack penalty as it grows; conditions like Frightened apply to the numbers and tick down when you end your turn. |

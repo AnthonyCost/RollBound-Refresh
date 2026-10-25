@@ -425,7 +425,8 @@ export function spellcastingOf(build, data) {
 export function spellOptions(build, data) {
   const casting = spellcastingOf(build, data);
   if (!casting?.tradition) return { cantrips: [], spells: [] };
-  const pool = data.spells.filter((s) => s.rarity === 'common' && s.traditions.includes(casting.tradition));
+  // Ordinary spells only: focus spells and rituals are learned other ways.
+  const pool = data.spells.filter((s) => (s.kind ?? 'spell') === 'spell' && s.rarity === 'common' && s.traditions.includes(casting.tradition));
   const granted = new Set(casting.granted.map((s) => s.id));
   return {
     cantrips: pool.filter((s) => s.rank === 0 && !granted.has(s.id)),

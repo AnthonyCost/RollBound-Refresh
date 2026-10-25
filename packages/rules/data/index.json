@@ -10,9 +10,9 @@
    "Impossible Magic"
   ],
   "license": "Game mechanics © Paizo Inc., used under the ORC License. Data via the Foundry VTT pf2e system and the Archives of Nethys.",
-  "generatedAt": "2026-10-24T03:02:52.786Z",
+  "generatedAt": "2026-10-25T22:20:32.051Z",
   "needsReview": [],
-  "version": "7c71a83eb89c"
+  "version": "22b76bf3bdf0"
  },
  "files": [
   {
@@ -181,25 +181,25 @@
    "path": "dark-archive-remastered/spells.json",
    "type": "spells",
    "book": "Dark Archive (Remastered)",
-   "count": 4
+   "count": 70
   },
   {
    "path": "impossible-magic/spells.json",
    "type": "spells",
    "book": "Impossible Magic",
-   "count": 37
+   "count": 301
   },
   {
    "path": "player-core/spells.json",
    "type": "spells",
    "book": "Player Core",
-   "count": 83
+   "count": 488
   },
   {
    "path": "player-core-2/spells.json",
    "type": "spells",
    "book": "Player Core 2",
-   "count": 21
+   "count": 169
   },
   {
    "path": "impossible-magic/runes.json",

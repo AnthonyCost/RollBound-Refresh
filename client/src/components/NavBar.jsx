@@ -43,7 +43,7 @@ const icon = {
 // encounter: shown only while the character is in an active encounter.
 const LINKS = [
   { to: 'sheet', label: 'Sheet', icon: 'sheet' },
-  { to: 'spells', label: 'Spell Book', icon: 'spells' },
+  { to: 'spells', label: 'Spells', icon: 'spells' },
   { to: 'inventory', label: 'Inventory', icon: 'inventory' },
   { to: 'lore', label: 'Lore', icon: 'lore' },
   { to: 'turn', label: 'Turn', icon: 'turn', encounter: true },

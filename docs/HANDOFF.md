@@ -120,7 +120,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 ### 2. Home, Characters and Campaigns pages
 - **Home** (`/home`, `pages/HomePage.jsx`) is where signing in lands and where the wordmark goes. It greets you, then shows three sections: **My Characters**, **Campaigns I'm Hosting** and **Campaigns I'm Playing**. Each has every card, a count, its main action (Create a Character, Create a Campaign) and **See All**; the section titles link to the full pages. It has no search, sort or join box; those are on the full pages. The cards are shared with those pages (`CharacterCard`, `CampaignCard`).
 - **Characters** (`/characters`, `pages/CharactersPage.jsx`) is the full list of your characters.
-  - It shows only your characters, as cards: class art behind the portrait, name, "Level · Ancestry · Class", campaign (plus "Asked to join …" or "Rules updated"), and HP and AC.
+  - It shows only your characters, as cards: the class's banner behind the portrait (`class-<slug>-banner.webp`, falling back to the class portrait, faded; see `docs/adding-art.md`), name, "Level · Ancestry · Class", and campaign (plus "Asked to join …" or "Rules updated").
   - Each card has **View** (the sheet), **Edit** (the builder; off for characters without builder choices) and **Delete** (asks first; `DELETE /api/characters/:id`).
   - Search covers name, level, ancestry, class and campaign. Sort by name, level, or created newest or oldest; the choice is remembered (`rollbound.characterSort`). **Create a Character** sits top right.
 - **Campaigns** (`/campaigns`, `pages/CampaignsPage.jsx`) has two sections:
@@ -244,6 +244,13 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - `<slug>-thumb.webp` is a 192×192 square, cut around the most detailed part of the picture (sharp's `attention` crop, usually the face). It's used on bestiary cards (with the level as a corner badge) and in the encounter picker.
   - Creatures without art look as before.
   - Add art with `npm run art:creatures -- <folder>` (`client/scripts/import-creature-art.mjs`). It matches files by creature name in any style ("Goblin Warrior.webp", "goblin_warrior.png", or a pre-Remaster name), makes both files, and lists unmatched files with suggestions.
+
+### 6d. Spell Book
+- **What:** every spell in the rules data (1,028 from Player Core, Player Core 2, Impossible Magic and Dark Archive: 725 cantrips and spells of ranks 1–10, 272 focus spells and 31 rituals) at `/spells`, linked from the ☰ menu as **Spell Book**. The breadcrumb reads "Spells".
+- **List** (`pages/SpellBookPages.jsx`, built like the Bestiary): search by name or trait, filter by type (Spells, Focus Spells, Rituals), rank (cantrips, 1–10), tradition, rarity and book. The filters live in the address. Ordinary spells come first, then focus spells, then rituals, each by rank, 60 at a time. Each card shows rank, cast time (action symbols), notable traits, traditions and defense.
+- **Each spell's page** (`/spells/:slug`; `/spells/id/:spellId` finds one by ID) shows "Cantrip 1", "Spell 3", "Focus 1" or "Ritual 5" as the books do, the traits, traditions, cast time, range, area, targets, defense and duration, then the full rules text, the book, and an Archives of Nethys search link.
+- **Character pages:** the character tab formerly called Spell Book is now **Spells** (`pages/CharacterSpellsPage.jsx`), and each spell there links to its Spell Book page.
+- **Every spell is imported:** all of Foundry's spell folders (`PACK_PATTERNS` in `scripts/import-pf2e.js`), and every spell, focus spell and ritual from the AoN books (`import-aon.js`). Each spell has a `kind`: `spell`, `focus` or `ritual`. The builder's `spellOptions` still offers only ordinary common cantrips and rank 1 spells, and a test checks that no focus spell, ritual or higher rank reaches a level 1 character. The builder's Spells step now downloads more data (about 1.3 MB, roughly 300 KB compressed).
 
 ### 7. Image uploads and S3
 - **Three kinds:** campaign covers (`covers/`, 5 MB), profile pictures (`avatars/`, 2 MB), and character portraits (`portraits/`, 5 MB).

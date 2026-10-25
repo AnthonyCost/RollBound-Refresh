@@ -5,7 +5,7 @@ import PageShell from '../components/PageShell.jsx';
 import Portrait from '../components/Portrait.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { isOutdated } from '../state/rulesData.js';
-import { artFor, hasOwnArt } from '../builder/art.js';
+import { artFor, bannerFor, hasOwnArt } from '../builder/art.js';
 
 const SORTS = {
   name: { label: 'Name', compare: (a, b) => a.name.localeCompare(b.name) },
@@ -31,7 +31,9 @@ export function CharacterCard({ character: c, onDelete }) {
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState([]);
   const slug = c.data.classSlug;
-  const banner = slug && hasOwnArt('class', slug) ? artFor('class', slug) : null;
+  // The class's own banner if it has one, otherwise its portrait, faded behind.
+  const banner = slug ? bannerFor(slug) ?? (hasOwnArt('class', slug) ? artFor('class', slug) : null) : null;
+  const isBanner = Boolean(slug && bannerFor(slug));
   const remove = async () => {
     setBusy(true);
     try {
@@ -46,7 +48,7 @@ export function CharacterCard({ character: c, onDelete }) {
   return (
     <li className="char-card">
       <Link to={`/play/${c.id}/sheet`} className="char-card__banner">
-        {banner && <img className="char-card__art" src={banner} alt="" />}
+        {banner && <img className={`char-card__art ${isBanner ? 'char-card__art--banner' : ''}`} src={banner} alt="" />}
         <Portrait url={c.portraitUrl} name={c.name} size="lg" />
         <span className="char-card__text">
           <span className="char-card__name">{c.name}</span>
@@ -56,10 +58,6 @@ export function CharacterCard({ character: c, onDelete }) {
             {c.joinRequest && <span className="char-card__alert"> · Asked to join {c.joinRequest.campaignName}</span>}
             {isOutdated(c.data) && <span className="char-card__alert"> · Rules updated</span>}
           </span>
-        </span>
-        <span className="char-card__stats">
-          <span><small>HP</small>{c.summary.maxHp}</span>
-          <span><small>AC</small>{c.summary.ac}</span>
         </span>
       </Link>
       {confirming ? (
