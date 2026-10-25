@@ -6,13 +6,16 @@ dist/
 *:Zone.Identifier
 
 # Third-party placeholder art (Monster Hunter, (c) Capcom): local use only, replace before publishing.
-client/src/assets/art/placeholder-hero.png
+# client/src/assets/art/placeholder-hero.png
 
 # Local stand-in for the S3 bucket
 server/uploads/
 
-# Paizo character sheet template (personal-use license): add locally, see docs/character-sheet-pdf.md
-client/public/sheets/*.pdf
+# # Paizo character sheet template (personal-use license): add locally, see docs/character-sheet-pdf.md
+# client/public/sheets/*.pdf
 
-# Adventure Path covers (Paizo art with the Pathfinder logo): local use only, see client/src/assets/adventure-paths/README.md
-client/src/assets/adventure-paths/*.webp
+# # Adventure Path covers (Paizo art with the Pathfinder logo): local use only, see client/src/assets/adventure-paths/README.md
+# client/src/assets/adventure-paths/*.webp
+
+# # Bestiary thumbnails (likely Paizo art): local use only, see client/src/assets/creatures/README.md
+# client/src/assets/creatures/*.webp

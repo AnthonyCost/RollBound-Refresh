@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { budgets, creatureXp, dcByLevel, rateEncounter } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useCampaign, useCampaignCrumbs } from './CampaignPage.jsx';
-import { creaturePath, loadBestiary } from '../state/bestiary.js';
+import { creaturePath, creatureThumb, loadBestiary } from '../state/bestiary.js';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import Ornament from '../components/Ornament.jsx';
 
@@ -140,6 +140,7 @@ function BestiaryPicker({ partyLevel, onAdd, full }) {
         <ul className="picker__results">
           {results.map((c) => (
             <li key={c.id} className="picker__result">
+              {creatureThumb(c) && <img className="picker__thumb" src={creatureThumb(c)} alt="" loading="lazy" />}
               <span className="picker__info">
                 <Link to={creaturePath(c)} target="_blank" rel="noreferrer" className="picker__name">{c.name}</Link>
                 <span className="muted">

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
-import { BESTIARY_BOOKS, bookKey, creaturePath, loadBestiary } from '../state/bestiary.js';
+import { BESTIARY_BOOKS, bookKey, creaturePath, creatureThumb, loadBestiary } from '../state/bestiary.js';
 
 // The creature types a monster's traits can name, in the order the books list them.
 const TYPES = ['Aberration', 'Animal', 'Astral', 'Beast', 'Celestial', 'Construct', 'Dragon', 'Dream', 'Elemental', 'Ethereal', 'Fey', 'Fiend', 'Fungus', 'Giant', 'Humanoid', 'Monitor', 'Ooze', 'Plant', 'Spirit', 'Time', 'Undead'];
@@ -159,10 +159,17 @@ export default function BestiaryPage() {
               {matches.slice(0, shown).map((c) => (
                 <li key={c.id}>
                   <Link to={creaturePath(c)} className="creature-card">
-                    <span className="creature-card__level" aria-label={`Level ${c.level}`}>
-                      <small>LVL</small>
-                      {c.level}
-                    </span>
+                    {creatureThumb(c) ? (
+                      <span className="creature-card__thumb">
+                        <img src={creatureThumb(c)} alt="" loading="lazy" decoding="async" />
+                        <span className="creature-card__badge" aria-label={`Level ${c.level}`}>{c.level}</span>
+                      </span>
+                    ) : (
+                      <span className="creature-card__level" aria-label={`Level ${c.level}`}>
+                        <small>LVL</small>
+                        {c.level}
+                      </span>
+                    )}
                     <span className="creature-card__body">
                       <span className="creature-card__name">{c.name}</span>
                       <span className="creature-card__tags">

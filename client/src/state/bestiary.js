@@ -26,3 +26,19 @@ export const bookByKey = (key) => BESTIARY_BOOKS.find((b) => bookKey(b.book) ===
 
 /** Where a creature's page is. */
 export const creaturePath = (c) => `/bestiary/${bookKey(c.book)}/${c.slug}`;
+
+// Art from client/src/assets/creatures/: <slug>.webp (the whole picture) and
+// <slug>-thumb.webp (a small square). Only their URLs load here; each image
+// downloads when it's shown.
+const ART = Object.fromEntries(
+  Object.entries(import.meta.glob('../assets/creatures/*.webp', { eager: true, query: '?url', import: 'default' })).map(([path, url]) => [
+    path.split('/').pop().replace('.webp', ''),
+    url,
+  ]),
+);
+
+/** A creature's small square thumbnail URL, or null when it has none. */
+export const creatureThumb = (c) => ART[`${c.slug}-thumb`] ?? null;
+
+/** A creature's whole picture, for its page, or null when it has none. */
+export const creatureArt = (c) => ART[c.slug] ?? null;

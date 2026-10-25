@@ -603,7 +603,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .picker__nearby { margin: 0; font-size: 14px; }
 .picker__results { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; max-height: 420px; overflow-y: auto; }
 .picker__result { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 10px; border: 1px solid var(--line-soft); background: var(--bg); }
-.picker__info { display: flex; flex-direction: column; min-width: 0; font-size: 14px; }
+.picker__thumb { flex: none; width: 40px; height: 40px; object-fit: cover; object-position: center 25%; border: 1px solid var(--line-soft); }
+.picker__info { flex: 1; display: flex; flex-direction: column; min-width: 0; font-size: 14px; }
 .picker__name { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text); text-decoration: none; }
 .picker__name:hover { text-decoration: underline; }
 .homebrew { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
@@ -641,6 +642,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .creature-card { display: flex; gap: 12px; align-items: center; height: 100%; padding: 10px 12px; border: 1px solid var(--line-soft); background: var(--panel); color: var(--text); text-decoration: none; }
 @media (hover: hover) { .creature-card:hover { border-color: var(--bronze); background: var(--panel-hot); } }
 .creature-card__level { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid var(--line); background: var(--bg); font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.creature-card__thumb { position: relative; flex: none; width: 64px; height: 64px; border: 1px solid var(--line); background: var(--bg); }
+.creature-card__thumb img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+.creature-card__badge { position: absolute; right: -6px; bottom: -6px; min-width: 24px; height: 24px; padding: 0 5px; display: grid; place-items: center; border: 1px solid var(--line); background: var(--bg); font-family: var(--display); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .creature-card__level small { font-size: 8px; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 2px; }
 .creature-card__body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .creature-card__name { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; overflow-wrap: anywhere; }
@@ -652,6 +656,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 .creature { display: flex; flex-direction: column; gap: 18px; }
 .creature__head { display: flex; flex-direction: column; gap: 8px; }
+/* The creature's whole picture, at its own shape, above its lore. */
+.creature__art { display: flex; justify-content: center; padding: 10px; border: 1px solid var(--line); background: radial-gradient(ellipse at 50% 35%, #2a0f0c, #070505); }
+.creature__art img { display: block; width: auto; max-width: 100%; height: auto; max-height: min(640px, 75vh); object-fit: contain; }
+@media (hover: hover) { .creature__art:hover { border-color: var(--bronze); } }
 .creature__head .rule-note { margin: 0; }
 .creature__title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .creature__level { font-family: var(--display); font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--bronze); }

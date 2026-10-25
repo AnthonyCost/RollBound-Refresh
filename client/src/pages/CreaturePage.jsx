@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
-import { BESTIARY_LICENSE, bookByKey, creaturePath, loadBestiary } from '../state/bestiary.js';
+import { BESTIARY_LICENSE, bookByKey, creatureArt, creaturePath, loadBestiary } from '../state/bestiary.js';
 import { signed } from '../format.js';
 
 /** One creature: its quick numbers, lore, Recall Knowledge DCs and full stat block. */
@@ -67,6 +67,12 @@ export default function CreaturePage() {
 
         <div className="split">
           <div className="split__col">
+            {/* The whole picture, uncropped; tap to open it full size. */}
+            {creatureArt(c) && (
+              <a className="creature__art" href={creatureArt(c)} target="_blank" rel="noreferrer" aria-label={`Open ${c.name}'s art full size`}>
+                <img src={creatureArt(c)} alt={c.name} />
+              </a>
+            )}
             {c.description && <div className="creature__lore" dangerouslySetInnerHTML={{ __html: c.description }} />}
             {c.recall.length > 0 && (
               <section className="panel creature__recall" aria-labelledby="recall-title">

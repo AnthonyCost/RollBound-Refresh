@@ -57,6 +57,7 @@ Other commands:
 | `npm run db:migrate-builds --workspace @rollbound/server` | Upgrades saved characters' builds on their own |
 | `npm run dev:client -- --host` | Opens the dev server to your phone on the same Wi-Fi |
 | `npm run data:bestiary --workspace @rollbound/rules` | Rebuilds the bestiary from the Archives of Nethys (Monster Core and Monster Core 2), checking Monster Core against Foundry |
+| `npm run art:creatures -- <folder>` | Adds bestiary art (a full picture and a face-cropped thumbnail), matching each image to a creature by its file name |
 | `npm run inbox:post -- --title "…" --body "…"` | Posts an announcement to everyone's inbox. Add `--kind patch-notes` for patch notes, or `--body-file notes.txt` for a longer body (line breaks are kept) |
 
 The settings go in `server/.env`; see `server/.env.example`. Key ones are `DATABASE_URL`, `UPLOAD_SECRET`, and the commented S3 block.
@@ -238,6 +239,11 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Checked:** the import compares Monster Core against Foundry VTT's independent copy. Of 418 creatures in both, 413 agree on level, HP, AC, Perception and saves; 5 don't (Air Scamp Fortitude, Dero Stalker AC, Giant Monitor Lizard AC, Centaur Herbalist HP and Will, Azuretzi HP), likely errata applied in one source and not the other. Foundry has no Monster Core 2 yet, so it's AoN only. `test/bestiary.test.js` checks every creature has its numbers and a clean stat block.
 - **Pages:** `pages/BestiaryPage.jsx` has search (name, old name, or trait), filters for level range, creature type, size, rarity and book, and Clear filters. The filters live in the address, so a filtered list can be bookmarked. It shows 60 at a time. `pages/CreaturePage.jsx` (`/bestiary/mc/:slug`, `/bestiary/mc2/:slug`) shows quick stats, lore, Recall Knowledge, sidebars, the stat block, the book and page, and the creature's family with a filtered-list link.
 - **Used by** the Encounters tab's creature picker.
+- **Art** (optional, per creature), in `client/src/assets/creatures/`:
+  - `<slug>.webp` is the whole picture, fitted inside 900×1600 (9:16 art keeps its shape). It shows uncropped at the top of the creature page's lore column, up to 640px tall, and opens full size when tapped.
+  - `<slug>-thumb.webp` is a 192×192 square, cut around the most detailed part of the picture (sharp's `attention` crop, usually the face). It's used on bestiary cards (with the level as a corner badge) and in the encounter picker.
+  - Creatures without art look as before.
+  - Add art with `npm run art:creatures -- <folder>` (`client/scripts/import-creature-art.mjs`). It matches files by creature name in any style ("Goblin Warrior.webp", "goblin_warrior.png", or a pre-Remaster name), makes both files, and lists unmatched files with suggestions.
 
 ### 7. Image uploads and S3
 - **Three kinds:** campaign covers (`covers/`, 5 MB), profile pictures (`avatars/`, 2 MB), and character portraits (`portraits/`, 5 MB).
