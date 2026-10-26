@@ -25,6 +25,7 @@ import { booksLabel, isOutdated, loadRules, replaceCharacter } from '../state/ru
 import { useCampaignService } from '../state/campaignService.js';
 import { savePortrait } from '../state/portraits.js';
 import ImagePicker from '../components/ImagePicker.jsx';
+import StartStep from '../builder/StartStep.jsx';
 
 const DRAFT_KEY = 'rollbound:draft';
 
@@ -95,7 +96,8 @@ const STEP_TOUCHED = {
   review: (b) => Boolean(b.name.trim()),
 };
 
-const BLANK = { build: emptyBuild(), step: STEPS[0] };
+// start: null until the player picks Build your own ('custom') or a pregenerated hero ('pregen').
+const BLANK = { build: emptyBuild(), step: STEPS[0], start: null };
 
 // Steps that only need EARLY_TYPES, so they can show before feats, spells and gear arrive.
 const EARLY_STEPS = ['ancestry', 'background', 'class'];
@@ -111,6 +113,8 @@ function loadDraft(key) {
         build: { ...emptyBuild(), ...saved.build, v: saved.build.v ?? 1 },
         step: STEPS.includes(saved.step) ? saved.step : STEPS[0],
         campaign: saved.campaign ?? null,
+        // Drafts from before the start screen were already under way.
+        start: saved.start ?? 'custom',
       };
     }
   } catch {
@@ -215,7 +219,7 @@ export default function BuilderPage() {
   const [loadFailed, setLoadFailed] = useState(false);
   const [hadDraft] = useState(() => Boolean(loadDraft(draftKey)));
   // campaign: { code, name, books } when a new character is built for a campaign.
-  const [{ build, step, campaign = null }, setDraft] = useState(() => loadDraft(draftKey) ?? BLANK);
+  const [{ build, step, campaign = null, start = null }, setDraft] = useState(() => loadDraft(draftKey) ?? BLANK);
   const [removed, setRemoved] = useState([]);
   // Edit mode: { name, original, repick, books, campaignName } once the saved character has loaded.
   const [editing, setEditing] = useState(null);
@@ -307,13 +311,32 @@ export default function BuilderPage() {
   const earlyOk = !editId && build.v >= BUILD_VERSION && EARLY_STEPS.includes(step);
   const stepData = ready ? view : earlyOk ? earlyView : null;
   useEffect(() => {
-    if (ready) saveDraft(draftKey, { build, step, ...(campaign && { campaign }) });
-  }, [ready, draftKey, build, step, campaign]);
+    if (ready) saveDraft(draftKey, { build, step, start, ...(campaign && { campaign }) });
+  }, [ready, draftKey, build, step, start, campaign]);
 
   const update = (patch) => setDraft((d) => ({ ...d, build: { ...d.build, ...patch } }));
   const goTo = (s) => {
     setDraft((d) => ({ ...d, step: s }));
     window.scrollTo(0, 0);
+  };
+  // The start screen shows for a new character until the player picks how to begin.
+  const choosing = !editId && !start;
+  const startCustom = () => {
+    setDraft((d) => ({ ...d, start: 'custom', step: STEPS[0] }));
+    setPortrait({});
+    window.scrollTo(0, 0);
+  };
+  const startPregen = (pregen, headshotUrl) => {
+    const chosen = data ? dropBookIssues(dropMissingChoices(migrateBuild(pregen.build, data), data), data, campaign?.books ?? null) : pregen.build;
+    setDraft((d) => ({ ...d, start: 'pregen', build: chosen, step: 'review' }));
+    window.scrollTo(0, 0);
+    // Their headshot as the portrait, ready to save with them (it can still be changed).
+    if (headshotUrl) {
+      fetch(headshotUrl)
+        .then((r) => r.blob())
+        .then((blob) => setPortrait({ file: new File([blob], `${pregen.slug}.webp`, { type: 'image/webp' }) }))
+        .catch(() => {});
+    }
   };
 
   const index = STEPS.indexOf(step);
@@ -354,6 +377,7 @@ export default function BuilderPage() {
   const reset = () => {
     setDraft(editing ? { build: editing.original, step: STEPS[0] } : { ...BLANK, campaign });
     setRemoved([]);
+    setPortrait({});
     setConfirmReset(false);
     setErrors([]);
     window.scrollTo(0, 0);
@@ -368,7 +392,7 @@ export default function BuilderPage() {
         ]}
         actions={
           <>
-            {anyTouched && (
+            {(anyTouched || (!editId && start)) && (
               <button type="button" className="btn btn--small" onClick={() => setConfirmReset(true)}>
                 Reset
               </button>
@@ -388,7 +412,7 @@ export default function BuilderPage() {
         </div>
       )}
 
-      <nav className="steps" aria-label="Builder steps">
+      {!choosing && <nav className="steps" aria-label="Builder steps">
         {STEPS.map((s, i) => (
           <button
             key={s}
@@ -399,9 +423,22 @@ export default function BuilderPage() {
             onClick={() => goTo(s)}
           />
         ))}
-      </nav>
+      </nav>}
 
       <main className="app__main">
+        {choosing ? (
+          <>
+            <header className="builder__header">
+              <span className="eyebrow">Getting started</span>
+              <h1 className="title">How do you want to start?</h1>
+              <p className="rule-note">Build a hero of your own, or jump in with one of Pathfinder’s iconic heroes.</p>
+            </header>
+            {!data && !loadFailed && <p className="muted italic center">Opening the rulebooks…</p>}
+            {data && <CampaignBar campaign={campaign} removed={removed} onChoose={chooseCampaign} onClear={clearCampaign} />}
+            <StartStep onCustom={startCustom} onPregen={startPregen} />
+          </>
+        ) : (
+        <>
         <header className="builder__header">
           <span className="eyebrow">
             Step {index + 1} of {STEPS.length}
@@ -456,14 +493,16 @@ export default function BuilderPage() {
             </button>
           </>
         )}
+        </>
+        )}
       </main>
 
-      <footer className="builder__footer">
-        <button type="button" className="btn" disabled={index === 0} onClick={() => goTo(STEPS[index - 1])}>Back</button>
+      {!choosing && <footer className="builder__footer">
+        <button type="button" className="btn" disabled={index === 0 && Boolean(editId)} onClick={() => (index === 0 ? setDraft((d) => ({ ...d, start: null })) : goTo(STEPS[index - 1]))}>Back</button>
         <button type="button" className="btn btn--blood btn--grow" disabled={index === STEPS.length - 1} onClick={() => goTo(STEPS[index + 1])}>
           {index < STEPS.length - 1 ? `Next: ${infoFor(STEPS[index + 1]).title}` : 'Last step'}
         </button>
-      </footer>
+      </footer>}
     </div>
   );
 }

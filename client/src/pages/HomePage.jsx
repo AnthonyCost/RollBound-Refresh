@@ -5,7 +5,7 @@ import { useAuth } from '../state/AuthContext.jsx';
 import { useCampaignService } from '../state/campaignService.js';
 import PageShell from '../components/PageShell.jsx';
 import Icon from '../components/Icon.jsx';
-import { bannerFor, classSlugOf } from '../builder/art.js';
+import homeMap from '../assets/home-map.webp';
 import { adventurePath } from '@rollbound/rules';
 import { CharacterCard } from './CharactersPage.jsx';
 
@@ -61,7 +61,7 @@ function CampaignRow({ campaign: c, hosting }) {
   );
 }
 
-/** Home: a welcome with your latest character, your characters and campaigns, and places to explore. */
+/** Home: a welcome over a map of the world, places to explore, then your characters and campaigns. */
 export default function HomePage() {
   const { user } = useAuth();
   const service = useCampaignService();
@@ -79,14 +79,11 @@ export default function HomePage() {
   // Every campaign once: the ones you host first, then the ones you play in.
   const campaigns = data ? [...data.running.map((c) => ({ c, hosting: true })), ...data.playing.map((c) => ({ c, hosting: false }))] : [];
   const dropCharacter = (id) => setData((d) => ({ ...d, characters: d.characters.filter((c) => c.id !== id) }));
-  // The banner of the character you touched last sets the welcome's art.
-  const latest = data?.characters.reduce((a, c) => (!a || (c.updatedAt ?? '') > (a.updatedAt ?? '') ? c : a), null);
-  const heroArt = latest ? bannerFor(classSlugOf(latest.data)) : null;
 
   return (
     <PageShell>
       <header className="home-hero">
-        {heroArt && <img className="home-hero__art" src={heroArt} alt="" />}
+        <img className="home-hero__art" src={homeMap} alt="" />
         <div className="home-hero__content">
           <span className="eyebrow">Welcome back</span>
           <h1 className="title">{user.displayName}</h1>

@@ -264,6 +264,13 @@ export function featSummary(build, data) {
   if (build.ancestryFeat) add(build.ancestryFeat, 'Ancestry feat', 'chosen');
   if (build.classFeat) add(build.classFeat, 'Class feat', 'chosen');
   for (const g of fixedFeatGrants(build, data)) add(g.id, g.from, 'granted');
+  // Versatile Human: a 1st-level general feat (skill feats count). Keyed by the heritage's ID.
+  const { heritage } = lookup(build, data);
+  if (heritage?.slug === 'versatile-human') {
+    const options = [...featPool(data, { category: 'general' }), ...featPool(data, { category: 'skill' })];
+    slots.push({ parent: heritage, options, chosen: build.bonusFeats[heritage.id] ?? null });
+    if (build.bonusFeats[heritage.id]) add(build.bonusFeats[heritage.id], heritage.name, 'bonus');
+  }
   return { owned, slots };
 }
 
@@ -493,6 +500,15 @@ export function proficienciesOf(build, data) {
       else if (group === 'perception') p.perception = best(p.perception, rank);
     }
   }
+  // General feats that add training: Armor Proficiency (the next armor category up) and
+  // Weapon Proficiency (martial weapons).
+  for (const { feat } of featSummary(build, data).owned) {
+    if (feat.slug === 'armor-proficiency') {
+      const next = ['light', 'medium', 'heavy'].find((c) => !p.armor[c] || p.armor[c] === 'untrained');
+      if (next) p.armor[next] = 'trained';
+    }
+    if (feat.slug === 'weapon-proficiency' && (!p.weapons.martial || p.weapons.martial === 'untrained')) p.weapons.martial = 'trained';
+  }
   if (spellcastingOf(build, data)) p.spellcasting = 'trained';
   // Some classes (cleric) are trained with their deity's favored weapon.
   if (cls.deityFavoredWeapon && deity) {
@@ -720,8 +736,8 @@ function choiceRefs(build, data) {
   for (const [parent, id] of Object.entries(build.bonusFeats ?? {})) {
     if (!id) continue;
     const clear = (b) => ({ ...b, bonusFeats: { ...b.bonusFeats, [parent]: null } });
-    // A bonus pick whose granting feat is gone has nowhere to go, so it counts as gone too.
-    refs.push({ step: 'feats', kind: 'feat', id, item: find(data.feats, parent) && find(data.feats, id), clear });
+    // A bonus pick whose granting feat (or heritage) is gone has nowhere to go, so it counts as gone too.
+    refs.push({ step: 'feats', kind: 'feat', id, item: (find(data.feats, parent) ?? find(data.heritages, parent)) && find(data.feats, id), clear });
   }
   many('spells', 'cantrip', 'cantrips', data.spells);
   many('spells', 'spell', 'spells', data.spells);

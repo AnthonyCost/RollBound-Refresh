@@ -35,7 +35,7 @@ export async function createDemo() {
   let user, sam, wolves, kestrel;
   try {
     await client.query('BEGIN');
-    [user] = (await client.query("INSERT INTO users (email, display_name, is_demo) VALUES ($1, 'Adventurer', true) RETURNING *", [fakeEmail('')])).rows;
+    [user] = (await client.query("INSERT INTO users (email, display_name, is_demo) VALUES ($1, 'Traveler', true) RETURNING *", [fakeEmail('')])).rows;
     [sam] = (await client.query("INSERT INTO users (email, display_name, is_demo, demo_owner_id) VALUES ($1, 'Sam', true, $2) RETURNING *", [fakeEmail('-sam'), user.id])).rows;
     const campaign = async (gm, name, backstory) =>
       (await client.query('INSERT INTO campaigns (name, backstory, gm_user_id, party_level, invite_code) VALUES ($1, $2, $3, 1, $4) RETURNING *', [name, backstory, gm.id, generateInviteCode()])).rows[0];

@@ -42,7 +42,9 @@ export const SAMPLE_BUILDS = {
     "languages": [],
     "ancestryFeat": "lwLcUHQMOqfaNND4",
     "classFeat": "5FyvwI24mnROzh61",
-    "bonusFeats": {},
+    "bonusFeats": {
+      "hFBwsVcSnNCJoimo": "AmP0qu7c5dlBSath"
+    },
     "cantrips": [],
     "spells": [],
     "runes": [],

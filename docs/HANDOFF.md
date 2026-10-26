@@ -108,7 +108,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - the session cookie is HTTP-only and lasts 30 days,
   - the database stores only a SHA-256 hash of each session token (`sessions` table).
 - **Demo mode:** "Try the demo" (`POST /api/auth/demo`) makes a real, temporary account for each visitor and signs them in, so the demo runs the same code as everyone else (`server/src/demo.js`).
-  - **What it comes with:** "Adventurer" runs *Wolves at the Ford* with Mira in the party. Mira is now built in the builder, so she can be edited. A pretend player, **Sam**, has asked to bring his ranger **Kestrel** in, so a join request waits in the inbox. Sam also runs *The Sunken Vault*; the welcome message gives its invite code, and Sam accepts requests to it about five seconds later (`answerBotRequests`, run when the inbox or character list loads). The characters' builds are `SAMPLE_BUILDS` in the rules package, and a test keeps them valid.
+  - **What it comes with:** "Traveler" runs *Wolves at the Ford* with Mira in the party. Mira is now built in the builder, so she can be edited. A pretend player, **Sam**, has asked to bring his ranger **Kestrel** in, so a join request waits in the inbox. Sam also runs *The Sunken Vault*; the welcome message gives its invite code, and Sam accepts requests to it about five seconds later (`answerBotRequests`, run when the inbox or character list loads). The characters' builds are `SAMPLE_BUILDS` in the rules package, and a test keeps them valid.
   - **Separate worlds:** a demo only finds its own campaigns' invite codes, and nobody else finds them (`canJoin`).
   - **Lifetime:** demo accounts are deleted, with Sam, their characters, campaigns, messages and uploads, when the visitor exits the demo, or after 24 hours (`scheduleDemoCleanup`, hourly and on start). The banner shows the hours left.
   - **Ending:** a demo's sign-in stops working at exactly 24 hours (`userForToken`), and the hourly cleanup deletes it afterwards. In the last hour the banner turns red, counts down the minutes, and offers **Create an account**, which ends the demo and opens sign-up. When time runs out the banner checks with the server and the app signs out by itself.
@@ -120,7 +120,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 ### 2. Home, Characters and Campaigns pages
 - **Home** (`/home`, `pages/HomePage.jsx`) is where signing in lands and where the wordmark goes.
   - **Order, top to bottom, one full-width row each:** the welcome band, Explore, My Characters, Campaigns.
-  - **Welcome band:** the greeting over your most recently updated character's class banner (no buttons).
+  - **Welcome band:** the greeting over a black-and-white map (`client/src/assets/home-map.webp`) under a dark wash (no buttons).
   - **Explore:** tiles (icon, name, one line) for the Bestiary, Spell Book, Learning The Game and Resources: four across on wide screens, two on tablets, one on phones.
   - **My Characters:** cards (`CharacterCard`, shared with `/characters`) with **+ New** and **See All**.
   - **Campaigns:** one list of compact rows (`CampaignRow`), hosted ones first, each once, with a **Game Master** or **Player** badge, cover, Adventure Path or Homebrew, player count, who runs it, and which of your characters plays; one across on phones, two or more on wider screens. Edit, Encounters and Delete live on `/campaigns` and the campaign page.
@@ -157,6 +157,15 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - a grid of round icon tiles,
   - the selected option's stats and description.
 - **Saving:** sends the character to the API, with an optional portrait.
+
+### 3a. Builder start: build your own or a pregenerated hero
+- A new character opens on **How do you want to start?** (`builder/StartStep.jsx`), before step 1: **Build your own** goes to the steps; **Play a pregenerated hero** opens a gallery of Paizo's iconics. Picking one loads their build (cleared of anything a campaign's books rule out) and jumps to Review, where it can be renamed and saved like any character. Back on step 1, or Reset, returns to the start screen. The draft remembers the choice (`start`); drafts from before this screen count as Build your own.
+- **Pregens:** 18 of Paizo's 23 level 1 iconics, every one whose class the builder offers (Grimmyr, Nahoa, Samo, Ulka and Yoon wait on Guardian, Exemplar, Animist, Commander and Kineticist). Each is transcribed by name from its sheet in `packages/rules/pregens/specs.js`; `npm run pregens -w packages/rules` (`scripts/build-pregens.js`) finds every choice in the rules data, solves the attribute boosts that give the sheet's attributes, splits skills into granted and chosen, checks the build with `buildProblems()`, compares HP, AC, Perception and saves with the sheet (all 18 match), and writes `src/pregens.js` (`PREGENS`: `{ slug, name, ancestry, heritage, className, classSlug, pdf, notes?, build }`). A test keeps every pregen valid.
+- **Where they differ from the sheet** (the script prints these as notes): regional languages (Kelish, Mwangi, Varisian…) aren't in the builder's language list; skills trained by feats the builder doesn't model are left off (Harsk, Sajan and Seelah's Stealth, Nhalmika and Seelah's Society); a few spells the class or muse grants differently are trimmed; Fumbus uses Courier for Pathfinder Hopeful, Korakai a staff for the khakkara, and Nhalmika drops the reinforced stock to stay within 15 gp. Wizard and witch spellbooks/familiars are filled out beyond the sheet's prepared spells.
+- **Builder fixes found on the way:** Versatile Human now gets its 1st-level general feat (a bonus slot keyed by the heritage's ID; Mira took Toughness), and Armor Proficiency and Weapon Proficiency now actually train light/medium/heavy armor and martial weapons (`proficienciesOf`).
+- **Original sheets** are in `client/public/pregens/` (`Pregens-<Hero>-Lvl1.pdf`); the gallery links each one.
+- **Gallery cards** show each hero's whole class portrait, fitted (not cropped), with the name below.
+- **Headshot portraits:** picking a hero preloads a square headshot as their portrait (saved with the character like an upload; it can be changed or removed on Review). The headshots are `client/src/assets/pregens/<slug>.webp`, cut from the class portraits by `npm run art:pregens -w client` (`scripts/pregen-headshots.mjs`): it finds the head as the topmost wide, solid shape in the transparent art, with hand-set crops in `FOCUS` for Jirelle, Korakai and Nhalmika.
 
 ### 4. Rules data import
 - **Source:** the Foundry VTT pf2e system's open data, filtered to the books in `BOOKS` (Player Core, Player Core 2 and Guns & Gears) and pinned to an upstream commit recorded in `meta.commit`.

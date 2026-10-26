@@ -548,6 +548,26 @@ describe('demo sample builds', () => {
   }
 });
 
+describe('pregenerated heroes', () => {
+  it('has every iconic whose class the builder offers', () => {
+    assert.equal(R.PREGENS.length, 18);
+  });
+  for (const p of R.PREGENS) {
+    it(`${p.name} is a complete, valid character with the current rules data`, () => {
+      const current = R.migrateBuild(p.build, data);
+      assert.deepEqual(R.buildProblems(current, data).map((x) => x.message), []);
+      assert.equal(R.buildCharacter(current, data).name, p.name);
+    });
+  }
+  it('gets a general feat for Versatile Human, and Armor Proficiency trains light armor', () => {
+    const kyra = R.PREGENS.find((p) => p.name === 'Kyra').build;
+    assert.equal(R.proficienciesOf(kyra, data).armor.light, 'trained');
+    const { slots } = R.featSummary({ ...kyra, bonusFeats: {} }, data);
+    assert.equal(slots.length, 1);
+    assert.equal(slots[0].parent.name, 'Versatile Human');
+  });
+});
+
 describe('spell choices with every spell in the data', () => {
   it('offers level 1 casters only ordinary cantrips and rank 1 spells', () => {
     assert.ok(data.spells.some((s) => s.kind === 'focus') && data.spells.some((s) => s.kind === 'ritual') && data.spells.some((s) => s.rank > 1));

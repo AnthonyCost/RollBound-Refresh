@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "art:import": "node scripts/import-art.mjs",
-    "art:creatures": "node scripts/import-creature-art.mjs"
+    "art:creatures": "node scripts/import-creature-art.mjs",
+    "art:pregens": "node scripts/pregen-headshots.mjs"
   },
   "dependencies": {
     "@rollbound/rules": "*",
