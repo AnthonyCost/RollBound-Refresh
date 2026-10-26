@@ -291,6 +291,11 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - `pdf-lib` pausing on timers made it crawl in a background tab,
   - `createImageBitmap` and `img.decode()` stalled in headless Chrome.
 
+### 8b. Fonts
+- **Beaufort for LOL** (`--display` and `--body`) everywhere: 400 for body text, 500 medium, 700 for headings, card names, labels, buttons and tabs, and 900 (heavy) for page titles (`.title`), the sheet's character name and the wordmark. Italics at 400 and 700.
+- **Old Fenris** is kept in `@font-face` and as `--accent-font` for some future one-off element. Nothing uses it yet, so browsers don't download it.
+- The files are self-hosted in `client/src/assets/fonts/` as WOFF2, trimmed to Latin characters with `pyftsubset` (about 215 KB together, Old Fenris being 108 KB of it). Google Fonts (Cinzel, Spectral) is no longer loaded.
+
 ### 9. Responsive design
 - **Approach:** mobile first, with the layout switching at 768px (tablet) and 1024px (desktop).
 - **Desktop:** two columns, and the content area widens to 1180px.
