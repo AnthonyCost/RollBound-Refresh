@@ -1,0 +1,224 @@
+{
+ "source": "Archives of Nethys (2e.aonprd.com): all equipment, legacy items replaced by their Remaster versions",
+ "license": "Game mechanics © Paizo Inc., used under the ORC License.",
+ "generatedAt": "2026-10-26T02:46:01.254Z",
+ "count": 3878,
+ "categories": [
+  {
+   "name": "Consumables",
+   "slug": "consumables",
+   "file": "consumables.json",
+   "count": 623
+  },
+  {
+   "name": "Weapons",
+   "slug": "weapons",
+   "file": "weapons.json",
+   "count": 616
+  },
+  {
+   "name": "Alchemical Items",
+   "slug": "alchemical-items",
+   "file": "alchemical-items.json",
+   "count": 435
+  },
+  {
+   "name": "Worn Items",
+   "slug": "worn-items",
+   "file": "worn-items.json",
+   "count": 411
+  },
+  {
+   "name": "Held Items",
+   "slug": "held-items",
+   "file": "held-items.json",
+   "count": 260
+  },
+  {
+   "name": "Adventuring Gear",
+   "slug": "adventuring-gear",
+   "file": "adventuring-gear.json",
+   "count": 212
+  },
+  {
+   "name": "Armor",
+   "slug": "armor",
+   "file": "armor.json",
+   "count": 163
+  },
+  {
+   "name": "Artifacts",
+   "slug": "artifacts",
+   "file": "artifacts.json",
+   "count": 156
+  },
+  {
+   "name": "Runes",
+   "slug": "runes",
+   "file": "runes.json",
+   "count": 128
+  },
+  {
+   "name": "Shields",
+   "slug": "shields",
+   "file": "shields.json",
+   "count": 104
+  },
+  {
+   "name": "Staves",
+   "slug": "staves",
+   "file": "staves.json",
+   "count": 83
+  },
+  {
+   "name": "Snares",
+   "slug": "snares",
+   "file": "snares.json",
+   "count": 83
+  },
+  {
+   "name": "Tattoos",
+   "slug": "tattoos",
+   "file": "tattoos.json",
+   "count": 54
+  },
+  {
+   "name": "Assistive Items",
+   "slug": "assistive-items",
+   "file": "assistive-items.json",
+   "count": 53
+  },
+  {
+   "name": "Cursed Items",
+   "slug": "cursed-items",
+   "file": "cursed-items.json",
+   "count": 49
+  },
+  {
+   "name": "Wands",
+   "slug": "wands",
+   "file": "wands.json",
+   "count": 48
+  },
+  {
+   "name": "Grimoires",
+   "slug": "grimoires",
+   "file": "grimoires.json",
+   "count": 46
+  },
+  {
+   "name": "Animals and Gear",
+   "slug": "animals-and-gear",
+   "file": "animals-and-gear.json",
+   "count": 42
+  },
+  {
+   "name": "Spellhearts",
+   "slug": "spellhearts",
+   "file": "spellhearts.json",
+   "count": 40
+  },
+  {
+   "name": "Contracts",
+   "slug": "contracts",
+   "file": "contracts.json",
+   "count": 28
+  },
+  {
+   "name": "Intelligent Items",
+   "slug": "intelligent-items",
+   "file": "intelligent-items.json",
+   "count": 25
+  },
+  {
+   "name": "Other",
+   "slug": "other",
+   "file": "other.json",
+   "count": 24
+  },
+  {
+   "name": "Materials",
+   "slug": "materials",
+   "file": "materials.json",
+   "count": 23
+  },
+  {
+   "name": "Banners",
+   "slug": "banners",
+   "file": "banners.json",
+   "count": 21
+  },
+  {
+   "name": "Structures",
+   "slug": "structures",
+   "file": "structures.json",
+   "count": 21
+  },
+  {
+   "name": "Services",
+   "slug": "services",
+   "file": "services.json",
+   "count": 20
+  },
+  {
+   "name": "Grafts",
+   "slug": "grafts",
+   "file": "grafts.json",
+   "count": 19
+  },
+  {
+   "name": "Trade Goods",
+   "slug": "trade-goods",
+   "file": "trade-goods.json",
+   "count": 18
+  },
+  {
+   "name": "Relics",
+   "slug": "relics",
+   "file": "relics.json",
+   "count": 17
+  },
+  {
+   "name": "Customizations",
+   "slug": "customizations",
+   "file": "customizations.json",
+   "count": 16
+  },
+  {
+   "name": "Apex Items",
+   "slug": "apex-items",
+   "file": "apex-items.json",
+   "count": 15
+  },
+  {
+   "name": "Adjustments",
+   "slug": "adjustments",
+   "file": "adjustments.json",
+   "count": 12
+  },
+  {
+   "name": "Censer",
+   "slug": "censer",
+   "file": "censer.json",
+   "count": 4
+  },
+  {
+   "name": "Blighted Boons",
+   "slug": "blighted-boons",
+   "file": "blighted-boons.json",
+   "count": 4
+  },
+  {
+   "name": "Figurehead",
+   "slug": "figurehead",
+   "file": "figurehead.json",
+   "count": 3
+  },
+  {
+   "name": "High-Tech",
+   "slug": "high-tech",
+   "file": "high-tech.json",
+   "count": 2
+  }
+ ]
+}

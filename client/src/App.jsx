@@ -20,6 +20,7 @@ import AccountPage from './pages/AccountPage.jsx';
 import SharedSheetPage, { PartySheetPage } from './pages/SharedSheetPage.jsx';
 import CharacterSpellsPage from './pages/CharacterSpellsPage.jsx';
 import SpellBookPage, { SpellByIdPage, SpellPage } from './pages/SpellBookPages.jsx';
+import ArmoryPage, { ItemPage } from './pages/ArmoryPages.jsx';
 import InventoryPage from './pages/InventoryPage.jsx';
 import LorePage from './pages/LorePage.jsx';
 import LearnPage from './pages/LearnPage.jsx';
@@ -110,6 +111,8 @@ export default function App() {
         <Route path="/characters/:characterId/edit" element={<BuilderPage />} />
         <Route path="/bestiary" element={<BestiaryPage />} />
         <Route path="/spells" element={<SpellBookPage />} />
+        <Route path="/armory" element={<ArmoryPage />} />
+        <Route path="/armory/:slug" element={<ItemPage />} />
         <Route path="/spells/id/:spellId" element={<SpellByIdPage />} />
         <Route path="/spells/:slug" element={<SpellPage />} />
         <Route path="/bestiary/creature/:creatureId" element={<CreatureByIdPage />} />

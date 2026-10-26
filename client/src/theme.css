@@ -773,6 +773,18 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .creature__kin a { color: var(--text-soft); }
 .creature__license { margin: 0; font-size: 12px; color: var(--text-muted); }
 
+/* ---------- Armory item pages ---------- */
+.item-facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px; margin: 0; }
+.item-facts div { padding: 8px 10px; border: 1px solid var(--line); background: var(--panel); text-align: center; }
+.item-facts dt { font-family: var(--display); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.item-facts dd { margin: 3px 0 0; font-family: var(--display); font-size: 17px; font-weight: 700; color: var(--text); overflow-wrap: anywhere; }
+.statblock__body.item-text p { padding-left: 0; text-indent: 0; margin-bottom: 8px; }
+.item-text table { width: 100%; margin: 6px 0 10px; border-collapse: collapse; font-size: 14px; }
+.item-text th, .item-text td { padding: 5px 8px; border: 1px solid var(--line-soft); text-align: left; }
+.item-text th { font-family: var(--display); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--bronze); }
+.item-variant { display: flex; justify-content: space-between; gap: 12px; margin: 14px -14px 8px; padding: 6px 14px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line-soft); background: var(--panel-hot); font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 1px; color: var(--text); }
+.item-variant span { color: var(--bronze); white-space: nowrap; }
+
 /* ---------- Creating a campaign ---------- */
 
 .kind-choice { display: grid; gap: 10px; }

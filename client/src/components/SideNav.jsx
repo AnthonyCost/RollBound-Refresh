@@ -39,6 +39,7 @@ export default function SideNav({ open, onClose }) {
         {link('/campaigns', 'map', 'Campaigns')}
         {link('/bestiary', 'book', 'Bestiary')}
         {link('/spells', 'spark', 'Spell Book')}
+        {link('/armory', 'armory', 'Armory', false)}
         {link('/learn', 'learn', 'Learning The Game', false)}
         {link('/resources', 'links', 'Resources')}
         <div className="sidenav__divider" />
