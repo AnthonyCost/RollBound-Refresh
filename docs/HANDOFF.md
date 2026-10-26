@@ -275,6 +275,10 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Fix found while writing it:** the encounter builder's Low threat added 15 XP per extra character. GM Core says 20 (Table 10-1), so `THREATS` in `packages/rules/src/gm.js` and its test were corrected.
 - **Server rules reload:** `server/src/rules.js` reloads the rules data when `packages/rules/data/index.json` changes. Before, a running server kept the version it started with, so demo characters made after a data re-import showed "Rules updated" straight away.
 
+### 6f. Action symbols
+- One, two and three actions, reaction and free action are drawn like Paizo's symbols (a small diamond tucked into a chevron, plus a chevron per extra action; a curved arrow; an outlined diamond). They're inline SVGs used as CSS masks on `.act act--1|2|3|r|f` in `theme.css`, so they take the text colour (`--blood-text` by default).
+- Rules text in the data (creature stat blocks, spells) already uses those spans. Elsewhere, `components/ActionCost.jsx` turns a cost into symbols: "2", "1 to 3", "reaction", and older characters' worded costs ("single action to three actions"); anything else ("10 minutes") stays as words. The Spell Book, the sheet's spell list and the Spells tab use it.
+
 ### 7. Image uploads and S3
 - **Three kinds:** campaign covers (`covers/`, 5 MB), profile pictures (`avatars/`, 2 MB), and character portraits (`portraits/`, 5 MB).
 - **Flow:**

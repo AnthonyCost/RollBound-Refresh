@@ -4,6 +4,7 @@ import { useTable } from '../state/TableContext.jsx';
 import { useRules } from '../state/useRules.js';
 import Ornament from '../components/Ornament.jsx';
 import { signed, titleCase } from '../format.js';
+import ActionCost from '../components/ActionCost.jsx';
 
 const SPELL_TYPES = ['spells'];
 
@@ -16,7 +17,6 @@ const KIND = {
   focus: 'You cast these with Focus Points, which you regain when you rest.',
 };
 
-const actionsLabel = (a) => (/^\d$/.test(a) ? `${a} action${a === '1' ? '' : 's'}` : a);
 const rankLabel = (rank) => (rank === 0 ? 'Cantrips' : `Rank ${rank}`);
 
 /** Every spell the character knows or has, with its full rules text. */
@@ -77,7 +77,7 @@ export default function CharacterSpellsPage() {
                   <details className="feature spell">
                     <summary>
                       <span className="spell__name">{spell.name}</span>
-                      <span className="spell__actions">{actionsLabel(spell.actions)}</span>
+                      <span className="spell__actions"><ActionCost actions={spell.actions} /></span>
                     </summary>
                     <div className="spell__body">
                       {spell.traits?.length > 0 && (

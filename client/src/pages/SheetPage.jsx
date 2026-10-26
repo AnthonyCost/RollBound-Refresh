@@ -12,6 +12,7 @@ import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
 import HpTracker from '../components/HpTracker.jsx';
 import ShareSheet from '../components/ShareSheet.jsx';
 import { signed, titleCase } from '../format.js';
+import ActionCost from '../components/ActionCost.jsx';
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 
@@ -223,8 +224,7 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
               <ul className="log">
                 {list.map((s) => (
                   <li key={s.slug}>
-                    <strong>{s.name}</strong>
-                    <span className="muted"> · {/^\d$/.test(s.actions) ? `${s.actions} action${s.actions === '1' ? '' : 's'}` : s.actions}</span>
+                    <strong>{s.name}</strong> <ActionCost actions={s.actions} />
                   </li>
                 ))}
               </ul>

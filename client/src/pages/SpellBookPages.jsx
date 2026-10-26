@@ -3,6 +3,7 @@ import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
 import { useRules } from '../state/useRules.js';
 import { titleCase } from '../format.js';
+import ActionCost from '../components/ActionCost.jsx';
 
 const SPELL_TYPES = ['spells'];
 const TRADITIONS = ['arcane', 'divine', 'occult', 'primal'];
@@ -15,22 +16,6 @@ const KINDS = { spell: 'Spells', focus: 'Focus Spells', ritual: 'Rituals' };
 /** How the books head a spell: "Cantrip 1", "Spell 3", "Focus 4", "Ritual 5". */
 const kindOf = (s) => (s.kind === 'ritual' ? 'Ritual' : s.kind === 'focus' ? 'Focus' : s.rank === 0 ? 'Cantrip' : 'Spell');
 const levelOf = (s) => s.rank || 1;
-const ACTION_ICONS = { 1: '1', 2: '2', 3: '3', reaction: 'r', free: 'f' };
-
-/** A spell's cast time: the book's action symbols where it has one, otherwise the words ("1 minute"). */
-function CastTime({ actions }) {
-  const icon = ACTION_ICONS[actions];
-  if (icon) return <span className={`act act--${icon}`} role="img" aria-label={actions === 'reaction' ? 'reaction' : actions === 'free' ? 'free action' : `${actions} action${actions === '1' ? '' : 's'}`} />;
-  const range = /^(\d) to (\d)$/.exec(actions ?? '');
-  if (range) {
-    return (
-      <span className="cast-range">
-        <span className={`act act--${range[1]}`} role="img" aria-label={`${range[1]} to`} /> to <span className={`act act--${range[2]}`} role="img" aria-label={`${range[2]} actions`} />
-      </span>
-    );
-  }
-  return <span>{actions}</span>;
-}
 
 /** Filters live in the address, so a filtered list can be bookmarked (as on the Bestiary). */
 function useFilters() {
@@ -160,7 +145,7 @@ export default function SpellBookPage() {
                     </span>
                     <span className="creature-card__body">
                       <span className="creature-card__name">
-                        {s.name} <CastTime actions={s.actions} />
+                        {s.name} <ActionCost actions={s.actions} />
                       </span>
                       <span className="creature-card__tags">
                         {s.rarity !== 'common' && <span className={`tag tag--rarity-${s.rarity}`}>{s.rarity}</span>}
@@ -213,7 +198,7 @@ export function SpellPage() {
   const facts = [
     ['Traditions', s.traditions.map(titleCase).join(', ')],
     ['Type', s.kind === 'focus' ? 'Focus spell: cast with a Focus Point' : s.kind === 'ritual' ? 'Ritual' : null],
-    ['Cast', <CastTime key="cast" actions={s.actions} />],
+    ['Cast', <ActionCost key="cast" actions={s.actions} />],
     ['Range', s.range],
     ['Area', s.area],
     ['Targets', s.target],
