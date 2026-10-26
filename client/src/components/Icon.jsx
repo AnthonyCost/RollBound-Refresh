@@ -20,6 +20,18 @@ const PATHS = {
       <path d="M5 17a3 3 0 0 1 3-3h11M10 8h5" />
     </>
   ),
+  compass: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M15.5 8.5l-2 5-5 2 2-5z" />
+    </>
+  ),
+  swords: <path d="M4 4l9 9M4 4v3l9 9M4 4h3l9 9M14 18l4-4M16 20l4-4M20 4l-6 6M20 4h-3M20 4v3M6 14l4 4M4 20l3-3" />,
+  crown: <path d="M4 18h16M5 15l-1-8 5 4 3-6 3 6 5-4-1 8z" />,
+  learn: <path d="M3 9l9-5 9 5-9 5zM7 11v5c3 2 7 2 10 0v-5M21 9v6" />,
+  links: <path d="M10 14a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-1 1M14 10a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l1-1" />,
+  external: <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />,
+  arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
 };
 
 export default function Icon({ name, size = 20 }) {

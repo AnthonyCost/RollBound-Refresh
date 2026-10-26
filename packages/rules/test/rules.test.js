@@ -148,7 +148,9 @@ describe('GM tools', () => {
   it('adjusts budgets for party size', () => {
     const r = rateEncounter([{ level: 1, count: 2 }], 1, 5);
     expect(r.budgets.find((b) => b.name === 'moderate').budget).toBe(100);
-    expect(r.threat).toBe('moderate');
+    // GM Core adds 20 per extra character to Low too (60 + 20), so 80 XP is still low.
+    expect(r.budgets.find((b) => b.name === 'low').budget).toBe(80);
+    expect(r.threat).toBe('low');
   });
   it('knows DCs by level', () => {
     expect(dcByLevel(0)).toBe(14);

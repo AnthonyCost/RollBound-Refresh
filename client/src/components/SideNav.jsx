@@ -17,8 +17,8 @@ export default function SideNav({ open, onClose }) {
   }, [open, onClose]);
 
   if (!open) return null;
-  const link = (to, icon, label) => (
-    <NavLink to={to} end className="sidenav__link" onClick={onClose}>
+  const link = (to, icon, label, end = true) => (
+    <NavLink to={to} end={end} className="sidenav__link" onClick={onClose}>
       <Icon name={icon} /> {label}
     </NavLink>
   );
@@ -39,6 +39,8 @@ export default function SideNav({ open, onClose }) {
         {link('/campaigns', 'map', 'Campaigns')}
         {link('/bestiary', 'book', 'Bestiary')}
         {link('/spells', 'spark', 'Spell Book')}
+        {link('/learn', 'learn', 'Learning The Game', false)}
+        {link('/resources', 'links', 'Resources')}
         <div className="sidenav__divider" />
         {link('/create', 'plus', 'New Character')}
         {link('/campaigns/new', 'plus', 'New Campaign')}

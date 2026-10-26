@@ -6,7 +6,7 @@ const CREATURE_XP = { '-4': 10, '-3': 15, '-2': 20, '-1': 30, 0: 40, 1: 60, 2: 8
 // Budget for a party of four, plus the adjustment per character above/below four.
 export const THREATS = [
   { name: 'trivial', budget: 40, perCharacter: 10 },
-  { name: 'low', budget: 60, perCharacter: 15 },
+  { name: 'low', budget: 60, perCharacter: 20 },
   { name: 'moderate', budget: 80, perCharacter: 20 },
   { name: 'severe', budget: 120, perCharacter: 30 },
   { name: 'extreme', budget: 160, perCharacter: 40 },

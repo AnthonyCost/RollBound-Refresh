@@ -500,9 +500,62 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 /* ---------- Home ---------- */
 
-.home-greeting { display: flex; flex-direction: column; gap: 2px; padding-bottom: 4px; }
-.home-section { display: flex; flex-direction: column; gap: 12px; }
-.home-section + .home-section { margin-top: 18px; }
+/* The welcome: your latest character's class art behind the greeting. */
+.home-hero { position: relative; display: flex; align-items: flex-end; min-height: clamp(140px, 18vw, 200px); padding: 24px; overflow: hidden; border: 1px solid var(--line); background: radial-gradient(ellipse at 75% 20%, #3a1410, #0c0504 70%); }
+.home-hero__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; opacity: 0.9; }
+.home-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(7 5 5 / 0.88) 0%, rgb(7 5 5 / 0.4) 60%, transparent), linear-gradient(to top, rgb(7 5 5 / 0.6), transparent 60%); }
+.home-hero__content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.home-hero__content .eyebrow { color: var(--bronze); }
+.home-hero__content .title { font-size: clamp(26px, 2vw + 18px, 38px); overflow-wrap: anywhere; }
+@container (max-width: 520px) { .home-hero { padding: 20px 16px; } }
+
+.home-section { display: flex; flex-direction: column; gap: 12px; min-width: 0; margin-top: 12px; scroll-margin-top: 16px; }
+.home-section__new { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blood-text); text-decoration: none; }
+@media (hover: hover) { .home-section__new:hover { color: var(--gold); } }
+
+/* Campaigns: one list, a column on phones and two side by side from tablets up. */
+.camp-rows { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.camp-rows > li { display: flex; }
+.camp-row { flex: 1; display: flex; align-items: center; gap: 14px; padding: 12px 14px 12px 12px; border: 1px solid var(--line); background: var(--panel); color: var(--text); text-decoration: none; transition: border-color 0.2s, background-color 0.2s; }
+.camp-row__cover { flex: none; display: grid; place-items: center; width: 68px; height: 68px; overflow: hidden; border: 1px solid var(--line-soft); background: radial-gradient(ellipse at 50% 30%, #3a1410, #0c0504); font-family: var(--display); font-size: 26px; font-weight: 700; color: var(--bronze); }
+.camp-row__cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.camp-row__text { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; }
+.camp-row__role { padding: 2px 7px; border: 1px solid var(--line); font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--bronze); }
+.camp-row__role--gm { border-color: var(--blood); color: var(--blood-text); }
+.camp-row__name { font-family: var(--display); font-size: 17px; font-weight: 700; letter-spacing: 0.5px; overflow-wrap: anywhere; }
+.camp-row__meta { font-size: 14px; color: var(--text-muted); }
+.camp-row__mine { font-size: 14px; font-style: italic; color: var(--text-soft); }
+.camp-row > svg { flex: none; color: var(--text-dim); transition: transform 0.2s, color 0.2s; }
+
+/* Explore: the reference pages, as a row of tiles. */
+.home-explore { display: flex; flex-direction: column; gap: 10px; }
+.home-explore h2 { margin: 0; color: var(--bronze); }
+.home-explore ul { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin: 0; padding: 0; list-style: none; }
+/* Four, two or one across, so no tile is left alone on a row. */
+@container (min-width: 560px) { .home-explore ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (min-width: 1000px) { .home-explore ul { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.home-explore li { display: flex; }
+.explore-tile { flex: 1; display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid var(--line); background: var(--panel); color: var(--text); text-decoration: none; transition: border-color 0.2s, background-color 0.2s; }
+.explore-tile__icon { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--blood); background: radial-gradient(circle at 50% 30%, #3a1410, #0c0504); color: var(--gold); transition: box-shadow 0.2s; }
+.explore-tile__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.explore-tile__name { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0.5px; }
+.explore-tile__blurb { font-size: 14px; line-height: 1.45; color: var(--text-muted); }
+
+/* Hover, and keyboard focus, on cards and tiles: red border, gold name, art leaning in. */
+.char-card, .camp-card { transition: border-color 0.2s, box-shadow 0.2s; }
+.char-card__art, .camp-card__cover img { transition: transform 0.4s ease, opacity 0.3s; }
+.char-card:has(.char-card__banner:is(:hover, :focus-visible)), .camp-card:has(.camp-card__open:is(:hover, :focus-visible)) { border-color: var(--blood); box-shadow: 0 0 16px var(--glow); }
+.char-card__banner:is(:hover, :focus-visible) .char-card__art, .camp-card__open:is(:hover, :focus-visible) .camp-card__cover img { transform: scale(1.05); }
+.camp-card__open:is(:hover, :focus-visible) .camp-card__cover img { opacity: 0.95; }
+.char-card__banner:focus-visible .char-card__name, .camp-card__open:focus-visible .camp-card__name { color: var(--gold); }
+.camp-row:is(:hover, :focus-visible), .explore-tile:is(:hover, :focus-visible) { border-color: var(--blood); background: var(--panel-hot); }
+.camp-row:is(:hover, :focus-visible) .camp-row__name, .explore-tile:is(:hover, :focus-visible) .explore-tile__name { color: var(--gold); }
+.explore-tile:is(:hover, :focus-visible) .explore-tile__icon { box-shadow: 0 0 14px var(--glow); }
+.camp-row:is(:hover, :focus-visible) .camp-row__cover img { transform: scale(1.08); }
+.camp-row:is(:hover, :focus-visible) > svg { transform: translateX(3px); color: var(--blood-text); }
+@media (prefers-reduced-motion: reduce) {
+  .char-card__art, .camp-card__cover img, .camp-row__cover img, .camp-row > svg { transition: none; transform: none !important; }
+}
 .home-section__head { display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
 .home-section__head h2 { display: flex; align-items: center; gap: 10px; margin: 0; font-family: var(--display); font-size: clamp(18px, 1vw + 14px, 22px); letter-spacing: 2px; text-transform: uppercase; }
 .home-section__head h2 a { color: var(--text); text-decoration: none; }
@@ -1857,6 +1910,98 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 /* Room for the banner to show above the first panels. */
 .app--play:has(.sheet-backdrop) .app__main { padding-top: 16px; }
+
+/* ---------- Learning the Game and Resources ---------- */
+
+.learn__head, .learn__body { width: 100%; max-width: 988px; margin-inline: auto; }
+.learn__head { display: flex; flex-direction: column; gap: 6px; padding-bottom: 8px; border-bottom: 1px solid var(--line-soft); }
+.learn__head .eyebrow, .learn__head .rule-note { margin: 0; }
+.learn__head .rule-note { max-width: 70ch; font-size: 16px; }
+
+/* A reading column with "On this page" beside it on wide screens. */
+.learn__body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
+.learn__contents { display: none; }
+@container (min-width: 900px) {
+  .learn__body { grid-template-columns: 220px minmax(0, 720px); justify-content: center; gap: 48px; }
+  .learn__contents { display: block; position: sticky; top: 16px; align-self: start; }
+}
+.learn__contents .eyebrow { margin: 0 0 10px; color: var(--bronze); }
+.learn__contents ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--line); }
+.learn__contents a { display: block; margin-left: -1px; padding: 6px 0 6px 14px; border-left: 2px solid transparent; font-size: 15px; line-height: 1.35; color: var(--text-muted); text-decoration: none; }
+.learn__contents a[aria-current] { border-left-color: var(--blood-text); color: var(--text); }
+@media (hover: hover) { .learn__contents a:hover { color: var(--gold); } }
+
+.learn__lessons { display: flex; flex-direction: column; min-width: 0; }
+.lesson { display: flex; flex-direction: column; gap: 14px; padding: 28px 0; border-bottom: 1px solid var(--line-faint); scroll-margin-top: 16px; }
+.lesson:first-child { padding-top: 8px; }
+.lesson:last-child { border-bottom: 0; }
+.lesson p { margin: 0; font-size: 17px; line-height: 1.7; color: var(--text-soft); }
+.lesson__title { display: flex; align-items: center; gap: 12px; margin: 0; font-family: var(--display); font-size: clamp(20px, 0.8vw + 16px, 24px); font-weight: 700; letter-spacing: 1px; color: var(--text); }
+.lesson__number { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--blood); background: var(--panel-hot); color: var(--blood-text); font-size: 13px; }
+.lesson__list { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 17px; line-height: 1.6; color: var(--text-soft); }
+.lesson__list li { padding-left: 4px; }
+.lesson__list li::marker { color: var(--blood-text); }
+.lesson__table { width: 100%; max-width: 560px; border-collapse: collapse; font-size: 16px; border: 1px solid var(--line); background: var(--panel); }
+.lesson__table th, .lesson__table td { padding: 9px 14px; border-bottom: 1px solid var(--line-soft); text-align: left; }
+.lesson__table thead th { font-family: var(--display); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); border-bottom-color: var(--line); background: var(--bg-deep); }
+.lesson__table tbody th { font-weight: 400; color: var(--text); }
+.lesson__table td { color: var(--gold); font-variant-numeric: tabular-nums; }
+.lesson__table tbody tr:last-child > * { border-bottom: 0; }
+.lesson__tip { padding: 14px 16px; border: 1px solid var(--line-soft); border-left: 3px solid var(--gold); background: var(--panel-hot); }
+.lesson p.lesson__tip { font-size: 16px; line-height: 1.6; }
+.lesson__tip .eyebrow { display: block; margin-bottom: 4px; color: var(--gold); }
+.lesson__tip a { color: var(--bronze); white-space: nowrap; }
+.lesson__more { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; font-size: 15px; color: var(--text-muted); }
+@media (hover: hover) { .lesson__more:hover { color: var(--bronze); } }
+.learn__next { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; max-width: 988px; margin: 8px auto 0; color: var(--text); text-decoration: none; }
+.learn__next > span { display: flex; flex-direction: column; gap: 2px; }
+.learn__next-label { font-family: var(--display); font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+.learn__next svg { color: var(--blood-text); }
+@media (hover: hover) { .learn__next:hover { border-color: var(--blood); } .learn__next:hover .learn__next-label { color: var(--gold); } }
+
+.resources__head { display: flex; flex-direction: column; gap: 6px; }
+.resources__head .rule-note { margin: 0; font-size: 16px; }
+
+/* "Start here": three numbered steps, in a row on wide screens. */
+.start { padding: 20px; }
+.start__steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px; }
+.start__steps > li { display: flex; }
+.start__step { flex: 1; display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid var(--line-soft); background: var(--bg-deep); color: var(--text); text-decoration: none; }
+.start__step > svg { flex: none; margin-left: auto; color: var(--text-dim); }
+.start__number { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--blood); background: var(--panel-hot); font-family: var(--display); font-size: 16px; font-weight: 700; color: var(--blood-text); }
+.start__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.start__title { display: inline-flex; align-items: center; gap: 6px; font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0.5px; }
+.start__title svg { color: var(--text-dim); }
+.start__blurb { font-size: 14px; line-height: 1.45; color: var(--text-muted); }
+@media (hover: hover) {
+  .start__step:hover { border-color: var(--blood); background: var(--panel-hot); }
+  .start__step:hover .start__title { color: var(--gold); }
+  .start__step:hover > svg { color: var(--blood-text); }
+}
+
+/* Resource tiles: class art across the top, then the details. */
+.resources { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); gap: 16px; }
+.resources > li { display: flex; }
+.resource { flex: 1; display: flex; flex-direction: column; border: 1px solid var(--line); background: var(--panel); color: var(--text); text-decoration: none; overflow: hidden; }
+.resource__art { position: relative; display: block; aspect-ratio: 720 / 267; background: radial-gradient(ellipse at 70% 30%, #3a1410, #0c0504); }
+.resource__frame { position: absolute; inset: 0; overflow: hidden; }
+.resource__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+.resource__frame::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--panel) 0%, rgb(18 12 10 / 0.2) 60%, transparent); }
+.resource__icon { position: absolute; z-index: 1; left: 20px; bottom: -26px; display: grid; place-items: center; width: 56px; height: 56px; border: 1px solid var(--blood); background: radial-gradient(circle at 50% 30%, #3a1410, #0c0504); color: var(--gold); box-shadow: 0 0 18px var(--glow); }
+.resource__body { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 36px 20px 20px; }
+.resource__tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.resource__tag { padding: 3px 8px; border: 1px solid var(--line); font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--bronze); }
+.resource__tag--free { border-color: var(--blood); color: var(--blood-text); }
+.resource__name { font-family: var(--display); font-size: 21px; font-weight: 700; letter-spacing: 1px; }
+.resource__site { margin-top: -6px; font-size: 14px; color: var(--text-dim); }
+.resource__text { flex: 1; font-size: 16px; line-height: 1.6; color: var(--text-soft); }
+.resource__cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding-top: 14px; border-top: 1px solid var(--line-soft); font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blood-text); }
+@media (hover: hover) {
+  .resource:hover { border-color: var(--blood); }
+  .resource:hover .resource__name { color: var(--gold); }
+  .resource:hover .resource__art img { transform: scale(1.04); }
+}
+@media (prefers-reduced-motion: reduce) { .resource__art img { transition: none; } }
 
 /* ---------- Spell Book ---------- */
 .spell-card__rank--focus { border-color: var(--bronze); }

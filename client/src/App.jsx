@@ -22,6 +22,8 @@ import CharacterSpellsPage from './pages/CharacterSpellsPage.jsx';
 import SpellBookPage, { SpellByIdPage, SpellPage } from './pages/SpellBookPages.jsx';
 import InventoryPage from './pages/InventoryPage.jsx';
 import LorePage from './pages/LorePage.jsx';
+import LearnPage from './pages/LearnPage.jsx';
+import ResourcesPage from './pages/ResourcesPage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
 import TopBar from './components/TopBar.jsx';
@@ -143,6 +145,10 @@ export default function App() {
         </Route>
       </Route>
       {/* Anyone with a share link, signed in or not. */}
+      {/* Open to everyone, signed in or not. */}
+      <Route path="/learn" element={<Navigate to="/learn/overview" replace />} />
+      <Route path="/learn/:topic" element={<LearnPage />} />
+      <Route path="/resources" element={<ResourcesPage />} />
       <Route path="/sheets/:shareId" element={<SharedSheetPage />}>
         <Route index element={<Navigate to="sheet" replace />} />
         <Route path="sheet" element={<SheetPage />} />

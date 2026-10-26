@@ -118,7 +118,13 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Profile:** the Account page (`/account`) sets the display name and profile picture. Sign-up has an optional picture too; it uploads after the account exists, and if that fails the user lands on the Account page with a note.
 
 ### 2. Home, Characters and Campaigns pages
-- **Home** (`/home`, `pages/HomePage.jsx`) is where signing in lands and where the wordmark goes. It greets you, then shows three sections: **My Characters**, **Campaigns I'm Hosting** and **Campaigns I'm Playing**. Each has every card, a count, its main action (Create a Character, Create a Campaign) and **See All**; the section titles link to the full pages. It has no search, sort or join box; those are on the full pages. The cards are shared with those pages (`CharacterCard`, `CampaignCard`).
+- **Home** (`/home`, `pages/HomePage.jsx`) is where signing in lands and where the wordmark goes.
+  - **Order, top to bottom, one full-width row each:** the welcome band, Explore, My Characters, Campaigns.
+  - **Welcome band:** the greeting over your most recently updated character's class banner (no buttons).
+  - **Explore:** tiles (icon, name, one line) for the Bestiary, Spell Book, Learning The Game and Resources: four across on wide screens, two on tablets, one on phones.
+  - **My Characters:** cards (`CharacterCard`, shared with `/characters`) with **+ New** and **See All**.
+  - **Campaigns:** one list of compact rows (`CampaignRow`), hosted ones first, each once, with a **Game Master** or **Player** badge, cover, Adventure Path or Homebrew, player count, who runs it, and which of your characters plays; one across on phones, two or more on wider screens. Edit, Encounters and Delete live on `/campaigns` and the campaign page.
+- **Hover and focus:** character cards, campaign cards, campaign rows and Explore tiles get a red border and gold name on hover or keyboard focus. Card art leans in slightly (none with reduced motion), matching the Resources tiles.
 - **Characters** (`/characters`, `pages/CharactersPage.jsx`) is the full list of your characters.
   - It shows only your characters, as cards: the class's card strip behind the portrait (`class-<slug>-card.webp`, a detail-picked crop of the 1920×1080 banner made by `npm run art:import`, falling back to the class portrait, faded; see `docs/adding-art.md`), name, "Level · Ancestry · Class", and campaign (plus "Asked to join …" or "Rules updated").
   - Each card has **View** (the sheet), **Edit** (the builder; off for characters without builder choices) and **Delete** (asks first; `DELETE /api/characters/:id`).
@@ -252,6 +258,13 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Each spell's page** (`/spells/:slug`; `/spells/id/:spellId` finds one by ID) shows "Cantrip 1", "Spell 3", "Focus 1" or "Ritual 5" as the books do, the traits, traditions, cast time, range, area, targets, defense and duration, then the full rules text, the book, and an Archives of Nethys search link.
 - **Character pages:** the character tab formerly called Spell Book is now **Spells** (`pages/CharacterSpellsPage.jsx`), and each spell there links to its Spell Book page.
 - **Every spell is imported:** all of Foundry's spell folders (`PACK_PATTERNS` in `scripts/import-pf2e.js`), and every spell, focus spell and ritual from the AoN books (`import-aon.js`). Each spell has a `kind`: `spell`, `focus` or `ritual`. The builder's `spellOptions` still offers only ordinary common cantrips and rank 1 spells, and a test checks that no focus spell, ritual or higher rank reaches a level 1 character. The builder's Spells step now downloads more data (about 1.3 MB, roughly 300 KB compressed).
+
+### 6e. Learning The Game and Resources
+- **Open to everyone:** both pages work signed out (their routes sit outside the sign-in guard in `App.jsx`), so visitors can read them without an account. The ☰ menu links to both.
+- **Learning The Game** (`/learn/:topic`, `pages/LearnPage.jsx`; `/learn` opens Overview): a single reading column, with a sticky "On this page" list of the tab's lessons beside it on wide screens (it marks the lesson being read). Tabs for Overview, Character Creation, Combat, Skills & Exploration, Spells and Game Mastering. The content is data in `client/src/learn/lessons.js`: each lesson has paragraphs and optionally a list, a small table, an "In RollBound" tip linking to the feature that helps (builder, Spell Book, Bestiary, campaigns), and an Archives of Nethys link. Rules follow the Remaster (Player Core, GM Core). Each tab ends with a link to the next.
+- **Resources** (`/resources`, `pages/ResourcesPage.jsx`): a "New to Pathfinder? Start here" strip (Learning The Game, Paizo's free demo adventure, Archives of Nethys), then tiles linking out, in new tabs, to Paizo's free downloads (demo adventure, pregenerated heroes), Archives of Nethys, the Paizo store and Foundry VTT's Pathfinder system. Each tile is headed by a class's card crop (`RESOURCES[].art`) and shows its site and tags (Free, Official, Paid, Play online).
+- **Fix found while writing it:** the encounter builder's Low threat added 15 XP per extra character. GM Core says 20 (Table 10-1), so `THREATS` in `packages/rules/src/gm.js` and its test were corrected.
+- **Server rules reload:** `server/src/rules.js` reloads the rules data when `packages/rules/data/index.json` changes. Before, a running server kept the version it started with, so demo characters made after a data re-import showed "Rules updated" straight away.
 
 ### 7. Image uploads and S3
 - **Three kinds:** campaign covers (`covers/`, 5 MB), profile pictures (`avatars/`, 2 MB), and character portraits (`portraits/`, 5 MB).
