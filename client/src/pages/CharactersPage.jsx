@@ -5,7 +5,7 @@ import PageShell from '../components/PageShell.jsx';
 import Portrait from '../components/Portrait.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { isOutdated } from '../state/rulesData.js';
-import { artFor, bannerFor, hasOwnArt } from '../builder/art.js';
+import { artFor, cardArtFor, classSlugOf, hasOwnArt } from '../builder/art.js';
 
 const SORTS = {
   name: { label: 'Name', compare: (a, b) => a.name.localeCompare(b.name) },
@@ -30,10 +30,10 @@ export function CharacterCard({ character: c, onDelete }) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState([]);
-  const slug = c.data.classSlug;
+  const slug = classSlugOf(c.data);
   // The class's own banner if it has one, otherwise its portrait, faded behind.
-  const banner = slug ? bannerFor(slug) ?? (hasOwnArt('class', slug) ? artFor('class', slug) : null) : null;
-  const isBanner = Boolean(slug && bannerFor(slug));
+  const banner = slug ? cardArtFor(slug) ?? (hasOwnArt('class', slug) ? artFor('class', slug) : null) : null;
+  const isBanner = Boolean(slug && cardArtFor(slug));
   const remove = async () => {
     setBusy(true);
     try {

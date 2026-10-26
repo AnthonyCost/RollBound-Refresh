@@ -2,6 +2,7 @@ import { Link, Outlet, useParams } from 'react-router-dom';
 import { TableProvider, useTable } from '../state/TableContext.jsx';
 import TopBar from '../components/TopBar.jsx';
 import NavBar from '../components/NavBar.jsx';
+import SheetBackdrop from '../components/SheetBackdrop.jsx';
 
 /** A character opened from its share link: every tab, read-only, no sign-in needed. */
 export default function SharedSheetPage() {
@@ -40,6 +41,7 @@ function ViewOnlyShell({ crumbs, missing }) {
     <div className="app app--play">
       <TopBar crumbs={crumbs(character?.name ?? 'Character', campaignName)} actions={<span className="tag tag--view">View only</span>} />
       {!loading && !notFound && <NavBar />}
+      {!loading && !notFound && <SheetBackdrop />}
 
       <main className="app__main">
         {loading && <p className="muted italic center">Summoning the sheet…</p>}

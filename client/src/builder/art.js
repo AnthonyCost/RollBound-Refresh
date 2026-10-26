@@ -2,13 +2,15 @@
 // client/src/assets/art/ are found by name, so adding art needs no code:
 //   <kind>-<slug>.webp       full-length portrait (the large panel)
 //   <kind>-<slug>-icon.webp  round emblem (the selection tile)
-//   class-<slug>-banner.webp wide background for character cards (1200x450)
+//   class-<slug>-banner.webp background for the character sheet (1920x1080)
+//   class-<slug>-card.webp   closer crop of the banner for character cards
 // e.g. class-wizard.webp, ancestry-elf-icon.webp. Guide: docs/adding-art.md
 const files = import.meta.glob('../assets/art/*.{webp,png,jpg}', { eager: true, query: '?url', import: 'default' });
 
 const ART = {};
 const ICONS = {};
 const BANNERS = {};
+const CARDS = {};
 let placeholder = null;
 
 for (const [path, url] of Object.entries(files)) {
@@ -17,10 +19,10 @@ for (const [path, url] of Object.entries(files)) {
     placeholder = url;
     continue;
   }
-  const m = /^(ancestry|class)-([a-z0-9-]+?)(-icon|-banner)?$/.exec(name);
+  const m = /^(ancestry|class)-([a-z0-9-]+?)(-icon|-banner|-card)?$/.exec(name);
   if (!m) continue;
   const [, kind, slug, extra] = m;
-  const table = extra === '-icon' ? ICONS : extra === '-banner' ? BANNERS : ART;
+  const table = { '-icon': ICONS, '-banner': BANNERS, '-card': CARDS }[extra] ?? ART;
   (table[kind] ??= {})[slug] = url;
 }
 
@@ -72,3 +74,13 @@ export const tileFocusFor = (kind, slug) => TILE_FOCUS[kind]?.[slug] ?? null;
 
 /** A class's wide banner for character cards, or null when it has none. */
 export const bannerFor = (slug) => BANNERS.class?.[slug] ?? null;
+
+/** The closer crop of a class's banner for character cards, or its full banner until one is made. */
+export const cardArtFor = (slug) => CARDS.class?.[slug] ?? bannerFor(slug);
+
+/**
+ * A character's class slug, for its art. Older characters (the seeded sample) have
+ * no classSlug, so it's worked out from the class name.
+ */
+export const classSlugOf = (character) =>
+  character?.classSlug ?? (character?.className ? character.className.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : null);

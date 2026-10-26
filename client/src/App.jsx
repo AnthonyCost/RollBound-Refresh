@@ -25,6 +25,7 @@ import LorePage from './pages/LorePage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
 import TopBar from './components/TopBar.jsx';
+import SheetBackdrop from './components/SheetBackdrop.jsx';
 import DemoBanner from './components/DemoBanner.jsx';
 
 function Loading() {
@@ -75,6 +76,7 @@ function PlayShell() {
       />
 
       {!notFound && <NavBar />}
+      {!loading && !notFound && <SheetBackdrop />}
       <DemoBanner />
 
       <main className="app__main">

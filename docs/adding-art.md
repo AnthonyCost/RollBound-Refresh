@@ -24,11 +24,18 @@ You can add art one image at a time. Anything without its own art falls back as 
 | --- | --- |
 | `<kind>-<slug>.png` | Portrait (`kind` is `ancestry` or `class`) |
 | `<kind>-<slug>-icon.png` | Tile icon |
-| `class-<slug>-banner.png` | Background of that class's character cards (Home and Characters) |
+| `class-<slug>-banner.png` | Background of that class's character cards (Home and Characters) and of the Sheet tab |
 
 **Class icons** are finished round emblems with their own ring, so send them with transparent corners. **Ancestry icons** can be any picture, square or not: the app clips them to a circle and draws the ring, so every ancestry tile looks the same. Keep the face near the middle.
 
-**Class banners** sit behind a character's portrait, name and campaign on their card. Send them wide, about **1200 × 450** (8:3) or larger. The card shows a strip about 2.7 times as wide as it is tall, so a little of the top and bottom may be cut on narrow cards. The left side sits under the portrait and text, behind a dark fade, so keep the subject in the **right half**. A class without a banner falls back to its portrait, faded.
+**Class banners** are **1920 × 1080** (16:9) backgrounds, made dark and muted so text reads on top of them. Two places use them:
+
+- **The Sheet tab:** the banner fills the page under the tabs at full width and its own shape, at 25% opacity over the page's dark red to black gradient, then fades out, so long sheets end on the page's usual background.
+- **Character cards:** a closer 2.7:1 strip (`class-<slug>-card.webp`, about 1.3× zoom) sits behind the portrait, name and campaign. The import picks the strip with the most detail, so it lands on figures and effects rather than empty sky or the faded bottom. The left side is under a dark fade.
+
+Dropped a banner straight into `client/src/assets/art/`? Run `npm run art:import -w client` with no folder to make its card strip. Strips are remade whenever their banner changes.
+
+A class without a banner shows its portrait, faded, on cards and nothing behind the sheet.
 
 Slugs are listed [below](#slugs). PNG, JPG and WebP all work as input.
 
@@ -37,7 +44,7 @@ Slugs are listed [below](#slugs). PNG, JPG and WebP all work as input.
 - **Portraits** are trimmed to the figure and capped at 1200px tall.
 - **Class icons** are trimmed and fitted into 192 × 192, keeping their transparency.
 - **Ancestry icons** are cropped to fill a 192 × 192 square, centered on the most detailed area (usually the face).
-- **Class banners** are cropped to fill 1200 × 450, centered on the most detailed area.
+- **Class banners** are cropped to fill 1920 × 1080, centered on the most detailed area.
 
 It warns you about:
 - files named in a way it doesn't recognize (those are skipped),
