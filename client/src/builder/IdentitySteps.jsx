@@ -4,7 +4,9 @@ import OptionList from './OptionList.jsx';
 import Showcase from './Showcase.jsx';
 import Chips, { pick } from './Chips.jsx';
 import ChoiceHeading from './ChoiceHeading.jsx';
-import { ABILITY_SHORT, SIZE, abilityList, boostSlotLabel, cap } from './labels.js';
+import { ABILITY_SHORT, SIZE, abilityList, boostSlotLabel, cap, sourceTag } from './labels.js';
+import BookSpread, { LETTER_SECTIONS, letterOf } from '../components/BookSpread.jsx';
+import BookLeaf, { ChosenActions, wide } from './BookLeaf.jsx';
 
 const boostsLine = (slots) => slots.map(boostSlotLabel).join(', ');
 
@@ -78,22 +80,62 @@ const slotLabel = (slot) => (slot.length === 6 ? 'Free' : slot.map((a) => ABILIT
 // The attributes a background's limited boost offers (its other boost is free).
 const limitedBoosts = (b) => b.boosts.filter((slot) => slot.length < 6).flat();
 
+/** A background's Lore in words: "Legal Lore or Warfare Lore", "Terrain Lore (your choice)". */
+const loreLabel = (entry) => {
+  if (!entry) return null;
+  const l = loreOptions(entry);
+  return l.fixed ?? l.options?.join(' or ') ?? `${l.placeholder} (your choice)`;
+};
+
+/** A background as the right-hand page: what it grants, its full text, and the choose button. */
+function BackgroundLeaf({ b, data, chosen, onChoose, onRemove, onClose }) {
+  const feats = b.feats.map((id) => data.feats.find((f) => f.id === id)?.name).filter(Boolean);
+  return (
+    <BookLeaf
+      eyebrow={`${sourceTag(b.source)}${b.rarity !== 'common' ? ` · ${b.rarity}` : ''}`}
+      title={b.name}
+      facts={[
+        ['Boosts', b.boosts.map(slotLabel).join(', ')],
+        ['Trained in', b.skills.map(cap).join(', ')],
+        ['Lore', loreLabel(b.lore[0])],
+        ['Skill feat', feats.join(', ')],
+      ]}
+      description={b.description}
+      onClose={onClose}
+    >
+      {chosen ? <ChosenActions label="Your background" onRemove={onRemove} /> : <button type="button" className="btn btn--blood" onClick={onChoose}>Choose {b.name}</button>}
+    </BookLeaf>
+  );
+}
+
 export function BackgroundStep({ build, update, data }) {
   const { background } = lookup(build, data);
   const lore = background?.lore[0] ? loreOptions(background.lore[0]) : null;
-  // Filters: attributes the limited boost must offer (up to 2), a skill it trains, a book.
+  // Filters: a name, attributes the limited boost must offer (up to 2), a skill it trains, a book.
+  const [query, setQuery] = useState('');
   const [boosts, setBoosts] = useState([]);
   const [skill, setSkill] = useState('');
   const [book, setBook] = useState('');
+  // The background open on the right page: the chosen one to start with, on wide screens.
+  const [openId, setOpenId] = useState(() => (wide() ? build.background : null));
   const books = [...new Set(data.backgrounds.map((b) => b.source))];
   const skills = [...new Set(data.backgrounds.flatMap((b) => b.skills))].sort();
-  const filtering = boosts.length > 0 || skill || book;
-  const shown = data.backgrounds.filter(
-    (b) => boosts.every((a) => limitedBoosts(b).includes(a)) && (!skill || b.skills.includes(skill)) && (!book || b.source === book),
-  );
-  // The chosen background stays in the list whatever the filters say.
-  const items = background && !shown.includes(background) ? [background, ...shown] : shown;
+  const q = query.trim().toLowerCase();
+  const filtering = Boolean(q) || boosts.length > 0 || skill || book;
+  const shown = data.backgrounds
+    .filter(
+      (b) =>
+        (!q || b.name.toLowerCase().includes(q)) &&
+        boosts.every((a) => limitedBoosts(b).includes(a)) &&
+        (!skill || b.skills.includes(skill)) &&
+        (!book || b.source === book),
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
+  // The chosen background stays in the index whatever the filters say.
+  const items = background && !shown.includes(background) ? [...shown, background].sort((a, b) => a.name.localeCompare(b.name)) : shown;
+  const open = data.backgrounds.find((b) => b.id === openId) ?? null;
   const clearFilters = () => {
+    setQuery('');
     setBoosts([]);
     setSkill('');
     setBook('');
@@ -111,9 +153,13 @@ export function BackgroundStep({ build, update, data }) {
     <>
       <section className="choice" aria-label="Background">
         <ChoiceHeading title="Background" chosen={background?.name} />
-        <p className="rule-note">Your background gives two attribute boosts, training in a skill and a Lore, and a skill feat.</p>
+        <p className="rule-note">Your background gives two attribute boosts, training in a skill and a Lore, and a skill feat. Open one to read it, then choose it.</p>
 
         <div className="filters" role="group" aria-label="Filter backgrounds">
+          <label className="filters__field filters__field--wide">
+            <span className="filters__label">Name</span>
+            <input className="options__search" type="search" value={query} placeholder="Search backgrounds" onChange={(e) => setQuery(e.target.value)} />
+          </label>
           <div className="filters__field filters__field--wide">
             <span className="filters__label" id="bg-boosts">Boosts</span>
             <Chips
@@ -139,29 +185,40 @@ export function BackgroundStep({ build, update, data }) {
               {books.map((b) => <option key={b} value={b}>{b}</option>)}
             </select>
           </label>
-          <p className="filters__count" role="status">
-            {filtering ? `${shown.length} of ${data.backgrounds.length} backgrounds` : `${data.backgrounds.length} backgrounds`}
-            {filtering && <button type="button" className="chip" onClick={clearFilters}>Clear filters</button>}
-          </p>
+          {filtering && (
+            <p className="filters__count">
+              <button type="button" className="chip" onClick={clearFilters}>Clear filters</button>
+            </p>
+          )}
         </div>
 
-        <OptionList
-          label="Backgrounds"
+        <BookSpread
           items={items}
-          selected={build.background}
-          onSelect={select}
+          total={data.backgrounds.length}
+          noun="backgrounds"
+          sections={LETTER_SECTIONS}
+          sectionOf={letterOf}
+          open={open}
+          onOpen={(b) => setOpenId(b.id)}
+          marked={(b) => b.id === build.background}
+          resetKey={`${q}|${boosts.join()}|${skill}|${book}`}
+          filtered={filtering}
           emptyText="No backgrounds match these filters."
           meta={(b) => (
-            <span className="bg-meta">
-              <span className="bg-meta__boosts">
-                <span className="visually-hidden">Boosts: </span>
-                {b.boosts.map((slot, i) => (
-                  <span key={i} className={`ability-badge ${slot.length === 6 ? 'ability-badge--free' : ''}`}>{slotLabel(slot)}</span>
-                ))}
-              </span>
-              {b.skills.length > 0 && <span className="bg-meta__skills">Trained in {b.skills.map(cap).join(', ')}</span>}
+            <span className="bg-meta__boosts">
+              <span className="visually-hidden">Boosts: </span>
+              {b.boosts.map((slot, i) => (
+                <span key={i} className={`ability-badge ${slot.length === 6 ? 'ability-badge--free' : ''}`}>{slotLabel(slot)}</span>
+              ))}
             </span>
           )}
+          leaf={open && <BackgroundLeaf b={open} data={data} chosen={open.id === build.background} onChoose={() => select(open.id)} onRemove={() => select(null)} onClose={() => setOpenId(null)} />}
+          blank={
+            <>
+              <p className="book__blank-title">Choose a background</p>
+              <p className="rule-note">Open a background from the index to read it here. Use the letter tabs to jump ahead, and the arrow keys to turn pages.</p>
+            </>
+          }
         />
       </section>
 

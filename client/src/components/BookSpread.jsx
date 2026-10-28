@@ -1,8 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 /** Entries on one page of the index. */
 const PAGE = 24;
+
+/** Sections for an alphabetical index: a tab for each letter. */
+export const LETTER_SECTIONS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((l) => ({ key: l, tab: l, name: l }));
+/** An entry's letter section, by the first letter of its name. */
+export const letterOf = (item) => {
+  const l = item.name[0].toUpperCase();
+  return l >= 'A' && l <= 'Z' ? l : 'A';
+};
 
 /**
  * A reference laid out like an open book (the Spell Book and the Bestiary). On wide
@@ -16,18 +24,30 @@ const PAGE = 24;
  * open: the open entry (or null), shown by leaf; blank shows before one is opened.
  * href(item): where an entry opens (keep the current search so filters stay).
  * meta(item): what sits after the dot leader (level, rarity, actions).
+ *
+ * In the character builder, entries open with onOpen(item) instead of a link, and the
+ * page is kept on screen rather than in the address (resetKey: change it to go back to
+ * the first page, e.g. when a filter changes). marked(item) shows the chosen diamond;
+ * blocked(item) greys an entry out, with the reason as its tooltip. tabsOnTop runs the
+ * tabs across the top, for sections with names rather than letters.
  */
-export default function BookSpread({ items, total, noun, sections, sectionOf, open, href, meta, leaf, blank, filtered, clearTo, emptyText }) {
+export default function BookSpread({
+  items, total, noun, sections, sectionOf, open, href, onOpen, meta, leaf, blank, filtered, clearTo, emptyText,
+  marked = () => false, blocked = () => null, tabsOnTop = false, resetKey = '',
+}) {
   const [params, setParams] = useSearchParams();
+  const [localPage, setLocalPage] = useState(null);
+  useEffect(() => setLocalPage(null), [resetKey]);
   const pages = Math.max(1, Math.ceil(items.length / PAGE));
-  // Without a page in the address, show the page the open entry is on.
+  // Without a page asked for, show the page the open entry is on.
   const openAt = open ? items.indexOf(open) : -1;
-  const asked = params.has('page') ? Math.max(1, Number(params.get('page')) || 1) : null;
+  const urlPage = params.has('page') ? Math.max(1, Number(params.get('page')) || 1) : null;
+  const asked = onOpen ? localPage : urlPage;
   const current = Math.min(asked ?? (openAt >= 0 ? Math.floor(openAt / PAGE) + 1 : 1), pages);
   const onPage = items.slice((current - 1) * PAGE, current * PAGE);
 
   const turn = (to) =>
-    setParams(
+    onOpen ? setLocalPage(Math.min(pages, Math.max(1, to))) : setParams(
       () => {
         const next = new URLSearchParams(window.location.search);
         const page = Math.min(pages, Math.max(1, to));
@@ -59,7 +79,7 @@ export default function BookSpread({ items, total, noun, sections, sectionOf, op
   });
 
   return (
-    <div className={`book ${open ? 'book--open' : ''}`}>
+    <div className={`book ${open ? 'book--open' : ''} ${tabsOnTop ? 'book--tabs-top' : ''}`}>
       <nav className="book__tabs" aria-label="Sections">
         {sections.map((x) => (
           <button
@@ -82,7 +102,7 @@ export default function BookSpread({ items, total, noun, sections, sectionOf, op
           <span>{runningHead}</span>
           <span role="status">
             {items.length === total ? `${total} ${noun}` : `${items.length} of ${total}`}
-            {filtered && (
+            {filtered && clearTo && (
               <>
                 {' · '}
                 <Link to={clearTo} className="bestiary__clear">Clear filters</Link>
@@ -97,14 +117,32 @@ export default function BookSpread({ items, total, noun, sections, sectionOf, op
               const section = sectionOf(item);
               const starts = i === 0 || sectionOf(onPage[i - 1]) !== section;
               const isOpen = item === open;
+              const chosen = marked(item);
+              const reason = blocked(item);
+              const className = `book__entry-link ${isOpen ? 'book__entry-link--open' : ''} ${reason ? 'book__entry-link--blocked' : ''}`;
+              const inner = (
+                <>
+                  {onOpen && <span className={`book__mark ${chosen ? 'book__mark--on' : ''}`} aria-hidden="true" />}
+                  <span className="book__entry-name">
+                    {item.name}
+                    {chosen && <span className="visually-hidden"> (chosen)</span>}
+                  </span>
+                  <span className="book__entry-dots" aria-hidden="true" />
+                  <span className="book__entry-meta">{meta(item)}</span>
+                </>
+              );
               return (
                 <li key={item.id}>
                   {starts && <h2 className="book__section">{nameOf(section)}</h2>}
-                  <Link to={href(item)} className={`book__entry-link ${isOpen ? 'book__entry-link--open' : ''}`} aria-current={isOpen ? 'page' : undefined}>
-                    <span className="book__entry-name">{item.name}</span>
-                    <span className="book__entry-dots" aria-hidden="true" />
-                    <span className="book__entry-meta">{meta(item)}</span>
-                  </Link>
+                  {onOpen ? (
+                    <button type="button" className={className} aria-pressed={isOpen} title={reason ?? undefined} onClick={() => onOpen(item)}>
+                      {inner}
+                    </button>
+                  ) : (
+                    <Link to={href(item)} className={className} aria-current={isOpen ? 'page' : undefined}>
+                      {inner}
+                    </Link>
+                  )}
                 </li>
               );
             })}

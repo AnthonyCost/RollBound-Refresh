@@ -495,7 +495,7 @@ export default function BuilderPage() {
             {!editId && <ImagePicker label="Portrait (optional)" shape="square" hint="you can add or change it later from the sheet" value={portrait} onChange={setPortrait} />}
             <FormErrors errors={errors} />
             {isDemo && !editId && <p className="rule-note center">Demo characters are deleted with the demo. Create an account to keep yours.</p>}
-            <button type="button" className="btn btn--blood" disabled={!ready || problems.length > 0 || saving} onClick={save}>
+            <button type="button" className="btn btn--blood builder__save" disabled={!ready || problems.length > 0 || saving} onClick={save}>
               {saving ? 'Saving…' : editId ? 'Save changes' : 'Save character'}
             </button>
           </>

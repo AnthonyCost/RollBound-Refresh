@@ -1158,11 +1158,150 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .filters__label { font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
 .filters select { min-height: 44px; padding: 0 10px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-family: var(--body); font-size: 15px; }
 .filters__count { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 0; font-size: 14px; font-style: italic; color: var(--text-muted); }
-.bg-meta { display: flex; flex-direction: column; gap: 6px; }
 .bg-meta__boosts { display: flex; flex-wrap: wrap; gap: 4px; }
 .ability-badge { padding: 2px 8px; border: 1px solid var(--bronze); border-radius: 3px; font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1px; font-style: normal; color: var(--bronze); }
 .ability-badge--free { border-color: var(--line); color: var(--text-muted); }
-.bg-meta__skills { font-size: 13px; }
+.book__desc { margin: 0; padding: 12px 0 0; }
+/* The feat step's slots and what's in each, above the spread. */
+/* Gear: your pack as a receipt, with a purse that fills toward 15 gp. */
+.pack { display: flex; flex-direction: column; gap: 10px; }
+.pack__head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; }
+.purse { height: 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-deep); overflow: hidden; }
+.purse__fill { display: block; height: 100%; background: linear-gradient(90deg, #8a6a2c, var(--gold)); transition: width 0.25s ease; }
+.purse--over .purse__fill { background: linear-gradient(90deg, var(--blood-dark), var(--blood-text)); }
+@media (prefers-reduced-motion: reduce) { .purse__fill { transition: none; } }
+.pack__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.pack__list li { display: flex; align-items: baseline; gap: 8px; font-size: 15px; }
+.pack__name { display: inline-flex; align-items: baseline; gap: 6px; }
+.pack__star { color: var(--gold); }
+.pack__dots { flex: 1; min-width: 12px; border-bottom: 1px dotted var(--line); transform: translateY(-4px); }
+.pack__price { flex: none; font-variant-numeric: tabular-nums; color: var(--text-soft); }
+.pack__total { margin-top: 4px; padding-top: 6px; border-top: 1px solid var(--line-faint); font-family: var(--display); font-size: 13px !important; letter-spacing: 1.5px; text-transform: uppercase; }
+.pack .link-button { font-size: 13px; }
+/* Attributes: the boost ledger. */
+.ledger { display: flex; flex-direction: column; gap: 12px; }
+.ledger__scroll { overflow-x: auto; }
+.ledger__table { width: 100%; min-width: 520px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.ledger__table th, .ledger__table td { padding: 6px; border-bottom: 1px solid var(--line-faint); text-align: center; vertical-align: middle; }
+.ledger__table thead th { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); border-bottom: 3px double var(--line); }
+.ledger__table abbr { text-decoration: none; }
+.ledger__source { text-align: left !important; min-width: 150px; }
+.ledger__label { display: block; font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-soft); }
+.ledger__count { display: block; margin-top: 2px; font-family: var(--body); font-size: 12px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--text-muted); }
+.ledger__count--done { color: var(--gold); }
+.ledger__crown { color: var(--gold); }
+.ledger__cell {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 40px;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  background: none;
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blood-text);
+}
+button.ledger__cell { cursor: pointer; }
+@media (hover: hover) { button.ledger__cell:not(:disabled):not(.ledger__cell--on):hover { border-color: var(--bronze); border-style: solid; } }
+.ledger__cell--on { border: 1px solid var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 10px #4a120c; }
+.ledger__cell--on:disabled { opacity: 1; border-color: var(--line); color: var(--text-soft); background: var(--panel); box-shadow: none; }
+.ledger__cell--closed { border-color: transparent; background: repeating-linear-gradient(135deg, transparent 0 6px, var(--line-faint) 6px 7px); opacity: 0.5; }
+.ledger__flaw { display: block; margin-top: 2px; font-family: var(--display); font-size: 11px; font-weight: 700; color: var(--blood-text); }
+.ledger__total { font-family: var(--display); font-size: 20px; font-weight: 700; color: var(--text-soft); border-bottom: 0 !important; padding-top: 10px !important; }
+.ledger__total--up { color: var(--gold); }
+.ledger__total--down { color: var(--blood-text); }
+.ledger__table tfoot .ledger__source { font-family: var(--display); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); border-bottom: 0; }
+
+/* Skills: the character sheet's skill list. */
+.skill-sheet { width: 100%; min-width: 460px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.skill-sheet th, .skill-sheet td { padding: 5px 8px; border-bottom: 1px solid var(--line-faint); text-align: center; vertical-align: middle; }
+.skill-sheet thead th { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); border-bottom: 3px double var(--line); }
+.skill-sheet abbr { text-decoration: none; }
+.skill-sheet__skill { text-align: left !important; font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+tbody .skill-sheet__skill { color: var(--text-soft); }
+.skill-sheet__attr { font-family: var(--display); font-size: 12px; letter-spacing: 1px; color: var(--text-muted); }
+.skill-sheet__mod { font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--text-soft); }
+.skill-sheet__status { text-align: right !important; width: 1%; white-space: nowrap; }
+.skill-sheet__from { font-size: 13px; font-style: italic; color: var(--bronze); }
+.skill-sheet--on .skill-sheet__skill, .skill-sheet--on .skill-sheet__mod { color: var(--gold); }
+.skill-sheet--on { background: var(--panel-hot); }
+.skill-sheet--fixed .skill-sheet__skill, .skill-sheet--fixed .skill-sheet__mod { color: var(--bronze); }
+.skill-sheet__btn {
+  min-width: 96px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel);
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+.skill-sheet__btn:disabled { opacity: 0.35; cursor: default; }
+@media (hover: hover) { .skill-sheet__btn:not(:disabled):hover { border-color: var(--bronze); color: var(--text); } }
+.skill-sheet__btn--on { border-color: var(--blood); color: var(--blood-text); background: var(--panel-hot); }
+.rank-pips { display: inline-flex; gap: 5px; }
+.rank-pips__pip { width: 9px; height: 9px; transform: rotate(45deg); border: 1px solid var(--line); }
+.rank-pips__pip--on { background: var(--blood-text); border-color: var(--blood-text); box-shadow: 0 0 6px var(--blood); }
+.skill-sheet--fixed .rank-pips__pip--on { background: var(--bronze); border-color: var(--bronze); box-shadow: none; }
+
+/* Review: the class banner behind the name, then the character as a two-page spread. */
+.review-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 220px;
+  padding: 24px 22px 20px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(11, 9, 8, 0.15), rgba(11, 9, 8, 0.92) 78%), var(--review-art, radial-gradient(ellipse at 50% 0%, #3a0f0a, var(--bg))) center 30% / cover;
+}
+.review-hero__name { display: flex; flex-direction: column; gap: 4px; }
+.review-hero__name input {
+  width: 100%;
+  padding: 4px 0 6px;
+  border: 0;
+  border-bottom: 1px solid var(--bronze);
+  background: none;
+  color: var(--text);
+  font-family: var(--display);
+  font-size: clamp(26px, 3vw + 14px, 42px);
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.review-hero__name input::placeholder { color: var(--text-dim); }
+.review-hero__name input:focus { outline: none; border-bottom-color: var(--gold); box-shadow: 0 1px 0 var(--gold); }
+.review-hero__line { margin: 0; font-size: 16px; color: var(--text-soft); }
+.todo__mark { display: inline-block; width: 9px; height: 9px; margin-right: 8px; transform: rotate(45deg); border: 1px solid var(--blood-text); }
+.review__stats { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.review__spread { display: grid; gap: 12px; }
+.review__page { padding: 26px 24px 22px; }
+.review__page .book__section:first-child { margin-top: 0; }
+.review__facts { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.review__facts div { display: flex; gap: 10px; }
+.review__facts dt { flex: none; width: 92px; font-family: var(--display); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); padding-top: 2px; }
+.review__facts dd { margin: 0; }
+.review__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.review__list li { display: flex; align-items: baseline; gap: 8px; font-size: 15px; }
+.review__num { font-family: var(--display); font-weight: 700; font-variant-numeric: tabular-nums; color: var(--gold); }
+.builder__save { min-height: 52px; font-size: 15px; letter-spacing: 3px; box-shadow: 0 0 22px var(--glow); }
+@media (min-width: 1024px) {
+  .review__spread { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; }
+  .review__spread .review__page:first-child { border-right: 0; border-radius: 6px 0 0 6px; box-shadow: inset 0 0 0 4px var(--bg), inset -30px 0 36px -26px #000, 0 10px 30px rgba(0, 0, 0, 0.45); }
+  .review__spread .review__page:last-child { border-left: 1px solid #000; border-radius: 0 6px 6px 0; box-shadow: inset 0 0 0 4px var(--bg), inset 30px 0 36px -26px #000, 0 10px 30px rgba(0, 0, 0, 0.45); }
+}
+@media (max-width: 520px) { .review__stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.feat-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px 24px; }
 .builder__footer {
   position: sticky;
   bottom: 0;
@@ -1615,7 +1754,24 @@ button:focus-visible, a:focus-visible, input:focus-visible {
      text beside it, so every portrait gets the same space. It stays in view while
      the details scroll. */
   .showcase__art { height: auto; aspect-ratio: 2 / 3; align-self: start; position: sticky; top: 16px; }
-  .showcase__tiles { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); overflow: visible; padding: 0; }
+  /* align-content: start keeps tile rows their own height; the tiles' area fills the
+     art's height beside them, and the rows would otherwise stretch to fill it. */
+  .showcase__tiles { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); align-content: start; overflow: visible; padding: 0; }
+}
+
+/* Wider still: a game's character-select screen. Tiles on the left, the portrait in the
+   middle, the details on the right; each column always holds the same thing, so
+   nothing moves when you pick. The portrait keeps its 2:3 shape but never runs past
+   the bottom of the screen. */
+@container (min-width: 1000px) {
+  .showcase {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, min(30%, 440px)) minmax(0, 1fr);
+    grid-template-areas: 'tiles art info';
+    grid-template-rows: auto;
+    align-items: start;
+  }
+  .showcase__art { width: min(100%, calc((100dvh - 140px) * 2 / 3)); justify-self: center; }
+  .showcase__info { position: sticky; top: 16px; }
 }
 
 /* ---------- Campaigns ---------- */
@@ -2250,6 +2406,15 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .book__entry-meta { flex: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
 @media (hover: hover) { .book__entry-link:hover .book__entry-name { color: var(--gold); } }
 .book__entry-link--open { background: var(--panel-hot); box-shadow: inset 2px 0 0 var(--blood); }
+/* In the builder, entries are buttons that open the entry; the diamond marks what's chosen. */
+button.book__entry-link { width: 100%; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; }
+button.book__entry-link.book__entry-link--open { background: var(--panel-hot); }
+.book__mark { flex: none; align-self: center; width: 9px; height: 9px; transform: rotate(45deg); border: 1px solid var(--line); }
+.book__mark--on { background: var(--blood-text); border-color: var(--blood-text); box-shadow: 0 0 8px var(--blood); }
+.book__entry-link--blocked .book__entry-name, .book__entry-link--blocked .book__entry-meta { opacity: 0.5; }
+/* The open entry's choose button, at the foot of the right page. */
+.book__choose { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--line-faint); }
+.book__choose .btn { min-width: 200px; }
 .book__entry-link--open .book__entry-name { color: var(--gold); }
 .book__empty { margin: 32px 0; }
 
@@ -2269,6 +2434,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 @media (hover: hover) { .book__turn-btn:not(:disabled):hover { border-color: var(--bronze); color: var(--gold); } }
 
 .book__back { align-self: flex-start; font-size: 14px; color: var(--bronze); }
+button.book__back { padding: 0; border: 0; background: none; font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; }
+/* Named sections (feat slots): wider tabs, which wrap on phones. */
+.book--tabs-top .book__tabs { flex-wrap: wrap; overflow: visible; }
+.book--tabs-top .book__tab { padding: 0 12px; letter-spacing: 1.5px; text-transform: uppercase; }
 /* A creature's level after the dot leader. */
 .book__level { min-width: 30px; padding: 2px 6px; border: 1px solid var(--line); background: var(--bg); font-family: var(--display); font-size: 13px; font-weight: 700; text-align: center; color: var(--text); font-variant-numeric: tabular-nums; }
 /* The creature page: art and lore, then the stat block, stacked on one page. */
@@ -2306,4 +2475,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .book__tab { min-height: 30px; border-radius: 4px 0 0 4px; border-right: 0; text-align: center; }
   .book__tab--here { box-shadow: -4px 0 10px var(--glow); }
   .book__back { display: none; }
+  /* Named tabs sit across the top of the spread, like ribbons. */
+  .book--tabs-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+  .book--tabs-top .book__tabs, .book--tabs-top.book--open .book__tabs { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; padding: 0 0 0 18px; position: static; }
+  .book--tabs-top .book__tab { border-radius: 4px 4px 0 0; border-right: 1px solid var(--line); border-bottom: 0; min-height: 34px; }
+  .book--tabs-top .book__tab--here { box-shadow: 0 -4px 10px var(--glow); }
 }

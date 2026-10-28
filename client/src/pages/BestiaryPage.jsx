@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
-import BookSpread from '../components/BookSpread.jsx';
+import BookSpread, { LETTER_SECTIONS, letterOf } from '../components/BookSpread.jsx';
 import { CreatureEntry } from './CreaturePage.jsx';
 import { BESTIARY_BOOKS, bookByKey, bookKey, creaturePath, loadBestiary } from '../state/bestiary.js';
 
@@ -10,12 +10,7 @@ const TYPES = ['Aberration', 'Animal', 'Astral', 'Beast', 'Celestial', 'Construc
 const SIZES = ['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan'];
 const RARITIES = ['common', 'uncommon', 'rare', 'unique'];
 const LEVELS = Array.from({ length: 27 }, (_, i) => i - 1);
-// The index is alphabetical, with a thumb-index tab for each letter.
-const SECTIONS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((l) => ({ key: l, tab: l, name: l }));
-const sectionOf = (c) => {
-  const l = c.name[0].toUpperCase();
-  return l >= 'A' && l <= 'Z' ? l : 'A';
-};
+
 const titleCase = (s) => s[0].toUpperCase() + s.slice(1);
 
 /** Filters live in the address, so a filtered list can be bookmarked or shared. */
@@ -169,8 +164,8 @@ export default function BestiaryPage() {
           items={matches}
           total={creatures.length}
           noun="creatures"
-          sections={SECTIONS}
-          sectionOf={sectionOf}
+          sections={LETTER_SECTIONS}
+          sectionOf={letterOf}
           open={open}
           href={(c) => `${creaturePath(c)}${search}`}
           meta={(c) => (
