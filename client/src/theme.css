@@ -40,7 +40,10 @@
   --deg-critfail: #e25a45;
 
   --gutter: clamp(16px, 4vw, 40px);
-  --app-max: 1180px;
+  /* The content column: grows with the screen past 1180px, up to 1600px, and stays centred. */
+  --content-max: clamp(1180px, 82vw, 1600px);
+  /* Comfortable line length for paragraphs, however wide the column. */
+  --measure: 75ch;
 
   --accent-font: 'Old Fenris', 'Beaufort for LOL', Georgia, serif;
   --display: 'Beaufort for LOL', 'Times New Roman', serif;
@@ -75,17 +78,17 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .app {
   min-height: 100dvh;
   width: 100%;
-  max-width: var(--app-max);
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   background: radial-gradient(ellipse 120% 480px at 50% 0%, var(--glow) 0%, #160a08 45%, var(--bg) 75%);
-  border-inline: 1px solid var(--line-faint);
 }
 
 .app__main {
   flex: 1;
-  padding: 0 max(var(--gutter), env(safe-area-inset-right)) 24px max(var(--gutter), env(safe-area-inset-left));
+  /* The frame spans the screen; the content is a centred column. The side padding is the
+     gutter (or the notch inset) until the screen is wider than --content-max. */
+  padding: 0 max(var(--gutter), env(safe-area-inset-right), calc((100% - var(--content-max)) / 2)) 24px
+    max(var(--gutter), env(safe-area-inset-left), calc((100% - var(--content-max)) / 2));
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -383,7 +386,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .add-item__custom-row .btn { flex: 1; min-height: 44px; }
 
 .lore-backstory__input { width: 100%; padding: 10px 12px; resize: vertical; line-height: 1.5; }
-.lore-backstory__text { margin: 0; white-space: pre-wrap; line-height: 1.6; color: var(--text-soft); overflow-wrap: anywhere; }
+.lore-backstory__text { max-width: var(--measure); margin: 0; white-space: pre-wrap; line-height: 1.6; color: var(--text-soft); overflow-wrap: anywhere; }
 .lore-backstory__foot { display: flex; justify-content: space-between; gap: 8px; margin: 0; font-size: 13px; color: var(--text-soft); }
 .origins__list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin: 0; }
 .origins__list div { display: flex; gap: 10px; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--line-soft); }
@@ -748,7 +751,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .creature__quick div { padding: 8px 4px; border: 1px solid var(--line); background: var(--panel); text-align: center; }
 .creature__quick dt { font-family: var(--display); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
 .creature__quick dd { margin: 2px 0 0; font-family: var(--display); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.creature__lore { font-size: 16px; line-height: 1.7; color: var(--text-soft); }
+.creature__lore { max-width: var(--measure); font-size: 16px; line-height: 1.7; color: var(--text-soft); }
 .creature__lore p { margin: 0 0 0.8em; }
 .creature__recall { display: flex; flex-direction: column; gap: 6px; }
 .creature__recall .panel__title { margin: 0; }
@@ -877,7 +880,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .log { gap: 18px; }
 .log__head { display: flex; flex-direction: column; gap: 6px; padding-bottom: 14px; border-bottom: 1px solid var(--line-soft); }
 .log__head .title { overflow-wrap: anywhere; }
-.log-body { font-size: 17px; line-height: 1.75; color: var(--text-soft); overflow-wrap: anywhere; }
+.log-body { max-width: var(--measure); font-size: 17px; line-height: 1.75; color: var(--text-soft); overflow-wrap: anywhere; }
 .log-body p { margin: 0 0 1em; white-space: pre-line; }
 .log-body p:first-child::first-letter { float: left; margin: 6px 8px 0 0; font-family: var(--display); font-size: 52px; line-height: 0.8; color: var(--bronze); }
 .log__actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; padding-top: 14px; border-top: 1px solid var(--line-soft); }
@@ -1211,6 +1214,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .option__desc table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
 .option__desc th, .option__desc td { padding: 4px 8px; border: 1px solid var(--line-soft); text-align: left; }
 .option__desc p { margin: 0 0 8px; }
+.option__desc > :is(p, ul, ol) { max-width: var(--measure); }
 .option__desc hr { border: none; border-top: 1px solid var(--line-soft); }
 .option__desc ul { padding-left: 18px; }
 
@@ -1594,13 +1598,14 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .showcase__stats div { padding: 8px 10px; border: 1px solid var(--line-soft); background: var(--panel); }
 .showcase__stats dt { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
 .showcase__stats dd { margin: 2px 0 0; font-family: var(--display); font-size: 15px; font-weight: 700; }
-.showcase__lede { font-size: 15px; line-height: 1.6; font-style: italic; color: var(--text-soft); }
+.showcase__lede { max-width: var(--measure); font-size: 15px; line-height: 1.6; font-style: italic; color: var(--text-soft); }
 .showcase__lede p { margin: 0; }
 
 /* Wide: art on the left; details and tiles on the right. */
 @container (min-width: 720px) {
   .showcase {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    /* The art column stops at 480px, so the 2:3 portrait doesn't tower on wide screens. */
+    grid-template-columns: minmax(0, min(42%, 480px)) minmax(0, 1fr);
     /* The picked option's details sit above the tiles, beside the art. */
     grid-template-areas: 'art info' 'art tiles';
     grid-template-rows: auto 1fr;
@@ -1709,7 +1714,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .app__main > .cover { aspect-ratio: 21 / 8; }
 }
 
-.backstory { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; color: var(--text-soft); }
+.backstory { max-width: var(--measure); margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; color: var(--text-soft); }
 
 .invite { display: flex; flex-direction: column; gap: 10px; }
 .invite__code {
@@ -2280,7 +2285,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 @media (min-width: 1024px) {
   /* The open book: tabs, then the left and right pages meeting at the spine. */
-  .book { grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1.2fr); gap: 0; align-items: stretch; }
+  .book { grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1.2fr); gap: 0; align-items: stretch; width: 100%; max-width: 1440px; margin-inline: auto; }
   .book__intro--open, .book__filters--open { display: flex; }
   .book__index, .book--open .book__index { display: block; padding: 30px 30px 22px 34px; border-right: 0; border-radius: 6px 0 0 6px; }
   .book__leaf { display: block; padding: 30px 34px 26px 32px; border-radius: 0 6px 6px 0; }
