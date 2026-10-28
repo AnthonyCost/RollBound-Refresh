@@ -11,7 +11,8 @@ export default function OptionList({ items, selected, onSelect, meta, warn, note
   const [query, setQuery] = useState('');
   const isSelected = (id) => (multiple ? selected.includes(id) : selected === id);
   const q = query.trim().toLowerCase();
-  const shown = q ? items.filter((i) => i.name.toLowerCase().includes(q)) : items;
+  // Searching never hides what's chosen.
+  const shown = q ? items.filter((i) => isSelected(i.id) || i.name.toLowerCase().includes(q)) : items;
 
   return (
     <div className="options">
@@ -54,7 +55,7 @@ export default function OptionList({ items, selected, onSelect, meta, warn, note
           );
         })}
       </ul>
-      {q && !shown.length && <p className="muted italic">No matches for “{query}”.</p>}
+      {q && !shown.some((i) => !isSelected(i.id)) && <p className="muted italic">No matches for “{query}”.</p>}
     </div>
   );
 }

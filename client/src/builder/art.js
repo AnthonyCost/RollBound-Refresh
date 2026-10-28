@@ -12,11 +12,18 @@ const ICONS = {};
 const BANNERS = {};
 const CARDS = {};
 let placeholder = null;
+// Fills the showcase before anything is picked: placeholder-<kind>.webp, e.g. placeholder-ancestry.
+const EMPTY = {};
 
 for (const [path, url] of Object.entries(files)) {
   const name = path.split('/').pop().replace(/\.(webp|png|jpg)$/, '');
   if (name === 'placeholder-hero') {
     placeholder = url;
+    continue;
+  }
+  const empty = /^placeholder-(ancestry|class)$/.exec(name);
+  if (empty) {
+    EMPTY[empty[1]] = url;
     continue;
   }
   const m = /^(ancestry|class)-([a-z0-9-]+?)(-icon|-banner|-card)?$/.exec(name);
@@ -62,6 +69,8 @@ const TILE_FOCUS = {
 export const PLACEHOLDER_ART = placeholder;
 
 export const artFor = (kind, slug) => ART[kind]?.[slug] ?? PLACEHOLDER_ART;
+/** The showcase's art before anything is picked: { url, fill } (fill: a scene that fills the frame, not a figure). */
+export const emptyArtFor = (kind) => (EMPTY[kind] ? { url: EMPTY[kind], fill: true } : { url: PLACEHOLDER_ART, fill: false });
 export const hasOwnArt = (kind, slug) => Boolean(ART[kind]?.[slug]);
 export const iconFor = (kind, slug) => ICONS[kind]?.[slug] ?? null;
 

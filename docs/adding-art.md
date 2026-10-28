@@ -85,6 +85,8 @@ A tile without an icon shows a round crop from the top of the portrait. If that 
 
 An icon file makes this unnecessary.
 
+**Before anything is picked**, the panel shows `placeholder-<kind>.webp` (for example `placeholder-ancestry.webp`) if there is one: a scene that fills the whole frame at low opacity. Without one it falls back to `placeholder-hero.png`, drawn like a portrait.
+
 ## Slugs
 
 **Ancestries:**

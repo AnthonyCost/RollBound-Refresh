@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { loreOptions, lookup, keyAbilityOptions, keyAbilityOf, sanctificationOptions, TRADITIONS } from '@rollbound/rules';
 import OptionList from './OptionList.jsx';
 import Showcase from './Showcase.jsx';
 import Chips, { pick } from './Chips.jsx';
-import { SIZE, abilityList, boostSlotLabel, cap } from './labels.js';
+import ChoiceHeading from './ChoiceHeading.jsx';
+import { ABILITY_SHORT, SIZE, abilityList, boostSlotLabel, cap } from './labels.js';
 
 const boostsLine = (slots) => slots.map(boostSlotLabel).join(', ');
 
@@ -34,15 +36,16 @@ export function AncestryStep({ build, update, data }) {
       />
 
       {ancestry && (
-        <>
-          <h2 className="panel__title builder__subhead">{ancestry.name} heritages</h2>
+        <section className="choice" aria-label="Heritage">
+          <ChoiceHeading title="Heritage" chosen={heritage?.name} />
+          <h3 className="choice__group">{ancestry.name} heritages</h3>
           <OptionList
             label={`${ancestry.name} heritages`}
             items={ownHeritages}
             selected={build.heritage}
             onSelect={(id) => update({ heritage: id, heritageSkill: null, ancestryFeat: null })}
           />
-          <h2 className="panel__title builder__subhead">Versatile heritages</h2>
+          <h3 className="choice__group">Versatile heritages</h3>
           <p className="rule-note">A versatile heritage can belong to any ancestry, and opens up its own ancestry feats.</p>
           <OptionList
             label="Versatile heritages"
@@ -50,12 +53,12 @@ export function AncestryStep({ build, update, data }) {
             selected={build.heritage}
             onSelect={(id) => update({ heritage: id, heritageSkill: null, ancestryFeat: null })}
           />
-        </>
+        </section>
       )}
 
       {heritage?.skillChoice && (
-        <section className="panel">
-          <h2 className="panel__title">{heritage.name}: choose a skill</h2>
+        <section className="panel choice">
+          <ChoiceHeading title={`${heritage.name} skill`} chosen={build.heritageSkill && cap(build.heritageSkill)} />
           <Chips
             label="Heritage skill"
             options={heritage.skillChoice}
@@ -69,9 +72,32 @@ export function AncestryStep({ build, update, data }) {
   );
 }
 
+const ABILITY_KEYS = Object.keys(ABILITY_SHORT);
+// A background's boost slots as short labels: "STR / INT", "Free".
+const slotLabel = (slot) => (slot.length === 6 ? 'Free' : slot.map((a) => ABILITY_SHORT[a]).join(' / '));
+// The attributes a background's limited boost offers (its other boost is free).
+const limitedBoosts = (b) => b.boosts.filter((slot) => slot.length < 6).flat();
+
 export function BackgroundStep({ build, update, data }) {
   const { background } = lookup(build, data);
   const lore = background?.lore[0] ? loreOptions(background.lore[0]) : null;
+  // Filters: attributes the limited boost must offer (up to 2), a skill it trains, a book.
+  const [boosts, setBoosts] = useState([]);
+  const [skill, setSkill] = useState('');
+  const [book, setBook] = useState('');
+  const books = [...new Set(data.backgrounds.map((b) => b.source))];
+  const skills = [...new Set(data.backgrounds.flatMap((b) => b.skills))].sort();
+  const filtering = boosts.length > 0 || skill || book;
+  const shown = data.backgrounds.filter(
+    (b) => boosts.every((a) => limitedBoosts(b).includes(a)) && (!skill || b.skills.includes(skill)) && (!book || b.source === book),
+  );
+  // The chosen background stays in the list whatever the filters say.
+  const items = background && !shown.includes(background) ? [background, ...shown] : shown;
+  const clearFilters = () => {
+    setBoosts([]);
+    setSkill('');
+    setBook('');
+  };
 
   const select = (id) => {
     if (id === build.background) return;
@@ -83,19 +109,65 @@ export function BackgroundStep({ build, update, data }) {
 
   return (
     <>
-      <OptionList
-        label="Backgrounds"
-        items={data.backgrounds}
-        selected={build.background}
-        onSelect={select}
-        meta={(b) =>
-          [`Boosts ${boostsLine(b.boosts)}`, b.skills.length && `Trained ${b.skills.map(cap).join(', ')}`].filter(Boolean).join(' · ')
-        }
-      />
+      <section className="choice" aria-label="Background">
+        <ChoiceHeading title="Background" chosen={background?.name} />
+        <p className="rule-note">Your background gives two attribute boosts, training in a skill and a Lore, and a skill feat.</p>
+
+        <div className="filters" role="group" aria-label="Filter backgrounds">
+          <div className="filters__field filters__field--wide">
+            <span className="filters__label" id="bg-boosts">Boosts</span>
+            <Chips
+              label="Backgrounds that can boost"
+              options={ABILITY_KEYS}
+              isOn={(a) => boosts.includes(a)}
+              isDisabled={(a) => !boosts.includes(a) && boosts.length >= 2}
+              onToggle={(a) => setBoosts((list) => (list.includes(a) ? list.filter((x) => x !== a) : [...list, a]))}
+              render={(a) => ABILITY_SHORT[a]}
+            />
+          </div>
+          <label className="filters__field">
+            <span className="filters__label">Trains</span>
+            <select value={skill} onChange={(e) => setSkill(e.target.value)}>
+              <option value="">Any skill</option>
+              {skills.map((s) => <option key={s} value={s}>{cap(s)}</option>)}
+            </select>
+          </label>
+          <label className="filters__field">
+            <span className="filters__label">Book</span>
+            <select value={book} onChange={(e) => setBook(e.target.value)}>
+              <option value="">Any book</option>
+              {books.map((b) => <option key={b} value={b}>{b}</option>)}
+            </select>
+          </label>
+          <p className="filters__count" role="status">
+            {filtering ? `${shown.length} of ${data.backgrounds.length} backgrounds` : `${data.backgrounds.length} backgrounds`}
+            {filtering && <button type="button" className="chip" onClick={clearFilters}>Clear filters</button>}
+          </p>
+        </div>
+
+        <OptionList
+          label="Backgrounds"
+          items={items}
+          selected={build.background}
+          onSelect={select}
+          emptyText="No backgrounds match these filters."
+          meta={(b) => (
+            <span className="bg-meta">
+              <span className="bg-meta__boosts">
+                <span className="visually-hidden">Boosts: </span>
+                {b.boosts.map((slot, i) => (
+                  <span key={i} className={`ability-badge ${slot.length === 6 ? 'ability-badge--free' : ''}`}>{slotLabel(slot)}</span>
+                ))}
+              </span>
+              {b.skills.length > 0 && <span className="bg-meta__skills">Trained in {b.skills.map(cap).join(', ')}</span>}
+            </span>
+          )}
+        />
+      </section>
 
       {lore && !lore.fixed && (
-        <section className="panel">
-          <h2 className="panel__title">Your Lore skill</h2>
+        <section className="panel choice">
+          <ChoiceHeading title="Your Lore skill" chosen={build.lore?.trim()} need={lore.options ? 'Choose one' : 'Name it'} />
           {lore.options ? (
             <Chips label="Lore" options={lore.options} isOn={(o) => build.lore === o} onToggle={pick(build.lore, (o) => update({ lore: o ?? '' }))} />
           ) : (
@@ -166,8 +238,8 @@ export function ClassStep({ build, update, data }) {
         <>
 
           {cls.skillChoice && (
-            <section className="panel">
-              <h2 className="panel__title">{cls.name} skill</h2>
+            <section className="panel choice">
+              <ChoiceHeading title={`${cls.name} skill`} chosen={build.classSkill && cap(build.classSkill)} />
               <Chips
                 label="Class skill"
                 options={cls.skillChoice}
@@ -179,8 +251,8 @@ export function ClassStep({ build, update, data }) {
           )}
 
           {cls.deity && (
-            <section>
-              <h2 className="panel__title builder__subhead">Deity</h2>
+            <section className="choice">
+              <ChoiceHeading title="Deity" chosen={deity?.name} />
               <p className="rule-note">
                 Your deity trains you in their divine skill{cls.deityFavoredWeapon ? ' and favored weapon' : ''}
                 {cls.divineFont ? ', and sets your divine font' : ''}. Their
@@ -204,15 +276,15 @@ export function ClassStep({ build, update, data }) {
           )}
 
           {deity && cls.divineFont && deity.font.length > 1 && (
-            <section className="panel">
-              <h2 className="panel__title">Divine font</h2>
+            <section className="panel choice">
+              <ChoiceHeading title="Divine font" chosen={build.font && cap(build.font)} />
               <Chips label="Divine font" options={deity.font} isOn={(f) => build.font === f} onToggle={pick(build.font, (f) => update({ font: f }))} render={cap} />
             </section>
           )}
 
           {deity && sanctificationOptions(deity).length > 1 && (
-            <section className="panel">
-              <h2 className="panel__title">Sanctification</h2>
+            <section className="panel choice">
+              <ChoiceHeading title="Sanctification" chosen={build.sanctification && (build.sanctification === 'none' ? 'Neither' : cap(build.sanctification))} />
               <Chips
                 label="Sanctification"
                 options={sanctificationOptions(deity)}
@@ -224,8 +296,8 @@ export function ClassStep({ build, update, data }) {
           )}
 
           {keyOptions.length > 1 && (
-            <section className="panel">
-              <h2 className="panel__title">Key attribute</h2>
+            <section className="panel choice">
+              <ChoiceHeading title="Key attribute" chosen={keyAbilityOf(build, data) && abilityList([keyAbilityOf(build, data)])} />
               <p className="rule-note">Your key attribute gets a boost and sets your class DC.</p>
               <Chips
                 label="Key attribute"
@@ -248,8 +320,8 @@ export function ClassStep({ build, update, data }) {
             }
             const option = f.choice.options.find((o) => o.id === build.classChoices[f.choice.key]);
             return (
-              <section key={f.name} className="options">
-                <h2 className="panel__title builder__subhead">{f.name}</h2>
+              <section key={f.name} className="choice">
+                <ChoiceHeading title={f.name} chosen={option?.name} />
                 <OptionList
                   label={f.name}
                   items={f.choice.options}
@@ -267,8 +339,8 @@ export function ClassStep({ build, update, data }) {
                   }
                 />
                 {option?.skillChoice && (
-                  <div className="panel">
-                    <h2 className="panel__title">{option.name}: choose a skill</h2>
+                  <div className="panel choice">
+                    <ChoiceHeading title={`${option.name} skill`} chosen={build.classChoiceSkills[f.choice.key] && cap(build.classChoiceSkills[f.choice.key])} level={3} />
                     <Chips
                       label={`${option.name} skill`}
                       options={option.skillChoice}
@@ -279,8 +351,8 @@ export function ClassStep({ build, update, data }) {
                   </div>
                 )}
                 {option?.traditionChoice && (
-                  <div className="panel">
-                    <h2 className="panel__title">{option.name}: spell tradition</h2>
+                  <div className="panel choice">
+                    <ChoiceHeading title={`${option.name} tradition`} chosen={build.tradition && cap(build.tradition)} level={3} />
                     <p className="rule-note">Your tradition comes from the kind of creature in your bloodline. Pick the one that matches.</p>
                     <Chips
                       label="Tradition"

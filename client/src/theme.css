@@ -445,8 +445,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 .condition-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip {
-  min-height: 36px;
-  padding: 0 12px;
+  min-height: 44px;
+  padding: 0 14px;
   border: 1px solid var(--line);
   background: var(--panel);
   font-family: var(--display);
@@ -455,6 +455,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   color: var(--text-soft);
 }
 .chip[aria-pressed='true'] { border-color: var(--blood); color: var(--blood-text); background: var(--panel-hot); }
+/* A check as well as the color, so a pressed chip reads without color vision. */
+.chip[aria-pressed='true']::before { content: '✓ '; }
+@media (hover: hover) { .chip:not(:disabled):not([aria-pressed='true']):hover { border-color: var(--bronze); color: var(--text); } }
 
 .condition { display: flex; flex-direction: column; gap: 4px; }
 .condition__name { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 2px; color: var(--blood-text); text-transform: uppercase; }
@@ -1126,6 +1129,37 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 .builder__header { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding-top: 6px; }
 .builder__subhead { margin: 6px 0 0; text-align: left; }
+
+/* A builder choice: a heading with its status, then the options. */
+.choice { display: flex; flex-direction: column; gap: 10px; }
+.choice .rule-note { margin: 0; }
+.choice-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line-faint); }
+.choice-head__title { margin: 0; font-family: var(--display); font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--bronze); }
+.choice-head__status {
+  padding: 4px 10px;
+  border: 1px dashed var(--line);
+  border-radius: 999px;
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.choice-head__status--done { border: 1px solid var(--gold); color: var(--gold); }
+.choice__group { margin: 6px 0 0; font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+
+/* Backgrounds: filters above the list, and each card's boosts as badges. */
+.filters { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; padding: 14px; border: 1px solid var(--line-soft); border-radius: 4px; background: var(--bg-deep); }
+.filters__field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.filters__field--wide, .filters__count { grid-column: 1 / -1; }
+.filters__label { font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.filters select { min-height: 44px; padding: 0 10px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-family: var(--body); font-size: 15px; }
+.filters__count { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 0; font-size: 14px; font-style: italic; color: var(--text-muted); }
+.bg-meta { display: flex; flex-direction: column; gap: 6px; }
+.bg-meta__boosts { display: flex; flex-wrap: wrap; gap: 4px; }
+.ability-badge { padding: 2px 8px; border: 1px solid var(--bronze); border-radius: 3px; font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1px; font-style: normal; color: var(--bronze); }
+.ability-badge--free { border-color: var(--line); color: var(--text-muted); }
+.bg-meta__skills { font-size: 13px; }
 .builder__footer {
   position: sticky;
   bottom: 0;
@@ -1151,12 +1185,13 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 .options__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
 
-.option { border: 1px solid var(--line-soft); background: var(--panel); }
-.option--on { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 18px #4a120c; }
+.option { border: 1px solid var(--line-soft); border-radius: 4px; background: var(--panel); transition: border-color 0.15s, background-color 0.15s; }
+.option:has(.option__head:is(:hover, :focus-visible)):not(.option--blocked) { border-color: var(--bronze); background: #17100d; }
+.option--on, .option--on:has(.option__head:is(:hover, :focus-visible)) { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 18px #4a120c; }
 .option__head {
   width: 100%;
-  min-height: 56px;
-  padding: 10px 12px;
+  min-height: 60px;
+  padding: 12px 14px;
   border: none;
   background: none;
   text-align: left;
@@ -1165,13 +1200,14 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   gap: 12px;
 }
 .option__gem { flex: none; width: 10px; height: 10px; transform: rotate(45deg); border: 1px solid var(--line); }
-.option--on .option__gem { background: var(--blood-text); border-color: var(--blood-text); }
+.option--on .option__gem { background: var(--blood-text); border-color: var(--blood-text); box-shadow: 0 0 8px var(--blood); }
 .option__main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.option__name { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.option__meta { font-size: 13px; color: var(--text-muted); }
+.option__name { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.option--on .option__name { color: var(--gold); }
+.option__meta { font-size: 13px; line-height: 1.45; color: var(--text-muted); }
 .option__warn { font-size: 13px; font-style: italic; color: var(--blood-text); }
 .option__tags { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-.option__desc { padding: 0 14px 12px 34px; font-size: 14px; line-height: 1.5; color: var(--text-soft); overflow-wrap: anywhere; }
+.option__desc { margin: 0 14px; padding: 12px 0 14px 36px; border-top: 1px solid var(--line-faint); font-size: 14px; line-height: 1.55; color: var(--text-soft); overflow-wrap: anywhere; }
 .option__desc table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
 .option__desc th, .option__desc td { padding: 4px 8px; border: 1px solid var(--line-soft); text-align: left; }
 .option__desc p { margin: 0 0 8px; }
@@ -1424,6 +1460,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   text-shadow: 0 0 30px var(--glow);
 }
 .showcase__art--empty .showcase__img { opacity: 0.18; filter: grayscale(1) brightness(0.6); animation: none; }
+/* A scene (not a figure) fills the whole frame. */
+.showcase__img--fill { inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
 .showcase__prompt {
   position: absolute;
   inset: 0;
@@ -1559,11 +1597,12 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .showcase__lede { font-size: 15px; line-height: 1.6; font-style: italic; color: var(--text-soft); }
 .showcase__lede p { margin: 0; }
 
-/* Wide: art on the left; tiles and details on the right. */
+/* Wide: art on the left; details and tiles on the right. */
 @container (min-width: 720px) {
   .showcase {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    grid-template-areas: 'art tiles' 'art info';
+    /* The picked option's details sit above the tiles, beside the art. */
+    grid-template-areas: 'art info' 'art tiles';
     grid-template-rows: auto 1fr;
     column-gap: 24px;
   }

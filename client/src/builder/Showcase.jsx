@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { artFor, hasOwnArt, iconFor, iconIsFramed, tileFocusFor } from './art.js';
+import { artFor, emptyArtFor, hasOwnArt, iconFor, iconIsFramed, tileFocusFor } from './art.js';
 import { sourceTag } from './labels.js';
 
 const firstParagraph = (html = '') => /<p>[\s\S]*?<\/p>/.exec(html)?.[0] ?? '';
@@ -43,7 +43,8 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
     onSelect(items[next].id);
   };
 
-  const art = current ? artFor(kind, current.slug) : artFor(kind, null);
+  const empty = current ? null : emptyArtFor(kind);
+  const art = current ? artFor(kind, current.slug) : empty.url;
   const showArt = Boolean(art) && !brokenArt[art];
 
   return (
@@ -53,7 +54,7 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
         {showArt ? (
           <img
             key={current?.slug ?? 'none'}
-            className="showcase__img"
+            className={`showcase__img ${empty?.fill ? 'showcase__img--fill' : ''}`}
             src={art}
             alt=""
             onError={() => setBrokenArt((b) => ({ ...b, [art]: true }))}
