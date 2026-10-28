@@ -2481,3 +2481,154 @@ button.book__back { padding: 0; border: 0; background: none; font: inherit; font
   .book--tabs-top .book__tab { border-radius: 4px 4px 0 0; border-right: 1px solid var(--line); border-bottom: 0; min-height: 34px; }
   .book--tabs-top .book__tab--here { box-shadow: 0 -4px 10px var(--glow); }
 }
+
+/* ---------- Character sheet, laid out like page one of Paizo's sheet ----------
+   Header, attributes, the defense band, then skills (left) and Strikes and DCs
+   (right). (pages/SheetPage.jsx) */
+
+.sheet { display: flex; flex-direction: column; gap: 16px; }
+.sheet-panel {
+  position: relative;
+  padding: 18px 16px 16px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: radial-gradient(ellipse 120% 70% at 50% 0%, #1b120f 0%, #130d0b 60%, #0f0a08 100%);
+  box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px var(--line-faint);
+}
+.sheet-panel::before, .sheet-panel::after { content: ''; position: absolute; width: 16px; height: 16px; border: 0 solid var(--bronze); opacity: 0.6; pointer-events: none; }
+.sheet-panel::before { top: 8px; left: 8px; border-top-width: 1px; border-left-width: 1px; }
+.sheet-panel::after { bottom: 8px; right: 8px; border-bottom-width: 1px; border-right-width: 1px; }
+.sheet-panel__title { margin: 0 0 8px; padding-bottom: 6px; border-bottom: 3px double var(--line); font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--bronze); }
+.sheet-panel__label { font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+
+/* The header: portrait, name and the sheet's labelled boxes, and the HP orb. */
+.sheet-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px; }
+.sheet-head__body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.sheet-head__name { margin: 0; font-family: var(--display); font-size: clamp(22px, 2vw + 14px, 34px); font-weight: 900; letter-spacing: 3px; text-transform: uppercase; overflow-wrap: anywhere; }
+.sheet-head__fields { margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 6px 14px; }
+.sheet-head__fields div { padding-bottom: 3px; border-bottom: 1px solid var(--line); min-width: 0; }
+.sheet-head__fields dt { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.sheet-head__fields dd { margin: 1px 0 0; font-size: 15px; overflow-wrap: anywhere; }
+.sheet-head .hero__campaign { margin: 0; }
+.sheet__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Attribute modifiers, in a row as on the sheet. */
+.sheet-attrs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.sheet-attr { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); text-align: center; }
+.sheet-attr--key { border-color: var(--gold); box-shadow: 0 0 12px var(--glow); }
+.sheet-attr__short { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); }
+.sheet-attr__value { font-family: var(--display); font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sheet-attr__name { font-size: 11px; color: var(--text-dim); }
+
+/* The defense band: AC, saves, HP, Perception and Speed. */
+.sheet-defense { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.sheet-def-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.sheet-def {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 112px;
+  padding: 12px 6px;
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  text-align: center;
+}
+button.sheet-def { cursor: pointer; }
+@media (hover: hover) { button.sheet-def:not([aria-pressed='true']):hover { border-color: var(--bronze); } }
+button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 16px #4a120c; }
+.sheet-def__label { font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.sheet-def__value { font-family: var(--display); font-size: 30px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.sheet-def__value small { font-size: 15px; color: var(--text-muted); }
+.sheet-def__extra { font-size: 12px; font-style: italic; color: var(--text-muted); }
+/* AC in a shield shape, as on the sheet. */
+.sheet-def--ac { border-color: var(--line); border-radius: 6px 6px 50% 50% / 6px 6px 34% 34%; padding-bottom: 20px; }
+.sheet-def--hp .sheet-def__value { color: var(--blood-text); }
+
+/* Two columns: skills, then Strikes and DCs. */
+.sheet__columns { display: grid; gap: 16px; align-items: start; }
+.sheet__col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.sheet-skills { margin: 0; padding: 0; list-style: none; }
+.sheet-skill {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px auto 52px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 4px 6px;
+  border: 0;
+  border-bottom: 1px solid var(--line-faint);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.sheet-skill[aria-pressed='true'] { background: var(--panel-hot); box-shadow: inset 2px 0 0 var(--blood); }
+@media (hover: hover) { .sheet-skill:hover .sheet-skill__name { color: var(--gold); } }
+.sheet-skill__name { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-soft); overflow-wrap: anywhere; }
+.sheet-skill__attr { font-family: var(--display); font-size: 11px; letter-spacing: 1px; color: var(--text-muted); text-align: center; }
+.sheet-skill__total { font-family: var(--display); font-size: 18px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+.sheet-langs { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-top: 12px; font-size: 15px; }
+
+.sheet-strike-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+.sheet-strikes { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.sheet-strike {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.sheet-strike[aria-pressed='true'] { border-color: var(--blood); background: var(--panel-hot); }
+@media (hover: hover) { .sheet-strike:not([aria-pressed='true']):hover { border-color: var(--bronze); } }
+.sheet-strike__bonus { display: grid; place-items: center; height: 44px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); font-family: var(--display); font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sheet-strike__main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sheet-strike__name { font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.sheet-strike__traits { font-size: 12px; font-style: italic; color: var(--text-muted); overflow-wrap: anywhere; }
+.sheet-strike__damage { font-size: 14px; color: var(--text-soft); text-align: right; }
+.sheet-strike__damage small { color: var(--text-muted); }
+.sheet-profs { margin: 6px 0 0; padding-top: 10px; border-top: 1px solid var(--line-faint); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; text-align: center; }
+.sheet-profs dt { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+.sheet-profs dd { margin: 0; }
+
+@media (max-width: 560px) {
+  .sheet-head { grid-template-columns: auto minmax(0, 1fr); }
+  .sheet-head .health-orb, .sheet-head > :last-child { grid-column: 1 / -1; justify-self: center; }
+  .sheet-attrs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 900px) {
+  .sheet-defense { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.8fr); }
+  .sheet-def-group { grid-column: auto; }
+  .sheet__columns { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+/* Sheet: DCs, spells and runes. */
+.sheet-magic { display: flex; flex-direction: column; gap: 12px; }
+.sheet-magic .sheet-panel__title { margin-bottom: 0; }
+.sheet-dcs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.sheet-dcs--1 { grid-template-columns: minmax(0, 200px); }
+.sheet-dcs--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sheet-dcs .sheet-def { min-height: 96px; }
+.sheet-spells { display: flex; flex-direction: column; gap: 4px; }
+.sheet-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.sheet-list li { display: flex; align-items: baseline; gap: 8px; font-size: 15px; }
+.sheet-list .act { flex: none; }
+
+/* The Feats tab: everything the character has gained, as a book. (pages/CharacterFeatsPage.jsx) */
+.feats-tab { display: flex; flex-direction: column; gap: 12px; }
+.feats-tab__head .sheet-panel__title { margin-bottom: 6px; }
+.feats-tab__head .rule-note { margin: 0; }

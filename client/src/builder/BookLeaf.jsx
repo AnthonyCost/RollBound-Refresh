@@ -2,9 +2,9 @@
 export const wide = () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
 
 /**
- * The right-hand page of a builder book (see BookSpread): an option's name, its facts,
- * any notes, its rules text, and the buttons that choose it (children). onClose goes back
- * to the index on phones.
+ * The right-hand page of a book you pick from (see BookSpread): an option's name, its
+ * facts, any notes, its rules text, and the buttons that choose it (children, if any).
+ * onClose goes back to the index on phones.
  */
 export default function BookLeaf({ eyebrow, title, facts = [], notes, description, onClose, children }) {
   const shown = facts.filter(([, v]) => v != null && v !== '' && v !== false);
@@ -27,7 +27,7 @@ export default function BookLeaf({ eyebrow, title, facts = [], notes, descriptio
       )}
       {notes}
       {description && <div className="option__desc book__desc" dangerouslySetInnerHTML={{ __html: description }} />}
-      <div className="book__choose">{children}</div>
+      {children && <div className="book__choose">{children}</div>}
     </article>
   );
 }

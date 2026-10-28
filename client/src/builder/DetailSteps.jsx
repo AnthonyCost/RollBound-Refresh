@@ -35,6 +35,7 @@ import {
 import Chips from './Chips.jsx';
 import ChoiceHeading from './ChoiceHeading.jsx';
 import ActionCost from '../components/ActionCost.jsx';
+import RankPips from '../components/RankPips.jsx';
 import BookSpread from '../components/BookSpread.jsx';
 import BookLeaf, { ChosenActions, wide } from './BookLeaf.jsx';
 import { ABILITY_SHORT, cap, sourceTag } from './labels.js';
@@ -178,18 +179,6 @@ export function AttributesStep({ build, update, data }) {
 
 // A trained skill at 1st level adds +3 (trained +2, plus your level).
 const TRAINED_AT_1 = 3;
-const RANKS = ['Trained', 'Expert', 'Master', 'Legendary'];
-
-/** Proficiency as the sheet shows it: four diamonds, filled up to the rank (only Trained at 1st level). */
-function RankPips({ trained }) {
-  return (
-    <span className="rank-pips">
-      {RANKS.map((r, i) => <span key={r} className={`rank-pips__pip ${trained && i === 0 ? 'rank-pips__pip--on' : ''}`} aria-hidden="true" />)}
-      <span className="visually-hidden">{trained ? 'Trained' : 'Untrained'}</span>
-    </span>
-  );
-}
-
 /**
  * Skills as the character sheet lists them: every skill on one line with its
  * attribute, proficiency, modifier, and a button to train it (or where its training
@@ -247,7 +236,7 @@ export function SkillsStep({ build, update, data }) {
                   <tr key={s} className={fixed ? 'skill-sheet--fixed' : picked ? 'skill-sheet--on' : ''}>
                     <th scope="row" className="skill-sheet__skill">{cap(s)}</th>
                     <td className="skill-sheet__attr">{ABILITY_SHORT[ab]}</td>
-                    <td><RankPips trained={trained} /></td>
+                    <td><RankPips rank={trained ? 'trained' : 'untrained'} /></td>
                     <td className="skill-sheet__mod">{signed(mods[ab] + (trained ? TRAINED_AT_1 : 0))}</td>
                     <td className="skill-sheet__status">
                       {fixed ? (
@@ -269,7 +258,7 @@ export function SkillsStep({ build, update, data }) {
                 <tr key={l} className="skill-sheet--fixed">
                   <th scope="row" className="skill-sheet__skill">{l}</th>
                   <td className="skill-sheet__attr">INT</td>
-                  <td><RankPips trained /></td>
+                  <td><RankPips rank="trained" /></td>
                   <td className="skill-sheet__mod">{signed(mods.int + TRAINED_AT_1)}</td>
                   <td className="skill-sheet__status">
                     <span className="skill-sheet__from">from {l === build.lore?.trim() ? 'your background' : 'your class'}</span>

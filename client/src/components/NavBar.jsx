@@ -20,6 +20,12 @@ const icon = {
       <path d="M12 2v20M3 7l18 10M21 7L3 17" />
     </>
   ),
+  feats: (
+    <>
+      <path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.4 7.2 17.9l.9-5.4L4.2 8.7l5.4-.8z" />
+      <path d="M8 21h8" />
+    </>
+  ),
   spells: (
     <>
       <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" />
@@ -43,6 +49,7 @@ const icon = {
 // encounter: shown only while the character is in an active encounter.
 const LINKS = [
   { to: 'sheet', label: 'Sheet', icon: 'sheet' },
+  { to: 'feats', label: 'Feats', icon: 'feats' },
   { to: 'spells', label: 'Spells', icon: 'spells' },
   { to: 'inventory', label: 'Inventory', icon: 'inventory' },
   { to: 'lore', label: 'Lore', icon: 'lore' },

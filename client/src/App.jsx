@@ -19,6 +19,7 @@ import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import SharedSheetPage, { PartySheetPage } from './pages/SharedSheetPage.jsx';
 import CharacterSpellsPage from './pages/CharacterSpellsPage.jsx';
+import CharacterFeatsPage from './pages/CharacterFeatsPage.jsx';
 import SpellBookPage, { SpellByIdPage } from './pages/SpellBookPages.jsx';
 import ArmoryPage, { ItemPage } from './pages/ArmoryPages.jsx';
 import InventoryPage from './pages/InventoryPage.jsx';
@@ -133,6 +134,7 @@ export default function App() {
         <Route path="/campaigns/:id/characters/:characterId" element={<PartySheetPage />}>
           <Route index element={<Navigate to="sheet" replace />} />
           <Route path="sheet" element={<SheetPage />} />
+          <Route path="feats" element={<CharacterFeatsPage />} />
           <Route path="spells" element={<CharacterSpellsPage />} />
           <Route path="inventory" element={<InventoryPage />} />
           <Route path="lore" element={<LorePage />} />
@@ -140,6 +142,7 @@ export default function App() {
         <Route path="/play/:characterId" element={<Play />}>
           <Route index element={<Navigate to="sheet" replace />} />
           <Route path="sheet" element={<SheetPage />} />
+          <Route path="feats" element={<CharacterFeatsPage />} />
           <Route path="spells" element={<CharacterSpellsPage />} />
           <Route path="inventory" element={<InventoryPage />} />
           <Route path="lore" element={<LorePage />} />
@@ -155,6 +158,7 @@ export default function App() {
       <Route path="/sheets/:shareId" element={<SharedSheetPage />}>
         <Route index element={<Navigate to="sheet" replace />} />
         <Route path="sheet" element={<SheetPage />} />
+        <Route path="feats" element={<CharacterFeatsPage />} />
         <Route path="spells" element={<CharacterSpellsPage />} />
         <Route path="inventory" element={<InventoryPage />} />
         <Route path="lore" element={<LorePage />} />

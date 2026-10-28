@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { spellAttack, spellDc, spellKey, preparedValue } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
@@ -6,6 +7,8 @@ import Ornament from '../components/Ornament.jsx';
 import { signed, titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
 import Chips from '../builder/Chips.jsx';
+import BookSpread from '../components/BookSpread.jsx';
+import BookLeaf, { wide } from '../builder/BookLeaf.jsx';
 
 const SPELL_TYPES = ['spells'];
 
@@ -77,12 +80,21 @@ function PreparePanel({ casting, prepared, setPrepared, status, readOnly }) {
   );
 }
 
-/** Every spell the character knows or has, with its full rules text. */
+/**
+ * Every spell the character knows or has, laid out like the Spell Book: a tab for
+ * cantrips and each rank, the index on the left, and the open spell's full rules text
+ * on the right. Casters who prepare from known spells choose today's spells above it.
+ */
 export default function CharacterSpellsPage() {
   const { character, conditions, shieldRaised, prepared, setPrepared, preparedStatus, readOnly } = useTable();
   const rules = useRules(SPELL_TYPES);
   const casting = character.spellcasting;
   const opts = { conditions, shieldRaised };
+  const spells = casting ? [...casting.cantrips, ...casting.spells] : [];
+  const items = spells
+    .map((s) => ({ ...s, id: spellKey(s) }))
+    .sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name));
+  const [openId, setOpenId] = useState(() => (wide() ? items[0]?.id ?? null : null));
 
   if (!casting) {
     return (
@@ -95,73 +107,86 @@ export default function CharacterSpellsPage() {
     );
   }
 
-  const spells = [...casting.cantrips, ...casting.spells];
   const full = (s) => rules?.spells?.find((x) => x.id === s.id || x.slug === s.slug) ?? s;
-  const ranks = [...new Set(spells.map((s) => s.rank))].sort((a, b) => a - b);
+  const sectionOf = (s) => String(s.rank);
+  const sections = [...new Set(items.map(sectionOf))].map((key) => ({ key, tab: key === '0' ? 'Cantrips' : `Rank ${key}`, name: rankLabel(Number(key)) }));
   // How many times each spell is prepared today (a rank 1 spell can fill several slots).
   const timesPrepared = (s) => (prepared ? [...prepared.cantrips, ...prepared.slots].filter((p) => p && spellKey(p) === spellKey(s)).length : 0);
+  const open = items.find((i) => i.id === openId) ?? null;
+  const spell = open && full(open);
 
   return (
-    <div className="narrow">
-      <Ornament label="SPELLS" />
-      <section className="panel spellbook__head">
-        <h1 className="panel__title">{titleCase(casting.tradition ?? 'Spells')} {casting.kind === 'focus' ? 'focus spells' : 'spells'}</h1>
+    <div className="feats-tab">
+      <header className="feats-tab__head">
+        <h1 className="sheet-panel__title">{titleCase(casting.tradition ?? 'Spells')} {casting.kind === 'focus' ? 'focus spells' : 'spells'}</h1>
         <p className="rule-note">{KIND[casting.kind] ?? ''}</p>
-        <dl className="spellbook__stats">
-          <div><dt>Spell attack</dt><dd>{signed(spellAttack(character, opts).total)}</dd></div>
-          <div><dt>Spell DC</dt><dd>{spellDc(character, opts).total}</dd></div>
-          {casting.kind !== 'focus' && <div><dt>Rank 1 slots</dt><dd>{casting.slots}</dd></div>}
-        </dl>
-      </section>
+      </header>
+      <div className={`sheet-dcs sheet-dcs--${casting.kind === 'focus' ? 2 : 3}`}>
+        <div className="sheet-def">
+          <span className="sheet-def__label">Spell attack</span>
+          <span className="sheet-def__value">{signed(spellAttack(character, opts).total)}</span>
+        </div>
+        <div className="sheet-def">
+          <span className="sheet-def__label">Spell DC</span>
+          <span className="sheet-def__value">{spellDc(character, opts).total}</span>
+        </div>
+        {casting.kind !== 'focus' && (
+          <div className="sheet-def">
+            <span className="sheet-def__label">Rank 1 slots</span>
+            <span className="sheet-def__value">{casting.slots}</span>
+          </div>
+        )}
+      </div>
 
       {prepared && <PreparePanel casting={casting} prepared={prepared} setPrepared={setPrepared} status={preparedStatus} readOnly={readOnly} />}
 
       {rules?.error && <p className="rule-note rule-note--warn">Couldn't load the spells' full rules text. Try refreshing.</p>}
 
-      {ranks.map((rank) => (
-        <section key={rank} className="spellbook__rank" aria-label={rankLabel(rank)}>
-          <h2 className="eyebrow">{rankLabel(rank)}</h2>
-          <ul className="spellbook__list">
-            {spells.filter((s) => s.rank === rank).map((s) => {
-              const spell = full(s);
-              const facts = [
-                ['Range', spell.range],
-                ['Area', spell.area],
-                ['Targets', spell.target],
-                ['Defense', spell.defense && titleCase(spell.defense)],
-                ['Duration', spell.duration],
-              ].filter(([, v]) => v);
-              return (
-                <li key={s.id ?? s.slug}>
-                  <details className="feature spell">
-                    <summary>
-                      <span className="spell__name">
-                        {spell.name}
-                        {timesPrepared(s) > 0 && <span className="tag spell__prepared">Prepared{timesPrepared(s) > 1 ? ` ×${timesPrepared(s)}` : ''}</span>}
-                      </span>
-                      <span className="spell__actions"><ActionCost actions={spell.actions} /></span>
-                    </summary>
-                    <div className="spell__body">
-                      {spell.traits?.length > 0 && (
-                        <p className="spell__traits">{spell.traits.map((t) => <span key={t} className="tag">{t}</span>)}</p>
-                      )}
-                      {facts.length > 0 && (
-                        <p className="spell__facts">
-                          {facts.map(([k, v]) => <span key={k}><strong>{k}</strong> {v}</span>)}
-                        </p>
-                      )}
-                      {spell.description
-                        ? <div className="option__desc" dangerouslySetInnerHTML={{ __html: spell.description }} />
-                        : !rules && <p className="muted italic">Loading the rules text…</p>}
-                      {spell.slug && <Link to={`/spells/${spell.slug}`} className="spell__link">Open in the Spell Book</Link>}
-                    </div>
-                  </details>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ))}
+      <BookSpread
+        items={items}
+        total={items.length}
+        noun="spells"
+        sections={sections}
+        sectionOf={sectionOf}
+        tabsOnTop
+        open={open}
+        onOpen={(i) => setOpenId(i.id)}
+        marked={(i) => timesPrepared(i) > 0}
+        meta={(i) => (
+          <>
+            {timesPrepared(i) > 1 && <span className="tag">×{timesPrepared(i)}</span>}
+            <ActionCost actions={i.actions} />
+          </>
+        )}
+        emptyText={casting.kind === 'focus' ? 'Your focus spells come from your class; read them on the Feats tab.' : 'No spells yet.'}
+        leaf={open && (
+          <BookLeaf
+            key={open.id}
+            eyebrow={`${open.rank === 0 ? 'Cantrip' : `Spell ${open.rank}`}${timesPrepared(open) ? ` · Prepared${timesPrepared(open) > 1 ? ` ×${timesPrepared(open)}` : ''}` : ''}`}
+            title={spell.name}
+            facts={[
+              ['Cast', <ActionCost key="cast" actions={spell.actions} />],
+              ['Range', spell.range],
+              ['Area', spell.area],
+              ['Targets', spell.target],
+              ['Defense', spell.defense && titleCase(spell.defense)],
+              ['Duration', spell.duration],
+              ['Traits', spell.traits?.join(', ')],
+            ]}
+            description={spell.description}
+            notes={!rules && <p className="muted italic">Loading the rules text…</p>}
+            onClose={() => setOpenId(null)}
+          >
+            {spell.slug && <Link to={`/spells/${spell.slug}`} className="spell__link">Open in the Spell Book</Link>}
+          </BookLeaf>
+        )}
+        blank={
+          <>
+            <p className="book__blank-title">Your spells</p>
+            <p className="rule-note">Open a spell from the index to read it here. The tabs switch between cantrips and each rank.</p>
+          </>
+        }
+      />
     </div>
   );
 }
