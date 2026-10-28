@@ -2161,10 +2161,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .spell-text hr { margin: 10px 0; border: 0; border-top: 1px solid var(--line); }
 .spell__link { align-self: flex-start; font-size: 14px; color: var(--bronze); }
 
-/* ---------- Spell Book as an open book ----------
-   Phones: one page at a time (the index, or the open spell). Wide screens: a two-page
+/* ---------- Spell Book and Bestiary as an open book ----------
+   Phones: one page at a time (the index, or the open entry). Wide screens: a two-page
    spread with a spine, thumb-index tabs down the left edge, the index on the left
-   page and the open spell on the right. (pages/SpellBookPages.jsx) */
+   page and the open entry on the right. (components/BookSpread.jsx) */
 
 .book { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
 .book__page {
@@ -2269,6 +2269,12 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 @media (hover: hover) { .book__turn-btn:not(:disabled):hover { border-color: var(--bronze); color: var(--gold); } }
 
 .book__back { align-self: flex-start; font-size: 14px; color: var(--bronze); }
+/* A creature's level after the dot leader. */
+.book__level { min-width: 30px; padding: 2px 6px; border: 1px solid var(--line); background: var(--bg); font-family: var(--display); font-size: 13px; font-weight: 700; text-align: center; color: var(--text); font-variant-numeric: tabular-nums; }
+/* The creature page: art and lore, then the stat block, stacked on one page. */
+.creature__columns { display: flex; flex-direction: column; gap: 18px; }
+.creature__column { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.book__leaf .creature__art img { max-height: min(460px, 60vh); }
 .book__leaf .creature { gap: 14px; }
 .book__blank { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 320px; text-align: center; }
 .book__blank-mark { font-size: 48px; color: var(--bronze); opacity: 0.4; }

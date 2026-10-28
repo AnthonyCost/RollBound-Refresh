@@ -4,12 +4,11 @@ import PageShell from '../components/PageShell.jsx';
 import { useRules } from '../state/useRules.js';
 import { titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
+import BookSpread from '../components/BookSpread.jsx';
 
 const SPELL_TYPES = ['spells'];
 const TRADITIONS = ['arcane', 'divine', 'occult', 'primal'];
 const RARITIES = ['common', 'uncommon', 'rare', 'unique'];
-/** Spells on one page of the index. */
-const PAGE = 24;
 
 export const spellPath = (s) => `/spells/${s.slug}`;
 const RANKS = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -27,44 +26,39 @@ const SECTIONS = [
   { key: 'r', tab: 'R', name: 'Rituals' },
 ];
 const sectionOf = (s) => (s.kind === 'focus' ? 'f' : s.kind === 'ritual' ? 'r' : s.rank === 0 ? 'c' : String(s.rank));
-const sectionName = (key) => SECTIONS.find((x) => x.key === key)?.name ?? '';
 
 /** Filters live in the address, so a filtered list can be bookmarked (as on the Bestiary). */
 function useFilters() {
   const [params, setParams] = useSearchParams();
   const filters = { q: params.get('q') ?? '', kind: params.get('kind') ?? '', rank: params.get('rank') ?? '', tradition: params.get('tradition') ?? '', rarity: params.get('rarity') ?? '', book: params.get('book') ?? '' };
-  // null when the address doesn't say, so an open spell can show the page it's on.
-  const page = params.has('page') ? Math.max(1, Number(params.get('page')) || 1) : null;
   // Built on the browser's address so quick changes in a row don't undo each other.
-  // Changing a filter goes back to the first page.
+  // Changing a filter goes back to the first page of the index.
   const set = (changes) =>
     setParams(
       () => {
         const next = new URLSearchParams(window.location.search);
-        if (!('page' in changes)) next.delete('page');
+        next.delete('page');
         for (const [k, v] of Object.entries(changes)) {
-          if (v === '' || v == null || (k === 'page' && v === 1)) next.delete(k);
+          if (v === '' || v == null) next.delete(k);
           else next.set(k, String(v));
         }
         return next;
       },
       { replace: true },
     );
-  return [filters, page, set];
+  return [filters, set];
 }
 
 /**
- * The Spell Book, laid out like an open book. On wide screens the left page is the
- * index (searchable, filterable, in numbered pages, with thumb-index tabs for each
- * rank) and the right page is the open spell. On phones it's one page at a time: the
- * index at /spells, the spell at /spells/:slug. Filters and the page stay in the
- * address, so opening a spell keeps your place in the index.
+ * The Spell Book, laid out like an open book (see BookSpread): the index, with a
+ * thumb-index tab for each rank, and the open spell at /spells/:slug. Filters stay in
+ * the address, so opening a spell keeps your place in the index.
  */
 export default function SpellBookPage() {
   const { slug } = useParams();
   const { search } = useLocation();
   const rules = useRules(SPELL_TYPES);
-  const [filters, page, setFilters] = useFilters();
+  const [filters, setFilters] = useFilters();
 
   const spells = rules?.spells ?? null;
   const books = useMemo(() => (spells ? [...new Set(spells.map((s) => s.source))] : []), [spells]);
@@ -87,33 +81,6 @@ export default function SpellBookPage() {
   const filtered = Object.values(filters).some(Boolean);
 
   const open = slug ? spells?.find((x) => x.slug === slug) : null;
-  const pages = Math.max(1, Math.ceil(matches.length / PAGE));
-  const openAt = open ? matches.indexOf(open) : -1;
-  const current = Math.min(page ?? (openAt >= 0 ? Math.floor(openAt / PAGE) + 1 : 1), pages);
-  const onPage = matches.slice((current - 1) * PAGE, current * PAGE);
-  // Where each section starts, for the thumb-index tabs.
-  const firstPageOf = useMemo(() => {
-    const at = {};
-    matches.forEach((s, i) => (at[sectionOf(s)] ??= Math.floor(i / PAGE) + 1));
-    return at;
-  }, [matches]);
-  const openSections = new Set(onPage.map(sectionOf));
-  const first = onPage[0] && sectionOf(onPage[0]);
-  const last = onPage.at(-1) && sectionOf(onPage.at(-1));
-  const runningHead = first ? (first === last ? sectionName(first) : `${sectionName(first)} – ${sectionName(last)}`) : 'No spells';
-
-  const turn = (to) => setFilters({ page: Math.min(pages, Math.max(1, to)) });
-
-  // The arrow keys turn pages, except while typing in a field.
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.target.closest('input, select, textarea, [contenteditable]') || e.altKey || e.ctrlKey || e.metaKey) return;
-      if (e.key === 'ArrowLeft' && current > 1) turn(current - 1);
-      if (e.key === 'ArrowRight' && current < pages) turn(current + 1);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  });
   useEffect(() => {
     if (slug) window.scrollTo(0, 0);
   }, [slug]);
@@ -182,85 +149,31 @@ export default function SpellBookPage() {
       )}
 
       {spells && (
-        <div className={`book ${slug ? 'book--open' : ''}`}>
-          <nav className="book__tabs" aria-label="Sections">
-            {SECTIONS.map((x) => (
-              <button
-                key={x.key}
-                type="button"
-                className={`book__tab ${openSections.has(x.key) ? 'book__tab--here' : ''}`}
-                disabled={!firstPageOf[x.key]}
-                aria-current={openSections.has(x.key) ? 'true' : undefined}
-                aria-label={`${x.name}${firstPageOf[x.key] ? `, page ${firstPageOf[x.key]}` : ', none match'}`}
-                title={x.name}
-                onClick={() => turn(firstPageOf[x.key])}
-              >
-                {x.tab}
-              </button>
-            ))}
-          </nav>
-
-          <section className="book__page book__index" aria-label="Index">
-            <header className="book__running">
-              <span>{runningHead}</span>
-              <span role="status">
-                {matches.length === spells.length ? `${matches.length} spells` : `${matches.length} of ${spells.length}`}
-                {filtered && (
-                  <>
-                    {' · '}
-                    <Link to="/spells" className="bestiary__clear">Clear filters</Link>
-                  </>
-                )}
-              </span>
-            </header>
-
-            {onPage.length ? (
-              <ol key={current} className="book__list book__turn">
-                {onPage.map((s, i) => {
-                  const section = sectionOf(s);
-                  const starts = i === 0 || sectionOf(onPage[i - 1]) !== section;
-                  return (
-                    <li key={s.id}>
-                      {starts && <h2 className="book__section">{sectionName(section)}</h2>}
-                      <Link
-                        to={`${spellPath(s)}${search}`}
-                        className={`book__entry-link ${s.slug === slug ? 'book__entry-link--open' : ''}`}
-                        aria-current={s.slug === slug ? 'page' : undefined}
-                      >
-                        <span className="book__entry-name">{s.name}</span>
-                        <span className="book__entry-dots" aria-hidden="true" />
-                        <span className="book__entry-meta">
-                          {s.rarity !== 'common' && <span className={`tag tag--rarity-${s.rarity}`}>{s.rarity}</span>}
-                          <ActionCost actions={s.actions} />
-                        </span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ol>
-            ) : (
-              <p className="muted italic center book__empty">No spells match. Try fewer filters.</p>
-            )}
-
-            <footer className="book__foot">
-              <button type="button" className="book__turn-btn" disabled={current <= 1} onClick={() => turn(current - 1)} aria-label="Previous page">‹</button>
-              <span className="book__folio">Page {current} of {pages}</span>
-              <button type="button" className="book__turn-btn" disabled={current >= pages} onClick={() => turn(current + 1)} aria-label="Next page">›</button>
-            </footer>
-          </section>
-
-          <section className="book__page book__leaf" aria-label={open ? open.name : 'Open spell'}>
-            {open ? (
-              <SpellEntry key={open.slug} s={open} closeTo={closeTo} />
-            ) : (
-              <div className="book__blank">
-                <span className="book__blank-mark" aria-hidden="true">✦</span>
-                <p className="book__blank-title">Choose a spell</p>
-                <p className="rule-note">Pick a spell from the index to read it here. Use the tabs to jump to a rank, and the arrow keys to turn pages.</p>
-              </div>
-            )}
-          </section>
-        </div>
+        <BookSpread
+          items={matches}
+          total={spells.length}
+          noun="spells"
+          sections={SECTIONS}
+          sectionOf={sectionOf}
+          open={open}
+          href={(s) => `${spellPath(s)}${search}`}
+          meta={(s) => (
+            <>
+              {s.rarity !== 'common' && <span className={`tag tag--rarity-${s.rarity}`}>{s.rarity}</span>}
+              <ActionCost actions={s.actions} />
+            </>
+          )}
+          leaf={open && <SpellEntry key={open.slug} s={open} closeTo={closeTo} />}
+          blank={
+            <>
+              <p className="book__blank-title">Choose a spell</p>
+              <p className="rule-note">Pick a spell from the index to read it here. Use the tabs to jump to a rank, and the arrow keys to turn pages.</p>
+            </>
+          }
+          filtered={filtered}
+          clearTo="/spells"
+          emptyText="No spells match. Try fewer filters."
+        />
       )}
     </PageShell>
   );

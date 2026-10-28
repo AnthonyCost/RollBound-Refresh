@@ -14,7 +14,7 @@ import CampaignLayout, { CampaignOverview } from './pages/CampaignPage.jsx';
 import { SessionLogEditor, SessionLogPage, SessionLogsPage } from './pages/SessionLogPages.jsx';
 import { EncounterEditor, EncounterListPage } from './pages/EncountersPage.jsx';
 import BestiaryPage from './pages/BestiaryPage.jsx';
-import CreaturePage, { CreatureByIdPage } from './pages/CreaturePage.jsx';
+import { CreatureByIdPage } from './pages/CreaturePage.jsx';
 import CampaignEditPage from './pages/CampaignEditPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import SharedSheetPage, { PartySheetPage } from './pages/SharedSheetPage.jsx';
@@ -116,7 +116,7 @@ export default function App() {
         <Route path="/spells/id/:spellId" element={<SpellByIdPage />} />
         <Route path="/spells/:slug" element={<SpellBookPage />} />
         <Route path="/bestiary/creature/:creatureId" element={<CreatureByIdPage />} />
-        <Route path="/bestiary/:book/:slug" element={<CreaturePage />} />
+        <Route path="/bestiary/:book/:slug" element={<BestiaryPage />} />
         <Route path="/campaigns/new" element={<CampaignCreatePage />} />
         <Route path="/campaigns/:id" element={<CampaignLayout />}>
           <Route index element={<CampaignOverview />} />

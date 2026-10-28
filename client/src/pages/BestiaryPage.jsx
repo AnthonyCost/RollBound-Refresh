@@ -1,14 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
-import { BESTIARY_BOOKS, bookKey, creaturePath, creatureThumb, loadBestiary } from '../state/bestiary.js';
+import BookSpread from '../components/BookSpread.jsx';
+import { CreatureEntry } from './CreaturePage.jsx';
+import { BESTIARY_BOOKS, bookByKey, bookKey, creaturePath, loadBestiary } from '../state/bestiary.js';
 
 // The creature types a monster's traits can name, in the order the books list them.
 const TYPES = ['Aberration', 'Animal', 'Astral', 'Beast', 'Celestial', 'Construct', 'Dragon', 'Dream', 'Elemental', 'Ethereal', 'Fey', 'Fiend', 'Fungus', 'Giant', 'Humanoid', 'Monitor', 'Ooze', 'Plant', 'Spirit', 'Time', 'Undead'];
 const SIZES = ['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan'];
 const RARITIES = ['common', 'uncommon', 'rare', 'unique'];
 const LEVELS = Array.from({ length: 27 }, (_, i) => i - 1);
-const PAGE = 60;
+// The index is alphabetical, with a thumb-index tab for each letter.
+const SECTIONS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((l) => ({ key: l, tab: l, name: l }));
+const sectionOf = (c) => {
+  const l = c.name[0].toUpperCase();
+  return l >= 'A' && l <= 'Z' ? l : 'A';
+};
 const titleCase = (s) => s[0].toUpperCase() + s.slice(1);
 
 /** Filters live in the address, so a filtered list can be bookmarked or shared. */
@@ -27,10 +34,12 @@ function useFilters() {
   };
   // Built on the browser's address, which updates at once, so quick changes in a row
   // don't undo each other (the hook's own copy only updates on the next render).
+  // Changing a filter goes back to the first page of the index.
   const set = (changes) =>
     setParams(
       () => {
         const next = new URLSearchParams(window.location.search);
+        next.delete('page');
         for (const [k, v] of Object.entries(changes)) {
           const empty = v === '' || v == null || (k === 'min' && v === -1) || (k === 'max' && v === 25);
           if (empty) next.delete(k);
@@ -43,19 +52,25 @@ function useFilters() {
   return [filters, set];
 }
 
-/** The bestiary: every creature in Monster Core and Monster Core 2, searchable and filterable. */
+/**
+ * The bestiary: every creature in Monster Core and Monster Core 2, laid out like an open
+ * book (see BookSpread): an alphabetical index with a tab for each letter, and the open
+ * creature at /bestiary/:book/:slug. Filters stay in the address, so opening a creature
+ * keeps your place in the index.
+ */
 export default function BestiaryPage() {
+  const { book: openBook, slug } = useParams();
+  const { search } = useLocation();
   const [creatures, setCreatures] = useState(null);
   const [failed, setFailed] = useState(false);
   const [filters, setFilters] = useFilters();
-  const [shown, setShown] = useState(PAGE);
 
   useEffect(() => {
     loadBestiary().then(setCreatures, () => setFailed(true));
   }, []);
   useEffect(() => {
-    setShown(PAGE);
-  }, [filters.q, filters.book, filters.type, filters.size, filters.rarity, filters.family, filters.min, filters.max]);
+    if (slug) window.scrollTo(0, 0);
+  }, [slug]);
 
   const matches = useMemo(() => {
     if (!creatures) return [];
@@ -70,22 +85,24 @@ export default function BestiaryPage() {
         (!filters.family || c.family.includes(filters.family)) &&
         c.level >= filters.min &&
         c.level <= filters.max,
-    );
-  }, [creatures, filters]);
+    ).sort((a, b) => a.name.localeCompare(b.name));
+  }, [creatures, filters.q, filters.book, filters.type, filters.size, filters.rarity, filters.family, filters.min, filters.max]);
+  const open = slug && creatures ? creatures.find((x) => x.book === bookByKey(openBook) && x.slug === slug) ?? null : null;
+  const closeTo = `/bestiary${search}`;
 
   const filtered = filters.q || filters.book || filters.type || filters.size || filters.rarity || filters.family || filters.min !== -1 || filters.max !== 25;
   const total = BESTIARY_BOOKS.reduce((t, b) => t + b.count, 0);
 
   return (
-    <PageShell crumbs={[{ label: 'Bestiary' }]}>
-      <header className="bestiary__head">
+    <PageShell crumbs={slug ? [{ label: 'Bestiary', to: closeTo }, { label: open?.name ?? 'Creature' }] : [{ label: 'Bestiary' }]}>
+      <header className={`bestiary__head ${slug ? 'book__intro--open' : ''}`}>
         <h1 className="title">Bestiary</h1>
         <p className="rule-note">
           {total} creatures from {BESTIARY_BOOKS.map((b) => b.book).join(' and ')}, with their full stat blocks. Search by name, or narrow by level, type, size and rarity.
         </p>
       </header>
 
-      <section className="panel bestiary__filters" aria-label="Filters">
+      <section className={`panel bestiary__filters ${slug ? 'book__filters--open' : ''}`} aria-label="Filters">
         <label className="bestiary__search">
           <span className="visually-hidden">Search</span>
           <input id="bestiary-search" type="search" value={filters.q} placeholder="Search: goblin, dragon, lich…" onChange={(e) => setFilters({ q: e.target.value })} />
@@ -143,57 +160,36 @@ export default function BestiaryPage() {
       {failed && <p className="form-errors" role="alert">Couldn't load the bestiary. Try refreshing.</p>}
       {!creatures && !failed && <p className="muted italic center">Opening the tome…</p>}
 
+      {slug && creatures && !open && (
+        <p className="muted italic center">There's no such creature in the bestiary. <Link to={closeTo}>Back to the index</Link></p>
+      )}
+
       {creatures && (
-        <>
-          <p className="bestiary__count" role="status">
-            {matches.length === creatures.length ? `All ${matches.length} creatures` : `${matches.length} of ${creatures.length} creatures`}
-            {filtered && (
-              <>
-                {' · '}
-                <Link to="/bestiary" className="bestiary__clear">Clear filters</Link>
-              </>
-            )}
-          </p>
-          {matches.length ? (
-            <ul className="creatures">
-              {matches.slice(0, shown).map((c) => (
-                <li key={c.id}>
-                  <Link to={creaturePath(c)} className="creature-card">
-                    {creatureThumb(c) ? (
-                      <span className="creature-card__thumb">
-                        <img src={creatureThumb(c)} alt="" loading="lazy" decoding="async" />
-                        <span className="creature-card__badge" aria-label={`Level ${c.level}`}>{c.level}</span>
-                      </span>
-                    ) : (
-                      <span className="creature-card__level" aria-label={`Level ${c.level}`}>
-                        <small>LVL</small>
-                        {c.level}
-                      </span>
-                    )}
-                    <span className="creature-card__body">
-                      <span className="creature-card__name">{c.name}</span>
-                      <span className="creature-card__tags">
-                        {c.rarity !== 'common' && <span className={`tag tag--rarity-${c.rarity}`}>{c.rarity}</span>}
-                        {c.size && <span className="tag">{c.size}</span>}
-                        {c.traits.slice(0, 3).map((t) => <span key={t} className="tag">{t}</span>)}
-                      </span>
-                      <span className="creature-card__stats">
-                        HP {c.hp} · AC {c.ac} · {c.book === 'Monster Core' ? 'MC' : 'MC2'} {c.page && `p. ${c.page}`}
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="panel panel--dashed muted italic center">No creatures match. Try a wider level range or fewer filters.</p>
+        <BookSpread
+          items={matches}
+          total={creatures.length}
+          noun="creatures"
+          sections={SECTIONS}
+          sectionOf={sectionOf}
+          open={open}
+          href={(c) => `${creaturePath(c)}${search}`}
+          meta={(c) => (
+            <>
+              {c.rarity !== 'common' && <span className={`tag tag--rarity-${c.rarity}`}>{c.rarity}</span>}
+              <span className="book__level" aria-label={`Level ${c.level}`}>{c.level}</span>
+            </>
           )}
-          {matches.length > shown && (
-            <button type="button" className="btn bestiary__more" onClick={() => setShown((n) => n + PAGE)}>
-              Show {Math.min(PAGE, matches.length - shown)} more
-            </button>
-          )}
-        </>
+          leaf={open && <CreatureEntry key={open.id} c={open} creatures={creatures} search={search} closeTo={closeTo} />}
+          blank={
+            <>
+              <p className="book__blank-title">Choose a creature</p>
+              <p className="rule-note">Pick a creature from the index to read its stat block here. Use the letter tabs to jump ahead, and the arrow keys to turn pages.</p>
+            </>
+          }
+          filtered={filtered}
+          clearTo="/bestiary"
+          emptyText="No creatures match. Try a wider level range or fewer filters."
+        />
       )}
     </PageShell>
   );
