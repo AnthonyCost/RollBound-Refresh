@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { LIMITS, armorClass, equipCharacter, inventoryProblems, maxHp } from '@rollbound/rules';
+import { LIMITS, armorClass, equipCharacter, inventoryProblems, maxHp, preparedProblems } from '@rollbound/rules';
 import { rulesData } from '../rules.js';
 import { answerBotRequests } from '../demo.js';
 import { pool } from '../db.js';
@@ -36,6 +36,7 @@ const toJson = (row) => ({
   currentHp: currentHp(row),
   inventory: row.inventory ?? null,
   backstory: row.backstory ?? '',
+  prepared: row.prepared ?? null,
   updatedAt: row.updated_at,
 });
 
@@ -143,6 +144,18 @@ characters.put('/:id/inventory', async (req, res) => {
   const { rowCount } = await pool.query('UPDATE characters SET inventory = $1 WHERE id = $2 AND owner_id = $3', [clean, req.params.id, req.user.id]);
   if (!rowCount) return res.status(404).json({ errors: ['Character not found.'] });
   res.json({ inventory: clean });
+});
+
+// Set the spells prepared today: { cantrips, slots } (see preparedProblems in the rules).
+characters.put('/:id/prepared', async (req, res) => {
+  if (!isId(req.params.id)) return res.status(404).json({ errors: ['Character not found.'] });
+  const { rows } = await pool.query('SELECT data FROM characters WHERE id = $1 AND owner_id = $2', [req.params.id, req.user.id]);
+  if (!rows.length) return res.status(404).json({ errors: ['Character not found.'] });
+  const errors = preparedProblems(rows[0].data, req.body);
+  if (errors.length) return res.status(400).json({ errors });
+  const prepared = { cantrips: req.body.cantrips, slots: req.body.slots };
+  await pool.query('UPDATE characters SET prepared = $1 WHERE id = $2', [prepared, req.params.id]);
+  res.json({ prepared });
 });
 
 // Set the backstory: { backstory } of up to LIMITS.backstory characters.

@@ -333,6 +333,11 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .spell__body, .inventory__body { display: flex; flex-direction: column; gap: 8px; padding: 0 14px 12px; }
 .spell__body .option__desc, .inventory__body .option__desc { padding: 0; }
 .spell__traits { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; }
+.spell__prepared { margin-left: 8px; vertical-align: middle; }
+.prepare { display: flex; flex-direction: column; gap: 12px; }
+.prepare .panel__title, .prepare .rule-note { margin: 0; }
+.prepare__group { display: flex; flex-direction: column; gap: 6px; }
+.prepare__slot { margin: 0; }
 .spell__facts, .inventory__facts { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; font-size: 14px; color: var(--text-soft); }
 .spell__facts strong { font-family: var(--display); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--bronze); }
 

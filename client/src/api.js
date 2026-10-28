@@ -45,6 +45,7 @@ export const api = {
   // keepalive lets the save finish even if the tab is closing.
   setHp: (id, currentHp) => request(`/characters/${id}/hp`, { method: 'PUT', body: JSON.stringify({ currentHp }), keepalive: true }),
   setInventory: (id, inventory) => request(`/characters/${id}/inventory`, { method: 'PUT', body: JSON.stringify(inventory), keepalive: true }),
+  setPrepared: (id, prepared) => request(`/characters/${id}/prepared`, { method: 'PUT', body: JSON.stringify(prepared), keepalive: true }),
   setBackstory: (id, backstory) => request(`/characters/${id}/backstory`, { method: 'PUT', body: JSON.stringify({ backstory }), keepalive: true }),
   resetShareLink: (id) => post(`/characters/${id}/share-link`, {}),
   getSharedSheet: (shareId) => request(`/sheets/${encodeURIComponent(shareId)}`),

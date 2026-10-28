@@ -266,6 +266,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **List** (`pages/SpellBookPages.jsx`, built like the Bestiary): search by name or trait, filter by type (Spells, Focus Spells, Rituals), rank (cantrips, 1–10), tradition, rarity and book. The filters live in the address. Ordinary spells come first, then focus spells, then rituals, each by rank, 60 at a time. Each card shows rank, cast time (action symbols), notable traits, traditions and defense.
 - **Each spell's page** (`/spells/:slug`; `/spells/id/:spellId` finds one by ID) shows "Cantrip 1", "Spell 3", "Focus 1" or "Ritual 5" as the books do, the traits, traditions, cast time, range, area, targets, defense and duration, then the full rules text, the book, and an Archives of Nethys search link.
 - **Character pages:** the character tab formerly called Spell Book is now **Spells** (`pages/CharacterSpellsPage.jsx`), and each spell there links to its Spell Book page.
+- **Prepared spells:** casters who prepare from the spells they know (wizard, magus and necromancer from their book, witch from her familiar: any class with `casting.prepares`) choose today's cantrips and fill each rank 1 slot on the Spells tab; a spell can fill more than one slot. The Sheet tab shows what's prepared, the empty slots, and what else is in the book. It's stored in `characters.prepared` (`{ cantrips, slots }` of spell ids, saved through `PUT /characters/:id/prepared`, checked by `preparedProblems`), apart from the built sheet like the inventory. Until it's first changed, the first cantrips and spells the character knows are prepared, which matches each pregen's sheet (`packages/rules/src/spells.js`). Clerics and druids prepare from their whole tradition, so for them the builder's picks are what's prepared.
 - **Every spell is imported:** all of Foundry's spell folders (`PACK_PATTERNS` in `scripts/import-pf2e.js`), and every spell, focus spell and ritual from the AoN books (`import-aon.js`). Each spell has a `kind`: `spell`, `focus` or `ritual`. The builder's `spellOptions` still offers only ordinary common cantrips and rank 1 spells, and a test checks that no focus spell, ritual or higher rank reaches a level 1 character. The builder's Spells step now downloads more data (about 1.3 MB, roughly 300 KB compressed).
 
 ### 6d2. Armory
@@ -513,6 +514,9 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - [ ] Hands: equipping doesn't check that weapons and a shield fit in two hands.
 - [ ] Item batches (ammunition's Bulk is per 10, not each), and items for the hand-made books.
 - [ ] Put the inventory and backstory on the PDF export.
+
+**Known bugs, for later:**
+- [ ] The PDF export lists every spell a wizard, magus, necromancer or witch knows, not only what's prepared today (the Sheet and Spells tabs show prepared spells; see `preparedSpells` in `packages/rules/src/spells.js`).
 
 ---
 

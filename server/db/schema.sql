@@ -63,6 +63,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS characters_share_idx ON characters (share_id);
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS inventory JSONB;
 -- The player's own backstory for the character, shown on its Lore tab.
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS backstory TEXT NOT NULL DEFAULT '';
+-- Spells prepared today, for casters who prepare from the spells they know (see
+-- spells.js in the rules). NULL until first changed: the first ones they know.
+ALTER TABLE characters ADD COLUMN IF NOT EXISTS prepared JSONB;
 -- Hit points right now. NULL means full.
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS current_hp INTEGER CHECK (current_hp >= 0);
 

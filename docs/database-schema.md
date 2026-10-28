@@ -57,6 +57,7 @@ erDiagram
         text share_id UK "public share link"
         jsonb inventory "null: builder gear"
         text backstory
+        jsonb prepared "spells prepared today, null: the first known"
         int current_hp "null: full"
         timestamptz created_at
         timestamptz updated_at

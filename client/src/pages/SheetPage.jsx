@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier } from '@rollbound/rules';
+import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import Portrait from '../components/Portrait.jsx';
@@ -188,7 +188,50 @@ function CampaignLine({ campaign, readOnly }) {
   );
 }
 
+/** What a caster who prepares from their spellbook or familiar has prepared today (chosen on the Spells tab). */
+function PreparedToday({ casting, prepared, readOnly }) {
+  const unprepared = [...prepared.unprepared.cantrips, ...prepared.unprepared.spells];
+  return (
+    <section className="panel">
+      <h2 className="panel__title">Prepared today</h2>
+      <div className="spell-group">
+        <span className="eyebrow">Cantrips</span>
+        {prepared.cantrips.length ? (
+          <ul className="log">
+            {prepared.cantrips.map((s) => (
+              <li key={spellKey(s)}>
+                <strong>{s.name}</strong> <ActionCost actions={s.actions} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="muted italic">No cantrips prepared.</p>
+        )}
+      </div>
+      <div className="spell-group">
+        <span className="eyebrow">{casting.slots} first-rank slots</span>
+        <ul className="log">
+          {prepared.slots.map((s, i) => (
+            <li key={i}>{s ? <><strong>{s.name}</strong> <ActionCost actions={s.actions} /></> : <span className="muted italic">Empty slot</span>}</li>
+          ))}
+        </ul>
+      </div>
+      {unprepared.length > 0 && (
+        <p className="rule-note" style={{ margin: 0 }}>
+          Also in your {casting.kind === 'familiar' ? 'familiar' : (casting.listName ?? 'spellbook')}: {unprepared.map((s) => s.name).join(', ')}.
+        </p>
+      )}
+      {!readOnly && (
+        <p className="rule-note" style={{ margin: '8px 0 0' }}>
+          <Link to="../spells">Change what's prepared</Link> on the Spells tab.
+        </p>
+      )}
+    </section>
+  );
+}
+
 function MagicAndDcs({ character, opts, selected, onSelect }) {
+  const { prepared, readOnly } = useTable();
   const casting = character.spellcasting;
   const stats = {
     classDc: { short: 'CLASS DC', title: 'Class DC', stat: classDc(character), signed: false },
@@ -212,7 +255,9 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
       </div>
       {current && <Breakdown title={current.title} stat={current.stat} signTotal={current.signed !== false} />}
 
-      {casting && casting.kind !== 'focus' && (
+      {prepared && <PreparedToday casting={casting} prepared={prepared} readOnly={readOnly} />}
+
+      {casting && casting.kind !== 'focus' && !prepared && (
         <section className="panel">
           <h2 className="panel__title">{casting.slots} first-rank slots a day</h2>
           {[
@@ -230,11 +275,6 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
               </ul>
             </div>
           ))}
-          {casting.prepares && (
-            <p className="rule-note" style={{ margin: '8px 0 0' }}>
-              You prepare {casting.prepares.cantrips} cantrips and {casting.prepares.spells} of these spells each morning.
-            </p>
-          )}
         </section>
       )}
 

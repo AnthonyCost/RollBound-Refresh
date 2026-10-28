@@ -9,6 +9,7 @@ import {
   endOfTurn,
   equipCharacter,
   withEquipped,
+  preparedSpells,
 } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useDelayedSave } from './useDelayedSave.js';
@@ -34,6 +35,7 @@ const ENCOUNTER_ACTIVE = false;
 const HP_SAVE_DELAY = 500;
 const INVENTORY_SAVE_DELAY = 600;
 const BACKSTORY_SAVE_DELAY = 1000;
+const PREPARED_SAVE_DELAY = 600;
 
 // What equipping from the inventory needs from the rules data.
 const GEAR_TYPES = ['weapons', 'armor', 'shields'];
@@ -57,6 +59,8 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
   // null until first edited: the Inventory tab starts from the builder's gear.
   const [inventory, setStoredInventory] = useState(null);
   const [backstory, setStoredBackstory] = useState('');
+  // null until first changed: the first spells they know (see preparedSpells).
+  const [storedPrepared, setStoredPrepared] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
@@ -79,6 +83,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
         setStoredHp(row.currentHp);
         setStoredInventory(row.inventory ?? null);
         setStoredBackstory(row.backstory ?? '');
+        setStoredPrepared(row.prepared ?? null);
       })
       .catch(() => !cancelled && setNotFound(true))
       .finally(() => !cancelled && setLoading(false));
@@ -102,6 +107,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
   const [scheduleHp, hpStatus] = useDelayedSave((v) => api.setHp(characterId, v), HP_SAVE_DELAY);
   const [scheduleInventory, inventoryStatus] = useDelayedSave((v) => api.setInventory(characterId, v), INVENTORY_SAVE_DELAY);
   const [scheduleBackstory, backstoryStatus] = useDelayedSave((v) => api.setBackstory(characterId, v), BACKSTORY_SAVE_DELAY);
+  const [schedulePrepared, preparedStatus] = useDelayedSave((v) => api.setPrepared(characterId, v), PREPARED_SAVE_DELAY);
 
   // Hit points: null means full.
   const max = character ? maxHp(character) : 0;
@@ -132,6 +138,17 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       scheduleBackstory(text);
     },
     [readOnly, scheduleBackstory],
+  );
+  // Spells prepared today, for casters who prepare from the spells they know; null for others.
+  const prepared = useMemo(() => preparedSpells(character, storedPrepared), [character, storedPrepared]);
+  /** Saves a prepared list: { cantrips, slots } of spell keys (see preparedValue). */
+  const setPrepared = useCallback(
+    (value) => {
+      if (readOnly) return;
+      setStoredPrepared(value);
+      schedulePrepared(value);
+    },
+    [readOnly, schedulePrepared],
   );
   const hpError = hpStatus === 'error' ? "Couldn't save hit points. Check your connection and try again." : null;
 
@@ -227,6 +244,9 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       backstory,
       setBackstory,
       backstoryStatus,
+      prepared,
+      setPrepared,
+      preparedStatus,
       loading: loading || !gearReady,
       notFound,
       round,
@@ -244,7 +264,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       cycleCondition,
       resetEncounter,
     }),
-    [character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

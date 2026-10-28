@@ -34,5 +34,6 @@ export function sheetJson(row) {
     currentHp: currentHp(row),
     inventory: row.inventory ?? null,
     backstory: row.backstory ?? '',
+    prepared: row.prepared ?? null,
   };
 }
