@@ -4,7 +4,12 @@ import { useAuth } from '../state/AuthContext.jsx';
 import Logo from './Logo.jsx';
 import Ornament from './Ornament.jsx';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
+import art from '../assets/auth-art.webp';
 
+/**
+ * The sign-in and create-account screens: full-screen art with the form in a dark
+ * card over it (beside the art on wide screens), laid out like D&D Beyond's sign-in.
+ */
 export default function AuthLayout({ title, children }) {
   const { enterDemo, endedReason } = useAuth();
   const navigate = useNavigate();
@@ -26,6 +31,9 @@ export default function AuthLayout({ title, children }) {
 
   return (
     <div className="app app--auth">
+      <div className="auth__art" aria-hidden="true">
+        <img src={art} alt="" />
+      </div>
       <main className="auth">
         <header className="auth__header">
           <span className="wordmark auth__wordmark">ROLLBOUND <Logo /></span>
@@ -40,7 +48,7 @@ export default function AuthLayout({ title, children }) {
           </p>
         )}
 
-        <section className="panel auth__panel">
+        <section className="auth__panel">
           <h1 className="panel__title">{title}</h1>
           {children}
         </section>
@@ -50,7 +58,7 @@ export default function AuthLayout({ title, children }) {
         <div className="auth__demo">
           <button type="button" className="btn" onClick={startDemo} disabled={busy}>{busy ? 'Setting up your demo…' : 'Try the demo'}</button>
           <p className="italic muted center auth__note">
-            No sign-up needed. You get a temporary account with Mira, a level 1 fighter, and a campaign to run. It's deleted after a day.
+            No sign-up needed. You get a temporary account with a character of every class and campaigns to run and join. It's deleted after a day.
           </p>
           <FormErrors errors={errors} />
         </div>
