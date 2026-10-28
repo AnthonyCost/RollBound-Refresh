@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useOutletContext, useParams } from 'react-router-dom';
 import { useCampaignService } from '../state/campaignService.js';
 import PageShell from '../components/PageShell.jsx';
-import CampaignCover from '../components/CampaignCover.jsx';
 import InviteCode from '../components/InviteCode.jsx';
 import Portrait from '../components/Portrait.jsx';
 import Avatar from '../components/Avatar.jsx';
@@ -173,83 +172,38 @@ export function CampaignOverview() {
   ];
 
   return (
-    <div className="sheet campaign-home">
-      {state?.created && (
-        <p className="panel panel--hot center" role="status">
-          Your campaign is ready. Share the invite code with your players.
-        </p>
-      )}
-
-      <CampaignCover
-        name={campaign.name}
-        coverUrl={campaign.coverUrl}
-        subtitle={
-          <span className="cover__byline">
-            <Avatar url={campaign.gmAvatarUrl} name={campaign.gmName} size={24} />
+    <div className="campaign-home">
+      {/* The cover as a banner: shorter than the cover's own shape, with the name over its foot. */}
+      <header className={`campaign-banner ${campaign.coverUrl ? '' : 'campaign-banner--plain'}`}>
+        {campaign.coverUrl && <img className="campaign-banner__img" src={campaign.coverUrl} alt="" />}
+        <div className="campaign-banner__text">
+          <h1 className="campaign-banner__name">{campaign.name}</h1>
+          <p className="campaign-card__byline">
+            <Avatar url={campaign.gmAvatarUrl} name={campaign.gmName} size={22} />
             {campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`}
-          </span>
-        }
-      />
-      <p className="campaign-tags">
-        <span className="tag tag--theme">{path ? path.name : 'Homebrew'}</span>
-        {path && <span className="tag">Levels {path.levels.join('–')}</span>}
-        {path && <span className="tag">{path.setting}</span>}
-        <span className="tag">Party level {campaign.partyLevel}</span>
-      </p>
-
-      <div className={`camp-stats camp-stats--${stats.length}`}>
-        {stats.map((st) =>
-          st.to ? (
-            <Link key={st.label} to={st.to} className="sheet-def camp-stat">
-              <span className="sheet-def__label">{st.label}</span>
-              <span className="sheet-def__value">{st.value}</span>
-              <span className="sheet-def__extra">Open ›</span>
-            </Link>
-          ) : (
-            <div key={st.label} className="sheet-def camp-stat">
-              <span className="sheet-def__label">{st.label}</span>
-              <span className="sheet-def__value">{st.value}</span>
-            </div>
-          ),
-        )}
-      </div>
-      <FormErrors errors={errors} />
-
-      <div className="sheet__columns">
-        <div className="sheet__col">
-          <section className="sheet-panel campaign-chronicle" aria-labelledby="chronicle-title">
-            <h2 id="chronicle-title" className="sheet-panel__title">The chronicle</h2>
-            {path && (
-              <p className="campaign-path">
-                <strong>{path.name}</strong>
-                <span className="muted"> · Levels {path.levels.join('–')} · {path.setting}</span>
-              </p>
-            )}
-            {campaign.backstory ? <p className="backstory campaign-chronicle__story">{campaign.backstory}</p> : <p className="rule-note">No backstory yet.</p>}
-            <div className="campaign-books">
-              <span className="sheet-panel__label">Books</span>
-              <p className="rule-note" style={{ margin: 0 }}>{booksLabel(campaign.books)}. Characters are built from these, and characters using other books can't join.</p>
-            </div>
-          </section>
-
-          <section className="sheet-panel" aria-labelledby="latest-title">
-            <h2 id="latest-title" className="sheet-panel__title">Latest session</h2>
-            {latest ? (
-              <Link to={`/campaigns/${id}/logs/${latest.id}`} className="campaign-latest">
-                <span className="eyebrow">Session {latest.number}</span>
-                <span className="campaign-latest__title">{latest.title}</span>
-                {latest.excerpt && <span className="campaign-latest__excerpt">{latest.excerpt.length >= 280 ? `${latest.excerpt.trimEnd()}…` : latest.excerpt}</span>}
-                <span className="campaign-latest__more">Read it in the journal ›</span>
-              </Link>
-            ) : (
-              <p className="muted italic" style={{ margin: 0 }}>
-                {logs ? (campaign.isGm ? 'No sessions logged yet. After you play, write up what happened.' : 'No sessions logged yet.') : 'Gathering the chronicle…'}
-              </p>
-            )}
-          </section>
+          </p>
+          <p className="campaign-tags">
+            <span className="tag tag--theme">{path ? path.name : 'Homebrew'}</span>
+            {path && <span className="tag">Levels {path.levels.join('–')}</span>}
+            {path && <span className="tag">{path.setting}</span>}
+          </p>
         </div>
+      </header>
 
-        <div className="sheet__col">
+      <div className="campaign-layout">
+        <aside className="campaign-side" aria-label="About the campaign">
+          <section className="sheet-panel campaign-card">
+            <h2 className="sheet-panel__title">At a glance</h2>
+            <dl className="campaign-card__stats">
+              {stats.map((st) => (
+                <div key={st.label}>
+                  <dt>{st.label}</dt>
+                  <dd>{st.to ? <Link to={st.to}>{st.value} <span aria-hidden="true">›</span></Link> : st.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
           {campaign.isGm && (
             <section className="sheet-panel campaign-gm" aria-labelledby="gm-title">
               <h2 id="gm-title" className="sheet-panel__title">Game master's tools</h2>
@@ -282,6 +236,45 @@ export function CampaignOverview() {
             </section>
           )}
 
+        </aside>
+
+        <div className="campaign-main">
+          {state?.created && (
+            <p className="panel panel--hot" role="status" style={{ margin: 0 }}>
+              Your campaign is ready. Share the invite code with your players.
+            </p>
+          )}
+          <FormErrors errors={errors} />
+          <section className="sheet-panel campaign-chronicle" aria-labelledby="chronicle-title">
+            <h2 id="chronicle-title" className="sheet-panel__title">The chronicle</h2>
+            {path && (
+              <p className="campaign-path">
+                <strong>{path.name}</strong>
+                <span className="muted"> · Levels {path.levels.join('–')} · {path.setting}</span>
+              </p>
+            )}
+            {campaign.backstory ? <p className="backstory campaign-chronicle__story">{campaign.backstory}</p> : <p className="rule-note">No backstory yet.</p>}
+            <div className="campaign-books">
+              <span className="sheet-panel__label">Books</span>
+              <p className="rule-note" style={{ margin: 0 }}>{booksLabel(campaign.books)}. Characters are built from these, and characters using other books can't join.</p>
+            </div>
+          </section>
+
+          <section className="sheet-panel" aria-labelledby="latest-title">
+            <h2 id="latest-title" className="sheet-panel__title">Latest session</h2>
+            {latest ? (
+              <Link to={`/campaigns/${id}/logs/${latest.id}`} className="campaign-latest">
+                <span className="eyebrow">Session {latest.number}</span>
+                <span className="campaign-latest__title">{latest.title}</span>
+                {latest.excerpt && <span className="campaign-latest__excerpt">{latest.excerpt.length >= 280 ? `${latest.excerpt.trimEnd()}…` : latest.excerpt}</span>}
+                <span className="campaign-latest__more">Read it in the journal ›</span>
+              </Link>
+            ) : (
+              <p className="muted italic" style={{ margin: 0 }}>
+                {logs ? (campaign.isGm ? 'No sessions logged yet. After you play, write up what happened.' : 'No sessions logged yet.') : 'Gathering the chronicle…'}
+              </p>
+            )}
+          </section>
           <section className="sheet-panel" aria-labelledby="party-title">
             <h2 id="party-title" className="sheet-panel__title">The party</h2>
             {campaign.characters.length ? (

@@ -2846,3 +2846,42 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
   /* The threat stays in view while the roster scrolls; if the side is taller than the screen, it scrolls itself. */
   .war-table__side { position: sticky; top: 16px; max-height: calc(100dvh - 32px); overflow-y: auto; scrollbar-width: thin; }
 }
+
+/* Campaign Overview with a sidebar: the campaign card (cover, name, tags, numbers) and
+   the GM's tools on the left; the chronicle, latest session, party and encounters on
+   the right. Phones stack the sidebar first. */
+.campaign-layout { display: grid; gap: 16px; align-items: start; }
+.campaign-side, .campaign-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.campaign-card { display: flex; flex-direction: column; gap: 10px; }
+.campaign-card__byline { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 14px; font-style: italic; color: var(--text-soft); }
+.campaign-card .campaign-tags { margin: 0; }
+.campaign-card__stats { margin: 4px 0 0; display: flex; flex-direction: column; }
+.campaign-card__stats div { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line-faint); }
+.campaign-card__stats dt { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.campaign-card__stats dd { margin: 0; font-family: var(--display); font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.campaign-card__stats a { color: var(--bronze); text-decoration: none; }
+@media (hover: hover) { .campaign-card__stats a:hover { color: var(--gold); } }
+/* The banner: the cover at 3:1, never taller than 320px, with the name and tags over its foot. */
+.campaign-home { display: flex; flex-direction: column; gap: 16px; }
+.campaign-banner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  aspect-ratio: 3 / 1;
+  min-height: 200px;
+  max-height: 320px;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: radial-gradient(ellipse 80% 70% at 50% 40%, #3a0f0a 0%, #160806 60%, var(--bg-deep) 100%);
+}
+.campaign-banner__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+.campaign-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 5, 5, 0) 30%, rgba(7, 5, 5, 0.9)); }
+.campaign-banner__text { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; }
+.campaign-banner__name { margin: 0; font-family: var(--display); font-size: clamp(24px, 2vw + 16px, 40px); font-weight: 900; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 2px 10px #000; overflow-wrap: anywhere; }
+.campaign-banner .campaign-tags { margin: 0; }
+.campaign-card .sheet-panel__title { margin-bottom: 0; }
+@media (min-width: 900px) {
+  .campaign-layout { grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); }
+}
