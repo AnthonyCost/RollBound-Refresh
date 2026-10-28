@@ -2,7 +2,8 @@
 // `npm run pregens -w packages/rules` turns these into builds (IDs, boosts, skills) and
 // writes src/pregens.js. `sheet` holds numbers from the PDF the resolver checks the
 // build against. Iconics whose class the builder doesn't have yet (Grimmyr, Nahoa,
-// Samo, Ulka, Yoon) are left out. `extraCantrips`/`extraSpells` fill a spellbook or familiar
+// Samo, Ulka, Yoon) are left out. `tradition` picks a choice's tradition (Ija's dragon
+// eidolon) and `runes` a runesmith's runic repertoire. `extraCantrips`/`extraSpells` fill a spellbook or familiar
 // beyond what the sheet prepares; `note` explains a stand-in for something the rules data lacks.
 const ATTRS = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 const attrs = (...v) => Object.fromEntries(ATTRS.map((a, i) => [a, v[i]]));
@@ -80,6 +81,18 @@ export const SPECS = [
     sheet: { hp: 22, ac: 18, perception: 7, fortitude: 7, reflex: 8, will: 5 },
   },
   {
+    name: 'Ija', pdf: 'Pregens-Ija-Lvl1.pdf',
+    ancestry: 'Human', heritage: 'Skilled Human', background: 'Scholar', cls: 'Summoner', key: 'cha',
+    attrs: attrs(0, 0, 2, 2, 1, 4),
+    trained: ['acrobatics', 'arcana', 'diplomacy', 'intimidation', 'nature', 'occultism', 'society', 'stealth', 'survival'], lore: 'Academia Lore',
+    languages: ['Draconic', 'Kibwani', 'Mwangi', 'Osiriani'],
+    ancestryFeat: 'Natural Ambition', classFeat: 'Advanced Weaponry', bonus: { 'Natural Ambition': 'Glider Form' },
+    choices: { 'summoner-eidolon': 'Dragon' }, tradition: 'arcane',
+    cantrips: ['Detect Magic', 'Electric Arc', 'Figment', 'Infectious Enthusiasm', 'Spout'], spells: ['Force Barrage'],
+    weapons: ['Staff'],
+    sheet: { hp: 20, ac: 13, perception: 4, fortitude: 7, reflex: 3, will: 6 },
+  },
+  {
     name: 'Jirelle', pdf: 'Pregens-Jirelle-Lvl1.pdf',
     ancestry: 'Human', heritage: 'Aiuvarin', background: 'Sailor', cls: 'Swashbuckler', key: 'dex',
     attrs: attrs(1, 4, 1, 0, 1, 2),
@@ -152,6 +165,17 @@ export const SPECS = [
     sheet: { hp: 15, ac: 18, perception: 7, fortitude: 4, reflex: 9, will: 7 },
   },
   {
+    name: 'Mios', pdf: 'Pregens-Mios-Lvl1.pdf',
+    ancestry: 'Human', heritage: 'Versatile Human', background: 'Scholar', cls: 'Thaumaturge', key: 'cha',
+    attrs: attrs(2, 0, 1, 2, 0, 4),
+    trained: ['arcana', 'athletics', 'crafting', 'deception', 'diplomacy', 'medicine', 'nature', 'occultism', 'religion', 'society'], lore: 'Academia Lore',
+    languages: ['Aklo', 'Chthonian', 'Necril', 'Varisian'],
+    ancestryFeat: 'Natural Ambition', classFeat: 'Diverse Lore', bonus: { 'Natural Ambition': 'Root to Life', 'Versatile Human': 'Arcane Sense' },
+    choices: { 'thaumaturge-first-implement-and-esoterica': 'Lantern' },
+    armor: 'Hide Armor', weapons: ['Pick', 'Dagger'],
+    sheet: { hp: 17, ac: 16, perception: 5, fortitude: 6, reflex: 3, will: 5 },
+  },
+  {
     name: 'Nhalmika', pdf: 'Pregens-Nhalmika-Lvl1.pdf',
     ancestry: 'Dwarf', heritage: 'Forge Dwarf', background: 'Martial Disciple', cls: 'Gunslinger', key: 'dex',
     attrs: attrs(3, 3, 2, 0, 2, -1),
@@ -162,6 +186,18 @@ export const SPECS = [
     armor: 'Studded Leather Armor', weapons: ['Clan Dagger', 'Dwarven Scattergun'],
     note: 'Leaves out the reinforced stock: with it, her gear costs more than the builder’s 15 gp.',
     sheet: { hp: 20, ac: 18, perception: 7, fortitude: 7, reflex: 8, will: 5 },
+  },
+  {
+    name: 'Pallemi', pdf: 'Pregens-Pallemi-Lvl1.pdf',
+    ancestry: 'Automaton', heritage: 'Mage Automaton', background: 'Mechanic', cls: 'Runesmith', key: 'int',
+    attrs: attrs(2, 0, 1, 4, 1, 1),
+    trained: ['arcana', 'athletics', 'crafting', 'diplomacy', 'medicine', 'nature', 'occultism', 'society', 'stealth'], lore: 'Engineering Lore',
+    languages: ['Empyrean', 'Dwarven', 'Osiriani', 'Utopian', 'Vudrani'],
+    ancestryFeat: 'Reinforced Chassis', classFeat: 'Engraving Strike',
+    note: 'AC 13 instead of 16: the builder doesn’t count Reinforced Chassis as armor.',
+    runes: ['Esvadir, Rune of Whetstones', 'Lyskel, Rune of Frost', 'Ranshu, Rune of Thunder', 'Zohk, Rune of Homecoming'],
+    weapons: ['Glaive'],
+    sheet: { hp: 17, ac: 16, perception: 4, fortitude: 6, reflex: 3, will: 6 },
   },
   {
     name: 'Quinn', pdf: 'Pregens-Quinn-Lvl1.pdf',
@@ -197,6 +233,20 @@ export const SPECS = [
     sheet: { hp: 20, ac: 17, perception: 3, fortitude: 7, reflex: 4, will: 5 },
   },
   {
+    name: 'Seltyiel', pdf: 'Pregens-Seltyiel-Lvl1.pdf',
+    ancestry: 'Human', heritage: 'Aiuvarin', background: 'Prisoner', cls: 'Magus', key: 'str',
+    attrs: attrs(3, 2, 1, 1, 0, 2),
+    trained: ['arcana', 'athletics', 'deception', 'intimidation', 'stealth'], lore: 'Underworld Lore',
+    languages: ['Diabolic', 'Draconic'],
+    ancestryFeat: 'Haughty Obstinacy',
+    choices: { 'magus-hybrid-study': 'Laughing Shadow' },
+    note: 'Saves follow the magus rules (expert Fortitude and Will), not the sheet’s Fort +5, Ref +6, Will +6.',
+    cantrips: ['Detect Magic', 'Electric Arc', 'Gouging Claw', 'Shield', 'Tangle Vine'], spells: ['Thunderstrike'],
+    extraCantrips: ['Caustic Blast', 'Frostbite', 'Void Warp'], extraSpells: ['Echoing Weapon', 'Grim Tendrils', 'Horizon Thunder Sphere', 'Sure Strike'],
+    armor: 'Hide Armor', weapons: ['Scimitar'],
+    sheet: { hp: 17, ac: 18, perception: 3, fortitude: 5, reflex: 6, will: 6 },
+  },
+  {
     name: 'Seoni', pdf: 'Pregens-Seoni-Lvl1.pdf',
     ancestry: 'Human', heritage: 'Skilled Human', background: 'Nomad', cls: 'Sorcerer', key: 'cha',
     attrs: attrs(0, 2, 1, 1, 1, 4),
@@ -207,6 +257,31 @@ export const SPECS = [
     cantrips: ['Caustic Blast', 'Detect Magic', 'Forbidding Ward', 'Frostbite', 'Shield'], spells: ['Dizzying Colors', 'Force Barrage', 'Grim Tendrils'],
     weapons: ['Staff', 'Crossbow'],
     sheet: { hp: 15, ac: 15, perception: 4, fortitude: 4, reflex: 5, will: 6 },
+  },
+  {
+    name: 'Thaleon', pdf: 'Pregens-Thaleon-Lvl1.pdf',
+    ancestry: 'Elf', heritage: 'Seer Elf', background: 'Nomad', cls: 'Psychic', key: 'cha',
+    attrs: attrs(0, 2, 0, 2, 1, 4),
+    trained: ['crafting', 'diplomacy', 'medicine', 'occultism', 'society', 'survival'], lore: 'Desert Lore',
+    languages: ['Kelish', 'Mwangi', 'Osiriani'],
+    ancestryFeat: 'Nimble Elf',
+    choices: { 'psychic-subconscious-mind': 'Wandering Reverie', 'psychic-conscious-mind': 'The Tangible Dream' },
+    cantrips: ['Phase Bolt', 'Prestidigitation', 'Warp Step', 'Figment', 'Imaginary Weapon', 'Shield'], spells: ['Dizzying Colors', 'Soothe'],
+    weapons: ['Dagger', 'Shortsword'],
+    sheet: { hp: 12, ac: 15, perception: 4, fortitude: 3, reflex: 5, will: 6 },
+  },
+  {
+    name: 'Usharak', pdf: 'Pregens-Usharak-Lvl1.pdf',
+    ancestry: 'Lizardfolk', heritage: 'Wetlander Lizardfolk', background: 'Astrologer', cls: 'Necromancer', key: 'int',
+    attrs: attrs(0, 2, 1, 4, 2, 0),
+    trained: ['arcana', 'crafting', 'diplomacy', 'medicine', 'nature', 'occultism', 'religion', 'survival'], lore: 'Astrology Lore',
+    languages: ['Boggard', 'Elven', 'Iruxi', 'Necril', 'Sakvroth'],
+    ancestryFeat: 'Bone Magic',
+    choices: { 'necromancer-fatal-method': 'Puppeteer', 'necromancer-grim-fascination': 'Bone' },
+    cantrips: ['Daze', 'Detect Magic', 'Haunting Hymn', 'Light', 'Shield', 'Void Warp'], spells: ['Harm'],
+    extraCantrips: ['Forbidding Ward', 'Guidance'], extraSpells: ['Bane', 'Bone Shield', 'Enfeeble', 'Soothe'],
+    armor: 'Leather Armor', weapons: ['Club'],
+    sheet: { hp: 17, ac: 16, perception: 5, fortitude: 6, reflex: 5, will: 5 },
   },
   {
     name: 'Valeros', pdf: 'Pregens-Valeros-Lvl1.pdf',

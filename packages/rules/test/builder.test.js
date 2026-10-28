@@ -554,7 +554,7 @@ describe('demo sample builds', () => {
 
 describe('pregenerated heroes', () => {
   it('has every iconic whose class the builder offers', () => {
-    assert.equal(R.PREGENS.length, 18);
+    assert.equal(R.PREGENS.length, 24);
   });
   for (const p of R.PREGENS) {
     it(`${p.name} is a complete, valid character with the current rules data`, () => {

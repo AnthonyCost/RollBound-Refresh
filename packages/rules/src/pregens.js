@@ -481,6 +481,85 @@ export const PREGENS = [
     }
   },
   {
+    "slug": "ija",
+    "name": "Ija",
+    "ancestry": "Human",
+    "heritage": "Skilled Human",
+    "className": "Summoner",
+    "classSlug": "summoner",
+    "pdf": "pregens/Pregens-Ija-Lvl1.pdf",
+    "notes": [
+      "not trained in survival (from feats the builder doesn't model)",
+      "doesn't speak Kibwani, Mwangi, Osiriani (regional languages aren't in the builder)"
+    ],
+    "build": {
+      "v": 2,
+      "name": "Ija",
+      "ancestry": "IiG7DgeLWYrSNXuX",
+      "heritage": "zVf0Hlp5xG0Q7kmc",
+      "heritageSkill": "acrobatics",
+      "altAncestryBoosts": false,
+      "ancestryBoosts": [
+        "cha",
+        "con"
+      ],
+      "background": "v0WPfxN6G8XFfFZT",
+      "backgroundBoosts": [
+        "int",
+        "cha"
+      ],
+      "lore": "Academia Lore",
+      "class": "aon-class-77",
+      "keyAbility": "cha",
+      "classSkill": null,
+      "classChoices": {
+        "summoner-eidolon": "aon-eidolon-21"
+      },
+      "classChoiceSkills": {},
+      "tradition": "arcane",
+      "deity": null,
+      "font": null,
+      "sanctification": null,
+      "freeBoosts": [
+        "con",
+        "int",
+        "wis",
+        "cha"
+      ],
+      "skills": [
+        "diplomacy",
+        "nature",
+        "occultism",
+        "society",
+        "stealth"
+      ],
+      "languages": [
+        "draconic"
+      ],
+      "ancestryFeat": "PodajLVxqYSAqVox",
+      "classFeat": "aon-feat-9221",
+      "bonusFeats": {
+        "PodajLVxqYSAqVox": "aon-feat-9226"
+      },
+      "cantrips": [
+        "gpzpAAAJ1Lza2JVl",
+        "kBhaPuzLUSwS6vVf",
+        "0zU8CPejjQFnhZFI",
+        "aon-spell-2748",
+        "eSL5hVT9gXrnRLtd"
+      ],
+      "spells": [
+        "gKKqvLohtrSJj3BM"
+      ],
+      "runes": [],
+      "armor": null,
+      "shield": null,
+      "weapons": [
+        "FVjTuBCIefAgloUU"
+      ]
+    }
+  },
+  {
     "slug": "jirelle",
     "name": "Jirelle",
     "ancestry": "Human",
@@ -920,6 +999,81 @@ export const PREGENS = [
     }
   },
   {
+    "slug": "mios",
+    "name": "Mios",
+    "ancestry": "Human",
+    "heritage": "Versatile Human",
+    "className": "Thaumaturge",
+    "classSlug": "thaumaturge",
+    "pdf": "pregens/Pregens-Mios-Lvl1.pdf",
+    "notes": [
+      "not trained in society (from feats the builder doesn't model)",
+      "doesn't speak Varisian (regional languages aren't in the builder)"
+    ],
+    "build": {
+      "v": 2,
+      "name": "Mios",
+      "ancestry": "IiG7DgeLWYrSNXuX",
+      "heritage": "hFBwsVcSnNCJoimo",
+      "heritageSkill": null,
+      "altAncestryBoosts": false,
+      "ancestryBoosts": [
+        "cha",
+        "str"
+      ],
+      "background": "v0WPfxN6G8XFfFZT",
+      "backgroundBoosts": [
+        "int",
+        "cha"
+      ],
+      "lore": "Academia Lore",
+      "class": "aon-class-69",
+      "keyAbility": "cha",
+      "classSkill": null,
+      "classChoices": {
+        "thaumaturge-first-implement-and-esoterica": "aon-implement-20"
+      },
+      "classChoiceSkills": {},
+      "tradition": null,
+      "deity": null,
+      "font": null,
+      "sanctification": null,
+      "freeBoosts": [
+        "str",
+        "con",
+        "int",
+        "cha"
+      ],
+      "skills": [
+        "athletics",
+        "crafting",
+        "deception",
+        "diplomacy",
+        "medicine"
+      ],
+      "languages": [
+        "aklo",
+        "chthonian",
+        "necril"
+      ],
+      "ancestryFeat": "PodajLVxqYSAqVox",
+      "classFeat": "aon-feat-8354",
+      "bonusFeats": {
+        "PodajLVxqYSAqVox": "aon-feat-8357",
+        "hFBwsVcSnNCJoimo": "blMeVamjGz4ODWxq"
+      },
+      "cantrips": [],
+      "spells": [],
+      "runes": [],
+      "armor": "AnwzlOs0njF9Jqnr",
+      "shield": null,
+      "weapons": [
+        "6I4YJAQUbTAqbpsI",
+        "rQWaJhI5Bko5x14Z"
+      ]
+    }
+  },
+  {
     "slug": "nhalmika",
     "name": "Nhalmika",
     "ancestry": "Dwarf",
@@ -983,6 +1137,81 @@ export const PREGENS = [
       "weapons": [
         "kJJvKm80KwWXPukV",
         "jcIabnkJgjwzK6Og"
+      ]
+    }
+  },
+  {
+    "slug": "pallemi",
+    "name": "Pallemi",
+    "ancestry": "Automaton",
+    "heritage": "Mage Automaton",
+    "className": "Runesmith",
+    "classSlug": "runesmith",
+    "pdf": "pregens/Pregens-Pallemi-Lvl1.pdf",
+    "notes": [
+      "AC 13 instead of 16: the builder doesn’t count Reinforced Chassis as armor.",
+      "doesn't speak Osiriani, Vudrani (regional languages aren't in the builder)"
+    ],
+    "build": {
+      "v": 2,
+      "name": "Pallemi",
+      "ancestry": "kYsBAJ103T44agJF",
+      "heritage": "J0eAmntxXywr9sGt",
+      "heritageSkill": null,
+      "altAncestryBoosts": false,
+      "ancestryBoosts": [
+        "str",
+        "int"
+      ],
+      "background": "cODrdTvko4Om26ik",
+      "backgroundBoosts": [
+        "int",
+        "cha"
+      ],
+      "lore": "Engineering Lore",
+      "class": "aon-class-76",
+      "keyAbility": "int",
+      "classSkill": "arcana",
+      "classChoices": {},
+      "classChoiceSkills": {},
+      "tradition": null,
+      "deity": null,
+      "font": null,
+      "sanctification": null,
+      "freeBoosts": [
+        "str",
+        "con",
+        "int",
+        "wis"
+      ],
+      "skills": [
+        "athletics",
+        "diplomacy",
+        "medicine",
+        "nature",
+        "occultism",
+        "society",
+        "stealth"
+      ],
+      "languages": [
+        "empyrean",
+        "dwarven"
+      ],
+      "ancestryFeat": "cilZUszwjSGB4p1W",
+      "classFeat": "aon-feat-9169",
+      "bonusFeats": {},
+      "cantrips": [],
+      "spells": [],
+      "runes": [
+        "aon-runesmith-rune-4",
+        "aon-runesmith-rune-7",
+        "aon-runesmith-rune-11",
+        "aon-runesmith-rune-16"
+      ],
+      "armor": null,
+      "shield": null,
+      "weapons": [
+        "vlnzTSsRmWeSkt9O"
       ]
     }
   },
@@ -1192,6 +1421,88 @@ export const PREGENS = [
     }
   },
   {
+    "slug": "seltyiel",
+    "name": "Seltyiel",
+    "ancestry": "Human",
+    "heritage": "Aiuvarin",
+    "className": "Magus",
+    "classSlug": "magus",
+    "pdf": "pregens/Pregens-Seltyiel-Lvl1.pdf",
+    "notes": [
+      "Saves follow the magus rules (expert Fortitude and Will), not the sheet’s Fort +5, Ref +6, Will +6."
+    ],
+    "build": {
+      "v": 2,
+      "name": "Seltyiel",
+      "ancestry": "IiG7DgeLWYrSNXuX",
+      "heritage": "N36ZR4lh9eCazDaN",
+      "heritageSkill": null,
+      "altAncestryBoosts": false,
+      "ancestryBoosts": [
+        "cha",
+        "str"
+      ],
+      "background": "apXTV7jJx6yJpj8D",
+      "backgroundBoosts": [
+        "con",
+        "dex"
+      ],
+      "lore": "Underworld Lore",
+      "class": "aon-class-74",
+      "keyAbility": "str",
+      "classSkill": null,
+      "classChoices": {
+        "magus-hybrid-study": "aon-hybrid-study-11"
+      },
+      "classChoiceSkills": {},
+      "tradition": null,
+      "deity": null,
+      "font": null,
+      "sanctification": null,
+      "freeBoosts": [
+        "str",
+        "dex",
+        "int",
+        "cha"
+      ],
+      "skills": [
+        "athletics",
+        "deception",
+        "intimidation"
+      ],
+      "languages": [
+        "diabolic",
+        "draconic"
+      ],
+      "ancestryFeat": "RmiMUZlae6yGUyXY",
+      "classFeat": null,
+      "bonusFeats": {},
+      "cantrips": [
+        "gpzpAAAJ1Lza2JVl",
+        "kBhaPuzLUSwS6vVf",
+        "MPxbKoR54gkYkqLO",
+        "TVKNbcgTee19PXZR",
+        "uZK2BYzPnxUBnDjr",
+        "thAHF1zxNplLCJPO",
+        "IxhGEKl63R4QBvkj",
+        "mAMEt4FFbdqoRnkN"
+      ],
+      "spells": [
+        "zDJS8E66UI0himqV",
+        "aon-spell-2685",
+        "k34hDOfIIMAxNL4a",
+        "aon-spell-2732",
+        "Gb7SeieEvd0pL2Eh"
+      ],
+      "runes": [],
+      "armor": "AnwzlOs0njF9Jqnr",
+      "shield": null,
+      "weapons": [
+        "grmaV4GdoGD7sKbn"
+      ]
+    }
+  },
+  {
     "slug": "seoni",
     "name": "Seoni",
     "ancestry": "Human",
@@ -1263,6 +1574,168 @@ export const PREGENS = [
       "weapons": [
         "FVjTuBCIefAgloUU",
         "62nnVQvGhoVLLl2K"
+      ]
+    }
+  },
+  {
+    "slug": "thaleon",
+    "name": "Thaleon",
+    "ancestry": "Elf",
+    "heritage": "Seer Elf",
+    "className": "Psychic",
+    "classSlug": "psychic",
+    "pdf": "pregens/Pregens-Thaleon-Lvl1.pdf",
+    "notes": [
+      "also trained in deception (the sheet spends those picks on Lore)",
+      "doesn't speak Kelish, Mwangi, Osiriani (regional languages aren't in the builder)",
+      "cantrips: Imaginary Weapon left out"
+    ],
+    "build": {
+      "v": 2,
+      "name": "Thaleon",
+      "ancestry": "PgKmsA2aKdbLU6O0",
+      "heritage": "jEtVesbqYcWGbBYk",
+      "heritageSkill": null,
+      "altAncestryBoosts": false,
+      "ancestryBoosts": [
+        "dex",
+        "int",
+        "cha"
+      ],
+      "background": "8UXahQfkP9GZ1TNW",
+      "backgroundBoosts": [
+        "con",
+        "cha"
+      ],
+      "lore": "Desert Lore",
+      "class": "aon-class-68",
+      "keyAbility": "cha",
+      "classSkill": null,
+      "classChoices": {
+        "psychic-subconscious-mind": "aon-subconscious-mind-8",
+        "psychic-conscious-mind": "aon-conscious-mind-11"
+      },
+      "classChoiceSkills": {},
+      "tradition": null,
+      "deity": null,
+      "font": null,
+      "sanctification": null,
+      "freeBoosts": [
+        "dex",
+        "int",
+        "wis",
+        "cha"
+      ],
+      "skills": [
+        "crafting",
+        "diplomacy",
+        "medicine",
+        "society",
+        "deception"
+      ],
+      "languages": [],
+      "ancestryFeat": "kCO4r8NOm8E2T3eH",
+      "classFeat": null,
+      "bonusFeats": {},
+      "cantrips": [
+        "aon-spell-2576",
+        "Qw3fnUlaUbnn7ipC",
+        "aon-spell-2583"
+      ],
+      "spells": [
+        "szIyEsvihc5e1w8n"
+      ],
+      "runes": [],
+      "armor": null,
+      "shield": null,
+      "weapons": [
+        "rQWaJhI5Bko5x14Z",
+        "7tKkkF8eZ4iCLJtp"
+      ]
+    }
+  },
+  {
+    "slug": "usharak",
+    "name": "Usharak",
+    "ancestry": "Lizardfolk",
+    "heritage": "Wetlander Lizardfolk",
+    "className": "Necromancer",
+    "classSlug": "necromancer",
+    "pdf": "pregens/Pregens-Usharak-Lvl1.pdf",
+    "build": {
+      "v": 2,
+      "name": "Usharak",
+      "ancestry": "HWEgF7Gmoq55VhTL",
+      "heritage": "dJeiekfqGQ8dkwsO",
+      "heritageSkill": null,
+      "altAncestryBoosts": true,
+      "ancestryBoosts": [
+        "dex",
+        "int"
+      ],
+      "background": "3YQ1Wcjzk8ftoyo7",
+      "backgroundBoosts": [
+        "int",
+        "wis"
+      ],
+      "lore": "Astrology Lore",
+      "class": "aon-class-75",
+      "keyAbility": "int",
+      "classSkill": null,
+      "classChoices": {
+        "necromancer-fatal-method": "aon-fatal-method-1",
+        "necromancer-grim-fascination": "aon-grim-fascination-2"
+      },
+      "classChoiceSkills": {},
+      "tradition": null,
+      "deity": null,
+      "font": null,
+      "sanctification": null,
+      "freeBoosts": [
+        "dex",
+        "con",
+        "int",
+        "wis"
+      ],
+      "skills": [
+        "arcana",
+        "crafting",
+        "diplomacy",
+        "medicine",
+        "nature",
+        "religion",
+        "survival"
+      ],
+      "languages": [
+        "boggard",
+        "elven",
+        "necril",
+        "sakvroth"
+      ],
+      "ancestryFeat": "fLDhS0e6fBDjiCUA",
+      "classFeat": null,
+      "bonusFeats": {},
+      "cantrips": [
+        "4gBIw4IDrSfFHik4",
+        "gpzpAAAJ1Lza2JVl",
+        "b5BQbwmuBhgPXTyi",
+        "WBmvzNDfpwka3qT4",
+        "TVKNbcgTee19PXZR",
+        "mAMEt4FFbdqoRnkN",
+        "RA7VKcen3p56rVyZ",
+        "izcxFQFwf3woCnFs"
+      ],
+      "spells": [
+        "7ZinJNzxq0XF0oMx",
+        "aon-spell-2646",
+        "J7Y7tl0bbdz7TcCc",
+        "szIyEsvihc5e1w8n"
+      ],
+      "runes": [],
+      "armor": "4tIVTg9wj56RrveA",
+      "shield": null,
+      "weapons": [
+        "c58wczIzH2gzeXQL"
       ]
     }
   },

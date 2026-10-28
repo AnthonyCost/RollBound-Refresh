@@ -9,7 +9,7 @@ import { writeFileSync } from 'node:fs';
 import { loadRulesData } from '../src/load.js';
 import {
   ABILITIES, emptyBuild, lookup, ancestryBoostSlots, attributes, skillPicks, grantedSkills, languagePicks,
-  featSummary, ancestryFeatOptions, classFeatOptions, spellOptions, spellcastingOf, buildProblems, buildCharacter,
+  featSummary, ancestryFeatOptions, classFeatOptions, spellOptions, spellcastingOf, runeOptions, buildProblems, buildCharacter,
 } from '../src/builder.js';
 import { maxHp, armorClass, perception, savingThrow, SKILL_ABILITY } from '../src/character.js';
 import { SPECS } from '../pregens/specs.js';
@@ -78,6 +78,7 @@ for (const spec of SPECS) {
   if (spec.deity) build.deity = need(`deity "${spec.deity}"`, byName(data.deities, spec.deity))?.id ?? null;
   if (spec.font) build.font = spec.font;
   if (spec.sanctification) build.sanctification = spec.sanctification;
+  if (spec.tradition) build.tradition = spec.tradition;
   if (spec.classSkill) build.classSkill = spec.classSkill;
 
   const solved = solveBoosts(build, spec.attrs);
@@ -147,6 +148,8 @@ for (const spec of SPECS) {
   };
   build.cantrips = fit([...spellsFrom(spec.cantrips, 0), ...spellsFrom(spec.extraCantrips, 0)], casting?.cantrips, 'cantrips');
   build.spells = fit([...spellsFrom(spec.spells, 1), ...spellsFrom(spec.extraSpells, 1)], casting?.spells, '1st-rank spells');
+
+  build.runes = (spec.runes ?? []).map((n) => need(`rune "${n}"`, byName(runeOptions(build, data), n))?.id).filter(Boolean);
 
   build.armor = spec.armor ? need(`armor "${spec.armor}"`, byName(data.armor, spec.armor))?.id ?? null : null;
   build.shield = spec.shield ? need(`shield "${spec.shield}"`, byName(data.shields, spec.shield))?.id ?? null : null;

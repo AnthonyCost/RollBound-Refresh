@@ -1,11 +1,13 @@
-// Cuts a square headshot from each pregenerated hero's class portrait, for the portrait
-// the builder preloads when a player picks them. Writes src/assets/pregens/<slug>.webp.
+// Cuts a square headshot from each pregenerated hero's portrait, for the portrait the
+// builder preloads when a player picks them. Writes src/assets/pregens/<slug>.webp. The
+// portrait is the hero's own art in src/assets/pregens/portraits/<slug>.webp if there is
+// one (their class art shows someone else), otherwise their class portrait.
 //   npm run art:pregens
 // The portraits are transparent and trimmed to the figure, so the head is the topmost
 // wide, solid shape: rows are scanned from the top for an opaque run at least HEAD_MIN of
 // the width (thinner things above it, like staffs and blades, are skipped). FOCUS
 // overrides that for art where it guesses wrong: { x, y, size } as fractions of the image.
-import { mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -14,17 +16,21 @@ import { PREGENS } from '@rollbound/rules';
 const here = dirname(fileURLToPath(import.meta.url));
 const ART = join(here, '..', 'src', 'assets', 'art');
 const OUT = join(here, '..', 'src', 'assets', 'pregens');
+const OWN = join(OUT, 'portraits');
 const SIZE = 256;
 const HEAD_MIN = 0.14;
 const FOCUS = {
+  ija: { x: 0.77, y: 0.4, size: 0.32 },
   jirelle: { x: 0.6, y: 0.1, size: 0.34 },
   korakai: { x: 0.47, y: 0.13, size: 0.36 },
   nhalmika: { x: 0.52, y: 0.19, size: 0.4 },
+  usharak: { x: 0.37, y: 0.17, size: 0.36 },
 };
 
 mkdirSync(OUT, { recursive: true });
 for (const p of PREGENS) {
-  const source = join(ART, `class-${p.classSlug}.webp`);
+  const own = join(OWN, `${p.slug}.webp`);
+  const source = existsSync(own) ? own : join(ART, `class-${p.classSlug}.webp`);
   const { data, info } = await sharp(source).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const { width, height } = info;
   const opaque = (x, y) => data[(y * width + x) * 4 + 3] > 128;

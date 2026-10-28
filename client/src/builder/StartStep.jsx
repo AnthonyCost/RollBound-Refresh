@@ -11,6 +11,14 @@ const HEADSHOTS = Object.fromEntries(
   ]),
 );
 
+// Heroes whose class art shows someone else have their own portrait.
+const PORTRAITS = Object.fromEntries(
+  Object.entries(import.meta.glob('../assets/pregens/portraits/*.webp', { eager: true, query: '?url', import: 'default' })).map(([path, url]) => [
+    path.split('/').pop().replace('.webp', ''),
+    url,
+  ]),
+);
+
 /**
  * The builder's first screen for a new character: build your own step by step, or
  * start from one of Paizo's pregenerated heroes. Picking a hero hands their build to
@@ -32,7 +40,7 @@ export default function StartStep({ onCustom, onPregen }) {
             <li key={p.slug} className="pregen">
               <button type="button" className="pregen__pick" onClick={() => onPregen(p, HEADSHOTS[p.slug] ?? null)}>
                 <span className="pregen__frame">
-                  <img className="pregen__art" src={artFor('class', p.classSlug)} alt="" loading="lazy" />
+                  <img className="pregen__art" src={PORTRAITS[p.slug] ?? artFor('class', p.classSlug)} alt="" loading="lazy" />
                 </span>
                 <span className="pregen__text">
                   <span className="pregen__name">{p.name}</span>
