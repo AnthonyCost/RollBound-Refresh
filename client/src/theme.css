@@ -310,7 +310,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 /* ---------- Spell Book, Inventory, Lore tabs ---------- */
 
-.coins input, .inventory__note-field input, .add-item input, .add-item select, .lore-backstory__input {
+.coins input, .purse-load input, .inventory__note-field input, .add-item input, .add-item select, .lore-backstory__input {
   min-height: 44px;
   padding: 0 10px;
   border: 1px solid var(--line);
@@ -319,7 +319,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-family: var(--body);
   font-size: 16px;
 }
-.coins input:focus, .inventory__note-field input:focus, .add-item input:focus, .add-item select:focus, .lore-backstory__input:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
+.coins input:focus, .purse-load input:focus, .inventory__note-field input:focus, .add-item input:focus, .add-item select:focus, .lore-backstory__input:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
 
 .spellbook__head, .coins, .add-item, .lore-backstory, .origins, .background { display: flex; flex-direction: column; gap: 10px; }
 .spellbook__head .panel__title, .spellbook__head .rule-note, .coins .panel__title, .add-item .panel__title,
@@ -966,6 +966,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .app--auth { isolation: isolate; }
 /* Phones: a band across the top, framed on the dragon's head, fading into the page. */
 .auth__art { position: fixed; inset: 0 0 auto; height: 45vh; z-index: -1; overflow: hidden; }
+.auth__art picture { display: contents; }
 .auth__art img { width: 100%; height: 100%; object-fit: cover; object-position: 40% 38%; }
 .auth__art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 9, 8, 0.1) 40%, var(--bg)); }
 .auth {
@@ -1502,7 +1503,7 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   .auth { width: 100%; max-width: 460px; margin: 30vh auto 48px; flex: none; padding: 40px 36px 32px; }
   /* Tablets and up: the art fills the screen behind the card. */
   .auth__art { inset: 0; height: auto; }
-  .auth__art img { object-position: 45% 35%; }
+  .auth__art img { object-position: 30% 40%; }
   .auth__art::after { background: linear-gradient(180deg, rgba(11, 9, 8, 0.25), rgba(11, 9, 8, 0.85) 75%); }
   .builder__footer { justify-content: center; }
   .builder__footer .btn { max-width: 320px; }
@@ -1514,7 +1515,8 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   /* Sign-in: the card moves to the right, leaving the dragon and party in view on the left. */
   .app--auth { max-width: none; align-items: flex-end; justify-content: center; padding-right: max(48px, 7vw); }
   .auth { margin: 48px 0; }
-  .auth__art img { object-position: 30% 45%; }
+  /* The wide painting: the dragon on the left stays clear of the card. */
+  .auth__art img { object-position: 0% 40%; }
   .auth__art::after { background: linear-gradient(90deg, rgba(11, 9, 8, 0) 35%, rgba(11, 9, 8, 0.75)); }
   body { font-size: 16px; }
 

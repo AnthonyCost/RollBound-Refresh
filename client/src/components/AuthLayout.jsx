@@ -5,6 +5,7 @@ import Logo from './Logo.jsx';
 import Ornament from './Ornament.jsx';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 import art from '../assets/auth-art.webp';
+import wideArt from '../assets/auth-art-wide.webp';
 
 /**
  * The sign-in and create-account screens: full-screen art with the form in a dark
@@ -31,8 +32,12 @@ export default function AuthLayout({ title, children }) {
 
   return (
     <div className="app app--auth">
+      {/* Tablets and desktops get the wide painting; phones keep the tall one, framed on the dragon. */}
       <div className="auth__art" aria-hidden="true">
-        <img src={art} alt="" />
+        <picture>
+          <source media="(min-width: 768px)" srcSet={wideArt} />
+          <img src={art} alt="" />
+        </picture>
       </div>
       <main className="auth">
         <header className="auth__header">
