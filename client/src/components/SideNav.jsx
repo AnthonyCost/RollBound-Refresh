@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../state/AuthContext.jsx';
 import Icon from './Icon.jsx';
+import Logo from './Logo.jsx';
 
 /** The ☰ menu: a panel from the left with the main places, like GitHub's. */
 export default function SideNav({ open, onClose }) {
@@ -28,7 +29,7 @@ export default function SideNav({ open, onClose }) {
       <nav ref={panel} className="sidenav__panel" role="dialog" aria-modal="true" aria-label="Main menu">
         <div className="sidenav__head">
           <Link to="/home" className="sidenav__brand" onClick={onClose}>
-            <span className="wordmark">ROLLBOUND</span>
+            <span className="wordmark">ROLLBOUND <Logo /></span>
           </Link>
           <button type="button" className="icon-button" aria-label="Close menu" onClick={onClose}>
             <Icon name="close" />

@@ -105,6 +105,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 
 .wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   font-family: var(--display);
   font-weight: 900;
   font-size: clamp(17px, 0.6vw + 15px, 22px);
@@ -112,6 +115,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   color: var(--bronze);
   text-decoration: none;
 }
+/* The logo beside the wordmark scales with its text. */
+.wordmark__logo { flex: none; width: 1.6em; height: 1.6em; }
 
 .eyebrow {
   font-family: var(--display);

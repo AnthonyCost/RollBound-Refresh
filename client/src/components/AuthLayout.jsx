@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../state/AuthContext.jsx';
+import Logo from './Logo.jsx';
 import Ornament from './Ornament.jsx';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 
@@ -27,7 +28,7 @@ export default function AuthLayout({ title, children }) {
     <div className="app app--auth">
       <main className="auth">
         <header className="auth__header">
-          <span className="wordmark auth__wordmark">ROLLBOUND</span>
+          <span className="wordmark auth__wordmark">ROLLBOUND <Logo /></span>
           <p className="italic muted center auth__tagline">A Pathfinder 2e companion that teaches the rules while you play.</p>
         </header>
 

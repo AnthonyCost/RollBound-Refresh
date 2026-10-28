@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../state/AuthContext.jsx';
 import Avatar from './Avatar.jsx';
 import Icon from './Icon.jsx';
+import Logo from './Logo.jsx';
 import Inbox from './Inbox.jsx';
 import Menu from './Menu.jsx';
 import SideNav from './SideNav.jsx';
@@ -28,7 +29,7 @@ export default function TopBar({ crumbs = [], actions }) {
         )}
         {/* On phones, pages with crumbs show the crumb instead, to leave it room. */}
         <Link to={user ? '/home' : '/'} className={`wordmark topbar__wordmark ${crumbs.length ? 'topbar__wordmark--with-crumbs' : ''}`}>
-          ROLLBOUND
+          ROLLBOUND <Logo />
         </Link>
         {crumbs.length > 0 && (
           <nav className="crumbs" aria-label="Breadcrumb">
