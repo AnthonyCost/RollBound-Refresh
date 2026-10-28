@@ -546,6 +546,10 @@ describe('demo sample builds', () => {
       assert.equal(R.buildCharacter(current, data).name, build.name);
     });
   }
+  it('gives the demo visitor one character of every class', () => {
+    const classes = R.DEMO_ROSTER.map((b) => data.classes.find((c) => c.id === b.class).slug).sort();
+    assert.deepEqual(classes, data.classes.map((c) => c.slug).sort());
+  });
 });
 
 describe('pregenerated heroes', () => {

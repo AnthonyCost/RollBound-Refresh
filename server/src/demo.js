@@ -1,10 +1,11 @@
 // Demo accounts. "Try the demo" makes a real, temporary account for each visitor,
-// so the demo runs the same code as everyone else. It comes with Mira (in a sample
-// campaign the visitor runs), a pretend player Sam whose ranger asks to join it,
-// and Sam's own campaign to ask to join, which Sam answers by himself. Demo
-// accounts are deleted after DEMO_HOURS, or when the visitor exits the demo.
+// so the demo runs the same code as everyone else. It comes with a character of every
+// class (DEMO_ROSTER), with Mira in a sample campaign the visitor runs; a pretend player
+// Sam whose ranger asks to join it; and Sam's own campaign to ask to join, which Sam
+// answers by himself. Demo accounts are deleted after DEMO_HOURS, or when the visitor
+// exits the demo.
 import { randomBytes } from 'node:crypto';
-import { SAMPLE_BUILDS, buildCharacter, migrateBuild } from '@rollbound/rules';
+import { SAMPLE_BUILDS, DEMO_ROSTER, buildCharacter, migrateBuild } from '@rollbound/rules';
 import { pool } from './db.js';
 import { storage } from './storage/index.js';
 import { rulesData } from './rules.js';
@@ -45,7 +46,9 @@ export async function createDemo() {
       const c = sheet(build);
       return (await client.query('INSERT INTO characters (owner_id, campaign_id, name, level, data, share_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [owner.id, campaignId, c.name, c.level, c, generateShareId()])).rows[0];
     };
-    await character(user, SAMPLE_BUILDS.mira, wolves.id);
+    const [mira, ...heroes] = DEMO_ROSTER;
+    await character(user, mira, wolves.id);
+    for (const build of heroes) await character(user, build, null);
     kestrel = await character(sam, SAMPLE_BUILDS.kestrel, null);
     await client.query("INSERT INTO messages (user_id, kind, title, body) VALUES ($1, 'announcement', 'Welcome to the RollBound demo', $2)", [user.id, WELCOME(vault.invite_code)]);
     await client.query('COMMIT');
