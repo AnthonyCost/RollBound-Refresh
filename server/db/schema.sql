@@ -58,8 +58,9 @@ ALTER TABLE characters ADD COLUMN IF NOT EXISTS portrait_key TEXT;
 -- view the sheet. Filled in for older characters by db:setup.
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS share_id TEXT;
 CREATE UNIQUE INDEX IF NOT EXISTS characters_share_idx ON characters (share_id);
--- What the character carries and their coins (see inventory.js in the rules).
--- NULL until first edited: the sheet starts from the builder's gear.
+-- What the character carries and their coins (see inventory.js in the rules), with
+-- any damage to a shield (docs/shield-hit-points.md). NULL until first edited: the
+-- sheet starts from the builder's gear.
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS inventory JSONB;
 -- The player's own backstory for the character, shown on its Lore tab.
 ALTER TABLE characters ADD COLUMN IF NOT EXISTS backstory TEXT NOT NULL DEFAULT '';

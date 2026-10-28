@@ -55,7 +55,7 @@ erDiagram
         jsonb data "the sheet, with builder choices"
         text portrait_key "uploaded image"
         text share_id UK "public share link"
-        jsonb inventory "null: builder gear"
+        jsonb inventory "items, coins, shield damage; null: builder gear"
         text backstory
         jsonb prepared "spells prepared today, null: the first known"
         int current_hp "null: full"
@@ -122,6 +122,7 @@ erDiagram
 - A character has **at most one pending join request** (a unique index on `character_id` where `status = 'pending'`).
 - `campaigns.invite_code` and `characters.share_id` are unique, and `db:setup` fills them in for older rows and makes them required.
 - A character's `level` and a campaign's `party_level` are 1 to 20, and `current_hp` is never negative.
+- An encounter's `party_size` is 1 to 8 and its `party_level` 1 to 20 (both null to follow the campaign).
 - `message_reads` covers messages for everyone too; messages for everyone from before a user signed up count as read without a row.
 
 ## Not in the database
@@ -129,4 +130,5 @@ erDiagram
 - **Rules data** (ancestries, classes, feats, spells, items): JSON files in `packages/rules/data/`, loaded by the server and client. A character's `data` stores the IDs of what was chosen.
 - **Adventure Paths**: `packages/rules/src/adventurePaths.js`. `campaigns.adventure_path` holds a slug from it.
 - **Uploaded images**: in S3 (or `server/uploads/` locally). The `*_key` columns hold where each one is.
+- **Inside the JSONB columns**: `characters.inventory` is `{ items, coins }`, where a shield item can carry `damage` (Hit Points lost; see `docs/shield-hit-points.md`), and `characters.prepared` is `{ cantrips, slots }` of spell ids. The rules package checks both before they're saved (`inventoryProblems`, `preparedProblems`).
 - **Creatures**: `packages/rules/bestiary/`. An encounter's creatures hold a bestiary `creatureId` (or none, for homebrew) with a copy of the name and level.
