@@ -10,6 +10,9 @@ import {
   equipCharacter,
   withEquipped,
   preparedSpells,
+  shieldState,
+  setItemDamage,
+  startingInventory,
 } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useDelayedSave } from './useDelayedSave.js';
@@ -139,6 +142,21 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     },
     [readOnly, scheduleBackstory],
   );
+  // The equipped shield's Hit Points, Hardness and Broken Threshold; null without one.
+  // Before the inventory is first edited, the shield is the builder's.
+  const currentInventory = useMemo(
+    () => inventory ?? (baseCharacter && gear && !gear.error ? startingInventory(baseCharacter, gear) : null),
+    [inventory, baseCharacter, gear],
+  );
+  const shield = useMemo(() => (gear && !gear.error ? shieldState(currentInventory, gear) : null), [currentInventory, gear]);
+  /** Sets the equipped shield's damage (Hit Points lost), saved with the inventory. */
+  const setShieldDamage = useCallback(
+    (damage) => {
+      if (readOnly || !shield || !currentInventory) return;
+      setInventory(setItemDamage(currentInventory, shield.key, Math.min(shield.max, damage)));
+    },
+    [readOnly, shield, currentInventory, setInventory],
+  );
   // Spells prepared today, for casters who prepare from the spells they know; null for others.
   const prepared = useMemo(() => preparedSpells(character, storedPrepared), [character, storedPrepared]);
   /** Saves a prepared list: { cantrips, slots } of spell keys (see preparedValue). */
@@ -247,6 +265,8 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       prepared,
       setPrepared,
       preparedStatus,
+      shield,
+      setShieldDamage,
       loading: loading || !gearReady,
       notFound,
       round,
@@ -264,7 +284,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       cycleCondition,
       resetEncounter,
     }),
-    [character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

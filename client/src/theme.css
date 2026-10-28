@@ -2550,6 +2550,9 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 /* AC in a shield shape, as on the sheet. */
 .sheet-def--ac { border-color: var(--line); border-radius: 6px 6px 50% 50% / 6px 6px 34% 34%; padding-bottom: 20px; }
 .sheet-def--hp .sheet-def__value { color: var(--blood-text); }
+.sheet-def--shield .sheet-def__value { color: var(--bronze); }
+.sheet-def--broken { border-color: var(--blood); }
+.sheet-def--broken .sheet-def__value, .sheet-def--broken .sheet-def__extra { color: var(--blood-text); font-style: normal; }
 
 /* Two columns: skills, then Strikes and DCs. */
 .sheet__columns { display: grid; gap: 16px; align-items: start; }
@@ -2614,6 +2617,7 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 }
 @media (min-width: 900px) {
   .sheet-defense { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.8fr); }
+  .sheet-defense--shield { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.8fr); }
   .sheet-def-group { grid-column: auto; }
   .sheet__columns { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }

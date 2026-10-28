@@ -3,6 +3,7 @@
 // { items: [{ key, kind, id, name, qty, bulk, price, note, equipped }], coins: { pp, gp, sp, cp } }
 // kind is weapon, armor, shield or item for rules data (id points at it), or custom.
 // Equipped weapons, armor and shield are what the sheet's Strikes and AC use.
+// A shield can also carry damage: the Hit Points it has lost (see shieldState).
 import { FIST, STARTING_GOLD_CP, gearCost, toArmor, toShield, toWeapon } from './builder.js';
 
 export const COINS = ['pp', 'gp', 'sp', 'cp'];
@@ -13,7 +14,7 @@ export const ITEM_KINDS = ['weapon', 'armor', 'shield', 'item', 'custom'];
 export const EQUIPPABLE = ['weapon', 'armor', 'shield'];
 const ONE_AT_A_TIME = ['armor', 'shield'];
 
-export const LIMITS = { items: 300, name: 120, note: 300, qty: 9999, bulk: 100, coins: 10_000_000, backstory: 20_000 };
+export const LIMITS = { items: 300, name: 120, note: 300, qty: 9999, bulk: 100, coins: 10_000_000, backstory: 20_000, damage: 9999 };
 
 const find = (list, id) => (id ? list?.find((x) => x.id === id) ?? null : null);
 // randomUUID only exists on HTTPS pages (and localhost); getRandomValues works on any.
@@ -136,6 +137,29 @@ export function equipCharacter(character, inv, data) {
 }
 
 /**
+ * The equipped shield's condition: { key, name, hardness, max, current, brokenAt, broken,
+ * destroyed }, or null without one. brokenAt is the Broken Threshold, half its Hit
+ * Points: at or below it the shield is broken and can't be used until it's repaired; at
+ * 0 it's destroyed. data needs shields.
+ */
+export function shieldState(inv, data) {
+  if (!inv || !data?.shields) return null;
+  const on = equippedKeys(inv);
+  const item = inv.items.find((i) => i.kind === 'shield' && on.has(i.key));
+  const rule = item && find(data.shields, item.id);
+  if (!rule?.hp) return null;
+  const current = Math.max(0, rule.hp - Math.min(rule.hp, item.damage ?? 0));
+  const brokenAt = Math.floor(rule.hp / 2);
+  return { key: item.key, name: item.name, hardness: rule.hardness, max: rule.hp, current, brokenAt, broken: current <= brokenAt, destroyed: current === 0 };
+}
+
+/** The inventory with an item's damage set (kept between 0 and the shield's Hit Points by shieldState). */
+export function setItemDamage(inv, key, damage) {
+  const d = Math.max(0, Math.min(LIMITS.damage, Math.round(damage)));
+  return { ...inv, items: inv.items.map((i) => (i.key === key ? { ...i, damage: d } : i)) };
+}
+
+/**
  * Total Bulk. Light items (Bulk L, stored as 0.1) count 10 to 1 Bulk; items with no
  * Bulk count nothing. Returns { bulk, light } with light < 10, e.g. 3 Bulk and 4 L.
  */
@@ -173,6 +197,7 @@ export function inventoryProblems(inv) {
     if (typeof i.note !== 'string' || i.note.length > LIMITS.note) errors.push(`${at}: note must be ${LIMITS.note} characters or fewer.`);
     if (i.equipped !== undefined && typeof i.equipped !== 'boolean') errors.push(`${at}: equipped must be true or false.`);
     if (i.equipped && !EQUIPPABLE.includes(i.kind)) errors.push(`${at}: only weapons, armor and shields can be equipped.`);
+    if (i.damage !== undefined && (!Number.isInteger(i.damage) || i.damage < 0 || i.damage > LIMITS.damage)) errors.push(`${at}: damage must be a whole number from 0 to ${LIMITS.damage}.`);
   });
   for (const kind of ONE_AT_A_TIME) {
     if (inv.items.filter((i) => i?.kind === kind && i.equipped).length > 1) errors.push(`Only one ${kind === 'armor' ? 'suit of armor' : 'shield'} can be equipped.`);

@@ -9,6 +9,7 @@ import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import Breakdown from '../components/Breakdown.jsx';
 import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
 import HpTracker from '../components/HpTracker.jsx';
+import ShieldTracker from '../components/ShieldTracker.jsx';
 import ShareSheet from '../components/ShareSheet.jsx';
 import { signed, titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
@@ -25,7 +26,7 @@ const WEAPON_CATEGORIES = ['unarmed', 'simple', 'martial', 'advanced'];
  * left and Strikes and DCs on the right. Tap any number to see how it's worked out.
  */
 export default function SheetPage() {
-  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, conditions, shieldRaised } = useTable();
+  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, conditions, shieldRaised, shield } = useTable();
   const [editingPortrait, setEditingPortrait] = useState(false);
   const [selected, setSelected] = useState('ac');
   const [skill, setSkill] = useState(null);
@@ -131,7 +132,7 @@ export default function SheetPage() {
         ))}
       </section>
 
-      <section className="sheet-panel sheet-defense" aria-label="Defenses">
+      <section className={`sheet-panel sheet-defense ${shield ? 'sheet-defense--shield' : ''}`} aria-label="Defenses">
         {defenseBox({
           id: 'ac',
           label: 'Armor Class',
@@ -151,6 +152,18 @@ export default function SheetPage() {
           </span>
           <span className="sheet-def__extra">{currentHp === maxHp ? 'Unhurt' : currentHp === 0 ? 'Dying' : `${maxHp - currentHp} damage taken`}</span>
         </div>
+        {shield && (
+          <div className={`sheet-def sheet-def--shield ${shield.broken ? 'sheet-def--broken' : ''}`}>
+            <span className="sheet-def__label">Shield</span>
+            <span className="sheet-def__value">
+              {shield.current}
+              <small> / {shield.max}</small>
+            </span>
+            <span className="sheet-def__extra">
+              {shield.destroyed ? 'Destroyed' : shield.broken ? 'Broken' : `Hardness ${shield.hardness} · BT ${shield.brokenAt}`}
+            </span>
+          </div>
+        )}
         {defenseBox({ id: 'perception', label: 'Perception', rank: p.perception, extra: senses })}
         <div className="sheet-def sheet-def--speed">
           <span className="sheet-def__label">Speed</span>
@@ -164,6 +177,7 @@ export default function SheetPage() {
       <Breakdown title={current.title} stat={current.stat} signTotal={current.signed !== false} />
 
       {!readOnly && <HpTracker />}
+      {!readOnly && <ShieldTracker />}
 
       <div className="sheet__columns">
         <div className="sheet__col">

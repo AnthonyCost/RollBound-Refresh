@@ -138,7 +138,10 @@ characters.put('/:id/inventory', async (req, res) => {
   if (errors.length) return res.status(400).json({ errors: errors.slice(0, 5) });
   const { items, coins } = req.body;
   const clean = {
-    items: items.map(({ key, kind, id, name, qty, bulk, price, note, equipped }) => ({ key, kind, id: kind === 'custom' ? null : id, name: name.trim(), qty, bulk, price, note, equipped: Boolean(equipped) })),
+    // damage: Hit Points a shield has lost (see shieldState); left off when there's none.
+    items: items.map(({ key, kind, id, name, qty, bulk, price, note, equipped, damage }) => ({
+      key, kind, id: kind === 'custom' ? null : id, name: name.trim(), qty, bulk, price, note, equipped: Boolean(equipped), ...(damage ? { damage } : {}),
+    })),
     coins: { pp: coins.pp, gp: coins.gp, sp: coins.sp, cp: coins.cp },
   };
   const { rowCount } = await pool.query('UPDATE characters SET inventory = $1 WHERE id = $2 AND owner_id = $3', [clean, req.params.id, req.user.id]);

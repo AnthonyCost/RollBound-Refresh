@@ -219,7 +219,7 @@ function LoadMeter({ load, limits, label, name }) {
 function slotStat(item, rule) {
   if (!rule) return null;
   if (item.kind === 'armor') return `AC +${rule.acBonus}${rule.dexCap != null ? ` · Dex cap +${rule.dexCap}` : ''}`;
-  if (item.kind === 'shield') return `+${rule.acBonus} AC raised · Hardness ${rule.hardness}`;
+  if (item.kind === 'shield') return `+${rule.acBonus} AC raised · Hardness ${rule.hardness} · HP ${Math.max(0, rule.hp - (item.damage ?? 0))}/${rule.hp}`;
   if (item.kind === 'weapon') return `1d${rule.die} ${rule.damageType}${rule.range ? ` · ${rule.range} ft` : ''}`;
   return null;
 }

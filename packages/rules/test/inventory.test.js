@@ -107,3 +107,30 @@ describe('inventory', () => {
     assert.ok(R.inventoryProblems({ ...ok, items: [{ ...ok.items[0], kind: 'weapon' }] }).some((e) => /id of its rules item/.test(e)));
   });
 });
+
+describe('shield damage', () => {
+  const steel = data.shields.find((s) => s.name === 'Steel Shield');
+  const withShield = (damage, equipped = true) => ({ items: [{ ...R.inventoryItem('shield', steel, 1, equipped), ...(damage != null && { damage }) }], coins: { pp: 0, gp: 0, sp: 0, cp: 0 } });
+
+  it('reports the equipped shield at full Hit Points with no damage', () => {
+    const s = R.shieldState(withShield(null), data);
+    assert.deepEqual([s.current, s.max, s.hardness, s.brokenAt, s.broken, s.destroyed], [20, 20, 5, 10, false, false]);
+    assert.equal(R.shieldState(withShield(null, false), data), null);
+  });
+
+  it('breaks at its Broken Threshold and is destroyed at 0', () => {
+    assert.equal(R.shieldState(withShield(9), data).broken, false);
+    assert.equal(R.shieldState(withShield(10), data).broken, true);
+    const gone = R.shieldState(withShield(25), data);
+    assert.deepEqual([gone.current, gone.destroyed], [0, true]);
+  });
+
+  it('saves damage on the shield and checks it', () => {
+    const inv = withShield(null);
+    const hurt = R.setItemDamage(inv, inv.items[0].key, 7.4);
+    assert.equal(hurt.items[0].damage, 7);
+    assert.deepEqual(R.inventoryProblems(hurt), []);
+    assert.ok(R.inventoryProblems({ ...hurt, items: [{ ...hurt.items[0], damage: -1 }] }).length);
+    assert.ok(R.inventoryProblems({ ...hurt, items: [{ ...hurt.items[0], damage: 1.5 }] }).length);
+  });
+});

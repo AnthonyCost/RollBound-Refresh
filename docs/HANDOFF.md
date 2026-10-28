@@ -516,6 +516,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - [ ] Put the inventory and backstory on the PDF export.
 
 **Known bugs, for later:**
+- [ ] Shield Hit Points are a first version; `docs/shield-hit-points.md` lists what's left (raising a broken shield still gives +2 AC, the PDF shows full shield HP, and more).
 - [ ] The PDF export lists every spell a wizard, magus, necromancer or witch knows, not only what's prepared today (the Sheet and Spells tabs show prepared spells; see `preparedSpells` in `packages/rules/src/spells.js`).
 
 ---
