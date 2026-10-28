@@ -42,10 +42,6 @@ export async function requestJoin({ campaign, character, player }) {
   }
 }
 
-/** Withdraws a character's pending request, if any (it joined somewhere directly). */
-export const withdrawRequests = (characterId) =>
-  pool.query("UPDATE join_requests SET status = 'withdrawn', decided_at = now() WHERE character_id = $1 AND status = 'pending'", [characterId]);
-
 /**
  * The GM accepts or rejects a request. check(character, campaign) can refuse an
  * accept with error messages (the campaign's books changed since they asked).

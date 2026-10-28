@@ -1,4 +1,5 @@
--- Demo data: one user, one campaign, and Mira, a level 1 human fighter.
+-- Demo data: one user, the campaign they run, and Mira, a level 1 human fighter.
+-- A GM's own characters can't join their campaign, so Mira isn't in its party.
 -- Safe to run more than once.
 
 INSERT INTO users (email, display_name)
@@ -12,7 +13,7 @@ WHERE u.email = 'demo@rollbound.local'
   AND NOT EXISTS (SELECT 1 FROM campaigns WHERE name = 'Wolves at the Ford');
 
 INSERT INTO characters (owner_id, campaign_id, name, level, data)
-SELECT u.id, c.id, 'Mira Ashvale', 1, $json$
+SELECT u.id, NULL, 'Mira Ashvale', 1, $json$
 {
   "name": "Mira Ashvale",
   "level": 1,
@@ -40,7 +41,6 @@ SELECT u.id, c.id, 'Mira Ashvale', 1, $json$
   "heroPoints": 1
 }
 $json$::jsonb
-FROM users u, campaigns c
+FROM users u
 WHERE u.email = 'demo@rollbound.local'
-  AND c.name = 'Wolves at the Ford'
   AND NOT EXISTS (SELECT 1 FROM characters WHERE name = 'Mira Ashvale');

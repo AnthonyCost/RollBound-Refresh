@@ -108,7 +108,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - the session cookie is HTTP-only and lasts 30 days,
   - the database stores only a SHA-256 hash of each session token (`sessions` table).
 - **Demo mode:** "Try the demo" (`POST /api/auth/demo`) makes a real, temporary account for each visitor and signs them in, so the demo runs the same code as everyone else (`server/src/demo.js`).
-  - **What it comes with:** "Traveler" runs *Wolves at the Ford* with Mira in the party. Mira is now built in the builder, so she can be edited. A pretend player, **Sam**, has asked to bring his ranger **Kestrel** in, so a join request waits in the inbox. Sam also runs *The Sunken Vault*; the welcome message gives its invite code, and Sam accepts requests to it about five seconds later (`answerBotRequests`, run when the inbox or character list loads). The characters' builds are `SAMPLE_BUILDS` in the rules package, and a test keeps them valid.
+  - **What it comes with:** "Traveler" has a character of every class (`DEMO_ROSTER`) and runs *Wolves at the Ford*, whose party starts empty. Mira is built in the builder, so she can be edited. A pretend player, **Sam**, has asked to bring his ranger **Kestrel** in, so a join request waits in the inbox. Sam also runs *The Sunken Vault*, where Mira already plays (a GM's own characters can't join their campaign); the welcome message gives its invite code for bringing more characters, and Sam accepts requests to it about five seconds later (`answerBotRequests`, run when the inbox or character list loads). The characters' builds are `SAMPLE_BUILDS` in the rules package, and a test keeps them valid.
   - **Separate worlds:** a demo only finds its own campaigns' invite codes, and nobody else finds them (`canJoin`).
   - **Lifetime:** demo accounts are deleted, with Sam, their characters, campaigns, messages and uploads, when the visitor exits the demo, or after 24 hours (`scheduleDemoCleanup`, hourly and on start). The banner shows the hours left.
   - **Ending:** a demo's sign-in stops working at exactly 24 hours (`userForToken`), and the hourly cleanup deletes it afterwards. In the last hour the banner turns red, counts down the minutes, and offers **Create an account**, which ends the demo and opens sign-up. When time runs out the banner checks with the server and the app signs out by itself.
@@ -201,7 +201,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - unique in the database, accepted in any case with or without the dash,
   - **permanent:** once generated a code never changes (the replace route and button are gone),
   - only the GM sees it: the campaign page, list and invite preview leave it out for everyone else.
-- **Joining:** a player previews the campaign from its code, then picks a character and **asks to join**. The GM accepts or rejects it (section 15). The GM's own characters join their campaign directly. A character is in one campaign at a time.
+- **Joining:** a player previews the campaign from its code, then picks a character and **asks to join**. The GM accepts or rejects it (section 15). A GM can't join their own campaign with their own characters: the join panel and builder say so, and `POST /campaigns/join` refuses with a 400. A character is in one campaign at a time.
 - **Campaign page:** cover, backstory, the party (portraits and player avatars), and the invite code (GM only).
 - **Party sheets:** each party card's portrait and name open that character's sheet. Your own opens your playable sheet (`/play/:id`). Anyone else's opens read-only at `/campaigns/:id/characters/:characterId`, with all four tabs. The server (`GET /api/campaigns/:id/characters/:characterId`) only returns it to the campaign's GM and players with a character in it, which includes the character's own player. The public share link (`/sheets/:shareId`) is separate: it's for owners sharing outside the campaign.
 - **GM controls:** **Remove** on other players' characters, with a confirm (`POST /api/campaigns/:id/remove`). The character stays with its player, in no campaign, and its player can rejoin with the code. **Delete campaign** is at the bottom of the Edit page, with a confirm (`DELETE /api/campaigns/:id`). Its characters stay with their players, in no campaign; the cover image is deleted and the hub says so. Players can still Leave with their own characters.
@@ -371,7 +371,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - Editing a campaign without sending `books` keeps the current list.
 - **Building for a campaign:**
   - Open `/create?invite=CODE`, using the "Build a new character for…" link in the join panel or the GM's "Build a character for this campaign" button, or enter a code in the builder's campaign bar.
-  - The builder then offers only that campaign's books, clears choices from other books with a note saying which, and saving also asks to join the campaign (or joins it, for the GM's own characters; see section 15).
+  - The builder then offers only that campaign's books, clears choices from other books with a note saying which, and saving also asks to join the campaign (see section 15). The GM's own campaign can't be picked.
   - The draft remembers the campaign across reloads.
 - **Joining** is refused if a character picked anything from a book the campaign doesn't allow. The error names each choice, for example "Gunslinger (Guns & Gears)". The server checks this for accounts, and the demo store does the same check.
 - **When the GM narrows the books later:** the roster flags characters who no longer fit, and the owner gets an **Edit** link. Editing a character in a campaign offers only its books and lists the choices to re-pick, each with the reason.
@@ -437,7 +437,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - **Accept** (in the inbox, or under **Waiting to join** on the campaign page) adds the character to the party. **Reject** doesn't. Either way the player gets a message back. `POST /api/join-requests/:id/accept|reject`, GM only.
   - Accepting re-checks the campaign's books. If they changed since the request, it explains why and the request stays pending, so the GM can reject it.
   - A character has one pending request at a time: asking another campaign withdraws the first (a unique index enforces it), and asking the same one again changes nothing.
-  - The GM's own characters join their own campaign straight away (`200 { status: 'joined' }`); the invite preview's `isGm` tells the client which button to show.
+  - The GM's own characters can't join their own campaign (`400`); the invite preview's `isGm` lets the client say so before they try.
   - The hub's character card says "Asked to join …" while waiting (`joinRequest` on the character).
   - Deleting a campaign or character deletes its requests and their messages.
 - **Demo mode:** the demo comes with a real request from Sam to answer, and Sam answers the visitor's requests (section 1).

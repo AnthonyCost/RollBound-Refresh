@@ -1,8 +1,9 @@
 // Demo accounts. "Try the demo" makes a real, temporary account for each visitor,
 // so the demo runs the same code as everyone else. It comes with a character of every
-// class (DEMO_ROSTER), with Mira in a sample campaign the visitor runs; a pretend player
-// Sam whose ranger asks to join it; and Sam's own campaign to ask to join, which Sam
-// answers by himself. Demo accounts are deleted after DEMO_HOURS, or when the visitor
+// class (DEMO_ROSTER); a sample campaign the visitor runs, which a pretend player Sam's
+// ranger asks to join; and Sam's own campaign, where Mira already plays and the visitor
+// can ask to bring more characters, which Sam answers by himself. A GM's own characters
+// can't join their campaign, so Mira plays in Sam's. Demo accounts are deleted after DEMO_HOURS, or when the visitor
 // exits the demo.
 import { randomBytes } from 'node:crypto';
 import { SAMPLE_BUILDS, DEMO_ROSTER, buildCharacter, migrateBuild } from '@rollbound/rules';
@@ -24,9 +25,9 @@ const fakeEmail = (tag) => `demo-${randomBytes(8).toString('hex')}${tag}@demo.in
 
 const WELCOME = (vaultCode) => `This is a temporary demo account. Everything in it is deleted after ${DEMO_HOURS} hours, or when you exit the demo.
 
-You run Wolves at the Ford, and Mira is in its party. Sam, a pretend player, has asked to bring his ranger Kestrel into it: accept or reject the request above.
+You run Wolves at the Ford. Sam, a pretend player, has asked to bring his ranger Kestrel into it: accept or reject the request above.
 
-Sam runs a campaign too, The Sunken Vault. Its invite code is ${vaultCode}. Enter it on the hub to ask to join with one of your characters; Sam answers within a few seconds.`;
+Sam runs a campaign too, The Sunken Vault, and your fighter Mira is already in its party. Its invite code is ${vaultCode}. Enter it on the hub to ask to bring another of your characters; Sam answers within a few seconds.`;
 
 /** Creates a demo account with its sample content. Returns the user row. */
 export async function createDemo() {
@@ -47,7 +48,7 @@ export async function createDemo() {
       return (await client.query('INSERT INTO characters (owner_id, campaign_id, name, level, data, share_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [owner.id, campaignId, c.name, c.level, c, generateShareId()])).rows[0];
     };
     const [mira, ...heroes] = DEMO_ROSTER;
-    await character(user, mira, wolves.id);
+    await character(user, mira, vault.id);
     for (const build of heroes) await character(user, build, null);
     kestrel = await character(sam, SAMPLE_BUILDS.kestrel, null);
     await client.query("INSERT INTO messages (user_id, kind, title, body) VALUES ($1, 'announcement', 'Welcome to the RollBound demo', $2)", [user.id, WELCOME(vault.invite_code)]);

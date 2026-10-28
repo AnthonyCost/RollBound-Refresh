@@ -16,6 +16,7 @@ const monogram = (name) => name.replace(/^The /, '')[0];
  * A character-select screen: small emblem tiles plus a large art stage that shows
  * the selected option's portrait, name, key stats, and opening description.
  * Tiles follow the radio-group pattern: arrow keys move between them and select.
+ * Clicking the selected tile again unselects it (onSelect(null)).
  * Selection uses item IDs; art is looked up by slug, which file names use.
  */
 export default function Showcase({ kind, label, items, selected, onSelect, stats, prompt }) {
@@ -78,7 +79,7 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
               aria-checked={on}
               tabIndex={focusable ? 0 : -1}
               className={`tile ${on ? 'tile--on' : ''}`}
-              onClick={() => onSelect(item.id)}
+              onClick={() => onSelect(on ? null : item.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
             >
               {iconFor(kind, item.slug) ? (

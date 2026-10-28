@@ -17,7 +17,7 @@ export default function JoinCampaign({ characters, onJoined }) {
   const [characterId, setCharacterId] = useState('');
   const [errors, setErrors] = useState([]);
   const [busy, setBusy] = useState(false);
-  // After asking: the GM decides, so say what happens next.
+  // After asking: the GM decides, so say what happens next. (A GM can't join their own campaign.)
   const [sent, setSent] = useState(null);
   const service = useCampaignService();
 
@@ -40,8 +40,8 @@ export default function JoinCampaign({ characters, onJoined }) {
     setBusy(true);
     try {
       const chosenCharacter = characters.find((c) => String(c.id) === characterId);
-      const result = await service.join(code, chosenCharacter?.id ?? characterId);
-      setSent(result.status === 'pending' ? { character: chosenCharacter?.name, campaign: preview.name } : null);
+      await service.join(code, chosenCharacter?.id ?? characterId);
+      setSent({ character: chosenCharacter?.name, campaign: preview.name });
       setCode('');
       setPreview(null);
       setCharacterId('');
@@ -96,13 +96,15 @@ export default function JoinCampaign({ characters, onJoined }) {
           </div>
         </div>
       )}
-      {preview && (
+      {preview?.isGm && <p className="rule-note">You run {preview.name}, so your own characters can't join it. Share the invite code with your players instead.</p>}
+      {preview && !preview.isGm && (
         <Link to={`/create?invite=${encodeURIComponent(code)}`} className="btn">
           Build a new character for {preview.name}
         </Link>
       )}
 
       {preview &&
+        !preview.isGm &&
         (characters.length ? (
           <>
             <label className="form-field">
@@ -124,9 +126,9 @@ export default function JoinCampaign({ characters, onJoined }) {
               <p className="rule-note">{chosen.name} is waiting to hear from {chosen.joinRequest.campaignName}. Asking here withdraws that request.</p>
             )}
             <button type="button" className="btn btn--blood" disabled={busy || !characterId} onClick={join}>
-              {preview.isGm ? `Join ${preview.name}` : `Ask to join ${preview.name}`}
+              Ask to join {preview.name}
             </button>
-            {!preview.isGm && <p className="rule-note">The GM of {preview.name} accepts or rejects each request.</p>}
+            <p className="rule-note">The GM of {preview.name} accepts or rejects each request.</p>
           </>
         ) : (
           <p className="rule-note">Create a character first, then come back to join.</p>

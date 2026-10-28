@@ -101,7 +101,7 @@ export function AttributesStep({ build, update, data }) {
                     options={slot}
                     isOn={(a) => s.boosts[i] === a}
                     isDisabled={(a) => fixed || takenElsewhere(a)}
-                    onToggle={(a) => (field ? setSlot(field, i, a) : update({ keyAbility: a }))}
+                    onToggle={(a) => (field ? setSlot(field, i, a) : update({ keyAbility: build.keyAbility === a ? null : a }))}
                     render={(a) => ABILITY_SHORT[a]}
                   />
                 </div>
@@ -427,7 +427,7 @@ export function GearStep({ build, update, data }) {
   const prof = cls ? proficienciesOf(build, data) : null;
   const untrained = (rank) => (cls && rank === 'untrained' ? `Your class is untrained with this` : null);
 
-  const toggle = (field) => (id) => update({ [field]: build[field] === id ? null : id });
+  const choose = (field) => (id) => update({ [field]: id });
   const toggleWeapon = (id) =>
     update({ weapons: build.weapons.includes(id) ? build.weapons.filter((w) => w !== id) : [...build.weapons, id] });
 
@@ -445,7 +445,7 @@ export function GearStep({ build, update, data }) {
         label="Armor"
         items={data.armor}
         selected={build.armor}
-        onSelect={toggle('armor')}
+        onSelect={choose('armor')}
         meta={(a) => `${cap(a.category)} · AC +${a.acBonus}${a.dexCap != null ? ` · Dex cap +${a.dexCap}` : ''}${a.strength ? ` · Str +${a.strength}` : ''} · ${formatPrice(a.price)}`}
         warn={(a) => untrained(prof?.armor[a.category])}
       />
@@ -455,7 +455,7 @@ export function GearStep({ build, update, data }) {
         label="Shields"
         items={data.shields}
         selected={build.shield}
-        onSelect={toggle('shield')}
+        onSelect={choose('shield')}
         meta={(s) => `AC +${s.acBonus} when raised · Hardness ${s.hardness} · ${formatPrice(s.price)}`}
       />
 

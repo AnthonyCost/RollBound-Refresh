@@ -4,6 +4,8 @@ import { sourceTag } from './labels.js';
 /**
  * A list of choosable rules options. The selected option expands to show its
  * description (imported HTML, reduced to plain formatting tags at import time).
+ * Clicking the selected option again unselects it: onSelect(null) for a single
+ * choice; a multiple list gets the ID and toggles it itself.
  */
 export default function OptionList({ items, selected, onSelect, meta, warn, note, blocked, multiple = false, label, emptyText = 'Nothing to choose here.' }) {
   const [query, setQuery] = useState('');
@@ -32,7 +34,7 @@ export default function OptionList({ items, selected, onSelect, meta, warn, note
           const hint = note?.(item);
           return (
             <li key={item.id} className={`option ${on ? 'option--on' : ''} ${on && item.description ? 'option--open' : ''} ${reason && !on ? 'option--blocked' : ''}`}>
-              <button type="button" className="option__head" aria-pressed={on} disabled={Boolean(reason) && !on} onClick={() => onSelect(item.id)}>
+              <button type="button" className="option__head" aria-pressed={on} disabled={Boolean(reason) && !on} onClick={() => onSelect(on && !multiple ? null : item.id)}>
                 <span className="option__gem" aria-hidden="true" />
                 <span className="option__main">
                   <span className="option__name">{item.name}</span>

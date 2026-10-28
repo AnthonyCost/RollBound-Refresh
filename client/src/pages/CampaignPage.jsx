@@ -197,11 +197,6 @@ export function CampaignOverview() {
 
         <section className="split__col" aria-label="Party">
           {campaign.isGm && <InviteCode code={campaign.inviteCode} />}
-          {campaign.isGm && (
-            <Link to={`/create?invite=${encodeURIComponent(campaign.inviteCode)}`} className="btn">
-              Build a character for this campaign
-            </Link>
-          )}
 
           {campaign.requests?.length > 0 && (
             <>

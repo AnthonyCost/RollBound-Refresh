@@ -1,7 +1,7 @@
 import { loreOptions, lookup, keyAbilityOptions, keyAbilityOf, sanctificationOptions, TRADITIONS } from '@rollbound/rules';
 import OptionList from './OptionList.jsx';
 import Showcase from './Showcase.jsx';
-import Chips from './Chips.jsx';
+import Chips, { pick } from './Chips.jsx';
 import { SIZE, abilityList, boostSlotLabel, cap } from './labels.js';
 
 const boostsLine = (slots) => slots.map(boostSlotLabel).join(', ');
@@ -60,7 +60,7 @@ export function AncestryStep({ build, update, data }) {
             label="Heritage skill"
             options={heritage.skillChoice}
             isOn={(s) => build.heritageSkill === s}
-            onToggle={(s) => update({ heritageSkill: s })}
+            onToggle={pick(build.heritageSkill, (s) => update({ heritageSkill: s }))}
             render={cap}
           />
         </section>
@@ -75,6 +75,7 @@ export function BackgroundStep({ build, update, data }) {
 
   const select = (id) => {
     if (id === build.background) return;
+    if (!id) return update({ background: null, backgroundBoosts: [], lore: '' });
     const bg = data.backgrounds.find((b) => b.id === id);
     const l = bg.lore[0] ? loreOptions(bg.lore[0]) : null;
     update({ background: id, backgroundBoosts: [], lore: l?.fixed ?? '' });
@@ -96,7 +97,7 @@ export function BackgroundStep({ build, update, data }) {
         <section className="panel">
           <h2 className="panel__title">Your Lore skill</h2>
           {lore.options ? (
-            <Chips label="Lore" options={lore.options} isOn={(o) => build.lore === o} onToggle={(o) => update({ lore: o })} />
+            <Chips label="Lore" options={lore.options} isOn={(o) => build.lore === o} onToggle={pick(build.lore, (o) => update({ lore: o ?? '' }))} />
           ) : (
             <label className="form-field">
               <span>{lore.placeholder}</span>
@@ -171,7 +172,7 @@ export function ClassStep({ build, update, data }) {
                 label="Class skill"
                 options={cls.skillChoice}
                 isOn={(s) => build.classSkill === s}
-                onToggle={(s) => update({ classSkill: s })}
+                onToggle={pick(build.classSkill, (s) => update({ classSkill: s }))}
                 render={cap}
               />
             </section>
@@ -205,7 +206,7 @@ export function ClassStep({ build, update, data }) {
           {deity && cls.divineFont && deity.font.length > 1 && (
             <section className="panel">
               <h2 className="panel__title">Divine font</h2>
-              <Chips label="Divine font" options={deity.font} isOn={(f) => build.font === f} onToggle={(f) => update({ font: f })} render={cap} />
+              <Chips label="Divine font" options={deity.font} isOn={(f) => build.font === f} onToggle={pick(build.font, (f) => update({ font: f }))} render={cap} />
             </section>
           )}
 
@@ -216,7 +217,7 @@ export function ClassStep({ build, update, data }) {
                 label="Sanctification"
                 options={sanctificationOptions(deity)}
                 isOn={(o) => build.sanctification === o}
-                onToggle={(o) => update({ sanctification: o })}
+                onToggle={pick(build.sanctification, (o) => update({ sanctification: o }))}
                 render={(o) => (o === 'none' ? 'Neither' : cap(o))}
               />
             </section>
@@ -230,7 +231,7 @@ export function ClassStep({ build, update, data }) {
                 label="Key attribute"
                 options={keyOptions}
                 isOn={(a) => keyAbilityOf(build, data) === a}
-                onToggle={(a) => update({ keyAbility: a })}
+                onToggle={pick(build.keyAbility, (a) => update({ keyAbility: a }))}
                 render={(a) => abilityList([a])}
               />
             </section>
@@ -272,7 +273,7 @@ export function ClassStep({ build, update, data }) {
                       label={`${option.name} skill`}
                       options={option.skillChoice}
                       isOn={(s) => build.classChoiceSkills[f.choice.key] === s}
-                      onToggle={(s) => update({ classChoiceSkills: { ...build.classChoiceSkills, [f.choice.key]: s } })}
+                      onToggle={pick(build.classChoiceSkills[f.choice.key], (s) => update({ classChoiceSkills: { ...build.classChoiceSkills, [f.choice.key]: s } }))}
                       render={cap}
                     />
                   </div>
@@ -285,7 +286,7 @@ export function ClassStep({ build, update, data }) {
                       label="Tradition"
                       options={TRADITIONS}
                       isOn={(t) => build.tradition === t}
-                      onToggle={(t) => update({ tradition: t, cantrips: [], spells: [] })}
+                      onToggle={pick(build.tradition, (t) => update({ tradition: t, cantrips: [], spells: [] }))}
                       render={cap}
                     />
                   </div>

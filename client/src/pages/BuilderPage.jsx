@@ -112,7 +112,8 @@ function loadDraft(key) {
       return {
         build: { ...emptyBuild(), ...saved.build, v: saved.build.v ?? 1 },
         step: STEPS.includes(saved.step) ? saved.step : STEPS[0],
-        campaign: saved.campaign ?? null,
+        // A draft from before GMs were kept out of their own campaigns could be for one.
+        campaign: saved.campaign?.isGm ? null : (saved.campaign ?? null),
         // Drafts from before the start screen were already under way.
         start: saved.start ?? 'custom',
       };
@@ -145,6 +146,8 @@ async function fetchCharacter(id) {
 const outsideBooks = (build, data, books, campaignName) =>
   bookIssues(build, data, books).map((i) => ({ ...i, why: `${campaignName} doesn't use ${i.book}` }));
 
+const gmCantJoin = (name) => `You run ${name}, so your own characters can't join it.`;
+
 /**
  * Which campaign a new character is being built for, and what it allows. Shows a
  * bar when there is one, or a way to enter an invite code when there isn't.
@@ -158,7 +161,9 @@ function CampaignBar({ campaign, removed, onChoose, onClear }) {
     e.preventDefault();
     setErrors([]);
     try {
-      onChoose(code, await service.preview(code));
+      const found = await service.preview(code);
+      if (found.isGm) return setErrors([gmCantJoin(found.name)]);
+      onChoose(code, found);
       setOpen(false);
       setCode('');
     } catch (err) {
@@ -172,9 +177,7 @@ function CampaignBar({ campaign, removed, onChoose, onClear }) {
         <p>
           Building for <strong>{campaign.name}</strong> · Books: {booksLabel(campaign.books)}
         </p>
-        <p className="muted">
-          {campaign.isGm ? 'Saving adds this character to your party.' : "Saving asks its GM to let this character in; you'll hear back in your inbox."}
-        </p>
+        <p className="muted">Saving asks its GM to let this character in; you'll hear back in your inbox.</p>
         {removed.length > 0 && (
           <p className="muted">
             Cleared because {campaign.name} doesn't use their books: {removed.map((r) => `${r.name} (${r.book})`).join(', ')}.
@@ -276,7 +279,11 @@ export default function BuilderPage() {
     let cancelled = false;
     service
       .preview(inviteCode)
-      .then((c) => !cancelled && chooseCampaign(inviteCode, c))
+      .then((c) => {
+        if (cancelled) return;
+        if (c.isGm) setErrors([gmCantJoin(c.name)]);
+        else chooseCampaign(inviteCode, c);
+      })
       .catch((err) => !cancelled && setErrors(errorsFrom(err)))
       .finally(() => !cancelled && setSearch({}, { replace: true }));
     return () => {
@@ -288,7 +295,7 @@ export default function BuilderPage() {
 
   /** Builds this new character for a campaign, clearing choices from books it doesn't use. */
   const chooseCampaign = (code, c) => {
-    const chosen = { code, name: c.name, books: c.books ?? null, isGm: Boolean(c.isGm) };
+    const chosen = { code, name: c.name, books: c.books ?? null };
     setDraft((d) => {
       const gone = data ? bookIssues(d.build, data, chosen.books) : [];
       setRemoved(gone);
@@ -362,8 +369,8 @@ export default function BuilderPage() {
       const { id } = await api.createCharacter(character);
       saveDraft(draftKey, null);
       // The character is saved either way; a portrait that fails can be added from the sheet,
-      // and a campaign it couldn't ask to join can be asked again from the Campaigns page. For
-      // someone else's campaign this sends a join request; the GM's own joins directly.
+      // and a campaign it couldn't ask to join can be asked again from the Campaigns page. This
+      // sends its GM a join request.
       if (portrait.file) await savePortrait(id, portrait.file).catch(() => {});
       if (campaign) await service.join(campaign.code, id).catch(() => {});
       navigate(`/play/${id}/sheet`, { replace: true });
