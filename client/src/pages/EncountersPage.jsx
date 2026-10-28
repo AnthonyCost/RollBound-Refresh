@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { budgets, creatureXp, dcByLevel, rateEncounter } from '@rollbound/rules';
 import { api } from '../api.js';
 import { useCampaign, useCampaignCrumbs } from './CampaignPage.jsx';
+import { autoParty, encounterRating, partyFor } from '../state/encounters.js';
 import { creaturePath, creatureThumb, loadBestiary } from '../state/bestiary.js';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
-import Ornament from '../components/Ornament.jsx';
 
 // What each threat means at the table (GM Core).
 const THREAT_NOTES = {
@@ -23,36 +23,40 @@ const MAX_COUNT = 20;
 const RESULTS = 20;
 
 const newKey = () => Math.random().toString(36).slice(2, 10);
+const threatSlug = (threat) => threat.replace(' ', '-');
+const THUMBS_SHOWN = 4;
+
+/** An encounter's threat as a seal, colored from cool (trivial) to blood red (extreme). */
+function ThreatSeal({ threat, empty }) {
+  return <span className={`threat-seal threat-seal--${empty ? 'empty' : threatSlug(threat)}`}>{empty ? 'Empty' : threat}</span>;
+}
+
+/** The bestiary by creature id, for thumbnails; null until it loads (or if it can't). */
+function useBestiaryIndex() {
+  const [index, setIndex] = useState(null);
+  useEffect(() => {
+    loadBestiary().then((all) => setIndex(new Map(all.map((c) => [c.id, c]))), () => setIndex(new Map()));
+  }, []);
+  return index;
+}
+
+/** A creature's bestiary thumbnail, or its initial for homebrew and creatures without art. */
+function CreatureThumb({ creature, index }) {
+  const known = creature.creatureId && index?.get(creature.creatureId);
+  const src = known && creatureThumb(known);
+  return src ? <img className="war-thumb" src={src} alt="" loading="lazy" /> : <span className="war-thumb war-thumb--letter" aria-hidden="true">{creature.name[0]}</span>;
+}
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, Math.round(Number(n)) || lo));
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
-/**
- * The party an encounter is built for when the GM hasn't set one: the campaign's
- * characters, at their average level. With nobody in the party yet, a table of four
- * at the campaign's party level.
- */
-export function autoParty(campaign) {
-  const chars = campaign.characters;
-  if (!chars.length) return { size: 4, level: campaign.partyLevel, fromCharacters: false };
-  const level = Math.round(chars.reduce((t, c) => t + c.level, 0) / chars.length);
-  return { size: Math.min(8, chars.length), level: Math.max(1, Math.min(20, level)), fromCharacters: true };
-}
-
-/** The party an encounter uses: its own size and level where set, otherwise the campaign's. */
-const partyFor = (encounter, campaign) => {
-  const auto = autoParty(campaign);
-  return { size: encounter.partySize ?? auto.size, level: encounter.partyLevel ?? auto.level };
-};
-
-const rate = (encounter, campaign) => {
-  const party = partyFor(encounter, campaign);
-  return { ...rateEncounter(encounter.creatures, party.level, party.size), party };
-};
-
-/** The GM's saved encounters for this campaign. */
+/** The GM's saved encounters for this campaign, as cards: threat, creatures, and XP against the budget. */
 export function EncounterListPage() {
   const { id } = useParams();
+  const { state } = useLocation();
   const { campaign } = useCampaign();
+  // Set when the editor just saved one: { id, name }.
+  const justSaved = state?.saved ?? null;
+  const index = useBestiaryIndex();
   const [list, setList] = useState(null);
   const [errors, setErrors] = useState([]);
   useCampaignCrumbs([{ label: 'Encounters' }]);
@@ -64,37 +68,52 @@ export function EncounterListPage() {
   if (!campaign.isGm) return <Navigate to={`/campaigns/${id}`} replace />;
   const auto = autoParty(campaign);
   return (
-    <div className="encounters narrow">
+    <div className="encounters feats-tab">
       <header className="logs__head">
-        <h1 className="title">Encounters</h1>
+        <h1 className="sheet-panel__title">Encounters</h1>
         <Link to="new" className="btn btn--blood btn--small">New encounter</Link>
       </header>
       <p className="rule-note">
         Only you can see these. Threats are rated for {auto.fromCharacters ? 'your party' : 'a party'} of {plural(auto.size, 'character')} at level {auto.level}
         {auto.fromCharacters ? '' : ' until characters join'}, unless an encounter sets its own.
       </p>
+      {justSaved && (
+        <p className="panel panel--hot war-saved" role="status">
+          Saved “{justSaved.name}”. It's ready on the war table.
+        </p>
+      )}
       <FormErrors errors={errors} />
       {!list && !errors.length && <p className="muted italic center">Gathering your notes…</p>}
       {list?.length === 0 && (
         <p className="panel panel--dashed muted italic center">No encounters yet. Build one from the bestiary and save it for your next session.</p>
       )}
       {list?.length > 0 && (
-        <ul className="logs__list">
+        <ul className="war-cards">
           {list.map((e) => {
-            const r = rate(e, campaign);
+            const r = encounterRating(e, campaign);
             const total = e.creatures.reduce((t, c) => t + c.count, 0);
+            const top = budgets(r.party.size).at(-1).budget;
             return (
               <li key={e.id}>
-                <Link to={String(e.id)} className="log-card encounter-card">
-                  <span className="encounter-card__top">
-                    <span className="log-card__title">{e.name}</span>
-                    <span className={`encounter__threat encounter__threat--${r.threat.replace(' ', '-')}`}>{e.creatures.length ? r.threat : 'empty'}</span>
+                <Link to={String(e.id)} className={`war-card ${justSaved && String(justSaved.id) === String(e.id) ? 'war-card--saved' : ''}`}>
+                  <span className="war-card__top">
+                    <span className="war-card__name">{e.name}</span>
+                    <ThreatSeal threat={r.threat} empty={!e.creatures.length} />
                   </span>
-                  <span className="log-card__excerpt">
+                  {e.creatures.length > 0 ? (
+                    <span className="war-card__thumbs" aria-hidden="true">
+                      {e.creatures.slice(0, THUMBS_SHOWN).map((c) => <CreatureThumb key={c.key} creature={c} index={index} />)}
+                      {e.creatures.length > THUMBS_SHOWN && <span className="war-thumb war-thumb--more">+{e.creatures.length - THUMBS_SHOWN}</span>}
+                    </span>
+                  ) : null}
+                  <span className="war-card__creatures">
                     {e.creatures.length ? e.creatures.map((c) => `${c.count > 1 ? `${c.count} × ` : ''}${c.name}`).join(', ') : 'No creatures yet.'}
                   </span>
+                  <span className={`war-card__bar war-card__bar--${threatSlug(r.threat)}`} aria-hidden="true">
+                    <span style={{ width: `${Math.min(100, ((r.xp ?? top) / top) * 100)}%` }} />
+                  </span>
                   <span className="log-meta">
-                    {r.xp ?? '—'} XP · {plural(total, 'creature')} · for {r.party.size} at level {r.party.level}
+                    {r.xp ?? '—'} XP of {top} · {plural(total, 'creature')} · for {r.party.size} at level {r.party.level}
                   </span>
                 </Link>
               </li>
@@ -126,8 +145,8 @@ function BestiaryPicker({ partyLevel, onAdd, full }) {
   }, [creatures, query, nearby, partyLevel]);
 
   return (
-    <section className="panel picker" aria-labelledby="picker-title">
-      <h2 id="picker-title" className="panel__title">Add from the bestiary</h2>
+    <section className="sheet-panel picker" aria-labelledby="picker-title">
+      <h2 id="picker-title" className="sheet-panel__title">Add from the bestiary</h2>
       <input id="picker-search" type="search" className="picker__search" value={query} placeholder="Search: wolf, goblin, undead…" onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()} />
       <label className="toggle picker__nearby">
         <input type="checkbox" checked={nearby} onChange={(e) => setNearby(e.target.checked)} />
@@ -199,7 +218,7 @@ export function EncounterEditor() {
   const [errors, setErrors] = useState([]);
   const [busy, setBusy] = useState(false);
   const [confirming, setConfirming] = useState(false);
-  const [notice, setNotice] = useState(null);
+  const index = useBestiaryIndex();
   useCampaignCrumbs([{ label: 'Encounters', to: `/campaigns/${id}/encounters` }, { label: encounterId ? form?.name || 'Encounter' : 'New' }]);
 
   useEffect(() => {
@@ -233,7 +252,6 @@ export function EncounterEditor() {
   const changed = JSON.stringify({ ...form, updatedAt: 0 }) !== JSON.stringify({ ...saved, updatedAt: 0 });
 
   const update = (changes) => {
-    setNotice(null);
     setForm((f) => ({ ...f, ...changes }));
   };
   const setCreature = (key, changes) => update({ creatures: form.creatures.map((c) => (c.key === key ? { ...c, ...changes } : c)) });
@@ -249,15 +267,9 @@ export function EncounterEditor() {
     setErrors([]);
     try {
       const body = { name: form.name, notes: form.notes, partySize: form.partySize, partyLevel: form.partyLevel, creatures: form.creatures };
-      if (encounterId) {
-        const next = await api.updateEncounter(id, encounterId, body);
-        setSaved(next);
-        setForm(next);
-        setNotice('Saved.');
-      } else {
-        const made = await api.createEncounter(id, body);
-        navigate(`/campaigns/${id}/encounters/${made.id}`, { replace: true });
-      }
+      // Back to the campaign's encounters, which confirm the save and point out this one.
+      const done = encounterId ? await api.updateEncounter(id, encounterId, body) : await api.createEncounter(id, body);
+      navigate(`/campaigns/${id}/encounters`, { state: { saved: { id: done.id ?? Number(encounterId), name: form.name } } });
     } catch (err) {
       setErrors(errorsFrom(err));
     } finally {
@@ -283,7 +295,6 @@ export function EncounterEditor() {
           <input id="encounter-name" value={form.name} maxLength={NAME_MAX} required placeholder="Ambush at the ford" onChange={(e) => update({ name: e.target.value })} />
         </label>
         <div className="encounter-head__actions">
-          {notice && !changed && <span className="encounter-head__saved" role="status">{notice}</span>}
           {changed && encounterId && <span className="encounter-head__unsaved">Unsaved changes</span>}
           <Link to={`/campaigns/${id}/encounters`} className="btn btn--small">{changed ? 'Cancel' : 'Back'}</Link>
           <button type="submit" className="btn btn--blood btn--small" disabled={busy || !form.name.trim() || (encounterId && !changed)}>
@@ -293,25 +304,17 @@ export function EncounterEditor() {
       </div>
       <FormErrors errors={errors} />
 
-      <div className="split">
-        <div className="split__col">
-          <section className="panel encounter" aria-labelledby="encounter-title">
-            <h2 id="encounter-title" className="panel__title">Creatures</h2>
-            <div className="encounter__total">
-              <span className="encounter__xp">{rating.xp ?? '—'} XP</span>
-              <span className={`encounter__threat encounter__threat--${rating.threat.replace(' ', '-')}`}>{form.creatures.length ? rating.threat : 'empty'}</span>
-            </div>
-            <div className="encounter__bar" aria-hidden="true">
-              <div style={{ width: `${Math.min(100, ((rating.xp ?? top) / top) * 100)}%` }} />
-              {table.map((t) => <span key={t.name} style={{ left: `${(t.budget / top) * 100}%` }} />)}
-            </div>
-            {rating.xp === null && <p className="rule-note rule-note--warn">A creature more than 4 levels above the party is beyond the budget table: expect it to beat them.</p>}
+      <div className="war-table">
+        <div className="war-table__main">
+          <section className="sheet-panel encounter" aria-labelledby="encounter-title">
+            <h2 id="encounter-title" className="sheet-panel__title">Roster</h2>
             {form.creatures.length > 0 ? (
               <ul className="encounter__list">
                 {form.creatures.map((c) => {
                   const each = creatureXp(c.level, party.level);
                   return (
                     <li key={c.key} className="encounter__creature">
+                      <CreatureThumb creature={c} index={index} />
                       <span className="encounter__name">
                         {c.creatureId ? <Link to={`/bestiary/creature/${c.creatureId}`} target="_blank" rel="noreferrer">{c.name}</Link> : <span>{c.name} <span className="tag">Homebrew</span></span>}
                         {' '}<span className="muted">· Level {c.level}</span>
@@ -342,9 +345,11 @@ export function EncounterEditor() {
           </label>
         </div>
 
-        <div className="split__col">
-          <section className="panel encounter-party" aria-labelledby="party-title">
-            <h2 id="party-title" className="panel__title">The party</h2>
+        <aside className="war-table__side">
+          <ThreatMeter rating={rating} table={table} tier={tier} top={top} empty={!form.creatures.length} />
+
+          <section className="sheet-panel encounter-party" aria-labelledby="party-title">
+            <h2 id="party-title" className="sheet-panel__title">The party</h2>
             {/* Each starts at the campaign's party and follows it; typing a number sets it for this encounter. */}
             <div className="party-tiles">
               {[
@@ -375,16 +380,6 @@ export function EncounterEditor() {
             </div>
           </section>
 
-          <Ornament label="XP BUDGET" />
-          <ul className="threats">
-            {table.map((t, i) => (
-              <li key={t.name} className={`threat ${i === tier && form.creatures.length ? 'threat--current' : ''}`}>
-                <span className="threat__name">{t.name}</span>
-                <span className="threat__xp">{t.budget} XP</span>
-                <span className="threat__note">{THREAT_NOTES[t.name]}</span>
-              </li>
-            ))}
-          </ul>
           <details className="feature xp-reference">
             <summary>What creatures are worth</summary>
             <table className="xp-table">
@@ -424,8 +419,60 @@ export function EncounterEditor() {
               )}
             </section>
           )}
-        </div>
+        </aside>
       </div>
     </form>
+  );
+}
+
+/**
+ * How threatening the encounter is: a seal, its XP, and a bar split at each threat's
+ * budget (trivial to extreme) with a pointer at the encounter's XP, and what that
+ * threat means at the table. It stays in view while the roster scrolls.
+ */
+function ThreatMeter({ rating, table, tier, top, empty }) {
+  const beyond = rating.xp === null || rating.xp > top;
+  const at = beyond ? 100 : Math.min(100, (rating.xp / top) * 100);
+  return (
+    <section className="sheet-panel threat-meter" aria-labelledby="threat-title">
+      <h2 id="threat-title" className="sheet-panel__title">Threat</h2>
+      <div className="threat-meter__head">
+        <ThreatSeal threat={rating.threat} empty={empty} />
+        <span className="threat-meter__xp">
+          {rating.xp ?? '—'}
+          <small> XP</small>
+        </span>
+      </div>
+      <div
+        className="threat-meter__bar"
+        role="meter"
+        aria-label="Encounter XP"
+        aria-valuemin={0}
+        aria-valuemax={top}
+        aria-valuenow={Math.min(rating.xp ?? top, top)}
+        aria-valuetext={empty ? 'No creatures' : `${rating.xp ?? 'beyond'} XP: ${rating.threat}`}
+      >
+        {table.map((t, i) => {
+          const from = i === 0 ? 0 : table[i - 1].budget;
+          return <span key={t.name} className={`threat-meter__seg threat-meter__seg--${threatSlug(t.name)}`} style={{ left: `${(from / top) * 100}%`, width: `${((t.budget - from) / top) * 100}%` }} />;
+        })}
+        {!empty && <span className="threat-meter__pointer" style={{ left: `${at}%` }} />}
+      </div>
+      <ol className="threat-meter__scale">
+        {table.map((t, i) => (
+          <li key={t.name} className={i === tier && !empty ? 'threat-meter__step--current' : ''}>
+            <span className="threat-meter__step-name">{t.name}</span>
+            <span className="threat-meter__step-xp">{t.budget}</span>
+          </li>
+        ))}
+      </ol>
+      <p className={`rule-note ${beyond && !empty ? 'rule-note--warn' : ''}`} style={{ margin: 0 }}>
+        {empty
+          ? 'Add creatures to see how hard the fight will be.'
+          : rating.xp === null
+            ? 'A creature more than 4 levels above the party is beyond the budget table: expect it to beat them.'
+            : (THREAT_NOTES[rating.threat] ?? 'Beyond extreme: more than the whole party should face.')}
+      </p>
+    </section>
   );
 }

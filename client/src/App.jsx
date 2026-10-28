@@ -11,7 +11,7 @@ import CampaignsPage from './pages/CampaignsPage.jsx';
 import BuilderPage from './pages/BuilderPage.jsx';
 import CampaignCreatePage from './pages/CampaignCreatePage.jsx';
 import CampaignLayout, { CampaignOverview } from './pages/CampaignPage.jsx';
-import { SessionLogEditor, SessionLogPage, SessionLogsPage } from './pages/SessionLogPages.jsx';
+import { SessionLogEditor, SessionLogsPage } from './pages/SessionLogPages.jsx';
 import { EncounterEditor, EncounterListPage } from './pages/EncountersPage.jsx';
 import BestiaryPage from './pages/BestiaryPage.jsx';
 import { CreatureByIdPage } from './pages/CreaturePage.jsx';
@@ -123,7 +123,7 @@ export default function App() {
           <Route index element={<CampaignOverview />} />
           <Route path="logs" element={<SessionLogsPage />} />
           <Route path="logs/new" element={<SessionLogEditor />} />
-          <Route path="logs/:logId" element={<SessionLogPage />} />
+          <Route path="logs/:logId" element={<SessionLogsPage />} />
           <Route path="logs/:logId/edit" element={<SessionLogEditor />} />
           <Route path="encounters" element={<EncounterListPage />} />
           <Route path="encounters/new" element={<EncounterEditor />} />

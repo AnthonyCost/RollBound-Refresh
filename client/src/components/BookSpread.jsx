@@ -24,6 +24,7 @@ export const letterOf = (item) => {
  * open: the open entry (or null), shown by leaf; blank shows before one is opened.
  * href(item): where an entry opens (keep the current search so filters stay).
  * meta(item): what sits after the dot leader (level, rarity, actions).
+ * lead(item), optional: what sits before the name (a session's number).
  *
  * In the character builder, entries open with onOpen(item) instead of a link, and the
  * page is kept on screen rather than in the address (resetKey: change it to go back to
@@ -32,7 +33,7 @@ export const letterOf = (item) => {
  * tabs across the top, for sections with names rather than letters.
  */
 export default function BookSpread({
-  items, total, noun, sections, sectionOf, open, href, onOpen, meta, leaf, blank, filtered, clearTo, emptyText,
+  items, total, noun, sections, sectionOf, open, href, onOpen, meta, lead, leaf, blank, filtered, clearTo, emptyText,
   marked = () => false, blocked = () => null, tabsOnTop = false, resetKey = '',
 }) {
   const [params, setParams] = useSearchParams();
@@ -123,6 +124,7 @@ export default function BookSpread({
               const inner = (
                 <>
                   {onOpen && <span className={`book__mark ${chosen ? 'book__mark--on' : ''}`} aria-hidden="true" />}
+                  {lead && <span className="book__lead">{lead(item)}</span>}
                   <span className="book__entry-name">
                     {item.name}
                     {chosen && <span className="visually-hidden"> (chosen)</span>}

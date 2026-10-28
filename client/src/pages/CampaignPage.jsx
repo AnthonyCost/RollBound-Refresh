@@ -4,7 +4,6 @@ import { useCampaignService } from '../state/campaignService.js';
 import PageShell from '../components/PageShell.jsx';
 import CampaignCover from '../components/CampaignCover.jsx';
 import InviteCode from '../components/InviteCode.jsx';
-import Ornament from '../components/Ornament.jsx';
 import Portrait from '../components/Portrait.jsx';
 import Avatar from '../components/Avatar.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
@@ -12,6 +11,8 @@ import { adventurePath } from '@rollbound/rules';
 import { booksLabel } from '../state/rulesData.js';
 import { api } from '../api.js';
 import { inboxChanged, onInboxChanged } from '../state/inbox.js';
+import { cardArtFor } from '../builder/art.js';
+import { encounterRating } from '../state/encounters.js';
 
 /** What each tab under a campaign gets: { campaign, reload, setCrumbs }. */
 export const useCampaign = () => useOutletContext();
@@ -109,13 +110,24 @@ export default function CampaignLayout() {
   );
 }
 
-/** The Overview tab: cover, backstory, books, invite code, requests and the party. */
+/**
+ * The Overview tab, as the campaign's title page: the cover, its numbers (each opening
+ * its tab), the chronicle and latest session, then the GM's tools, the party with their
+ * class art, and the encounters ready to run.
+ */
 export function CampaignOverview() {
   const { id } = useParams();
   const { state } = useLocation();
   const { campaign, reload: load } = useCampaign();
   const [errors, setErrors] = useState([]);
   const service = useCampaignService();
+  // The latest session and ready encounters, for the previews (encounters are the GM's alone).
+  const [logs, setLogs] = useState(null);
+  const [encounters, setEncounters] = useState(null);
+  useEffect(() => {
+    api.listLogs(id).then(setLogs, () => setLogs([]));
+    if (campaign.isGm) api.listEncounters(id).then(setEncounters, () => setEncounters([]));
+  }, [id, campaign.isGm]);
 
   const answer = async (requestId, accept) => {
     setErrors([]);
@@ -150,11 +162,21 @@ export function CampaignOverview() {
   };
 
   const others = campaign.characters.filter((c) => !c.mine);
+  const path = adventurePath(campaign.adventurePath);
+  const latest = logs?.length ? [...logs].sort((a, b) => b.number - a.number)[0] : null;
+  const ready = encounters?.filter((e) => e.creatures.length) ?? [];
+  const stats = [
+    { label: 'Party', value: campaign.characters.length, to: null },
+    { label: 'Party level', value: campaign.partyLevel, to: null },
+    { label: 'Sessions', value: logs ? logs.length : '…', to: `/campaigns/${id}/logs` },
+    ...(campaign.isGm ? [{ label: 'Encounters', value: encounters ? encounters.length : '…', to: `/campaigns/${id}/encounters` }] : []),
+  ];
+
   return (
-    <>
+    <div className="sheet campaign-home">
       {state?.created && (
         <p className="panel panel--hot center" role="status">
-          Your campaign is ready. Share the invite code below with your players.
+          Your campaign is ready. Share the invite code with your players.
         </p>
       )}
 
@@ -164,125 +186,190 @@ export function CampaignOverview() {
         subtitle={
           <span className="cover__byline">
             <Avatar url={campaign.gmAvatarUrl} name={campaign.gmName} size={24} />
-            {campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`} · Party level {campaign.partyLevel}
+            {campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`}
           </span>
         }
       />
+      <p className="campaign-tags">
+        <span className="tag tag--theme">{path ? path.name : 'Homebrew'}</span>
+        {path && <span className="tag">Levels {path.levels.join('–')}</span>}
+        {path && <span className="tag">{path.setting}</span>}
+        <span className="tag">Party level {campaign.partyLevel}</span>
+      </p>
+
+      <div className={`camp-stats camp-stats--${stats.length}`}>
+        {stats.map((st) =>
+          st.to ? (
+            <Link key={st.label} to={st.to} className="sheet-def camp-stat">
+              <span className="sheet-def__label">{st.label}</span>
+              <span className="sheet-def__value">{st.value}</span>
+              <span className="sheet-def__extra">Open ›</span>
+            </Link>
+          ) : (
+            <div key={st.label} className="sheet-def camp-stat">
+              <span className="sheet-def__label">{st.label}</span>
+              <span className="sheet-def__value">{st.value}</span>
+            </div>
+          ),
+        )}
+      </div>
       <FormErrors errors={errors} />
 
-      <div className="split">
-        <section className="split__col" aria-label="Backstory">
-          {adventurePath(campaign.adventurePath) && (
-            <>
-              <Ornament label="ADVENTURE PATH" />
+      <div className="sheet__columns">
+        <div className="sheet__col">
+          <section className="sheet-panel campaign-chronicle" aria-labelledby="chronicle-title">
+            <h2 id="chronicle-title" className="sheet-panel__title">The chronicle</h2>
+            {path && (
               <p className="campaign-path">
-                <strong>{adventurePath(campaign.adventurePath).name}</strong>
-                <span className="muted">
-                  {' '}· Levels {adventurePath(campaign.adventurePath).levels.join('–')} · {adventurePath(campaign.adventurePath).setting}
-                </span>
+                <strong>{path.name}</strong>
+                <span className="muted"> · Levels {path.levels.join('–')} · {path.setting}</span>
               </p>
-            </>
-          )}
-          <Ornament label="BACKSTORY" />
-          {campaign.backstory ? (
-            <p className="backstory">{campaign.backstory}</p>
-          ) : (
-            <p className="rule-note">No backstory yet.</p>
-          )}
-          <Ornament label="BOOKS" />
-          <p className="rule-note">
-            {booksLabel(campaign.books)}. Characters are built from these, and characters using other books can't join.
-          </p>
-        </section>
+            )}
+            {campaign.backstory ? <p className="backstory campaign-chronicle__story">{campaign.backstory}</p> : <p className="rule-note">No backstory yet.</p>}
+            <div className="campaign-books">
+              <span className="sheet-panel__label">Books</span>
+              <p className="rule-note" style={{ margin: 0 }}>{booksLabel(campaign.books)}. Characters are built from these, and characters using other books can't join.</p>
+            </div>
+          </section>
 
-        <section className="split__col" aria-label="Party">
-          {campaign.isGm && <InviteCode code={campaign.inviteCode} />}
+          <section className="sheet-panel" aria-labelledby="latest-title">
+            <h2 id="latest-title" className="sheet-panel__title">Latest session</h2>
+            {latest ? (
+              <Link to={`/campaigns/${id}/logs/${latest.id}`} className="campaign-latest">
+                <span className="eyebrow">Session {latest.number}</span>
+                <span className="campaign-latest__title">{latest.title}</span>
+                {latest.excerpt && <span className="campaign-latest__excerpt">{latest.excerpt.length >= 280 ? `${latest.excerpt.trimEnd()}…` : latest.excerpt}</span>}
+                <span className="campaign-latest__more">Read it in the journal ›</span>
+              </Link>
+            ) : (
+              <p className="muted italic" style={{ margin: 0 }}>
+                {logs ? (campaign.isGm ? 'No sessions logged yet. After you play, write up what happened.' : 'No sessions logged yet.') : 'Gathering the chronicle…'}
+              </p>
+            )}
+          </section>
+        </div>
 
-          {campaign.requests?.length > 0 && (
-            <>
-              <Ornament label="WAITING TO JOIN" />
-              <ul className="hub__list">
-                {campaign.requests.map((r) => (
-                  <li key={r.id} className="hub-card party-card request-card">
-                    <Portrait url={r.character.portraitUrl} name={r.character.name} size="sm" />
-                    <div className="hub-card__body">
-                      <span className="hub-card__name">{r.character.name}</span>
-                      <span className="hub-card__sub">
-                        {[r.character.ancestry, r.character.className].filter(Boolean).join(' ')} · Level {r.character.level}
-                      </span>
-                      <span className="hub-card__tag hub-card__player">
-                        <Avatar url={r.playerAvatarUrl} name={r.player} size={18} /> Played by {r.player}
-                      </span>
-                    </div>
-                    <div className="hub-card__actions">
-                      <button type="button" className="chip" onClick={() => answer(r.id, false)}>Reject</button>
-                      <button type="button" className="chip chip--accept" onClick={() => answer(r.id, true)}>Accept</button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </>
+        <div className="sheet__col">
+          {campaign.isGm && (
+            <section className="sheet-panel campaign-gm" aria-labelledby="gm-title">
+              <h2 id="gm-title" className="sheet-panel__title">Game master's tools</h2>
+              <InviteCode code={campaign.inviteCode} />
+              {campaign.requests?.length > 0 && (
+                <div className="campaign-requests">
+                  <span className="sheet-panel__label">Waiting to join</span>
+                  <ul className="hub__list">
+                    {campaign.requests.map((r) => (
+                      <li key={r.id} className="hub-card party-card request-card">
+                        <Portrait url={r.character.portraitUrl} name={r.character.name} size="sm" />
+                        <div className="hub-card__body">
+                          <span className="hub-card__name">{r.character.name}</span>
+                          <span className="hub-card__sub">
+                            {[r.character.ancestry, r.character.className].filter(Boolean).join(' ')} · Level {r.character.level}
+                          </span>
+                          <span className="hub-card__tag hub-card__player">
+                            <Avatar url={r.playerAvatarUrl} name={r.player} size={18} /> Played by {r.player}
+                          </span>
+                        </div>
+                        <div className="hub-card__actions">
+                          <button type="button" className="chip" onClick={() => answer(r.id, false)}>Reject</button>
+                          <button type="button" className="chip chip--accept" onClick={() => answer(r.id, true)}>Accept</button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </section>
           )}
 
-          <Ornament label="THE PARTY" />
-          {campaign.characters.length ? (
-            <ul className="hub__list">
-              {campaign.characters.map((c) => (
-                <li key={c.id} className="hub-card party-card">
-                  {/* Your own character opens to play; anyone else's opens read-only, for the party and the GM. */}
-                  <Link
-                    to={c.mine ? `/play/${c.id}/sheet` : `/campaigns/${id}/characters/${c.id}/sheet`}
-                    className="party-card__open"
-                    aria-label={`${c.mine ? 'Play' : 'View'} ${c.name}'s sheet`}
-                  >
-                    <Portrait url={c.portraitUrl} name={c.name} size="sm" />
-                    <div className="hub-card__body">
-                      <span className="hub-card__name">{c.name}</span>
-                      <span className="hub-card__sub">
-                        {[c.ancestry, c.className].filter(Boolean).join(' ')} · Level {c.level}
-                      </span>
-                      <span className="hub-card__tag hub-card__player">
-                        {!c.mine && <Avatar url={c.playerAvatarUrl} name={c.player} size={18} />}
-                        {c.mine ? 'Your character' : `Played by ${c.player}`}
-                      </span>
-                      {c.outsideBooks?.length > 0 && (
-                        <span className="hub-card__alert hub-card__warn">Uses books this campaign doesn't: {c.outsideBooks.join(', ')}</span>
+          <section className="sheet-panel" aria-labelledby="party-title">
+            <h2 id="party-title" className="sheet-panel__title">The party</h2>
+            {campaign.characters.length ? (
+              <ul className="party-banners">
+                {campaign.characters.map((c) => {
+                  const art = c.className ? cardArtFor(c.className.toLowerCase().replace(/\s+/g, '-')) : null;
+                  return (
+                    <li key={c.id} className="party-banner">
+                      {art && <img className="party-banner__art" src={art} alt="" loading="lazy" />}
+                      {/* Your own character opens to play; anyone else's opens read-only, for the party and the GM. */}
+                      <Link
+                        to={c.mine ? `/play/${c.id}/sheet` : `/campaigns/${id}/characters/${c.id}/sheet`}
+                        className="party-banner__open"
+                        aria-label={`${c.mine ? 'Play' : 'View'} ${c.name}'s sheet`}
+                      >
+                        <Portrait url={c.portraitUrl} name={c.name} size="sm" />
+                        <span className="party-banner__body">
+                          <span className="party-banner__name">{c.name}</span>
+                          <span className="party-banner__sub">
+                            {[c.ancestry, c.className].filter(Boolean).join(' ')} · Level {c.level}
+                          </span>
+                          <span className="party-banner__player">
+                            {!c.mine && <Avatar url={c.playerAvatarUrl} name={c.player} size={18} />}
+                            {c.mine ? 'Your character' : `Played by ${c.player}`}
+                          </span>
+                          {c.outsideBooks?.length > 0 && (
+                            <span className="hub-card__alert hub-card__warn">Uses books this campaign doesn't: {c.outsideBooks.join(', ')}</span>
+                          )}
+                        </span>
+                      </Link>
+                      {c.mine && (
+                        <div className="party-banner__actions">
+                          {c.outsideBooks?.length > 0 && <Link to={`/characters/${c.id}/edit`} className="chip chip--link">Edit</Link>}
+                          <button type="button" className="chip" onClick={() => leave(c.id)}>Leave</button>
+                        </div>
                       )}
-                    </div>
-                  </Link>
-                  {c.mine && (
-                    <div className="hub-card__actions">
-                      {c.outsideBooks?.length > 0 && <Link to={`/characters/${c.id}/edit`} className="chip chip--link">Edit</Link>}
-                      <button type="button" className="chip" onClick={() => leave(c.id)}>Leave</button>
-                    </div>
-                  )}
-                  {!c.mine && campaign.isGm && removing !== c.id && (
-                    <div className="hub-card__actions">
-                      <button type="button" className="chip" onClick={() => setRemoving(c.id)}>Remove</button>
-                    </div>
-                  )}
-                  {removing === c.id && (
-                    <div className="confirm confirm--inline party-card__confirm" role="alertdialog" aria-label={`Remove ${c.name}`}>
-                      <p>Remove {c.name} from {campaign.name}? {c.player} keeps the character and can rejoin with the invite code.</p>
-                      <div className="btn-row">
-                        <button type="button" className="btn btn--grow" onClick={() => setRemoving(null)}>Keep</button>
-                        <button type="button" className="btn btn--blood btn--grow" onClick={() => remove(c.id)}>Remove</button>
-                      </div>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="panel panel--dashed muted italic center">
-              {campaign.isGm ? 'No one has joined yet. Share your invite code to gather a party.' : 'No characters yet.'}
-            </p>
+                      {!c.mine && campaign.isGm && removing !== c.id && (
+                        <div className="party-banner__actions">
+                          <button type="button" className="chip" onClick={() => setRemoving(c.id)}>Remove</button>
+                        </div>
+                      )}
+                      {removing === c.id && (
+                        <div className="confirm confirm--inline party-banner__confirm" role="alertdialog" aria-label={`Remove ${c.name}`}>
+                          <p>Remove {c.name} from {campaign.name}? {c.player} keeps the character and can rejoin with the invite code.</p>
+                          <div className="btn-row">
+                            <button type="button" className="btn btn--grow" onClick={() => setRemoving(null)}>Keep</button>
+                            <button type="button" className="btn btn--blood btn--grow" onClick={() => remove(c.id)}>Remove</button>
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="muted italic" style={{ margin: 0 }}>
+                {campaign.isGm ? 'No one has joined yet. Share your invite code to gather a party.' : 'No characters yet.'}
+              </p>
+            )}
+            {!campaign.isGm && others.length === 0 && campaign.characters.length > 0 && (
+              <p className="rule-note" style={{ margin: '10px 0 0' }}>Ask your GM for the invite code to bring more players in.</p>
+            )}
+          </section>
+
+          {campaign.isGm && (
+            <section className="sheet-panel" aria-labelledby="ready-title">
+              <h2 id="ready-title" className="sheet-panel__title">Ready encounters</h2>
+              {ready.length ? (
+                <ul className="sheet-list">
+                  {ready.slice(0, 4).map((e) => {
+                    const r = encounterRating(e, campaign);
+                    return (
+                      <li key={e.id}>
+                        <Link to={`/campaigns/${id}/encounters/${e.id}`}>{e.name}</Link>
+                        <span className="book__entry-dots" aria-hidden="true" />
+                        <span className={`encounter__threat encounter__threat--${r.threat.replace(' ', '-')}`}>{r.threat}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p className="muted italic" style={{ margin: 0 }}>{encounters ? 'No encounters ready. Build one from the bestiary.' : 'Checking the war table…'}</p>
+              )}
+              {ready.length > 4 && <Link to={`/campaigns/${id}/encounters`} className="campaign-latest__more">All {ready.length} encounters ›</Link>}
+            </section>
           )}
-          {!campaign.isGm && others.length === 0 && campaign.characters.length > 0 && (
-            <p className="rule-note">Ask your GM for the invite code to bring more players in.</p>
-          )}
-        </section>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

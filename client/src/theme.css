@@ -887,6 +887,15 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .log__actions .confirm { flex-basis: 100%; }
 .log__back { align-self: flex-start; font-size: 14px; color: var(--bronze); }
 .log-form { display: flex; flex-direction: column; gap: 14px; }
+/* The journal's open log: links to the sessions either side, and the editor's Write / Preview. */
+.log__turn { display: flex; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid var(--line-faint); font-family: var(--display); font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; }
+.log__turn a { color: var(--bronze); text-decoration: none; }
+@media (hover: hover) { .log__turn a:hover { color: var(--gold); } }
+.book__leaf .log__actions { border-top: 0; }
+.log-editor { display: flex; flex-direction: column; gap: 14px; max-width: 860px; width: 100%; margin-inline: auto; }
+.log-editor__modes { display: flex; gap: 6px; }
+.log-editor__preview { display: flex; flex-direction: column; gap: 16px; }
+.log-editor__preview-actions { padding-top: 12px; border-top: 1px solid var(--line-faint); }
 .log-form textarea, .log-form input[type='date'] {
   padding: 10px 12px;
   border: 1px solid var(--line);
@@ -2403,6 +2412,8 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   text-decoration: none;
 }
 .book__entry-name { font-size: 16px; overflow-wrap: anywhere; }
+/* A number before the name, like a journal's session numbers. */
+.book__lead { flex: none; align-self: center; min-width: 30px; height: 26px; padding: 0 6px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 3px; background: var(--bg); font-family: var(--display); font-size: 13px; font-weight: 700; color: var(--bronze); font-variant-numeric: tabular-nums; }
 /* Dot leaders, as in a table of contents. */
 .book__entry-dots { flex: 1; min-width: 12px; border-bottom: 1px dotted var(--line); transform: translateY(-4px); }
 .book__entry-meta { flex: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
@@ -2710,4 +2721,128 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
   /* Phones: the value column steps aside to keep the name readable. */
   .pack-row__line { grid-template-columns: minmax(0, 1fr) auto 28px 60px; }
   .pack-row__value { display: none; }
+}
+
+/* ---------- Campaign Overview, as a title page ----------
+   (pages/CampaignPage.jsx) */
+
+.campaign-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 0; }
+.camp-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.camp-stat { min-height: 96px; text-decoration: none; }
+a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--bronze); }
+@media (hover: hover) { a.camp-stat:hover { border-color: var(--bronze); } a.camp-stat:hover .sheet-def__extra { color: var(--gold); } }
+@media (min-width: 720px) {
+  .camp-stats--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .camp-stats--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.campaign-chronicle { display: flex; flex-direction: column; gap: 12px; }
+.campaign-chronicle .sheet-panel__title { margin-bottom: 0; }
+.campaign-chronicle .campaign-path { margin: 0; }
+/* The backstory opens with a large first letter, like the journal's logs. */
+.campaign-chronicle__story::first-letter { float: left; margin: 6px 8px 0 0; font-family: var(--display); font-size: 52px; line-height: 0.8; color: var(--bronze); }
+.campaign-books { display: flex; flex-direction: column; gap: 4px; padding-top: 10px; border-top: 1px solid var(--line-faint); }
+
+.campaign-latest { display: flex; flex-direction: column; gap: 6px; color: var(--text); text-decoration: none; }
+.campaign-latest__title { font-family: var(--display); font-size: 18px; font-weight: 700; letter-spacing: 1px; overflow-wrap: anywhere; }
+.campaign-latest__excerpt { font-size: 15px; line-height: 1.55; color: var(--text-soft); white-space: pre-line; overflow-wrap: anywhere; }
+.campaign-latest__more { font-size: 14px; color: var(--bronze); }
+@media (hover: hover) { .campaign-latest:hover .campaign-latest__title { color: var(--gold); } }
+
+.campaign-gm { display: flex; flex-direction: column; gap: 12px; }
+.campaign-gm .sheet-panel__title { margin-bottom: 0; }
+.campaign-requests { display: flex; flex-direction: column; gap: 6px; }
+
+/* The party, each character over their class's banner art. */
+.party-banners { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.party-banner { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--bg-deep); isolation: isolate; }
+.party-banner__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; opacity: 0.35; }
+.party-banner::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(7, 5, 5, 0.95) 30%, rgba(7, 5, 5, 0.35)); }
+.party-banner__open { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; }
+@media (hover: hover) { .party-banner:has(.party-banner__open:hover) { border-color: var(--bronze); } .party-banner__open:hover .party-banner__name { color: var(--gold); } }
+.party-banner__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.party-banner__name { font-family: var(--display); font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; overflow-wrap: anywhere; }
+.party-banner__sub { font-size: 14px; color: var(--text-soft); }
+.party-banner__player { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-style: italic; color: var(--text-muted); }
+.party-banner__actions { display: flex; gap: 6px; }
+.party-banner__confirm { flex-basis: 100%; }
+
+/* ---------- Encounters, as a war table ----------
+   Threat seals (cool for trivial to blood red for extreme), encounter cards with
+   creature thumbnails, and the editor's roster beside a sticky threat meter.
+   (pages/EncountersPage.jsx) */
+
+.threat-seal {
+  display: inline-grid;
+  place-items: center;
+  min-width: 88px;
+  padding: 4px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.threat-seal--empty { color: var(--text-dim); border-style: dashed; }
+.threat-seal--trivial { color: #8fb3d9; }
+.threat-seal--low { color: #9cc4a0; }
+.threat-seal--moderate { color: var(--gold); }
+.threat-seal--severe { color: #e8824a; }
+.threat-seal--extreme, .threat-seal--beyond-extreme { color: var(--blood-text); background: rgba(192, 57, 43, 0.15); }
+
+.war-cards { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.war-card { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 16px; border: 1px solid var(--line); border-radius: 4px; background: radial-gradient(ellipse 120% 70% at 50% 0%, #1b120f 0%, #130d0b 60%, #0f0a08 100%); color: var(--text); text-decoration: none; }
+@media (hover: hover) { .war-card:hover { border-color: var(--bronze); } .war-card:hover .war-card__name { color: var(--gold); } }
+.war-card--saved { border-color: var(--gold); box-shadow: 0 0 18px var(--glow); }
+.war-saved { margin: 0; }
+.war-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.war-card__name { font-family: var(--display); font-size: 17px; font-weight: 700; letter-spacing: 1px; overflow-wrap: anywhere; }
+.war-card__thumbs { display: flex; }
+.war-card__thumbs .war-thumb + .war-thumb { margin-left: -10px; }
+.war-card__creatures { font-size: 14px; color: var(--text-soft); overflow-wrap: anywhere; }
+.war-card__bar { display: block; height: 6px; border-radius: 999px; background: var(--bg-deep); border: 1px solid var(--line-faint); overflow: hidden; }
+.war-card__bar span { display: block; height: 100%; background: linear-gradient(90deg, #6b5530, var(--gold)); }
+.war-card__bar--severe span { background: linear-gradient(90deg, #8a4a24, #e8824a); }
+.war-card__bar--extreme span, .war-card__bar--beyond-extreme span { background: linear-gradient(90deg, var(--blood-dark), var(--blood-text)); }
+
+.war-thumb { flex: none; width: 40px; height: 40px; border: 2px solid var(--bg); border-radius: 50%; object-fit: cover; object-position: center 25%; background: var(--panel); box-shadow: 0 0 0 1px var(--line); }
+.war-thumb--letter, .war-thumb--more { display: grid; place-items: center; font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--bronze); }
+.war-thumb--more { font-size: 12px; color: var(--text-muted); }
+
+.war-table { display: grid; gap: 16px; align-items: start; }
+.war-table__main, .war-table__side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.encounter__creature { align-items: center; }
+.encounter__creature .war-thumb { width: 36px; height: 36px; }
+
+.threat-meter { display: flex; flex-direction: column; gap: 12px; }
+.threat-meter .sheet-panel__title { margin-bottom: 0; }
+.threat-meter__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.threat-meter__head .threat-seal { min-width: 120px; padding: 8px 14px; font-size: 13px; }
+.threat-meter__xp { font-family: var(--display); font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.threat-meter__xp small { font-size: 14px; color: var(--text-muted); }
+.threat-meter__bar { position: relative; height: 14px; border-radius: 999px; overflow: visible; background: var(--bg-deep); }
+.threat-meter__seg { position: absolute; top: 0; bottom: 0; opacity: 0.55; border-right: 1px solid var(--bg); }
+.threat-meter__seg:first-child { border-radius: 999px 0 0 999px; }
+.threat-meter__seg:last-of-type { border-radius: 0 999px 999px 0; border-right: 0; }
+.threat-meter__seg--trivial { background: #3d5a78; }
+.threat-meter__seg--low { background: #4f7a55; }
+.threat-meter__seg--moderate { background: #8a6a2c; }
+.threat-meter__seg--severe { background: #8a4a24; }
+.threat-meter__seg--extreme { background: var(--blood-dark); }
+.threat-meter__pointer { position: absolute; top: -6px; bottom: -6px; width: 3px; margin-left: -1.5px; border-radius: 2px; background: var(--text); box-shadow: 0 0 8px var(--gold); transition: left 0.25s ease; }
+@media (prefers-reduced-motion: reduce) { .threat-meter__pointer { transition: none; } }
+.threat-meter__scale { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; text-align: center; }
+.threat-meter__scale li { display: flex; flex-direction: column; gap: 1px; padding: 4px 2px; border-radius: 3px; }
+.threat-meter__step-name { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+.threat-meter__step-xp { font-size: 12px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+.threat-meter__step--current { background: var(--panel-hot); box-shadow: inset 0 0 0 1px var(--blood); }
+.threat-meter__step--current .threat-meter__step-name { color: var(--text); }
+
+@media (min-width: 900px) {
+  .war-table { grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); }
+  /* The threat stays in view while the roster scrolls; if the side is taller than the screen, it scrolls itself. */
+  .war-table__side { position: sticky; top: 16px; max-height: calc(100dvh - 32px); overflow-y: auto; scrollbar-width: thin; }
 }
