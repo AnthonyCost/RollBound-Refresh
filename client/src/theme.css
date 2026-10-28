@@ -2632,3 +2632,76 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .feats-tab { display: flex; flex-direction: column; gap: 12px; }
 .feats-tab__head .sheet-panel__title { margin-bottom: 6px; }
 .feats-tab__head .rule-note { margin: 0; }
+
+/* ---------- Inventory: purse and load, equipped slots, pack, merchant ----------
+   (pages/InventoryPage.jsx) */
+
+.purse-load { display: flex; flex-direction: column; gap: 14px; }
+.purse-load__head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; }
+.purse-load__head .sheet-panel__title { margin: 0; padding: 0; border: 0; }
+.load { display: flex; flex-direction: column; gap: 6px; }
+.load__head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.load__bar { position: relative; height: 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-deep); overflow: visible; }
+.load__fill { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #6b5530, var(--bronze)); transition: width 0.25s ease; }
+.load__bar--heavy .load__fill { background: linear-gradient(90deg, #8a6a2c, var(--gold)); }
+.load__bar--over .load__fill { background: linear-gradient(90deg, var(--blood-dark), var(--blood-text)); }
+.load__mark { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--gold); opacity: 0.8; }
+.load__mark--max { background: var(--blood-text); }
+@media (prefers-reduced-motion: reduce) { .load__fill { transition: none; } }
+
+.slot-cards { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.slot-card { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid #6b5530; border-radius: 4px; background: #17110b; }
+.slot-card--empty { border-style: dashed; border-color: var(--line); background: none; }
+.slot-card__item { display: flex; flex-direction: column; gap: 2px; padding-top: 4px; border-top: 1px solid var(--line-faint); }
+.slot-card__item:first-of-type { border-top: 0; padding-top: 0; }
+.slot-card__name { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
+.slot-card__stat { font-size: 13px; color: var(--text-soft); }
+.slot-card .link-button { padding: 2px 0; font-size: 13px; }
+.slot-card__empty { font-size: 14px; font-style: italic; color: var(--text-muted); }
+
+.pack-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.pack-group:last-child { margin-bottom: 0; }
+.pack-group > .sheet-panel__label { padding-bottom: 4px; border-bottom: 1px solid var(--line-faint); }
+.pack-rows { margin: 0; padding: 0; list-style: none; }
+.pack-row { border-bottom: 1px solid var(--line-faint); }
+.pack-row--open { background: var(--panel-hot); }
+.pack-row__line { display: grid; grid-template-columns: minmax(0, 1fr) auto 32px 72px 64px; align-items: center; gap: 8px; min-height: 46px; padding: 2px 4px; }
+.pack-row__name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+@media (hover: hover) { .pack-row__name:hover { color: var(--gold); } }
+.pack-row__caret { width: 7px; height: 7px; transform: rotate(45deg); border: 1px solid var(--bronze); flex: none; }
+.pack-row--open .pack-row__caret { background: var(--bronze); }
+.pack-row__qty { display: inline-flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
+.pack-row__qty button { width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--text-soft); font-size: 16px; line-height: 1; cursor: pointer; }
+.pack-row__qty button:disabled { opacity: 0.35; cursor: default; }
+.pack-row__qty .stepper__value { min-width: 28px; text-align: center; }
+.pack-row__bulk, .pack-row__value { font-size: 13px; color: var(--text-muted); text-align: right; font-variant-numeric: tabular-nums; }
+.pack-row__action { text-align: right; }
+.pack-row__equip { min-height: 32px; padding: 0 10px; border: 1px solid var(--blood); border-radius: 4px; background: var(--panel-hot); color: var(--blood-text); font-family: var(--display); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
+.pack-row__details { display: flex; flex-direction: column; gap: 8px; padding: 4px 8px 14px 22px; }
+.pack-row__details .inventory__remove { align-self: flex-start; }
+
+.merchant { display: flex; flex-direction: column; gap: 12px; }
+.merchant__head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.merchant__head .sheet-panel__title { margin: 0; padding: 0; border: 0; }
+.merchant__body { display: flex; flex-direction: column; gap: 12px; }
+.merchant .add-item__custom { display: flex; flex-direction: column; gap: 8px; }
+
+@media (max-width: 560px) {
+  /* Phones: the value column steps aside to keep the name readable. */
+  .pack-row__line { grid-template-columns: minmax(0, 1fr) auto 28px 60px; }
+  .pack-row__value { display: none; }
+}

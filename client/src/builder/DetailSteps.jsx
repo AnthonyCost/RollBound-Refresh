@@ -40,6 +40,7 @@ import BookSpread from '../components/BookSpread.jsx';
 import BookLeaf, { ChosenActions, wide } from './BookLeaf.jsx';
 import { ABILITY_SHORT, cap, sourceTag } from './labels.js';
 import { cardArtFor } from './art.js';
+import { gearFacts } from './gearFacts.js';
 import { signed } from '../format.js';
 
 function AbilityTiles({ mods }) {
@@ -661,7 +662,6 @@ const GEAR_SECTIONS = [
   { key: 'shield', tab: 'Shields', name: 'Shields' },
   { key: 'weapon', tab: 'Weapons', name: 'Weapons' },
 ];
-const bulkLabel = (b) => (b == null ? null : b > 0 && b < 1 ? 'Light' : b === 0 ? 'Negligible' : String(b));
 
 /**
  * Gear as a merchant's ledger: your pack and purse above, then a book of armor, shields
@@ -795,35 +795,11 @@ export function GearStep({ build, update, data }) {
 /** One item as the right-hand page: its numbers and traits, and buy or sell. */
 function GearLeaf({ i, owned, primary, untrained, replacing, over, onBuy, onSell, onPrimary, onClose }) {
   const x = i.item;
-  // Only build the list for this kind: shields have no category, so the others would fail on one.
-  const facts =
-    i.kind === 'armor'
-      ? [
-          ['Category', cap(x.category)],
-          ['AC bonus', `+${x.acBonus}`],
-          ['Dex cap', x.dexCap != null ? `+${x.dexCap}` : null],
-          ['Strength', x.strength ? `+${x.strength}` : null],
-          ['Check penalty', x.checkPenalty || null],
-          ['Speed penalty', x.speedPenalty ? `${x.speedPenalty} ft` : null],
-        ]
-      : i.kind === 'shield'
-        ? [
-            ['AC when raised', `+${x.acBonus}`],
-            ['Hardness', x.hardness],
-            ['Hit Points', x.hp],
-          ]
-        : [
-            ['Damage', `1d${x.die} ${x.damageType}`],
-            ['Category', cap(x.category)],
-            ['Group', x.group && cap(x.group)],
-            ['Hands', x.hands],
-            ['Range', x.range ? `${x.range} ft` : null],
-          ];
   return (
     <BookLeaf
       eyebrow={`${{ armor: 'Armor', shield: 'Shield', weapon: 'Weapon' }[i.kind]} · ${sourceTag(x.source)}${x.rarity && x.rarity !== 'common' ? ` · ${x.rarity}` : ''}`}
       title={x.name}
-      facts={[...facts, ['Traits', x.traits?.map(cap).join(', ')], ['Bulk', bulkLabel(x.bulk)], ['Price', formatPrice(x.price)]]}
+      facts={gearFacts(i.kind, x)}
       notes={untrained && <p className="rule-note rule-note--warn">Your class is untrained with this, so you won't add your level to {i.kind === 'armor' ? 'AC' : 'attack rolls'} with it.</p>}
       onClose={onClose}
     >
