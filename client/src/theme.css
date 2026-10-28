@@ -2155,3 +2155,144 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .spell-text p { margin: 0 0 0.8em; padding: 0; text-indent: 0; }
 .spell-text hr { margin: 10px 0; border: 0; border-top: 1px solid var(--line); }
 .spell__link { align-self: flex-start; font-size: 14px; color: var(--bronze); }
+
+/* ---------- Spell Book as an open book ----------
+   Phones: one page at a time (the index, or the open spell). Wide screens: a two-page
+   spread with a spine, thumb-index tabs down the left edge, the index on the left
+   page and the open spell on the right. (pages/SpellBookPages.jsx) */
+
+.book { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.book__page {
+  position: relative;
+  min-width: 0;
+  padding: 22px 18px 18px;
+  border: 1px solid var(--line);
+  background: radial-gradient(ellipse 120% 70% at 50% 0%, #1d1410 0%, #140d0b 55%, #0f0a08 100%);
+  box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px var(--line-faint), 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+/* Gilded corners. */
+.book__page::before, .book__page::after { content: ''; position: absolute; width: 22px; height: 22px; border: 0 solid var(--bronze); opacity: 0.7; pointer-events: none; }
+.book__page::before { top: 9px; left: 9px; border-top-width: 1px; border-left-width: 1px; }
+.book__page::after { bottom: 9px; right: 9px; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* One page at a time on phones. */
+.book__leaf { display: none; }
+.book--open .book__leaf { display: block; }
+.book--open .book__index, .book--open .book__tabs { display: none; }
+.book__intro--open, .book__filters--open { display: none; }
+
+.book__tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.book__tab {
+  flex: none;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px 4px 0 0;
+  background: var(--panel);
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-soft);
+}
+.book__tab:disabled { opacity: 0.35; }
+.book__tab--here { border-color: var(--blood); background: var(--panel-hot); color: var(--blood-text); }
+@media (hover: hover) { .book__tab:not(:disabled):not(.book__tab--here):hover { border-color: var(--bronze); color: var(--text); } }
+
+.book__running {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding-bottom: 8px;
+  margin-bottom: 6px;
+  border-bottom: 3px double var(--line);
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.book__running .bestiary__clear { letter-spacing: 1px; }
+
+.book__list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+.book__section {
+  margin: 14px 0 4px;
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--bronze);
+}
+.book__list li:first-child .book__section { margin-top: 4px; }
+/* A large first letter, like a chapter's opening. */
+.book__section::first-letter { font-size: 1.7em; color: var(--gold); text-shadow: 0 0 12px var(--glow); }
+.book__entry-link {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 8px;
+  border-radius: 3px;
+  color: var(--text);
+  text-decoration: none;
+}
+.book__entry-name { font-size: 16px; overflow-wrap: anywhere; }
+/* Dot leaders, as in a table of contents. */
+.book__entry-dots { flex: 1; min-width: 12px; border-bottom: 1px dotted var(--line); transform: translateY(-4px); }
+.book__entry-meta { flex: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
+@media (hover: hover) { .book__entry-link:hover .book__entry-name { color: var(--gold); } }
+.book__entry-link--open { background: var(--panel-hot); box-shadow: inset 2px 0 0 var(--blood); }
+.book__entry-link--open .book__entry-name { color: var(--gold); }
+.book__empty { margin: 32px 0; }
+
+.book__foot { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line-faint); }
+.book__folio { font-size: 14px; font-style: italic; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.book__turn-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--bronze);
+}
+.book__turn-btn:disabled { opacity: 0.3; }
+@media (hover: hover) { .book__turn-btn:not(:disabled):hover { border-color: var(--bronze); color: var(--gold); } }
+
+.book__back { align-self: flex-start; font-size: 14px; color: var(--bronze); }
+.book__leaf .creature { gap: 14px; }
+.book__blank { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 320px; text-align: center; }
+.book__blank-mark { font-size: 48px; color: var(--bronze); opacity: 0.4; }
+.book__blank-title { margin: 0; font-family: var(--display); font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-soft); }
+.book__blank .rule-note { max-width: 34ch; }
+
+/* Turning a page: a quick fade and slide. */
+.book__turn { animation: book-turn 260ms ease-out both; }
+@keyframes book-turn {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .book__turn { animation: none; } }
+
+@media (min-width: 1024px) {
+  /* The open book: tabs, then the left and right pages meeting at the spine. */
+  .book { grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1.2fr); gap: 0; align-items: stretch; }
+  .book__intro--open, .book__filters--open { display: flex; }
+  .book__index, .book--open .book__index { display: block; padding: 30px 30px 22px 34px; border-right: 0; border-radius: 6px 0 0 6px; }
+  .book__leaf { display: block; padding: 30px 34px 26px 32px; border-radius: 0 6px 6px 0; }
+  /* The spine: each page darkens toward the middle. */
+  .book__index { box-shadow: inset 0 0 0 4px var(--bg), inset -30px 0 36px -26px #000, 0 10px 30px rgba(0, 0, 0, 0.45); }
+  .book__leaf { box-shadow: inset 0 0 0 4px var(--bg), inset 30px 0 36px -26px #000, 0 10px 30px rgba(0, 0, 0, 0.45); border-left: 1px solid #000; }
+  /* Gilded corners on each page's outer edge. */
+  .book__index::after { right: auto; left: 9px; border-right-width: 0; border-left-width: 1px; }
+  .book__leaf::before { left: auto; right: 9px; border-left-width: 0; border-right-width: 1px; }
+  /* Thumb-index tabs stand out from the left page's edge. */
+  .book__tabs, .book--open .book__tabs { display: flex; flex-direction: column; gap: 3px; overflow: visible; padding: 26px 0 0; align-self: start; position: sticky; top: 16px; }
+  .book__tab { min-height: 30px; border-radius: 4px 0 0 4px; border-right: 0; text-align: center; }
+  .book__tab--here { box-shadow: -4px 0 10px var(--glow); }
+  .book__back { display: none; }
+}
