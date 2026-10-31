@@ -40,8 +40,8 @@ function PreparePanel({ casting, prepared, setPrepared, status, readOnly }) {
   const names = new Map(casting.cantrips.map((s) => [spellKey(s), s.name]));
 
   return (
-    <section className="panel prepare" aria-labelledby="prepare-title">
-      <h2 id="prepare-title" className="panel__title">Prepared today</h2>
+    <section className="sheet-panel prepare" aria-labelledby="prepare-title">
+      <h2 id="prepare-title" className="sheet-panel__title">Prepared today</h2>
       <p className="rule-note">
         During your daily preparations, choose {maxCantrips} cantrips and a spell for each rank 1 slot from {source}. A spell can fill more than one slot.
       </p>

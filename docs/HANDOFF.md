@@ -322,6 +322,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Components:** sized by the space they actually have (container queries).
 - **Touch and comfort:** larger tap targets on touch screens, hover effects only with a mouse, phone notch and home-bar areas respected, and reduced-motion support.
 
+- **Responsive pass:** every page was measured in Chromium at 320, 375, 600, 768, 1024, 1100 and 1440 wide. The fixes are the "Responsive pass" block at the end of `theme.css`. Conventions: size text inside a frame with `cqi`, not `vw` (the builder's "Choose your…" prompt); below 640px, tables reflow into grid rows rather than scrolling sideways (boost ledger, skill sheet); below 560px, tabs stack icon over label so they all fit; form controls get dark defaults from a zero-specificity `:where` rule and `color-scheme: dark`, so a new input can't come out white.
+
 ### 9b. Header (laid out like GitHub's)
 - **One header everywhere:** `components/TopBar.jsx`, used by `PageShell`, the hub, the play screens, the builder and the read-only sheets.
 - **Left:** the ☰ button opens a side menu (`SideNav.jsx`): Home, Characters, Campaigns, Bestiary, New Character, New Campaign, Your Account, Sign Out / Exit Demo. Menu items are in Title Case. Next come the ROLLBOUND wordmark (home) and breadcrumbs, such as `Characters / Mira Ashvale` or `Campaigns / Ashen Road / Edit`. Each page passes its crumbs: "Characters" links to `/characters` and "Campaigns" to `/campaigns`. Phones show only the last crumb, and hide the wordmark when there's a crumb to make room.

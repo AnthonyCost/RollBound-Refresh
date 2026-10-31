@@ -1,7 +1,6 @@
 import { LIMITS, abilityName } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import { useRules } from '../state/useRules.js';
-import Ornament from '../components/Ornament.jsx';
 import { titleCase } from '../format.js';
 
 const LORE_TYPES = ['backgrounds', 'feats'];
@@ -29,11 +28,9 @@ export default function LorePage() {
   ].filter(([, v]) => v);
 
   return (
-    <div className="narrow">
-      <Ornament label="LORE" />
-
-      <section className="panel lore-backstory" aria-labelledby="backstory-title">
-        <h1 id="backstory-title" className="panel__title">Backstory</h1>
+    <div className="sheet__columns lore-tab">
+      <section className="sheet-panel lore-backstory" aria-labelledby="backstory-title">
+        <h1 id="backstory-title" className="sheet-panel__title">Backstory</h1>
         {readOnly ? (
           backstory.trim() ? <p className="lore-backstory__text">{backstory}</p> : <p className="muted italic">No backstory written yet.</p>
         ) : (
@@ -55,8 +52,9 @@ export default function LorePage() {
         )}
       </section>
 
-      <section className="panel origins" aria-labelledby="origins-title">
-        <h2 id="origins-title" className="panel__title">Origins</h2>
+      <div className="sheet__col">
+      <section className="sheet-panel origins" aria-labelledby="origins-title">
+        <h2 id="origins-title" className="sheet-panel__title">Origins</h2>
         <dl className="origins__list">
           {origins.map(([k, v]) => (
             <div key={k}>
@@ -67,8 +65,8 @@ export default function LorePage() {
         </dl>
       </section>
 
-      <section className="panel background" aria-labelledby="background-title">
-        <h2 id="background-title" className="panel__title">Background: {character.background}</h2>
+      <section className="sheet-panel background" aria-labelledby="background-title">
+        <h2 id="background-title" className="sheet-panel__title">Background: {character.background}</h2>
         {!rules && <p className="muted italic">Loading…</p>}
         {rules?.error && <p className="rule-note rule-note--warn">Couldn't load the background's rules. Try refreshing.</p>}
         {background && (
@@ -97,6 +95,7 @@ export default function LorePage() {
         )}
         {rules && !rules.error && !background && <p className="muted italic">This background isn't in the current rules data.</p>}
       </section>
+      </div>
     </div>
   );
 }

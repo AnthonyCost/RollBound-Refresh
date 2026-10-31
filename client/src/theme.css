@@ -174,7 +174,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-weight: 700;
   letter-spacing: 3px;
   color: var(--bronze);
-  text-align: center;
   text-transform: uppercase;
 }
 
@@ -310,7 +309,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 /* ---------- Spell Book, Inventory, Lore tabs ---------- */
 
-.coins input, .purse-load input, .inventory__note-field input, .add-item input, .add-item select, .lore-backstory__input {
+.coins input, .purse-load input, .inventory__note-field input, .add-item input, .add-item select, .add-item__custom input, .add-item__custom select, .lore-backstory__input {
   min-height: 44px;
   padding: 0 10px;
   border: 1px solid var(--line);
@@ -319,7 +318,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-family: var(--body);
   font-size: 16px;
 }
-.coins input:focus, .purse-load input:focus, .inventory__note-field input:focus, .add-item input:focus, .add-item select:focus, .lore-backstory__input:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
+.coins input:focus, .purse-load input:focus, .inventory__note-field input:focus, .add-item input:focus, .add-item select:focus, .add-item__custom input:focus, .add-item__custom select:focus, .lore-backstory__input:focus { border-color: var(--bronze); outline: none; box-shadow: 0 0 0 1px var(--bronze); }
 
 .spellbook__head, .coins, .add-item, .lore-backstory, .origins, .background { display: flex; flex-direction: column; gap: 10px; }
 .spellbook__head .panel__title, .spellbook__head .rule-note, .coins .panel__title, .add-item .panel__title,
@@ -1191,7 +1190,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 /* Attributes: the boost ledger. */
 .ledger { display: flex; flex-direction: column; gap: 12px; }
 .ledger__scroll { overflow-x: auto; }
-.ledger__table { width: 100%; min-width: 520px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.ledger__table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .ledger__table th, .ledger__table td { padding: 6px; border-bottom: 1px solid var(--line-faint); text-align: center; vertical-align: middle; }
 .ledger__table thead th { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--text-muted); border-bottom: 3px double var(--line); }
 .ledger__table abbr { text-decoration: none; }
@@ -1225,7 +1224,7 @@ button.ledger__cell { cursor: pointer; }
 .ledger__table tfoot .ledger__source { font-family: var(--display); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); border-bottom: 0; }
 
 /* Skills: the character sheet's skill list. */
-.skill-sheet { width: 100%; min-width: 460px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.skill-sheet { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .skill-sheet th, .skill-sheet td { padding: 5px 8px; border-bottom: 1px solid var(--line-faint); text-align: center; vertical-align: middle; }
 .skill-sheet thead th { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); border-bottom: 3px double var(--line); }
 .skill-sheet abbr { text-decoration: none; }
@@ -1573,6 +1572,7 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 
 .showcase__art {
   grid-area: art;
+  container-type: inline-size;
   position: relative;
   height: clamp(280px, 62vw, 420px);
   display: grid;
@@ -1623,8 +1623,13 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   display: grid;
   place-items: center;
   font-family: var(--display);
-  font-size: clamp(16px, 2vw + 10px, 22px);
-  letter-spacing: 4px;
+  padding: 0 14px;
+  /* Sized by its own frame, not the window, and centered if it wraps. */
+  font-size: clamp(14px, 5.6cqi, 22px);
+  line-height: 1.3;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-wrap: balance;
   text-transform: uppercase;
   color: var(--text-soft);
   text-shadow: 0 2px 8px #000;
@@ -2622,8 +2627,6 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .sheet-profs dd { margin: 0; }
 
 @media (max-width: 560px) {
-  .sheet-head { grid-template-columns: auto minmax(0, 1fr); }
-  .sheet-head .health-orb, .sheet-head > :last-child { grid-column: 1 / -1; justify-self: center; }
   .sheet-attrs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (min-width: 900px) {
@@ -2884,4 +2887,109 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
 .campaign-card .sheet-panel__title { margin-bottom: 0; }
 @media (min-width: 900px) {
   .campaign-layout { grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); }
+}
+
+/* ---------- Responsive pass ----------
+   Fixes from measuring every page at 320, 375, 600, 768, 1024 and 1440 wide. */
+
+/* Native controls match the dark theme, including any without a class of their own.
+   :where keeps this at zero specificity, so every styled control still wins. */
+:root { color-scheme: dark; accent-color: var(--blood); }
+:where(input:not([type='checkbox'], [type='radio']), select, textarea) { border: 1px solid var(--line); background: var(--bg); color: var(--text); font-family: var(--body); }
+
+/* Section titles are left-aligned; the sign-in card and invite code stay centered. */
+.auth__panel .panel__title, .invite .panel__title { text-align: center; }
+.prepare .sheet-panel__title, .lore-backstory .sheet-panel__title, .origins .sheet-panel__title, .background .sheet-panel__title { margin: 0; }
+.lore-backstory__input { min-height: 240px; }
+
+/* Touch targets: small links and the step diamonds get a bigger area to press. */
+.steps__pip { position: relative; }
+.steps__pip::after { content: ''; position: absolute; inset: -6px; }
+.book__back, .link-button, .home-section__new, .home-section__all, .lesson__more { display: inline-flex; align-items: center; min-height: 36px; }
+.sheet__actions { align-items: flex-start; }
+.sheet__actions .btn { min-height: 44px; }
+
+/* Long source tags can't squeeze an option's name. */
+.option__tags { flex: 0 1 auto; max-width: 38%; }
+.option__tags .tag { text-align: right; overflow-wrap: anywhere; }
+.option__name { overflow-wrap: break-word; min-width: 0; }
+
+/* A join request's buttons drop below the character when there's no room beside it. */
+.request-card { flex-wrap: wrap; }
+.request-card .hub-card__body { flex: 1 1 150px; }
+.request-card .hub-card__actions { margin-left: auto; }
+
+/* The sheet's AC stands alone above the saves until the band fits on one row. */
+.sheet-def--ac { grid-column: 1 / -1; justify-self: center; width: min(280px, 100%); }
+@media (max-width: 899px) {
+  .sheet-defense:not(.sheet-defense--shield) .sheet-def--hp { grid-column: 1 / -1; }
+  /* Only the current crumb, so it doesn't crowd the wordmark. */
+  .crumbs__item:not(.crumbs__item--current), .crumbs__sep { display: none; }
+}
+@media (min-width: 900px) {
+  .sheet-def--ac { grid-column: auto; justify-self: stretch; width: auto; }
+}
+
+/* Phones and small tablets: tables reflow into rows that fit, with no sideways scrolling. */
+@media (max-width: 640px) {
+  .ledger__table, .ledger__table thead, .ledger__table tbody, .ledger__table tfoot { display: block; }
+  .ledger__table tr { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px 4px; padding: 8px 0; border-bottom: 1px solid var(--line-faint); }
+  .ledger__table thead tr { border-bottom: 3px double var(--line); }
+  .ledger__table tfoot tr { border-bottom: 0; }
+  .ledger__table th, .ledger__table td, .ledger__table thead th { padding: 0; border: 0; }
+  .ledger__table thead .ledger__source { display: none; }
+  .ledger__table tbody .ledger__source, .ledger__table tfoot .ledger__source { grid-column: 1 / -1; min-width: 0; }
+  .ledger__cell { width: 100%; }
+  .ledger__total { font-size: 18px; padding-top: 0 !important; }
+
+  .skill-sheet, .skill-sheet tbody { display: block; }
+  .skill-sheet thead { display: none; }
+  .skill-sheet tr { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: 'name name mod' 'attr prof status'; align-items: center; gap: 4px 10px; padding: 8px 6px; border-bottom: 1px solid var(--line-faint); }
+  .skill-sheet th, .skill-sheet td { padding: 0; border: 0; }
+  .skill-sheet .skill-sheet__skill { grid-area: name; }
+  .skill-sheet .skill-sheet__attr { grid-area: attr; text-align: left; }
+  .skill-sheet td:nth-child(3) { grid-area: prof; text-align: left; }
+  .skill-sheet .skill-sheet__mod { grid-area: mod; text-align: right; font-size: 20px; }
+  .skill-sheet .skill-sheet__status { grid-area: status; width: auto; white-space: normal; }
+  .skill-sheet__btn { min-width: 84px; }
+}
+
+/* Phones. */
+@media (max-width: 560px) {
+  /* Every character tab fits at once, icon over label. More tabs than fit still scroll. */
+  .nav { gap: 0; padding-inline: 4px; }
+  .nav a { flex: 1 0 auto; flex-direction: column; justify-content: center; gap: 3px; min-height: 56px; padding: 6px 6px 4px; font-size: 9px; letter-spacing: 0.5px; }
+
+  /* The sheet's header: portrait and health side by side, then name and details at full width. */
+  .sheet-head { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'portrait orb' 'name name' 'fields fields' 'campaign campaign'; gap: 10px 16px; }
+  .sheet-head__body { display: contents; }
+  .sheet-head .hero__portrait { grid-area: portrait; }
+  .sheet-head > :last-child { grid-area: orb; justify-self: end; }
+  .sheet-head__name { grid-area: name; }
+  .sheet-head__fields { grid-area: fields; }
+  .sheet-head .hero__campaign { grid-area: campaign; }
+
+  /* The amount gets its own line, so the two buttons have room for their labels. */
+  .hp-tracker__row { flex-wrap: wrap; }
+  .hp-tracker__amount { flex: 1 1 100%; }
+  .hp-tracker__amount input { width: 100%; }
+}
+@media (max-width: 480px) {
+  .threat-meter__scale { grid-template-columns: minmax(0, 1fr); text-align: left; }
+  .threat-meter__scale li { flex-direction: row; justify-content: space-between; padding: 3px 8px; }
+  .threat-meter__step-name { font-size: 10px; }
+}
+@media (max-width: 420px) {
+  .sheet-strike { grid-template-columns: 54px minmax(0, 1fr); grid-template-areas: 'bonus main' 'bonus damage'; row-gap: 2px; }
+  .sheet-strike__bonus { grid-area: bonus; }
+  .sheet-strike__main { grid-area: main; }
+  .sheet-strike__damage { grid-area: damage; text-align: left; }
+  .sheet-profs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 360px) {
+  /* The side menu also has New Character and New Campaign, so the + menu makes room here. */
+  .topbar .menu--create { display: none; }
+  .btn-row { flex-wrap: wrap; }
+  .btn-row .btn--grow { flex: 1 1 100%; }
+  .hp-tracker__row .btn { flex: 1 1 100%; }
 }
