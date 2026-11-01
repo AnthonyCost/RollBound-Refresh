@@ -25,15 +25,19 @@ const savedSort = () => {
 /** "Level 1 · Human · Fighter (Way of the Drifter)". */
 export const lineOf = (c) => [`Level ${c.level}`, c.data.ancestry?.name, c.data.className].filter(Boolean).join(' · ');
 
+/** A character's class art: its own banner if it has one, otherwise its portrait, shown faded. */
+export function classArtOf(c) {
+  const slug = classSlugOf(c.data);
+  const banner = slug ? cardArtFor(slug) ?? (hasOwnArt('class', slug) ? artFor('class', slug) : null) : null;
+  return { banner, isBanner: Boolean(slug && cardArtFor(slug)) };
+}
+
 /** One character as a card: class art behind the portrait, then View, Edit and Delete. */
 export function CharacterCard({ character: c, onDelete }) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [errors, setErrors] = useState([]);
-  const slug = classSlugOf(c.data);
-  // The class's own banner if it has one, otherwise its portrait, faded behind.
-  const banner = slug ? cardArtFor(slug) ?? (hasOwnArt('class', slug) ? artFor('class', slug) : null) : null;
-  const isBanner = Boolean(slug && cardArtFor(slug));
+  const { banner, isBanner } = classArtOf(c);
   const remove = async () => {
     setBusy(true);
     try {

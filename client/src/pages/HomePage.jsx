@@ -6,17 +6,19 @@ import { useCampaignService } from '../state/campaignService.js';
 import { inboxChanged, onInboxChanged } from '../state/inbox.js';
 import { lastCampaign } from '../state/lastCampaign.js';
 import { isOutdated } from '../state/rulesData.js';
+import { adventureCover } from '../state/adventureCovers.js';
 import PageShell from '../components/PageShell.jsx';
 import Icon from '../components/Icon.jsx';
 import Portrait from '../components/Portrait.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import homeMap from '../assets/home-map.webp';
 import { adventurePath } from '@rollbound/rules';
-import { lineOf } from './CharactersPage.jsx';
+import { classArtOf, lineOf } from './CharactersPage.jsx';
 
-// How many characters and campaigns Home shows; See All opens the rest.
-const RECENT_CHARACTERS = 5;
-const RECENT_CAMPAIGNS = 4;
+// How many characters, campaigns and party portraits Home shows; See All opens the rest.
+const RECENT_CHARACTERS = 4;
+const RECENT_CAMPAIGNS = 3;
+const PARTY_SHOWN = 6;
 // Newest first: IDs go up as things are created.
 const newestFirst = (a, b) => b.id - a.id;
 /** "October 24, 2026" for a "2026-10-24" date, read as written (no time zone shift). */
@@ -52,19 +54,46 @@ function Section({ id, title, to, count, action, children }) {
 }
 
 /** The top of the page: art beside what to do next. */
-function Spotlight({ art, eyebrow, title, lines, children }) {
+function Spotlight({ art, eyebrow, title, lines, party, children }) {
   return (
-    <section className="home-spotlight" aria-labelledby="home-spotlight-title">
-      <div className="home-spotlight__art" aria-hidden="true">
+    <section className="home-spotlight home-rise" aria-labelledby="home-spotlight-title">
+      <div className={`home-spotlight__art ${art ? '' : 'home-spotlight__art--map'}`} aria-hidden="true">
         <img src={art ?? homeMap} alt="" />
       </div>
       <div className="home-spotlight__text">
         <span className="eyebrow">{eyebrow}</span>
         <h2 id="home-spotlight-title" className="home-spotlight__title">{title}</h2>
         {lines.filter(Boolean).map((line) => <p key={line} className="home-spotlight__line">{line}</p>)}
+        {party}
         <div className="home-spotlight__actions">{children}</div>
       </div>
     </section>
+  );
+}
+
+/** The party's portraits, overlapping, with a count of any that don't fit. */
+function PartyStack({ party }) {
+  if (!party.length) return null;
+  const extra = party.length - PARTY_SHOWN;
+  return (
+    <div className="home-party" aria-hidden="true">
+      {party.slice(0, PARTY_SHOWN).map((m) => <Portrait key={m.id} url={m.portraitUrl} name={m.name} size="sm" />)}
+      {extra > 0 && <span className="home-party__more">+{extra}</span>}
+    </div>
+  );
+}
+
+/** Stands in for the page while it loads, so nothing jumps when the real content arrives. */
+function HomeSkeleton() {
+  return (
+    <div className="home-skeleton" role="status">
+      <span className="visually-hidden">Gathering your party…</span>
+      <div className="home-skeleton__spotlight" />
+      <div className="home-table" aria-hidden="true">
+        <div className="home-skeleton__column">{[0, 1, 2, 3].map((i) => <div key={i} className="home-skeleton__row" />)}</div>
+        <div className="home-skeleton__column">{[0, 1, 2].map((i) => <div key={i} className="home-skeleton__row home-skeleton__row--tall" />)}</div>
+      </div>
+    </div>
   );
 }
 
@@ -89,10 +118,11 @@ function ContinueCampaign({ campaign: c, hosting }) {
 
   return (
     <Spotlight
-      art={c.coverUrl}
+      art={c.coverUrl ?? adventureCover(c.adventurePath)}
       eyebrow={`Continue · ${hosting ? 'Game Master' : 'Player'}`}
       title={c.name}
-      lines={[path ? path.name : 'Homebrew', facts, latest && `Last session: ${latest.title}`]}
+      lines={[`${path ? path.name : 'Homebrew'} · ${facts}`, latest && `Last session: ${latest.title}`]}
+      party={<PartyStack party={c.party} />}
     >
       <Link to={`/campaigns/${c.id}`} className="btn btn--blood">Open Campaign</Link>
       {hosting ? (
@@ -102,7 +132,7 @@ function ContinueCampaign({ campaign: c, hosting }) {
         </>
       ) : (
         <>
-          {mine && <Link to={`/play/${mine.id}/sheet`} className="btn">{mine.name}'s Sheet</Link>}
+          {mine && <Link to={`/play/${mine.id}/sheet`} className="btn">Character Sheet</Link>}
           <Link to={`/campaigns/${c.id}/logs`} className="btn">Session Logs</Link>
         </>
       )}
@@ -167,7 +197,8 @@ function NeedsAttention() {
   useEffect(() => onInboxChanged(load), [load]);
   if (!requests.length) return null;
   return (
-    <section className="home-attention" aria-label="Needs attention">
+    <section className="home-attention home-rise" aria-labelledby="home-attention-title">
+      <h2 id="home-attention-title" className="eyebrow">Waiting on you</h2>
       <ul>{requests.map((r) => <JoinRequest key={r.id} request={r} onAnswered={load} />)}</ul>
     </section>
   );
@@ -192,11 +223,12 @@ function LatestLog({ log }) {
 function CampaignRow({ campaign: c, hosting }) {
   const path = adventurePath(c.adventurePath);
   const mine = c.party.filter((m) => m.mine);
+  const cover = c.coverUrl ?? adventureCover(c.adventurePath);
   return (
     <li>
       <Link className="camp-row" to={`/campaigns/${c.id}`}>
         <span className="camp-row__cover" aria-hidden="true">
-          {c.coverUrl ? <img src={c.coverUrl} alt="" /> : <span>{c.name[0]}</span>}
+          {cover ? <img src={cover} alt="" /> : <span>{c.name[0]}</span>}
         </span>
         <span className="camp-row__text">
           <span className={`camp-row__role ${hosting ? 'camp-row__role--gm' : ''}`}>{hosting ? 'Game Master' : 'Player'}</span>
@@ -215,9 +247,11 @@ function CampaignRow({ campaign: c, hosting }) {
 
 /** One character as a compact row that opens their sheet. Editing and deleting live on the Characters page. */
 function CharacterRow({ character: c }) {
+  const { banner, isBanner } = classArtOf(c);
   return (
     <li>
       <Link className="char-row" to={`/play/${c.id}/sheet`}>
+        {banner && <img className={`char-row__art ${isBanner ? 'char-row__art--banner' : ''}`} src={banner} alt="" />}
         <Portrait url={c.portraitUrl} name={c.name} size="sm" />
         <span className="char-row__text">
           <span className="char-row__name">{c.name}</span>
@@ -269,13 +303,13 @@ export default function HomePage() {
       <h1 className="home-greeting">{data && brandNew ? 'Welcome' : 'Welcome back'}, {user.displayName}</h1>
 
       {failed && <p className="form-errors" role="alert">Couldn't load your table. Try refreshing.</p>}
-      {!data && !failed && <p className="muted italic center">Gathering your party…</p>}
+      {!data && !failed && <HomeSkeleton />}
 
       {data && (
         <>
           {current && <ContinueCampaign key={current.c.id} campaign={current.c} hosting={current.hosting} />}
           {!current && characters[0] && (
-            <Spotlight eyebrow="Continue · Your newest hero" title={characters[0].name} lines={[lineOf(characters[0]), 'Not in a campaign yet.']}>
+            <Spotlight art={classArtOf(characters[0]).banner} eyebrow="Continue · Your newest hero" title={characters[0].name} lines={[lineOf(characters[0]), 'Not in a campaign yet.']}>
               <Link to={`/play/${characters[0].id}/sheet`} className="btn btn--blood">Open Sheet</Link>
               <Link to="/campaigns" className="btn">Join a Campaign</Link>
               <Link to="/campaigns/new" className="btn">Start a Campaign</Link>
@@ -292,7 +326,7 @@ export default function HomePage() {
           <NeedsAttention />
 
           {!brandNew && (
-            <div className="home-table">
+            <div className="home-table home-rise">
               <Section id="home-characters" title="Your Characters" to="/characters" count={characters.length} action={<Link to="/create" className="home-section__new">+ New</Link>}>
                 {characters.length ? (
                   <ul className="char-rows">
@@ -307,6 +341,12 @@ export default function HomePage() {
                 {campaigns.length ? (
                   <ul className="camp-rows">
                     {campaigns.slice(0, RECENT_CAMPAIGNS).map(({ c, hosting }) => <CampaignRow key={c.id} campaign={c} hosting={hosting} />)}
+                    <li>
+                      <Link className="home-invite" to="/campaigns">
+                        <Icon name="plus" />
+                        <span>Have an invite code? Join a campaign</span>
+                      </Link>
+                    </li>
                   </ul>
                 ) : (
                   <p className="panel panel--dashed muted italic center"><Link to="/campaigns/new">Start a campaign</Link> or <Link to="/campaigns">join with an invite code</Link>.</p>
