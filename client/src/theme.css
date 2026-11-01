@@ -533,15 +533,12 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 /* The Continue card: the campaign's cover, or the map (assets/home-map.webp), beside what to do next. */
 .home-spotlight { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); border: 1px solid var(--line); background: radial-gradient(ellipse 90% 120% at 70% 0%, #2a120d 0%, #150d0a 55%, #0f0a08 100%); box-shadow: 0 10px 34px rgb(0 0 0 / 0.45); }
-/* Gold corners, like a page in the rulebook. */
-.home-spotlight::before, .home-spotlight::after { content: ''; position: absolute; z-index: 2; width: 18px; height: 18px; border: 1px solid var(--bronze); pointer-events: none; }
-.home-spotlight::before { top: 6px; left: 6px; border-right: 0; border-bottom: 0; }
-.home-spotlight::after { right: 6px; bottom: 6px; border-top: 0; border-left: 0; }
 .home-spotlight__art { position: relative; height: 112px; overflow: hidden; background: radial-gradient(ellipse at 75% 20%, #3a1410, #0c0504 70%); }
 .home-spotlight__art img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; opacity: 0.9; }
 /* The map alone is grey: warm it to sit with the reds and golds. */
 .home-spotlight__art--map img { object-position: center 40%; opacity: 0.6; filter: sepia(0.75) saturate(1.3) brightness(0.8); }
-.home-spotlight__art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, #150d0a, transparent 70%); }
+/* A mask, not a gradient on top: the panel behind varies in colour, so no flat colour could blend into it. */
+.home-spotlight__art { mask-image: linear-gradient(to top, transparent, #000 70%); }
 .home-spotlight__text { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; padding: 14px 16px 18px; }
 .home-spotlight__text .eyebrow { color: var(--bronze); }
 .home-spotlight__title { margin: 0; font-family: var(--display); font-size: clamp(24px, 1.2vw + 19px, 36px); font-weight: 700; line-height: 1.15; letter-spacing: 1px; overflow-wrap: anywhere; }
@@ -561,7 +558,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .home-spotlight { grid-template-columns: minmax(220px, 36%) minmax(0, 1fr); }
   .home-spotlight__art { height: auto; min-height: 220px; }
   .home-spotlight__art img { position: absolute; inset: 0; }
-  .home-spotlight__art::after { background: linear-gradient(to left, #150d0a, transparent 60%); }
+  .home-spotlight__art { mask-image: linear-gradient(to left, transparent, #000 75%); }
   .home-spotlight__text { justify-content: center; padding: 24px 28px; }
   .home-spotlight__actions .btn, .home-spotlight__actions .btn--blood { flex: none; padding: 0 16px; white-space: nowrap; }
   .home-request__actions { flex: none; }
