@@ -28,7 +28,7 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 // Places to go besides your own table.
 const REFERENCE = [
   { to: '/bestiary', icon: 'bestiary', name: 'Bestiary' },
-  { to: '/spells', icon: 'spark', name: 'Spells' },
+  { to: '/spells', icon: 'spells', name: 'Spells' },
   { to: '/armory', icon: 'armory', name: 'Armory' },
   { to: '/learn/overview', icon: 'learn', name: 'Learn' },
   { to: '/resources', icon: 'links', name: 'Resources' },

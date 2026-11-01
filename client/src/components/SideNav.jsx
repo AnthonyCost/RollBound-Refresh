@@ -39,7 +39,7 @@ export default function SideNav({ open, onClose }) {
         {link('/characters', 'shield', 'Characters')}
         {link('/campaigns', 'map', 'Campaigns')}
         {link('/bestiary', 'bestiary', 'Bestiary')}
-        {link('/spells', 'spark', 'Spell Book')}
+        {link('/spells', 'spells', 'Spell Book')}
         {link('/armory', 'armory', 'Armory', false)}
         {link('/learn', 'learn', 'Learning The Game', false)}
         {link('/resources', 'links', 'Resources')}

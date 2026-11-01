@@ -16,6 +16,7 @@ const ICONS = {
   arrow: { line: 'M5 12h14M13 6l6 6-6 6' },
   external: { line: 'M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5' },
   inbox: 'envelope',
+  coins: 'two-coins',
   // Places
   home: 'house',
   user: 'character',
@@ -44,7 +45,7 @@ const ICONS = {
   turn: 'hourglass',
   roll: 'dice-twenty-faces-twenty',
   // Campaign tabs
-  overview: 'tower-flag',
+  overview: 'knight-banner',
   logs: 'quill-ink',
 };
 

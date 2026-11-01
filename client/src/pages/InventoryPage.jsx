@@ -25,6 +25,7 @@ import BookSpread from '../components/BookSpread.jsx';
 import BookLeaf from '../builder/BookLeaf.jsx';
 import { gearFacts } from '../builder/gearFacts.js';
 import { sourceTag } from '../builder/labels.js';
+import Icon from '../components/Icon.jsx';
 
 const GEAR_TYPES = ['weapons', 'armor', 'shields', 'items'];
 const KIND_OF = { weapons: 'weapon', armor: 'armor', shields: 'shield', items: 'item' };
@@ -102,7 +103,7 @@ export default function InventoryPage() {
                   }}
                 />
               )}
-              <span className="coin__abbr">{c}</span>
+              <span className="coin__abbr"><Icon name="coins" size={16} />{c}</span>
             </label>
           ))}
         </div>

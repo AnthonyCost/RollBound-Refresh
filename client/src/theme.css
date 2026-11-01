@@ -349,7 +349,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .coin__name { font-family: var(--display); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
 .coin input { width: 100%; min-width: 0; padding: 0 4px; text-align: center; font-family: var(--display); font-size: 18px; }
 .coin__value { font-family: var(--display); font-size: 20px; font-weight: 700; min-height: 44px; display: grid; place-items: center; }
-.coin__abbr { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.coin__abbr { display: inline-flex; align-items: center; gap: 5px; font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 .coin--pp .coin__abbr { color: #cfd8e3; }
 .coin--gp .coin__abbr { color: var(--gold); }
 .coin--sp .coin__abbr { color: #b9bec4; }

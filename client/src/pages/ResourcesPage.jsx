@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
 import Icon from '../components/Icon.jsx';
-import { cardArtFor } from '../builder/art.js';
+import freeRulesArt from '../assets/resources/free-rules.webp';
+import archivesArt from '../assets/resources/archives.webp';
+import storeArt from '../assets/resources/store.webp';
+import foundryArt from '../assets/resources/foundry.webp';
 
 // Places outside RollBound worth knowing about, each a tile that opens in a new tab.
-// `art` is a class whose banner crop heads the tile.
+// `art` heads the tile.
 const RESOURCES = [
   {
     name: 'Free Rules & Adventures',
     site: 'paizo.com',
     icon: 'learn',
-    art: 'fighter',
+    art: freeRulesArt,
     tags: ['Free', 'Official'],
     text: 'Paizo’s free downloads for Second Edition: a one-hour demo adventure, ready-to-play Remaster heroes and short adventures to try the game.',
     href: 'https://paizo.com/pathfinder/2e/freeresources',
@@ -20,7 +23,7 @@ const RESOURCES = [
     name: 'Archives of Nethys',
     site: '2e.aonprd.com',
     icon: 'book',
-    art: 'cleric',
+    art: archivesArt,
     tags: ['Free', 'Official'],
     text: 'Every rule, spell, feat, item and creature, free to read and search. Paizo’s official online reference, and where RollBound links for the full rules.',
     href: 'https://2e.aonprd.com/',
@@ -30,7 +33,7 @@ const RESOURCES = [
     name: 'Paizo Store',
     site: 'store.paizo.com',
     icon: 'crown',
-    art: 'alchemist',
+    art: storeArt,
     tags: ['Paid', 'Official'],
     text: 'Rulebooks like Player Core and GM Core, the Beginner Box, Adventure Paths, maps, cards and pawns, in print and PDF.',
     href: 'https://store.paizo.com/pathfinder/',
@@ -40,7 +43,7 @@ const RESOURCES = [
     name: 'Foundry VTT',
     site: 'foundryvtt.com',
     icon: 'map',
-    art: 'guardian',
+    art: foundryArt,
     tags: ['Play online', 'Paid app, free system'],
     text: 'A virtual tabletop for playing online, with maps, tokens and lighting. Its Pathfinder 2e system automates the rules, and RollBound’s rules data comes from it.',
     href: 'https://foundryvtt.com/packages/pf2e',
@@ -104,7 +107,7 @@ export default function ResourcesPage() {
           <li key={r.name}>
             <a className="resource" href={r.href} target="_blank" rel="noreferrer">
               <span className="resource__art">
-                <span className="resource__frame">{cardArtFor(r.art) && <img src={cardArtFor(r.art)} alt="" loading="lazy" />}</span>
+                <span className="resource__frame"><img src={r.art} alt="" loading="lazy" /></span>
                 <span className="resource__icon"><Icon name={r.icon} size={28} /></span>
               </span>
               <span className="resource__body">
