@@ -10,6 +10,8 @@ import { adventurePath } from '@rollbound/rules';
 import { booksLabel } from '../state/rulesData.js';
 import { api } from '../api.js';
 import { inboxChanged, onInboxChanged } from '../state/inbox.js';
+import { useAuth } from '../state/AuthContext.jsx';
+import { rememberCampaign } from '../state/lastCampaign.js';
 import { cardArtFor } from '../builder/art.js';
 import { encounterRating } from '../state/encounters.js';
 
@@ -69,6 +71,7 @@ export default function CampaignLayout() {
   const [missing, setMissing] = useState(false);
   const [crumbs, setCrumbs] = useState([]);
   const service = useCampaignService();
+  const { user } = useAuth();
 
   const load = useCallback(() => {
     service
@@ -80,6 +83,10 @@ export default function CampaignLayout() {
   useEffect(load, [load]);
   // Answering a request from the inbox updates the party here too.
   useEffect(() => onInboxChanged(load), [load]);
+  // Home's Continue card opens with the campaign you were last in.
+  useEffect(() => {
+    if (campaign && user) rememberCampaign(user.id, campaign.id);
+  }, [campaign, user]);
   const all = [
     { label: 'Campaigns', to: '/campaigns' },
     { label: campaign?.name ?? 'Campaign', to: `/campaigns/${id}` },

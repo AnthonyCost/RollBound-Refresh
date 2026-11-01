@@ -23,7 +23,7 @@ const savedSort = () => {
 };
 
 /** "Level 1 · Human · Fighter (Way of the Drifter)". */
-const lineOf = (c) => [`Level ${c.level}`, c.data.ancestry?.name, c.data.className].filter(Boolean).join(' · ');
+export const lineOf = (c) => [`Level ${c.level}`, c.data.ancestry?.name, c.data.className].filter(Boolean).join(' · ');
 
 /** One character as a card: class art behind the portrait, then View, Edit and Delete. */
 export function CharacterCard({ character: c, onDelete }) {
