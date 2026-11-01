@@ -2559,6 +2559,10 @@ button.book__back { padding: 0; border: 0; background: none; font: inherit; font
 /* Named sections (feat slots): wider tabs, which wrap on phones. */
 .book--tabs-top .book__tabs { flex-wrap: wrap; overflow: visible; }
 .book--tabs-top .book__tab { padding: 0 12px; letter-spacing: 1.5px; text-transform: uppercase; }
+/* A creature's type icon in the index, and beside its name on its page. */
+.book__type { display: flex; color: var(--bronze); }
+.creature__type { flex: none; display: flex; align-self: center; color: var(--gold); }
+.creature__type + .title { flex: 1; min-width: 0; }
 /* A creature's level after the dot leader. */
 .book__level { min-width: 30px; padding: 2px 6px; border: 1px solid var(--line); background: var(--bg); font-family: var(--display); font-size: 13px; font-weight: 700; text-align: center; color: var(--text); font-variant-numeric: tabular-nums; }
 /* The creature page: art and lore, then the stat block, stacked on one page. */

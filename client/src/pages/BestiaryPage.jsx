@@ -3,7 +3,8 @@ import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import PageShell from '../components/PageShell.jsx';
 import BookSpread, { LETTER_SECTIONS, letterOf } from '../components/BookSpread.jsx';
 import { CreatureEntry } from './CreaturePage.jsx';
-import { BESTIARY_BOOKS, bookByKey, bookKey, creaturePath, loadBestiary } from '../state/bestiary.js';
+import Icon from '../components/Icon.jsx';
+import { BESTIARY_BOOKS, bookByKey, bookKey, creaturePath, creatureType, loadBestiary } from '../state/bestiary.js';
 
 // The creature types a monster's traits can name, in the order the books list them.
 const TYPES = ['Aberration', 'Animal', 'Astral', 'Beast', 'Celestial', 'Construct', 'Dragon', 'Dream', 'Elemental', 'Ethereal', 'Fey', 'Fiend', 'Fungus', 'Giant', 'Humanoid', 'Monitor', 'Ooze', 'Plant', 'Spirit', 'Time', 'Undead'];
@@ -168,6 +169,15 @@ export default function BestiaryPage() {
           sectionOf={letterOf}
           open={open}
           href={(c) => `${creaturePath(c)}${search}`}
+          lead={(c) => {
+            const { type, icon } = creatureType(c);
+            return (
+              <span className="book__type" title={type}>
+                <Icon name={icon} size={18} />
+                <span className="visually-hidden">{type}: </span>
+              </span>
+            );
+          }}
           meta={(c) => (
             <>
               {c.rarity !== 'common' && <span className={`tag tag--rarity-${c.rarity}`}>{c.rarity}</span>}

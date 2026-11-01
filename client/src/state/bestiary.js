@@ -42,3 +42,13 @@ export const creatureThumb = (c) => ART[`${c.slug}-thumb`] ?? null;
 
 /** A creature's whole picture, for its page, or null when it has none. */
 export const creatureArt = (c) => ART[c.slug] ?? null;
+
+// A creature's type for its icon. Some have two (a Giant is also Humanoid, a skeletal
+// dragon also Undead), so the first in this list wins: the more telling type goes first.
+const TYPE_ORDER = ['Dragon', 'Undead', 'Time', 'Dream', 'Construct', 'Giant', 'Fiend', 'Celestial', 'Monitor', 'Elemental', 'Fungus', 'Ooze', 'Spirit', 'Ethereal', 'Astral', 'Aberration', 'Fey', 'Plant', 'Beast', 'Animal', 'Humanoid'];
+/** { type, icon } for a creature, by its traits. Shadow creatures have no type of their own. */
+export function creatureType(c) {
+  const type = TYPE_ORDER.find((t) => c.traits.includes(t));
+  if (type) return { type, icon: `creature${type}` };
+  return c.traits.some((t) => t === 'Shade' || t === 'Shadow') ? { type: 'Shadow', icon: 'creatureShadow' } : { type: 'Creature', icon: 'creatureOther' };
+}

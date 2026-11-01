@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
-import { BESTIARY_LICENSE, creatureArt, creaturePath, loadBestiary } from '../state/bestiary.js';
+import Icon from '../components/Icon.jsx';
+import { BESTIARY_LICENSE, creatureArt, creaturePath, creatureType, loadBestiary } from '../state/bestiary.js';
 import { signed } from '../format.js';
 
 /**
@@ -10,6 +11,7 @@ import { signed } from '../format.js';
  * on links to family members; closeTo goes back to the index.
  */
 export function CreatureEntry({ c, creatures, search, closeTo }) {
+  const { type, icon } = creatureType(c);
   const kin = c.family.length ? creatures.filter((x) => x.id !== c.id && x.family.some((f) => c.family.includes(f))) : [];
   // Family members can be on another page of the index, so their links don't keep the page.
   const kinSearch = (() => {
@@ -31,6 +33,7 @@ export function CreatureEntry({ c, creatures, search, closeTo }) {
       <Link to={closeTo} className="book__back">‹ Back to the index</Link>
       <header className="creature__head">
         <div className="creature__title">
+          <span className="creature__type" title={type}><Icon name={icon} size={30} /></span>
           <h2 className="title">{c.name}</h2>
           <span className="creature__level">Creature {c.level}</span>
         </div>
