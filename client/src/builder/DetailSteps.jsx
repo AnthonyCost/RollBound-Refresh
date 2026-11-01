@@ -23,7 +23,11 @@ import {
   buildProblems,
   buildCharacter,
   maxHp,
+  armorAllowed,
   armorClass,
+  equipCharacter,
+  landSpeed,
+  swimSpeed,
   savingThrow,
   perception,
   keyAbilityOf,
@@ -262,7 +266,7 @@ export function SkillsStep({ build, update, data }) {
                   <td><RankPips rank="trained" /></td>
                   <td className="skill-sheet__mod">{signed(mods.int + TRAINED_AT_1)}</td>
                   <td className="skill-sheet__status">
-                    <span className="skill-sheet__from">from {l === build.lore?.trim() ? 'your background' : 'your class'}</span>
+                    <span className="skill-sheet__from">from {l === build.lore?.trim() ? 'your background' : lookup(build, data).cls?.lores?.includes(l) ? 'your class' : 'a feat'}</span>
                   </td>
                 </tr>
               ))}
@@ -590,8 +594,8 @@ export function SpellsStep({ build, update, data }) {
       <section className="panel">
         <h2 className="panel__title">{listName} · {cap(casting.tradition)}</h2>
         <p className="rule-note" style={{ margin: 0 }}>
-          {SPELL_NOTE[casting.kind]} You have {casting.slots} 1st-rank spell slots a day; cantrips are free to cast.
-          {casting.prepares && ` You prepare ${casting.prepares.cantrips} cantrips and ${casting.prepares.spells} spells each day.`}
+          {SPELL_NOTE[casting.kind]} You have {casting.slots} 1st-rank spell slot{casting.slots === 1 ? '' : 's'} a day; cantrips are free to cast.
+          {casting.prepares && ` You prepare ${casting.prepares.cantrips} cantrips and ${casting.prepares.spells} spell${casting.prepares.spells === 1 ? '' : 's'} each day.`}
         </p>
       </section>
 
@@ -682,7 +686,8 @@ export function GearStep({ build, update, data }) {
   };
   const byName = (a, b) => a.name.localeCompare(b.name);
   const items = [
-    ...[...data.armor].sort(byName).map((a) => ({ id: `armor:${a.id}`, name: a.name, kind: 'armor', item: a })),
+    // Armor a build can't start with stays listed if it's already in the pack, so it can be sold.
+    ...data.armor.filter((a) => a.id === build.armor || armorAllowed(a, build, data)).sort(byName).map((a) => ({ id: `armor:${a.id}`, name: a.name, kind: 'armor', item: a })),
     ...[...data.shields].sort(byName).map((x) => ({ id: `shield:${x.id}`, name: x.name, kind: 'shield', item: x })),
     ...[...data.weapons].sort(byName).map((w) => ({ id: `weapon:${w.id}`, name: w.name, kind: 'weapon', item: w })),
   ];
@@ -825,9 +830,10 @@ const STEP_LABEL = { ancestry: 'Ancestry', background: 'Background', class: 'Cla
  * The finished page: the class banner behind the character's name, what's still to
  * do (each linking to its step), then the character laid out as a two-page spread.
  */
-export function ReviewStep({ build, update, data, goTo }) {
+export function ReviewStep({ build, update, data, goTo, inventory = null }) {
   const problems = buildProblems(build, data).filter((p) => p.step !== 'review');
-  const character = problems.length ? null : buildCharacter({ ...build, name: build.name || 'Unnamed' }, data);
+  // A saved character's sheet wears what its inventory has equipped, so show the same here.
+  const character = problems.length ? null : equipCharacter(buildCharacter({ ...build, name: build.name || 'Unnamed' }, data), inventory, data);
   const { ancestry, heritage, background, cls } = lookup(build, data);
   const banner = cls ? cardArtFor(cls.slug) : null;
   const line = [ancestry?.name, cls?.name].filter(Boolean).join(' ');
@@ -838,8 +844,9 @@ export function ReviewStep({ build, update, data, goTo }) {
       <header className="review-hero" style={banner ? { '--review-art': `url(${banner})` } : undefined}>
         <label className="review-hero__name">
           <span className="eyebrow">Character name</span>
-          <input value={build.name} maxLength={60} onChange={(e) => update({ name: e.target.value })} placeholder="Mira Ashvale" />
+          <input value={build.name} maxLength={60} onChange={(e) => update({ name: e.target.value })} placeholder="Mira Ashvale" aria-invalid={!build.name.trim()} aria-describedby="review-name-note" />
         </label>
+        {!build.name.trim() && <p id="review-name-note" className="rule-note--warn">Name your character to save them.</p>}
         <p className="review-hero__line">
           Level 1{line && ` ${line}`}
           {sub && <span className="muted"> · {sub}</span>}
@@ -888,7 +895,7 @@ export function ReviewStep({ build, update, data, goTo }) {
             <section className="book__page review__page" aria-label="Who they are">
               <h2 className="book__section">Who they are</h2>
               <dl className="review__facts">
-                <div><dt>Speed</dt><dd>{character.ancestry.speed} ft</dd></div>
+                <div><dt>Speed</dt><dd>{landSpeed(character).total} ft{swimSpeed(character) && `, swim ${swimSpeed(character)} ft`}</dd></div>
                 <div><dt>Class DC</dt><dd>{classDc(character).total}</dd></div>
                 {character.spellcasting && <div><dt>Spell DC</dt><dd>{spellDc(character).total}</dd></div>}
                 {character.deity && (
@@ -953,6 +960,7 @@ export function ReviewStep({ build, update, data, goTo }) {
                   ))}
               </ul>
               {!character.armor && !character.shield && !character.weapons.length && <p className="muted italic">No gear bought.</p>}
+              {inventory && <p className="muted italic">This is what's equipped now. Change it on the Inventory tab.</p>}
             </section>
           </div>
         </>

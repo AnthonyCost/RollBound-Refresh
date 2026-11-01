@@ -29,6 +29,39 @@ export function maxHp(character) {
   return ancestry.hp + (classHp + abilities.con) * level;
 }
 
+/**
+ * The Speed lost to armor: its penalty, 5 feet less if Strength meets the armor's
+ * entry. Unburdened Iron ignores it. A negative number, or 0.
+ */
+function armorSpeedPenalty({ armor, abilities, feats }) {
+  if (!armor?.speedPenalty || feats?.some((f) => f.slug === 'unburdened-iron')) return 0;
+  const strongEnough = armor.strength != null && abilities.str >= armor.strength;
+  return strongEnough ? Math.min(0, armor.speedPenalty + 5) : armor.speedPenalty;
+}
+
+export function landSpeed(character) {
+  const { ancestry, armor } = character;
+  const parts = [{ label: ancestry.name, value: ancestry.speed }];
+  const penalty = armorSpeedPenalty(character);
+  if (penalty) parts.push({ label: armor.name, value: penalty, note: 'Speed penalty from armor. Meeting its Strength entry reduces it by 5 feet.' });
+  return { total: Math.max(5, sum(parts)), parts };
+}
+
+// Heritages that grant a swim Speed. A test checks this against the rules data.
+export const HERITAGE_SWIM_SPEEDS = {
+  'Riverside Tripkee': 15,
+  'Seaweed Leshy': 20,
+  'Tunnelflood Kobold': 15,
+  'Wavediver Tengu': 15,
+  'Wetlander Lizardfolk': 15,
+};
+
+/** The character's swim Speed, or null without one. Armor's penalty applies to every Speed. */
+export function swimSpeed(character) {
+  const base = HERITAGE_SWIM_SPEEDS[character.heritage];
+  return base ? Math.max(5, base + armorSpeedPenalty(character)) : null;
+}
+
 export function armorClass(character, { conditions = [], shieldRaised = false } = {}) {
   const { abilities, armor, level, proficiencies } = character;
   const dexCap = armor?.dexCap ?? Infinity;

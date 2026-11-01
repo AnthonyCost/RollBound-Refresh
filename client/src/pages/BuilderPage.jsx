@@ -139,7 +139,7 @@ function saveDraft(key, draft) {
  */
 async function fetchCharacter(id) {
   const row = await api.getCharacter(id);
-  return { data: row.data, campaignName: row.campaignName, books: row.campaignBooks ?? null };
+  return { data: row.data, campaignName: row.campaignName, books: row.campaignBooks ?? null, inventory: row.inventory ?? null };
 }
 
 /** Choices a campaign's books rule out, in the re-pick list's shape. */
@@ -224,7 +224,7 @@ export default function BuilderPage() {
   // campaign: { code, name, books } when a new character is built for a campaign.
   const [{ build, step, campaign = null, start = null }, setDraft] = useState(() => loadDraft(draftKey) ?? BLANK);
   const [removed, setRemoved] = useState([]);
-  // Edit mode: { name, original, repick, books, campaignName } once the saved character has loaded.
+  // Edit mode: { name, original, repick, books, campaignName, inventory } once the saved character has loaded.
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -253,7 +253,7 @@ export default function BuilderPage() {
     if (!editId || !data) return;
     let cancelled = false;
     fetchCharacter(editId)
-      .then(({ data: c, books, campaignName }) => {
+      .then(({ data: c, books, campaignName, inventory }) => {
         if (cancelled) return;
         if (!c?.build) throw new Error('no build');
         const current = dropMissingChoices(migrateBuild(c.build, data), data);
@@ -263,7 +263,7 @@ export default function BuilderPage() {
           ...outsideBooks(current, data, books, campaignName),
         ];
         const original = dropBookIssues(current, data, books);
-        setEditing({ name: c.name, original, repick, books, campaignName });
+        setEditing({ name: c.name, original, repick, books, campaignName, inventory });
         if (!hadDraft) setDraft({ build: original, step: buildProblems(original, data)[0]?.step ?? 'review' });
       })
       .catch(() => !cancelled && setLoadFailed(true));
@@ -488,7 +488,7 @@ export default function BuilderPage() {
           </section>
         )}
 
-        {stepData && <info.Component build={build} update={update} data={stepData} goTo={goTo} />}
+        {stepData && <info.Component build={build} update={update} data={stepData} goTo={goTo} inventory={editing?.inventory} />}
 
         {step === 'review' && (
           <>

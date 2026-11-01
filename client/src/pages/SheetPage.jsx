@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { armorClass, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey } from '@rollbound/rules';
+import { armorClass, landSpeed, swimSpeed, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import Portrait from '../components/Portrait.jsx';
@@ -168,9 +168,10 @@ export default function SheetPage() {
         <div className="sheet-def sheet-def--speed">
           <span className="sheet-def__label">Speed</span>
           <span className="sheet-def__value">
-            {character.ancestry.speed}
+            {landSpeed(character).total}
             <small> ft</small>
           </span>
+          {swimSpeed(character) && <span className="sheet-def__extra">Swim {swimSpeed(character)} ft</span>}
         </div>
       </section>
 
@@ -300,7 +301,7 @@ function PreparedToday({ casting, prepared, readOnly }) {
         {prepared.cantrips.length ? <ul className="sheet-list">{prepared.cantrips.map((s) => spellLine(s, spellKey(s)))}</ul> : <p className="muted italic">No cantrips prepared.</p>}
       </div>
       <div className="sheet-spells">
-        <span className="sheet-panel__label">{casting.slots} first-rank slots</span>
+        <span className="sheet-panel__label">{casting.slots} first-rank slot{casting.slots === 1 ? '' : 's'}</span>
         <ul className="sheet-list">
           {prepared.slots.map((s, i) => (s ? spellLine(s, i) : <li key={i}><span className="muted italic">Empty slot</span></li>))}
         </ul>
@@ -352,7 +353,7 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
 
       {casting && casting.kind !== 'focus' && !prepared && (
         <>
-          <p className="rule-note" style={{ margin: 0 }}>{casting.slots} first-rank slots a day.</p>
+          <p className="rule-note" style={{ margin: 0 }}>{casting.slots} first-rank slot{casting.slots === 1 ? '' : 's'} a day.</p>
           {[
             ['Cantrips', casting.cantrips],
             ['1st rank', casting.spells],

@@ -70,7 +70,7 @@ function autoBuild({ cls, ancestry, heritage, background, n, deity, choices = {}
   }
   const weapons = d.weapons.filter((w) => w.price <= 200);
   b.weapons = [weapons[n % weapons.length].id];
-  const armor = d.armor.filter((a) => a.price <= 900);
+  const armor = d.armor.filter((a) => a.price <= 900 && R.armorAllowed(a, b, d));
   b.armor = armor[n % armor.length].id;
   return b;
 }

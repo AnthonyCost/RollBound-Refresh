@@ -9,6 +9,7 @@ import {
   armorClass,
   classDc,
   damageModifier,
+  landSpeed,
   maxHp,
   perception,
   savingThrow,
@@ -141,8 +142,7 @@ function fillStatistics(w, c, { playerName }) {
   w.set('perception.prof', signed(profPart(per)));
   w.rank('perception.rank', c.proficiencies.perception);
   w.set('senses', vision(c));
-  const slowed = c.armor?.speedPenalty && c.abilities.str < (c.armor.strength ?? 0);
-  w.set('speed', c.ancestry.speed + (slowed ? c.armor.speedPenalty : 0));
+  w.set('speed', landSpeed(c).total);
   w.set('languages', (c.languages ?? []).map(cap).join('\n'));
 
   const ranks = c.skills ?? {};

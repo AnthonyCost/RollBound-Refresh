@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { strikeBonus, damageModifier, describeCondition, CONDITIONS } from '@rollbound/rules';
+import { strikeBonus, damageModifier, describeCondition, landSpeed, CONDITIONS } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
 import { signed } from '../format.js';
 
 const ACTIONS = [
   { id: 'strike', name: 'Strike' },
-  { id: 'stride', name: 'Stride', hint: (c) => `Move up to ${c.ancestry.speed} ft` },
+  { id: 'stride', name: 'Stride', hint: (c) => `Move up to ${landSpeed(c).total} ft` },
   { id: 'step', name: 'Step', hint: () => 'Move 5 ft without triggering reactions' },
   { id: 'shield', name: 'Raise a Shield', hint: () => '+2 AC until your next turn' },
   { id: 'demoralize', name: 'Demoralize', hint: () => 'Intimidation: frighten a foe' },

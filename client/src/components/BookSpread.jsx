@@ -102,7 +102,7 @@ export default function BookSpread({
         <header className="book__running">
           <span>{runningHead}</span>
           <span role="status">
-            {items.length === total ? `${total} ${noun}` : `${items.length} of ${total}`}
+            {items.length === total ? `${total} ${total === 1 ? noun.replace(/ies$/, 'y').replace(/s$/, '') : noun}` : `${items.length} of ${total}`}
             {filtered && clearTo && (
               <>
                 {' · '}

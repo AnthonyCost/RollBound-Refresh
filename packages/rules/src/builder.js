@@ -456,9 +456,17 @@ export function runeOptions(build, data) {
 // ---------- Lore ----------
 
 /** Lore skills: the background's choice plus any a class grants (necromancer: Undead Lore). */
+// A feat that grants Additional Lore for a named Lore. Feats that let the player choose
+// the Lore ("for the chosen Lore", "for either...") don't match.
+const GRANTED_LORE = /Additional Lore (?:general )?feat for ([A-Z][\w' -]* Lore)\b/;
+
 export function loresOf(build, data) {
   const lores = build.lore?.trim() ? [build.lore.trim()] : [];
   for (const l of lookup(build, data).cls?.lores ?? []) if (!lores.includes(l)) lores.push(l);
+  for (const { feat } of featSummary(build, data).owned) {
+    const granted = feat.description?.match(GRANTED_LORE)?.[1];
+    if (granted && !lores.includes(granted)) lores.push(granted);
+  }
   return lores;
 }
 
@@ -469,6 +477,22 @@ export function gearCost(build, data) {
   const shield = find(data.shields, build.shield);
   const weapons = build.weapons.map((w) => find(data.weapons, w)).filter(Boolean);
   return (armor?.price ?? 0) + (shield?.price ?? 0) + weapons.reduce((t, w) => t + w.price, 0);
+}
+
+// Armor that comes from a class choice or a feat, not the shop. Its price is 0 because
+// the character gets it for free, so it can't be offered to everyone.
+const ARMOR_REQUIRES = {
+  'power-suit': { option: 'armor-innovation', who: 'an Inventor with the Armor Innovation' },
+  'subterfuge-suit': { option: 'armor-innovation', who: 'an Inventor with the Armor Innovation' },
+  'reinforced-chassis': { feat: 'reinforced-chassis', who: 'a character with the Reinforced Chassis feat' },
+};
+
+/** Whether this build can start with this armor. */
+export function armorAllowed(armor, build, data) {
+  const needs = ARMOR_REQUIRES[armor.slug];
+  if (!needs) return true;
+  if (needs.option) return chosenOptions(build, data).some((o) => o.option.slug === needs.option);
+  return featSummary(build, data).owned.some(({ feat }) => feat.slug === needs.feat);
 }
 
 export function formatPrice(cp) {
@@ -597,6 +621,8 @@ export function buildProblems(build, data) {
   if (runes && runeCount !== runes.known) add('spells', `Choose ${runes.known} runes for your runic repertoire (${runeCount} chosen).`);
 
   if (gearCost(build, data) > STARTING_GOLD_CP) add('gear', 'Your gear costs more than your 15 gp.');
+  const armor = find(data.armor, build.armor);
+  if (armor && !armorAllowed(armor, build, data)) add('gear', `${armor.name} is only for ${ARMOR_REQUIRES[armor.slug].who}.`);
 
   if (!build.name.trim()) add('review', 'Name your character.');
   return problems;

@@ -109,6 +109,35 @@ describe('feats', () => {
   });
 });
 
+describe('granted lores', () => {
+  it('trains the Lore a feat names', () => {
+    const build = { ...fighterBuild(), ancestry: 'dwarf', heritage: 'rock-dwarf', ancestryFeat: 'dwarven-lore' };
+    assert.ok(R.loresOf(named(build), data).includes('Dwarf Lore'));
+    assert.ok(buildCharacter(build, data).lores.includes('Dwarf Lore'));
+  });
+
+  it("doesn't guess a Lore the player chooses", () => {
+    const build = { ...fighterBuild(), ancestry: 'lizardfolk', heritage: 'wetlander-lizardfolk', ancestryFeat: 'lizardfolk-lore' };
+    assert.deepEqual(R.loresOf(named(build), data), ['Warfare Lore']);
+  });
+});
+
+describe('armor that needs a class choice or feat', () => {
+  it('flags innovation armor on other classes', () => {
+    const problems = buildProblems({ ...fighterBuild(), armor: 'power-suit' }, data);
+    assert.ok(problems.some((p) => p.step === 'gear' && p.message.includes('Power Suit')));
+  });
+
+  it('flags Reinforced Chassis without the feat', () => {
+    const problems = buildProblems({ ...fighterBuild(), armor: 'reinforced-chassis' }, data);
+    assert.ok(problems.some((p) => p.step === 'gear' && p.message.includes('Reinforced Chassis')));
+  });
+
+  it('leaves shop armor alone', () => {
+    assert.ok(data.armor.filter((a) => a.rarity === 'common').every((a) => R.armorAllowed(a, named(fighterBuild()), data)));
+  });
+});
+
 describe('a finished build', () => {
   it('has no problems', () => {
     assert.deepEqual(buildProblems(fighterBuild(), data), []);
