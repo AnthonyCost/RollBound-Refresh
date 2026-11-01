@@ -9,6 +9,13 @@ import homeMap from '../assets/home-map.webp';
 import { adventurePath } from '@rollbound/rules';
 import { CharacterCard } from './CharactersPage.jsx';
 
+// How many characters and campaigns Home shows; See All opens the rest.
+const RECENT = 6;
+// Newest first: IDs go up as things are created.
+const newestFirst = (a, b) => b.id - a.id;
+/** "October 24, 2026" for a "2026-10-24" date, read as written (no time zone shift). */
+const longDate = (iso) => new Date(`${iso}T12:00:00`).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+
 // Places to go besides your own table.
 const EXPLORE = [
   { to: '/bestiary', icon: 'book', name: 'Bestiary', text: 'Every creature, with full stat blocks.' },
@@ -33,6 +40,24 @@ function Section({ id, title, to, count, action, children }) {
       </div>
       {children}
     </section>
+  );
+}
+
+/** The newest session log from your campaigns, as a card that opens it in the campaign's journal. */
+function LatestLog({ log }) {
+  return (
+    <Link className="home-log" to={`/campaigns/${log.campaignId}/logs/${log.id}`}>
+      <span className="home-log__cover" aria-hidden="true">
+        {log.coverUrl ? <img src={log.coverUrl} alt="" /> : <span>{log.campaignName[0]}</span>}
+      </span>
+      <span className="home-log__text">
+        <span className="eyebrow">{log.campaignName} · Session {log.number}</span>
+        <span className="home-log__title">{log.title}</span>
+        {log.playedOn && <span className="home-log__date">Played {longDate(log.playedOn)}</span>}
+        {log.excerpt && <span className="home-log__excerpt">{log.excerpt.length >= 280 ? `${log.excerpt.trimEnd()}…` : log.excerpt}</span>}
+        <span className="home-log__more">Read the log ›</span>
+      </span>
+    </Link>
   );
 }
 
@@ -61,7 +86,7 @@ function CampaignRow({ campaign: c, hosting }) {
   );
 }
 
-/** Home: a welcome over a map of the world, places to explore, then your characters and campaigns. */
+/** Home: a welcome over a map of the world, places to explore, your latest session log, then your newest characters and campaigns. */
 export default function HomePage() {
   const { user } = useAuth();
   const service = useCampaignService();
@@ -69,15 +94,18 @@ export default function HomePage() {
   const [failed, setFailed] = useState(false);
 
   const load = useCallback(() => {
-    Promise.all([api.listCharacters(), service.list()]).then(
-      ([characters, campaigns]) => setData({ characters, ...campaigns }),
+    // A log that can't load only affects its own section, not the whole page.
+    Promise.all([api.listCharacters(), service.list(), api.latestLog().catch(() => ({ failed: true }))]).then(
+      ([characters, campaigns, latest]) => setData({ characters, latest, ...campaigns }),
       () => setFailed(true),
     );
   }, [service]);
   useEffect(load, [load]);
 
-  // Every campaign once: the ones you host first, then the ones you play in.
-  const campaigns = data ? [...data.running.map((c) => ({ c, hosting: true })), ...data.playing.map((c) => ({ c, hosting: false }))] : [];
+  // Every campaign once, hosted or played, whichever was created most recently first.
+  const campaigns = data ? [...data.running.map((c) => ({ c, hosting: true })), ...data.playing.map((c) => ({ c, hosting: false }))].sort((a, b) => newestFirst(a.c, b.c)) : [];
+  const recentCharacters = data ? [...data.characters].sort(newestFirst).slice(0, RECENT) : [];
+  const log = data?.latest?.log ?? null;
   const dropCharacter = (id) => setData((d) => ({ ...d, characters: d.characters.filter((c) => c.id !== id) }));
 
   return (
@@ -112,10 +140,22 @@ export default function HomePage() {
 
       {data && (
         <>
+          <Section id="home-logs" title="Session Logs" to={log ? `/campaigns/${log.campaignId}/logs` : '/campaigns'}>
+            {log ? (
+              <LatestLog log={log} />
+            ) : (
+              <p className="panel panel--dashed muted italic center">
+                {data.latest?.failed
+                  ? "Couldn't load the latest session log. Try refreshing."
+                  : 'No session logs yet. The latest from your campaigns will appear here once a GM writes one.'}
+              </p>
+            )}
+          </Section>
+
           <Section id="home-characters" title="My Characters" to="/characters" count={data.characters.length} action={<Link to="/create" className="home-section__new">+ New</Link>}>
             {data.characters.length ? (
               <ul className="char-grid">
-                {data.characters.map((c) => <CharacterCard key={c.id} character={c} onDelete={dropCharacter} />)}
+                {recentCharacters.map((c) => <CharacterCard key={c.id} character={c} onDelete={dropCharacter} />)}
               </ul>
             ) : (
               <p className="panel panel--dashed muted italic center">No characters yet. Create one and they'll gather here.</p>
@@ -125,7 +165,7 @@ export default function HomePage() {
           <Section id="home-campaigns" title="Campaigns" to="/campaigns" count={campaigns.length} action={<Link to="/campaigns/new" className="home-section__new">+ New</Link>}>
             {campaigns.length ? (
               <ul className="camp-rows">
-                {campaigns.map(({ c, hosting }) => <CampaignRow key={c.id} campaign={c} hosting={hosting} />)}
+                {campaigns.slice(0, RECENT).map(({ c, hosting }) => <CampaignRow key={c.id} campaign={c} hosting={hosting} />)}
               </ul>
             ) : (
               <p className="panel panel--dashed muted italic center">

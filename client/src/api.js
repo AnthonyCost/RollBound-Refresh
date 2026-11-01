@@ -60,6 +60,7 @@ export const api = {
   inbox: () => request('/inbox'),
   markRead: (ids) => post('/inbox/read', { ids }),
   answerJoinRequest: (id, accept) => post(`/join-requests/${id}/${accept ? 'accept' : 'reject'}`, {}),
+  latestLog: () => request('/campaigns/latest-log'),
   listLogs: (campaignId) => request(`/campaigns/${campaignId}/logs`),
   getLog: (campaignId, logId) => request(`/campaigns/${campaignId}/logs/${logId}`),
   createLog: (campaignId, log) => post(`/campaigns/${campaignId}/logs`, log),

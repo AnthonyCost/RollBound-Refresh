@@ -10,7 +10,7 @@ export const LOG_LIMITS = { title: 120, body: 50_000 };
 const isId = (s) => /^\d{1,9}$/.test(String(s));
 const isDate = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s));
 
-const toJson = (row, { full = true } = {}) => ({
+export const logJson = (row, { full = true } = {}) => ({
   id: row.id,
   title: row.title,
   // "2026-10-24" as written (db.js keeps DATE columns as text), so time zones can't shift the day.
@@ -64,13 +64,13 @@ sessionLogs.use(async (req, res, next) => {
 // Newest first.
 sessionLogs.get('/', async (req, res) => {
   const { rows } = await pool.query(`SELECT * FROM (${SELECT_LOGS}) x ORDER BY number DESC`, [req.params.id]);
-  res.json(rows.map((r) => toJson(r, { full: false })));
+  res.json(rows.map((r) => logJson(r, { full: false })));
 });
 
 sessionLogs.get('/:logId', async (req, res) => {
   const { rows } = await pool.query(`SELECT * FROM (${SELECT_LOGS}) x WHERE id = $2`, [req.params.id, req.params.logId]);
   if (!rows.length) return res.status(404).json({ errors: ['Session log not found.'] });
-  res.json(toJson(rows[0]));
+  res.json(logJson(rows[0]));
 });
 
 sessionLogs.post('/', async (req, res) => {
@@ -83,7 +83,7 @@ sessionLogs.post('/', async (req, res) => {
     log.body,
   ]);
   const { rows: made } = await pool.query(`SELECT * FROM (${SELECT_LOGS}) x WHERE id = $2`, [req.params.id, rows[0].id]);
-  res.status(201).json(toJson(made[0]));
+  res.status(201).json(logJson(made[0]));
 });
 
 sessionLogs.put('/:logId', async (req, res) => {
@@ -95,7 +95,7 @@ sessionLogs.put('/:logId', async (req, res) => {
   );
   if (!rowCount) return res.status(404).json({ errors: ['Session log not found.'] });
   const { rows } = await pool.query(`SELECT * FROM (${SELECT_LOGS}) x WHERE id = $2`, [req.params.id, req.params.logId]);
-  res.json(toJson(rows[0]));
+  res.json(logJson(rows[0]));
 });
 
 sessionLogs.delete('/:logId', async (req, res) => {

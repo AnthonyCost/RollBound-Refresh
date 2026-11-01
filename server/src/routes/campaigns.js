@@ -9,7 +9,7 @@ import { rulesData } from '../rules.js';
 import { sheetJson } from './sheets.js';
 import { requestJoin } from '../joinRequests.js';
 import { canJoin } from '../demo.js';
-import { sessionLogs } from './sessionLogs.js';
+import { logJson, sessionLogs } from './sessionLogs.js';
 import { encounters } from './encounters.js';
 
 export const campaigns = Router();
@@ -116,6 +116,27 @@ campaigns.get('/', async (req, res) => {
       .map((m) => ({ id: m.id, name: m.name, level: m.level, portraitUrl: storage.publicUrl(m.portrait_key), mine: m.owner_id === req.user.id })),
   }));
   res.json({ running: all.filter((c) => c.isGm), playing: all.filter((c) => !c.isGm) });
+});
+
+// The newest session log from any campaign you run or play in, for Home: by the day it
+// was played (or written, without a date). { log: null } if there isn't one yet.
+campaigns.get('/latest-log', async (req, res) => {
+  const { rows } = await pool.query(
+    `SELECT * FROM (
+       SELECT l.*, c.name AS campaign_name, c.cover_key,
+              ROW_NUMBER() OVER (PARTITION BY l.campaign_id ORDER BY l.played_on NULLS LAST, l.created_at) AS number
+       FROM session_logs l JOIN campaigns c ON c.id = l.campaign_id
+       WHERE c.gm_user_id = $1
+          OR EXISTS (SELECT 1 FROM characters ch WHERE ch.campaign_id = c.id AND ch.owner_id = $1)
+     ) x
+     ORDER BY COALESCE(x.played_on, x.created_at::date) DESC, x.created_at DESC
+     LIMIT 1`,
+    [req.user.id],
+  );
+  const r = rows[0];
+  res.json({
+    log: r ? { ...logJson(r, { full: false }), campaignId: r.campaign_id, campaignName: r.campaign_name, coverUrl: storage.publicUrl(r.cover_key) } : null,
+  });
 });
 
 campaigns.post('/', async (req, res) => {

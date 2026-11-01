@@ -136,6 +136,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - The old Player Mode / Game Master Mode toggle is gone; the header's menus and the breadcrumbs ("Characters", "Campaigns") lead to these pages.
 - Each character opens at `/play/:id/sheet` (with `spells`, `inventory`, `lore`, and the hidden `turn` and `roll`). Anyone with a character's share link can view it at `/sheets/:shareId`.
 
+- **Home's lists:** Home shows the six newest characters and campaigns (highest IDs first; the count and See All cover the rest). Above them, **Session Logs** shows the newest log from any campaign the user hosts or plays in, from `GET /api/campaigns/latest-log`: by the day it was played, or written if it has no date. It opens in that campaign's journal.
+
 ### 3. Character builder (`/create`)
 - **Nine steps:** Ancestry, Background, Class, Attributes, Skills, Feats, Spells, Gear, Review.
 - **Teaching:** each step has a short note explaining its rule.
