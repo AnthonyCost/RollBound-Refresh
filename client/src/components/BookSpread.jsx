@@ -30,11 +30,13 @@ export const letterOf = (item) => {
  * page is kept on screen rather than in the address (resetKey: change it to go back to
  * the first page, e.g. when a filter changes). marked(item) shows the chosen diamond;
  * blocked(item) greys an entry out, with the reason as its tooltip. tabsOnTop runs the
- * tabs across the top, for sections with names rather than letters.
+ * tabs across the top, for sections with names rather than letters. short leaves out the
+ * tabs and page turner, for an index that always fits one page. heading replaces the
+ * running head's list of sections.
  */
 export default function BookSpread({
-  items, total, noun, sections, sectionOf, open, href, onOpen, meta, lead, leaf, blank, filtered, clearTo, emptyText,
-  marked = () => false, blocked = () => null, tabsOnTop = false, resetKey = '',
+  items, total, noun, sections, sectionOf, open, href, onOpen, meta, lead, leaf, blank, heading, filtered, clearTo, emptyText,
+  marked = () => false, blocked = () => null, short = false, tabsOnTop = false, resetKey = '',
 }) {
   const [params, setParams] = useSearchParams();
   const [localPage, setLocalPage] = useState(null);
@@ -81,7 +83,7 @@ export default function BookSpread({
 
   return (
     <div className={`book ${open ? 'book--open' : ''} ${tabsOnTop ? 'book--tabs-top' : ''}`}>
-      <nav className="book__tabs" aria-label="Sections">
+      {!short && <nav className="book__tabs" aria-label="Sections">
         {sections.map((x) => (
           <button
             key={x.key}
@@ -96,11 +98,11 @@ export default function BookSpread({
             {x.tab}
           </button>
         ))}
-      </nav>
+      </nav>}
 
       <section className="book__page book__index" aria-label="Index">
         <header className="book__running">
-          <span>{runningHead}</span>
+          <span>{heading ?? runningHead}</span>
           <span role="status">
             {items.length === total ? `${total} ${total === 1 ? noun.replace(/ies$/, 'y').replace(/s$/, '') : noun}` : `${items.length} of ${total}`}
             {filtered && clearTo && (
@@ -153,11 +155,11 @@ export default function BookSpread({
           <p className="muted italic center book__empty">{emptyText}</p>
         )}
 
-        <footer className="book__foot">
+        {!short && <footer className="book__foot">
           <button type="button" className="book__turn-btn" disabled={current <= 1} onClick={() => turn(current - 1)} aria-label="Previous page">‹</button>
           <span className="book__folio">Page {current} of {pages}</span>
           <button type="button" className="book__turn-btn" disabled={current >= pages} onClick={() => turn(current + 1)} aria-label="Next page">›</button>
-        </footer>
+        </footer>}
       </section>
 
       <section className="book__page book__leaf" aria-label={open ? open.name : 'Open entry'}>

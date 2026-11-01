@@ -29,7 +29,7 @@ RollBound is a Pathfinder 2e (Remaster) table companion that **teaches the rules
 
 **What a player can do today:**
 - create an account (with an optional profile picture), or try a demo, which makes a temporary account,
-- build a level 1 character in a 9-step builder using Player Core and Player Core 2,
+- build a level 1 character in a 10-step builder using Player Core and Player Core 2,
 - play that character from its sheet (Sheet, Spell Book, Inventory, Lore), with Turn and Roll waiting for the encounter tracker,
 - export the character to Paizo's fillable PDF character sheet,
 - create, edit and join campaigns with invite codes, cover images and portraits.
@@ -139,7 +139,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Home's lists:** Home shows the six newest characters and campaigns (highest IDs first; the count and See All cover the rest). Above them, **Session Logs** shows the newest log from any campaign the user hosts or plays in, from `GET /api/campaigns/latest-log`: by the day it was played, or written if it has no date. It opens in that campaign's journal.
 
 ### 3. Character builder (`/create`)
-- **Nine steps:** Ancestry, Background, Class, Attributes, Skills, Feats, Spells, Gear, Review.
+- **Ten steps:** Ancestry, Heritage, Background, Class, Attributes, Skills, Feats, Spells, Gear, Review.
+- **Heritage step:** browse-then-choose, like Backgrounds (`HeritageStep` in `builder/IdentitySteps.jsx`). The index lists the ancestry's heritages, then the versatile ones. The longest list is 17, so it always fits on one page and leaves out the tabs and page turner (`short` on `BookSpread`). A heritage's skill choice sits on its own page once it's chosen. Changing ancestry still clears the heritage, versatile ones included.
 - **Teaching:** each step has a short note explaining its rule.
 - **Drafts:** the draft is saved in `localStorage`, and Reset (in the header) clears it.
 - **Step diamonds:** empty means nothing chosen yet, gold means started, and red is the current step.

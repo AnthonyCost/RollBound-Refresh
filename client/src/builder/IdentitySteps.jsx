@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { loreOptions, lookup, keyAbilityOptions, keyAbilityOf, sanctificationOptions, TRADITIONS } from '@rollbound/rules';
 import OptionList from './OptionList.jsx';
-import Showcase from './Showcase.jsx';
+import Showcase, { Emblem } from './Showcase.jsx';
 import Chips, { pick } from './Chips.jsx';
 import ChoiceHeading from './ChoiceHeading.jsx';
 import { ABILITY_SHORT, SIZE, abilityList, boostSlotLabel, cap, sourceTag } from './labels.js';
@@ -11,10 +11,6 @@ import BookLeaf, { ChosenActions, wide } from './BookLeaf.jsx';
 const boostsLine = (slots) => slots.map(boostSlotLabel).join(', ');
 
 export function AncestryStep({ build, update, data }) {
-  const { ancestry, heritage } = lookup(build, data);
-  const ownHeritages = data.heritages.filter((h) => h.ancestry === build.ancestry);
-  const versatile = data.heritages.filter((h) => !h.ancestry);
-
   return (
     <>
       <Showcase
@@ -36,41 +32,132 @@ export function AncestryStep({ build, update, data }) {
           update({ ancestry: id, heritage: null, heritageSkill: null, ancestryBoosts: [], ancestryFeat: null, languages: [] })
         }
       />
-
-      {ancestry && (
-        <section className="choice" aria-label="Heritage">
-          <ChoiceHeading title="Heritage" chosen={heritage?.name} />
-          <h3 className="choice__group">{ancestry.name} heritages</h3>
-          <OptionList
-            label={`${ancestry.name} heritages`}
-            items={ownHeritages}
-            selected={build.heritage}
-            onSelect={(id) => update({ heritage: id, heritageSkill: null, ancestryFeat: null })}
-          />
-          <h3 className="choice__group">Versatile heritages</h3>
-          <p className="rule-note">A versatile heritage can belong to any ancestry, and opens up its own ancestry feats.</p>
-          <OptionList
-            label="Versatile heritages"
-            items={versatile}
-            selected={build.heritage}
-            onSelect={(id) => update({ heritage: id, heritageSkill: null, ancestryFeat: null })}
-          />
-        </section>
-      )}
-
-      {heritage?.skillChoice && (
-        <section className="panel choice">
-          <ChoiceHeading title={`${heritage.name} skill`} chosen={build.heritageSkill && cap(build.heritageSkill)} />
-          <Chips
-            label="Heritage skill"
-            options={heritage.skillChoice}
-            isOn={(s) => build.heritageSkill === s}
-            onToggle={pick(build.heritageSkill, (s) => update({ heritageSkill: s }))}
-            render={cap}
-          />
-        </section>
-      )}
     </>
+  );
+}
+
+/**
+ * A heritage as the right-hand page: whose it is, its full text, the button that chooses
+ * it, then what it grants. Once chosen, a heritage's skill choice is made here too.
+ */
+function HeritageLeaf({ h, ancestry, data, chosen, skill, onSkill, onChoose, onRemove, onClose }) {
+  const feats = h.feats.map((id) => data.feats?.find((f) => f.id === id)?.name).filter(Boolean);
+  const facts = [
+    ['Ancestry HP', h.ancestryHp],
+    ['Trained in', h.skillChoice ? 'One skill of your choice' : h.skills.map(cap).join(', ')],
+    ['Feats', feats.join(', ')],
+    ['Opens feats for', !h.ancestry && [...h.traits, ...h.featAncestries].map(cap).join(', ')],
+  ].filter(([, v]) => v);
+  return (
+    <article className="creature book__turn heritage-leaf">
+      <button type="button" className="book__back" onClick={onClose}>‹ Back to the index</button>
+      <header className="heritage-leaf__head">
+        <div className="heritage-leaf__crest">
+          {h.ancestry ? <Emblem kind="ancestry" item={ancestry} /> : <span className="heritage-leaf__glyph" aria-hidden="true">✦</span>}
+          <span className="eyebrow">{h.ancestry ? ancestry.name : 'Versatile'} heritage</span>
+        </div>
+        <h2 className="title">{h.name}</h2>
+        <p className="heritage-leaf__book">
+          {h.source}
+          {h.rarity !== 'common' && <span className="tag tag--rare">{h.rarity}</span>}
+        </p>
+      </header>
+      {h.description && <div className="option__desc heritage-leaf__desc" dangerouslySetInnerHTML={{ __html: h.description }} />}
+      <div className="heritage-leaf__foot">
+        {chosen && h.skillChoice && (
+          <div className="heritage-leaf__skill">
+            <ChoiceHeading title="Your skill" chosen={skill && cap(skill)} level={3} />
+            <Chips label="Heritage skill" options={h.skillChoice} isOn={(s) => skill === s} onToggle={pick(skill, onSkill)} render={cap} />
+          </div>
+        )}
+        {chosen ? (
+          <div className="book__choose"><ChosenActions label="Your heritage" onRemove={onRemove} /></div>
+        ) : (
+          <button type="button" className="btn btn--blood heritage-leaf__choose" onClick={onChoose}>Choose {h.name}</button>
+        )}
+      </div>
+      {facts.length > 0 && (
+        <dl className="heritage-leaf__facts">
+          {facts.map(([k, v]) => (
+            <div key={k}>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </article>
+  );
+}
+
+export function HeritageStep({ build, update, data, goTo }) {
+  const { ancestry, heritage } = lookup(build, data);
+  // The heritage open on the right page: the chosen one to start with, on wide screens.
+  const [openId, setOpenId] = useState(() => (wide() ? build.heritage : null));
+
+  if (!ancestry) {
+    return (
+      <section className="notice notice--quiet">
+        <p>Heritages depend on your ancestry, so choose that first.</p>
+        <button type="button" className="btn" onClick={() => goTo('ancestry')}>Choose an ancestry</button>
+      </section>
+    );
+  }
+
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  const items = [
+    ...data.heritages.filter((h) => h.ancestry === build.ancestry).sort(byName),
+    ...data.heritages.filter((h) => !h.ancestry).sort(byName),
+  ];
+  const open = items.find((h) => h.id === openId) ?? null;
+  const select = (id) => update({ heritage: id, heritageSkill: null, ancestryFeat: null });
+
+  return (
+    <section className="choice" aria-label="Heritage">
+      <BookSpread
+        items={items}
+        total={items.length}
+        noun="heritages"
+        heading={heritage ? `Your heritage: ${heritage.name}` : 'Choose one'}
+        sections={[
+          { key: 'own', tab: ancestry.name, name: `${ancestry.name} heritages` },
+          { key: 'versatile', tab: 'Versatile', name: 'Versatile heritages' },
+        ]}
+        sectionOf={(h) => (h.ancestry ? 'own' : 'versatile')}
+        short
+        tabsOnTop
+        open={open}
+        onOpen={(h) => setOpenId(h.id)}
+        marked={(h) => h.id === build.heritage}
+        emptyText="No heritages in this campaign's books."
+        meta={(h) => (
+          <>
+            {h.rarity !== 'common' && <span className="tag tag--rare">{h.rarity}</span>}
+            {sourceTag(h.source)}
+          </>
+        )}
+        leaf={open && (
+          <HeritageLeaf
+            key={open.id}
+            h={open}
+            ancestry={ancestry}
+            data={data}
+            chosen={open.id === build.heritage}
+            skill={build.heritageSkill}
+            onSkill={(s) => update({ heritageSkill: s })}
+            onChoose={() => select(open.id)}
+            onRemove={() => select(null)}
+            onClose={() => setOpenId(null)}
+          />
+        )}
+        blank={
+          <>
+            <p className="book__blank-title">Choose a heritage</p>
+            <p className="rule-note">Open a heritage from the index to read it here.</p>
+          </>
+        }
+      />
+    </section>
   );
 }
 
@@ -89,7 +176,7 @@ const loreLabel = (entry) => {
 
 /** A background as the right-hand page: what it grants, its full text, and the choose button. */
 function BackgroundLeaf({ b, data, chosen, onChoose, onRemove, onClose }) {
-  const feats = b.feats.map((id) => data.feats.find((f) => f.id === id)?.name).filter(Boolean);
+  const feats = b.feats.map((id) => data.feats?.find((f) => f.id === id)?.name).filter(Boolean);
   return (
     <BookLeaf
       eyebrow={`${sourceTag(b.source)}${b.rarity !== 'common' ? ` · ${b.rarity}` : ''}`}

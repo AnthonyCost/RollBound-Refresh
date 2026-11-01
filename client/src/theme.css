@@ -2516,6 +2516,26 @@ button.book__entry-link.book__entry-link--open { background: var(--panel-hot); }
 /* The open entry's choose button, at the foot of the right page. */
 .book__choose { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--line-faint); }
 .book__choose .btn { min-width: 200px; }
+/* A heritage's page: a crest with its ancestry, the rules text, the choose button, and
+   facts as ruled lines. (builder/IdentitySteps.jsx) */
+.heritage-leaf__head { display: flex; flex-direction: column; gap: 6px; }
+.heritage-leaf__crest { display: flex; align-items: center; gap: 10px; }
+.heritage-leaf__crest .tile__emblem { flex: none; width: 32px; height: 32px; border-width: 1px; }
+.heritage-leaf__crest .tile__emblem--framed::after { box-shadow: inset 0 0 0 1px rgba(7, 5, 5, 0.85), inset 0 0 6px rgba(0, 0, 0, 0.6); }
+.heritage-leaf__crest .tile__letter { font-size: 14px; }
+.heritage-leaf__glyph { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--bronze); border-radius: 50%; background: radial-gradient(circle at 50% 40%, #3a1410, #120c0a); font-size: 15px; color: var(--gold); }
+.heritage-leaf .title { text-align: left; }
+.heritage-leaf__book { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0; font-size: 14px; font-style: italic; color: var(--text-muted); }
+.heritage-leaf__book .tag { font-style: normal; }
+.heritage-leaf__desc { margin: 0; padding: 0; border-top: 0; font-size: 16px; line-height: 1.65; }
+.heritage-leaf__desc > p:first-child::first-letter { float: left; margin: 4px 3px 0 0; font-family: var(--display); font-size: 44px; font-weight: 700; line-height: 0.9; color: var(--gold); }
+.heritage-leaf__facts { margin: 0; border-top: 1px solid var(--line-soft); }
+.heritage-leaf__facts div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 16px; padding: 9px 0; border-bottom: 1px solid var(--line-faint); }
+.heritage-leaf__facts dt { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); align-self: center; }
+.heritage-leaf__facts dd { margin: 0; font-family: var(--display); font-size: 15px; font-weight: 700; }
+.heritage-leaf__foot { display: flex; flex-direction: column; gap: 14px; }
+.heritage-leaf__skill { display: flex; flex-direction: column; gap: 10px; }
+.heritage-leaf__choose { width: 100%; }
 .book__entry-link--open .book__entry-name { color: var(--gold); }
 .book__empty { margin: 32px 0; }
 
@@ -2534,7 +2554,7 @@ button.book__entry-link.book__entry-link--open { background: var(--panel-hot); }
 .book__turn-btn:disabled { opacity: 0.3; }
 @media (hover: hover) { .book__turn-btn:not(:disabled):hover { border-color: var(--bronze); color: var(--gold); } }
 
-.book__back { align-self: flex-start; font-size: 14px; color: var(--bronze); }
+.book__back { display: inline-flex; align-items: center; min-height: 36px; align-self: flex-start; font-size: 14px; color: var(--bronze); }
 button.book__back { padding: 0; border: 0; background: none; font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; }
 /* Named sections (feat slots): wider tabs, which wrap on phones. */
 .book--tabs-top .book__tabs { flex-wrap: wrap; overflow: visible; }
@@ -2988,7 +3008,7 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
 /* Touch targets: small links and the step diamonds get a bigger area to press. */
 .steps__pip { position: relative; }
 .steps__pip::after { content: ''; position: absolute; inset: -6px; }
-.book__back, .link-button, .home-section__new, .home-section__all, .lesson__more { display: inline-flex; align-items: center; min-height: 36px; }
+.link-button, .home-section__new, .home-section__all, .lesson__more { display: inline-flex; align-items: center; min-height: 36px; }
 .sheet__actions { align-items: flex-start; }
 .sheet__actions .btn { min-height: 44px; }
 

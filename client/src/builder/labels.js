@@ -2,7 +2,7 @@ export const ABILITY_SHORT = { str: 'STR', dex: 'DEX', con: 'CON', int: 'INT', w
 
 export const cap = (s) => s.replace(/(^|[\s-])(\w)/g, (_m, sep, c) => `${sep === '-' ? ' ' : sep}${c.toUpperCase()}`);
 
-export const sourceTag = (source) => ({ 'Player Core': 'PC', 'Player Core 2': 'PC2' })[source] ?? source;
+export const sourceTag = (source) => ({ 'Player Core': 'PC', 'Player Core 2': 'PC2', 'Dark Archive (Remastered)': 'Dark Archive' })[source] ?? source;
 
 export const SIZE = { tiny: 'Tiny', sm: 'Small', med: 'Medium', lg: 'Large' };
 

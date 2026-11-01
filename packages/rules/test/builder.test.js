@@ -451,7 +451,7 @@ describe('data updates', () => {
     const review = reviewCharacter(saved(), moved);
     assert.equal(review.status, 'repick');
     assert.deepEqual(review.missing, []);
-    assert.ok(review.problems.some((p) => p.step === 'ancestry'));
+    assert.ok(review.problems.some((p) => p.step === 'heritage'));
   });
 });
 

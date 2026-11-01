@@ -544,7 +544,7 @@ export function proficienciesOf(build, data) {
 
 // ---------- Validation ----------
 
-export const STEPS = ['ancestry', 'background', 'class', 'attributes', 'skills', 'feats', 'spells', 'gear', 'review'];
+export const STEPS = ['ancestry', 'heritage', 'background', 'class', 'attributes', 'skills', 'feats', 'spells', 'gear', 'review'];
 
 /** What's still missing or invalid, as [{ step, message }]. Empty means ready to save. */
 export function buildProblems(build, data) {
@@ -553,9 +553,9 @@ export function buildProblems(build, data) {
   const { ancestry, heritage, background, cls, deity } = lookup(build, data);
 
   if (!ancestry) add('ancestry', 'Choose an ancestry.');
-  if (!heritage) add('ancestry', 'Choose a heritage.');
-  else if (heritage.ancestry && heritage.ancestry !== build.ancestry) add('ancestry', `${heritage.name} isn't a ${ancestry?.name ?? 'matching'} heritage.`);
-  else if (heritage.skillChoice && !build.heritageSkill) add('ancestry', `Choose the skill from ${heritage.name}.`);
+  if (!heritage) add('heritage', 'Choose a heritage.');
+  else if (heritage.ancestry && heritage.ancestry !== build.ancestry) add('heritage', `${heritage.name} isn't a ${ancestry?.name ?? 'matching'} heritage.`);
+  else if (heritage.skillChoice && !build.heritageSkill) add('heritage', `Choose the skill from ${heritage.name}.`);
   if (!background) add('background', 'Choose a background.');
   else if (background.lore.length && !build.lore.trim()) add('background', 'Choose your Lore skill.');
 
@@ -747,7 +747,7 @@ function choiceRefs(build, data) {
     }
   };
   one('ancestry', 'ancestry', 'ancestry', data.ancestries);
-  one('ancestry', 'heritage', 'heritage', data.heritages);
+  one('heritage', 'heritage', 'heritage', data.heritages);
   one('background', 'background', 'background', data.backgrounds);
   one('class', 'class', 'class', data.classes);
   const options = find(data.classes, build.class)?.features.flatMap((f) => f.choice?.options ?? []) ?? [];

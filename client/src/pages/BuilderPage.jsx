@@ -19,7 +19,7 @@ import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 import TopBar from '../components/TopBar.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
-import { AncestryStep, BackgroundStep, ClassStep } from '../builder/IdentitySteps.jsx';
+import { AncestryStep, HeritageStep, BackgroundStep, ClassStep } from '../builder/IdentitySteps.jsx';
 import { AttributesStep, SkillsStep, FeatsStep, SpellsStep, GearStep, ReviewStep } from '../builder/DetailSteps.jsx';
 import { booksLabel, isOutdated, loadRules, replaceCharacter } from '../state/rulesData.js';
 import { useCampaignService } from '../state/campaignService.js';
@@ -33,7 +33,12 @@ const STEP_INFO = {
   ancestry: {
     title: 'Ancestry',
     Component: AncestryStep,
-    note: 'Your ancestry sets your starting Hit Points, size, Speed, and some attribute boosts. Your heritage narrows it down: the branch of that people you come from.',
+    note: 'Your ancestry sets your starting Hit Points, size, Speed, and some attribute boosts.',
+  },
+  heritage: {
+    title: 'Heritage',
+    Component: HeritageStep,
+    note: 'Your heritage narrows your ancestry down: the branch of that people you come from, or a versatile lineage that can belong to any of them and opens up its own ancestry feats.',
   },
   background: {
     title: 'Background',
@@ -85,7 +90,8 @@ const RUNES_INFO = {
 
 // Whether the player has chosen anything on each step yet (not whether it's complete).
 const STEP_TOUCHED = {
-  ancestry: (b) => Boolean(b.ancestry || b.heritage),
+  ancestry: (b) => Boolean(b.ancestry),
+  heritage: (b) => Boolean(b.heritage),
   background: (b) => Boolean(b.background),
   class: (b) => Boolean(b.class),
   attributes: (b) => b.altAncestryBoosts || b.freeBoosts.length > 0 || [...b.ancestryBoosts, ...b.backgroundBoosts].some(Boolean) || Boolean(b.keyAbility),
@@ -100,7 +106,7 @@ const STEP_TOUCHED = {
 const BLANK = { build: emptyBuild(), step: STEPS[0], start: null };
 
 // Steps that only need EARLY_TYPES, so they can show before feats, spells and gear arrive.
-const EARLY_STEPS = ['ancestry', 'background', 'class'];
+const EARLY_STEPS = ['ancestry', 'heritage', 'background', 'class'];
 
 /** The saved draft under this key, or null if there isn't one. */
 function loadDraft(key) {

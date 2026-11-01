@@ -12,6 +12,24 @@ const focusProps = (focus) =>
 
 const monogram = (name) => name.replace(/^The /, '')[0];
 
+/** An option's round emblem: its icon, a crop of its portrait, or its first letter. */
+export function Emblem({ kind, item }) {
+  const icon = iconFor(kind, item.slug);
+  if (icon) {
+    return (
+      <span className={`tile__emblem ${iconIsFramed(kind) ? 'tile__emblem--framed' : 'tile__emblem--icon'}`} aria-hidden="true">
+        <img src={icon} alt="" loading="lazy" />
+      </span>
+    );
+  }
+  const own = hasOwnArt(kind, item.slug);
+  return (
+    <span className={`tile__emblem ${own ? 'tile__emblem--framed tile__emblem--art' : ''}`} aria-hidden="true">
+      {own ? <img src={artFor(kind, item.slug)} alt="" loading="lazy" {...focusProps(tileFocusFor(kind, item.slug))} /> : <span className="tile__letter">{monogram(item.name)}</span>}
+    </span>
+  );
+}
+
 /**
  * A character-select screen: small emblem tiles plus a large art stage that shows
  * the selected option's portrait, name, key stats, and opening description.
@@ -83,19 +101,7 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
               onClick={() => onSelect(on ? null : item.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
             >
-              {iconFor(kind, item.slug) ? (
-                <span className={`tile__emblem ${iconIsFramed(kind) ? 'tile__emblem--framed' : 'tile__emblem--icon'}`} aria-hidden="true">
-                  <img src={iconFor(kind, item.slug)} alt="" loading="lazy" />
-                </span>
-              ) : (
-                <span className={`tile__emblem ${hasOwnArt(kind, item.slug) ? 'tile__emblem--framed tile__emblem--art' : ''}`} aria-hidden="true">
-                  {hasOwnArt(kind, item.slug) ? (
-                    <img src={artFor(kind, item.slug)} alt="" loading="lazy" {...focusProps(tileFocusFor(kind, item.slug))} />
-                  ) : (
-                    <span className="tile__letter">{monogram(item.name)}</span>
-                  )}
-                </span>
-              )}
+              <Emblem kind={kind} item={item} />
               <span className="tile__name">{item.name}</span>
             </button>
           );
