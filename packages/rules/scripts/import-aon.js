@@ -236,7 +236,8 @@ function mapSpell(doc) {
     area: field(doc, 'Area'),
     target: doc.target ?? null,
     defense: field(doc, 'Defense')?.toLowerCase() ?? null,
-    duration: doc.duration_raw ?? null,
+    // AoN marks up "sustained" as a template tag: {{actions 2317 "sustained"}}.
+    duration: doc.duration_raw?.replace(/\{\{actions \d+ "[^"]*"\}\}/g, 'sustained') ?? null,
     description: toHtml(doc.markdown),
     source: book,
   };

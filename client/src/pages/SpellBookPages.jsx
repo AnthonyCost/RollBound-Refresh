@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { Link, Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
 import { useRules } from '../state/useRules.js';
-import { titleCase } from '../format.js';
+import { sentenceCase, titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
 import BookSpread from '../components/BookSpread.jsx';
 
@@ -185,11 +185,11 @@ function SpellEntry({ s, closeTo }) {
     ['Traditions', s.traditions.map(titleCase).join(', ')],
     ['Type', s.kind === 'focus' ? 'Focus spell: cast with a Focus Point' : s.kind === 'ritual' ? 'Ritual' : null],
     ['Cast', <ActionCost key="cast" actions={s.actions} />],
-    ['Range', s.range],
-    ['Area', s.area],
-    ['Targets', s.target],
+    ['Range', sentenceCase(s.range)],
+    ['Area', sentenceCase(s.area)],
+    ['Targets', sentenceCase(s.target)],
     ['Defense', s.defense && titleCase(s.defense)],
-    ['Duration', s.duration],
+    ['Duration', sentenceCase(s.duration)],
   ].filter(([, v]) => v);
   return (
     <article className="creature spell-page book__turn">

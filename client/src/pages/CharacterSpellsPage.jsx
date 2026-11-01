@@ -4,7 +4,7 @@ import { spellAttack, spellDc, spellKey, preparedValue } from '@rollbound/rules'
 import { useTable } from '../state/TableContext.jsx';
 import { useRules } from '../state/useRules.js';
 import Ornament from '../components/Ornament.jsx';
-import { signed, titleCase } from '../format.js';
+import { sentenceCase, signed, titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
 import Chips from '../builder/Chips.jsx';
 import BookSpread from '../components/BookSpread.jsx';
@@ -166,12 +166,12 @@ export default function CharacterSpellsPage() {
             title={spell.name}
             facts={[
               ['Cast', <ActionCost key="cast" actions={spell.actions} />],
-              ['Range', spell.range],
-              ['Area', spell.area],
-              ['Targets', spell.target],
+              ['Range', sentenceCase(spell.range)],
+              ['Area', sentenceCase(spell.area)],
+              ['Targets', sentenceCase(spell.target)],
               ['Defense', spell.defense && titleCase(spell.defense)],
-              ['Duration', spell.duration],
-              ['Traits', spell.traits?.join(', ')],
+              ['Duration', sentenceCase(spell.duration)],
+              ['Traits', spell.traits?.map(titleCase).join(', ')],
             ]}
             description={spell.description}
             notes={!rules && <p className="muted italic">Loading the rules text…</p>}

@@ -1,3 +1,5 @@
+import { sentenceCase } from '../format.js';
+
 // Pathfinder's action symbols (styled as .act in theme.css): one, two or three actions,
 // a reaction or a free action. Rules text from the data already uses the same spans.
 const ICONS = { 1: '1', 2: '2', 3: '3', reaction: 'r', free: 'f' };
@@ -20,5 +22,5 @@ export default function ActionCost({ actions }) {
       </span>
     );
   }
-  return <span>{actions}</span>;
+  return <span>{sentenceCase(actions)}</span>;
 }

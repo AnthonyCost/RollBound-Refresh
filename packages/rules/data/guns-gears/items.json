@@ -187,7 +187,7 @@
   "price": 1500,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>This tin clockwork lizard is activated when a creature moves adjacent to it, at which point it spits out a glob of acid. The target must succeed at a Reflex check saving throw or take 3d6[acid] damage.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes full damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and 5[persistent,acid] damage.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and 10[persistent,acid] damage.</p>",
+  "description": "<p>This tin clockwork lizard is activated when a creature moves adjacent to it, at which point it spits out a glob of acid. The target must succeed at a DC 20 Reflex save saving throw or take 3d6 acid damage.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes full damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and 5 persistent acid damage.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and 10 persistent acid damage.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -370,7 +370,7 @@
   "price": 16000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>When a creature enters the snare's square, several strands of strong wires ending in jagged hooks latch onto it before hauling it to the ground. The snare deals 2d6[piercing] damage, and the targeted creature must attempt a Reflex check save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is knock Prone and Immobilized for 1 round (Escape).</p>\n<p><strong>Critical Failure</strong> The creature takes double damage, is knocked prone, and is Restrained for 1 round (Escape).</p>",
+  "description": "<p>When a creature enters the snare's square, several strands of strong wires ending in jagged hooks latch onto it before hauling it to the ground. The snare deals 2d6 piercing damage, and the targeted creature must attempt a DC 28 Reflex save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is knock Prone and Immobilized for 1 round (Escape).</p>\n<p><strong>Critical Failure</strong> The creature takes double damage, is knocked prone, and is Restrained for 1 round (Escape).</p>",
   "source": "Guns & Gears"
  },
  {
@@ -404,7 +404,7 @@
   "price": 500,
   "bulk": 5,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>Black powder is a volatile and explosive alchemical substance commonly used in the production of firearm munitions. Black powder becomes inert and useless when wet and must be kept in a sealed, water-tight container.</p>\n<p>A horn contains 500 doses worth of black powder. A horn can be detonated by leaving a small trail of black powder and then lighting it. Each 5-foot square requires one dose of black powder to create a trail through. As long as the horn is mostly full (at least 400 doses remaining) it can be detonated to deal 1d6[fire|options:area-damage] damage in a 5-foot burst (Reflex check save). It takes 1 round per 15 feet of powder trail laid down for a horn to detonate after the trail is lit. If multiple horns detonate simultaneously, it can increase the area of the explosion, but the damage in overlapping areas doesn't increase.</p>",
+  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>Black powder is a volatile and explosive alchemical substance commonly used in the production of firearm munitions. Black powder becomes inert and useless when wet and must be kept in a sealed, water-tight container.</p>\n<p>A horn contains 500 doses worth of black powder. A horn can be detonated by leaving a small trail of black powder and then lighting it. Each 5-foot square requires one dose of black powder to create a trail through. As long as the horn is mostly full (at least 400 doses remaining) it can be detonated to deal 1d6 fire damage in a 5-foot burst (DC 16 basic Reflex save). It takes 1 round per 15 feet of powder trail laid down for a horn to detonate after the trail is lit. If multiple horns detonate simultaneously, it can increase the area of the explosion, but the damage in overlapping areas doesn't increase.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -421,7 +421,7 @@
   "price": 5000,
   "bulk": 50,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>Black powder is a volatile and explosive alchemical substance commonly used in the production of firearm munitions. Black powder becomes inert and useless when wet and must be kept in a sealed, water-tight container.</p>\n<p>A keg contains 5,000 doses of black powder and can be detonated in the same way as a horn. As long as the keg is mostly full (at least 4,000 doses remaining) this deals 3d6[fire|options:area-damage] damage in a 20-foot burst (Reflex check save). Detonating multiple kegs can increase the area, but not the damage, of this effect; detonating a keg and any horns at the same time in an overlapping area also doesn't increase the damage.</p>",
+  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>Black powder is a volatile and explosive alchemical substance commonly used in the production of firearm munitions. Black powder becomes inert and useless when wet and must be kept in a sealed, water-tight container.</p>\n<p>A keg contains 5,000 doses of black powder and can be detonated in the same way as a horn. As long as the keg is mostly full (at least 4,000 doses remaining) this deals 3d6 fire damage in a 20-foot burst (DC 20 basic Reflex save). Detonating multiple kegs can increase the area, but not the damage, of this effect; detonating a keg and any horns at the same time in an overlapping area also doesn't increase the damage.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -842,7 +842,7 @@
   "price": 25000,
   "bulk": 0.1,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>When you Activate a cryomister, you can either place it in an adjacent square or toss it up to 20 feet away. Once you've done so, the metallic device instantly disperses a heavy mist, settling quickly on nearby flat surfaces and forming a sheet of ice. The cryomister creates a 15-foot burst, making the affected area difficult terrain for 1 minute; at the GM's discretion, however, this duration might be reduced in unusually hot conditions or increased in unusually cold ones. If an affected square takes fire damage, the difficult terrain is removed. Though not designed as a weapon, the cryomister's rapidly cooling mist deals 5[splash)[cold]] splash damage to creatures in the area on activation. Creatures attempting to move through the affected area can attempt a Acrobatics check to ignore the difficult terrain and move at their normal Speed. Throwing the cryomister onto the surface of a liquid creates a floating piece of ice for the same duration, capable of supporting one Huge creature, two Large creatures, or four medium or smaller creatures.</p>",
+  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>When you Activate a cryomister, you can either place it in an adjacent square or toss it up to 20 feet away. Once you've done so, the metallic device instantly disperses a heavy mist, settling quickly on nearby flat surfaces and forming a sheet of ice. The cryomister creates a 15-foot burst, making the affected area difficult terrain for 1 minute; at the GM's discretion, however, this duration might be reduced in unusually hot conditions or increased in unusually cold ones. If an affected square takes fire damage, the difficult terrain is removed. Though not designed as a weapon, the cryomister's rapidly cooling mist deals 5 cold splash damage to creatures in the area on activation. Creatures attempting to move through the affected area can attempt a DC 30 Acrobatics check to ignore the difficult terrain and move at their normal Speed. Throwing the cryomister onto the surface of a liquid creates a floating piece of ice for the same duration, capable of supporting one Huge creature, two Large creatures, or four medium or smaller creatures.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -860,7 +860,7 @@
   "price": 300,
   "bulk": 0.1,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>When you Activate a cryomister, you can either place it in an adjacent square or toss it up to 20 feet away. Once you've done so, the metallic device instantly disperses a heavy mist, settling quickly on nearby flat surfaces and forming a sheet of ice. The cryomister creates a 5-foot burst, making the affected area difficult terrain for 1 minute; at the GM's discretion, however, this duration might be reduced in unusually hot conditions or increased in unusually cold ones. If an affected square takes fire damage, the difficult terrain is removed. Though not designed as a weapon, the cryomister's rapidly cooling mist deals 1[splash)[cold]] splash damage to creatures in the area on activation. Creatures attempting to move through the affected area can attempt a Acrobatics check to ignore the difficult terrain and move at their normal Speed. Throwing the cryomister onto the surface of a liquid creates a floating piece of ice for the same duration, capable of supporting one or more medium creatures.</p>",
+  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>When you Activate a cryomister, you can either place it in an adjacent square or toss it up to 20 feet away. Once you've done so, the metallic device instantly disperses a heavy mist, settling quickly on nearby flat surfaces and forming a sheet of ice. The cryomister creates a 5-foot burst, making the affected area difficult terrain for 1 minute; at the GM's discretion, however, this duration might be reduced in unusually hot conditions or increased in unusually cold ones. If an affected square takes fire damage, the difficult terrain is removed. Though not designed as a weapon, the cryomister's rapidly cooling mist deals 1 cold splash damage to creatures in the area on activation. Creatures attempting to move through the affected area can attempt a DC 17 Acrobatics check to ignore the difficult terrain and move at their normal Speed. Throwing the cryomister onto the surface of a liquid creates a floating piece of ice for the same duration, capable of supporting one or more medium creatures.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -878,7 +878,7 @@
   "price": 250000,
   "bulk": 0.1,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>When you Activate a cryomister, you can either place it in an adjacent square or toss it up to 20 feet away. Once you've done so, the metallic device instantly disperses a heavy mist, settling quickly on nearby flat surfaces and forming a sheet of ice. The cryomister creates a 20-foot burst, making the affected area difficult terrain for 1 minute; at the GM's discretion, however, this duration might be reduced in unusually hot conditions or increased in unusually cold ones. If an affected square takes fire damage, the difficult terrain is removed. Though not designed as a weapon, the cryomister's rapidly cooling mist deals 8[splash)[cold]] splash damage to creatures in the area on activation. Creatures attempting to move through the affected area can attempt a Acrobatics check to ignore the difficult terrain and move at their normal Speed. Throwing the cryomister onto the surface of a liquid creates a floating piece of ice for the same duration, capable of supporting Gargantuan creatures larger than a 20-by-20-foot space, such as a mu spore.</p>",
+  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>When you Activate a cryomister, you can either place it in an adjacent square or toss it up to 20 feet away. Once you've done so, the metallic device instantly disperses a heavy mist, settling quickly on nearby flat surfaces and forming a sheet of ice. The cryomister creates a 20-foot burst, making the affected area difficult terrain for 1 minute; at the GM's discretion, however, this duration might be reduced in unusually hot conditions or increased in unusually cold ones. If an affected square takes fire damage, the difficult terrain is removed. Though not designed as a weapon, the cryomister's rapidly cooling mist deals 8 cold splash damage to creatures in the area on activation. Creatures attempting to move through the affected area can attempt a DC 39 Acrobatics check to ignore the difficult terrain and move at their normal Speed. Throwing the cryomister onto the surface of a liquid creates a floating piece of ice for the same duration, capable of supporting Gargantuan creatures larger than a 20-by-20-foot space, such as a mu spore.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -896,7 +896,7 @@
   "price": 2500,
   "bulk": 0.1,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>When you Activate a cryomister, you can either place it in an adjacent square or toss it up to 20 feet away. Once you've done so, the metallic device instantly disperses a heavy mist, settling quickly on nearby flat surfaces and forming a sheet of ice. The cryomister creates a 10-foot burst, making the affected area difficult terrain for 1 minute; at the GM's discretion, however, this duration might be reduced in unusually hot conditions or increased in unusually cold ones. If an affected square takes fire damage, the difficult terrain is removed. Though not designed as a weapon, the cryomister's rapidly cooling mist deals 3[splash)[cold]] splash damage to creatures in the area on activation. Creatures attempting to move through the affected area can attempt a Acrobatics check to ignore the difficult terrain and move at their normal Speed. Throwing the cryomister onto the surface of a liquid creates a floating piece of ice for the same duration, capable of supporting one Large creature or two Medium or smaller creatures.</p>",
+  "description": "<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>When you Activate a cryomister, you can either place it in an adjacent square or toss it up to 20 feet away. Once you've done so, the metallic device instantly disperses a heavy mist, settling quickly on nearby flat surfaces and forming a sheet of ice. The cryomister creates a 10-foot burst, making the affected area difficult terrain for 1 minute; at the GM's discretion, however, this duration might be reduced in unusually hot conditions or increased in unusually cold ones. If an affected square takes fire damage, the difficult terrain is removed. Though not designed as a weapon, the cryomister's rapidly cooling mist deals 3 cold splash damage to creatures in the area on activation. Creatures attempting to move through the affected area can attempt a DC 21 Acrobatics check to ignore the difficult terrain and move at their normal Speed. Throwing the cryomister onto the surface of a liquid creates a floating piece of ice for the same duration, capable of supporting one Large creature or two Medium or smaller creatures.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -976,7 +976,7 @@
   "price": 900000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>This modified Stasian coil of metal and glass stands about three feet tall. It activates when at least three creatures are within 20 feet of it, or if at least one creature stays within 20 feet of it for more than 1 round. It then lashes out with a torrent of electrical energy dealing 7d12[electricity] damage to all creatures within 20 feet of it. Due to the fact that it doesn't trigger immediately when a creature enters its square, abilities like Surprise Snare don't work with a death coil. Creatures within that area must attempt a Fortitude check saving throw.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is Stunned 2.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage is Stunned 4.</p>",
+  "description": "<p>This modified Stasian coil of metal and glass stands about three feet tall. It activates when at least three creatures are within 20 feet of it, or if at least one creature stays within 20 feet of it for more than 1 round. It then lashes out with a torrent of electrical energy dealing 7d12 electricity damage to all creatures within 20 feet of it. Due to the fact that it doesn't trigger immediately when a creature enters its square, abilities like Surprise Snare don't work with a death coil. Creatures within that area must attempt a DC 43 Fortitude save saving throw.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is Stunned 2.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage is Stunned 4.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1025,7 +1025,7 @@
   "price": 1200,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>This snare uses clockwork stressed almost to the breaking point, which activates with a powerful explosion that deals 3d8[piercing] damage to the first creature entering the snare's square. The creature must attempt a Reflex check saving throw.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and 3[bleed] damage.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and 6[bleed] damage.</p>",
+  "description": "<p>This snare uses clockwork stressed almost to the breaking point, which activates with a powerful explosion that deals 3d8 piercing damage to the first creature entering the snare's square. The creature must attempt a DC 19 Reflex save saving throw.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and 3 bleed damage.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and 6 bleed damage.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1045,7 +1045,7 @@
   "price": 90000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (concentrate)</p><hr><p>The night sky seems contained in this glass projectile. When an activated <em>dreaming round</em> damages a creature, it induces drowsiness. The creature must attempt a Fortitude check save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected and becomes temporarily immune for 1 minute.</p>\n<p><strong>Success</strong> The creature becomes Slowed 1 and Fatigued for 1 round.</p>\n<p><strong>Failure</strong> The creature becomes fatigued and slowed 1, and must attempt another Fortitude save at the end of each of its turns. If it fails, its slowed condition increases by 1. A successful save reduces the slowed condition by 1. If the slowed condition is removed or reduced to 0, the effect and the fatigued condition end. If the target's actions are reduced to 0 by this effect, it immediately falls into a deep sleep and is Unconscious, during which it no longer attempts a save at the end of its turn. It wakes up automatically after 1 hour or if it takes damage, but not due to non-painful stimuli (such as noise or being nudged). When it wakes up, its slowed condition decreases by 1, though it must once again save at the end of each of its turns and might risk falling asleep again.</p>\n<p><strong>Critical Failure</strong> As failure, except the target is initially Slowed 2.</p>",
+  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (concentrate)</p><hr><p>The night sky seems contained in this glass projectile. When an activated <em>dreaming round</em> damages a creature, it induces drowsiness. The creature must attempt a DC 30 Fortitude save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected and becomes temporarily immune for 1 minute.</p>\n<p><strong>Success</strong> The creature becomes Slowed 1 and Fatigued for 1 round.</p>\n<p><strong>Failure</strong> The creature becomes fatigued and slowed 1, and must attempt another Fortitude save at the end of each of its turns. If it fails, its slowed condition increases by 1. A successful save reduces the slowed condition by 1. If the slowed condition is removed or reduced to 0, the effect and the fatigued condition end. If the target's actions are reduced to 0 by this effect, it immediately falls into a deep sleep and is Unconscious, during which it no longer attempts a save at the end of its turn. It wakes up automatically after 1 hour or if it takes damage, but not due to non-painful stimuli (such as noise or being nudged). When it wakes up, its slowed condition decreases by 1, though it must once again save at the end of each of its turns and might risk falling asleep again.</p>\n<p><strong>Critical Failure</strong> As failure, except the target is initially Slowed 2.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1073,7 +1073,7 @@
   "price": 4500,
   "bulk": 0.1,
   "usage": "held-in-two-hands",
-  "description": "<p>This foot-long length of conductive cable is capped on both ends by grounded handles containing Stasian coils. These coils can be turned on or off as a single action. While on, the coils electrify the cable, dealing 1d6[electricity] and 1d6[fire] damage in a thin precise line to anything the cable touches, though the cable is too unwieldy to use as a weapon. Electrocables are typically used to \"cut\" a thin straight line through metal. They ignore 10 points of a metal object's hardness.</p>",
+  "description": "<p>This foot-long length of conductive cable is capped on both ends by grounded handles containing Stasian coils. These coils can be turned on or off as a single action. While on, the coils electrify the cable, dealing 1d6 electricity and 1d6 fire damage in a thin precise line to anything the cable touches, though the cable is too unwieldy to use as a weapon. Electrocables are typically used to \"cut\" a thin straight line through metal. They ignore 10 points of a metal object's hardness.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1090,7 +1090,7 @@
   "price": 3000,
   "bulk": 1,
   "usage": "worn",
-  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>This rare gadget uses Stasian technology to grant someone a burst of activity, though its use can be painful. The electromuscular stimulator must be carefully attached to you, requiring 1 minute to do so. You can attach an electromuscular stimulator to yourself. When you Activate an attached electromuscular stimulator, roll a Crafting check check, using the Crafting modifier of the creature who attached the stimulator to you, with a DC equal to the standard DC for your level. The effects of the activation depend on the result of the Crafting check.</p><hr><p><strong>Critical Success</strong> You gain the Quickened condition for 1 minute and can use the extra action each round only to Stride or Strike.</p>\n<p><strong>Success</strong> As critical success, but you also take 3[persistent,electricity] damage.</p>\n<p><strong>Failure</strong> You gain the quickened condition for 2 rounds and can use the extra action each round only to Stride or Strike. You take 3 persistent electricity damage.</p>\n<p><strong>Critical Failure</strong> You take 2d6[electricity] damage and 3 persistent electricity damage.</p>",
+  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>This rare gadget uses Stasian technology to grant someone a burst of activity, though its use can be painful. The electromuscular stimulator must be carefully attached to you, requiring 1 minute to do so. You can attach an electromuscular stimulator to yourself. When you Activate an attached electromuscular stimulator, roll a Crafting check, using the Crafting modifier of the creature who attached the stimulator to you, with a DC equal to the standard DC for your level. The effects of the activation depend on the result of the Crafting check.</p><hr><p><strong>Critical Success</strong> You gain the Quickened condition for 1 minute and can use the extra action each round only to Stride or Strike.</p>\n<p><strong>Success</strong> As critical success, but you also take 3 persistent electricity damage.</p>\n<p><strong>Failure</strong> You gain the quickened condition for 2 rounds and can use the extra action each round only to Stride or Strike. You take 3 persistent electricity damage.</p>\n<p><strong>Critical Failure</strong> You take 2d6 electricity damage and 3 persistent electricity damage.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1126,7 +1126,7 @@
   "price": 2200,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>Eroding bullets cast a faint green glow, and smell like the sickly- sweet organic gases that rise from corpses. Handling an eroding bullet without gloves deals 1[acid] damage and leaves the putrid scent coated on your fingers. Upon Striking an enemy, the glass casing inside the bullet bursts, releasing a splattering of bubbling green acid that coats the target. The target takes 2d6[persistent,acid] damage in addition to the damage normally dealt by the attack.</p>",
+  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>Eroding bullets cast a faint green glow, and smell like the sickly- sweet organic gases that rise from corpses. Handling an eroding bullet without gloves deals 1 acid damage and leaves the putrid scent coated on your fingers. Upon Striking an enemy, the glass casing inside the bullet bursts, releasing a splattering of bubbling green acid that coats the target. The target takes 2d6 persistent acid damage in addition to the damage normally dealt by the attack.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1211,7 +1211,7 @@
   "price": 40000,
   "bulk": 0.1,
   "usage": "held-in-two-hands",
-  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>When you Activate an explosive mine, you place it on the ground in a square within your reach, priming it to explode when a creature steps on that square. If you have time in advance to prepare, you can place the mine on the ground before activating it, and you or an ally can try to use Stealth to Conceal an Object before you Activate the mine. If you don't Conceal the mine, its position is obvious at a glance.</p>\n<p>Once activated, the mine is primed to explode when enough pressure is placed on the square where it's located. Typically, this occurs when a Small or larger creature moves onto the square, though it could happen if a creature intentionally places pressure on the square from a distance to safely trigger the mine. Once triggered, the mine explodes, dealing the 12d6[fire|options:area-damage] damage to any creatures in a 5-foot emanation with a Reflex check save.</p>",
+  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>When you Activate an explosive mine, you place it on the ground in a square within your reach, priming it to explode when a creature steps on that square. If you have time in advance to prepare, you can place the mine on the ground before activating it, and you or an ally can try to use Stealth to Conceal an Object before you Activate the mine. If you don't Conceal the mine, its position is obvious at a glance.</p>\n<p>Once activated, the mine is primed to explode when enough pressure is placed on the square where it's located. Typically, this occurs when a Small or larger creature moves onto the square, though it could happen if a creature intentionally places pressure on the square from a distance to safely trigger the mine. Once triggered, the mine explodes, dealing the 12d6 fire damage to any creatures in a 5-foot emanation with a DC 29 basic Reflex save.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1228,7 +1228,7 @@
   "price": 400,
   "bulk": 0.1,
   "usage": "held-in-two-hands",
-  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>When you Activate an explosive mine, you place it on the ground in a square within your reach, priming it to explode when a creature steps on that square. If you have time in advance to prepare, you can place the mine on the ground before activating it, and you or an ally can try to use Stealth to Conceal an Object before you Activate the mine. If you don't Conceal the mine, its position is obvious at a glance.</p>\n<p>Once activated, the mine is primed to explode when enough pressure is placed on the square where it's located. Typically, this occurs when a Small or larger creature moves onto the square, though it could happen if a creature intentionally places pressure on the square from a distance to safely trigger the mine. Once triggered, the mine explodes, dealing the 2d6[fire|options:area-damage] damage to any creatures in a 5-foot emanation with a Reflex check save.</p>",
+  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>When you Activate an explosive mine, you place it on the ground in a square within your reach, priming it to explode when a creature steps on that square. If you have time in advance to prepare, you can place the mine on the ground before activating it, and you or an ally can try to use Stealth to Conceal an Object before you Activate the mine. If you don't Conceal the mine, its position is obvious at a glance.</p>\n<p>Once activated, the mine is primed to explode when enough pressure is placed on the square where it's located. Typically, this occurs when a Small or larger creature moves onto the square, though it could happen if a creature intentionally places pressure on the square from a distance to safely trigger the mine. Once triggered, the mine explodes, dealing the 2d6 fire damage to any creatures in a 5-foot emanation with a DC 15 basic Reflex save.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1245,7 +1245,7 @@
   "price": 400000,
   "bulk": 0.1,
   "usage": "held-in-two-hands",
-  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>When you Activate an explosive mine, you place it on the ground in a square within your reach, priming it to explode when a creature steps on that square. If you have time in advance to prepare, you can place the mine on the ground before activating it, and you or an ally can try to use Stealth to Conceal an Object before you Activate the mine. If you don't Conceal the mine, its position is obvious at a glance.</p>\n<p>Once activated, the mine is primed to explode when enough pressure is placed on the square where it's located. Typically, this occurs when a Small or larger creature moves onto the square, though it could happen if a creature intentionally places pressure on the square from a distance to safely trigger the mine. Once triggered, the mine explodes, dealing the 18d6[fire|options:area-damage] damage to any creatures in a 10-foot emanation with a Reflex check save.</p>",
+  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>When you Activate an explosive mine, you place it on the ground in a square within your reach, priming it to explode when a creature steps on that square. If you have time in advance to prepare, you can place the mine on the ground before activating it, and you or an ally can try to use Stealth to Conceal an Object before you Activate the mine. If you don't Conceal the mine, its position is obvious at a glance.</p>\n<p>Once activated, the mine is primed to explode when enough pressure is placed on the square where it's located. Typically, this occurs when a Small or larger creature moves onto the square, though it could happen if a creature intentionally places pressure on the square from a distance to safely trigger the mine. Once triggered, the mine explodes, dealing the 18d6 fire damage to any creatures in a 10-foot emanation with a DC 38 basic Reflex save.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1262,7 +1262,7 @@
   "price": 4000,
   "bulk": 0.1,
   "usage": "held-in-two-hands",
-  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>When you Activate an explosive mine, you place it on the ground in a square within your reach, priming it to explode when a creature steps on that square. If you have time in advance to prepare, you can place the mine on the ground before activating it, and you or an ally can try to use Stealth to Conceal an Object before you Activate the mine. If you don't Conceal the mine, its position is obvious at a glance.</p>\n<p>Once activated, the mine is primed to explode when enough pressure is placed on the square where it's located. Typically, this occurs when a Small or larger creature moves onto the square, though it could happen if a creature intentionally places pressure on the square from a distance to safely trigger the mine. Once triggered, the mine explodes, dealing the 6d6[fire|options:area-damage] damage to any creatures in a 5-foot emanation with a Reflex check save.</p>",
+  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>When you Activate an explosive mine, you place it on the ground in a square within your reach, priming it to explode when a creature steps on that square. If you have time in advance to prepare, you can place the mine on the ground before activating it, and you or an ally can try to use Stealth to Conceal an Object before you Activate the mine. If you don't Conceal the mine, its position is obvious at a glance.</p>\n<p>Once activated, the mine is primed to explode when enough pressure is placed on the square where it's located. Typically, this occurs when a Small or larger creature moves onto the square, though it could happen if a creature intentionally places pressure on the square from a distance to safely trigger the mine. Once triggered, the mine explodes, dealing the 6d6 fire damage to any creatures in a 5-foot emanation with a DC 20 basic Reflex save.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1368,7 +1368,7 @@
   "price": 1000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>Anyone who opens the box triggers a clockwork mechanism that unleashes a 15-foot cone of fire. The cone issues forth in a random direction determined by the GM but always including the creature who opened the box. Those within the cone take 4d6[fire|options:area-damage] damage with a Reflex check save.</p>",
+  "description": "<p>Anyone who opens the box triggers a clockwork mechanism that unleashes a 15-foot cone of fire. The cone issues forth in a random direction determined by the GM but always including the creature who opened the box. Those within the cone take 4d6 fire damage with a DC 17 basic Reflex save.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1417,7 +1417,7 @@
   "price": 2500,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>The snare takes the form of a Tiny, drake-like clockwork toy. When a creature enters its square the snare activates, causing the drake to spit a gout of fire in a 15-foot cone in the direction from which the creature entered. For instance, if a creature entered the square coming from the east, the cone would point east, to hit any allies behind the triggering creature. Those within the cone take 6d6[fire|options:area-damage] damage with a Reflex check save. After spitting its fire, the snare falls apart</p>",
+  "description": "<p>The snare takes the form of a Tiny, drake-like clockwork toy. When a creature enters its square the snare activates, causing the drake to spit a gout of fire in a 15-foot cone in the direction from which the creature entered. For instance, if a creature entered the square coming from the east, the cone would point east, to hit any allies behind the triggering creature. Those within the cone take 6d6 fire damage with a DC 19 basic Reflex save. After spitting its fire, the snare falls apart</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1434,7 +1434,7 @@
   "price": 18000,
   "bulk": 0.1,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 2 Interact</p>\n<hr>\n<p>Flare beacons create an incredibly bright light for a brief period of time. They are often used to signal others to the beacon's location, to coordinate assaults, to request rescue, or for other similar reasons. Higher-level beacons have a radius so large that they can be seen from miles away at night. When you Activate a flare beacon, you can either place it on the ground in a space within your reach or toss it up to 60 feet straight up. A flare beacon in the air falls at a rate of 10 feet per round.</p>\n<hr>\n<p>The beacon shines bright light in a 100-foot radius and dim light in the next 100 feet. Creatures within a 20-foot radius of the beacon must succeed at a Fortitude check save or be dazzled until they are no longer within 20 feet of it. Additionally, on a critical failure, they are also blinded for 1 round.</p>",
+  "description": "<p><strong>Activate</strong> 2 Interact</p>\n<hr>\n<p>Flare beacons create an incredibly bright light for a brief period of time. They are often used to signal others to the beacon's location, to coordinate assaults, to request rescue, or for other similar reasons. Higher-level beacons have a radius so large that they can be seen from miles away at night. When you Activate a flare beacon, you can either place it on the ground in a space within your reach or toss it up to 60 feet straight up. A flare beacon in the air falls at a rate of 10 feet per round.</p>\n<hr>\n<p>The beacon shines bright light in a 100-foot radius and dim light in the next 100 feet. Creatures within a 20-foot radius of the beacon must succeed at a DC 27 Fortitude save or be dazzled until they are no longer within 20 feet of it. Additionally, on a critical failure, they are also blinded for 1 round.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1451,7 +1451,7 @@
   "price": 400,
   "bulk": 0.1,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>Flare beacons create an incredibly bright light for a brief period of time. They are often used to signal others to the beacon's location, to coordinate assaults, to request rescue, or for other similar reasons. Higher-level beacons have a radius so large that they can be seen from miles away at night. When you Activate a flare beacon, you can either place it on the ground in a space within your reach or toss it up to 60 feet straight up. The beacon then sparks into being, casting bright light in a 20-foot radius and dim light in the next 20 feet for 1 minute. A flare beacon in the air falls at a rate of 10 feet per round. Creatures adjacent to a flare beacon must succeed at a Fortitude check save or be Dazzled until they are no longer adjacent to it.</p>",
+  "description": "<p><strong>Activate</strong> 2 (manipulate)</p><hr><p>Flare beacons create an incredibly bright light for a brief period of time. They are often used to signal others to the beacon's location, to coordinate assaults, to request rescue, or for other similar reasons. Higher-level beacons have a radius so large that they can be seen from miles away at night. When you Activate a flare beacon, you can either place it on the ground in a space within your reach or toss it up to 60 feet straight up. The beacon then sparks into being, casting bright light in a 20-foot radius and dim light in the next 20 feet for 1 minute. A flare beacon in the air falls at a rate of 10 feet per round. Creatures adjacent to a flare beacon must succeed at a DC 15 Fortitude save or be Dazzled until they are no longer adjacent to it.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1468,7 +1468,7 @@
   "price": 150000,
   "bulk": 0.1,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 2 Interact</p>\n<hr>\n<p>Flare beacons create an incredibly bright light for a brief period of time. They are often used to signal others to the beacon's location, to coordinate assaults, to request rescue, or for other similar reasons. Higher-level beacons have a radius so large that they can be seen from miles away at night. When you Activate a flare beacon, you can either place it on the ground in a space within your reach or toss it up to 60 feet straight up. A flare beacon in the air falls at a rate of 10 feet per round.</p>\n<hr>\n<p>The beacon shines bright light in a 180-foot radius and dim light in the next 180 feet. Creatures within a 30-foot radius of the beacon must succeed at a Fortitude check save or be dazzled until they are no longer within 30 feet of it. Additionally, on a critical failure, they are also blinded for 1 round.</p>",
+  "description": "<p><strong>Activate</strong> 2 Interact</p>\n<hr>\n<p>Flare beacons create an incredibly bright light for a brief period of time. They are often used to signal others to the beacon's location, to coordinate assaults, to request rescue, or for other similar reasons. Higher-level beacons have a radius so large that they can be seen from miles away at night. When you Activate a flare beacon, you can either place it on the ground in a space within your reach or toss it up to 60 feet straight up. A flare beacon in the air falls at a rate of 10 feet per round.</p>\n<hr>\n<p>The beacon shines bright light in a 180-foot radius and dim light in the next 180 feet. Creatures within a 30-foot radius of the beacon must succeed at a DC 35 Fortitude save or be dazzled until they are no longer within 30 feet of it. Additionally, on a critical failure, they are also blinded for 1 round.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1485,7 +1485,7 @@
   "price": 3500,
   "bulk": 0.1,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Activate</strong> 2 Interact</p>\n<hr>\n<p>Flare beacons create an incredibly bright light for a brief period of time. They are often used to signal others to the beacon's location, to coordinate assaults, to request rescue, or for other similar reasons. Higher-level beacons have a radius so large that they can be seen from miles away at night. When you Activate a flare beacon, you can either place it on the ground in a space within your reach or toss it up to 60 feet straight up. A flare beacon in the air falls at a rate of 10 feet per round.</p>\n<hr>\n<p>The beacon shines bright light in a 60-foot radius and dim light in the next 60 feet. Creatures within a 10-foot radius of the beacon must succeed at a Fortitude check save or be dazzled until they are no longer within 10 feet of it.</p>",
+  "description": "<p><strong>Activate</strong> 2 Interact</p>\n<hr>\n<p>Flare beacons create an incredibly bright light for a brief period of time. They are often used to signal others to the beacon's location, to coordinate assaults, to request rescue, or for other similar reasons. Higher-level beacons have a radius so large that they can be seen from miles away at night. When you Activate a flare beacon, you can either place it on the ground in a space within your reach or toss it up to 60 feet straight up. A flare beacon in the air falls at a rate of 10 feet per round.</p>\n<hr>\n<p>The beacon shines bright light in a 60-foot radius and dim light in the next 60 feet. Creatures within a 10-foot radius of the beacon must succeed at a DC 20 Fortitude save or be dazzled until they are no longer within 10 feet of it.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1523,7 +1523,7 @@
   "price": 11500,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>The snare takes the form of a Tiny frost worm clockwork toy. When a creature enters its square, the snare activates, causing the worm to let loose a 30-foot line of frost in the direction from which the creature entered the square. For instance, if a creature entered the square coming from the south, the worm would shoot the line south, to hit any allies of the triggering creature. Those within the line take 10d6[cold|options:area-damage] damage with a Reflex check save. After spitting its frost, the snare falls apart.</p>",
+  "description": "<p>The snare takes the form of a Tiny frost worm clockwork toy. When a creature enters its square, the snare activates, causing the worm to let loose a 30-foot line of frost in the direction from which the creature entered the square. For instance, if a creature entered the square coming from the south, the worm would shoot the line south, to hit any allies of the triggering creature. Those within the line take 10d6 cold damage with a DC 25 basic Reflex save. After spitting its frost, the snare falls apart.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -1541,7 +1541,7 @@
   "price": 2100,
   "bulk": 0.1,
   "usage": "wornshoes",
-  "description": "<p><strong>Activate</strong> 1 (manipulate, move)</p><hr><p>Gadget skates are metal devices that come in pairs and strap onto existing footwear (or a creature's feet). When you Activate gadget skates, clockwork gears reveal small wheels that propel you along the ground, moving you up to twice your Speed. During this movement, you must succeed at a Acrobatics check check to turn up to 90 degrees, and you can't turn more than once or more than 90 degrees. During the activation and after the activation is complete, you can't Stride, Step, or otherwise move on the ground until the end of your next turn. However, you can use this movement instead of a Stride to perform a High Jump or Long Jump just after the activation ends, in the direction of your last movement using the gadget skates.</p>\n<p>You can Sustain the Activation of your gadget skates for up to 1 minute. Starting on the turn after you Activate the gadget skates, the first time you Sustain the Activation each turn, you gain the effects of the activation again: you move up to twice your Speed in the same direction as your last movement with the gadget skates, and the restrictions continue to apply until you choose to cease Sustaining the Activation or you reach the maximum duration. Once the effect ends, the skates fall away and you can move normally.</p>",
+  "description": "<p><strong>Activate</strong> 1 (manipulate, move)</p><hr><p>Gadget skates are metal devices that come in pairs and strap onto existing footwear (or a creature's feet). When you Activate gadget skates, clockwork gears reveal small wheels that propel you along the ground, moving you up to twice your Speed. During this movement, you must succeed at a DC 20 Acrobatics check to turn up to 90 degrees, and you can't turn more than once or more than 90 degrees. During the activation and after the activation is complete, you can't Stride, Step, or otherwise move on the ground until the end of your next turn. However, you can use this movement instead of a Stride to perform a High Jump or Long Jump just after the activation ends, in the direction of your last movement using the gadget skates.</p>\n<p>You can Sustain the Activation of your gadget skates for up to 1 minute. Starting on the turn after you Activate the gadget skates, the first time you Sustain the Activation each turn, you gain the effects of the activation again: you move up to twice your Speed in the same direction as your last movement with the gadget skates, and the restrictions continue to apply until you choose to cease Sustaining the Activation or you reach the maximum duration. Once the effect ends, the skates fall away and you can move normally.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -2309,7 +2309,7 @@
   "price": 7000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>This craggy stone ammunition is warm to the touch. When you fire an activated meteor shot, it explodes into a small swarm of meteors as it reaches its target, scorching nearby creatures and littering the ground with rubble. In addition to the weapon's normal damage, the meteor shot deals fire damage and the ground in the area becomes difficult terrain.</p>\n<p>The ammunition deals 3d6[fire|options:area-damage] damage in a 5-foot  around the target (Reflex check save).</p>\n<p>In addition, the Strike gains the following critical failure effect.</p><hr><p><strong>Critical Failure</strong> The weapon misfires.</p>",
+  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>This craggy stone ammunition is warm to the touch. When you fire an activated meteor shot, it explodes into a small swarm of meteors as it reaches its target, scorching nearby creatures and littering the ground with rubble. In addition to the weapon's normal damage, the meteor shot deals fire damage and the ground in the area becomes difficult terrain.</p>\n<p>The ammunition deals 3d6 fire damage in a 5-foot emanation around the target (DC 23 basic Reflex save).</p>\n<p>In addition, the Strike gains the following critical failure effect.</p><hr><p><strong>Critical Failure</strong> The weapon misfires.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -2328,7 +2328,7 @@
   "price": 40000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>This craggy stone ammunition is warm to the touch. When you fire an activated meteor shot, it explodes into a small swarm of meteors as it reaches its target, scorching nearby creatures and littering the ground with rubble. In addition to the weapon's normal damage, the meteor shot deals fire damage and the ground in the area becomes difficult terrain.</p>\n<p>The ammunition deals 6d6[fire|options:area-damage] damage in a 10-foot  around the target (Reflex check save).</p>\n<p>In addition, the Strike gains the following critical failure effect.</p><hr><p><strong>Critical Failure</strong> The weapon misfires.</p>",
+  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>This craggy stone ammunition is warm to the touch. When you fire an activated meteor shot, it explodes into a small swarm of meteors as it reaches its target, scorching nearby creatures and littering the ground with rubble. In addition to the weapon's normal damage, the meteor shot deals fire damage and the ground in the area becomes difficult terrain.</p>\n<p>The ammunition deals 6d6 fire damage in a 10-foot emanation around the target (DC 29 basic Reflex save).</p>\n<p>In addition, the Strike gains the following critical failure effect.</p><hr><p><strong>Critical Failure</strong> The weapon misfires.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -2347,7 +2347,7 @@
   "price": 300000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>This craggy stone ammunition is warm to the touch. When you fire an activated meteor shot, it explodes into a small swarm of meteors as it reaches its target, scorching nearby creatures and littering the ground with rubble. In addition to the weapon's normal damage, the meteor shot deals fire damage and the ground in the area becomes difficult terrain.</p>\n<p>The ammunition deals 9d6[fire|options:area-damage] damage in a 20-foot  around the target (Reflex check save).</p>\n<p>In addition, the Strike gains the following critical failure effect.</p><hr><p><strong>Critical Failure</strong> The weapon misfires.</p>",
+  "description": "<p><strong>Ammunition</strong> round</p>\n<p><strong>Activate</strong> 1 (manipulate)</p><hr><p>This craggy stone ammunition is warm to the touch. When you fire an activated meteor shot, it explodes into a small swarm of meteors as it reaches its target, scorching nearby creatures and littering the ground with rubble. In addition to the weapon's normal damage, the meteor shot deals fire damage and the ground in the area becomes difficult terrain.</p>\n<p>The ammunition deals 9d6 fire damage in a 20-foot emanation around the target (DC 37 basic Reflex save).</p>\n<p>In addition, the Strike gains the following critical failure effect.</p><hr><p><strong>Critical Failure</strong> The weapon misfires.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -2399,7 +2399,7 @@
   "price": 600,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>When a creature enters this snare's square, it triggers an extremely loud clockwork device, which explodes with a bang that can be heard from 200 feet away and deals 1d8[fire] damage. The creature must attempt a Reflex check save.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is Deafened for 1 round.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and is Deafened for 1 minute.</p>",
+  "description": "<p>When a creature enters this snare's square, it triggers an extremely loud clockwork device, which explodes with a bang that can be heard from 200 feet away and deals 1d8 fire damage. The creature must attempt a DC 18 Reflex save.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is Deafened for 1 round.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and is Deafened for 1 minute.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -2530,7 +2530,7 @@
   "price": 12000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>This cute and unassuming dragon toy activates once a creature moves into its square. It then unleashes a rapid burst of toxic gas in a 10-foot emanation. Those within the emanation when the snare is activated must attempt a Fortitude check Fortitude saving throw or take 3d6[poison] damage.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is Sickened 1.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and is Sickened 2.</p>",
+  "description": "<p>This cute and unassuming dragon toy activates once a creature moves into its square. It then unleashes a rapid burst of toxic gas in a 10-foot emanation. Those within the emanation when the snare is activated must attempt a DC 25 Fortitude save Fortitude saving throw or take 3d6 poison damage.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is Sickened 1.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and is Sickened 2.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -3132,7 +3132,7 @@
   "price": 17500,
   "bulk": 0,
   "usage": "affixed-to-a-shield",
-  "description": "<p><strong>Usage</strong> affixed to a shield</p>\n<p><strong>Activate</strong> F (concentrate)</p>\n<p><strong>Trigger</strong> You Shield Block a foe's melee attack with the affixed shield.</p><hr><p>This miniature Stasian coil talisman emits small sparks when jostled. It uses a combination of Stasian technology and battle magic to erupt in electricity when discharged. When you activate the coil, the foe takes 2d12[electricity] damage (Reflex check save). On a failed save, the foe is Off-Guard until the start of its next turn.</p>",
+  "description": "<p><strong>Usage</strong> affixed to a shield</p>\n<p><strong>Activate</strong> F (concentrate)</p>\n<p><strong>Trigger</strong> You Shield Block a foe's melee attack with the affixed shield.</p><hr><p>This miniature Stasian coil talisman emits small sparks when jostled. It uses a combination of Stasian technology and battle magic to erupt in electricity when discharged. When you activate the coil, the foe takes 2d12 electricity damage (DC 27 basic Reflex save). On a failed save, the foe is Off-Guard until the start of its next turn.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -3151,7 +3151,7 @@
   "price": 70000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>This snare uses tightly wound springs, clockwork, and shrapnel to cause devastating damage. When a creature enters the snare's square, the trap releases, dealing 12d6[piercing] damage in a deafening explosion. Everyone in a 10-foot radius of the snare's square must attempt a Reflex check save.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature in unaffected,</p>\n<p><strong>Success</strong> The creature takes half damage and is Deafened for 1 round.</p>\n<p><strong>Failure</strong> The creature takes full damage, 2d6[persistent,piercing] damage, and is Deafened for 1 minute.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage, 4d6[persistent,piercing] damage, and is Deafened for 1 minute.</p>",
+  "description": "<p>This snare uses tightly wound springs, clockwork, and shrapnel to cause devastating damage. When a creature enters the snare's square, the trap releases, dealing 12d6 piercing damage in a deafening explosion. Everyone in a 10-foot radius of the snare's square must attempt a DC 31 Reflex save.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature in unaffected,</p>\n<p><strong>Success</strong> The creature takes half damage and is Deafened for 1 round.</p>\n<p><strong>Failure</strong> The creature takes full damage, 2d6 persistent piercing damage, and is Deafened for 1 minute.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage, 4d6 persistent piercing damage, and is Deafened for 1 minute.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -3360,7 +3360,7 @@
   "price": 9000,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>This complicated snare is affixed with various crystals and Stasian coils attached to strange electrical relays, working on the same principles as etheric spirit singers. When an incorporeal creature enters its square, the device lets loose an ectoplasmic web that lashes around the creature's spectral form. The creature must succeed a Reflex checksaving throw or become Immobilized for 1 round. On a critical failure, the creature becomes Immobilized for 1 minute. In either case, the incorporeal creature can attempt to Escape (DC 26).</p>",
+  "description": "<p>This complicated snare is affixed with various crystals and Stasian coils attached to strange electrical relays, working on the same principles as etheric spirit singers. When an incorporeal creature enters its square, the device lets loose an ectoplasmic web that lashes around the creature's spectral form. The creature must succeed a DC 26 Reflex savesaving throw or become Immobilized for 1 round. On a critical failure, the creature becomes Immobilized for 1 minute. In either case, the incorporeal creature can attempt to Escape (DC 26).</p>",
   "source": "Guns & Gears"
  },
  {
@@ -3500,7 +3500,7 @@
   "price": 440000,
   "bulk": 3,
   "usage": "worn",
-  "description": "<p>This traveler's chair uses Stasian technology to ride lightning.</p><hr><p><strong>Activate—Electroball</strong> 2 (electricity, manipulate)</p>\n<p><strong>Frequency</strong> once per hour</p>\n<p><strong>Effect</strong> You create a ball of electricity around the chair, surrounding it in a damaging aura of electricity and using electromagnetism to briefly levitate. For 1 minute, you gain a fly Speed equal to your Speed and adjacent creatures that hit you with a melee attack, as well as creatures that touch or hit you with an unarmed attack, take 2d6[electricity] damage each time. As normal, this applies to creatures who choose to touch you, not when you touch or attack another creature.</p>\n<p>Effect: Storm Chair</p><hr><p><strong>Activate—Ride the Lightning</strong> 2 (electricity, manipulate)</p>\n<p><strong>Frequency</strong> once per day</p>\n<p><strong>Effect</strong> You release the majority of the stored up energy from your storm chair, devastating foes in a chain of electricity. This has the effects of Chain Lightning with a DC of 31.</p>",
+  "description": "<p>This traveler's chair uses Stasian technology to ride lightning.</p><hr><p><strong>Activate—Electroball</strong> 2 (electricity, manipulate)</p>\n<p><strong>Frequency</strong> once per hour</p>\n<p><strong>Effect</strong> You create a ball of electricity around the chair, surrounding it in a damaging aura of electricity and using electromagnetism to briefly levitate. For 1 minute, you gain a fly Speed equal to your Speed and adjacent creatures that hit you with a melee attack, as well as creatures that touch or hit you with an unarmed attack, take 2d6 electricity damage each time. As normal, this applies to creatures who choose to touch you, not when you touch or attack another creature.</p>\n<p>Effect: Storm Chair</p><hr><p><strong>Activate—Ride the Lightning</strong> 2 (electricity, manipulate)</p>\n<p><strong>Frequency</strong> once per day</p>\n<p><strong>Effect</strong> You release the majority of the stored up energy from your storm chair, devastating foes in a chain of electricity. This has the effects of Chain Lightning with a DC of 31.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -3553,7 +3553,7 @@
   "price": 2300,
   "bulk": 0,
   "usage": "held-in-one-hand",
-  "description": "<p>This clockwork cobra activates when a creature enters its square, at which point it lashes out and spits venom, dealing 3d6[poison] damage. The target must attempt a Fortitude check save.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is Sickened 1.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage is Sickened 2.</p>",
+  "description": "<p>This clockwork cobra activates when a creature enters its square, at which point it lashes out and spits venom, dealing 3d6 poison damage. The target must attempt a DC 21 Fortitude save.</p>\n<hr>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is Sickened 1.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage is Sickened 2.</p>",
   "source": "Guns & Gears"
  },
  {

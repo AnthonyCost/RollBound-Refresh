@@ -45,7 +45,7 @@ import BookLeaf, { ChosenActions, wide } from './BookLeaf.jsx';
 import { ABILITY_SHORT, cap, sourceTag } from './labels.js';
 import { cardArtFor } from './art.js';
 import { gearFacts } from './gearFacts.js';
-import { signed } from '../format.js';
+import { sentenceCase, signed, titleCase } from '../format.js';
 
 function AbilityTiles({ mods }) {
   return (
@@ -631,12 +631,12 @@ export function SpellsStep({ build, update, data }) {
               title={s.name}
               facts={[
                 ['Cast', <ActionCost key="cast" actions={s.actions} />],
-                ['Range', s.range],
-                ['Area', s.area],
-                ['Targets', s.target],
-                ['Defense', s.defense && cap(s.defense)],
-                ['Duration', s.duration],
-                ['Traits', s.traits.join(', ')],
+                ['Range', sentenceCase(s.range)],
+                ['Area', sentenceCase(s.area)],
+                ['Targets', sentenceCase(s.target)],
+                ['Defense', s.defense && titleCase(s.defense)],
+                ['Duration', sentenceCase(s.duration)],
+                ['Traits', s.traits.map(titleCase).join(', ')],
               ]}
               description={s.description}
               onClose={close}

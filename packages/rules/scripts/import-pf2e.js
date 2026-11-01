@@ -10,6 +10,7 @@ import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { splitData } from '../src/data.js';
+import { cleanDescription } from './clean-description.js';
 
 // Add "Impossible Magic" here once the Foundry data includes it; the run logs
 // any skipped title containing "Impossible" so you can copy the exact string.
@@ -84,31 +85,7 @@ async function mapLimit(items, limit, fn) {
 
 // ---------- Description cleanup ----------
 
-const ALLOWED_TAGS = new Set(['p', 'strong', 'em', 'b', 'i', 'ul', 'ol', 'li', 'hr', 'br', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'h2', 'h3', 'h4']);
-
-function cleanDescription(html = '') {
-  return html
-    .replace(/@UUID\[[^\]]+\]\{([^}]+)\}/g, '$1')
-    .replace(/@UUID\[[^\]]*?([^.\]]+)\]/g, '$1')
-    .replace(/@Check\[([^\]|]+)[^\]]*\](\{([^}]+)\})?/g, (_m, type, _b, label) => label ?? `${type.replace(/^type:/, '')[0].toUpperCase()}${type.replace(/^type:/, '').slice(1)} check`)
-    .replace(/@Damage\[([^\]]*(?:\[[^\]]*\][^\]]*)*)\](\{([^}]+)\})?/g, (_m, expr, _b, label) => label ?? expr.replace(/\[([^\]]+)\]/g, ' $1').replace(/[()]/g, ''))
-    .replace(/@Template\[([^\]]+)\](\{([^}]+)\})?/g, (_m, spec, _b, label) => {
-      if (label) return label;
-      const type = /type:(\w+)/.exec(spec)?.[1] ?? '';
-      const dist = /distance:(\d+)/.exec(spec)?.[1];
-      return dist ? `${dist}-foot ${type}` : type;
-    })
-    .replace(/\[\[\/(\w+)\s+([^\]]+?)(?:\s*#[^\]]*)?\]\](\{([^}]+)\})?/g, (_m, cmd, args, _b, label) => {
-      if (label) return label;
-      if (cmd === 'act') return args.split(/\s+/)[0].split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ');
-      return args.replace(/[{}]/g, '');
-    })
-    .replace(/@Localize\[[^\]]+\]/g, '')
-    .replace(/@\w+\[[^\]]*\](\{([^}]+)\})?/g, (_m, _b, label) => label ?? '')
-    .replace(/<(\/?)([a-z0-9]+)\b[^>]*>/gi, (_m, close, tag) => (ALLOWED_TAGS.has(tag.toLowerCase()) ? `<${close}${tag.toLowerCase()}>` : ''))
-    .replace(/<p>\s*<\/p>/g, '')
-    .trim();
-}
+// See clean-description.js.
 
 // ---------- Rule elements ----------
 // Foundry encodes most mechanical effects as "rule elements". We read the few
@@ -473,7 +450,7 @@ function mapSpell(sp) {
     target: s.target?.value || null,
     defense: s.defense?.save ? `${s.defense.save.basic ? 'basic ' : ''}${s.defense.save.statistic}` : s.defense?.passive?.statistic ?? null,
     duration: s.duration?.value || null,
-    description: cleanDescription(s.description.value),
+    description: cleanDescription(s.description.value, { level: s.level.value, rank: s.level.value }),
     source: source(sp),
   };
 }

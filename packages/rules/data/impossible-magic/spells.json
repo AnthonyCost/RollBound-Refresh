@@ -622,7 +622,7 @@
   "area": null,
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You create an expendable shield of rough, raw bone in a free hand that can easily be replaced over and over again. When you Cast the Spell or the first time each round you Sustain this spell on subsequent rounds, you can Raise this Shield, granting you a +2 circumstance bonus to AC. While this spell is in effect, you gain the Shield Block reaction, but only with the bone shield. The bone shield has Hardness 3 and 1 HP (with no Broken Threshold). This shield also gains a +2 circumstance bonus to its Hardness against attacks that deal piercing or slashing damage. If the shield is destroyed, it's recreated already raised in a free hand when you Sustain the Spell.</p>\n<p><strong>Heightened (+2)</strong> The shield’s Hardness increases by 3.</p>",
   "source": "Impossible Magic"
  },
@@ -1036,7 +1036,7 @@
   "area": "15-foot burst",
   "target": null,
   "defense": "fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>Winning magical combat often requires exploiting weakness. You evoke a circle of floating inscriptions that creates and amplifies energy-based weaknesses on creatures inside the circle. Choose one type of damage from the following list: acid, cold, electricity, fire, force, or sonic. When you Cast the Spell and the first time you Sustain it each turn, each creature in the area must attempt a Fortitude saving throw.</p>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature gains weakness 1 to the chosen damage type for 1 round.</p>\n<p><strong>Failure</strong> As success, except the weakness is doubled.</p>\n<p><strong>Critical Failure</strong> As failure, and the creature becomes immobilized for 1 round or until they Escape.</p>\n<p><strong>Heightened (+2)</strong> The weakness gained on a success increases by 1.</p>",
   "source": "Impossible Magic"
  },
@@ -1083,7 +1083,7 @@
   "area": null,
   "target": "your companion",
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You create a duplicate of your companion that fights alongside its twin, mirroring the original's actions. The duplicate appears adjacent to your companion and has the same statistics.</p>\n<p>Each time you Command your companion, both your companion and its duplicate gain 2 actions. The duplicate always acts immediately after your companion and must use identical actions to the ones your companion used, in exactly the same order. However, it can use the actions differently, such as Striding to a different position or selecting a different target for a Strike. If the duplicate is unable to mimic an action, it performs the action without result, and the action is wasted. The duplicate can't use any actions that can be used only a limited number of times per day.</p>\n<p>The duplicate isn't truly alive and can't be healed in any way. If the duplicate ever reaches 0 Hit Points, it's instantly destroyed, and <em>clone companion</em> ends immediately.</p>",
   "source": "Impossible Magic"
  },
@@ -2100,7 +2100,7 @@
   "area": "20-foot burst",
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You conjure six types of elementals who combine forces to form a chaotic storm. The confluence has AC 28, 120 Hit Points, weakness 10 to area effects, and immunity to bleed and poison. Creatures can move through the confluence; creatures within the confluence are concealed, and all creatures outside the confluence are concealed to creatures within it. When you Cast or Sustain this Spell, you can move the confluence up to 20 feet and choose up to two different types of elementals to act.</p>\n<ul><li><strong>Air</strong> (air, electricity) Bolts of electricity burst from the confluence, dealing 4d4 electricity damage to creatures within 20 feet of the confluence, with a basic Reflex save. This doesn’t affect creatures that are completely inside of the confluence.</li><li><strong>Earth</strong> (earth) The confluence gains a +2 circumstance bonus to AC and resistance 10 to all physical damage (except adamantine) for 1 round.</li><li><strong>Fire</strong> (fire) Flames roar through the confluence, dealing 1d6 persistent fire damage to those partially or entirely inside the confluence.</li><li><strong>Metal</strong> (metal) The elemental flings shards of metal through the confluence, dealing 2d6 slashing damage to those partially or entirely inside the confluence with a basic Reflex save. A creature that critically fails also takes 1d6 persistent bleed damage.</li><li><strong>Water</strong> (attack, water) The elemental expels a powerful jet of water. Attempt a ranged spell attack against a target inside or within 60 feet of the confluence, using your spell attack modifier. This attack ignores concealment granted by the confluence, and the elemental gets a +2 circumstance bonus on the spell attack roll against a target inside the confluence. The water deals 4d6 bludgeoning damage on a hit (doubled on a critical hit). This attack doesn’t count toward your multiple attack penalty.</li><li><strong>Wood</strong> (wood) Roots and stumps grow, making ground in the area difficult terrain for 1 round.</li></ul>",
   "source": "Impossible Magic"
  },
@@ -2172,7 +2172,7 @@
   "area": null,
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>Sending forth swirls of fire and smoke, you summon a magical glowing being in an unoccupied space that resembles your form, though not your features. This duplicate is a creature created from the ashes of battle and glowing embers, dressed in a cloak of smoke. It has AC 10; 50 Hit Points; is immune to critical hits, precision damage, and the immobilized, prone, and restrained conditions; and has weakness 10 to cold and water. This creature doesn't provide or benefit from flanking and automatically fails all skill checks and saving throws, and all skill checks attempted against it automatically succeed. When you Cast the Spell and the first time you Sustain it each turn on subsequent rounds, the duplicate Strides up to 30 feet and launches a blast of fire in a 10-foot burst up to 30 feet away. Each creature in the burst takes 6d6 fire damage with a basic Reflex saving throw, using your spell DC.</p>\n<p><strong>Heightened (+1)</strong> The duplicate has an additional 10 Hit Points, and the damage increases by 1d6.</p>",
   "source": "Impossible Magic"
  },
@@ -2419,7 +2419,7 @@
   "area": null,
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustain\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You conjure two tiny portals in midair: one in your own space and another in any unoccupied space within range that you can see. As long as you occupy the space of a portal, you can see, hear, and reach through the portal in your space to Interact with creatures, objects, or the environment as if you were in the space of the other portal. Only you can use and benefit from these portals, although friendly creatures might be able to hand you items or otherwise Interact with whatever extremities you extend through them. No creature, including you, can pass entirely through either portal, even one occupying an extradimensional container.</p>",
   "source": "Impossible Magic"
  },
@@ -2547,7 +2547,7 @@
   "area": "20-foot burst",
   "target": null,
   "defense": "fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You open a tear in reality that leads to a fiendish plane such as Abaddon, Hell, or the Outer Rifts. Fiends reach out of the rift, grabbing at creatures with various appendages. When you Cast the Spell and the first time you Sustain it each turn on subsequent rounds, each creature in the area takes 7d6 spirit damage; creatures with the holy trait take an additional 10 spirit damage. An affected creature attempts a Fortitude save.</p>\n<p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature takes half damage.</p>\n<p><strong>Failure</strong> The creature takes full damage and is grabbed for 1 round or until it Escapes.</p>\n<p><strong>Critical Failure</strong> The creature takes double damage and is restrained for 1 round or until it Escapes.</p>\n<p><strong>Heightened (+1)</strong> The damage increases by 1d6.</p>",
   "source": "Impossible Magic"
  },
@@ -2599,7 +2599,7 @@
   "area": "5-foot radius, 40-foot tall cylinder",
   "target": null,
   "defense": "basic reflex",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You combine a blazing inferno and air currents into a fiery vortex. You can Cast this Spell only if you're outside or the ceiling is 40 feet or higher. All squares in the vortex are difficult terrain for flying creatures.</p>\n<p>All creatures in the area take 3d4 bludgeoning damage and 3d6 fire damage as gusts of fiery wind buffet them, with a basic Reflex save. Each time you Sustain the Spell, you can move the whirlwind up to 20 feet in a straight line. Each creature the whirlwind moves through takes the damage with a basic Reflex save. A creature can take damage from a <em>flame vortex</em> only once per round.</p>\n<p><strong>Heightened (+2)</strong> The vortex deals an additional 1d4 bludgeoning damage and 1d6 fire damage.</p>",
   "source": "Impossible Magic"
  },
@@ -3327,7 +3327,7 @@
   "area": null,
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 10 minutes",
+  "duration": "sustained up to 10 minutes",
   "description": "<p>You conjure a magical floating quill to assist in copying the text from one non-magical piece of literature to a blank page or empty book in your possession. You first press your finger to the page you want copied, then to the blank page, and the quill sets to work, magically conjuring ink as it writes. It can’t translate languages, codes, or idioms, but it transcribes the text exactly as-is from one page to the other. The quill can copy roughly one average book page per minute and disappears when the spell is finished.</p>",
   "source": "Impossible Magic"
  },
@@ -3427,7 +3427,7 @@
   "area": null,
   "target": "1 creature",
   "defense": "basic fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>Your enemies are full of hot air, so you make their lungs burn when they try to talk. The target takes 4d6 fire damage with a basic Fortitude save. On a failed save, the target also burns whenever they speak, causing them to take 4 fire damage whenever they use an action with the auditory trait or Cast a Spell, unless their spell is subtle.</p>\n<p><strong>Heightened (+1)</strong> The initial fire damage increases by 1d6, and the fire damage the target takes whenever they take an action with the auditory trait or Cast a Spell increases by 1.</p>",
   "source": "Impossible Magic"
  },
@@ -3855,7 +3855,7 @@
   "area": "30-foot emanation",
   "target": null,
   "defense": "fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>As your enemies attempt to approach you, you create a field around yourself that warps and stretches space and time. The first time an enemy enters or starts their turn in the emanation, they must attempt a Fortitude save. If a target affected by the spell leaves the spell’s area and later re-enters it, the spell’s effects resume based on their previous saving throw.</p>\n<p><strong>Critical Success</strong> The target is unaffected.</p>\n<p><strong>Success</strong> The target is encumbered while in the area of the spell.</p>\n<p><strong>Failure</strong> The target is encumbered and slowed 1 while in the area of the spell.</p>\n<p><strong>Critical Failure</strong> The target is encumbered, slowed 1, and cannot take reactions while in the area of the spell.</p>",
   "source": "Impossible Magic"
  },
@@ -4054,7 +4054,7 @@
   "area": null,
   "target": "1 creature",
   "defense": "reflex",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You conjure a crackling lasso of pure electricity, hurling it at a creature to bind them in place. The target must attempt a Reflex save.</p>\n<p><strong>Critical Success</strong> The target is unaffected</p>\n<p><strong>Success</strong> The target takes 2d12 electricity damage.</p>\n<p><strong>Failure</strong> The target takes 2d12 electricity damage and is immobilized until the end of your next turn, but it can Escape. On subsequent turns, if the target is still immobilized by the lasso, you can Sustain the spell to deal 2 electricity damage and keep the target immobilized until the end of your next turn.</p>\n<p><strong>Critical Failure</strong> As failure, but the target is also restrained.</p>\n<p><strong>Heightened (+1)</strong> The initial electricity damage increases by 1d12, and the electricity damage dealt when you Sustain the spell increases by 2.</p>",
   "source": "Impossible Magic"
  },
@@ -4129,7 +4129,7 @@
   "area": "10-foot burst",
   "target": null,
   "defense": "reflex",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You transform an unoccupied 10-foot burst of ground into a roiling cauldron of earth. When you Cast the Spell and the first time you Sustain it each turn on subsequent rounds, you can move the living terrain up to 15 feet in a straight line along the ground; you can’t move it onto water or other liquids. Creatures in the area at any point during this movement take 4d6 bludgeoning damage and must attempt a Reflex save as the living terrain destabilizes the earth while moving.</p>\n<p><strong>Critical Success</strong> The target takes no damage.</p>\n<p><strong>Success</strong> The target takes half damage and is clumsy 1 until the beginning of your next turn.</p>\n<p><strong>Failure</strong> The target takes full damage, is knocked prone, and is clumsy 1 until the beginning of your next turn.</p>\n<p><strong>Critical Failure</strong> The target takes double damage, is knocked prone, and is clumsy 2 until the beginning of your next turn.</p>\n<p><strong>Heightened (+1)</strong> The damage increases by 1 d6.</p>",
   "source": "Impossible Magic"
  },
@@ -4363,7 +4363,7 @@
   "area": null,
   "target": "1 metal object",
   "defense": "basic fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} for up to 1 minute",
+  "duration": "sustained for up to 1 minute",
   "description": "<p>You conjure a metal tuning fork and strike it, the vibration creating a soft ping that rattles the foundations of the target. Whenever you Cast this Spell and the first time you sustain it on subsequent turns, the target object produces the same note in an ear-piercing frequency that deals 1d12 sonic damage to all creatures in its space and all adjacent spaces (basic Fortitude save).</p>\n<p><strong>Heightened (+2)</strong> The damage increases by 1d12.</p>",
   "source": "Impossible Magic"
  },
@@ -4446,7 +4446,7 @@
   "area": null,
   "target": "1 creature",
   "defense": "basic will",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You completely surround a Large or smaller creature in a shimmering ring of illusory mirrors that follows them as they move, even when the creature moves outside the range of the spell. These mirrors reflect the target, though if the target has no reflection, like a vampire, they're unaffected by <em>mirror malefactors</em>. As long as the target is surrounded by mirrors, they're frightened 1, and they can't reduce their frightened value. When you Cast the Spell, the reflections leap from the mirrors and attack the target, dealing 7d8 mental damage with a basic Will save. On subsequent turns, this effect repeats the first time you Sustain the spell that turn. If the target critically succeeds at any Will save they attempt against <em>mirror malefactors</em>, the illusory mirrors shatter and the spell ends.</p>\n<p><strong>Heightened (+1)</strong> The damage for both the initial effect and on subsequent turns increases by 1d8.</p>",
   "source": "Impossible Magic"
  },
@@ -4749,7 +4749,7 @@
   "area": null,
   "target": "your familiar",
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>Typically, the connection between a familiar and its master carries subtle mental magic only felt between the two. Some casters learn to empower this magic, blasting scrambled lines of their mental conversations to any target between them. When you Cast this Spell and the first time you Sustain this spell on subsequent turns, this magical connection flares in a line between you and your familiar, dealing 3d8 mental damage to all creatures in the line, with a basic Reflex save.</p>\n<p><strong>Heightened (+1)</strong> The damage increases by 1d8.</p>",
   "source": "Impossible Magic"
  },
@@ -4801,7 +4801,7 @@
   "area": null,
   "target": null,
   "defense": "fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You open a rift into Creation’s Forge, igniting it into a miniature star that blazes with mighty light. You shed bright light in a 30-foot emanation (and dim light to the next 30 feet). When you Cast or Sustain the spell, each creature with void healing in the aura takes 1 vitality damage, and any creature in the aura with a particular vulnerability to sunlight becomes slowed 1 for 1 round unless it succeeds at a Fortitude save. After a creature in the aura loses HP due to fire damage from any source, it takes 1 vitality damage.</p>",
   "source": "Impossible Magic"
  },
@@ -4828,7 +4828,7 @@
   "area": null,
   "target": "your familiar",
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You channel your magic into your familiar, filling its body with dreadful energy, turning them into a powerful protective force. You can use Command an Animal on the target as part of Casting or Sustaining this spell. Your familiar's AC becomes 28; they become large, and they gain 20 temporary Hit Points. If your familiar is reduced to 0 Hit Points while under the effect of this spell, the spell immediately ends, and your familiar is instead reduced to 1 Hit Point. Once per turn your familiar can use the Body Check or Protector's Shove action.</p>\n<p><strong>Body Check</strong> [single action] Your familiar uses its new size and presence to press against an adjacent creature, dealing, 4d10 bludgeoning damage (basic Fortitude save). On a failed save, the target is also knocked back 10 feet (20 feet on a critical failure).</p>\n<p><strong>Protector's Shove</strong> [single action] Your familiar shoves an ally out of danger. Your familiar pushes an adjacent, willing ally, pushing them up to 20 feet away and granting them a +2 status bonus to AC for 1 round. This is forced movement.</p>\n<p><strong>Heightened (9th)</strong> The familiar’s AC become 36, they gain 30 temporary Hit Points, and the damage increases by 2d10.</p>",
   "source": "Impossible Magic"
  },
@@ -4876,7 +4876,7 @@
   "area": "10-foot burst",
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You create an echo of a powerful poltergeist, temporarily anchoring it to the area. Because the poltergeist is a manifestation and not truly present, it can’t be attacked or hurt; it remains invisible unless otherwise stated. When you Cast the Spell, and the first time you Sustain it on subsequent rounds, the poltergeist creates your choice of one of the following effects.</p>\n<ul><li><strong>Deathly Assault</strong> (void) The poltergeist focuses on one creature in the area and flies through that creature, dealing 4d10 void damage with a basic Fortitude save.</li><li><strong>Frighten</strong> (emotion, fear, mental) The poltergeist becomes visible, appearing as a skeletal, ghostlike humanoid. Creatures in the area must attempt a Will save, becoming frightened 2 on a failure.</li><li><strong>Telekinetic Storm</strong> (force) The poltergeist hurls debris and quasi-real objects around in the area. All creatures in the area take 4d8 force damage with a basic Reflex save.</li></ul>\n<p><strong>Heightened (+2)</strong> The damage of the deathly assault effect increases by 1d10, and the damage of the telekinetic storm effect increases by 1d8.</p>",
   "source": "Impossible Magic"
  },
@@ -4952,7 +4952,7 @@
   "area": "10-foot-by-10-foot square",
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 10 minutes",
+  "duration": "sustained up to 10 minutes",
   "description": "<p>A tightly packed crowd of humanoids appropriate to the area appear, facing you and agreeing loudly with anything you say. A creature that touches a member of the crowd or attempts a Seek action to examine the crowd can attempt to disbelieve your illusion. The crowd is difficult terrain for anyone who hasn’t disbelieved the illusion. When you spend 1 or more actions to cast a composition spell or to perform an activity that includes a Performance check, you can also Sustain this Spell as part of that action.</p>\n<p><strong>Heightened (+1)</strong> The crowd occupies an additional 10-foot-by-10-foot square in range. The additional square doesn’t need to be adjacent to any other square. It can overlap, but there’s no additional effect in the overlapped squares.</p>",
   "source": "Impossible Magic"
  },
@@ -5184,7 +5184,7 @@
   "area": null,
   "target": "1 creature",
   "defense": "reflex",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>Ethereal threads emanate from your fingertips and flow toward the target, connecting to its arms, legs, and body. The target must attempt a Reflex save.</p>\n<p><strong>Critical Success</strong> The target is unaffected.</p>\n<p><strong>Success</strong> The strings impede the target's movements, but you can't control them. The target is clumsy 1 until the end of its next turn.</p>\n<p><strong>Failure</strong> The target is clumsy 1 and slowed 1. Additionally, when you Cast this Spell and the first time you Sustain it on subsequent turns, you can force the target to Stride or Strike. If you force the target to Stride, you determine the path it takes; you can't force it to Stride into a space where it can't stand easily. This is forced movement. If you cause the creature to Strike, it makes a melee Strike against a creature within its reach using your spell attack modifier. The target can't hit itself this way. On a hit, the Strike deals 7d6 bludgeoning, piercing, or slashing damage, as appropriate. None of the target's equipment or abilities modify this Strike. This Strike contributes to and uses your multiple attack penalty. At the end of its turn, the target can attempt a Fortitude save against your spell DC to free itself from the threads. On a success, the spell ends.</p>\n<p><strong>Critical Failure</strong> As failure, but the target is slowed 2, and you can force the target to use 2 actions when you Cast or Sustain the spell.</p>",
   "source": "Impossible Magic"
  },
@@ -5234,7 +5234,7 @@
   "area": "15-foot emanation",
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You demonstrate exceptional control over elemental forces, allowing you to mitigate the effects of energy damage. As a reaction, whenever you or an ally in the area would attempt a basic Reflex save to resist an effect that deals acid, cold, electricity, fire, force, or sonic damage, they use the outcome one degree of success better than the result of their saving throw.</p>\n<p><strong>Heightened (8th)</strong> The area increases to a 30-foot emanation.</p>",
   "source": "Impossible Magic"
  },
@@ -5584,7 +5584,7 @@
   "area": null,
   "target": "1 creature",
   "defense": "will",
-  "duration": "{{actions 2317 \"sustained\"}} up to 10 minutes",
+  "duration": "sustained up to 10 minutes",
   "description": "<p>Your flamboyant flourish invokes such powerful feelings in your audience that you incite cheers and applause. The target of this spell must be able to see, hear, or otherwise understand you. The target must attempt a Will save.</p>\n<p><strong>Critical Success</strong> The target is unaffected.</p>\n<p><strong>Success</strong> The target becomes mildly distracted and applauds while it isn’t fully occupied. It can’t use reactions.</p>\n<p><strong>Failure</strong> The target applauds you so vigorously that it can’t use reactions and is slowed 1. The applause is so involved that it has the manipulate trait. This triggers reactions based on the manipulate trait at the start of the target’s turn.</p>\n<p><strong>Critical Failure</strong> As failure, plus the target is so distracted by its vigorous applauding of you that it’s fascinated with you.</p>\n<p><strong>Heightened (6th)</strong> You can target up to 10 creatures.</p>",
   "source": "Impossible Magic"
  },
@@ -5657,7 +5657,7 @@
   "area": "10-foot burst",
   "target": null,
   "defense": "basic fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You create a cloud of bloodsucking fog that drains the life from the living. Each living creature in the area when you Cast the Spell, aside from you, takes 6d6 void damage with a basic Fortitude save. Creatures in the area are concealed, and all creatures outside the cloud become concealed to creatures within it.</p>\n<p>The first time each round you Sustain this spell on subsequent turns, living creatures in the area take an additional 2d6 void damage with another basic Fortitude save. You also gain temporary Hit Points equal to half the damage a single creature took when you Sustained the spell this turn; calculate these temporary Hit Points using the creature that took the most damage. These temporary Hit Points last for 1 minute.</p>\n<p><strong>Heightened (+1)</strong> The initial damage increases by 2d6, and the secondary damage increases by 1d6.</p>",
   "source": "Impossible Magic"
  },
@@ -5983,7 +5983,7 @@
   "area": "30-foot line",
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}}",
+  "duration": "sustained",
   "description": "<p>By playing a brief tune on an instrument or in song, you cause the notes of the melody to physically manifest into a shimmering, translucent path. This path doesn’t need to be over solid ground and can tilt up or down diagonally up to 45 degrees, but it must be a straight, 5-foot-wide line. It can support as many creatures as can physically fit on the bridge.</p>",
   "source": "Impossible Magic"
  },
@@ -6113,7 +6113,7 @@
   "area": null,
   "target": null,
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You manipulate the fabric of space-time, temporarily bringing two distant points together, connected by a magical gate. Choose two unoccupied 5-foot squares on solid ground that you can see within range. You create spherical portals in both squares that are 5 feet tall and 5 feet wide connecting the two locations. Any creature that enters one portal can immediately transport itself to the exit portal as a part of its move action, which adds the teleportation trait to its movement (this movement still triggers reactions as normal). Physical objects can pass through the portal normally, as though the portals were adjacent. Ranged attacks made through the portals treat them as only one 5-foot square for the purpose of calculating range. Spells cast through the portals have no effect.</p>\n<p><strong>Heightened (6th)</strong> Range increases to 500 feet, and the portals can be made up to 10 feet tall and 10 feet wide.</p>\n<p><strong>Heightened (7th)</strong> Range increases to 1,000 feet, and the portals can be made up to 30 feet tall and 30 feet wide.</p>",
   "source": "Impossible Magic"
  },
@@ -6290,7 +6290,7 @@
   "area": "30-foot radius, 200-foot-tall cylinder",
   "target": null,
   "defense": "will",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You replace the sky with a mesmerizing vision of the Astral Plane’s River of Souls, pulling creatures toward their final destiny. You can Cast this Spell only if you’re outside. All creatures in the area must attempt a Will save, and they repeat the save each time you Sustain the spell.</p>\n<p><strong>Critical Success</strong> The creature is unaffected and temporarily immune to <em>stars of another sky</em> for 1 day.</p>\n<p><strong>Success</strong> The creature is fascinated by the beauty of the sky and rises 20 feet into the air. Creatures without a fly Speed remain in the air for the spell’s duration but fall when they recover from their fascinated condition. A creature that reaches the top of the cylinder doesn’t rise farther but takes 5d10 mental damage each time it starts its turn there due to a desire to become more immersed in the sky. Creatures without souls take double damage. If this damage drops the creature to 0 Hit Points, it dies instantly.</p>\n<p><strong>Failure</strong> As success, but the creature rises 50 feet into the air. Additionally, hostile actions don’t affect its fascinated condition for 1 round.</p>\n<p><strong>Critical Failure</strong> As failure, but the creature rises 100 feet into the air.</p>",
   "source": "Impossible Magic"
  },
@@ -6369,7 +6369,7 @@
   "area": null,
   "target": "your familiar",
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>Sometimes, you need more allies to best you foes. Your familiar divides, turning into two familiars. Then they divide again, becoming four, then eight, and so on until there are innumerable copies of your familiar bustling about, eager to join the fight. While in its swarm form, your familiar gains immunity to precision damage and to the grappled, prone, and restrained conditions; weakness 4 to area and splash damage; and resistance 4 to piercing and slashing damage. It occupies the space of a Large creature and can occupy the same space as other creatures. If your familiar is reduced to 0 Hit Points while under the effect of this spell, the spell immediately ends, and your familiar is instead reduced to 1 Hit Point. Once per turn, your familiar can use the Swarming Bites action.</p>\n<p><strong>Swarming Bites</strong> [single action] Each creature in the familiar swarm’s space takes 3d6 damage of the appropriate type (basic Reflex save). Usually this is piercing damage, but depending on your familiar, it can be bludgeoning or slashing at the GM’s discretion.</p>\n<p>Upon Casting this spell, you immediately Command your familiar. The first time each round you Sustain this spell on subsequent turns, you Command your familiar as part of the same action.</p>\n<p><strong>Heightened (+1)</strong> The damage of Swarming Bites increases by 1d6, and all resistances and weaknesses increase by 1.</p>",
   "source": "Impossible Magic"
  },
@@ -6526,7 +6526,7 @@
   "area": "60-foot burst",
   "target": null,
   "defense": "fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You cause the barrier between the Universe and the Void to weaken as waves of void energy pull the living toward the tear to their inevitable doom. The area is difficult terrain to all living creatures. When you Cast this Spell and the first time each round you Sustain it on subsequent rounds, all living creatures in the area must attempt a Fortitude saving throw.</p>\n<p><strong>Critical Success</strong> The target is unaffected. <strong>Success</strong> The target takes 5d12 void damage and is pulled 15 feet toward the center. <strong>Failure</strong> The target takes 10d12 void damage and is pulled 30 feet toward the center. <strong>Critical Failure</strong> The target takes 20d12 void damage and is pulled 30 feet toward the center.</p>\n<p>There’s an additional 5-foot burst in the center of the area that drains the life away from all who touch it. Whenever a living creature begins its turn in this burst, it becomes drained 1, or its drained condition increases by 1 to a maximum of drained 4. A target that is drained 4 and begins its turn in the center burst must attempt a Fortitude save that has the death and incapacitation traits; on a failure, it is reduced to 0 Hit Points, crumbles into ash, and becomes a wraith. The gear of the creature that’s transformed in this way falls to the ground in its space.</p>",
   "source": "Impossible Magic"
  },
@@ -6820,7 +6820,7 @@
   "area": null,
   "target": "your eidolon or familiar",
   "defense": null,
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You serve as an astral connection between your eidolon or familiar and the Akashic Record—a demiplane consisting of a comprehensive psychic library. If you Cast this Spell on your familiar, your familiar adds your spellcasting attribute modifier on checks to Recall Knowledge with the Lore skill of your choice, much like they do for Acrobatics and Stealth. Your familiar must have the speech familiar ability in order to share any information they learn with you. If you Cast this Spell on your eidolon, they instead become trained in the Lore skill of your choice.</p>\n<p>If you lose physical contact with the target, their connection to the Akashic Record is severed, and the spell immediately ends.</p>",
   "source": "Impossible Magic"
  },
@@ -7002,7 +7002,7 @@
   "area": "10-foot burst",
   "target": null,
   "defense": "will",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You magically desynchronize the current plane of existence, trapping creatures in an area that loops back on itself in the manner of an unbounded plane. Whenever a creature attempts to enter or leave the area, they must attempt a Will saving throw.</p>\n<p><strong>Critical Success</strong> The creature moves into or out of the area as intended.</p>\n<p><strong>Success</strong> The creature moves into or out of the area successfully but appears it a random unoccupied space adjacent to the edge of the area.</p>\n<p><strong>Failure</strong> The creature fails to enter or exit the area, instead appearing at a random, unoccupied space adjacent to the edge of the area, and their movement immediately ends.</p>\n<p><strong>Critical Failure</strong> As failure, except the creature can’t attempt to enter or leave again this turn.</p>",
   "source": "Impossible Magic"
  },
@@ -7127,7 +7127,7 @@
   "area": "20-foot burst",
   "target": null,
   "defense": "basic fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You disturb a section of reality itself, tearing creatures apart at a fundamental level using your current plane of existence as fuel. When you Cast this Spell and the first time you Sustain it on subsequent rounds, each creature in the area takes 5d10 force damage with a basic Fortitude save. On a failed save, a creature that isn’t a native inhabitant of the plane also takes 1d10 persistent force damage and becomes off-guard until it recovers from this persistent damage. A target reduced to 0 Hit Points by either damage scatters into fine dust; its gear remains.</p>\n<p><strong>Heightened (+2)</strong> The initial and persistent force damage increases by 1d10.</p>",
   "source": "Impossible Magic"
  },
@@ -7314,7 +7314,7 @@
   "area": "30-foot emanation",
   "target": null,
   "defense": "basic fortitude",
-  "duration": "{{actions 2317 \"sustained\"}} up to 1 minute",
+  "duration": "sustained up to 1 minute",
   "description": "<p>You create a powerful and hungry spirit entity that grows and builds strength by consuming the spirits of foes you both slay. When you Cast the Spell, the gestalt deals 14d6 void damage to all living creatures of your choice in the area, with a basic Fortitude save. Creatures you choose that end their turns in the area take 6d6 void damage, with a basic Fortitude save.</p>\n<p>At the end of each of your turns, if you killed a living creature during that turn or if the gestalt’s damage killed a creature since the end of your last turn, you add the slain creature’s soul to the gestalt. The emanation’s radius increases by 20 feet, and the damage dealt by the aura increases by 1d6. (Note that this increase only happens once, even if you killed multiple living creatures that turn.) As normal for determining threat level, the GM determines if a creature is of significant enough threat to empower the gestalt; in general, a creature several levels below you rarely poses a significant threat.</p>\n<p><strong>Heightened (10th)</strong> The initial damage increases to 16d6, and the aura’s damage starts at 7d6.</p>",
   "source": "Impossible Magic"
  },

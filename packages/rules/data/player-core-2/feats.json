@@ -221,7 +221,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p>You can capably deliver toxins with a Blowgun. Your blowgun Strikes can apply injury poisons even if they deal no damage due to a creature's resistance. If you critically succeed at a blowgun Strike using a poisoned dart, the target's initial save against the poison is one degree of success worse than the creature rolls; this is a misfortune effect.</p>\n<p>In addition, if you make a blowgun Strike while Hidden or Undetected, you don't automatically become Observed. Instead, immediately attempt a Stealth check check against the Perception DC of the target. If you succeed, you don't become observed, and are hidden (if you were undetected, you still become hidden rather than remaining undetected).</p>",
+  "description": "<p>You can capably deliver toxins with a Blowgun. Your blowgun Strikes can apply injury poisons even if they deal no damage due to a creature's resistance. If you critically succeed at a blowgun Strike using a poisoned dart, the target's initial save against the poison is one degree of success worse than the creature rolls; this is a misfortune effect.</p>\n<p>In addition, if you make a blowgun Strike while Hidden or Undetected, you don't automatically become Observed. Instead, immediately attempt a Stealth check against the Perception DC of the target. If you succeed, you don't become observed, and are hidden (if you were undetected, you still become hidden rather than remaining undetected).</p>",
   "source": "Player Core 2"
  },
  {
@@ -287,7 +287,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p>Tapping into the physiology of your draconic ancestor, you can exhale a torrent of energy in a 15-foot  or a 30-foot , dealing 1d4 damage. Each creature in the area must attempt a basic saving throw against the higher of your class DC or spell DC. You can't use this ability again for 1d4 rounds.</p>\n<p>At 3rd level and every 2 levels thereafter, the damage increases by 1d4. The shape of the breath, the damage type, and the saving throw match those of your draconic exemplar. This ability has the trait associated with the type of damage it deals.</p>",
+  "description": "<p>Tapping into the physiology of your draconic ancestor, you can exhale a torrent of energy in a 15-foot cone or a 30-foot line, dealing 1d4 damage. Each creature in the area must attempt a basic saving throw against the higher of your class DC or spell DC. You can't use this ability again for 1d4 rounds.</p>\n<p>At 3rd level and every 2 levels thereafter, the damage increases by 1d4. The shape of the breath, the damage type, and the saving throw match those of your draconic exemplar. This ability has the trait associated with the type of damage it deals.</p>",
   "source": "Player Core 2"
  },
  {
@@ -387,7 +387,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p>You have a habit of always being in the way when other creatures attempt to move. Attempt an Acrobatics check check against an adjacent creature's Reflex DC.</p>\n<p>Effect: Catfolk Dance</p>\n<hr>\n<p><strong>Critical Success</strong> The target creature gains a -2 circumstance penalty to Reflex saves and is Off-Guard until the start of your next turn.</p>\n<p><strong>Success</strong> The target creature gains a -2 circumstance penalty to Reflex saves until the start of your next turn.</p>",
+  "description": "<p>You have a habit of always being in the way when other creatures attempt to move. Attempt an Acrobatics check against an adjacent creature's Reflex DC.</p>\n<p>Effect: Catfolk Dance</p>\n<hr>\n<p><strong>Critical Success</strong> The target creature gains a -2 circumstance penalty to Reflex saves and is Off-Guard until the start of your next turn.</p>\n<p><strong>Success</strong> The target creature gains a -2 circumstance penalty to Reflex saves until the start of your next turn.</p>",
   "source": "Player Core 2"
  },
  {
@@ -718,7 +718,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p><strong>Requirements</strong> You have a hand free and are within melee reach of an opponent.</p><hr><p>You hook a foe's bootlaces together, pull their hat over their eyes, loosen their belt, or otherwise confound their mobility through an underhanded tactic. Attempt a Thievery check check against the target's Reflex DC.</p><hr><p><strong>Critical Success</strong> The target is Clumsy 1 until they use an Interact action to end the impediment</p>\n<p><strong>Success</strong> As critical success, but the condition ends automatically after 1 round.</p>\n<p><strong>Critical Failure</strong> You fall Prone as your attempt backfires.</p>",
+  "description": "<p><strong>Requirements</strong> You have a hand free and are within melee reach of an opponent.</p><hr><p>You hook a foe's bootlaces together, pull their hat over their eyes, loosen their belt, or otherwise confound their mobility through an underhanded tactic. Attempt a Thievery check against the target's Reflex DC.</p><hr><p><strong>Critical Success</strong> The target is Clumsy 1 until they use an Interact action to end the impediment</p>\n<p><strong>Success</strong> As critical success, but the condition ends automatically after 1 round.</p>\n<p><strong>Critical Failure</strong> You fall Prone as your attempt backfires.</p>",
   "source": "Player Core 2"
  },
  {
@@ -1291,7 +1291,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p>You tap into the collected lore of the divine, accessing a variety of potentially useful information.</p>\n<p>Attempt a Religion check check to understand the information you gain. The GM sets the DC (similar to the DC to Recall Knowledge), potentially adjusting the DC of the check for topics far removed from your mystery.</p>\n<hr>\n<p><strong>Critical Success</strong> You comprehend the lore accurately or gain a useful clue from the divine about your situation.</p>\n<p><strong>Success</strong> You learn two pieces of information about the topic, one true and one erroneous, but you don't know which is which.</p>\n<p><strong>Failure</strong> You recall incorrect information or gain an erroneous or misleading clue.</p>\n<p><strong>Critical Failure</strong> You recall two pieces of incorrect information or gain two erroneous or misleading clues.</p>",
+  "description": "<p>You tap into the collected lore of the divine, accessing a variety of potentially useful information.</p>\n<p>Attempt a Religion check to understand the information you gain. The GM sets the DC (similar to the DC to Recall Knowledge), potentially adjusting the DC of the check for topics far removed from your mystery.</p>\n<hr>\n<p><strong>Critical Success</strong> You comprehend the lore accurately or gain a useful clue from the divine about your situation.</p>\n<p><strong>Success</strong> You learn two pieces of information about the topic, one true and one erroneous, but you don't know which is which.</p>\n<p><strong>Failure</strong> You recall incorrect information or gain an erroneous or misleading clue.</p>\n<p><strong>Critical Failure</strong> You recall two pieces of incorrect information or gain two erroneous or misleading clues.</p>",
   "source": "Player Core 2"
  },
  {
@@ -1482,7 +1482,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p>Disobeying your Iron Command has lasting consequences. If an enemy refuses to kneel to you, you can deal ternarygte@actor.level,19,6,ternarygte@actor.level,16,5,ternarygte@actor.level,12,4,ternarygte@actor.level,9,3,ternarygte@actor.level,5,2,1d6[persistent,mental]{persistent mental damage} instead of normal mental damage. You must decide whether the mental damage will be persistent before your enemy chooses whether to kneel or not. The amount of damage is unchanged.</p>",
+  "description": "<p>Disobeying your Iron Command has lasting consequences. If an enemy refuses to kneel to you, you can deal persistent mental damage instead of normal mental damage. You must decide whether the mental damage will be persistent before your enemy chooses whether to kneel or not. The amount of damage is unchanged.</p>",
   "source": "Player Core 2"
  },
  {
@@ -1788,7 +1788,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p><strong>Requirements</strong> You are unarmored and touching the ground</p><hr><p>You enter the stance of an implacable mountain—a technique created by dwarven monks—allowing you to strike with the weight of an avalanche and block blows with your garments. The only Strikes you can make are falling stone unarmed attacks. These deal 1d8[bludgeoning] damage; are in the brawling group; and have the forceful, nonlethal, and unarmed traits.</p>\n<p>While in Mountain Stance, you gain a +4 item bonus to AC and a +2 circumstance bonus to any defenses against Reposition, Shove, Trip, and other forced movement effects. You have a Dexterity modifier cap to your AC of +0, meaning you don't add your Dexterity to your AC, and your Speeds are all reduced by 5 feet. The item bonus to AC from Mountain Stance is cumulative with armor potency runes on your explorer's clothing, mystic armor, and bands of force.</p>",
+  "description": "<p><strong>Requirements</strong> You are unarmored and touching the ground</p><hr><p>You enter the stance of an implacable mountain—a technique created by dwarven monks—allowing you to strike with the weight of an avalanche and block blows with your garments. The only Strikes you can make are falling stone unarmed attacks. These deal 1d8 bludgeoning damage; are in the brawling group; and have the forceful, nonlethal, and unarmed traits.</p>\n<p>While in Mountain Stance, you gain a +4 item bonus to AC and a +2 circumstance bonus to any defenses against Reposition, Shove, Trip, and other forced movement effects. You have a Dexterity modifier cap to your AC of +0, meaning you don't add your Dexterity to your AC, and your Speeds are all reduced by 5 feet. The item bonus to AC from Mountain Stance is cumulative with armor potency runes on your explorer's clothing, mystic armor, and bands of force.</p>",
   "source": "Player Core 2"
  },
  {
@@ -1851,7 +1851,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p>You lay a finger on the scales of life and death to heal a creature, regardless of whether it's living or undead. You restore 2*1+@actor.level[healing] Hit Points to one creature within 30 feet.</p>\n<p>In addition, you can mediate during your daily preparations to place yourself on one side of the scales. Choose life or death. If you align yourself with life, you are healed by vitality healing effects, as normal for most living creatures; if you align yourself with death, you gain the void healing ability, causing you to be healed by void effects that restore Hit Points and any other effects that restore Hit Points to undead creatures.</p>",
+  "description": "<p>You lay a finger on the scales of life and death to heal a creature, regardless of whether it's living or undead. You restore 2 × (1 + your level) healing Hit Points to one creature within 30 feet.</p>\n<p>In addition, you can mediate during your daily preparations to place yourself on one side of the scales. Choose life or death. If you align yourself with life, you are healed by vitality healing effects, as normal for most living creatures; if you align yourself with death, you gain the void healing ability, causing you to be healed by void effects that restore Hit Points and any other effects that restore Hit Points to undead creatures.</p>",
   "source": "Player Core 2"
  },
  {
@@ -2288,7 +2288,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p>Your surgery can bring a patient back from the brink of death, but might push them over the edge. When you Treat Wounds, you can deal 1d8[slashing] damage to your patient just before applying the effects of Treat Wounds.</p>\n<p>If you do, you gain a +2 circumstance bonus to your Medicine check to Treat Wounds, and if you roll a success, you get a critical success instead.</p>",
+  "description": "<p>Your surgery can bring a patient back from the brink of death, but might push them over the edge. When you Treat Wounds, you can deal 1d8 slashing damage to your patient just before applying the effects of Treat Wounds.</p>\n<p>If you do, you gain a +2 circumstance bonus to your Medicine check to Treat Wounds, and if you roll a success, you get a critical success instead.</p>",
   "source": "Player Core 2"
  },
  {
@@ -2961,7 +2961,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p>You can withstand blood loss startlingly well. Whenever you would gain the Drained condition, you can attempt a Flat check. On a success, you don't gain the drained condition.</p>",
+  "description": "<p>You can withstand blood loss startlingly well. Whenever you would gain the Drained condition, you can attempt a DC 17 Flat check. On a success, you don't gain the drained condition.</p>",
   "source": "Player Core 2"
  },
  {
@@ -3086,7 +3086,7 @@
   "feats": [],
   "grantChoice": null,
   "grantedOnlyIf": null,
-  "description": "<p><strong>Requirements</strong> You are unarmored</p><hr><p>You enter the stance of a wolf, low to the ground with your hands held like fangs. You can make wolf jaw unarmed attacks. These deal 1d8[piercing] damage; are in the brawling group; and have the agile, backstabber, finesse, nonlethal, and unarmed traits.</p>\n<p>If you're flanking a target while in Wolf Stance, your wolf jaw unarmed attacks also gain the trip trait.</p>",
+  "description": "<p><strong>Requirements</strong> You are unarmored</p><hr><p>You enter the stance of a wolf, low to the ground with your hands held like fangs. You can make wolf jaw unarmed attacks. These deal 1d8 piercing damage; are in the brawling group; and have the agile, backstabber, finesse, nonlethal, and unarmed traits.</p>\n<p>If you're flanking a target while in Wolf Stance, your wolf jaw unarmed attacks also gain the trip trait.</p>",
   "source": "Player Core 2"
  }
 ]
