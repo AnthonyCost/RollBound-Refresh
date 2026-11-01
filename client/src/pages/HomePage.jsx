@@ -56,7 +56,7 @@ function Section({ id, title, to, count, action, children }) {
 /** The top of the page: art beside what to do next. */
 function Spotlight({ art, eyebrow, title, lines, party, children }) {
   return (
-    <section className="home-spotlight home-rise" aria-labelledby="home-spotlight-title">
+    <section className="home-spotlight" aria-labelledby="home-spotlight-title">
       <div className={`home-spotlight__art ${art ? '' : 'home-spotlight__art--map'}`} aria-hidden="true">
         <img src={art ?? homeMap} alt="" />
       </div>
@@ -197,7 +197,7 @@ function NeedsAttention() {
   useEffect(() => onInboxChanged(load), [load]);
   if (!requests.length) return null;
   return (
-    <section className="home-attention home-rise" aria-labelledby="home-attention-title">
+    <section className="home-attention" aria-labelledby="home-attention-title">
       <h2 id="home-attention-title" className="eyebrow">Waiting on you</h2>
       <ul>{requests.map((r) => <JoinRequest key={r.id} request={r} onAnswered={load} />)}</ul>
     </section>
@@ -326,7 +326,7 @@ export default function HomePage() {
           <NeedsAttention />
 
           {!brandNew && (
-            <div className="home-table home-rise">
+            <div className="home-table">
               <Section id="home-characters" title="Your Characters" to="/characters" count={characters.length} action={<Link to="/create" className="home-section__new">+ New</Link>}>
                 {characters.length ? (
                   <ul className="char-rows">

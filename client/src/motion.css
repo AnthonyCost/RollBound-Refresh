@@ -1,0 +1,104 @@
+/* Motion across the site: short, quiet, and off for anyone who prefers reduced motion.
+   Entrances use "backwards" fill, so nothing keeps a transform once it has arrived
+   (a leftover transform would break sticky and fixed elements inside it). */
+
+:root {
+  --ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-pop: cubic-bezier(0.3, 1.4, 0.5, 1);
+  --motion-fast: 120ms;
+  --motion: 220ms;
+  --motion-slow: 340ms;
+}
+
+@keyframes rise-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes drop-in { from { opacity: 0; transform: translateY(-6px) scale(0.98); } }
+@keyframes pop-in { from { opacity: 0; transform: scale(0.6); } }
+@keyframes fade-in { from { opacity: 0; } }
+
+/* ---------- Pages: each section rises in, one just after another ---------- */
+
+.app__main > * { animation: rise-in var(--motion-slow) var(--ease-out) backwards; }
+.app__main > :nth-child(2) { animation-delay: 40ms; }
+.app__main > :nth-child(3) { animation-delay: 80ms; }
+.app__main > :nth-child(4) { animation-delay: 120ms; }
+.app__main > :nth-child(n + 5) { animation-delay: 160ms; }
+
+/* ---------- Lists of cards: a short ripple across the first few ---------- */
+
+:is(.char-grid, .camp-grid, .char-rows, .camp-rows, .creatures, .resources) > * { animation: rise-in var(--motion-slow) var(--ease-out) backwards; animation-delay: 240ms; }
+:is(.char-grid, .camp-grid, .char-rows, .camp-rows, .creatures, .resources) > :nth-child(1) { animation-delay: 60ms; }
+:is(.char-grid, .camp-grid, .char-rows, .camp-rows, .creatures, .resources) > :nth-child(2) { animation-delay: 100ms; }
+:is(.char-grid, .camp-grid, .char-rows, .camp-rows, .creatures, .resources) > :nth-child(3) { animation-delay: 140ms; }
+:is(.char-grid, .camp-grid, .char-rows, .camp-rows, .creatures, .resources) > :nth-child(4) { animation-delay: 180ms; }
+:is(.char-grid, .camp-grid, .char-rows, .camp-rows, .creatures, .resources) > :nth-child(5) { animation-delay: 210ms; }
+
+/* ---------- Buttons, tabs and links: respond to hover and press ---------- */
+
+.btn { transition: color var(--motion-fast), border-color var(--motion-fast), background-color var(--motion-fast), box-shadow var(--motion), filter var(--motion-fast), transform var(--motion-fast) var(--ease-out); }
+.btn:not(:disabled):active { transform: scale(0.97); }
+@media (hover: hover) {
+  .btn:not(:disabled, .btn--blood):hover { border-color: var(--bronze); color: var(--text); }
+  .btn--blood:not(:disabled):hover { box-shadow: 0 0 26px #7a1c12, inset 0 1px 0 var(--blood-text); }
+  .char-card:has(.char-card__banner:hover), .camp-card:has(.camp-card__open:hover) { transform: translateY(-2px); }
+}
+.char-card, .camp-card { transition: border-color 0.2s, box-shadow 0.2s, transform var(--motion) var(--ease-out); }
+.nav a { transition: color var(--motion-fast), border-color var(--motion); }
+.chip, .steps__pip { transition: color var(--motion-fast), border-color var(--motion-fast), background-color var(--motion-fast), transform var(--motion-fast) var(--ease-out); }
+.chip:active { transform: scale(0.96); }
+.steps__pip[aria-current='step'] { transform: rotate(45deg) scale(1.2); }
+
+/* ---------- Things that open: menus, the inbox, confirmations and messages ---------- */
+
+.inbox__panel, .menu__list { animation: drop-in var(--motion) var(--ease-out) backwards; transform-origin: top right; }
+.inbox__badge { animation: pop-in var(--motion) var(--ease-pop) backwards; }
+.confirm, .char-card__confirm, .form-errors, .notice { animation: drop-in var(--motion) var(--ease-out) backwards; }
+.sidenav { animation: fade-in var(--motion-fast) ease-out backwards; }
+
+/* ---------- Choosing things in the builder ---------- */
+
+.tile { transition: border-color var(--motion-fast), background-color var(--motion-fast), box-shadow var(--motion), transform var(--motion-fast) var(--ease-out); }
+.tile:active { transform: scale(0.97); }
+.tile--on .tile__emblem { animation: tile-chosen var(--motion-slow) var(--ease-pop); }
+@keyframes tile-chosen { 40% { transform: scale(1.1); } }
+@media (hover: hover) { .tile:not(.tile--on):hover { transform: translateY(-2px); } }
+.option__desc { animation: fade-in var(--motion) ease-out backwards; }
+
+/* ---------- At the table: taking a hit ---------- */
+
+.orb--hit-0 { animation: orb-hit-a 420ms ease-out; }
+.orb--hit-1 { animation: orb-hit-b 420ms ease-out; }
+@keyframes orb-hit-a {
+  15% { transform: translateX(-4px); box-shadow: 0 0 40px 8px #e0301e, inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
+  35% { transform: translateX(4px); }
+  55% { transform: translateX(-3px); }
+  75% { transform: translateX(2px); }
+}
+@keyframes orb-hit-b {
+  15% { transform: translateX(-4px); box-shadow: 0 0 40px 8px #e0301e, inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
+  35% { transform: translateX(4px); }
+  55% { transform: translateX(-3px); }
+  75% { transform: translateX(2px); }
+}
+
+/* ---------- The site's mark: the potion sways on hover ---------- */
+
+@media (hover: hover) {
+  a:hover .wordmark__logo { animation: potion-sway 600ms ease-in-out; }
+}
+@keyframes potion-sway { 25% { transform: rotate(-8deg); } 60% { transform: rotate(6deg); } }
+
+/* ---------- Everyone who prefers less motion gets none of it ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-delay: 0s !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .btn:not(:disabled):active, .chip:active, .tile:active { transform: none; }
+  .tile:hover, .char-card:hover, .camp-card:hover { transform: none !important; }
+  /* Still show that a hit landed, just without the shaking. */
+  .orb--hit-0, .orb--hit-1 { box-shadow: 0 0 30px 4px #e0301e, inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
+}

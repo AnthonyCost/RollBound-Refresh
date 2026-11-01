@@ -568,11 +568,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .home-request__actions .btn { flex: none; }
 }
 
-/* A gentle rise as the page's sections arrive. */
-.home-rise { animation: home-rise 0.35s ease both; }
-@keyframes home-rise { from { opacity: 0; transform: translateY(6px); } }
-@media (prefers-reduced-motion: reduce) { .home-rise { animation: none; } }
-
 /* While it loads: the page's shape, softly pulsing. */
 .home-skeleton { display: flex; flex-direction: column; gap: 20px; }
 .home-skeleton__spotlight, .home-skeleton__row { border: 1px solid var(--line-faint); background: var(--panel); animation: home-pulse 1.4s ease-in-out infinite; }
