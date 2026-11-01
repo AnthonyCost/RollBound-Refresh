@@ -2563,6 +2563,20 @@ button.book__back { padding: 0; border: 0; background: none; font: inherit; font
 .book__type { display: flex; color: var(--bronze); }
 .creature__type { flex: none; display: flex; align-self: center; color: var(--gold); }
 .creature__type + .title { flex: 1; min-width: 0; }
+/* The Armory's shelves: the biggest categories, as a row of icon tiles above the book. */
+.armory-shelves { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+.armory-shelves--open { display: none; }
+.armory-shelf { flex: 0 0 96px; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 10px 4px 8px; border: 1px solid var(--line); background: var(--panel); color: var(--bronze); cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+.armory-shelf__name { flex: 1; font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 0.8px; line-height: 1.25; text-align: center; text-transform: uppercase; color: var(--text-soft); }
+.armory-shelf__count { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.armory-shelf[aria-pressed='true'] { border-color: var(--blood); background: var(--panel-hot); color: var(--blood-text); box-shadow: 0 0 10px var(--glow); }
+.armory-shelf[aria-pressed='true'] .armory-shelf__name { color: var(--text); }
+@media (hover: hover) { .armory-shelf:not([aria-pressed='true']):hover { border-color: var(--bronze); color: var(--gold); } }
+@media (min-width: 1024px) {
+  .armory-shelves, .armory-shelves--open { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); overflow: visible; padding-bottom: 0; }
+}
+.armory-price { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
+.book__leaf .item-facts dd { font-size: 15px; }
 /* A creature's level after the dot leader. */
 .book__level { min-width: 30px; padding: 2px 6px; border: 1px solid var(--line); background: var(--bg); font-family: var(--display); font-size: 13px; font-weight: 700; text-align: center; color: var(--text); font-variant-numeric: tabular-nums; }
 /* The creature page: art and lore, then the stat block, stacked on one page. */

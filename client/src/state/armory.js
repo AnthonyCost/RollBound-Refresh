@@ -2,6 +2,7 @@
 // The list loads the first time it's needed; each category's rules text loads when one
 // of its items is opened.
 import index from '@rollbound/rules/armory/index.json';
+import { ICON_PATHS } from '../components/iconPaths.js';
 
 export const ARMORY_CATEGORIES = index.categories;
 export const ARMORY_LICENSE = index.license;
@@ -36,3 +37,9 @@ export const itemPath = (item) => `/armory/${item.slug}`;
 
 /** "Item 4" or "Item 4+" when it has stronger versions. */
 export const itemLevel = (item) => `Item ${item.level}${item.variants?.length > 1 ? '+' : ''}`;
+
+/** A category's Icon name (the anvil, for one without its own). */
+export const categoryIcon = (category) => {
+  const name = `item${category.replace(/[^A-Za-z]/g, '')}`;
+  return ICON_PATHS[name] ? name : 'armory';
+};
