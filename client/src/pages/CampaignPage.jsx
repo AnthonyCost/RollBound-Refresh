@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useOutletContext, useParams } from 'react-router-dom';
 import { useCampaignService } from '../state/campaignService.js';
 import PageShell from '../components/PageShell.jsx';
+import Icon from '../components/Icon.jsx';
 import InviteCode from '../components/InviteCode.jsx';
 import Portrait from '../components/Portrait.jsx';
 import Avatar from '../components/Avatar.jsx';
@@ -31,31 +32,18 @@ export function useCampaignCrumbs(crumbs) {
   }, [key, setCrumbs]);
 }
 
-const TAB_ICONS = {
-  overview: <path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z" />,
-  logs: (
-    <>
-      <path d="M7 4h11a2 2 0 0 1 0 4h-1v10a2 2 0 0 1-2 2H6a2 2 0 0 1 0-4h1z" />
-      <path d="M10 9h4M10 13h4" />
-    </>
-  ),
-  encounters: <path d="M5 19L19 5M15 5h4v4M5 5l14 14M9 19H5v-4" />,
-};
-
 /** The tabs under a campaign's header, like a GitHub repository's. Encounters is the GM's alone. */
 function CampaignTabs({ id, isGm }) {
   const tabs = [
     { to: `/campaigns/${id}`, label: 'Overview', icon: 'overview', end: true },
     { to: `/campaigns/${id}/logs`, label: 'Session logs', icon: 'logs' },
-    ...(isGm ? [{ to: `/campaigns/${id}/encounters`, label: 'Encounters', icon: 'encounters' }] : []),
+    ...(isGm ? [{ to: `/campaigns/${id}/encounters`, label: 'Encounters', icon: 'swords' }] : []),
   ];
   return (
     <nav className="nav" aria-label="Campaign">
       {tabs.map((t) => (
         <NavLink key={t.to} to={t.to} end={t.end}>
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-            {TAB_ICONS[t.icon]}
-          </svg>
+          <Icon name={t.icon} />
           {t.label.toUpperCase()}
         </NavLink>
       ))}

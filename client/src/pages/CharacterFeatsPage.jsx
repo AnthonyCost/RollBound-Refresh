@@ -97,6 +97,7 @@ export default function CharacterFeatsPage() {
             onClose={() => setOpenId(null)}
           />
         )}
+        blankIcon="feats"
         blank={
           <>
             <p className="book__blank-title">Feats and abilities</p>

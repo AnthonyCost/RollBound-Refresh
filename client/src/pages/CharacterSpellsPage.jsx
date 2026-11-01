@@ -180,6 +180,7 @@ export default function CharacterSpellsPage() {
             {spell.slug && <Link to={`/spells/${spell.slug}`} className="spell__link">Open in the Spell Book</Link>}
           </BookLeaf>
         )}
+        blankIcon="spells"
         blank={
           <>
             <p className="book__blank-title">Your spells</p>

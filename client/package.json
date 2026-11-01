@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "art:import": "node scripts/import-art.mjs",
     "art:creatures": "node scripts/import-creature-art.mjs",
-    "art:pregens": "node scripts/pregen-headshots.mjs"
+    "art:pregens": "node scripts/pregen-headshots.mjs",
+    "icons": "node scripts/build-icons.js"
   },
   "dependencies": {
     "@rollbound/rules": "*",
@@ -19,6 +20,7 @@
     "react-router-dom": "^7.6.0"
   },
   "devDependencies": {
+    "@iconify-json/game-icons": "^1.2.4",
     "@vitejs/plugin-react": "^4.5.0",
     "sharp": "^0.34.3",
     "vite": "^6.3.5"

@@ -5,6 +5,7 @@ import { useAuth } from '../state/AuthContext.jsx';
 import { inboxChanged, onInboxChanged } from '../state/inbox.js';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 import Portrait from './Portrait.jsx';
+import Icon from './Icon.jsx';
 
 const POLL_MS = 60_000;
 const KIND_LABEL = {
@@ -83,10 +84,7 @@ export default function Inbox() {
         aria-label={unread ? `Inbox, ${unread} unread` : 'Inbox'}
         onClick={toggle}
       >
-        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 13l3-8h12l3 8v6H3z" />
-          <path d="M3 13h5l1 2h6l1-2h5" />
-        </svg>
+        <Icon name="inbox" size={22} />
         {unread > 0 && <span className="inbox__badge">{unread > 99 ? '99+' : unread}</span>}
       </button>
       {open && (

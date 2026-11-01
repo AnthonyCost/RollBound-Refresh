@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import Icon from './Icon.jsx';
 
 /** Entries on one page of the index. */
 const PAGE = 24;
@@ -21,7 +22,8 @@ export const letterOf = (item) => {
  *
  * items: the matching entries, already sorted into sections.
  * sections: [{ key, tab, name }] in index order; sectionOf(item) gives an item's key.
- * open: the open entry (or null), shown by leaf; blank shows before one is opened.
+ * open: the open entry (or null), shown by leaf; blank shows before one is opened, under
+ * blankIcon (an Icon name for what the book holds).
  * href(item): where an entry opens (keep the current search so filters stay).
  * meta(item): what sits after the dot leader (level, rarity, actions).
  * lead(item), optional: what sits before the name (a session's number).
@@ -35,7 +37,7 @@ export const letterOf = (item) => {
  * running head's list of sections.
  */
 export default function BookSpread({
-  items, total, noun, sections, sectionOf, open, href, onOpen, meta, lead, leaf, blank, heading, filtered, clearTo, emptyText,
+  items, total, noun, sections, sectionOf, open, href, onOpen, meta, lead, leaf, blank, blankIcon, heading, filtered, clearTo, emptyText,
   marked = () => false, blocked = () => null, short = false, tabsOnTop = false, resetKey = '',
 }) {
   const [params, setParams] = useSearchParams();
@@ -165,7 +167,7 @@ export default function BookSpread({
       <section className="book__page book__leaf" aria-label={open ? open.name : 'Open entry'}>
         {open ? leaf : (
           <div className="book__blank">
-            <span className="book__blank-mark" aria-hidden="true">✦</span>
+            <span className="book__blank-mark"><Icon name={blankIcon} size={64} /></span>
             {blank}
           </div>
         )}

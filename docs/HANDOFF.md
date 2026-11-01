@@ -88,6 +88,7 @@ client/                React app (Vite)
   src/sheet/             PDF export: fill logic, field map, open/download
   src/state/             Auth, table state, campaign service, portraits, inbox
   src/assets/art/        Class/ancestry portraits and icons (found by file name)
+  scripts/build-icons.js Which game-icons.net icons the site uses; `npm run icons -w client` writes src/components/iconPaths.js for Icon.jsx
   scripts/               map-sheet-fields.mjs, import-art.mjs
 server/                Express API
   src/routes/            auth, characters, campaigns, uploads

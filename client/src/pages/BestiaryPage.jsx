@@ -175,6 +175,7 @@ export default function BestiaryPage() {
             </>
           )}
           leaf={open && <CreatureEntry key={open.id} c={open} creatures={creatures} search={search} closeTo={closeTo} />}
+          blankIcon="bestiary"
           blank={
             <>
               <p className="book__blank-title">Choose a creature</p>

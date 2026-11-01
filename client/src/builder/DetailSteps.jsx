@@ -424,6 +424,7 @@ export function FeatsStep({ build, update, data }) {
                 onClose={() => setOpenId(null)}
               />
             )}
+            blankIcon="feats"
             blank={
               <>
                 <p className="book__blank-title">Choose your feats</p>
@@ -476,7 +477,7 @@ const SPELL_NOTE = {
  * field, max, options }]; each group is a tab across the top and a line in the summary.
  * leaf(item, { chosen, full, add, remove, close }) draws the open option's page.
  */
-function PicksBook({ groups, build, update, noun, meta, leaf, blank }) {
+function PicksBook({ groups, build, update, noun, meta, leaf, blank, blankIcon }) {
   const items = groups.flatMap((g) =>
     [...g.options].sort((a, b) => a.name.localeCompare(b.name)).map((o) => ({ id: `${g.key}:${o.id}`, name: o.name, option: o, group: g })),
   );
@@ -513,6 +514,7 @@ function PicksBook({ groups, build, update, noun, meta, leaf, blank }) {
         emptyText={`No ${noun} to choose from.`}
         leaf={open && leaf(open, { chosen: isChosen(open), full: isFull(open.group), add: () => add(open), remove: () => remove(open), close: () => setOpenId(null) })}
         blank={blank}
+        blankIcon={blankIcon}
       />
     </section>
   );
@@ -552,6 +554,7 @@ function RunesPicker({ build, update, data, known }) {
             )}
           </BookLeaf>
         )}
+        blankIcon="runes"
         blank={
           <>
             <p className="book__blank-title">Choose your runes</p>
@@ -650,6 +653,7 @@ export function SpellsStep({ build, update, data }) {
             </BookLeaf>
           );
         }}
+        blankIcon="spells"
         blank={
           <>
             <p className="book__blank-title">Choose your spells</p>
@@ -786,6 +790,7 @@ export function GearStep({ build, update, data }) {
             onClose={() => setOpenId(null)}
           />
         )}
+        blankIcon="inventory"
         blank={
           <>
             <p className="book__blank-title">The merchant's ledger</p>

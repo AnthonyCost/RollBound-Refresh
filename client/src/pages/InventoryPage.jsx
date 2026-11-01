@@ -392,6 +392,7 @@ function Merchant({ view, coins, full, onAdd }) {
             {added && <span className="rule-note" aria-hidden="true">{added}</span>}
           </BookLeaf>
         )}
+        blankIcon="inventory"
         blank={
           <>
             <p className="book__blank-title">The merchant's shelves</p>

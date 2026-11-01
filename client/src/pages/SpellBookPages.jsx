@@ -164,6 +164,7 @@ export default function SpellBookPage() {
             </>
           )}
           leaf={open && <SpellEntry key={open.slug} s={open} closeTo={closeTo} />}
+          blankIcon="spells"
           blank={
             <>
               <p className="book__blank-title">Choose a spell</p>

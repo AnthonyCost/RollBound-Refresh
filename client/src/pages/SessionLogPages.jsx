@@ -154,6 +154,7 @@ export function SessionLogsPage() {
               )}
             </article>
           )}
+          blankIcon="logs"
           blank={
             <>
               <p className="book__blank-title">The campaign journal</p>

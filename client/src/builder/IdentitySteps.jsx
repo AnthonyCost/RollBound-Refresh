@@ -150,6 +150,7 @@ export function HeritageStep({ build, update, data, goTo }) {
             onClose={() => setOpenId(null)}
           />
         )}
+        blankIcon="heritage"
         blank={
           <>
             <p className="book__blank-title">Choose a heritage</p>
@@ -300,6 +301,7 @@ export function BackgroundStep({ build, update, data }) {
             </span>
           )}
           leaf={open && <BackgroundLeaf b={open} data={data} chosen={open.id === build.background} onChoose={() => select(open.id)} onRemove={() => select(null)} onClose={() => setOpenId(null)} />}
+          blankIcon="background"
           blank={
             <>
               <p className="book__blank-title">Choose a background</p>
