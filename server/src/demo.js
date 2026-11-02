@@ -6,7 +6,7 @@
 // can't join their campaign, so Mira plays in Sam's. Demo accounts are deleted after DEMO_HOURS, or when the visitor
 // exits the demo.
 import { randomBytes } from 'node:crypto';
-import { SAMPLE_BUILDS, DEMO_ROSTER, buildCharacter, migrateBuild } from '@rollbound/rules';
+import { SAMPLE_BUILDS, DEMO_ROSTER, PREGENS, buildCharacter, migrateBuild } from '@rollbound/rules';
 import { pool } from './db.js';
 import { storage } from './storage/index.js';
 import { rulesData } from './rules.js';
@@ -20,6 +20,14 @@ const BOT_DELAY_SECONDS = 5;
 const CLEANUP_EVERY_MS = 60 * 60 * 1000;
 // Demo accounts per IP address per hour, so a script can't fill the database.
 const DEMOS_PER_HOUR = 20;
+
+// Demo characters' portraits, by name: each pregen's own headshot (see storage/index.js).
+// Mira has the fighter's, and Kestrel, an elf ranger, borrows Merisiel's.
+const STOCK_PORTRAITS = {
+  ...Object.fromEntries(PREGENS.map((p) => [p.name, `stock/${p.slug}.webp`])),
+  'Mira Ashvale': 'stock/valeros.webp',
+  Kestrel: 'stock/merisiel.webp',
+};
 
 const fakeEmail = (tag) => `demo-${randomBytes(8).toString('hex')}${tag}@demo.invalid`;
 
@@ -45,7 +53,7 @@ export async function createDemo() {
     const vault = await campaign(sam, 'The Sunken Vault', 'Beneath the drowned chapel lies a vault no one has opened in three hundred years. Sam is gathering a party to open it.');
     const character = async (owner, build, campaignId) => {
       const c = sheet(build);
-      return (await client.query('INSERT INTO characters (owner_id, campaign_id, name, level, data, share_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [owner.id, campaignId, c.name, c.level, c, generateShareId()])).rows[0];
+      return (await client.query('INSERT INTO characters (owner_id, campaign_id, name, level, data, share_id, portrait_key) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [owner.id, campaignId, c.name, c.level, c, generateShareId(), STOCK_PORTRAITS[c.name] ?? null])).rows[0];
     };
     const [mira, ...heroes] = DEMO_ROSTER;
     await character(user, mira, vault.id);

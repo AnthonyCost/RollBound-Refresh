@@ -110,6 +110,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
   - the session cookie is HTTP-only and lasts 30 days,
   - the database stores only a SHA-256 hash of each session token (`sessions` table).
 - **Demo mode:** "Try the demo" (`POST /api/auth/demo`) makes a real, temporary account for each visitor and signs them in, so the demo runs the same code as everyone else (`server/src/demo.js`).
+  - **Portraits:** demo characters use the pregen headshots through `stock/<slug>.webp` portrait keys (`STOCK_PORTRAITS` in `server/src/demo.js`). `storage` in `server/src/storage/index.js` turns those into `/stock/...` URLs and never deletes them, so no demo stores its own copies.
   - **What it comes with:** "Traveler" has a character of every class (`DEMO_ROSTER`) and runs *Wolves at the Ford*, whose party starts empty. Mira is built in the builder, so she can be edited. A pretend player, **Sam**, has asked to bring his ranger **Kestrel** in, so a join request waits in the inbox. Sam also runs *The Sunken Vault*, where Mira already plays (a GM's own characters can't join their campaign); the welcome message gives its invite code for bringing more characters, and Sam accepts requests to it about five seconds later (`answerBotRequests`, run when the inbox or character list loads). The characters' builds are `SAMPLE_BUILDS` in the rules package, and a test keeps them valid.
   - **Separate worlds:** a demo only finds its own campaigns' invite codes, and nobody else finds them (`canJoin`).
   - **Lifetime:** demo accounts are deleted, with Sam, their characters, campaigns, messages and uploads, when the visitor exits the demo, or after 24 hours (`scheduleDemoCleanup`, hourly and on start). The banner shows the hours left.
@@ -170,7 +171,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Builder fixes found on the way:** Versatile Human now gets its 1st-level general feat (a bonus slot keyed by the heritage's ID; Mira took Toughness), and Armor Proficiency and Weapon Proficiency now actually train light/medium/heavy armor and martial weapons (`proficienciesOf`).
 - **Original sheets** are in `client/public/pregens/` (`Pregens-<Hero>-Lvl1.pdf`); the gallery links each one.
 - **Gallery cards** show each hero's whole class portrait, fitted (not cropped), with the name below.
-- **Headshot portraits:** picking a hero preloads a square headshot as their portrait (saved with the character like an upload; it can be changed or removed on Review). The headshots are `client/src/assets/pregens/<slug>.webp`, cut from the class portraits by `npm run art:pregens -w client` (`scripts/pregen-headshots.mjs`): it finds the head as the topmost wide, solid shape in the transparent art, with hand-set crops in `FOCUS` for Jirelle, Korakai and Nhalmika.
+- **Headshot portraits:** picking a hero preloads a square headshot as their portrait (`client/public/stock/<slug>.webp`) (saved with the character like an upload; it can be changed or removed on Review). The headshots are `client/src/assets/pregens/<slug>.webp`, cut from the class portraits by `npm run art:pregens -w client` (`scripts/pregen-headshots.mjs`): it finds the head as the topmost wide, solid shape in the transparent art, with hand-set crops in `FOCUS` for Jirelle, Korakai and Nhalmika.
 
 ### 4. Rules data import
 - **Source:** the Foundry VTT pf2e system's open data, filtered to the books in `BOOKS` (Player Core, Player Core 2 and Guns & Gears) and pinned to an upstream commit recorded in `meta.commit`.
@@ -210,6 +211,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Campaign page:** cover, backstory, the party (portraits and player avatars), and the invite code (GM only).
 - **Party sheets:** each party card's portrait and name open that character's sheet. Your own opens your playable sheet (`/play/:id`). Anyone else's opens read-only at `/campaigns/:id/characters/:characterId`, with all four tabs. The server (`GET /api/campaigns/:id/characters/:characterId`) only returns it to the campaign's GM and players with a character in it, which includes the character's own player. The public share link (`/sheets/:shareId`) is separate: it's for owners sharing outside the campaign.
 - **GM controls:** **Remove** on other players' characters, with a confirm (`POST /api/campaigns/:id/remove`). The character stays with its player, in no campaign, and its player can rejoin with the code. **Delete campaign** is at the bottom of the Edit page, with a confirm (`DELETE /api/campaigns/:id`). Its characters stay with their players, in no campaign; the cover image is deleted and the hub says so. Players can still Leave with their own characters.
+
+**Placeholder covers:** a campaign with no cover of its own or from its adventure path shows one of four paintings (`client/src/state/campaignCovers.js`), picked by its ID. It's only shown, never saved, so the Cover image field stays empty.
 
 ### 6a. Creating a campaign, step by step
 - **Steps** (`pages/CampaignCreatePage.jsx`), with diamonds like the character builder's:

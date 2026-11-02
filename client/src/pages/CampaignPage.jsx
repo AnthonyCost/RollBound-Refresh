@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation, useOutletContext, useParams } from 
 import { useCampaignService } from '../state/campaignService.js';
 import PageShell from '../components/PageShell.jsx';
 import Icon from '../components/Icon.jsx';
+import { campaignCover } from '../state/campaignCovers.js';
 import InviteCode from '../components/InviteCode.jsx';
 import Portrait from '../components/Portrait.jsx';
 import Avatar from '../components/Avatar.jsx';
@@ -169,8 +170,8 @@ export function CampaignOverview() {
   return (
     <div className="campaign-home">
       {/* The cover as a banner: shorter than the cover's own shape, with the name over its foot. */}
-      <header className={`campaign-banner ${campaign.coverUrl ? '' : 'campaign-banner--plain'}`}>
-        {campaign.coverUrl && <img className="campaign-banner__img" src={campaign.coverUrl} alt="" />}
+      <header className="campaign-banner">
+        <img className="campaign-banner__img" src={campaignCover(campaign)} alt="" />
         <div className="campaign-banner__text">
           <h1 className="campaign-banner__name">{campaign.name}</h1>
           <p className="campaign-card__byline">

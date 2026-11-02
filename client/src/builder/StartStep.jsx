@@ -3,14 +3,6 @@ import { PREGENS } from '@rollbound/rules';
 import { artFor, hasOwnArt, PLACEHOLDER_ART } from './art.js';
 import Icon from '../components/Icon.jsx';
 
-// Each hero's headshot (npm run art:pregens), preloaded as their portrait when picked.
-const HEADSHOTS = Object.fromEntries(
-  Object.entries(import.meta.glob('../assets/pregens/*.webp', { eager: true, query: '?url', import: 'default' })).map(([path, url]) => [
-    path.split('/').pop().replace('.webp', ''),
-    url,
-  ]),
-);
-
 // Heroes whose class art shows someone else have their own portrait.
 const PORTRAITS = Object.fromEntries(
   Object.entries(import.meta.glob('../assets/pregens/portraits/*.webp', { eager: true, query: '?url', import: 'default' })).map(([path, url]) => [
@@ -22,7 +14,8 @@ const PORTRAITS = Object.fromEntries(
 /**
  * The builder's first screen for a new character: build your own step by step, or
  * start from one of Paizo's pregenerated heroes. Picking a hero hands their build to
- * onPregen (with their headshot's URL, if there is one), which opens it at Review.
+ * onPregen with their headshot's URL (npm run art:pregens), preloaded as their portrait,
+ * which opens it at Review.
  */
 export default function StartStep({ onCustom, onPregen }) {
   const [browsing, setBrowsing] = useState(false);
@@ -38,7 +31,7 @@ export default function StartStep({ onCustom, onPregen }) {
         <ul className="pregens__grid">
           {PREGENS.map((p) => (
             <li key={p.slug} className="pregen">
-              <button type="button" className="pregen__pick" onClick={() => onPregen(p, HEADSHOTS[p.slug] ?? null)}>
+              <button type="button" className="pregen__pick" onClick={() => onPregen(p, `/stock/${p.slug}.webp`)}>
                 <span className="pregen__frame">
                   <img className="pregen__art" src={PORTRAITS[p.slug] ?? artFor('class', p.classSlug)} alt="" loading="lazy" />
                 </span>

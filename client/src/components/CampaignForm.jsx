@@ -4,6 +4,7 @@ import CampaignCover from './CampaignCover.jsx';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 import { CORE_BOOK, campaignBooks } from '@rollbound/rules';
 import { ALL_BOOKS, booksLabel } from '../state/rulesData.js';
+import { placeholderCover } from '../state/campaignCovers.js';
 
 const NAME_MAX = 80;
 const BACKSTORY_MAX = 5000;
@@ -135,7 +136,7 @@ export default function CampaignForm({ initial, prefill, submitLabel, onSubmit, 
 
       <aside className="split__col" aria-label="Preview">
         <span className="eyebrow">Preview</span>
-        <CampaignCover name={name || 'Your campaign'} coverUrl={previewUrl} subtitle={`Party level ${partyLevel}`} />
+        <CampaignCover name={name || 'Your campaign'} coverUrl={previewUrl ?? (initial?.id ? placeholderCover(initial.id) : null)} subtitle={`Party level ${partyLevel}`} />
         <p className="rule-note">Books: {booksLabel(books && campaignBooks(books, ALL_BOOKS))}</p>
         {backstory.trim() ? <p className="backstory">{backstory}</p> : <p className="rule-note">Your backstory will appear here for your players.</p>}
       </aside>

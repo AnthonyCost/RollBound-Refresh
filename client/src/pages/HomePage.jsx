@@ -6,7 +6,7 @@ import { useCampaignService } from '../state/campaignService.js';
 import { inboxChanged, onInboxChanged } from '../state/inbox.js';
 import { lastCampaign } from '../state/lastCampaign.js';
 import { isOutdated } from '../state/rulesData.js';
-import { adventureCover } from '../state/adventureCovers.js';
+import { campaignCover } from '../state/campaignCovers.js';
 import PageShell from '../components/PageShell.jsx';
 import Icon from '../components/Icon.jsx';
 import Portrait from '../components/Portrait.jsx';
@@ -118,7 +118,7 @@ function ContinueCampaign({ campaign: c, hosting }) {
 
   return (
     <Spotlight
-      art={c.coverUrl ?? adventureCover(c.adventurePath)}
+      art={campaignCover(c)}
       eyebrow={`Continue · ${hosting ? 'Game Master' : 'Player'}`}
       title={c.name}
       lines={[`${path ? path.name : 'Homebrew'} · ${facts}`, latest && `Last session: ${latest.title}`]}
@@ -223,12 +223,11 @@ function LatestLog({ log }) {
 function CampaignRow({ campaign: c, hosting }) {
   const path = adventurePath(c.adventurePath);
   const mine = c.party.filter((m) => m.mine);
-  const cover = c.coverUrl ?? adventureCover(c.adventurePath);
   return (
     <li>
       <Link className="camp-row" to={`/campaigns/${c.id}`}>
         <span className="camp-row__cover" aria-hidden="true">
-          {cover ? <img src={cover} alt="" /> : <span>{c.name[0]}</span>}
+          <img src={campaignCover(c)} alt="" />
         </span>
         <span className="camp-row__text">
           <span className={`camp-row__role ${hosting ? 'camp-row__role--gm' : ''}`}>{hosting ? 'Game Master' : 'Player'}</span>

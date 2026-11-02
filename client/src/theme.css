@@ -720,7 +720,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .camp-card__open { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 16px 16px; color: var(--text); text-align: center; text-decoration: none; }
 .camp-card__cover { align-self: stretch; height: 96px; margin: 0 -16px; overflow: hidden; border-bottom: 1px solid var(--line-soft); }
 .camp-card__cover img { width: 100%; height: 100%; object-fit: cover; opacity: 0.75; }
-.camp-card__cover-plain { display: grid; place-items: center; height: 100%; background: radial-gradient(ellipse at 50% 30%, #3a1410, #0c0504); font-family: var(--display); font-size: 40px; font-weight: 700; color: var(--bronze); }
 .camp-card__party { display: flex; justify-content: center; gap: 4px; min-height: 48px; margin-top: -26px; }
 .camp-card__party .portrait--sm { box-shadow: 0 0 0 2px var(--panel); }
 .camp-card__more { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); background: var(--bg); font-family: var(--display); font-size: 13px; color: var(--text-soft); }

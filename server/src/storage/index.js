@@ -10,4 +10,16 @@ export * from './shared.js';
 const DRIVER = (process.env.STORAGE_DRIVER ?? 'local').toLowerCase();
 if (!['local', 's3'].includes(DRIVER)) throw new Error(`Unknown STORAGE_DRIVER "${DRIVER}". Use "local" or "s3".`);
 
-export const storage = DRIVER === 's3' ? await import('./s3.js') : await import('./local.js');
+const driver = DRIVER === 's3' ? await import('./s3.js') : await import('./local.js');
+
+// Stock images ship with the client (client/public/stock/) and are shared, like the demo
+// characters' portraits. Their keys start stock/, and they're never in storage to delete.
+const isStock = (key) => key?.startsWith('stock/');
+
+export const storage = {
+  ...driver,
+  publicUrl: (key) => (isStock(key) ? `/${key}` : driver.publicUrl(key)),
+  deleteObject: async (key) => {
+    if (!isStock(key)) await driver.deleteObject(key);
+  },
+};

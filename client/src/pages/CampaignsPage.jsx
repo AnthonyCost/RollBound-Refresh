@@ -9,6 +9,7 @@ import Avatar from '../components/Avatar.jsx';
 import JoinCampaign from '../components/JoinCampaign.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { adventurePath } from '@rollbound/rules';
+import { campaignCover } from '../state/campaignCovers.js';
 
 const PORTRAITS_SHOWN = 6;
 const started = (iso) => new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
@@ -36,7 +37,7 @@ export function CampaignCard({ campaign: c, hosting, onDeleted }) {
     <li className="camp-card">
       <Link to={`/campaigns/${c.id}`} className="camp-card__open">
         <span className="camp-card__cover">
-          {c.coverUrl ? <img src={c.coverUrl} alt="" /> : <span className="camp-card__cover-plain" aria-hidden="true">{c.name[0]}</span>}
+          <img src={campaignCover(c)} alt="" />
         </span>
         <span className="camp-card__party" aria-label={c.party.length ? `Party: ${c.party.map((m) => m.name).join(', ')}` : 'No one has joined yet'}>
           {c.party.slice(0, PORTRAITS_SHOWN).map((m) => (

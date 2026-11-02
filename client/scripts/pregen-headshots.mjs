@@ -1,5 +1,5 @@
 // Cuts a square headshot from each pregenerated hero's portrait, for the portrait the
-// builder preloads when a player picks them. Writes src/assets/pregens/<slug>.webp. The
+// builder preloads when a player picks them, and demo characters use. Writes public/stock/<slug>.webp. The
 // portrait is the hero's own art in src/assets/pregens/portraits/<slug>.webp if there is
 // one (their class art shows someone else), otherwise their class portrait.
 //   npm run art:pregens
@@ -15,8 +15,8 @@ import { PREGENS } from '@rollbound/rules';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const ART = join(here, '..', 'src', 'assets', 'art');
-const OUT = join(here, '..', 'src', 'assets', 'pregens');
-const OWN = join(OUT, 'portraits');
+const OUT = join(here, '..', 'public', 'stock');
+const OWN = join(here, '..', 'src', 'assets', 'pregens', 'portraits');
 const SIZE = 256;
 const HEAD_MIN = 0.14;
 const FOCUS = {
@@ -66,5 +66,5 @@ for (const p of PREGENS) {
     .resize(SIZE, SIZE)
     .webp({ quality: 85, effort: 6 })
     .toFile(join(OUT, `${p.slug}.webp`));
-  console.log(`saved  pregens/${p.slug}.webp  (from ${side}px at ${left},${top})`);
+  console.log(`saved  stock/${p.slug}.webp  (from ${side}px at ${left},${top})`);
 }
