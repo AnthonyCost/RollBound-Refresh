@@ -104,6 +104,7 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 ### 1. Accounts, login and demo
 - **Pages:** `/` is sign-in and `/register` is create-account. Signing in lands you on the hub.
+- **Account page** (`/account`): a header with your picture, name and counts (characters, campaigns you run and play), the Profile form (display name and picture; Save is off until something changes), and a sign-out panel. Email and password can't be changed yet; the server has no route for that.
 - **Sessions:**
   - passwords are hashed with Node's built-in `scrypt`, so there's no extra dependency,
   - the session cookie is HTTP-only and lasts 30 days,

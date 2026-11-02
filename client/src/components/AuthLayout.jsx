@@ -10,8 +10,9 @@ import wideArt from '../assets/auth-art-wide.webp';
 /**
  * The sign-in and create-account screens: full-screen art with the form in a dark
  * card over it (beside the art on wide screens), laid out like D&D Beyond's sign-in.
+ * long tightens the card, for a form with more fields.
  */
-export default function AuthLayout({ title, children }) {
+export default function AuthLayout({ title, long = false, children }) {
   const { enterDemo, endedReason } = useAuth();
   const navigate = useNavigate();
 
@@ -39,7 +40,7 @@ export default function AuthLayout({ title, children }) {
           <img src={art} alt="" />
         </picture>
       </div>
-      <main className="auth">
+      <main className={`auth ${long ? 'auth--long' : ''}`}>
         <header className="auth__header">
           <span className="wordmark auth__wordmark">ROLLBOUND <Logo /></span>
           <p className="italic muted center auth__tagline">A Pathfinder 2e companion that teaches the rules while you play.</p>

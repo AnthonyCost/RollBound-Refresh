@@ -16,6 +16,10 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState([]);
   const [busy, setBusy] = useState(false);
   const [avatar, setAvatar] = useState({});
+  const [showPasswords, setShowPasswords] = useState(false);
+  const passwordType = showPasswords ? 'text' : 'password';
+  const longEnough = password.length >= 8;
+  const matches = confirm.length > 0 && confirm === password;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -46,7 +50,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthLayout title="Create account">
+    <AuthLayout title="Create account" long>
       <form className="form" onSubmit={submit}>
         <label className="form-field">
           <span>Display name</span>
@@ -56,18 +60,27 @@ export default function RegisterPage() {
           <span>Email</span>
           <input type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
-        <label className="form-field">
-          <span>Password</span>
-          <input type="password" autoComplete="new-password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
-          <small className="italic muted">At least 8 characters.</small>
-        </label>
-        <label className="form-field">
-          <span>Confirm password</span>
-          <input type="password" autoComplete="new-password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+        <div className="form-pair">
+          <label className="form-field">
+            <span>Password</span>
+            <input type={passwordType} autoComplete="new-password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <small className={`field-check ${longEnough ? 'field-check--ok' : ''}`}>{longEnough ? '✓ ' : ''}At least 8 characters</small>
+          </label>
+          <label className="form-field">
+            <span>Confirm password</span>
+            <input type={passwordType} autoComplete="new-password" required value={confirm} onChange={(e) => setConfirm(e.target.value)} />
+            <small className={`field-check ${matches ? 'field-check--ok' : ''}`} role="status">
+              {matches ? '✓ Passwords match' : confirm ? "Doesn't match yet" : 'Type it again'}
+            </small>
+          </label>
+        </div>
+        <label className="field-toggle">
+          <input type="checkbox" checked={showPasswords} onChange={(e) => setShowPasswords(e.target.checked)} />
+          Show passwords
         </label>
         <ImagePicker
           label="Profile picture (optional)"
-          shape="square"
+          shape="avatar"
           maxMb={2}
           hint="you can change it later"
           value={avatar}

@@ -6,7 +6,8 @@ const TYPES = ['image/jpeg', 'image/png', 'image/webp'];
  * Choose an image by tapping or dragging. `value` is { file } for a new image,
  * { remove: true } to drop the current one, or {} to keep `currentUrl`.
  * Validates and previews locally; uploading happens when the form is saved.
- * shape is "wide" (16:9 covers) or "square" (avatars and portraits).
+ * shape is "wide" (16:9 covers), "square" (portraits) or "avatar" (a small round picture
+ * with its text beside it, for profile pictures).
  */
 export default function ImagePicker({ label, value, currentUrl, onChange, shape = 'wide', maxMb = 5, hint }) {
   const id = useId();

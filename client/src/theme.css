@@ -1076,6 +1076,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   backdrop-filter: blur(6px);
 }
 .auth__header { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+/* A longer form (create account): tighter, so the card still fits a laptop screen. */
+.auth--long { gap: 14px; }
 .auth__wordmark { font-size: clamp(26px, 3vw + 18px, 40px); letter-spacing: 8px; text-shadow: 0 0 24px var(--glow); }
 .auth__tagline { margin: 0; max-width: 32ch; }
 .auth__panel { display: flex; flex-direction: column; gap: 12px; }
@@ -1606,6 +1608,7 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   /* Sign-in: the card moves to the right, leaving the dragon and party in view on the left. */
   .app--auth { max-width: none; align-items: flex-end; justify-content: center; padding-right: max(48px, 7vw); }
   .auth { margin: 48px 0; }
+  .auth--long { margin: 16px 0; padding-block: 24px; }
   /* The wide painting: the dragon on the left stays clear of the card. */
   .auth__art img { object-position: 0% 40%; }
   .auth__art::after { background: linear-gradient(90deg, rgba(11, 9, 8, 0) 35%, rgba(11, 9, 8, 0.75)); }
@@ -2284,6 +2287,46 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 
 .hub-card__gm, .cover__byline { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .auth .image-picker--square { max-width: 160px; }
+/* A small round picture with its text beside it, for profile pictures. */
+.image-picker--avatar { aspect-ratio: auto; max-height: none; display: block; overflow: visible; border: 0; background: none; }
+.image-picker--avatar .image-picker__img { inset: 0 auto auto 0; width: 72px; height: 72px; border-radius: 50%; border: 1px solid var(--bronze); }
+.image-picker--avatar .image-picker__label, .image-picker--avatar.image-picker--filled .image-picker__label { box-sizing: border-box; width: 100%; margin: 0; min-height: 72px; justify-content: center; align-items: flex-start; gap: 4px; padding: 0 0 0 86px; border: 0; background: none; text-align: left; }
+.image-picker--avatar:not(.image-picker--filled) .image-picker__label::before { content: '+'; position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 72px; height: 72px; box-sizing: border-box; border: 1px dashed var(--line); border-radius: 50%; background: var(--panel); font-size: 26px; font-weight: 300; color: var(--bronze); transition: border-color 0.2s, color 0.2s; }
+.image-picker--avatar.image-picker--drag .image-picker__label::before, .image-picker--avatar .image-picker__label:hover::before { border-color: var(--gold); color: var(--gold); }
+.image-picker--avatar small { font-size: 12px; line-height: 1.35; }
+
+/* Two fields side by side where they fit, and small checks that update as you type. */
+.form-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px 12px; }
+.field-check { font-size: 13px; font-style: italic; color: var(--text-muted); }
+.field-check--ok { font-style: normal; color: var(--gold); }
+.field-toggle { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; min-height: 32px; font-size: 14px; color: var(--text-muted); cursor: pointer; }
+.field-toggle input { width: 16px; height: 16px; accent-color: var(--blood-text); }
+
+/* The account page: a profile header with your counts, then the form and your session. */
+.account { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 980px; margin-inline: auto; }
+.account__hero { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 20px; text-align: center; }
+.account__who { display: flex; flex-direction: column; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.account__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%; }
+.account__stat { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 6px; border: 1px solid var(--line); background: var(--bg); color: var(--bronze); text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+.account__stat strong { font-family: var(--display); font-size: 22px; line-height: 1.2; color: var(--text); font-variant-numeric: tabular-nums; }
+.account__stat span { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1px; line-height: 1.3; text-transform: uppercase; color: var(--text-muted); }
+@media (hover: hover) { .account__stat:hover { border-color: var(--bronze); color: var(--gold); } }
+.account__grid { display: flex; flex-direction: column; gap: 16px; }
+.account__profile { display: flex; flex-direction: column; gap: 16px; }
+.account__save { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 14px; }
+.account__save .btn { min-width: 180px; }
+.account__session { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.account__session p { margin: 0; font-size: 15px; line-height: 1.5; }
+.account__session .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+@media (min-width: 760px) {
+  .account__hero { flex-direction: row; text-align: left; }
+  .account__hero .title { text-align: left; }
+  .account__who { flex: 1; }
+  .account__stats { flex: none; width: 360px; }
+}
+@media (min-width: 900px) {
+  .account__grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: start; }
+}
 
 /* ---------- Sheet backdrop ---------- */
 /* The class banner behind the Sheet tab: it takes no space itself, its picture spans
