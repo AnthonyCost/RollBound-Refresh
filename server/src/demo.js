@@ -36,7 +36,7 @@ const WELCOME = (vaultCode) => `This is a temporary demo account. Everything in 
 
 You run Wolves at the Ford. Sam, a pretend player, has asked to bring his ranger Kestrel into it: accept or reject the request above.
 
-Sam runs a campaign too, The Sunken Vault, and your fighter Mira is already in its party. Its invite code is ${vaultCode}. Enter it on the hub to ask to bring another of your characters; Sam answers within a few seconds.`;
+Sam runs a campaign too, The Sunken Vault, and your fighter Mira is already in its party. Its invite code is ${vaultCode}. Enter it on the Campaigns page to ask to bring another of your characters; Sam answers within a few seconds.`;
 
 /** Creates a demo account with its sample content. Returns the user row. */
 export async function createDemo() {

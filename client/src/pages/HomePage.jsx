@@ -54,15 +54,15 @@ function Section({ id, title, to, count, action, children }) {
 }
 
 /** The top of the page: art beside what to do next. */
-function Spotlight({ art, eyebrow, title, lines, party, children }) {
+function Spotlight({ art, tag, gm = false, title, lines, party, children }) {
   return (
     <section className="home-spotlight" aria-labelledby="home-spotlight-title">
       <div className={`home-spotlight__art ${art ? '' : 'home-spotlight__art--map'}`} aria-hidden="true">
         <img src={art ?? homeMap} alt="" />
       </div>
       <div className="home-spotlight__text">
-        <span className="eyebrow">{eyebrow}</span>
         <h2 id="home-spotlight-title" className="home-spotlight__title">{title}</h2>
+        {tag && <span className={`camp-row__role ${gm ? 'camp-row__role--gm' : ''}`}>{tag}</span>}
         {lines.filter(Boolean).map((line) => <p key={line} className="home-spotlight__line">{line}</p>)}
         {party}
         <div className="home-spotlight__actions">{children}</div>
@@ -119,7 +119,8 @@ function ContinueCampaign({ campaign: c, hosting }) {
   return (
     <Spotlight
       art={campaignCover(c)}
-      eyebrow={`Continue · ${hosting ? 'Game Master' : 'Player'}`}
+      tag={hosting ? 'Game Master' : 'Player'}
+      gm={hosting}
       title={c.name}
       lines={[`${path ? path.name : 'Homebrew'} · ${facts}`, latest && `Last session: ${latest.title}`]}
       party={<PartyStack party={c.party} />}
@@ -209,9 +210,11 @@ function LatestLog({ log }) {
   return (
     <Link className="home-log" to={`/campaigns/${log.campaignId}/logs/${log.id}`}>
       <span className="home-log__text">
-        <span className="eyebrow">{log.campaignName} · Session {log.number}</span>
         <span className="home-log__title">{log.title}</span>
-        {log.playedOn && <span className="home-log__date">Played {longDate(log.playedOn)}</span>}
+        <span className="home-log__date">
+          {log.campaignName} · Session {log.number}
+          {log.playedOn && ` · Played ${longDate(log.playedOn)}`}
+        </span>
         {log.excerpt && <span className="home-log__excerpt">{log.excerpt.length >= 280 ? `${log.excerpt.trimEnd()}…` : log.excerpt}</span>}
         <span className="home-log__more">Read the log ›</span>
       </span>
@@ -285,6 +288,10 @@ export default function HomePage() {
       () => setFailed(true),
     );
   }, [service]);
+  const retry = () => {
+    setFailed(false);
+    load();
+  };
   useEffect(load, [load]);
   // Accepting someone changes the party shown on this page.
   useEffect(() => onInboxChanged(load), [load]);
@@ -301,21 +308,26 @@ export default function HomePage() {
     <PageShell>
       <h1 className="home-greeting">{data && brandNew ? 'Welcome' : 'Welcome back'}, {user.displayName}</h1>
 
-      {failed && <p className="form-errors" role="alert">Couldn't load your table. Try refreshing.</p>}
+      {failed && (
+        <div className="form-errors home-failed" role="alert">
+          <p>Couldn't load your table. Check your connection, then try again.</p>
+          <button type="button" className="btn btn--small" onClick={retry}>Try Again</button>
+        </div>
+      )}
       {!data && !failed && <HomeSkeleton />}
 
       {data && (
         <>
           {current && <ContinueCampaign key={current.c.id} campaign={current.c} hosting={current.hosting} />}
           {!current && characters[0] && (
-            <Spotlight art={classArtOf(characters[0]).banner} eyebrow="Continue · Your newest hero" title={characters[0].name} lines={[lineOf(characters[0]), 'Not in a campaign yet.']}>
+            <Spotlight art={classArtOf(characters[0]).banner} tag="Newest hero" title={characters[0].name} lines={[lineOf(characters[0]), 'Not in a campaign yet.']}>
               <Link to={`/play/${characters[0].id}/sheet`} className="btn btn--blood">Open Sheet</Link>
               <Link to="/campaigns" className="btn">Join a Campaign</Link>
               <Link to="/campaigns/new" className="btn">Start a Campaign</Link>
             </Spotlight>
           )}
           {brandNew && (
-            <Spotlight eyebrow="Getting started" title="Your first adventure" lines={['Build a hero, or gather a party of your own. The rules are explained along the way.']}>
+            <Spotlight title="Your first adventure" lines={['Build a hero, or gather a party of your own. RollBound explains the rules as you go.']}>
               <Link to="/create" className="btn btn--blood">Create a Character</Link>
               <Link to="/campaigns" className="btn">Start or Join a Campaign</Link>
               <Link to="/learn/overview" className="btn">Learn the Game</Link>
@@ -326,7 +338,7 @@ export default function HomePage() {
 
           {!brandNew && (
             <div className="home-table">
-              <Section id="home-characters" title="Your Characters" to="/characters" count={characters.length} action={<Link to="/create" className="home-section__new">+ New</Link>}>
+              <Section id="home-characters" title="Your Characters" to="/characters" count={characters.length} action={<Link to="/create" className="home-section__new" aria-label="New character"><Icon name="plus" size={12} />New</Link>}>
                 {characters.length ? (
                   <ul className="char-rows">
                     {characters.slice(0, RECENT_CHARACTERS).map((c) => <CharacterRow key={c.id} character={c} />)}
@@ -336,7 +348,7 @@ export default function HomePage() {
                 )}
               </Section>
 
-              <Section id="home-campaigns" title="Your Campaigns" to="/campaigns" count={campaigns.length} action={<Link to="/campaigns/new" className="home-section__new">+ New</Link>}>
+              <Section id="home-campaigns" title="Your Campaigns" to="/campaigns" count={campaigns.length} action={<Link to="/campaigns/new" className="home-section__new" aria-label="New campaign"><Icon name="plus" size={12} />New</Link>}>
                 {campaigns.length ? (
                   <ul className="camp-rows">
                     {campaigns.slice(0, RECENT_CAMPAIGNS).map(({ c, hosting }) => <CampaignRow key={c.id} campaign={c} hosting={hosting} />)}

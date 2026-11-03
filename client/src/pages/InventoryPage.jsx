@@ -397,7 +397,7 @@ function Merchant({ view, coins, full, onAdd }) {
         blank={
           <>
             <p className="book__blank-title">The merchant's shelves</p>
-            <p className="rule-note">Open an item to read it, then buy it from your purse or add it for free, for loot and gifts.</p>
+            <p className="rule-note">Open an item to read it. Buy it from your purse, or add it for free if it's loot or a gift.</p>
           </>
         }
       />

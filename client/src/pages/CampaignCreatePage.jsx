@@ -12,7 +12,7 @@ const KINDS = [
     title: 'Adventure Path',
     text: "Run one of Paizo's published campaigns. We'll fill in its premise, starting level and cover for you to adjust.",
   },
-  { id: 'homebrew', title: 'Homebrew', text: 'Your own world and your own story, from a blank page.' },
+  { id: 'homebrew', title: 'Homebrew', text: 'Start from a blank page with your own world and story.' },
 ];
 
 const STEP_INFO = {

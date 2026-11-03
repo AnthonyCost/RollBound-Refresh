@@ -540,7 +540,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 /* A mask, not a gradient on top: the panel behind varies in colour, so no flat colour could blend into it. */
 .home-spotlight__art { mask-image: linear-gradient(to top, transparent, #000 70%); }
 .home-spotlight__text { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; padding: 14px 16px 18px; }
-.home-spotlight__text .eyebrow { color: var(--bronze); }
+.home-spotlight__text .camp-row__role { margin-bottom: 2px; }
+/* Couldn't load: the message, and a way to try again. */
+.form-errors.home-failed { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.home-failed p { margin: 0; }
 .home-spotlight__title { margin: 0; font-family: var(--display); font-size: clamp(24px, 1.2vw + 19px, 36px); font-weight: 700; line-height: 1.15; letter-spacing: 1px; overflow-wrap: anywhere; }
 .home-spotlight__line { margin: 0; font-size: 15px; color: var(--text-muted); overflow-wrap: anywhere; }
 .home-party { display: flex; align-items: center; margin-top: 4px; padding-left: 6px; }
@@ -580,7 +583,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .home-attention { display: flex; flex-direction: column; gap: 8px; }
 .home-attention h2 { margin: 0; color: var(--blood-text); }
 .home-attention ul { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.home-request { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 10px 12px; border: 1px solid var(--line); border-left: 3px solid var(--blood); background: var(--panel-hot); }
+.home-request { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 10px 12px; border: 1px solid var(--blood); background: var(--panel-hot); }
 .home-request__text { flex: 1 1 240px; min-width: 0; margin: 0; font-size: 15px; overflow-wrap: anywhere; }
 .home-request__actions { display: flex; gap: 8px; }
 .home-request .form-errors { flex-basis: 100%; }
@@ -619,6 +622,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .char-row__campaign { display: flex; flex-wrap: wrap; gap: 2px 8px; font-size: 13px; color: var(--bronze); }
 
 .home-section { display: flex; flex-direction: column; gap: 12px; min-width: 0; scroll-margin-top: 16px; }
+.home-section__new, .home-section__all { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; }
 .home-section__new { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blood-text); text-decoration: none; }
 @media (hover: hover) { .home-section__new:hover { color: var(--gold); } }
 
@@ -669,7 +673,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .home-section__all { font-size: 14px; color: var(--bronze); }
 /* Home's latest session log: the log's opening. */
 .home-log { display: grid; grid-template-columns: minmax(0, 1fr); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: radial-gradient(ellipse 120% 70% at 50% 0%, #1b120f 0%, #130d0b 60%, #0f0a08 100%); color: var(--text); text-decoration: none; }
-@media (hover: hover) { .home-log:hover { border-color: var(--bronze); } .home-log:hover .home-log__title { color: var(--gold); } }
+.home-log:is(:hover, :focus-visible) { border-color: var(--bronze); }
+.home-log:is(:hover, :focus-visible) .home-log__title { color: var(--gold); }
 .home-log__text { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 16px; }
 .home-log__title { font-family: var(--display); font-size: clamp(18px, 1vw + 14px, 22px); font-weight: 700; letter-spacing: 1px; overflow-wrap: anywhere; }
 .home-log__date { font-size: 14px; font-style: italic; color: var(--text-muted); }
@@ -1534,16 +1539,15 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 .start-choices { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin: 0; padding: 0; list-style: none; }
 @container (min-width: 640px) { .start-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .start-choices > li { display: flex; }
-.start-choice { position: relative; flex: 1; display: flex; align-items: flex-end; min-height: 260px; padding: 0; overflow: hidden; border: 1px solid var(--line); background: radial-gradient(ellipse at 70% 20%, #3a1410, #0c0504); color: var(--text); font: inherit; text-align: left; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; }
-.start-choice__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 20%; opacity: 0.45; transition: transform 0.4s ease, opacity 0.3s; }
-.start-choice::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgb(7 5 5 / 0.95) 15%, rgb(7 5 5 / 0.3) 70%, transparent); }
-.start-choice__text { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 6px; padding: 20px; }
-.start-choice__text .eyebrow { color: var(--bronze); }
-.start-choice__name { font-family: var(--display); font-size: 22px; font-weight: 700; letter-spacing: 1px; }
-.start-choice__blurb { font-size: 15px; line-height: 1.55; color: var(--text-soft); }
-.start-choice:not(:disabled):is(:hover, :focus-visible) { border-color: var(--blood); box-shadow: 0 0 16px var(--glow); }
-.start-choice:not(:disabled):is(:hover, :focus-visible) .start-choice__name { color: var(--gold); }
-.start-choice:not(:disabled):is(:hover, :focus-visible) .start-choice__art { transform: scale(1.04); opacity: 0.6; }
+.start-choice { position: relative; flex: 1; display: flex; align-items: flex-end; min-height: clamp(300px, 48vh, 520px); padding: 0; overflow: hidden; border: 1px solid var(--line); background: #0c0504; color: var(--text); font: inherit; text-align: left; cursor: pointer; transition: border-color 0.2s; }
+.start-choice__art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 18%; opacity: 0.72; transition: transform 600ms var(--ease-out), opacity 0.3s; }
+.start-choice::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgb(11 9 8 / 0.95), transparent 60%); }
+.start-choice__text { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 8px; padding: 26px; }
+/* The hero names in Old Fenris: the one place the site's accent face speaks. */
+.start-choice__name { font: 400 clamp(34px, 2vw + 22px, 48px)/1 var(--accent-font); }
+.start-choice__blurb { max-width: 34ch; font-size: 16px; line-height: 1.5; color: var(--text-soft); }
+.start-choice:not(:disabled):is(:hover, :focus-visible) { border-color: var(--bronze); }
+.start-choice:not(:disabled):is(:hover, :focus-visible) .start-choice__art { transform: scale(1.03); opacity: 0.92; }
 .start-choice:disabled { cursor: default; }
 .start-choice:disabled .start-choice__art { opacity: 0.2; filter: grayscale(1); }
 .start-choice:disabled .start-choice__name { color: var(--text-muted); }
@@ -2375,7 +2379,6 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 .lesson:last-child { border-bottom: 0; }
 .lesson p { margin: 0; font-size: 17px; line-height: 1.7; color: var(--text-soft); }
 .lesson__title { display: flex; align-items: center; gap: 12px; margin: 0; font-family: var(--display); font-size: clamp(20px, 0.8vw + 16px, 24px); font-weight: 700; letter-spacing: 1px; color: var(--text); }
-.lesson__number { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--blood); background: var(--panel-hot); color: var(--blood-text); font-size: 13px; }
 .lesson__list { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 17px; line-height: 1.6; color: var(--text-soft); }
 .lesson__list li { padding-left: 4px; }
 .lesson__list li::marker { color: var(--blood-text); }
@@ -2385,9 +2388,9 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 .lesson__table tbody th { font-weight: 400; color: var(--text); }
 .lesson__table td { color: var(--gold); font-variant-numeric: tabular-nums; }
 .lesson__table tbody tr:last-child > * { border-bottom: 0; }
-.lesson__tip { padding: 14px 16px; border: 1px solid var(--line-soft); border-left: 3px solid var(--gold); background: var(--panel-hot); }
-.lesson p.lesson__tip { font-size: 16px; line-height: 1.6; }
-.lesson__tip .eyebrow { display: block; margin-bottom: 4px; color: var(--gold); }
+.lesson__tip { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--line-soft); background: var(--panel-hot); }
+.lesson__tip > svg { flex: none; margin-top: 2px; color: var(--gold); }
+.lesson .lesson__tip p { margin: 0; font-size: 16px; line-height: 1.6; }
 .lesson__tip a { color: var(--bronze); white-space: nowrap; }
 .lesson__more { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; font-size: 15px; color: var(--text-muted); }
 @media (hover: hover) { .lesson__more:hover { color: var(--bronze); } }
@@ -3058,6 +3061,19 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
 /* Native controls match the dark theme, including any without a class of their own.
    :where keeps this at zero specificity, so every styled control still wins. */
 :root { color-scheme: dark; accent-color: var(--blood); }
+/* Selected text in the site's red rather than the browser's blue. */
+::selection { background: var(--blood); color: #fff4e6; }
+/* Every dropdown gets the same bronze chevron. !important because many select rules use the
+   background shorthand (which would clear the image) and set their own padding. */
+select {
+  appearance: none;
+  padding-right: 34px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23d9b977' stroke-width='1.6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  cursor: pointer;
+}
+select:disabled { opacity: 0.55; cursor: not-allowed; }
 :where(input:not([type='checkbox'], [type='radio']), select, textarea) { border: 1px solid var(--line); background: var(--bg); color: var(--text); font-family: var(--body); }
 
 /* Section titles are left-aligned; the sign-in card and invite code stay centered. */

@@ -26,6 +26,7 @@ import InventoryPage from './pages/InventoryPage.jsx';
 import LorePage from './pages/LorePage.jsx';
 import LearnPage from './pages/LearnPage.jsx';
 import ResourcesPage from './pages/ResourcesPage.jsx';
+import StyleLabPage from './pages/StyleLabPage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
 import { useAuth } from './state/AuthContext.jsx';
 import TopBar from './components/TopBar.jsx';
@@ -108,6 +109,7 @@ export default function App() {
         <Route path="/characters" element={<CharactersPage />} />
         <Route path="/campaigns" element={<CampaignsPage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/style-lab" element={<StyleLabPage />} />
         <Route path="/create" element={<BuilderPage />} />
         <Route path="/characters/:characterId/edit" element={<BuilderPage />} />
         <Route path="/bestiary" element={<BestiaryPage />} />

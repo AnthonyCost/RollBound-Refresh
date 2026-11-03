@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { PREGENS } from '@rollbound/rules';
-import { artFor, hasOwnArt, PLACEHOLDER_ART } from './art.js';
+import { artFor, PLACEHOLDER_ART } from './art.js';
 import Icon from '../components/Icon.jsx';
 
 // Heroes whose class art shows someone else have their own portrait.
@@ -19,7 +19,6 @@ const PORTRAITS = Object.fromEntries(
  */
 export default function StartStep({ onCustom, onPregen }) {
   const [browsing, setBrowsing] = useState(false);
-  const pregenArt = hasOwnArt('class', 'fighter') ? artFor('class', 'fighter') : PLACEHOLDER_ART;
 
   if (browsing) {
     return (
@@ -58,19 +57,20 @@ export default function StartStep({ onCustom, onPregen }) {
         <button type="button" className="start-choice" onClick={onCustom}>
           <img className="start-choice__art" src={PLACEHOLDER_ART} alt="" />
           <span className="start-choice__text">
-            <span className="eyebrow">Step by step</span>
             <span className="start-choice__name">Build your own</span>
-            <span className="start-choice__blurb">Choose an ancestry, background and class, then attributes, skills, feats and gear. Every choice is explained.</span>
+            <span className="start-choice__blurb">Pick an ancestry, background and class, then the rest. Each step explains what your choices do.</span>
           </span>
         </button>
       </li>
       <li>
         <button type="button" className="start-choice" disabled={!PREGENS.length} onClick={() => setBrowsing(true)}>
-          <img className="start-choice__art" src={pregenArt} alt="" />
+          {/* Placeholder until this panel gets its own art. */}
+          <img className="start-choice__art" src={PLACEHOLDER_ART} alt="" />
           <span className="start-choice__text">
-            <span className="eyebrow">{PREGENS.length ? `${PREGENS.length} heroes` : 'Coming soon'}</span>
-            <span className="start-choice__name">Play a pregenerated hero</span>
-            <span className="start-choice__blurb">Pick one of Pathfinder’s iconic heroes, ready to play at level 1. You can rename them and change anything later.</span>
+            <span className="start-choice__name">Take an iconic hero</span>
+            <span className="start-choice__blurb">
+              {PREGENS.length ? `Choose from ${PREGENS.length} heroes ready to play at level 1. You can rename them and change anything later.` : 'Coming soon.'}
+            </span>
           </span>
         </button>
       </li>

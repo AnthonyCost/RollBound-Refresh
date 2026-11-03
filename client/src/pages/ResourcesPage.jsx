@@ -25,7 +25,7 @@ const RESOURCES = [
     icon: 'book',
     art: archivesArt,
     tags: ['Free', 'Official'],
-    text: 'Every rule, spell, feat, item and creature, free to read and search. Paizo’s official online reference, and where RollBound links for the full rules.',
+    text: 'Paizo’s official online reference has every rule, spell, feat, item and creature, free to read and search. RollBound’s links to the full rules go here.',
     href: 'https://2e.aonprd.com/',
     cta: 'Open Archives of Nethys',
   },

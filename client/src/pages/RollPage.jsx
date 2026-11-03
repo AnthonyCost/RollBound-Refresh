@@ -97,7 +97,7 @@ export default function RollPage() {
     return (
       <div className="narrow">
         <h1 className="title center" style={{ paddingTop: 16 }}>No roll yet</h1>
-        <p className="italic muted center">Choose Strike on your turn and the result lands here, explained.</p>
+        <p className="italic muted center">Choose Strike on your turn, and the result shows up here with what it means.</p>
         <TargetAC />
         <Link to="../turn" className="btn btn--blood">Go to your turn</Link>
       </div>

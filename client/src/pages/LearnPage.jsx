@@ -23,7 +23,7 @@ function Lesson({ lesson, number }) {
   return (
     <section className="lesson" id={lessonId(number)} aria-labelledby={`${lessonId(number)}-title`}>
       <h2 className="lesson__title" id={`${lessonId(number)}-title`}>
-        <span className="lesson__number">{number}</span> {lesson.title}
+        {lesson.title}
       </h2>
       {lesson.body.map((p) => <p key={p.slice(0, 40)}>{p}</p>)}
       {lesson.table && (
@@ -44,9 +44,10 @@ function Lesson({ lesson, number }) {
         </ul>
       )}
       {lesson.tip && (
-        <p className="lesson__tip">
-          <span className="eyebrow">In RollBound</span> {lesson.tip.text} <Link to={lesson.tip.to}>{lesson.tip.label}</Link>
-        </p>
+        <aside className="lesson__tip">
+          <Icon name="sheet" size={22} />
+          <p><span className="visually-hidden">In RollBound: </span>{lesson.tip.text} <Link to={lesson.tip.to}>{lesson.tip.label}</Link></p>
+        </aside>
       )}
       {lesson.more && (
         <a className="lesson__more" href={lesson.more} target="_blank" rel="noreferrer">
@@ -102,9 +103,9 @@ export default function LearnPage() {
   const next = TOPICS[TOPICS.indexOf(topic) + 1];
 
   return (
-    <PageShell crumbs={[{ label: 'Learning The Game', to: '/learn/overview' }, { label: topic.label }]} tabs={<LearnTabs />}>
+    <PageShell crumbs={[{ label: 'Learning the Game', to: '/learn/overview' }, { label: topic.label }]} tabs={<LearnTabs />}>
       <header className="learn__head">
-        <p className="eyebrow">Learning The Game</p>
+        <p className="eyebrow">Learning the Game</p>
         <h1 className="title">{topic.label}</h1>
         <p className="rule-note">{topic.blurb}</p>
       </header>
