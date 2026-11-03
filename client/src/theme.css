@@ -2800,6 +2800,7 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 
 .details { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-height: 72vh; overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--bronze); background: var(--panel); box-shadow: 0 -14px 34px rgb(0 0 0 / 0.6); transform: translateY(105%); visibility: hidden; transition: transform 320ms var(--ease-out), visibility 0s 320ms; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .details--open { transform: none; visibility: visible; transition: transform 320ms var(--ease-out); }
+.details.details--inline { position: static; width: auto; max-height: none; transform: none; visibility: visible; transition: none; }
 /* Phones: room below the sheet while the drawer is up, so any number can be scrolled above it. */
 @media (max-width: 899px) { .app__main:has(.details--open) { padding-bottom: 72vh; } }
 @media (min-width: 900px) {

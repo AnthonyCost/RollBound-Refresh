@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
+import StyleLabPalette from './StyleLabPalette.jsx';
 import Portrait from '../components/Portrait.jsx';
 import Icon from '../components/Icon.jsx';
 import { cardArtFor, artFor, PLACEHOLDER_ART } from '../builder/art.js';
@@ -283,20 +285,50 @@ function SurfaceDemo() {
   );
 }
 
+const TABS = [
+  { id: 'proposals', label: 'Proposals', icon: 'overview' },
+  { id: 'palette', label: 'Path of Fire', icon: 'spark' },
+];
+
+/** The lab's tabs, as the site's own tab bar; the tab lives in the URL (?tab=palette) so it can be linked. */
+function LabTabs({ tab }) {
+  return (
+    <nav className="nav" aria-label="Style lab">
+      {TABS.map((t) => (
+        <Link key={t.id} to={t.id === 'proposals' ? '/style-lab' : `/style-lab?tab=${t.id}`} className={tab === t.id ? 'active' : undefined} aria-current={tab === t.id ? 'page' : undefined}>
+          <Icon name={t.icon} size={22} />
+          {t.label.toUpperCase()}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
 export default function StyleLabPage() {
   const [mode, setMode] = useState('both');
+  const [params] = useSearchParams();
+  const tab = TABS.some((t) => t.id === params.get('tab')) ? params.get('tab') : 'proposals';
   return (
-    <PageShell crumbs={[{ label: 'Style lab' }]}>
+    <PageShell crumbs={[{ label: 'Style lab' }]} tabs={<LabTabs tab={tab} />}>
       <div className="lab">
         <header className="lab-intro">
           <h1 className="x-title">Style lab</h1>
-          <p className="x-body">Proposed changes to make RollBound feel made rather than generated, on sample content. Nothing here is live anywhere else on the site.</p>
-          <div className="lab-toggle" role="group" aria-label="Show">
-            {[['before', 'Today'], ['both', 'Side by side'], ['after', 'Proposed']].map(([id, label]) => (
-              <button key={id} type="button" aria-pressed={mode === id} onClick={() => setMode(id)}>{label}</button>
-            ))}
-          </div>
+          <p className="x-body">
+            {tab === 'palette'
+              ? 'A colour scheme to try on RollBound, shown on the site’s real components. Nothing here is live anywhere else on the site.'
+              : 'Proposed changes to make RollBound feel made rather than generated, on sample content. Nothing here is live anywhere else on the site.'}
+          </p>
+          {tab === 'proposals' && (
+            <div className="lab-toggle" role="group" aria-label="Show">
+              {[['before', 'Today'], ['both', 'Side by side'], ['after', 'Proposed']].map(([id, label]) => (
+                <button key={id} type="button" aria-pressed={mode === id} onClick={() => setMode(id)}>{label}</button>
+              ))}
+            </div>
+          )}
         </header>
+
+        {tab === 'palette' ? <StyleLabPalette /> : (
+        <>
 
         <Study mode={mode} n={1} title="Capitals only where they label, and a second typeface"
           why="Headings and buttons in title case at normal spacing. Old Fenris, already loaded but never used, takes campaign and hero names."
@@ -333,6 +365,8 @@ export default function StyleLabPage() {
             {mode !== 'before' && <div className="lab-pane lab-after"><span className="lab-pane__tag">Proposed</span><SurfaceDemo /></div>}
           </div>
         </section>
+        </>
+        )}
       </div>
     </PageShell>
   );

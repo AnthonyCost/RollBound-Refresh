@@ -16,8 +16,9 @@ export const detailValue = (d) => d.value ?? (d.unsigned ? d.stat.total : signed
  *
  * detail: { kind, name, icon, stat?, value?, unsigned?, unit?, rank?, ability?, actions?,
  *           facts?: [label, value][], rules: string[], traits?: [name, rule][], uses?: [name, cost, trainedOnly][] }
+ * inline: shown in place, not sliding over the page (for previews such as the style lab).
  */
-export default function DetailsDrawer({ detail: d, onClose }) {
+export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
   useEffect(() => {
     if (!d) return undefined;
     const esc = (e) => e.key === 'Escape' && onClose();
@@ -26,7 +27,7 @@ export default function DetailsDrawer({ detail: d, onClose }) {
   }, [d, onClose]);
 
   return (
-    <aside className={`details ${d ? 'details--open' : ''}`} aria-label="Details" aria-live="polite">
+    <aside className={inline ? 'details details--inline' : `details ${d ? 'details--open' : ''}`} aria-label="Details" aria-live="polite">
       {d && (
         <div className="details__panel" key={`${d.kind}-${d.name}`}>
           <div className="details__top">
