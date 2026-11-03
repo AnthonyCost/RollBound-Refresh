@@ -291,3 +291,45 @@ export function traitLabel(trait) {
     .replace(/-(\d+)$/, ' $1 ft');
   return t[0].toUpperCase() + t.slice(1);
 }
+
+// ---------- The sheet's header, languages, senses, weapon proficiencies and runes ----------
+
+export const SIZE_RULES = {
+  tiny: ['Tiny creatures take up less than a 5-foot square, so several can share a space. Their reach is 0 feet, so they usually have to enter a foe’s space to attack it in melee.'],
+  sm: ['Small creatures take up a 5-foot square, like Medium ones, and have a 5-foot reach. Some weapons and armor are sized for them.'],
+  med: ['Medium creatures take up a 5-foot square and have a 5-foot reach.'],
+  lg: ['Large creatures take up a 10-foot square. Tall ones have a 10-foot reach; long ones, like horses, have 5 feet.'],
+};
+
+export const LEVEL_RULES = [
+  'Your level measures how experienced you are. It adds to every proficiency bonus you have at trained or better, and it sets which feats and spells you can choose.',
+  'You gain a level each time you earn 1,000 experience points, or when your GM says so.',
+];
+
+export const HERO_POINT_RULES = [
+  'Hero Points are rewards for heroic play. You usually start each session with 1, the GM can award more, and you can hold at most 3.',
+  'Spend 1 to reroll a check you just made; you must use the second result. Or, when you’re dying, spend all of them (at least 1) to stabilize at 0 Hit Points: you lose the dying condition without gaining or raising wounded.',
+];
+
+export const LANGUAGE_RULES = [
+  'You can speak, read and write these languages. You start with your ancestry’s languages, plus one more for each point of a positive Intelligence modifier.',
+  'Common is spoken across the Inner Sea region, so most people you meet will understand it.',
+];
+
+export const VISION_RULES = {
+  darkvision: 'Darkvision: you can see in darkness and dim light just as well as in bright light, though in darkness you see only in black and white.',
+  'low-light-vision': 'Low-light vision: you can see in dim light as though it were bright light, so dim light doesn’t conceal things from you.',
+};
+
+export const WEAPON_CATEGORY_RULES = {
+  unarmed: 'Unarmed attacks: fists, kicks, claws and the like. Everyone has a fist.',
+  simple: 'Simple weapons are easy to learn, like clubs, daggers, spears and crossbows.',
+  martial: 'Martial weapons take training, like longswords, battle axes and longbows.',
+  advanced: 'Advanced weapons are rare and specialized, and only a few classes are trained in them.',
+};
+export const WEAPON_PROFICIENCY_RULE =
+  'Your proficiency with a category adds to attack rolls with every weapon in it. Untrained adds nothing; trained or better adds its bonus plus your level.';
+
+export const RUNE_RULES = [
+  'Trace a rune as an action, or etch up to 2 during your daily preparations. Runes that call for a saving throw use your class DC.',
+];

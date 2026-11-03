@@ -2776,6 +2776,12 @@ button.book__back { padding: 0; border: 0; background: none; font: inherit; font
 .sheet-head__fields div { padding-bottom: 3px; border-bottom: 1px solid var(--line); min-width: 0; }
 .sheet-head__fields dt { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
 .sheet-head__fields dd { margin: 1px 0 0; font-size: 15px; overflow-wrap: anywhere; }
+/* Each header value opens its entry in the details drawer. */
+.sheet-head__value { display: block; width: 100%; padding: 0; border: 0; background: none; color: var(--text); font: inherit; text-align: left; overflow-wrap: anywhere; cursor: pointer; transition: color var(--motion-fast); }
+.sheet-head__value[aria-pressed='true'] { color: var(--gold); }
+@media (hover: hover) { .sheet-head__value:hover { color: var(--gold); } }
+.sheet-inline-spell { font-style: inherit; }
+.sheet-inline-spell[aria-pressed='true'] { color: var(--gold); }
 .sheet-head .hero__campaign { margin: 0; }
 .sheet__actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
@@ -2788,7 +2794,8 @@ button.book__back { padding: 0; border: 0; background: none; font: inherit; font
 .sheet-attr__name { font-size: 11px; color: var(--text-dim); }
 
 /* The defense band: AC, saves, HP, Perception and Speed. */
-.sheet-defense { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+/* Below 900px: AC, then the saves, each on their own row; Perception, Class DC and Speed share the last. */
+.sheet-defense { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .sheet-def-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .sheet-def {
   display: flex;
@@ -2843,7 +2850,9 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .sheet-skill__name { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-soft); overflow-wrap: anywhere; }
 .sheet-skill__attr { font-family: var(--display); font-size: 11px; letter-spacing: 1px; color: var(--text-muted); text-align: center; }
 .sheet-skill__total { font-family: var(--display); font-size: 18px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
-.sheet-langs { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-top: 12px; font-size: 15px; }
+.sheet-langs { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; width: 100%; margin-top: 12px; padding: 6px 0; border: 0; background: none; color: var(--text); font: inherit; font-size: 15px; text-align: left; cursor: pointer; }
+.sheet-langs[aria-pressed='true'] .sheet-langs__list { color: var(--gold); }
+@media (hover: hover) { .sheet-langs:hover .sheet-langs__list { color: var(--gold); } }
 
 .sheet-strike-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
 .sheet-strikes { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
@@ -2960,16 +2969,21 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 /* The share panel sits in the drawer without its own box. */
 .character-drawer__share .share { padding: 0; border: 0; background: none; box-shadow: none; align-self: stretch; }
 .character-drawer__share .share .panel__title { margin: 0 0 6px; font: 700 14px/1.2 var(--display); letter-spacing: 0; text-transform: none; color: var(--text); }
-.sheet-profs { margin: 6px 0 0; padding-top: 10px; border-top: 1px solid var(--line-faint); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; text-align: center; }
-.sheet-profs dt { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
-.sheet-profs dd { margin: 0; }
+.sheet-profs { margin: 6px 0 0; padding: 10px 0 0; list-style: none; border-top: 1px solid var(--line-faint); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; text-align: center; }
+.sheet-prof { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; min-height: 44px; padding: 6px 4px; border: 1px solid transparent; border-radius: 4px; background: none; color: var(--text); font: inherit; cursor: pointer; transition: border-color var(--motion-fast), background-color var(--motion-fast); }
+.sheet-prof__name { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.sheet-prof[aria-pressed='true'] { border-color: var(--blood); background: var(--panel-hot); }
+@media (hover: hover) { .sheet-prof:not([aria-pressed='true']):hover { border-color: var(--line); } }
 
 @media (max-width: 560px) {
   .sheet-attrs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (min-width: 900px) {
-  .sheet-defense { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1fr) minmax(0, 0.8fr); }
-  .sheet-defense--shield { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.8fr); }
+  .sheet-defense { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.8fr); }
+  .sheet-defense--shield { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.8fr); }
+  /* A character without a key attribute (very old builds) has no Class DC box. */
+  .sheet-defense:not(:has(.sheet-def--classdc)) { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1fr) minmax(0, 0.8fr); }
+  .sheet-defense--shield:not(:has(.sheet-def--classdc)) { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.8fr); }
   .sheet-def-group { grid-column: auto; }
   .sheet__columns { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }

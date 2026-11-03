@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { armorClass, landSpeed, swimSpeed, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey, describeCondition } from '@rollbound/rules';
+import { armorClass, landSpeed, swimSpeed, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey, describeCondition, proficiencyPart } from '@rollbound/rules';
 import { loadRules } from '../state/rulesData.js';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
@@ -9,7 +9,10 @@ import Portrait from '../components/Portrait.jsx';
 import CharacterDrawer from '../components/CharacterDrawer.jsx';
 import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import DetailsDrawer from '../components/DetailsDrawer.jsx';
-import { ATTRIBUTES, KEY_ATTRIBUTE, DEFENSES, HIT_POINTS, SKILLS, LORE, UNTRAINED_NOTE, STRIKE, traitRule, traitLabel } from '../sheet/sheetRules.js';
+import {
+  ATTRIBUTES, KEY_ATTRIBUTE, DEFENSES, HIT_POINTS, SKILLS, LORE, UNTRAINED_NOTE, STRIKE, traitRule, traitLabel,
+  SIZE_RULES, LEVEL_RULES, HERO_POINT_RULES, LANGUAGE_RULES, VISION_RULES, WEAPON_CATEGORY_RULES, WEAPON_PROFICIENCY_RULE, RUNE_RULES,
+} from '../sheet/sheetRules.js';
 import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
 import HpTracker from '../components/HpTracker.jsx';
 import ShieldTracker from '../components/ShieldTracker.jsx';
@@ -18,20 +21,38 @@ import ActionCost from '../components/ActionCost.jsx';
 import RankPips from '../components/RankPips.jsx';
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+// Each header field's entry in the details drawer.
+const HEADER_DETAIL = {
+  Ancestry: 'origin:ancestry',
+  Heritage: 'origin:heritage',
+  Background: 'origin:background',
+  Class: 'origin:class',
+  Size: 'info:size',
+  Level: 'info:level',
+  'Hero Points': 'info:heroPoints',
+};
+const ORIGIN = {
+  ancestry: { kind: 'Ancestry', type: 'ancestries', icon: 'user', name: (c) => c.ancestry?.name },
+  heritage: { kind: 'Heritage', type: 'heritages', icon: 'heritage', name: (c) => c.heritage },
+  background: { kind: 'Background', type: 'backgrounds', icon: 'background', name: (c) => c.background },
+  class: { kind: 'Class', type: 'classes', icon: 'swords', name: (c) => c.className },
+};
+const listOf = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === 'string' || typeof x === 'number').map((x) => titleCase(String(x))).join(', ') : v);
 const SIZE = { tiny: 'Tiny', sm: 'Small', med: 'Medium', lg: 'Large' };
 const SENSES = { darkvision: 'Darkvision', 'low-light-vision': 'Low-light vision' };
 const WEAPON_CATEGORIES = ['unarmed', 'simple', 'martial', 'advanced'];
-const SPELL_TYPES = ['spells'];
+// The rules text the drawer quotes: spells, the character's origins and runes.
+const DETAIL_TYPES = ['spells', 'ancestries', 'heritages', 'backgrounds', 'classes', 'runes'];
 
-/** The spells' full rules text, loaded the first time it's needed (when a spell is tapped). */
-function useSpellRules(needed) {
+/** The rules text the drawer quotes, loaded the first time it's needed (when a spell, origin or rune is tapped). */
+function useDetailRules(needed) {
   const [data, setData] = useState(null);
   const [wanted, setWanted] = useState(false);
   if (needed && !wanted) setWanted(true);
   useEffect(() => {
     if (!wanted) return undefined;
     let cancelled = false;
-    loadRules({ types: SPELL_TYPES }).then(
+    loadRules({ types: DETAIL_TYPES }).then(
       (d) => !cancelled && setData(d),
       () => !cancelled && setData({ error: true }),
     );
@@ -52,7 +73,7 @@ export default function SheetPage() {
   const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared } = useTable();
   // What the details drawer shows: 'attr:str', 'def:ac', 'hp:', 'skill:athletics', 'strike:0', 'magic:classDc', 'spell:<id>'.
   const [open, setOpen] = useState(null);
-  const spellRules = useSpellRules(Boolean(open?.startsWith('spell:')));
+  const spellRules = useDetailRules(/^(spell|origin|rune):/.test(open ?? ''));
   const toggle = (key) => setOpen((cur) => (cur === key ? null : key));
   const close = useCallback(() => setOpen(null), []);
 
@@ -113,7 +134,9 @@ export default function SheetPage() {
             {header.map(([k, v]) => (
               <div key={k}>
                 <dt>{k}</dt>
-                <dd>{v}</dd>
+                <dd>
+                  <button type="button" className="sheet-head__value" aria-pressed={open === HEADER_DETAIL[k]} onClick={() => toggle(HEADER_DETAIL[k])}>{v}</button>
+                </dd>
               </div>
             ))}
           </dl>
@@ -161,7 +184,7 @@ export default function SheetPage() {
           {defenseBox({ id: 'will', label: 'Will', rank: p.will })}
         </div>
         {shield && (
-          <div className={`sheet-def sheet-def--shield ${shield.broken ? 'sheet-def--broken' : ''}`}>
+          <button type="button" className={`sheet-def sheet-def--shield ${shield.broken ? 'sheet-def--broken' : ''}`} aria-pressed={open === 'def:shield'} onClick={() => toggle('def:shield')}>
             <span className="sheet-def__label">Shield</span>
             <span className="sheet-def__value">
               {shield.current}
@@ -170,9 +193,17 @@ export default function SheetPage() {
             <span className="sheet-def__extra">
               {shield.destroyed ? 'Destroyed' : shield.broken ? 'Broken' : `Hardness ${shield.hardness} · BT ${shield.brokenAt}`}
             </span>
-          </div>
+          </button>
         )}
         {defenseBox({ id: 'perception', label: 'Perception', rank: p.perception, extra: senses })}
+        {/* Class DC sits with the other numbers foes roll against, for casters and non-casters alike. */}
+        {character.keyAbility && (
+          <button type="button" className="sheet-def sheet-def--classdc" aria-pressed={open === 'magic:classDc'} onClick={() => toggle('magic:classDc')}>
+            <span className="sheet-def__label">Class DC</span>
+            <span className="sheet-def__value">{classDc(character).total}</span>
+            <RankPips rank={p.classDc ?? 'trained'} />
+          </button>
+        )}
         <button type="button" className="sheet-def sheet-def--speed" aria-pressed={open === 'def:speed'} onClick={() => toggle('def:speed')}>
           <span className="sheet-def__label">Speed</span>
           <span className="sheet-def__value">
@@ -204,10 +235,10 @@ export default function SheetPage() {
                 );
               })}
             </ul>
-            <div className="sheet-langs">
+            <button type="button" className="sheet-langs" aria-pressed={open === 'info:languages'} onClick={() => toggle('info:languages')}>
               <span className="sheet-panel__label">Languages</span>
-              <span>{(character.languages ?? []).map(titleCase).join(', ') || 'Common'}</span>
-            </div>
+              <span className="sheet-langs__list">{(character.languages ?? []).map(titleCase).join(', ') || 'Common'}</span>
+            </button>
           </section>
         </div>
 
@@ -294,6 +325,80 @@ function describe(key, character, opts, { shield, currentHp, maxHp, prepared, sp
     };
   }
 
+  if (kind === 'origin') {
+    const o = ORIGIN[id];
+    const name = o.name(character);
+    const list = spellRules?.[o.type] ?? [];
+    const built = character.build?.[id === 'class' ? 'class' : id];
+    const full = list.find((x) => x.id === built) ?? list.find((x) => x.name === name) ?? null;
+    const facts = id === 'ancestry'
+      ? [['Hit Points', full?.hp ?? character.ancestry?.hp], ['Size', full?.size && (SIZE[full.size] ?? titleCase(full.size))], ['Speed', (full?.speed ?? character.ancestry?.speed) && `${full?.speed ?? character.ancestry.speed} feet`], ['Vision', full?.vision && titleCase(String(full.vision).replace(/-/g, ' '))]]
+      : id === 'class'
+        ? [['Hit Points', full?.hp ? `${full.hp} + Constitution, each level` : null], ['Key attribute', character.keyAbility && abilityName(character.keyAbility)]]
+        : [];
+    return {
+      kind: o.kind,
+      name: name ?? o.kind,
+      icon: o.icon,
+      value: '',
+      facts: [...facts, ['Traits', listOf(full?.traits)], ['Rarity', full?.rarity && full.rarity !== 'common' && titleCase(full.rarity)]].filter((f) => f[1]),
+      html: full?.description,
+      note: !spellRules ? 'Loading the rules text…' : spellRules.error ? 'Couldn’t load the rules text. Try refreshing.' : !full ? 'No rules text for this one in the current rules data.' : null,
+    };
+  }
+
+  if (kind === 'rune') {
+    const r = character.runes?.find((x) => x.slug === id);
+    if (!r) return null;
+    const full = spellRules?.runes?.find((x) => x.id === r.id || x.slug === r.slug) ?? r;
+    return {
+      kind: 'Rune',
+      name: full.name,
+      icon: 'runes',
+      value: '',
+      facts: [['Usage', full.usage && full.usage[0].toUpperCase() + full.usage.slice(1)], ['Level', full.level], ['Traits', listOf(full.traits)], ['Your class DC', classDc(character).total]].filter((f) => f[1]),
+      rules: RUNE_RULES,
+      html: full.description,
+      note: !spellRules ? 'Loading the rules text…' : spellRules.error ? 'Couldn’t load the rune’s rules text. Try refreshing.' : null,
+    };
+  }
+
+  if (kind === 'info') {
+    if (id === 'size') {
+      const size = character.ancestry?.size;
+      return { kind: 'Size', name: SIZE[size] ?? titleCase(size ?? 'Medium'), icon: 'user', value: '', rules: SIZE_RULES[size] ?? SIZE_RULES.med };
+    }
+    if (id === 'level') return { kind: 'Level', name: `Level ${character.level}`, icon: 'crown', value: `${character.level}`, rules: LEVEL_RULES };
+    if (id === 'heroPoints') return { kind: 'Hero Points', name: 'Hero Points', icon: 'spark', value: `${character.heroPoints ?? 0}`, unit: '/ 3', rules: HERO_POINT_RULES };
+    if (id === 'languages') {
+      const langs = (character.languages ?? []).map(titleCase);
+      return {
+        kind: 'Languages',
+        name: 'Languages',
+        icon: 'book',
+        value: `${langs.length || 1}`,
+        rules: LANGUAGE_RULES,
+        sections: [{ title: 'You speak', items: (langs.length ? langs : ['Common']).map((l) => [l, null]) }],
+      };
+    }
+    return null;
+  }
+
+  if (kind === 'prof') {
+    const rank = p.weapons?.[id] ?? 'untrained';
+    const part = proficiencyPart(rank, character.level);
+    const yours = (character.weapons ?? []).filter((w) => w.category === id).map((w) => w.name);
+    return {
+      kind: 'Weapon proficiency',
+      name: `${titleCase(id)} ${id === 'unarmed' ? 'attacks' : 'weapons'}`,
+      icon: 'swords',
+      stat: { total: part.value, parts: [part] },
+      rank,
+      rules: [WEAPON_CATEGORY_RULES[id], WEAPON_PROFICIENCY_RULE],
+      facts: yours.length ? [['Yours', yours.join(', ')]] : [],
+    };
+  }
+
   if (kind === 'attr') {
     const mod = character.abilities[id];
     const skills = Object.keys(SKILL_ABILITY).filter((s) => SKILL_ABILITY[s] === id).map(titleCase);
@@ -335,8 +440,12 @@ function describe(key, character, opts, { shield, currentHp, maxHp, prepared, sp
     }
     const stat = id === 'ac' ? armorClass(character, opts) : id === 'perception' ? perception(character, opts) : savingThrow(character, id, opts);
     const rank = id === 'ac' ? p.armor[character.armor?.category ?? 'unarmored'] : p[id];
-    const facts = id === 'ac' ? [['Armor', character.armor?.name ?? 'None'], character.shield && ['Shield', `${character.shield.name}, +${character.shield.acBonus} when raised`]].filter(Boolean) : [];
-    return { ...info, stat, rank, unsigned: id === 'ac', facts };
+    const vision = character.ancestry?.vision;
+    const facts = id === 'ac'
+      ? [['Armor', character.armor?.name ?? 'None'], character.shield && ['Shield', `${character.shield.name}, +${character.shield.acBonus} when raised`]].filter(Boolean)
+      : id === 'perception' && SENSES[vision] ? [['Senses', SENSES[vision]]] : [];
+    const rules = id === 'perception' && VISION_RULES[vision] ? [...info.rules, VISION_RULES[vision]] : info.rules;
+    return { ...info, stat, rank, unsigned: id === 'ac', facts, rules };
   }
 
   if (kind === 'magic') {
@@ -423,14 +532,16 @@ function Strikes({ character, opts, readOnly, selected, onSelect }) {
       {weapons.length === 1 && weapons[0].slug === 'fist' && (
         <p className="rule-note">{readOnly ? 'No weapons equipped.' : 'No weapons equipped. Equip one on the Inventory tab.'}</p>
       )}
-      <dl className="sheet-profs">
+      <ul className="sheet-profs" aria-label="Weapon proficiencies">
         {WEAPON_CATEGORIES.map((c) => (
-          <div key={c}>
-            <dt>{titleCase(c)}</dt>
-            <dd><RankPips rank={character.proficiencies.weapons?.[c] ?? 'untrained'} /></dd>
-          </div>
+          <li key={c}>
+            <button type="button" className="sheet-prof" aria-pressed={selected === `prof:${c}`} onClick={() => onSelect(`prof:${c}`)}>
+              <span className="sheet-prof__name">{titleCase(c)}</span>
+              <RankPips rank={character.proficiencies.weapons?.[c] ?? 'untrained'} />
+            </button>
+          </li>
         ))}
-      </dl>
+      </ul>
     </section>
   );
 }
@@ -477,7 +588,13 @@ function PreparedToday({ casting, prepared, readOnly, pick }) {
       </div>
       {unprepared.length > 0 && (
         <p className="rule-note" style={{ margin: 0 }}>
-          Also in your {casting.kind === 'familiar' ? 'familiar' : (casting.listName ?? 'spellbook')}: {unprepared.map((s) => s.name).join(', ')}.
+          Also in your {casting.kind === 'familiar' ? 'familiar' : (casting.listName ?? 'spellbook')}:{' '}
+          {unprepared.map((s, i) => (
+            <span key={spellKey(s)}>
+              <button type="button" className="link-button sheet-inline-spell" aria-pressed={pick?.selected === `spell:${spellKey(s)}`} onClick={() => pick?.onSelect(`spell:${spellKey(s)}`)}>{s.name}</button>
+              {i < unprepared.length - 1 ? ', ' : '.'}
+            </span>
+          ))}
         </p>
       )}
       {!readOnly && (
@@ -494,19 +611,20 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
   const { prepared, readOnly } = useTable();
   const casting = character.spellcasting;
   const p = character.proficiencies;
-  const stats = {
-    classDc: { label: 'Class DC', title: 'Class DC', stat: classDc(character), signed: false, rank: p.classDc ?? 'trained' },
-    ...(casting && {
-      spellAttack: { label: 'Spell attack', title: 'Spell attack', stat: spellAttack(character, opts), rank: p.spellcasting ?? 'untrained' },
-      spellDc: { label: 'Spell DC', title: 'Spell DC', stat: spellDc(character, opts), signed: false, rank: p.spellcasting ?? 'untrained' },
-    }),
-  };
-  const title = casting ? `${casting.tradition ? titleCase(casting.tradition) : ''} Spells`.trim() : character.runes?.length ? 'Runes' : 'Class DC';
+  // Class DC lives in the defense band; this panel is only for casters' spells and runesmiths' runes.
+  if (!casting && !character.runes?.length) return null;
+  const stats = casting
+    ? {
+        spellAttack: { label: 'Spell attack', stat: spellAttack(character, opts), rank: p.spellcasting ?? 'untrained' },
+        spellDc: { label: 'Spell DC', stat: spellDc(character, opts), signed: false, rank: p.spellcasting ?? 'untrained' },
+      }
+    : {};
+  const title = casting ? `${casting.tradition ? titleCase(casting.tradition) : ''} Spells`.trim() : 'Runes';
 
   return (
     <section className="sheet-panel sheet-magic" aria-labelledby="magic-title">
       <h2 id="magic-title" className="sheet-panel__title">{title}</h2>
-      <div className={`sheet-dcs sheet-dcs--${Object.keys(stats).length}`} role="group" aria-label="Class and spell DCs">
+      {casting && <div className={`sheet-dcs sheet-dcs--${Object.keys(stats).length}`} role="group" aria-label="Spell attack and DC">
         {Object.entries(stats).map(([key, s]) => (
           <button key={key} type="button" className="sheet-def" aria-pressed={selected === `magic:${key}`} onClick={() => onSelect(`magic:${key}`)}>
             <span className="sheet-def__label">{s.label}</span>
@@ -514,7 +632,7 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
             <RankPips rank={s.rank} />
           </button>
         ))}
-      </div>
+      </div>}
 
       {prepared && <PreparedToday casting={casting} prepared={prepared} readOnly={readOnly} pick={{ selected, onSelect }} />}
 
@@ -539,14 +657,16 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
           <ul className="sheet-list">
             {character.runes.map((r) => (
               <li key={r.slug}>
-                <span>{r.name}</span>
-                <span className="book__entry-dots" aria-hidden="true" />
-                {r.usage && <span className="muted">{r.usage}</span>}
+                <button type="button" className="sheet-spell" aria-pressed={selected === `rune:${r.slug}`} onClick={() => onSelect(`rune:${r.slug}`)}>
+                  <span className="sheet-spell__name">{r.name}</span>
+                  <span className="book__entry-dots" aria-hidden="true" />
+                  {r.usage && <span className="muted">{r.usage}</span>}
+                </button>
               </li>
             ))}
           </ul>
           <p className="rule-note" style={{ margin: '4px 0 0' }}>
-            Trace a rune as an action, or etch up to 2 during your daily preparations. Runes that call for a saving throw use your class DC.
+            {RUNE_RULES[0]}
           </p>
         </div>
       )}
