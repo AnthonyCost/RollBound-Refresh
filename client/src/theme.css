@@ -65,12 +65,19 @@
   --bronze-dark: #6b5530;
   --steel-dark: #33281f;
   --steel-light: #54432f;
+  /* Text on the action colour (filled buttons, badges, selected text). */
+  --on-action: var(--text-bright);
   /* Health stays red in every theme. */
   --hp: #c0392b;
   --hp-hi: #e25a45;
   --hp-deep: #3a1410;
   --hp-shine: #ff8a6e;
 }
+
+/* Every theme's own default for text on its action colour, so a preview card in one theme
+   (data-theme on the card) doesn't inherit the page's value from another. Themes with light
+   action colours override it below (Radiant). */
+[data-theme] { --on-action: var(--text-bright); }
 
 /* Mirage: plum-black and wine, magenta glow, fire-orange actions, gold and parchment. */
 [data-theme='mirage'] {
@@ -217,47 +224,48 @@
   --deg-critfail: #e2604a;
 }
 
-/* Obscure: the sky at dusk. Twilight violet, lavender mist and mauve, mist-white text, an
-   amethyst for actions (#6c4aa1) and gold lettering (#d8b25c). */
+/* Obscure: the sky at dusk, from Secrets of the Obscure. Deep violet ground with an amethyst
+   glow (#6c4aa1), peach-coral actions that stand out from the violet,  near-white text, lavender mist, gold lettering (#d8b25c)
+   and peach for critical flares. */
 [data-theme='obscure'] {
-  --bg: #0e0c16;
-  --bg-deep: #09080f;
-  --glow: #33264f;
-  --glow-mid: #1a1528;
-  --panel: #15121f;
-  --panel-hot: #261d3c;
-  --panel-deep: #110f19;
-  --panel-warm: #1c1829;
+  --bg: #0c0819;
+  --bg-deep: #07050f;
+  --glow: #3a2468;
+  --glow-mid: #1a1230;
+  --panel: #140f24;
+  --panel-hot: #2e1a2e;
+  --panel-deep: #100c1d;
+  --panel-warm: #1b1530;
   --panel-mid: #14111d;
   --panel-ember: #1b1524;
-  --panel-raised: #2a2340;
-  --line: #4d4361;
-  --line-soft: #3a324b;
+  --panel-raised: #2b2148;
+  --line: #4f4268;
+  --line-soft: #3b3152;
   --line-faint: #2a2438;
-  --text: #eef0f6;
-  --text-soft: #d6d2df;
-  --text-muted: #a79fb3;
+  --text: #f6f4fb;
+  --text-soft: #ddd6ea;
+  --text-muted: #ada3c2;
   --text-dim: #857d92;
-  --text-bright: #fcfdff;
+  --text-bright: #ffffff;
   --bronze: #d8b25c;
   --bronze-dark: #7a6332;
   --gold: #ecd497;
   --gold-light: #f7ead0;
   --gold-dark: #9a7a38;
   --gold-deep: #26201a;
-  --gold-flare: #c5b7c6;
-  --gold-flare-dim: #9d7283;
-  --blood: #6c4aa1;
-  --blood-text: #b39ae0;
-  --blood-dark: #33215a;
-  --blood-top: #7d58b8;
-  --blood-glow: #6c4aa1;
-  --blood-shadow: #2a1c45;
-  --blood-flash: #e2d4ff;
-  --hot-shadow: #2a1c45;
+  --gold-flare: #f2b8a0;
+  --gold-flare-dim: #c8826a;
+  --blood: #d9765a;
+  --blood-text: #f4a585;
+  --blood-dark: #7a2e22;
+  --blood-top: #e88a68;
+  --blood-glow: #d9765a;
+  --blood-shadow: #4a1c18;
+  --blood-flash: #ffd2c0;
+  --hot-shadow: #4a1c18;
   --art-hi: #2a2340;
   --art-lo: #09080f;
-  --orb-hi: #1e1626;
+  --orb-hi: #24162e;
   --steel-dark: #2e2a3a;
   --steel-light: #524358;
   --deg-crit: #ecd497;
@@ -266,134 +274,137 @@
   --deg-critfail: #e2604a;
 }
 
-/* Luminary: a hero’s royal blue and gold. Royal-indigo ground, parchment text, royal-blue
-   actions, Luminary-gold labels and bright gold highlights. */
+/* Luminary: a hero’s colours. Royal-indigo ground,
+   parchment text, crimson-red actions that
+   stand out from the blue, gold labels and borders, and orange flares. */
 [data-theme='luminary'] {
   --bg: #0a0d1f;
   --bg-deep: #060815;
-  --glow: #1c2a66;
+  --glow: #24306e;
   --glow-mid: #111838;
   --panel: #10152c;
-  --panel-hot: #17224d;
+  --panel-hot: #2c1834;
   --panel-deep: #0c1024;
   --panel-warm: #141a35;
   --panel-mid: #0f1429;
   --panel-ember: #121a33;
   --panel-raised: #1d2650;
-  --line: #3a4680;
-  --line-soft: #2c3664;
+  --line: #5a5480;
+  --line-soft: #3e3d68;
   --line-faint: #20284b;
   --text: #f3efe2;
   --text-soft: #d9d4c2;
   --text-muted: #a3a7c2;
   --text-dim: #7f84a3;
   --text-bright: #fdfaf0;
-  --bronze: #e8c04a;
+  --bronze: #f0c64a;
   --bronze-dark: #7a6420;
-  --gold: #ffe08a;
+  --gold: #ffd968;
   --gold-light: #fff0c2;
-  --gold-dark: #b08a24;
+  --gold-dark: #c8922a;
   --gold-deep: #26220f;
-  --gold-flare: #ffd04a;
-  --gold-flare-dim: #b8942a;
-  --blood: #2f4fc0;
-  --blood-text: #86a6ff;
-  --blood-dark: #162a6e;
-  --blood-top: #3d62d8;
-  --blood-glow: #2f4fc0;
-  --blood-shadow: #132358;
-  --blood-flash: #c8d6ff;
-  --hot-shadow: #132358;
+  --gold-flare: #ff9a3a;
+  --gold-flare-dim: #d0602a;
+  --blood: #c8302e;
+  --blood-text: #ff6a4e;
+  --blood-dark: #6e1018;
+  --blood-top: #dc4234;
+  --blood-glow: #c8302e;
+  --blood-shadow: #4a1018;
+  --blood-flash: #ffb04a;
+  --hot-shadow: #4a1420;
   --art-hi: #1d2650;
   --art-lo: #060815;
-  --orb-hi: #1a1628;
+  --orb-hi: #2a1424;
   --steel-dark: #2a3050;
   --steel-light: #4c5680;
-  --deg-crit: #ffe08a;
-  --deg-success: #86a6ff;
+  --deg-crit: #ffd968;
+  --deg-success: #ff9a3a;
   --deg-fail: #7f84a3;
-  --deg-critfail: #e2604a;
+  --deg-critfail: #ff6a4e;
 }
 
-/* Radiant: a paladin in holy light. Olive-black shadow and burnt umber, holy-light text
-   (#f4e8c3), gold labels (#d7b248) and burnished amber actions (#ac7e1e). */
+/* Radiant: a paladin in the noon sun. Scorched umber rock under a burnt-orange sky, cream
+   text, halo-gold labels (#e3b57a), white-hot sunlight for buttons and diamonds (with dark
+   lettering on them), steel trim and moss green for successful rolls. */
 [data-theme='radiant'] {
-  --bg: #14120d;
-  --bg-deep: #0d0c08;
-  --glow: #4a3612;
-  --glow-mid: #221c10;
-  --panel: #1c1912;
-  --panel-hot: #2e2410;
-  --panel-deep: #16140e;
-  --panel-warm: #221e14;
-  --panel-mid: #1a1710;
-  --panel-ember: #211a0e;
-  --panel-raised: #302a1a;
-  --line: #5f5030;
-  --line-soft: #4a3e25;
-  --line-faint: #332b1a;
-  --text: #f4e8c3;
-  --text-soft: #dfd2a8;
-  --text-muted: #b0a27c;
-  --text-dim: #8c8060;
-  --text-bright: #fff8e0;
-  --bronze: #d7b248;
-  --bronze-dark: #715c38;
-  --gold: #f6e6a6;
-  --gold-light: #fbf3d0;
-  --gold-dark: #ac7e1e;
-  --gold-deep: #2a2210;
-  --gold-flare: #f4e8c3;
-  --gold-flare-dim: #d38930;
-  --blood: #ac7e1e;
-  --blood-text: #e6b04a;
-  --blood-dark: #563a08;
-  --blood-top: #c28f22;
-  --blood-glow: #d38930;
-  --blood-shadow: #3e2a08;
-  --blood-flash: #fff2c0;
-  --hot-shadow: #3e2a08;
-  --art-hi: #302a1a;
-  --art-lo: #0d0c08;
-  --orb-hi: #24180e;
-  --steel-dark: #3a3220;
-  --steel-light: #715c38;
-  --deg-crit: #f6e6a6;
-  --deg-success: #e6b04a;
-  --deg-fail: #8c8060;
+  --bg: #140a05;
+  --bg-deep: #0c0603;
+  --glow: #7a3612;
+  --glow-mid: #2e1409;
+  --panel: #1e110a;
+  --panel-hot: #3a2414;
+  --panel-deep: #170d07;
+  --panel-warm: #24150c;
+  --panel-mid: #1b0f08;
+  --panel-ember: #26140a;
+  --panel-raised: #33200f;
+  --line: #6e4220;
+  --line-soft: #52301a;
+  --line-faint: #382211;
+  --text: #f6ead2;
+  --text-soft: #e3d3b2;
+  --text-muted: #b89f7e;
+  --text-dim: #8f7a5e;
+  --text-bright: #fffaf0;
+  --bronze: #e3b57a;
+  --bronze-dark: #8a5a2a;
+  --gold: #f2c46a;
+  --gold-light: #fde3a6;
+  --gold-dark: #b07a30;
+  --gold-deep: #2e1c0c;
+  --gold-flare: #fff4dc;
+  --gold-flare-dim: #e08a3a;
+  --blood: #f4e6c4;
+  --blood-top: #fff6e0;
+  --blood-dark: #e3c48c;
+  --blood-text: #fff0cc;
+  --blood-glow: #ffb85a;
+  --blood-shadow: #6e3a14;
+  --blood-flash: #ffffff;
+  --hot-shadow: #a8481a;
+  --art-hi: #3a1e0e;
+  --art-lo: #0c0603;
+  --orb-hi: #2a1208;
+  --steel-dark: #3a3026;
+  --steel-light: #7a7462;
+  --deg-crit: #fff0cc;
+  --deg-success: #a4bc5e;
+  --deg-fail: #8f7a5e;
   --deg-critfail: #e2604a;
+  --on-action: #2a1206;
 }
 
-/* Tunic: Ocarina of Time's store page. Bark-brown ground under a forest-green canopy, gold
-   lettering (#e2c07b to #f5e8b5), cream text (#f2f2dc), and Kokiri-tunic green for actions. */
+/* Tunic: Ocarina of Time. Bark-brown ground under a forest-green canopy,
+   cream text (#f2f2dc), gold lettering and borders (#e2c07b to #f5e8b5), and Kokiri green for actions. */
 [data-theme='tunic'] {
   --bg: #120d08;
   --bg-deep: #0f0d07;
   --glow: #1f312b;
   --glow-mid: #1a1a12;
   --panel: #1c140d;
-  --panel-hot: #23301f;
+  --panel-hot: #2a3220;
   --panel-deep: #150f09;
   --panel-warm: #241a11;
   --panel-mid: #19120b;
   --panel-ember: #1d1610;
   --panel-raised: #302017;
-  --line: #5a4428;
-  --line-soft: #463420;
-  --line-faint: #302317;
+  --line: #7a6234;
+  --line-soft: #5a4626;
+  --line-faint: #3a2d1a;
   --text: #f2f2dc;
-  --text-soft: #ddd6b8;
+  --text-soft: #e6dcb4;
   --text-muted: #b4a682;
   --text-dim: #8f8264;
   --text-bright: #fbfbec;
-  --bronze: #e0c080;
+  --bronze: #e2c07b;
   --bronze-dark: #70552e;
   --gold: #f5e8b5;
   --gold-light: #fbf4d6;
-  --gold-dark: #a77e43;
+  --gold-dark: #c49a52;
   --gold-deep: #302017;
-  --gold-flare: #e2c07b;
-  --gold-flare-dim: #a77e43;
+  --gold-flare: #f5e8b5;
+  --gold-flare-dim: #e2c07b;
   --blood: #3f7a3a;
   --blood-text: #8cc46f;
   --blood-dark: #1f312b;
@@ -408,7 +419,7 @@
   --steel-dark: #3e3222;
   --steel-light: #70552e;
   --deg-crit: #f5e8b5;
-  --deg-success: #8cc46f;
+  --deg-success: #e2c07b;
   --deg-fail: #8f8264;
   --deg-critfail: #e2604a;
 }
@@ -575,7 +586,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   border-color: var(--blood);
   background: linear-gradient(var(--blood-top), var(--blood-dark));
   box-shadow: 0 0 18px var(--hot-shadow), inset 0 1px 0 var(--blood-text);
-  color: var(--text-bright);
+  color: var(--on-action);
   font-size: 13px;
   letter-spacing: 2.5px;
 }
@@ -2076,7 +2087,7 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
     border-color: var(--bronze);
     color: var(--text);
   }
-  .btn--blood:not(:disabled):hover { filter: brightness(1.12); color: var(--text-bright); }
+  .btn--blood:not(:disabled):hover { filter: brightness(1.12); color: var(--on-action); }
 }
 
 /* Fingers need bigger targets than a mouse pointer. */
@@ -2522,7 +2533,7 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   border-radius: 9px;
   background: var(--blood);
   box-shadow: 0 0 0 2px var(--bg-deep);
-  color: var(--text-bright);
+  color: var(--on-action);
   font-family: var(--body);
   font-size: 11px;
   font-weight: 700;
@@ -3636,7 +3647,7 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
    :where keeps this at zero specificity, so every styled control still wins. */
 :root { color-scheme: dark; accent-color: var(--blood); }
 /* Selected text in the site's red rather than the browser's blue. */
-::selection { background: var(--blood); color: #fff4e6; }
+::selection { background: var(--blood); color: var(--on-action); }
 /* Every dropdown gets the same bronze chevron. !important because many select rules use the
    background shorthand (which would clear the image) and set their own padding. */
 select {
@@ -3768,7 +3779,7 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .theme-card__pips { display: flex; gap: 3px; }
 .theme-card__pips i { width: 7px; height: 7px; transform: rotate(45deg); border: 1px solid var(--line); }
 .theme-card__pips i:first-child, .theme-card__pips i:nth-child(2) { background: var(--blood-text); border-color: var(--blood-text); }
-.theme-card__btn { display: grid; place-items: center; min-height: 30px; padding: 0 12px; border: 1px solid var(--blood); background: linear-gradient(var(--blood-top), var(--blood-dark)); color: var(--text-bright); font: 700 10px/1 var(--display); letter-spacing: 2px; text-transform: uppercase; }
+.theme-card__btn { display: grid; place-items: center; min-height: 30px; padding: 0 12px; border: 1px solid var(--blood); background: linear-gradient(var(--blood-top), var(--blood-dark)); color: var(--on-action); font: 700 10px/1 var(--display); letter-spacing: 2px; text-transform: uppercase; }
 .theme-card__orb { justify-self: center; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 40% 30%, var(--hp-hi), var(--hp) 55%, var(--hp-deep)); box-shadow: inset 0 0 0 2px var(--line), 0 0 10px var(--blood-shadow); }
 .theme-card__name { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font: 700 17px/1.2 var(--display); color: var(--text); }
 .theme-card__check { font: 600 12px/1 var(--display); color: var(--gold); }

@@ -38,7 +38,7 @@
 .btn:not(:disabled):active { transform: scale(0.97); }
 @media (hover: hover) {
   .btn:not(:disabled, .btn--blood):hover { border-color: var(--bronze); color: var(--text); }
-  .btn--blood:not(:disabled):hover { box-shadow: 0 0 26px #7a1c12, inset 0 1px 0 var(--blood-text); }
+  .btn--blood:not(:disabled):hover { box-shadow: 0 0 26px var(--blood-glow), inset 0 1px 0 var(--blood-text); }
   .char-card:has(.char-card__banner:hover), .camp-card:has(.camp-card__open:hover) { transform: translateY(-2px); }
 }
 .char-card, .camp-card { transition: border-color 0.2s, box-shadow 0.2s, transform var(--motion) var(--ease-out); }

@@ -32,20 +32,20 @@ export const THEMES = [
   {
     id: 'obscure',
     name: 'Obscure',
-    blurb: 'The sky at dusk: twilight violet, lavender mist, amethyst and gold.',
+    blurb: 'The sky at dusk: twilight violet, lavender mist, peach and gold.',
     browser: '#0e0c16',
   },
   {
     id: 'luminary',
     name: 'Luminary',
-    blurb: 'A hero’s colours: royal blue, parchment and the Luminary’s gold.',
+    blurb: 'A hero’s colours: royal blue, crimson, parchment and gold.',
     browser: '#0a0d1f',
   },
   {
     id: 'radiant',
     name: 'Radiant',
-    blurb: 'Holy light on burnished armour: gold, amber and deep umber.',
-    browser: '#14120d',
+    blurb: 'A paladin in the noon sun: burnt-orange sky, scorched rock and white-hot light.',
+    browser: '#140a05',
   },
   {
     id: 'tunic',
