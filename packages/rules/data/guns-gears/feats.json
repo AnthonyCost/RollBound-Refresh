@@ -19,6 +19,86 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "cTR67ZKDD1EKntXw",
+  "slug": "advanced-construct-companion",
+  "name": "Advanced Construct Companion",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "construct companion"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've upgraded your construct companion's power and decision-making ability. It becomes an advanced construct companion. During an encounter, even if you don't use the Command a Minion action, your construct companion can still use 1 action on your turn that round to Stride or Strike.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "HBZSP3ABqmsV9FXH",
+  "slug": "advanced-shooter",
+  "name": "Advanced Shooter",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've dedicated your training to the most complex and weird weapons of your favorite group. Choose firearms or crossbows. You gain proficiency with all advanced firearms as if they were martial firearms or with all advanced crossbows as if they were martial crossbows.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "Q1O4P1YIkCfeedHH",
+  "slug": "alchemical-shot",
+  "name": "Alchemical Shot",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You have an alchemical bomb worn or in one hand, and are wielding a firearm or crossbow.</p><hr><p>You've practiced a technique for mixing alchemical bombs with your loaded shot. You Interact to retrieve the bomb (if it's not already in your hand) and pour its contents onto your ammunition, consuming the bomb, then resume your grip on the required weapon. Next, Strike with your firearm. The Strike deals damage of the same type as the bomb (for instance, fire damage for alchemist's fire), and it deals an additional 1d6 persistent damage of the same type as the bomb. If the Strike is a failure, you take 1d6 damage of the same type as the bomb you used, and the firearm misfires.</p>\n<p>The persistent damage increases to 2d6 if the bomb is 11th level or higher, or 3d6 if it's 17th level or higher.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "N8Ci3w5gQ68rj6a6",
+  "slug": "arcane-camouflage",
+  "name": "Arcane Camouflage",
+  "level": 9,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Hunter automaton"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have developed magical techniques to aid you with stalking your prey. You can cast Blur and Invisibility each once per day as 2nd-rank arcane innate spells.</p>\n<p><strong>Enhancement</strong> Your camouflage is more potent. Your blur spell now lasts 10 minutes and when you cast invisibility, you can choose to gain the effects of the 4th-rank version of the spell. In addition, you can now cast blur and invisibility each twice per day.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "Lb8mrOF3W2VGSOpA",
   "slug": "arcane-communication",
   "name": "Arcane Communication",
@@ -56,6 +136,104 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p>Your eye has been magically enhanced to pierce darkness. You gain darkvision.</p>\n<p><strong>Enhancement</strong> Your eye can see Invisible creatures in brief spurts. You can cast See the Unseen as an arcane innate spell once per hour.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "FI4MnH0KQfIKJRNT",
+  "slug": "arcane-locomotion",
+  "name": "Arcane Locomotion",
+  "level": 13,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've modified your body to allow you to augment your movement. You gain either a climb Speed of 20 feet or a swim Speed of 20 feet, your choice.</p>\n<p><strong>Enhancement</strong> Your body allows for even further forms of movement. You can either select the option from this feat you haven't chosen yet (climb Speed or swim Speed), or you can increase your land Speed by 5 feet and increase the Speed you chose from this feat increase to be equal to your adjusted land Speed.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "YgytD4HGjWNFwiev",
+  "slug": "arcane-propulsion",
+  "name": "Arcane Propulsion",
+  "level": 9,
+  "category": "ancestry",
+  "traits": [
+   "arcane",
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p><hr><p>You redirect energy from your core to ports on your back or feet, allowing you to fly for a short time. You can maintain this redirected energy for 5 minutes. You gain a fly Speed equal to your Speed while redirecting the energy.</p>\n<p><strong>Enhancement</strong> You can maintain your flight for longer. You can redirect your energy at all times, allowing you to fly whenever you want, rather than just once per day for 5 minutes.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "bJzANqEGTkho1bv6",
+  "slug": "arcane-safeguards",
+  "name": "Arcane Safeguards",
+  "level": 5,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>The magic powering you makes it difficult for outside magic to affect you. You gain the Resist Magic reaction.</p>\n<p><strong>Enhancement</strong> Your safeguards improve. When you Resist Magic, you gain a number of temporary Hit Points equal to the spell rank of the triggering effect.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "xfbPSP9tl1N95xDF",
+  "slug": "arcane-slam",
+  "name": "Arcane Slam",
+  "level": 9,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "warrior automaton"
+  ],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You have a creature Grabbed or Restrained.</p><hr><p>You channel magical power from your core into your arm, empowering your attack as you attempt to slam your foe into the ground. Attempt an Athletics check against the foe's Fortitude DC. You take a –2 circumstance penalty to your check if the target is one size larger than you and a –4 circumstance penalty if it's larger than that. You gain a +2 circumstance bonus to your check if the target is one size smaller than you and a +4 circumstance bonus if it's smaller than that.</p><hr><p><strong>Critical Success</strong> You slam the foe down and the magical energy overwhelms it. The creature is knocked Prone, becomes Dazzled for 1 round, and takes damage equal to 2d6 plus your Strength modifier. The foe is no longer Grabbed or Restrained by you.</p>\n<p><strong>Success</strong> You slam the foe down. The creature is knocked prone and takes damage equal to your Strength modifier. The foe is no longer grabbed or restrained by you.</p>\n<p><strong>Failure</strong> You are unable to slam the creature, but your hold on the creature remains.</p>\n<p><strong>Critical Failure</strong> The creature breaks free and is no longer grabbed or restrained by you.</p>\n<p><strong>Enhancement</strong> Your arms better channel your core's power. You no longer take penalties for attempting to slam larger foes. Your foe takes damage equal to 2d6 plus your Strength modifier on a success (or double that on a critical success).</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "BTQj2N5erpJDWNFA",
+  "slug": "astral-blink",
+  "name": "Astral Blink",
+  "level": 13,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've attuned your core to allow you to phase in and out of the Astral Plane, allowing you to teleport periodically. You can cast Translocate once per hour as a 4th-rank innate arcane spell.</p>\n<p><strong>Enhancement</strong> Your attunement allows you to teleport in a series of quick jumps rather than in one big leap. You can expend your hourly use of translocate as a free action when you begin your turn. If you do, your Strides are augmented until the end of your turn, allowing you to instantly teleport to any point you could reach with your Speed instead of traversing normally to the location. While augmented, your Strides gain the teleportation trait. Your augmented Strides don't trigger reactions that can be triggered by move actions or upon leaving or entering a square, unless those reactions trigger on teleportation.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -100,6 +278,44 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "h9b5CId7S7gV7j2t",
+  "slug": "axial-recall",
+  "name": "Axial Recall",
+  "level": 17,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have reconfigured the magical resonance of your core to attune to the planar energies of Axis, enabling instantaneous travel to that plane. You can cast Interplanar Teleport twice per week as an arcane innate spell that can only target yourself; you can travel only to Axis or the Universe, and your body serves as the focus component.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "vPZxFpq7XkRmE3Uc",
+  "slug": "black-powder-boost",
+  "name": "Black Powder Boost",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm.</p><hr><p>You fire your weapon as you jump, using the kickback to go farther. You Leap and discharge your firearm to add a +10-foot status bonus to the distance traveled. If you spend 2 actions for Black Powder Boost, you High Jump or Long Jump instead.</p><hr><p><strong>Special</strong> An ability that allows you to High Jump or Long Jump as a single action (like the Quick Jump skill feat) lets you use Black Powder Boost as a single action for those jumps as well.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "XLoRtMn48f2KKvsu",
   "slug": "blast-lock",
   "name": "Blast Lock",
@@ -117,6 +333,88 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm.</p>\n<hr>\n<p>Sometimes taking the shortest distance between two points involves removing an obstacle or two. You shoot your firearm at a lock within 10 feet. Make an attack roll against the DC required to Pick the Lock</p>\n<hr>\n<p><strong>Critical Success</strong> You open the lock, or you achieve two successes toward opening a complex lock.</p>\n<p><strong>Success</strong> You open the lock, or you achieve one success toward opening a complex lock.</p>\n<p><strong>Failure</strong> You fail to open the lock, and your shot makes it harder to open. Future attempts to Pick the Lock or Blast the Lock take a -2 circumstance penalty.</p>\n<p><strong>Critical Failure</strong> You fail to open the lock, and your shot makes it much harder to open. Future attempts to Pick the Lock or Blast the Lock take a -4 circumstance penalty.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "3fLfHrJbMy2ayLMQ",
+  "slug": "blast-resistance",
+  "name": "Blast Resistance",
+  "level": 5,
+  "category": "ancestry",
+  "traits": [
+   "dwarf"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p><hr><p>You're used to the clamor of steel, the crack of a firearm, and the thunderous blast of explosions. You gain resistance 3 to fire and sonic. If you roll a success on a saving throw against an effect that causes the Dazzled or Deafened conditions, you get a critical success instead.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "r4ZVpDjX2X0yrmhw",
+  "slug": "blast-tackle",
+  "name": "Blast Tackle",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "way of the vanguard"
+  ],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a two-handed crossbow or a firearm that has the kickback or scatter trait.</p><hr><p>You throw yourself at an enemy, bracing your weapon against it and pulling it close before releasing a destructive shot. Attempt to Grapple; if you're wielding your weapon in both hands, you Release one hand to do so. If your Grapple succeeds, you can immediately Strike the target of the Grapple with the required weapon, even if it's a two-handed weapon you're holding in one hand. This Strike deals an additional 3d6 precision damage.</p>\n<p>As long the creature remains Grabbed or Restrained, you can use just one hand to reload the weapon and Strike that creature with it.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "7spk6rZPiNk2S0yA",
+  "slug": "blood-in-the-air",
+  "name": "Blood in the Air",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "concentrate",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> An enemy you've damaged with a ranged weapon during the last minute is Concealed or Hidden from you.</p><hr><p>Once you've locked on to a target, little can obscure your aim. Make a ranged weapon Strike against the required target. This Strike ignores the target's concealed condition and reduces the flat check for the hidden condition from 11 to 5.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "U9uRb2TezYlQPNJd",
+  "slug": "boost-modulation",
+  "name": "Boost Modulation",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "offensive boost"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You aren't satisfied with keeping to just one kind of boost from your constant tinkering, so you've learned to modulate between several possibilities at once. Choose two additional offensive boosts. You can use an Interact action to change the offensive boost currently affecting your weapon, choosing between the one you chose for the class feature and the two you chose for this modification. If your weapon has the modular trait, you can swap the offensive boost as part of the Interact action you take to use that trait.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -140,6 +438,66 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "vNIimhmP636VOP01",
+  "slug": "bullet-split",
+  "name": "Bullet Split",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a firearm or crossbow in one hand and a slashing (or versatile S) melee weapon in the other.</p><hr><p>You carefully align your weapon with the edge of your blade, splitting the projectile in two as you fire to attack two different targets. Make two Strikes, one each against two separate targets. The targets must be adjacent to each other and within your weapon's maximum range. Each of these attacks takes a –2 penalty to the attack roll, but the two count as only one attack when calculating your multiple attack penalty.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "b7KZ7Fg5u5z2gqvt",
+  "slug": "called-shot",
+  "name": "Called Shot",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You target a specific area of your foe's anatomy to debilitating effect. Declare a part of your foe's anatomy to target and make a ranged weapon Strike. If you hit and deal damage, the target takes one of the following effects, based on the body part you targeted. The GM should use the stated effects as a guideline when attacking creatures with stranger anatomy-for instance, applying the \"arms\" effect to a creature's tentacles if those are what the creature uses to attack.</p>\n<ul>\n<li><strong>Arms</strong> The target is Enfeebled 2 until the end of your next turn. On a critical hit, it's also Enfeebled 1 for 1 minute.</li>\n<li><strong>Head</strong> The target is Stupefied 2 until the end of your next turn. On a critical hit, it's also Stupefied 1 for 1 minute.</li>\n<li><strong>Legs</strong> The target takes a -10-foot status penalty to its Speeds until the end of your next turn. On a critical hit, it also takes a -5-foot penalty to its Speeds for 1 minute.</li>\n<li><strong>Wings</strong> If the target is flying using its wings, it immediately falls 20 feet, or 40 feet on a critical hit. The fall is gradual enough that if the target hits the ground, it takes no damage from the fall.</li>\n</ul>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "9p4oFIn791VAmzUn",
+  "slug": "cauterize",
+  "name": "Cauterize",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm and you or an adjacent ally are taking persistent bleed damage.</p>\n<hr>\n<p>You use the smoking barrel of your firearm to sear shut a bleeding wound. Make a Strike with your firearm. You then press the heated barrel to the wounds of you or an ally within reach that is taking persistent bleed damage, giving an immediate flat check to end the bleed with the lower DC for particularly effective assistance.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "LvVg83ZDj8mabcWF",
   "slug": "clan-pistol",
   "name": "Clan Pistol",
@@ -156,6 +514,199 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p><hr><p>Raised in the ancient halls of Dongun Hold or the surrounding region, you display your lineage with a clan pistol, rather than a clan dagger. You get one clan pistol of your clan for free, as it was given to you at birth. This replaces your clan dagger. Selling this pistol is a terrible taboo and earns you the disdain of other dwarves. You are trained with the clan pistol. In addition, when your clan pistol is visible, you gain a +1 circumstance bonus on checks to Gather Information or Make an Impression when interacting with citizens of Alkenstar, Dongun Hold, or their allies.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "dxUbA1dUEcVHnU5s",
+  "slug": "clockwork-celerity",
+  "name": "Clockwork Celerity",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "manipulate",
+   "unstable"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "armor, construct, or weapon innovation"
+  ],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> Your turn begins.</p><hr><p>You can use unstable clockwork devices in your innovation to push your invention to act more quickly. You are Quickened for this turn. How you can use the extra action depends on your innovation.</p><ul><li><strong>Armor</strong> You can use the extra action to Step, Stride, or use another movement action granted by your innovation (such as Swim if you have the Diving Armor feat).</li><li><strong>Construct</strong> You can use the extra action to Command your construct innovation (or to provide 1 of the actions if you spend 2 actions to Command your construct).</li><li><strong>Weapon</strong> You can use the extra action to Strike with your innovation or Reload your innovation.</li></ul>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "DFusBl7CyNkuDTRa",
+  "slug": "collapse-armor",
+  "name": "Collapse Armor",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "manipulate",
+   "modification"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "armor innovation"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are wearing your armor innovation, or holding it in both hands in its compact form (see text).</p><hr><p>You've modified your armor innovation to collapse into a more compact form so you can don or remove it in an instant. If you're wearing your innovation when you Collapse your Armor, you remove it instantly, and it compresses into its compact form, after which it latches onto your body, typically by attaching to a belt, bandolier, or other convenient carrying surface as a nondescript satchel. If your armor is stowed and carried on your person in its compact form when you take this action, it unfolds back into its armor form onto your body. In compact form, your armor innovation is easier to carry, with a Bulk 1 lower than the Bulk listed for it, to a minimum of light Bulk (carried armor normally has a Bulk 1 higher than listed in the armor entry).</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "wKFQreilUASJkKzV",
+  "slug": "collapse-construct",
+  "name": "Collapse Construct",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "manipulate",
+   "modification"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "construct innovation"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've modified your construct companion and built it out of light materials, enabling you to collapse it into a carrying case or other compact and innocuous form. Either your construct or you (if you're adjacent to it) can Collapse your Construct to turn it into its compact form or back into its normal form.</p>\n<p>In compact form, your construct can't act but is easily carried, with a Bulk of 2 if it's Small, 4 if it's Medium, or 8 if it's Large. The compact form has wheels, so you can easily drag it behind you at half your Speed (rather than the usual slower Speed for dragging).</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "MfvkZ9efD013H34Z",
+  "slug": "come-at-me",
+  "name": "Come at Me!",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Pistolero's Challenge"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're a legendary duelist, welcoming all challengers, enabling you to challenge many foes even while other challenges are active. There is no longer a limit to the number of Pistolero's Challenges you can have in effect at one time.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "Ls3MiZ5RcAWaiQ7f",
+  "slug": "construct-shell",
+  "name": "Construct Shell",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "construct innovation"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've adjusted your construct innovation so that when you ride it, special plates, hollows, or similar form partial barriers around you to add additional protection. You have lesser cover from all attacks when mounted on your construct innovation, not just from attacks where the construct would be in the way.</p>\n<p>Additionally, if your construct uses an emanation while you're riding on it, such as Explode, you can choose not to be affected by the emanation.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "4st3fSYSrJrxwHOP",
+  "slug": "contingency-gadgets",
+  "name": "Contingency Gadgets",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Gadget Specialist"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are too brilliant to be caught off guard, and you always have just the right gadget for the situation. When you prepare your gadgets during your daily preparations, you can choose to leave one of them as a contingency gadget that you keep ready for just this situation, rather than declaring which gadget you're making. You can pull the contingency gadget out using an Interact action, at which point you must choose which gadget you had prepared as a contingency.</p>\n<p>If you're legendary in Crafting, you can leave two contingency gadgets during your daily preparations, instead of just one.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "AYXqqeLSqCYhgUY7",
+  "slug": "core-attunement",
+  "name": "Core Attunement",
+  "level": 9,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "mage automaton"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your core allows you to draw more power from it. Select one 1st-rank arcane spell and one 2nd-rank or lower arcane spell, to which you have access. You can cast your chosen spells as arcane innate spells each once per day.</p>\n<p><strong>Enhancement</strong> Your attunement grows stronger. Select one 5th-rank or lower arcane spell and one 6th-rank or lower arcane spell, to which you have access. You can cast them as arcane innate spells each once per day, in addition to the original spells.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "zeyrLJr6b7hPdx4w",
+  "slug": "core-cannon",
+  "name": "Core Cannon",
+  "level": 17,
+  "category": "ancestry",
+  "traits": [
+   "arcane",
+   "automaton",
+   "concentrate"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p><hr><p>Your body transforms into a powerful magical cannon. While immobile as a cannon, you can fire blasts of energy directly from your core, devastating your foes. You become Immobilized until you use an Interact action to revert back to your standard form. While in your cannon form, the only actions you can use are to Strike with an energy blast unarmed attack or to Interact to revert back to your standard form. You can remain in your cannon form for up to 1 minute or until you take the action to revert back to your standard form, whichever comes first.</p>\n<p>Energy blasts are a special ranged unarmed attack. You can only make energy blast Strikes while you're in your cannon form. Your energy blasts deal 3d8 fire damage and 3d6 force damage, which increases to 4d8 fire damage and 3d6 force damage at level 20. You gain the item bonus to attack rolls with your energy blasts from the highest potency rune on any Handwraps of Mighty Blows you are wearing or any weapon you are wielding, but striking and property runes have no effect on your energy blasts. Energy blasts have a range increment of 120 feet. On a critical hit with an energy blast, the target takes 10 persistent fire damage. Your energy blast doesn't add critical specialization effects. If it matters for an effect dependent on weapon damage dice, an energy blast's number of weapon damage dice is three, or four at level 20.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "uclbKFsrqCW6tQmB",
+  "slug": "core-rejuvenation",
+  "name": "Core Rejuvenation",
+  "level": 13,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p>\n<p><strong>Trigger</strong> You have the Dying condition and are about to attempt a recovery check.</p><hr><p>Your soul taps into your core's power to push against the grasp of death and allow you to recover consciousness. You're restored to 1 Hit Point, lose the dying and Unconscious conditions, and can act normally on this turn. You gain or increase the wounded condition as normal when losing the dying condition in this way.</p>\n<p><strong>Enhancement</strong> Your soul can draw even more power from your core, granting you additional benefits. When you use Core Rejuvenation, you also gain a number of temporary Hit Points equal to three times your level. These Hit Points remain for 1 minute.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -178,6 +729,28 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "j8tukQK5FT1Vfx2G",
+  "slug": "crafters-instinct",
+  "name": "Crafter's Instinct",
+  "level": 13,
+  "category": "ancestry",
+  "traits": [
+   "dwarf",
+   "fortune"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "master in Crafting"
+  ],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p>\n<p><strong>Frequency</strong> once per day</p>\n<p><strong>Trigger</strong> You misfire with a firearm or you roll a failure on a Strike with a ranged weapon.</p><hr><p>You sense a minor flaw in the weapon as you fire it, and quickly adjust your aim on the fly to avoid the flaw. If the triggering Strike was a misfire, you get a normal failure instead. If the triggering Strike was a failure, it becomes a glancing blow that deals minimum damage for the Strike (adding any bonuses as normal but getting a result of 1 for all damage dice that would be rolled on a success). The glancing blow does not apply other effects that would normally happen only on a hit.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "s6h0xkdKf3gecLk6",
   "slug": "crossbow-crack-shot",
   "name": "Crossbow Crack Shot",
@@ -197,6 +770,210 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "bSC18SbdaNXfBHu9",
+  "slug": "dance-of-thunder",
+  "name": "Dance of Thunder",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "concentrate",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 3,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per minute</p>\n<p><strong>Requirements</strong> You're wielding a loaded firearm or crossbow and are not Fatigued.</p><hr><p>Your steps echo with the thunderous retort of exploding black powder as you dance a dance of death. Take any of the following actions you choose in any order: Step, Strike against a target within your firearm's first range increment, and Interact to reload. If you attempted a Strike and it succeeded, you can repeat these three actions again in any order. If you attempted a Strike in the second set and succeeded, you can repeat the actions one last time.</p>\n<p>After using Dance of Thunder, you become fatigued for 1 minute.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "NJyyxInJ743OotKf",
+  "slug": "deadeye",
+  "name": "Deadeye",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "concentrate",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You relax your eyes, taking in the smallest movements of objects, stirring of grass and leaves, and other signs of the presence of hidden things, granting you the ability to locate Invisible creatures.</p>\n<p>Until the start of your next turn, you can see invisible creatures and objects as silhouettes defined by the movement of air, slight depressions in the ground, and other tells that less-keen eyes would overlook, which makes them merely Concealed from you.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "jNzjecRGyyAqkkrm",
+  "slug": "deep-freeze",
+  "name": "Deep Freeze",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "cold",
+   "inventor",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You vent a jet of supercooled fluid from your innovation, damaging a foe and slowing it down. Target one creature within 60 feet. That creature takes cold damage equal to your level, with effects depending on its Reflex save.</p><hr><p><strong>Critical Success</strong> The target is unaffected.</p>\n<p><strong>Success</strong> The target takes half damage and takes a -5-foot status penalty to its Speeds for 1 round.</p>\n<p><strong>Failure</strong> The target takes full damage and takes a -10-foot status penalty to its Speeds for 1 round.</p>\n<p><strong>Critical Failure</strong> The target takes double damage, is Slowed 1 for 1 round, and takes a -15-foot status penalty to its Speeds for 1 round.</p>\n<p>Effect: Deep Freeze</p>\n<p><strong>Unstable Function</strong> Your innovation discharges an enormous cone of supercooled fluid, potentially causing cascading failures. Add the unstable trait to Deep Freeze. The ability affects all creatures within a 60-foot cone instead of a single target, and it deals cold damage equal to double your level instead of equal to your level.</p>\n<p>If you have the revolutionary innovation class feature, you can choose a 60-foot cone or a 90-foot cone when you use an unstable Deep Freeze.</p><hr><p><strong>Special</strong> If your innovation is a minion, it can take this action rather than you.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "corjPSTUKB02gkqN",
+  "slug": "defensive-armaments",
+  "name": "Defensive Armaments",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You use bulky firearms or crossbows to shield your body. Any two-handed firearms and two-handed crossbows you wield gain the parry trait. If an appropriate weapon already has the parry trait, increase the circumstance bonus to AC it grants when used to parry from +1 to +2. While parrying with your weapon, you are immune to splash damage.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "ToZw6ZjB0JhWwMeR",
+  "slug": "deflecting-shot",
+  "name": "Deflecting Shot",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> An ally within the first range increment of your firearm or crossbow is hit by an attack, and you can see the attacker.</p>\n<p><strong>Requirements</strong> You're wielding a loaded firearm or crossbow.</p>\n<hr>\n<p>You're always ready to take a quick shot to deflect a weapon or distract a foe enough to render them off target. The ally gains a +2 circumstance bonus to their AC against the triggering attack. You use this reaction after the result of the attack roll is revealed, so you know whether the +2 will make a sufficient difference.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "WldISqAE5Rw3Ewzn",
+  "slug": "demolitionist",
+  "name": "Demolitionist",
+  "level": 9,
+  "category": "ancestry",
+  "traits": [
+   "dwarf"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p><hr><p>You know how to destroy objects with a well-placed explosion. Whenever you hit with a bomb Strike against a trap or an unattended object, you ignore the first 5 points of the object's Hardness.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "Cs0hRKBfWn2gOYzK",
+  "slug": "devastating-weaponry",
+  "name": "Devastating Weaponry",
+  "level": 18,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "weapon innovation"
+  ],
+  "actions": 3,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You release a volley of projectiles from your weapon, or power it to fly in every direction across the battlefield and Strike multiple creatures. Make a Strike with your weapon innovation against each foe within 30 feet of you. Don't increase your multiple attack penalty until after making all the attacks. If your innovation is a melee weapon and any of the attacks are outside your reach, you Release the weapon before the Strikes, and it returns to your grasp after all of them. If your hands are full when the weapon returns, it falls to the ground in your space. As normal, if your weapon innovation requires one or more actions to reload between Strikes, you can't use it to make multiple attacks with Devastating Weaponry.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "UzuMXY8G88ULDRex",
+  "slug": "disruptive-blur",
+  "name": "Disruptive Blur",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "way of the drifter"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You use cacophonous blasts from your gun or distracting shots from your crossbow to cause momentary diversions, letting you move about the battlefield with impunity. After you make a Strike with a firearm or crossbow, creatures can't take reactions that would be triggered by your movement for the rest of your turn.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "XPTSCUoA8c4o9RgQ",
+  "slug": "distracting-explosion",
+  "name": "Distracting Explosion",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "offensive boost"
+  ],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> A creature within your reach uses a concentrate action.</p><hr><p>Your enemies think they can concentrate on something else while you're nearby? Oh, you'll give them a distraction, all right! Make a melee Strike against the triggering creature with a weapon or unarmed attack that is benefiting from your offensive boost. This Strike doesn't count toward your multiple attack penalty, and your multiple attack penalty doesn't apply to this Strike.</p>\n<p><strong>Unstable Function</strong> You pull out all the stops to create an explosive distraction. Add the unstable trait to Distracting Explosion. If the attack hits, you disrupt the triggering concentrate action.</p><hr><p><strong>Special</strong> If your innovation is a minion, it can take this reaction instead of you, even though minions can't normally take reactions or act when it's not their turn. It uses your reaction for the turn to do so.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "4L5pj2W7Zyf8B3kg",
+  "slug": "diving-armor",
+  "name": "Diving Armor",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "modification"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "armor innovation"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've modified your armor with fins, rotors, and other devices to make it easy for you to move through the water, plus mechanical gills that can help you extract breathable air from water. While wearing your armor innovation, you can breathe underwater and gain a swim Speed equal to your land Speed.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "qvxHGcOUYVG7Tqt4",
   "slug": "dongun-education",
   "name": "Dongun Education",
@@ -213,6 +990,51 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p><hr><p>You're knowledgeable in trades that are important to your people's survival and commercial interests. Pick two of the following Lore skills: Engineering Lore, Explosive Lore, or Firearm Lore. At 2nd level, you gain expert proficiency in these Lore skills; at 7th level, you gain master proficiency in these Lore skills; and at 15th level, you gain legendary proficiency in them.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "FNO2hfGmxqJngD4A",
+  "slug": "drifters-juke",
+  "name": "Drifter's Juke",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Way of the Drifter"
+  ],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a firearm or crossbow in one hand, and your other hand is either wielding a melee weapon or is empty.</p>\n<hr>\n<p>You move in and out of range to complement your attacks. You Step, make a Strike, Step, and make another Strike. One Strike must be a ranged Strike using your firearm or crossbow, and the other must be a melee Strike using your melee weapon or unarmed attack. You can choose not to take one or both Steps.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "XWtNGOkMHcrdrRw8",
+  "slug": "dual-form-weapon",
+  "name": "Dual-Form Weapon",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "modification"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "expert overdrive",
+   "weapon innovation"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your innovation has replaceable interlocking pieces that you can use to transform it into another type of weapon. When you select this feat, choose a level 0 weapon. It must be either a common weapon or another to which you have access. This weapon becomes your innovation's second configuration.</p>\n<p>Select a new set of weapon modifications for this new configuration. You can spend two Interact actions to switch your weapon innovation between the two configurations. These actions don't need to be taken consecutively, but if you've provided the first and not the second, the weapon is non-functional as it is stranded between states. Your weapon's Bulk is always the greater Bulk of the two configurations, regardless of which configuration it's in—if one weapon is smaller than the other, you still need to keep any weapon parts on hand. Any runes on your weapon innovation affect the second weapon configuration as long as it would normally qualify for them.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -237,6 +1059,28 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "LvmYfUGX3uDCpIHY",
+  "slug": "electrify-armor",
+  "name": "Electrify Armor",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "armor innovation"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are wearing your armor innovation.</p><hr><p>You electrify your armor to punish foes who dare to attack you. For 1 round, any creature that touches you, or that hits you with a melee unarmed attack or a non-reach melee weapon attack, takes 1d4 electricity damage. The effect ends if you cease wearing your armor innovation.</p>\n<p>If you have the revolutionary innovation class feature, the damage increases to 2d4.</p>\n<p><strong>Unstable Function</strong> You create an unstable chain reaction, sending countless sparks dancing across your armor. Add the unstable trait to Electrify Armor. The effects last for 1 minute instead of 1 round, and the damage dice increase from d4s to d12s.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "AMbYEv9rUt2fcR7F",
   "slug": "energy-beam",
   "name": "Energy Beam",
@@ -253,6 +1097,69 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p>You can channel your core's power through the magical gem that serves as your eye. You gain an energy beam ranged unarmed attack that deals 1d4 fire damage. The energy beam has a range increment of 20 feet. On a critical hit, the target takes persistent fire damage equal to the number of weapon damage dice. Your eye beam does not add critical specialization effects.</p>\n<p><strong>Enhancement</strong> You channel greater power. Increase the damage die of your energy beam by one step, from 1d4 to 1d6.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "GLHh9MWlcINLC6Q0",
+  "slug": "engine-of-destruction",
+  "name": "Engine of Destruction",
+  "level": 18,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "construct innovation"
+  ],
+  "actions": 3,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your construct unleashes a broad swath of devastation by separating its limbs, deploying hidden armaments, or using a similar technique to wreak havoc. You Command your innovation. Instead of its normal actions, it Strides once, then makes a Strike against each foe within 30 feet of it with a +2 circumstance bonus to its attack rolls. The multiple attack penalty doesn't increase until after the construct makes all the attacks.</p>\n<p>Effect: Engine of Destruction</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "WWCZef1PBliiot9Q",
+  "slug": "enlarged-chassis",
+  "name": "Enlarged Chassis",
+  "level": 13,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Medium or Small size"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've empowered your core to support a larger body, granting you size and additional reach. You gain the effects of enlarge constantly.</p>\n<p><strong>Enhancement</strong> Your core's empowerment has stabilized, allowing for greater support. You are no longer clumsy due to the effects of enlarge.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "TYe3dsNlks91YAks",
+  "slug": "explosive-expert",
+  "name": "Explosive Expert",
+  "level": 13,
+  "category": "ancestry",
+  "traits": [
+   "dwarf"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "Explosive Savant"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p><hr><p>Through your extensive training with volatile weapons, you've built up a fair bit of tolerance to your own black powder explosions. You are immune to splash damage caused by your own Strikes with bombs and firearms (such as the splash damage from the scatter trait).</p>",
   "source": "Guns & Gears"
  },
  {
@@ -278,6 +1185,27 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "NDbNNMouxnnwBqwm",
+  "slug": "explosive-maneuver",
+  "name": "Explosive Maneuver",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "weapon innovation"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> Your last action was a successful Strike against a foe using your weapon innovation.</p><hr><p>Thanks to a hidden experimental feature you built into your weapon, your weapon explosively deploys levers, tangling hooks, or similar mechanisms to provide significant assistance when you perform a combat maneuver. When you use Explosive Maneuver, choose Grapple, Shove, or Trip. Your weapon innovation must have a weapon trait that matches the action you chose (for instance, to choose Grapple, your weapon must have the grapple trait). You take the chosen action against the same foe as your previous successful Strike, using the same multiple attack penalty as your previous successful Strike. You still increase your multiple attack penalty after the Grapple, Shove, or Trip, as normal.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "6EgHimhCuS8L0xDE",
   "slug": "explosive-savant",
   "name": "Explosive Savant",
@@ -297,6 +1225,64 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "Stydu9VtrhQZFZxt",
+  "slug": "fake-out",
+  "name": "Fake Out",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "gunslinger",
+   "visual"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> An ally is about to use an action that requires an attack roll, targeting a creature within your weapon's first range increment.</p>\n<p><strong>Requirements</strong> You're wielding a loaded firearm or crossbow.</p>\n<hr>\n<p>With a skilled flourish of your weapon, you force an enemy to acknowledge you as a threat. Make an attack roll to Aid the triggering attack. If you dealt damage to that enemy with the same weapon since the start of your last turn, you gain a +1 circumstance bonus to this roll.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "qwnyuCsl5YvX0fdY",
+  "slug": "fatal-bullet",
+  "name": "Fatal Bullet",
+  "level": 16,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're especially talented at striking your enemies in their most vulnerable areas. When you critically hit with a fatal firearm, you deal an additional die of the appropriate size and damage type for the fatal trait after doubling the weapon's damage. For example, after getting a critical hit with a fatal d12 weapon, you add a total of 2d12 additional damage to the attack after doubling its damage.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "K9hM3AdWGbU3VE8L",
+  "slug": "final-shot",
+  "name": "Final Shot",
+  "level": 18,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 3,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirement</strong> You're wielding an unloaded firearm.</p><hr><p>You jam a triple charge of black powder into your weapon to unleash a devastating but risky and inaccurate attack. Interact to reload, expending three doses of black powder in addition to your normal black powder or ammunition, then Strike with your firearm against a creature within the weapon's first range increment. If you roll a success, the attack is instead a critical success, but if you roll a failure, the weapon misfires. Regardless of your roll, after the attack you're Off-Guard until the start of your next turn and Stunned 1.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "W5hgaJvaCrTKfYbC",
   "slug": "fire-savvy",
   "name": "Fire Savvy",
@@ -313,6 +1299,191 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p><hr><p>You've grown up around a forge and are well-suited to dealing with smoke and flame. Your flat check to remove persistent fire damage is DC 10 instead of DC 15, which is reduced to DC 5 with appropriate assistance. In addition, if you roll a success on a saving throw against suffocation or choking due to smoke or ash, you get a critical success instead.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "Xdf00Kmv5C3qqrtK",
+  "slug": "flesh-wound",
+  "name": "Flesh Wound",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You fire to ensure that even if your shot doesn't land cleanly, it still lands close enough to deal some damage. Make a ranged Strike. It gains the following effect on a failure (though not a critical failure).</p>\n<p><strong>Failure</strong> Though your attack misses, it still deals one die of damage plus any damage from your weapon specialization class feature. This uses your weapon's normal damage die and damage type. This attack doesn't add extra damage from any other sources or abilities.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "9cq4j15EbVyrHKFX",
+  "slug": "forge-blessed-shot",
+  "name": "Forge-Blessed Shot",
+  "level": 17,
+  "category": "ancestry",
+  "traits": [
+   "divine",
+   "dwarf"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "worshipper of Torag or Angradd"
+  ],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p>\n<p><strong>Frequency</strong> once per day</p>\n<p><strong>Trigger</strong> You attempt a ranged Strike.</p><hr><p>You intone a prayer to the dwarven deities Torag or Angradd, willing a higher power to guide your aim in the heat of battle. On your next Strike with a ranged weapon before the end of your turn, you gain a +2 circumstance bonus to your attack roll and ignore your target's Concealed condition, as well as your target's lesser, standard, and greater cover.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "6yJxUx0W2hwHckNi",
+  "slug": "full-automation",
+  "name": "Full Automation",
+  "level": 20,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "armor, construct, or weapon innovation"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You become so entwined with your innovations that you can use them without a second thought. You're permanently Quickened. How you can use the extra action depends on your innovation.</p>\n<ul>\n<li><strong>Armor</strong> Your armor responds to the most subtle stimuli to move you in the right direction as long as you are wearing it. You can use the extra action to Stride, Step, or use a form of movement provided by your innovation (such as Fly or Swim).</li>\n<li><strong>Construct</strong> Your ability to command your construct becomes instinctive. You can use the extra action to Command your construct innovation (or to provide 1 of the actions if you choose to spend 2 actions to Command your construct).</li>\n<li><strong>Weapon</strong> Your weapon becomes easier to wield with deadly efficacy, almost as if it is an extension of your body. It speeds effortlessly toward whatever target you choose as long as you are holding it. You can use the extra action to Strike with your innovation.</li>\n</ul>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "DQN7YC7s7T0pL6Aa",
+  "slug": "gadget-specialist",
+  "name": "Gadget Specialist",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "expert in Crafting"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Rather than just using your gadgets for various boosts and tweaks, you also craft a few specific temporary consumable gadgets each day. You gain the formulas for three common or uncommon gadgets. Each day during your daily preparations, you can create two temporary gadgets from your formula book. Gadgets prepared in this way don't cost you any resources to Craft and don't have any sale value. They are temporary items and fall apart the next time you make your daily preparations if you haven't already used them.</p>\n<p>If you're a master in Crafting, you can create three gadgets per day, and you gain three additional common or uncommon gadget formulas. If you're legendary in Crafting, you can create four gadgets per day, and you gain another additional three common or uncommon gadget formulas, for a total of nine.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "Q21KzuubUBBkoges",
+  "slug": "gigaton-strike",
+  "name": "Gigaton Strike",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Megaton Strike"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>When you use a full-power Megaton Strike, you can knock your foe back. When you succeed at your Strike while using an unstable Megaton Strike, your target must attempt a Fortitude save against your class DC.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The creature is pushed back 5 feet.</p>\n<p><strong>Failure</strong> The creature is pushed back 10 feet.</p>\n<p><strong>Critical Failure</strong> The creature is pushed back 20 feet.</p><hr><p><strong>Special</strong> If your innovation is a minion, this benefit applies on its unstable Megaton Strikes.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "lv8jRWK7bv7dR6SM",
+  "slug": "gigavolt",
+  "name": "Gigavolt",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Megavolt"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>When you unleash electricity from your innovation, you can bounce it off obstacles, creating a field of electric death. When you use Megavolt, each time your line of electricity hits a solid barrier, such as a wall, it bounces off at an angle of your choice and continues until you have reached the full length of the line. Even if a creature is in the area from multiple bounces, it takes the damage only once.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "5FHLom2tpC0X3nbf",
+  "slug": "greater-augmentation",
+  "name": "Greater Augmentation",
+  "level": 17,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've greatly improved your abilities and your core can support further augmentations. You gain the enhancement benefits of one of your 1st-, 5th-, 9th-, or 13th-level automaton ancestry feats. You are also capable of reconfiguring your augmentations to meet your needs. You can spend one week of downtime to change the enhancement you gain with this feat.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "94PGauGdzrVARMLc",
+  "slug": "grit-and-tenacity",
+  "name": "Grit and Tenacity",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "fortune",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per hour</p>\n<p><strong>Trigger</strong> You fail a Fortitude or Will save.</p>\n<hr>\n<p>You call upon deep reserves of toughness and mental fortitude to power through an otherwise debilitating effect. Reroll the triggering save with a +2 circumstance bonus; you must use the second result.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "aviDW7htxA77iarV",
+  "slug": "hair-trigger",
+  "name": "Hair Trigger",
+  "level": 16,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "initial deed that allows you to Interact to draw a weapon"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>No one can react faster than you can pull your trigger. When using your initial deed, instead of Interacting to draw a weapon, you can Strike with a firearm or crossbow you're already wielding. If this Strike hits, the target is also Off-Guard until the end of your first turn of the encounter.</p><hr><p><strong>Special</strong> If your initial deed allows you to Interact to draw a weapon more than once, this feat allows you to replace one of these Interact actions and use the other one to draw a weapon. You can't replace both Interact actions with Strikes, but you can draw a loaded firearm or crossbow with one of the actions and immediately shoot it with the other.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -336,6 +1507,50 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "Q4NiHmThMtk8razS",
+  "slug": "headshot",
+  "name": "Headshot",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "concentrate",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "way of the sniper"
+  ],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm or crossbow.</p><hr><p>You attempt to finish your target with a final, well-placed shot. Make a crossbow or firearm Strike. If you've damaged the target within the last minute with the same weapon and you get a critical success on your attack roll, the target must succeed at a Fortitude save against your class DC or die; this is a death and incapacitation effect. A creature that survives is temporarily immune for 1 day. Creatures with no head (such as dullahans or oozes) are immune to this ability, and creatures with redundant heads (such as ettins) might survive the destruction of a head.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "qUSWPWxYF8gfhfHM",
+  "slug": "helpful-tinkering",
+  "name": "Helpful Tinkering",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "offensive boost"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per 10 minutes</p><hr><p>You don't just tinker with your own innovation, you fiddle with your allies' weapons as well (for their benefit, of course). Choose an ally in your reach and one of their weapons. Attempt a Crafting check against a high DC for your level.</p><hr><p><strong>Success</strong> For 1 minute, the chosen ally's Strikes with the chosen weapon gain the same offensive boost your innovation has.</p>\n<p>Effect: Helpful Tinkering</p>\n<p><strong>Critical Failure</strong> Your ally takes damage of the type and amount that your offensive boost normally deals on a successful Strike.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "6LFBPpPPJjDq07fg",
   "slug": "hit-the-dirt",
   "name": "Hit the Dirt!",
@@ -352,6 +1567,247 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p><strong>Trigger</strong> A creature you can see attempts a ranged Strike against you.</p>\n<hr>\n<p>You fling yourself out of harm's way. You Leap. Your movement gives you a +2 circumstance bonus to AC against the triggering attack. Regardless of whether or not the triggering attack hits, you land Prone after completing your Leap.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "58LYCoLrCzG2Ll8b",
+  "slug": "incredible-construct-companion",
+  "name": "Incredible Construct Companion",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Advanced Construct Companion"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Thanks to your continual tinkering, your construct companion has advanced to an astounding new stage of engineering, enhancing all its attributes. Your construct companion becomes an incredible construct companion.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "dC14a0DZqDBA9B8g",
+  "slug": "instant-backup",
+  "name": "Instant Backup",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> Your attack with a firearm misfires.</p><hr><p>Even as your firearm misfires, you quickly draw a backup. Release the misfired weapon and Interact to draw a different weapon that requires the same number of hands or fewer.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "mDczSj3GolIbkhGJ",
+  "slug": "instant-return",
+  "name": "Instant Return",
+  "level": 16,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> An enemy misses you with a ranged attack using a type of ammunition appropriate to your weapon (a bullet if you're wielding a firearm).</p>\n<p><strong>Requirements</strong> You're wielding an unloaded firearm or crossbow.</p><hr><p>With a single fluid gesture, you catch a projectile out of the air, load it in your weapon, and shoot it back at the attacker. Interact to load the projectile into your weapon, then make a Strike with the required weapon against the triggering opponent. Since you're using the foe's ammunition, this Strike applies any special effects that ammunition would have (for instance, if it was Explosive Ammunition, it would explode in a burst of fire if your Strike hits).</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "b8BZl7wbm83ObEtO",
+  "slug": "integrated-armament",
+  "name": "Integrated Armament",
+  "level": 5,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your mechanical body houses a weapon or shield that you can quickly draw and stow, leaving you prepared for combat at all times.</p>\n<p>You can use a 1-minute activity, which has the manipulate trait, to integrate a single, one-handed weapon or shield into one of your arms. You can draw or stow this item as an Interact action. Creatures don't automatically see this integrated item when it's stowed and must actively Seek in order to find it. They take a –2 circumstance penalty to any checks to do so. While you are wielding the item, it can't be Disarmed and you can't drop or Release it; you must Interact to store the weapon and free that hand. A creature determined to retrieve the item can do so, but it requires either 1 minute to remove it or extreme violence to your arm—such as physically removing portions of the limb. You can only have one integrated armament at a time, though you can use the 1-minute activity to replace the item or swap the arm in which it's stored.</p>\n<p><strong>Enhancement</strong> Your body has more space for integration. You can now either integrate two one-handed weapons, a one-handed weapon and a shield, or a single two-handed weapon which is split across both arms. You can use a single Interact action to draw or store both integrated armaments. When you draw a single weapon, you can choose to hold it with either one hand or both hands.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "5ZoIJImgvpdhGcDR",
+  "slug": "just-the-thing",
+  "name": "Just the Thing!",
+  "level": 16,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per hour</p><hr><p>Need to balance on a razor's edge, force open an iron door, or persuade a dragon to negotiate? Never fear! No matter the situation, you always have just the thing. You attempt a skill action that takes 1 minute or less to complete, using the same number of actions or amount of time as normal. However, as you take the action, describe a device you pull out and use to accomplish the skill. The specifics of how you accomplish this are up to you, but they should fit the challenge at hand. For instance, you might use gravitic stabilizers to balance on the razor's edge, a force battering ram gizmo to open the iron door, or a device that produces an aroma with the ability to pacify wyrms to persuade the dragon. Using an invention in this way lets you alter how you calculate the skill check used in the action. Instead of the normal skill modifier associated with that skill action, you use your Crafting modifier.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "8YLCu791osZNFKN2",
+  "slug": "leap-and-fire",
+  "name": "Leap and Fire",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Hit the Dirt!"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're quick enough to line up a shot even while diving to the ground. When you use your Hit the Dirt! reaction, at any point during your Leap you can also make a ranged Strike with a loaded firearm or crossbow, targeting the creature whose attack triggered the reaction.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "AQvtqj2h2n5n8YYg",
+  "slug": "lesser-augmentation",
+  "name": "Lesser Augmentation",
+  "level": 9,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You know how to get the most out of your unique body and abilities. You gain the enhancement benefits of one of your 1st- or 5th-level automaton ancestry feats. You are also capable of reconfiguring your augmentations to meet your needs. You can spend one week of downtime to change the enhancement you gain with this feat.</p>\n<p><strong>Enhancement</strong> You gain the enhancement benefits of another 1st- or 5th-level automaton ancestry feat. Also, your reconfigurations take less time. You only need to spend 1 day of downtime to change any of your enhancements. If you have multiple enhancements, changing each one requires a separate day.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "McnLGEZnUbtYCNDW",
+  "slug": "lock-on",
+  "name": "Lock On",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "construct innovation"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Aha! You lock on to your enemy's weak point to assist your construct companion in destroying it. When you Lock On, designate an enemy you can see. If your next action is to Command your construct, the construct gains a +2 circumstance bonus to attack rolls against the designated enemy until the end of the turn. If you use 2 actions for the Command, the bonus is instead a +3 circumstance bonus, or a +4 circumstance bonus if you're legendary in Crafting.</p>\n<p>Effect: Lock On</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "xoB4RDYkdAALt0U4",
+  "slug": "magical-resistance",
+  "name": "Magical Resistance",
+  "level": 5,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your animating magic provides some defense. Choose one of the following energy damage types: cold, electricity, or sonic. You gain resistance 5 to that damage type.</p>\n<p><strong>Enhancement</strong> You tap deeper into your animating magic, and your resistances improve. Choose one of the following benefits: you gain resistance 5 to the remaining two damage types from the above list, or your chosen resistance increases to a value equal to 1 + half your level.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "4osf0dNeZ19KBoTb",
+  "slug": "manifold-modifications",
+  "name": "Manifold Modifications",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "modification"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "initial modification"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've modified your innovation using clever workarounds, so you can include another initial modification without compromising its structure. Your innovation gains an additional initial modification from the list for innovations of its type.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "BEqXsP6UqARzpEFD",
+  "slug": "megaton-strike",
+  "name": "Megaton Strike",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "armor, construct, or weapon innovation"
+  ],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You activate gears, explosives, and other hidden mechanisms in your innovation to make a powerful attack. You make a Strike, dealing an extra die of weapon damage. If you're at least 10th level, increase this to two extra dice, and if you're at least 18th level, increase it to three extra dice. The type of Strike you can make depends on your innovation.</p><ul><li><strong>Armor</strong> You Strike with a melee unarmed attack or a melee weapon. To use a melee weapon for this, you must have prepared it in advance with special contraptions when you make your daily preparations.</li><li><strong>Construct</strong> Your minion innovation Strikes.</li><li><strong>Weapon</strong> You Strike with your weapon innovation.</li></ul><p><strong>Unstable Function</strong> You put even more force into the Strike, though you risk stress fractures to your innovation. Add the unstable trait to Megaton Strike. The Strike deals another extra damage die, for a total of two extra dice at 4th level, three at 10th level, and four at 18th level.</p><hr><p><strong>Special</strong> If your innovation is a minion, it can take this action rather than you.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "hlX7jYoS1s6srZC2",
+  "slug": "megavolt",
+  "name": "Megavolt",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "electricity",
+   "inventor",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You bleed off some electric power from your innovation in the shape of a damaging bolt. Creatures in a 20-foot line from your innovation take 1d4 per 2 levels (at least 3d4) electricity damage, with a basic Reflex save against your class DC. The electricity damage increases by 1d4 at 8th level and every 2 levels thereafter.</p>\n<p><strong>Unstable Function</strong> You overload and supercharge the voltage even higher. Add the unstable trait to Megavolt. The area increases to a 60-foot line and the damage increases from d4s to d12s. If you have the breakthrough innovation class feature, you can choose a 60-foot or 90-foot line for the area when you use an unstable Megavolt; if you also have the revolutionary innovation class feature, you can choose a 60-foot, 90-foot, or 120-foot line.</p><hr><p><strong>Special</strong> If your innovation is a minion, it can take this action rather than you.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -378,6 +1834,49 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "lh3STEvbGnP7jVMr",
+  "slug": "munitions-machinist",
+  "name": "Munitions Machinist",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Munitions Crafter",
+   "expert in Crafting"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You're adept at crafting ammunition. You gain the Quick Alchemy benefits and 4 versatile vials, but can only use Quick Vial to create bombs or alchemical ammunition.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "J8HLcsOkAcXfTxYy",
+  "slug": "negate-damage",
+  "name": "Negate Damage",
+  "level": 18,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "armor innovation"
+  ],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> You would take damage.</p><hr><p>Your armor innovation activates various devices you prepared ahead of time, and you use one of them to reduce the damage you would take by 15.</p>\n<p><strong>Unstable Function</strong> You activate all the precautions at once, violently repelling the incoming attack to blunt its force. Add the unstable trait to Negate Damage and reduce the damage you would take by 50.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "XHy9inDi3oGZNd43",
   "slug": "no-no-i-created-you",
   "name": "No! No! I Created You!",
@@ -401,6 +1900,234 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "NBvhmNqneeok7ZOr",
+  "slug": "overdrive-ally",
+  "name": "Overdrive Ally",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "manipulate"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Overdrive"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You are currently in overdrive.</p>\n<hr>\n<p>You quickly fling some of your powered-up mechanisms to an ally, sharing your benefits with them briefly. Choose an ally within 30 feet. Until the end of their next turn, that ally's Strikes deal additional damage equal to half your Intelligence modifier, or your full Intelligence modifier if you were in critical overdrive. The ally doesn't gain the increased damage from expert, master, or legendary overdrive.</p>\n<p>Effect: Overdrive Ally</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "zgljg4gVI6i1Fpb5",
+  "slug": "paired-shots",
+  "name": "Paired Shots",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding two weapons, each of which can be either a loaded one-handed firearm or loaded one-handed crossbow.</p>\n<hr>\n<p>Your shots hit simultaneously. Make two Strikes, one with each of your two ranged weapons, each using your current multiple attack penalty. Both Strikes must have the same target.</p>\n<p>If both attacks hit, combine their damage and then add any applicable effects from both weapons. You add any precision damage, only once, to the attack of your choice. Combine the damage from both Strikes and apply resistances and weaknesses only once. This counts as two attacks when calculating your multiple attack penalty.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "R5hdEbfKdIVAQs24",
+  "slug": "paragon-companion",
+  "name": "Paragon Companion",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Incredible Companion"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your construct companion has reached the pinnacle of form and function. Your construct companion becomes a paragon construct companion.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "YlaLePtgDXGB0Fsf",
+  "slug": "penetrating-fire",
+  "name": "Penetrating Fire",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm or crossbow.</p><hr><p>You blast a bullet through one foe and into another. Choose two targets, one of which would give the other lesser cover against your ranged attacks. Make a single ranged Strike with the required weapon against both targets. This attack ignores any lesser cover the nearer target provides the other. Roll damage only once and apply it to each creature you hit. Penetrating Fire counts as two attacks for your multiple attack penalty.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "Wukrctjz2e8W4bbS",
+  "slug": "perfect-readiness",
+  "name": "Perfect Readiness",
+  "level": 20,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You prepare to fire with an instinctive speed and muscle memory that go beyond your conscious thoughts. You're permanently Quickened. You can use your extra action only to Step or Interact to reload.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "LbMPCAyUrLRHykGA",
+  "slug": "persistent-boost",
+  "name": "Persistent Boost",
+  "level": 16,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "offensive boost"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your innovation sets foes on fire, covers them in acid, leaves barbed thorns behind, or otherwise deals persistent damage to your foes that sticks around long after you deliver your boosted attack. When you or your construct innovation damage a foe with offensive boost, that foe also takes 1d8 persistent damage of the same damage type as the offensive boost damage.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "BkEOwv3SRtefczpO",
+  "slug": "phalanx-breaker",
+  "name": "Phalanx Breaker",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Way of the Vanguard"
+  ],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a two-handed firearm or a two-handed crossbow.</p>\n<hr>\n<p>You know that to take out an enemy formation, you must punch a hole through its center. Make a ranged Strike with the required weapon against a target within the weapon's first range increment. The target is pushed directly back 10 feet (20 feet on a critical hit), and if this pushes the target into an obstacle, the target takes bludgeoning damage equal to half your level.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "G8iGrx1qBDwLk1HO",
+  "slug": "piercing-critical",
+  "name": "Piercing Critical",
+  "level": 18,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your attacks with your preferred weapons deal especially devastating wounds. When you Strike with a firearm or crossbow for which you have legendary proficiency, you critically succeed if you roll a 19 on the die, as long as that result is a success.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "A2EBy2L4acrehiAA",
+  "slug": "pistol-twirl",
+  "name": "Pistol Twirl",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Deception"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded one-handed ranged weapon.</p>\n<hr>\n<p>Your quick gestures and flair for performance distract your opponent, leaving it vulnerable to your follow-up attacks. You Feint against an opponent within the required weapon's first range increment, rather than an opponent within melee reach. If you succeed, the foe is Off-Guard against your melee and ranged attacks, rather than only your melee attacks. On a critical failure, you're off-guard against the target's melee and ranged attacks, rather than only its melee attacks.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "yOyMlFGAgLfRas8m",
+  "slug": "pistoleros-challenge",
+  "name": "Pistolero's Challenge",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "auditory",
+   "flourish",
+   "gunslinger",
+   "linguistic",
+   "mental"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Way of the Pistolero"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>With a stern call, carefully chosen barb, or some other challenging declaration, you demand your foe's attention in a duel. Choose an opponent within 30 feet who you can perceive and can hear you, and make your choice of a Deception check or Intimidation check against the target's Will DC. No matter the result of the check, the foe is temporarily immune to your Pistolero's Challenge until noon the next day.</p>\n<p><strong>Success</strong> Both you and the opponent gain a +2 status bonus to damage rolls with Strikes made against each other. If you're a master in the skill you used for the check, the status bonus to damage rolls increases to +3, and if you're legendary, it increases to +4.</p>\n<p>Effect: Pistolero's Challenge</p>\n<p>You can have only one challenge in effect at a time; challenging a new opponent ends this effect on any current target. Otherwise, the effect lasts until one of you is defeated, flees, or the encounter ends.</p>\n<p><strong>Critical Failure</strong> You become Frightened 1 and can't use this ability again for 1 minute.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "vxDL78Yz0dPZdAJ5",
+  "slug": "precious-munitions",
+  "name": "Precious Munitions",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Munitions Machinist"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You mix flecks of precious materials you've gathered on your journeys into your custom bullets to bring out those properties in your temporary ammunition. You can use advanced alchemy to create standard-grade adamantine, cold iron, or silver ammunition, spending 1 daily consumable per piece of ammunition. At 15th level, you can create high-grade adamantine, cold iron, or silver ammunition.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "8zHsIubGREIrGfAA",
   "slug": "prototype-companion",
   "name": "Prototype Companion",
@@ -420,6 +2147,108 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "qFt6zyWVX1njJf1l",
+  "slug": "quick-draw",
+  "name": "Quick Draw",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "gunslinger",
+   "ranger",
+   "rogue"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You draw your weapon and attack with the same motion. You Interact to draw a weapon, then Strike with that weapon.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "llWnSLYALh88iRGQ",
+  "slug": "rain-of-bolts",
+  "name": "Rain of Bolts",
+  "level": 9,
+  "category": "ancestry",
+  "traits": [
+   "automaton"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Sharpshooter automaton"
+  ],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Frequency</strong> once per day</p><hr><p>Throughout the day, your body produces powerful projectiles within your chassis. You fire them all at once in either a 30-foot cone or a 10-foot emanation. Foes in the area take (3 + floor(your level/3))d6 piercing damage with a basic Reflex save against the higher of your class DC or spell DC. This increases to 7d6 at 12th level, 8d6 at 15th level, and 9d6 at 18th level.</p>\n<p><strong>Enhancement</strong> The projectiles regenerate quicker, they are much more powerful, and you can refine the metallic content to harm certain creatures. You can use Rain of Bolts once per hour instead of once per day. The damage increases to 12d6 and each time you use the action, you can choose adamantine, cold iron, or silver. The damage from Rain of Bolts is treated as the metal you chose. At 20th level, the damage increases to 13d6.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "GWnQMjSAIG6qcV8J",
+  "slug": "reach-for-the-stars",
+  "name": "Reach for the Stars",
+  "level": 18,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Black Powder Boost"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>The sky's the limit, as long as you've got enough black powder. When you use Black Powder Boost, you can expend additional black powder or ammunition to boost yourself farther. For each dose of black powder or piece of firearm ammunition you spend in addition to your shot, you add another 10 feet to the height or distance of your Leap, to a maximum of 5 boosts (a +50-foot status bonus). You must be wearing a dose of black powder or piece of ammunition, or have it in hand, to detonate it for a boost.</p>\n<p>You can choose at which points in your Leap you detonate each boost, allowing you to change direction each time. You must then move in a straight line until you boost again or end your Leap.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "lIr2kC561L7oX290",
+  "slug": "rebounding-assault",
+  "name": "Rebounding Assault",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm or loaded crossbow in one hand and a bludgeoning or slashing melee weapon in the other.</p><hr><p>You hurl your melee weapon at an opponent, then fire a bullet into the weapon's hilt, making it bounce back to your grasp. Make a thrown ranged Strike with the melee weapon, then a ranged Strike with your firearm. This counts as two attacks for your multiple attack penalty, but you don't apply the penalty until after you've completed both attacks. If the melee weapon doesn't already have the thrown trait, it gains the thrown 10 feet trait during a Rebounding Assault.</p>\n<p>If both attacks are successful, the bolt or bullet hits the thrown melee weapon instead of your target, adding its force into one attack. Combine the damage from both Strikes, using the thrown weapon's damage type, and add an additional 1d6 precision damage. The impact sends the melee weapon rebounding off the target and back to your hand.</p>\n<p>In any circumstance other than both attacks hitting, carry out the individual Strikes normally. The thrown weapon doesn't rebound and remains in the target's space as normal for thrown weapons.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "HKNOA5WGBWGEpdmH",
+  "slug": "redirecting-shot",
+  "name": "Redirecting Shot",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "fortune",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> An ally misses with a ranged attack that uses a thrown weapon or ammunition. The ally must be willing to accept your assistance, you must see the attack's target, and the attack's target must be within the first range increment of your firearm or crossbow.</p>\n<p><strong>Requirements</strong> You're wielding a loaded firearm or crossbow.</p><hr><p>Seeing your ally's attack about to go astray, you fire your weapon to right its course. Discharge your firearm and roll a d20. Your ally uses this roll instead of their own, and the attack ignores any bonuses the target would gain against the attack from lesser or standard cover, as well as the flat check if the target is Concealed.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "cilZUszwjSGB4p1W",
   "slug": "reinforced-chassis",
   "name": "Reinforced Chassis",
@@ -436,6 +2265,417 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p>Your body is designed to be particularly resilient. Your chassis is made from reinforced armor plating that grants a +3 item bonus to AC with a Dexterity cap of +1. If you are at least 5th level, the item bonus increases to +4 and at 10th level it increases to +5. You can never wear other armor or remove your chassis; however, you still don't become Fatigued from sleeping. You can etch armor runes onto your chassis.</p>\n<p><strong>Enhancement</strong> Your chassis becomes difficult to overcome. You gain the Chassis Deflection reaction.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "Na1qfHd6AFAXoN1A",
+  "slug": "reverse-engineer",
+  "name": "Reverse Engineer",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "expert in Crafting"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You are incredibly skilled at reverse engineering items to learn their formulas or disassembling them just to disable them. If you are using the Critical Crafting alternate rules and you get a critical success on your Crafting check to reverse engineer an item, you can reassemble the original item with one of the critical success crafting benefits (as determined by your GM).</p>\n<p>Furthermore, you can use Crafting instead of Thievery to Disable Device or Pick A Lock.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "62USpCx1ewK03wzm",
+  "slug": "ricochet-legend",
+  "name": "Ricochet Legend",
+  "level": 20,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Ricochet Master"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>The more obstacles between you and your target, the deadlier your shots become, as you ricochet off multiple surfaces to hit them. When using Ricochet Shot, your shot can bounce off of any surface within your weapon's first three range increments and the target can't benefit from cover unless they have total cover on all sides.</p>\n<p>In addition, a creature must attempt a Will save against your class DC the first time in an encounter you attack it with a Ricochet Shot. If it fails, it's Stunned 2 and is unable to determine where your shot originated.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "qkHVva51N6H8NNGR",
+  "slug": "ricochet-master",
+  "name": "Ricochet Master",
+  "level": 16,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Ricochet Shot"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You have an eye for angles and can find shots that others believe are impossible. When using Ricochet Shot, you can bounce your bullet off up to two solid surfaces within your weapon's first range increment instead of just one. In addition, a creature is Off-Guard the first time you attack it with a Ricochet Shot during an encounter.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "c7mCj6wUdb47rrnw",
+  "slug": "ricochet-shot",
+  "name": "Ricochet Shot",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "concentrate",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You bounce your shot off a nearby surface to strike your opponent from an unexpected angle. Attempt a Strike with a firearm or crossbow. When determining whether a target has cover from this Strike, you can choose one solid surface within your weapon's first range increment to ricochet your shot off of. If you do, you determine the target's cover from the point where you ricochet your shot instead of from you.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "BmAk6o14CutgnIOG",
+  "slug": "risky-reload",
+  "name": "Risky Reload",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a firearm.</p>\n<hr>\n<p>You've practiced a technique for rapidly reloading your firearm, but attempting to use this technique is a dangerous gamble with your firearm's functionality. Interact to reload a firearm, then make a Strike with that firearm. If the Strike fails, the firearm misfires.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "meQJfsKVar9tm6c9",
+  "slug": "running-reload",
+  "name": "Running Reload",
+  "level": 4,
+  "category": "class",
+  "traits": [
+   "gunslinger",
+   "ranger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You can reload your weapon on the move. You Stride, Step, or Sneak, then Interact to reload.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "L9sRaFl0tHT5AFIQ",
+  "slug": "scatter-blast",
+  "name": "Scatter Blast",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm that has the scatter trait.</p>\n<hr>\n<p>You pack your weapon with additional shot and powder, creating a risky but devastating wave of destruction. Make a ranged Strike with the firearm. The firearm's range increment increases by 20 feet and the radius of its scatter increases by 20 feet. The Strike gains the following failure conditions.</p>\n<p><strong>Failure</strong> The firearm misfires, but it doesn't cause the other critical failure effects listed below.</p>\n<p><strong>Critical Failure</strong> The firearm misfires and also explodes. It becomes broken, and it deals its normal weapon damage to all creatures in a 20-foot burst centered on the firearm, with a basic Reflex save against your class DC. This damage includes any from the weapon's fundamental and property runes.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "HpAUTAzEAK7mGsJ8",
+  "slug": "scrutinizing-gaze",
+  "name": "Scrutinizing Gaze",
+  "level": 13,
+  "category": "ancestry",
+  "traits": [
+   "dwarf"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p><hr><p>Your family's traditions of defending against Geb's undead have granted you a sixth sense for detecting spirits, haunts, and other restless dead, no matter their form or the strength of their presence. You gain a +2 circumstance bonus to Perception checks to Sense Motive when trying to determine if a creature is possessed or under the influence of an effect that would make them controlled, a +2 circumstance bonus to Perception checks made to see through disguises worn by undead, and a +2 circumstance bonus when using the Seek action to find Hidden or undetected haunts or undead within 30 feet of you.</p>\n<p>If you aren't using the Seek action or searching, the GM automatically rolls a secret check for you to notice haunts or undead within 30 feet anyway. This check doesn't gain the usual +2 circumstance bonus, and instead takes a –2 circumstance penalty.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "obGGzuPcgO5Xiz6P",
+  "slug": "searing-restoration",
+  "name": "Searing Restoration",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "fire",
+   "healing",
+   "inventor",
+   "manipulate",
+   "unstable"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>They told you there was no way that explosions could heal people, but they were fools… Fools who didn't understand your brilliance! You create a minor explosion from your innovation, altering the combustion to cauterize wounds using vaporized medicinal herbs. You or a living creature adjacent to you regains max(1,1d10 per 2 levels (rounded up) healing Hit Points. In addition, the creature you heal can attempt an immediate flat check to recover from a single source of persistent bleed damage, with the DC reduction from appropriate assistance.</p>\n<p>At 3rd level, and every 2 levels thereafter, increase the healing by 1d10.</p><hr><p><strong>Special</strong> If your innovation is a minion, it can take this action rather than you, though because it's not a living creature, it can't use the ability on itself.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "U0XX0Mm2MbZcuNK2",
+  "slug": "shared-overdrive",
+  "name": "Shared Overdrive",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Overdrive Ally"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've experimented enough on your teammates to transfer a substantial number of powered-up gizmos to them, enabling one of your allies to benefit from the full effects and duration of your Overdrive. The first time you use Overdrive Ally during a given Overdrive, the effect lasts for the remainder of the duration of your Overdrive, instead of just until the end of the target's next turn. Any further uses of Overdrive Ally during the same Overdrive have their normal duration, per Overdrive Ally.</p>\n<p>Effect: Overdrive Ally (Shared Overdrive)</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "7r79fZBr37qBN2EF",
+  "slug": "shattering-shot",
+  "name": "Shattering Shot",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm or loaded crossbow and are wearing or holding an alchemical bomb.</p><hr><p>You fling a bomb into the air and then shoot it with your gun before it falls, raining destruction down over a wide area. If necessary, you Interact to draw the bomb and regrip your weapon. You throw your bomb to the corner of a square within your firearm's first range increment and shoot it with your firearm. All creatures in a 15-foot burst of the bomb take the bomb's normal damage with a basic Reflex save against your class DC. They don't take any splash or persistent damage the bomb would deal normally.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "rqUJULinzDCUgimM",
+  "slug": "shooters-camouflage",
+  "name": "Shooter's Camouflage",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "master in Stealth"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You specialize in blending into a particular type of environment, able to disappear after taking your shot. Choose either natural or urban terrain. In the chosen terrain, you can Hide and Sneak even without cover or being Concealed.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "UZpBsHE57rmS0x6S",
+  "slug": "showstopper",
+  "name": "Showstopper",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Pistol Twirl",
+   "master in Deception"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your twirling weapons create a grand distraction that's difficult to look away from. When using Pistol Twirl to Feint, you can target all enemies within your weapon's first range increment who you can perceive and who can see you. You roll one Deception check and compare it against each target's Perception DC.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "rMjlDss3Km1RQ8DE",
+  "slug": "slingers-reflexes",
+  "name": "Slinger's Reflexes",
+  "level": 20,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your ability to react to unexpected circumstances is preternaturally sharp. At the start of each creature's turn, you gain an additional reaction you can use on only that turn to use a gunslinger reaction.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "WDid62NmmC6NiTE6",
+  "slug": "smoke-curtain",
+  "name": "Smoke Curtain",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm and are wearing or holding a dose of black powder.</p>\n<hr>\n<p>You load an extra dose of powder into your shot, causing it to belch a cloud of smoke. You make a Strike with your firearm and create a cloud of smoke in a 20-foot emanation centered on your location. Creatures are Concealed while within the smoke, and creatures outside the area are concealed to creatures within the smoke. The smoke dissipates at the start of your next turn. If your Strike is a critical failure, your firearm misfires.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "67UXSHUUH0K36xyB",
+  "slug": "smoke-sight",
+  "name": "Smoke Sight",
+  "level": 9,
+  "category": "ancestry",
+  "traits": [
+   "dwarf"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p><hr><p>You're used to fighting and hiding in a haze of smoke and flame. You automatically succeed at the DC 5 Flat check to target a Concealed creature if that creature is concealed only by smoke. When you are concealed or Hidden in smoke, increase the DC of the flat check to target you to 6 if you're concealed or 12 if you're hidden.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "Wn3DWAXo2TRxrhI6",
+  "slug": "snipers-aim",
+  "name": "Sniper's Aim",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "concentrate",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Way of the Sniper"
+  ],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You take an extra moment to carefully sync your aim and breathing, then fire a shot with great accuracy. Make a ranged weapon Strike. You gain a +2 circumstance bonus to this Strike's attack roll and ignore the target's concealment. If you're using a kickback firearm, you don't take the normal circumstance penalty on this Strike for not having the required Strength modifier or firing without using a stabilizer.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "2wLfchKVDSKBOIpV",
+  "slug": "soaring-armor",
+  "name": "Soaring Armor",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "inventor",
+   "modification"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "armor innovation"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Whether through a release of jets of flame, propeller blades, sonic bursts, streamlined aerodynamic structure, electromagnetic fields, or some combination of the above, you've managed to free your innovation from the bonds of gravity! While wearing your innovation, you gain a fly Speed equal to your land Speed.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "BL2nLeClO30QoQGs",
+  "slug": "spark-fist",
+  "name": "Spark Fist",
+  "level": 5,
+  "category": "ancestry",
+  "traits": [
+   "dwarf",
+   "fire",
+   "manipulate"
+  ],
+  "rarity": "uncommon",
+  "prerequisites": [
+   "expert in Crafting"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Access</strong> You are from Dongun Hold or Alkenstar.</p>\n<p><strong>Frequency</strong> once per minute</p><hr><p>You dust explosive black powder on your fist or glove before attacking, which combusts as you hit an opponent. The resulting pops of flame harm both you and your enemy. Until the end of your next turn, your fist loses the nonlethal trait and deals an additional 1 fire damage on a successful Strike. Each time you succeed on a fist Strike, you take 1 fire damage. If your fist would deal more than one weapon damage die, the fire damage dealt on a successful Strike, to both you and your opponent, is equal to the number of weapon damage dice.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "UIMZe4QDJQ9k4npN",
+  "slug": "stab-and-blast",
+  "name": "Stab and Blast",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a firearm with an attached bayonet or reinforced stock, a fire lance, or a combination weapon.</p><hr><p>You slice or smash your opponent with the melee portion of your weapon before pulling the trigger at point-blank range. Make a melee Strike with the required weapon. If the Strike is successful, you can immediately make a ranged Strike against the same target with a +2 circumstance bonus to the attack roll. This counts as two attacks toward your multiple attack penalty, but you don't apply the multiple attack penalty until after making both attacks.</p>",
   "source": "Guns & Gears"
  },
  {
@@ -478,6 +2718,165 @@
   "source": "Guns & Gears"
  },
  {
+  "id": "ySr510TkpUO3N6Ty",
+  "slug": "trick-shot",
+  "name": "Trick Shot",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded crossbow or firearm.</p><hr><p>You shoot not at your foe but at an object nearby. Make a Strike with your firearm against an AC equal to an easy DC for your level. On a success, instead of hitting your foe, your attack hits an object behind or to the side of your target, creating one of the following effects. The GM might determine that a different AC is appropriate or that a particular effect isn't a valid option, such as using the explosive barrel option when there's no such object on the battlefield. The GM should inform you if a Trick Shot is feasible before you spend your actions, since your trained eye can easily recognize loose or volatile objects.</p><ul><li><strong>Dislodge Object</strong> Your attack knocks an unattended object of no more than 2 Bulk out of position, moving it up to 10 feet in a direction of your choice. For example, the weapon could knock a wizard's crystal ball off a table.</li><li><p><strong>Explosive Barrel</strong> Your attack strikes a barrel of expensive rum, a vial of volatile alchemical fluids, a demonic pustule erupting from the earth, or some other explosive object. The object explodes in a 20-foot burst, and creatures in the area take (6 + floor((your level - 10) / 2))d6 damage with a basic Reflex save against your class DC. The damage type is chosen by the GM, based on the exploding object. Increase the damage by 1d6 for every 2 levels you have above 10th.</p>\n</li></ul>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "aWk0JaqVaUf2Cz9a",
+  "slug": "twin-shot-knockdown",
+  "name": "Twin Shot Knockdown",
+  "level": 10,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 2,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded crossbow or loaded firearm in each hand.</p><hr><p>You fire at an enemy while targeting a part of its anatomy that will disrupt its balance. Make two Strikes against the same target, one with each of the required weapons. If both Strikes are successful, the target is also knocked Prone.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "VW0Tp5rJDRjaJuSn",
+  "slug": "two-weapon-fusillade",
+  "name": "Two-Weapon Fusillade",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "flourish",
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding two weapons, each in a different hand. At least one of these weapons must be a loaded firearm or loaded crossbow.</p>\n<hr>\n<p>You attack with both your weapons in a furious barrage. Strike twice, once with each weapon.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "ny0nfGTDUE4p8TtO",
+  "slug": "ubiquitous-gadgets",
+  "name": "Ubiquitous Gadgets",
+  "level": 8,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Gadget Specialist"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>They thought you had used up all your devices, but they thought wrong! You have a few more gadgets up your sleeve than others expect. Increase the number of temporary gadgets you can create each day by 2.</p><hr><p><strong>Special</strong> You can select this feat a second time if you are 14th level or higher.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "85boZA8KRMu4rihN",
+  "slug": "ubiquitous-overdrive",
+  "name": "Ubiquitous Overdrive",
+  "level": 20,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Shared Overdrive"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You prepare a variety of incredible gizmos on each of your allies, linking them together through careful modification to enable you to power them up all at once. During your daily preparations, select up to six willing allies. Whenever you Overdrive, you grant the benefits of your overdrive to any of these allies you choose who are within 30 feet of you. The allies don't gain the increased damage from expert, master, or legendary overdrive.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "JSkaMCO6pzKYZrZe",
+  "slug": "unerring-shot",
+  "name": "Unerring Shot",
+  "level": 18,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>Your senses are finely tuned to the slightest variations in the air, so much that you can place your shot exactly where you intend to aim it from any range possible with your weapon. When attacking with a ranged weapon in which you have master or greater proficiency, ignore the penalty from its range increment. (The weapon's maximum range is unchanged.) In addition, if your target has cover against your attack with such a weapon, it doesn't gain the bonus to AC if it has lesser cover, gets only the bonus of lesser cover if it has standard cover, or gains only the bonus of standard cover if it has greater cover.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "eGZzifQWCf5gSq2y",
+  "slug": "unshakable-grit",
+  "name": "Unshakable Grit",
+  "level": 12,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "Grit and Tenacity"
+  ],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've become hardened by conflict after everything you've faced, and you possess a certain intractable stubbornness. If the reroll granted to you by your Grit and Tenacity reaction is a success, you get a critical success instead; if it's a critical failure, you get a failure instead.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "5zeKULjKDkiIenhu",
+  "slug": "unstable-redundancies",
+  "name": "Unstable Redundancies",
+  "level": 14,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "free",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> You would attempt the flat check for an unstable action, but you haven't rolled the flat check yet.</p>\n<hr>\n<p>You've built triple redundancies into your innovation and added all sorts of buffers to protect it from the harm of your unstable experiments. You automatically succeed at the triggering flat check.</p>\n<p>You can't rely on your Unstable Redundancies again until you spend 10 minutes setting them back up. If you spend 10 minutes retuning your innovation so you can use unstable actions again, you can set up your Unstable Redundancies during the same time.</p>",
+  "source": "Guns & Gears"
+ },
+ {
   "id": "4KkzwOu2OKYLKSXQ",
   "slug": "variable-core",
   "name": "Variable Core",
@@ -495,6 +2894,65 @@
   "grantChoice": null,
   "grantedOnlyIf": null,
   "description": "<p>You adjust your innovation's core, changing the way it explodes. When you choose this feat, select acid, cold, or electricity. Your innovation's core runs on that power source. When using the Explode action, or any time your innovation explodes on a critical failure and damages you, change the damage type from fire damage to the type you chose.</p>\n<p>If you have the offensive boost class feature and retrain Variable Core to a different damage type, you can also switch to a different offensive boost that deals the same damage type if you wish.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "lkl5QaDb1mlSD7SC",
+  "slug": "visual-fidelity",
+  "name": "Visual Fidelity",
+  "level": 6,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": null,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p>You've found a way to use a hodgepodge combination of devices to enhance your visual abilities in every situation. You gain darkvision and low-light vision, and you can see Invisible creatures and objects as translucent shapes, though these shapes are indistinct enough to be Concealed to you.</p>\n<p>If an effect would give you the Blinded condition, the effect must attempt a counteract check against your class DC, with your counteract rank equaling half your level, rounded up. On a failed counteract check, you aren't blinded-your various devices are able to compensate.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "XQEoKoFtq8n3wgA3",
+  "slug": "warning-shot",
+  "name": "Warning Shot",
+  "level": 2,
+  "category": "class",
+  "traits": [
+   "gunslinger"
+  ],
+  "rarity": "common",
+  "prerequisites": [
+   "trained in Intimidation"
+  ],
+  "actions": 1,
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Requirements</strong> You're wielding a loaded firearm.</p><hr><p>Who needs words when the roar of a gun is so much more succinct? You attempt to Demoralize a foe by firing your weapon into the air, using the firearm's maximum range rather than the usual range of 30 feet. This check doesn't take the –4 circumstance penalty if the target doesn't share a language with you.</p>",
+  "source": "Guns & Gears"
+ },
+ {
+  "id": "zBS1qFyIpFuCGhWW",
+  "slug": "you-failed-to-account-for-this",
+  "name": "You Failed to Account For... This!",
+  "level": 16,
+  "category": "class",
+  "traits": [
+   "inventor"
+  ],
+  "rarity": "common",
+  "prerequisites": [],
+  "actions": "reaction",
+  "skills": [],
+  "feats": [],
+  "grantChoice": null,
+  "grantedOnlyIf": null,
+  "description": "<p><strong>Trigger</strong> A creature you can see targets you with an attack against your AC.</p><hr><p>When your foes try to attack you, you always seem to have some outlandish invention you can pull out at the last second to protect you from whatever attack they throw at you. Describe a device you're attempting to use to protect yourself from the foe's attack—for instance, when attacked by an elemental hurricane's lightning lash Strike, you might pull out a specially grounded lightning rod from that time you tried to power an invention by harnessing a thunderstorm! Using an invention to defend in this way means that the attack roll for the triggering attack targets your Crafting DC instead of your AC.</p>\n<p>Since you're using your Crafting DC instead of your AC, any penalties to your AC don't apply, but this doesn't remove any conditions or other effects that are causing you such penalties. For instance, if you were Off-Guard and used an invention to defend against a sneak attack, you'd still take the extra precision damage if you were hit, even though the –2 penalty to AC from being off-guard wouldn't apply to your Crafting DC.</p>",
   "source": "Guns & Gears"
  }
 ]

@@ -12,6 +12,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { proficiencyIncreases } from './proficiency-text.js';
 
 const SEARCH = 'https://elasticsearch.aonprd.com/aon/_search';
 const here = dirname(fileURLToPath(import.meta.url));
@@ -149,6 +150,20 @@ function mapOption(doc, key) {
   };
 }
 
+// Every class in these books uses Player Core's standard schedule (AoN lists it as text
+// features, "Skill Feats", "General Feats" and so on, rather than as data).
+const evens = Array.from({ length: 10 }, (_, i) => 2 + i * 2);
+const odds = Array.from({ length: 9 }, (_, i) => 3 + i * 2);
+const standardProgression = (classFeatAt1) => ({
+  ancestryFeats: [1, 5, 9, 13, 17],
+  classFeats: classFeatAt1 ? [1, ...evens] : evens,
+  generalFeats: [3, 7, 11, 15, 19],
+  skillFeats: evens,
+  skillIncreases: odds,
+});
+// Features that describe the schedule itself, which the progression covers.
+const SCHEDULE_FEATURES = ['Skill Feats', 'General Feats', 'Skill Increases', 'Ancestry Feats', 'Attribute Boosts'];
+
 function mapClass(doc, docs) {
   const features = docs
     .filter((d) => d.category === 'class-feature' && d.class === doc.name && (d.level ?? 1) === 1 && !GENERIC_FEATURES.includes(d.name))
@@ -188,6 +203,16 @@ function mapClass(doc, docs) {
     divineFont: false,
     deityFavoredWeapon: null,
     features: features.filter((f) => f.name !== `${doc.name} Feats`),
+    progression: standardProgression(features.some((f) => f.name === `${doc.name} Feats` || f.name === 'Evolution Feat')),
+    // Class features above 1st level, with the proficiency increases read from their text.
+    advancement: docs
+      .filter((d) => d.category === 'class-feature' && d.class === doc.name && (d.level ?? 1) > 1)
+      .filter((d) => !SCHEDULE_FEATURES.includes(d.name) && d.name !== `${doc.name} Feats`)
+      .map((d) => {
+        const description = toHtml(d.markdown);
+        return { level: d.level, name: d.name, slug: slugOf(d.name), proficiencies: Object.fromEntries(proficiencyIncreases(description, doc.name, [doc.name]).increases.map((i) => [i.target, i.rank])), description };
+      })
+      .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name)),
     rarity: doc.rarity ?? 'common',
     description: toHtml(/_([^_]+)_/.exec(doc.markdown ?? '')?.[0] ?? '', { body: false }),
     source: book,
@@ -298,21 +323,20 @@ function mapRune(doc) {
 
 const docs = await download();
 const byName = (a, b) => a.name.localeCompare(b.name);
-const level1 = (d) => (d.level ?? 1) <= 1;
 
 const classes = docs.filter((d) => d.category === 'class').map((d) => mapClass(d, docs)).sort(byName);
 const classNames = [...classes.map((c) => c.slug), 'wizard', 'witch', 'sorcerer', 'bard', 'cleric', 'druid', 'oracle', 'champion', 'fighter', 'ranger', 'rogue', 'monk', 'barbarian', 'alchemist', 'investigator', 'swashbuckler'];
 const out = {
-  $comment: `Level 1 content from ${book}, converted from the Archives of Nethys by scripts/import-aon.js. Regenerate rather than editing by hand; put fixes in corrections/.`,
+  $comment: `Content from ${book} (levels 1-20), converted from the Archives of Nethys by scripts/import-aon.js. Regenerate rather than editing by hand; put fixes in corrections/.`,
   book,
   classes,
   // The importer skips heritages for ancestries that aren't imported, and says so.
   heritages: docs.filter((d) => d.category === 'heritage').map(mapHeritage).sort(byName),
   backgrounds: docs.filter((d) => d.category === 'background').map(mapBackground).sort(byName),
-  feats: docs.filter((d) => d.category === 'feat' && d.level === 1).map((d) => mapFeat(d, classNames)).sort(byName),
+  feats: docs.filter((d) => d.category === 'feat').map((d) => mapFeat(d, classNames)).sort(byName),
   // Every spell in the book: each rank, focus spells and rituals (the builder only offers ordinary ones).
   spells: docs.filter((d) => d.category === 'spell' && ['Spell', 'Cantrip', 'Focus', 'Ritual'].includes(d.spell_type)).map(mapSpell).sort(byName),
-  runes: docs.filter((d) => d.category === 'runesmith-rune' && level1(d)).map(mapRune).sort(byName),
+  runes: docs.filter((d) => d.category === 'runesmith-rune').map(mapRune).sort(byName),
   subclassOptions: Object.fromEntries(
     Object.entries(EXTRA_OPTIONS).map(([category, key]) => [key, docs.filter((d) => d.category === category).map((d) => mapOption(d, key)).sort(byName)]),
   ),

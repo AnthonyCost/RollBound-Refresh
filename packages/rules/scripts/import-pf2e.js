@@ -11,6 +11,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { splitData } from '../src/data.js';
 import { cleanDescription } from './clean-description.js';
+import { proficiencyIncreases } from './proficiency-text.js';
 
 // Add "Impossible Magic" here once the Foundry data includes it; the run logs
 // any skipped title containing "Impossible" so you can copy the exact string.
@@ -115,7 +116,13 @@ const PROFICIENCY_PATHS = [
   [/^system\.proficiencies\.attacks\.(\w+)\.rank$/, (m) => `attacks.${m[1]}`],
   [/^system\.saves\.(\w+)\.rank$/, (m) => `saves.${m[1]}`],
   [/^system\.perception\.rank$/, () => 'perception'],
+  [/^system\.proficiencies\.classDCs\.[\w-]+\.rank$/, () => 'classDc'],
+  [/^system\.proficiencies\.spellcasting\.rank$/, () => 'spellcasting'],
 ];
+
+// A proficiency key from Foundry's rules ("saves.will", "attacks.martial") as the
+// target names the text reader and the rules engine use ("will", "martial").
+const targetOfKey = (key) => key.split('.').pop();
 
 function ruleEffects(rules = [], cls = null) {
   const effects = { skills: [], skillChoice: null, feats: [], proficiencies: {}, tradition: null };
@@ -283,9 +290,37 @@ function mapSubclassOption(o, cls, featuresByUuidName) {
   };
 }
 
-function mapClass(c, featuresByUuidName, featuresByTag) {
+/**
+ * A class feature above 1st level, for leveling up: when it arrives, its text, and the
+ * proficiency increases it gives this class (from Foundry's rules where they're encoded,
+ * otherwise read from the text; see proficiency-text.js). Sentences the reader couldn't
+ * place are kept in reviewNotes for the import report.
+ */
+function mapAdvancement(level, feature, cls, className, classNames) {
+  const fromRules = ruleEffects(feature.system.rules, cls).proficiencies;
+  const fromText = proficiencyIncreases(feature.system.description.value, className, classNames);
+  const increases = new Map(fromText.increases.map((i) => [i.target, i.rank]));
+  // Encoded rules win: they're exact where the text is only read.
+  for (const [key, rank] of Object.entries(fromRules)) if (rank) increases.set(targetOfKey(key), rank);
+  return {
+    level,
+    name: feature.name.replace(/ \(\w+\)$/, ''),
+    slug: feature.system.slug ?? slugOf(feature.name),
+    proficiencies: Object.fromEntries(increases),
+    reviewNotes: fromText.flags,
+    description: cleanDescription(feature.system.description.value),
+  };
+}
+
+function mapClass(c, featuresByUuidName, featuresByTag, classNames) {
   const s = c.system;
   const slug = s.slug ?? slugOf(c.name);
+  const advancement = Object.values(s.items ?? {})
+    .filter((i) => i.level > 1)
+    .map((i) => [i.level, featuresByUuidName.get(uuidName(i.uuid)) ?? featuresByUuidName.get(i.name)])
+    .filter(([, f]) => f)
+    .map(([level, f]) => mapAdvancement(level, f, slug, c.name, classNames))
+    .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
   const features = Object.values(s.items ?? {})
     .filter((i) => i.level === 1)
     .map((i) => featuresByUuidName.get(uuidName(i.uuid)) ?? featuresByUuidName.get(i.name))
@@ -325,6 +360,16 @@ function mapClass(c, featuresByUuidName, featuresByTag) {
     divineFont: false,
     deityFavoredWeapon: null,
     features: features.filter((f) => f.name !== 'Deity'),
+    // Leveling up (levels 2-20): which levels grant each kind of feat and skill increases,
+    // and the class features that arrive above 1st level.
+    progression: {
+      ancestryFeats: s.ancestryFeatLevels?.value ?? [],
+      classFeats: s.classFeatLevels?.value ?? [],
+      generalFeats: s.generalFeatLevels?.value ?? [],
+      skillFeats: s.skillFeatLevels?.value ?? [],
+      skillIncreases: s.skillIncreaseLevels?.value ?? [],
+    },
+    advancement,
     rarity: s.traits.rarity,
     description: cleanDescription(s.description.value),
     source: source(c),
@@ -489,10 +534,12 @@ for (const f of classFeatures) {
   }
 }
 
-const classes = byPack(/^packs\/classes\//).map((c) => mapClass(c, featuresByUuidName, featuresByTag)).sort(byName);
+const classNames = byPack(/^packs\/classes\//).map((c) => c.name);
+const classes = byPack(/^packs\/classes\//).map((c) => mapClass(c, featuresByUuidName, featuresByTag, classNames)).sort(byName);
 const heritages = byPack(/^packs\/heritages\//).map(mapHeritage).sort(byName);
 const backgrounds = byPack(/^packs\/backgrounds\//).map(mapBackground).sort(byName);
-let feats = byPack(/^packs\/feats\//).filter((f) => f.system.level.value === 1).map(mapFeat);
+// Every level, 1 to 20, for leveling up.
+let feats = byPack(/^packs\/feats\//).map(mapFeat);
 
 // Feats granted by something we import can come from any level or older book; include them too.
 // Several books can have a feat with the same name (e.g. a legacy and a Remaster
@@ -738,6 +785,37 @@ for (const h of data.heritages) {
   }
 }
 data.meta.needsReview = needsReview;
+
+// ---------- Leveling report ----------
+// Each class's levels 2-20 in plain terms, to check against the books: the feature list,
+// the proficiency increases read for it, and any sentence the reader couldn't place.
+// Fix anything wrong with an "advancement" correction (corrections/README.md).
+const RANK_WORD = { trained: 'trained', expert: 'expert', master: 'master', legendary: 'legendary' };
+const TARGET_WORD = {
+  perception: 'Perception', fortitude: 'Fortitude', reflex: 'Reflex', will: 'Will', classDc: 'class DC', spellcasting: 'spellcasting',
+  unarmored: 'unarmored', light: 'light armor', medium: 'medium armor', heavy: 'heavy armor',
+  unarmed: 'unarmed', simple: 'simple weapons', martial: 'martial weapons', advanced: 'advanced weapons',
+};
+const report = ['# Leveling report', '', `Generated by \`npm run data:import\` from Foundry pf2e ${sha.slice(0, 7)}. Check each class against its book.`, '', 'Flags are sentences about proficiency the importer could not read with confidence; they need a correction or a rules-engine rule.', ''];
+let flagCount = 0;
+for (const c of data.classes) {
+  report.push(`## ${c.name} (${c.source})`, '');
+  const p = c.progression ?? {};
+  report.push(`- Class feats: ${(p.classFeats ?? []).join(', ') || 'none'}`, `- Ancestry feats: ${(p.ancestryFeats ?? []).join(', ')}`, `- Skill feats: ${(p.skillFeats ?? []).join(', ')}`, `- General feats: ${(p.generalFeats ?? []).join(', ')}`, `- Skill increases: ${(p.skillIncreases ?? []).join(', ')}`, '');
+  for (const a of c.advancement ?? []) {
+    const ups = Object.entries(a.proficiencies).map(([t, r]) => `${TARGET_WORD[t] ?? t} → ${RANK_WORD[r] ?? r}`);
+    report.push(`- **L${a.level} ${a.name}**${ups.length ? `: ${ups.join(', ')}` : ''}`);
+    for (const f of a.reviewNotes ?? []) {
+      flagCount++;
+      report.push(`  - ⚠ ${f}`);
+    }
+  }
+  if (!(c.advancement ?? []).length) report.push('- (no features above 1st level in the data)');
+  report.push('');
+}
+// The notes are for the report; the rules data doesn't need them.
+for (const c of data.classes) for (const a of c.advancement ?? []) delete a.reviewNotes;
+await writeFile(join(here, '..', '..', '..', 'docs', 'leveling-report.md'), `${report.join('\n')}\n`);
 // A fingerprint of the rules content: the same data always gets the same version,
 // and any change gets a new one. Saved characters record it (see reviewCharacter).
 const { meta, ...content } = data;
@@ -762,3 +840,4 @@ if (needsReview.length) {
 } else {
   console.log('\nImport report: nothing needs a correction.');
 }
+console.log(`Leveling report: docs/leveling-report.md (${flagCount} sentence(s) flagged for a look).`);

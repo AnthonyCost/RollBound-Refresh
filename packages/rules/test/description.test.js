@@ -53,7 +53,7 @@ describe('cleaning rules text', () => {
 
 describe('the imported rules text', () => {
   const data = loadRulesData();
-  const LEFTOVER = /\{\{|\}\}|\[\[|\]\]|@[A-Z]\w+\[|@(actor|item)\.|\d\[|\|options|\d-foot\s*[,.;]|\d-foot {2}|check save/;
+  const LEFTOVER = /\{\{|\}\}|\[\[|\]\]|@[A-Z]\w+\[|@(actor|item)\.|\d\[|\|options|\d-foot\s*[.;]|\d-foot\s*,(?!\s*(?:or\s+)?\d+-foot)|\d-foot {2}|check save/;
 
   for (const type of ['spells', 'feats', 'heritages', 'ancestries', 'backgrounds', 'classes', 'runes', 'items', 'deities']) {
     it(`has no markup left in ${type}`, () => {

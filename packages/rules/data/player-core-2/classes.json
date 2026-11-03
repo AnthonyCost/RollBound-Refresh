@@ -128,6 +128,187 @@
     }
    }
   ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 5,
+    "name": "Field Discovery",
+    "slug": "field-discovery",
+    "proficiencies": {},
+    "description": "<p>You learn a discovery listed in your research field.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Powerful Alchemy",
+    "slug": "powerful-alchemy",
+    "proficiencies": {},
+    "description": "<p>Alchemical items you infuse are particularly potent. When you create an infused alchemical item that allows a saving throw, you can change its DC to your class DC.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Alchemical Weapon Expertise",
+    "slug": "alchemical-weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert"
+    },
+    "description": "<p>You've trained to more effectively wield the weapons you find in your lab. Your proficiency ranks for simple weapons, alchemical bombs, and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Alchemical Expertise",
+    "slug": "alchemical-expertise",
+    "proficiencies": {
+     "classDc": "expert"
+    },
+    "description": "<p>Constant practice has increased the effectiveness of your concoctions. Your proficiency rank for your alchemist class DC increases to expert. In addition, when you gather reagents during exploration mode, you can regain three vials instead of two.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Double Brew",
+    "slug": "double-brew",
+    "proficiencies": {},
+    "description": "<p>You know your formulas so well that you can concoct two items at once.</p>\n<p>When using the Quick Alchemy action, you can create two items. These items don't have to be the same. If you create two consumables, you have to expend a versatile vial for each one.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Advanced Vials",
+    "slug": "advanced-vials",
+    "proficiencies": {},
+    "description": "<p>Your experience helps you improve your field vials with a benefit particular to your research field.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Chemical Hardiness",
+    "slug": "chemical-hardiness",
+    "proficiencies": {
+     "fortitude": "master"
+    },
+    "description": "<p>Imbibing alchemical compounds has strengthened your organs. Your proficiency rank for Fortitude saves increases to master. When you roll a success on a Fortitude save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Greater Field Discovery",
+    "slug": "greater-field-discovery",
+    "proficiencies": {},
+    "description": "<p>You learn an incredible discovery that advances your understanding of your field, as described in your research field.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Medium Armor Expertise",
+    "slug": "medium-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert",
+     "medium": "expert"
+    },
+    "description": "<p>You've learned to defend yourself better against attacks. Your proficiency ranks for light armor, medium armor, and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal an additional 2 damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Alchemical Weapon Mastery",
+    "slug": "alchemical-weapon-mastery",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master"
+    },
+    "description": "<p>You've mastered full capability with your weapons. Your proficiency ranks for simple weapons, alchemical bombs, and unarmed attacks increase to master.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Explosion Dodger",
+    "slug": "explosion-dodger",
+    "proficiencies": {
+     "reflex": "master"
+    },
+    "description": "<p>Your experiments taught you to fling yourself out of the way of sudden explosions. Your proficiency rank for Reflex saves increases to master. When you roll a success on a Reflex save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Abundant Vials",
+    "slug": "abundant-vials",
+    "proficiencies": {},
+    "description": "<p>You're permanently Quickened, and can use the extra action only to use Quick Alchemy to create a quick vial. You can create only one vial with this action, even if you have double brew or a similar ability.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Alchemical Mastery",
+    "slug": "alchemical-mastery",
+    "proficiencies": {
+     "classDc": "master"
+    },
+    "description": "<p>Your concoctions are incredibly effective. Your proficiency rank for your alchemist class DC increases to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Medium Armor Mastery",
+    "slug": "medium-armor-mastery",
+    "proficiencies": {
+     "unarmored": "master",
+     "light": "master",
+     "medium": "master"
+    },
+    "description": "<p>Your skill with light and medium armor improves, increasing your ability to avoid blows. Your proficiency ranks for light and medium armor, as well as for unarmored defense, increase to master.</p>"
+   }
+  ],
   "rarity": "common",
   "description": "<p><em>There's no sight more beautiful to you than a strange brew bubbling in a beaker, and you consume your ingenious elixirs with abandon. You're fascinated by uncovering the secrets of science and the natural world, and you're constantly experimenting in your lab or on the go with inventive concoctions for every eventuality. You are fearless in the face of risk, hurling explosive or toxic creations at your foes. Your unique path toward greatness is lined with alchemical brews that push your mind and body to their limits.</em></p>\n<p>Alchemist</p>",
   "source": "Player Core 2"
@@ -299,6 +480,203 @@
     "description": "<p>You gain the Quick-Tempered free action, which lets you Rage at the slightest provocation.</p>",
     "feats": [],
     "choice": null
+   }
+  ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Furious Footfalls",
+    "slug": "furious-footfalls",
+    "proficiencies": {},
+    "description": "<p>The urge to fight drives you ever forward. You gain a +5-foot status bonus to your Speed. This bonus increases to +10 feet while you're raging.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Brutality",
+    "slug": "brutality",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert",
+     "martial": "expert"
+    },
+    "description": "<p>Your fury makes your weapons lethal. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert. While raging, you have the critical specialization benefits for melee weapons and unarmed attacks.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Juggernaut",
+    "slug": "juggernaut",
+    "proficiencies": {
+     "fortitude": "master"
+    },
+    "description": "<p><strong>Barbarian, Thaumaturge</strong> Your body is accustomed to physical hardship and resistant to ailments. Your proficiency rank for Fortitude saves increases to master. When you roll a success on a Fortitude save, you get a critical success instead.</p>\n<p><strong>Magus</strong> Your body is accustomed to physical hardship and resistant to a wide range of ailments. Your proficiency rank for Fortitude saves increases to master. When you roll a success on a Fortitude save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal an additional 2 damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Raging Resistance",
+    "slug": "raging-resistance",
+    "proficiencies": {},
+    "description": "<p>Repeated exposure and toughened skin allow you to fend off harm. While raging, you gain resistance equal to 3 + your Constitution modifier to damage types based on your instinct.</p>\n<p>See specific instincts for more information.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Reflex Expertise",
+    "slug": "reflex-expertise",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>You've developed a knack for dodging danger. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Mighty Rage",
+    "slug": "mighty-rage",
+    "proficiencies": {
+     "classDc": "expert"
+    },
+    "description": "<p>Your rage intensifies and lets you hit harder at the start of a fight. Your proficiency rank for your barbarian class DC increases to expert. In addition, when you use Quick-Tempered, the first Strike you make during your first turn deals additional damage equal to your Rage damage.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Greater Juggernaut",
+    "slug": "greater-juggernaut",
+    "proficiencies": {
+     "fortitude": "legendary"
+    },
+    "description": "<p>You have a stalwart physiology. Your proficiency rank for Fortitude saves increases to legendary. When you roll a critical failure on a Fortitude save, you get a failure instead. When you roll a failure on a Fortitude save against an effect that deals damage, you halve the damage you take.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Medium Armor Expertise",
+    "slug": "medium-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert",
+     "medium": "expert"
+    },
+    "description": "<p>You've learned to defend yourself better against attacks. Your proficiency ranks for light armor, medium armor, and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Mastery",
+    "slug": "weapon-mastery",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master",
+     "martial": "master"
+    },
+    "description": "<p><strong>Barbarian</strong> Your rage makes you even more effective with the weapons you wield. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to master.</p>\n<p><strong>Magus, Thaumaturge</strong> You fully understand your weapons. Your proficiency ranks for simple and martial weapons increase to master.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Weapon Specialization",
+    "slug": "greater-weapon-specialization-barbarian",
+    "proficiencies": {},
+    "description": "<p>The weapons you've mastered become truly fearsome in your hands. Your damage from weapon specialization increases to 4 with weapons and unarmed attacks in which you're an expert, 6 if you're a master, and 8 if you're legendary.</p>\n<p>You gain a greater benefit from your instinct's specialization ability. See specific instincts for more information.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Indomitable Will",
+    "slug": "indomitable-will",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>Your rage makes it difficult to control you. Your proficiency rank for Will saves increases to master. When you roll a success on a Will save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Perception Mastery",
+    "slug": "perception-mastery",
+    "proficiencies": {
+     "perception": "master"
+    },
+    "description": "<p><strong>Barbarian</strong> Your instinct heightens each of your senses further. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Bard, Gunslinger, Rogue</strong> You've developed keen awareness and attention to detail. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Exemplar</strong> Through your adventures, you've developed keen awareness and attention to detail, the better to watch over your wards and keep an eye out for monsters and other threats. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Ranger</strong> You have highly developed acuity and attention to detail. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Swashbuckler</strong> Through your adventures, you've developed keen awareness and attention to detail. Your proficiency rank for Perception increases to master.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Revitalizing Rage",
+    "slug": "revitalizing-rage",
+    "proficiencies": {},
+    "description": "<p>Your rage sustains you more frequently, leaving you ready to jump into battle anew. Instead of needing to wait 1 minute before you can gain temporary Hit Points from Rage again, you need only to spend at least one full turn not in a Rage.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Armor Mastery",
+    "slug": "armor-mastery",
+    "proficiencies": {
+     "unarmored": "master",
+     "light": "master",
+     "medium": "master",
+     "heavy": "master"
+    },
+    "description": "<p><strong>Barbarian</strong> Your training and rage deepen your connection to your armor. Your proficiency ranks for light armor, medium armor, and unarmored defense increase to master.</p><hr><p><strong>Champion</strong> Your skill with armor improves, helping you avoid more blows. Your proficiency ranks for light, medium, and heavy armor, as well as for unarmored defense, increase to master.</p><hr><p><strong>Fighter</strong> Your skill with armor improves further. Your proficiency ranks for light, medium, and heavy armor, as well as for unarmored defense, increase to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Devastator",
+    "slug": "devastator",
+    "proficiencies": {
+     "classDc": "master"
+    },
+    "description": "<p>Your Strikes are so devastating that you hardly care about resistance, and your barbarian abilities are unparalleled. Your proficiency rank for your barbarian class DC increases to master. Your melee Strikes ignore up to 10 resistance to the physical damage they deal.</p>"
    }
   ],
   "rarity": "common",
@@ -505,6 +883,202 @@
     "choice": null
    }
   ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Blessing of the Devoted",
+    "slug": "blessing-of-the-devoted",
+    "proficiencies": {},
+    "description": "<p>Your deity blesses your service with a boon. This might come in the form of a spirit that visits you and inhabits your items or body, a mysterious divine tattoo upon your body, or the like. Choose one of the following blessings, or any other to which you have access.</p>\n<p><strong>Blessed Armament</strong>: Select one weapon or handwraps of mighty blows. You gain that armament's critical specialization effect, and you grant the armament a property rune of your choice from the following list: Fearsome, Ghost Touch, Returning, Shifting, or Vitalizing. During your daily preparations, you can change the spirit to inhabit a different armament, grant a different rune, or both.</p>\n<p><strong>Blessed Shield:</strong> In your hands, a shield gains the minor Reinforcing rune. As you go up in level, the shield gains the reinforcing rune of your level (lesser at 7th level, moderate at 10th level, greater at 13th level, major at 16th level, and supreme at 19th level). If your shield already has the appropriate reinforcing rune for your level, or if it's a Sturdy Shield of the same level as the appropriate reinforcing rune, the shield's Hardness instead increases by 1.</p>\n<p><strong>Blessed Swiftness:</strong> You gain a +5-foot status bonus to Speed. If you're mounted, your mount gains the bonus instead. In addition, when the movement of one of your allies triggers an enemy's reaction while the ally is in your champion's aura, the ally gains a +2 status bonus to all defenses against that reaction.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "martial": "expert"
+    },
+    "description": "<p><strong>Champion, Exemplar, Investigator, Magus</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert.</p>\n<p><strong>Druid, Kineticist</strong> You've improved your combat skill. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Oracle</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Psychic</strong> Training and magic improved your weapon technique. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Sorcerer</strong> You've improved your combat skill. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Swashbuckler</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert. You gain access to the critical specialization effects of all weapons for which you have expert proficiency.</p>\n<p><strong>Witch, Wizard</strong> Through sheer experience, you've improved your technique with your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Armor Expertise",
+    "slug": "armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert",
+     "medium": "expert",
+     "heavy": "expert"
+    },
+    "description": "<p>You have spent so much time in armor that you know how to make the most of its protection. Your proficiency ranks for light, medium, and heavy armor, as well as for unarmored defense, increase to expert. You gain the armor specialization effects of medium and heavy armor.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal an additional 2 damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Champion Expertise",
+    "slug": "champion-expertise",
+    "proficiencies": {
+     "classDc": "expert",
+     "spellcasting": "expert"
+    },
+    "description": "<p>Prayers strengthen your divine power. Your proficiency ranks for your champion class DC and divine spell attack rolls and DCs increase to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Reflex Expertise",
+    "slug": "reflex-expertise",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>You've developed a knack for dodging danger. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Relentless Reaction",
+    "slug": "relentless-reaction",
+    "proficiencies": {},
+    "description": "<p>Your champion's reaction improves, typically to punish the attacker with spiritual backlash. It gains the relentless reaction benefit listed in your cause below your champion's reaction.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Sacred Body",
+    "slug": "sacred-body",
+    "proficiencies": {
+     "fortitude": "master"
+    },
+    "description": "<p>The power of your deity keeps your body safe from harm, as true an edifice of the faith as a great temple. Your proficiency rank for Fortitude saves increases to master. When you roll a success on a Fortitude save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Divine Will",
+    "slug": "divine-will",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>Your faith grants mastery of your will. Your proficiency rank for Will saves increases to master. When you roll a success on a Will save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Exalted Reaction",
+    "slug": "exalted-reaction",
+    "proficiencies": {},
+    "description": "<p>Your champion's reaction exalts nearby allies, allowing them to benefit as well. When you use your champion's reaction, you also get the effect listed for its exalted reaction.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Armor Mastery",
+    "slug": "armor-mastery",
+    "proficiencies": {
+     "heavy": "master"
+    },
+    "description": "<p><strong>Barbarian</strong> Your training and rage deepen your connection to your armor. Your proficiency ranks for light armor, medium armor, and unarmored defense increase to master.</p><hr><p><strong>Champion</strong> Your skill with armor improves, helping you avoid more blows. Your proficiency ranks for light, medium, and heavy armor, as well as for unarmored defense, increase to master.</p><hr><p><strong>Fighter</strong> Your skill with armor improves further. Your proficiency ranks for light, medium, and heavy armor, as well as for unarmored defense, increase to master.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Martial Weapon Mastery",
+    "slug": "martial-weapon-mastery",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master",
+     "martial": "master"
+    },
+    "description": "<p>You fully understand your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to master.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Weapon Specialization",
+    "slug": "greater-weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>Your damage from weapon specialization increases to 4 with weapons and unarmed attacks in which you're an expert, 6 if you're a master, and 8 if you're legendary.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Champion Mastery",
+    "slug": "champion-mastery",
+    "proficiencies": {
+     "classDc": "master",
+     "spellcasting": "master"
+    },
+    "description": "<p>You've mastered your arsenal of champion techniques and divine spells. Your proficiency ranks for your champion class DC and for divine spell attack rolls and spell DCs increase to master.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Legendary Armor",
+    "slug": "legendary-armor",
+    "proficiencies": {
+     "unarmored": "legendary",
+     "light": "legendary",
+     "medium": "legendary",
+     "heavy": "legendary"
+    },
+    "description": "<p>You shield yourself with steel as easily as with faith. Your proficiency ranks for light, medium, and heavy armor, as well as for unarmored defense, increase to legendary.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Hero's Defiance",
+    "slug": "heros-defiance",
+    "proficiencies": {},
+    "description": "<p>You can defy fate and continue fighting as long as you have divine energy. You gain the Hero's Defiance devotion spell.</p>"
+   }
+  ],
   "rarity": "common",
   "description": "<p><em>You are an emissary of a deity, a devoted servant who has taken up a weighty mantle, and you adhere to a code that holds you apart from those around you. While champions exist for every alignment, as a champion of good, you provide certainty and hope to the innocent. You have powerful defenses that you share freely with your allies and innocent bystanders, as well as holy power you use to end the threat of evil. Your devotion even attracts the attention of holy spirits who aid you on your journey.</em></p>\n<p><em>Champion</em></p>",
   "source": "Player Core 2"
@@ -668,6 +1242,224 @@
     "choice": null
    }
   ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "skillIncreases": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Keen Recollection",
+    "slug": "keen-recollection",
+    "proficiencies": {},
+    "description": "<p>You can recall pertinent facts on topics that aren't your specialty. Your proficiency bonus to untrained skill checks to Recall Knowledge is equal to your level instead of +0.</p>"
+   },
+   {
+    "level": 3,
+    "name": "Skillful Lessons",
+    "slug": "skillful-lessons",
+    "proficiencies": {},
+    "description": "<p>At 3rd level and every odd-numbered level thereafter, you gain a skill feat. This feat must be for an Intelligence-, Wisdom-, or Charisma-based skill, or for the skill you gained from your methodology.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "martial": "expert"
+    },
+    "description": "<p><strong>Champion, Exemplar, Investigator, Magus</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert.</p>\n<p><strong>Druid, Kineticist</strong> You've improved your combat skill. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Oracle</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Psychic</strong> Training and magic improved your weapon technique. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Sorcerer</strong> You've improved your combat skill. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Swashbuckler</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert. You gain access to the critical specialization effects of all weapons for which you have expert proficiency.</p>\n<p><strong>Witch, Wizard</strong> Through sheer experience, you've improved your technique with your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Perception Mastery",
+    "slug": "perception-mastery",
+    "proficiencies": {},
+    "description": "<p><strong>Barbarian</strong> Your instinct heightens each of your senses further. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Bard, Gunslinger, Rogue</strong> You've developed keen awareness and attention to detail. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Exemplar</strong> Through your adventures, you've developed keen awareness and attention to detail, the better to watch over your wards and keep an eye out for monsters and other threats. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Ranger</strong> You have highly developed acuity and attention to detail. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Swashbuckler</strong> Through your adventures, you've developed keen awareness and attention to detail. Your proficiency rank for Perception increases to master.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal an additional 2 damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Fortitude Expertise",
+    "slug": "fortitude-expertise",
+    "proficiencies": {
+     "fortitude": "expert"
+    },
+    "description": "<p><strong>Animist</strong> Spiritual energy reinforces your body, making you more resilient. Your proficiency rank for Fortitude saves increases to expert.</p>\n<p><strong>Bard, Investigator, Swashbuckler</strong> Your physique has grown hardy in your adventures. Your proficiency rank for Fortitude saves increases to expert.</p>\n<p><strong>Druid</strong> Adventures have made your physique more hardy. Your proficiency rank for Fortitude saves increases to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Investigator Expertise",
+    "slug": "investigator-expertise",
+    "proficiencies": {
+     "classDc": "expert"
+    },
+    "description": "<p>You've refined your investigative techniques to an exceptional degree. Your circumstance bonus from Pursue a Lead increases to +2. Your proficiency rank for your investigator class DC increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Deductive Improvisation",
+    "slug": "deductive-improvisation",
+    "proficiencies": {},
+    "description": "<p>You use your skills at deduction to perform whatever task is necessary to solve the case.</p>\n<p>You can attempt any check that requires you to be trained in a skill, even if you're untrained in it; you can attempt any check that requires you to have expert proficiency in a skill so long as you're trained in it; and you can attempt any check that requires you to have master proficiency in a skill as long as you have expert proficiency in it.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Dogged Will",
+    "slug": "dogged-will",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>In your pursuit of truth and knowledge, you won't be dissuaded. Your proficiency rank for Will saves increases to master. When you roll a success on a Will save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Light Armor Expertise",
+    "slug": "light-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert"
+    },
+    "description": "<p>You've learned how to dodge while wearing light or no armor. Your proficiency ranks for light armor and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Martial Weapon Mastery",
+    "slug": "martial-weapon-mastery",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master",
+     "martial": "master"
+    },
+    "description": "<p>You fully understand your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to master.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Perception Legend",
+    "slug": "perception-legend",
+    "proficiencies": {
+     "perception": "legendary"
+    },
+    "description": "<p>You notice the almost imperceptible. Your proficiency rank for Perception increases to legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Weapon Specialization",
+    "slug": "greater-weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>Your damage from weapon specialization increases to 4 with weapons and unarmed attacks in which you're an expert, 6 if you're a master, and 8 if you're legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Savvy Reflexes",
+    "slug": "savvy-reflexes",
+    "proficiencies": {
+     "reflex": "master"
+    },
+    "description": "<p>With an eye for incoming danger, you masterfully keep yourself out of harm's way. Your proficiency rank for Reflex saves increases to master. When you roll a success on a Reflex save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Greater Dogged Will",
+    "slug": "greater-dogged-will",
+    "proficiencies": {
+     "will": "legendary"
+    },
+    "description": "<p>Your willpower becomes truly unbreakable.</p>\n<p>Your proficiency rank for Will saves increases to legendary. When you roll a success at a Will save, you get a critical success. When you roll a critical failure at a Will save, you get a failure instead. When you roll a failure on a Will save against a damaging effect, you take half damage.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Light Armor Mastery",
+    "slug": "light-armor-mastery",
+    "proficiencies": {
+     "unarmored": "master",
+     "light": "master"
+    },
+    "description": "<p>Your skill with light armor improves, increasing your ability to dodge blows. Your proficiency ranks for light armor and unarmored defense increase to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Master Detective",
+    "slug": "master-detective",
+    "proficiencies": {
+     "classDc": "master"
+    },
+    "description": "<p>As a master detective, you can solve any case and find all the clues available. Your reputation precedes you, and even the most skilled criminals and deceivers fear you. Your proficiency rank for your investigator class DC increases to master.</p>\n<p>In addition, if you enter a new location that includes another clue toward answering the question at the heart of one of your active investigations, the GM informs you of the existence of the clue and its type: an object, person, spell effect, or the like. When you find the clue, the GM informs you that you've done so.</p>\n<p>If there is more than one clue in the location, the GM chooses one to inform you about. When you find any of the clues in that location, the GM informs you that you've done so, even if it wasn't the clue they'd chosen or there are other clues you haven't found.</p>"
+   }
+  ],
   "rarity": "common",
   "description": "<p><em>You seek to uncover the truth, doggedly pursuing leads to reveal the plots of devious villains, discover ancient secrets, or unravel other mysteries. Your analytical mind quickly formulates solutions to complicated problems and your honed senses identify even the most obscure clues. Wielding knowledge as a weapon, you study the creatures and dangers you encounter to exploit their weaknesses.</em></p>\n<p><em>Investigator</em></p>",
   "source": "Player Core 2"
@@ -720,6 +1512,180 @@
     "description": "<p>Your fists are deadly weapons. The damage die for your fist increases to 1d6 instead of 1d4. You don't take the normal –2 circumstance penalty when making a lethal attack with your fist or any other unarmed attacks.</p>",
     "feats": [],
     "choice": null
+   }
+  ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Incredible Movement",
+    "slug": "incredible-movement",
+    "proficiencies": {},
+    "description": "<p>You move like the wind. You gain a +10-foot status bonus to your Speed whenever you're not wearing armor. The bonus increases by 5 feet for every 4 levels you have beyond 3rd.</p>"
+   },
+   {
+    "level": 3,
+    "name": "Mystic Strikes",
+    "slug": "mystic-strikes",
+    "proficiencies": {},
+    "description": "<p>Focusing your will into your physical attacks imbues them with mystical energy. Your unarmed attacks become magical, allowing them to get past resistances to non-magical attacks. However, you still need an item such as Handwraps of Mighty Blows (+1) to gain an item bonus to attack rolls or increase your attacks' weapon damage dice.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Expert Strikes",
+    "slug": "expert-strikes",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert"
+    },
+    "description": "<p>You've practiced martial arts and have now surpassed your former skill. Your proficiency ranks for unarmed attacks and simple weapons increase to expert. When you get a critical hit with an unarmed attack in the brawling group, you get its critical specialization effect.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Path to Perfection",
+    "slug": "path-to-perfection",
+    "proficiencies": {},
+    "description": "<p>You have progressed along your own path to enlightenment. Choose your Fortitude, Reflex, or Will saving throw. Your proficiency rank for the chosen saving throw increases to master. When you roll a success on the chosen saving throw, you get a critical success instead.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal an additional 2 damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Metal Strikes",
+    "slug": "metal-strikes",
+    "proficiencies": {},
+    "description": "<p>You can adjust your body to make unarmed attacks infused with the mystic energy of rare metals. Your unarmed attacks are treated as cold iron and silver. This allows you to deal more damage to a variety of supernatural creatures, such as demons, devils, and fey.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Monk Expertise",
+    "slug": "monk-expertise",
+    "proficiencies": {
+     "classDc": "expert",
+     "spellcasting": "expert"
+    },
+    "description": "<p>Your proficiency rank for your monk class DC increases to expert. If you have qi spells, your proficiency rank for spell attacks and spell DCs increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Second Path to Perfection",
+    "slug": "second-path-to-perfection",
+    "proficiencies": {},
+    "description": "<p>You've learned to find perfection in every success. Choose a different saving throw than the one you chose for your path to perfection. Your proficiency rank for the chosen saving throw increases to master. If you roll a success with the chosen saving throw, you instead critically succeed.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Graceful Mastery",
+    "slug": "graceful-mastery",
+    "proficiencies": {
+     "unarmored": "master"
+    },
+    "description": "<p>You move with perpetual grace, turning aside blows. Your proficiency rank for unarmored defense increases to master.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Master Strikes",
+    "slug": "master-strikes",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master"
+    },
+    "description": "<p>You've honed your body into an even deadlier weapon. Your proficiency ranks for unarmed attacks and simple weapons increase to master.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Weapon Specialization",
+    "slug": "greater-weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>Your damage from weapon specialization increases to 4 with weapons and unarmed attacks in which you're an expert, 6 if you're a master, and 8 if you're legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Third Path to Perfection",
+    "slug": "third-path-to-perfection",
+    "proficiencies": {},
+    "description": "<p>You have made great progress in your personal studies of enlightenment. Choose one of the saving throws you selected for path to perfection or second path to perfection. Your proficiency rank for the chosen type of save increases to legendary. When you roll a critical failure on the chosen type of save, you get a failure instead. When you roll a failure on the chosen type of save against an effect that deals damage, you take half damage.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Adamantine Strikes",
+    "slug": "adamantine-strikes",
+    "proficiencies": {},
+    "description": "<p>When you focus your will into your limbs, your blows are as unyielding as the hardest of metals. Your unarmed attacks are treated as adamantine.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Graceful Legend",
+    "slug": "graceful-legend",
+    "proficiencies": {
+     "unarmored": "legendary",
+     "classDc": "master",
+     "spellcasting": "master"
+    },
+    "description": "<p>Your sublime movement grants you unparalleled protection and offense. Your proficiency rank for unarmored defense increases to legendary, and your proficiency rank for your monk class DC increases to master. If you have qi spells, your proficiency rank for spell attack modifiers and spell DCs increases to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Perfected Form",
+    "slug": "perfected-form",
+    "proficiencies": {},
+    "description": "<p>You have purged incompetence from your techniques. On your first Strike of your turn, if you roll lower than 10, you can treat the attack roll as a 10. This is a fortune effect.</p>"
    }
   ],
   "rarity": "common",
@@ -979,6 +1945,193 @@
     "description": "<p><strong>Bard</strong> The collection of spells you can cast is called your spell repertoire. At 1st level, you learn two 1st-rank occult spells of your choice and five occult cantrips of your choice. You choose these from the common spells from the occult list or from other occult spells to which you have access. You can cast any spell in your spell repertoire by using a spell slot of an appropriate spell rank.</p>\n<p>You add to this spell repertoire as you increase in level. Each time you get a spell slot (see the Bard Spells per Day table), you add a spell to your spell repertoire of the same rank. At 2nd level, you select another 1st-rank spell; at 3rd level, you select two 2nd-rank spells, and so on. When you add spells, you might add a higher-rank version of a spell you already have, so you can cast a heightened version of that spell.</p>\n<p>Though you gain them at the same rate, your spell slots and the spells in your spell repertoire are separate. If a feat or other ability adds a spell to your spell repertoire, it wouldn't give you another spell slot, and vice versa.</p>\n<p><strong>Swapping Spells in Your Repertoire</strong></p>\n<p>As you gain new spells in your repertoire, you might want to replace some of the spells you previously learned. Each time you gain a level and learn new spells, you can swap out one of your old spells for a different spell of the same rank. This spell can be a cantrip. You can also swap out spells by retraining during downtime.</p><hr><p><strong>Oracle</strong> The collection of spells you can cast is called your spell repertoire. At 1st level, you learn two 1st-rank divine spells of your choice and five divine cantrips of your choice. You choose these from the common spells on the divine list or from other divine spells to which you have access. You can cast any spell in your spell repertoire by using a spell slot of an appropriate spell rank.</p>\n<p>You add to this spell repertoire as you increase in level. Each time you get a spell slot (see the Oracle Spells per Day table), you add a spell to your spell repertoire of the same rank. At 2nd level, you select another 1st-rank spell; at 3rd level, you select two 2nd-rank spells, and so on. When you add spells, you might add a higher-rank version of a spell you already have, so you can cast a heightened version of that spell.</p>\n<p>Your spell slots and the spells in your spell repertoire are separate. If a feat or other ability adds a spell to your spell repertoire, it wouldn't give you another spell slot, and vice versa.</p>\n<p><strong>Swapping Spells in Your Repertoire</strong></p>\n<p>As you gain new spells in your repertoire, you might want to replace some of the spells you previously learned. Each time you gain a level and learn new spells, you can swap out one of your old spells for a different spell of the same rank. This spell can be a cantrip. You can also swap out spells by retraining during downtime.</p><hr><p><strong>Psychic</strong> The collection of spells you can cast is called your spell repertoire. At 1st level, you learn one 1st-rank occult spell of your choice and three occult cantrips of your choice. You choose these from the common spells from the occult list or from other occult spells to which you have access. You can cast any spell in your spell repertoire by using a spell slot of an appropriate spell rank. Your choice of conscious mind also grants you additional spells in your repertoire, starting with an additional 1st-rabk spell and two cantrips listed in your conscious mind, which you cast as psi cantrips.</p>\n<p>You add to this spell repertoire as you increase in level. Each time you get a spell slot (see Table 2), you add a spell to your spell repertoire of the same level. At 2nd level, you select another 1st-rank spell; at 3rd level, you select one 2nd-level spell, and so on. When you add spells, you might add a higher-rank version of a spell you already have, so you can cast a heightened version of that spell. Your conscious mind also adds additional spells to your repertoire as you gain spells of higher levels.</p>\n<p>Though you gain them at the same rate, your spell slots and the spells in your spell repertoire are separate. If a feat or other ability adds a spell to your spell repertoire, such as the spells you gain from your conscious mind, it wouldn't give you another spell slot, and vice versa.</p>\n<p><strong>Swapping Spells in Your Repertoire</strong></p>\n<p>As you gain new spells in your repertoire, you might want to replace some of the spells you previously learned. Each time you gain a level and learn new spells, you can swap out one of your old spells for a different spell of the same rank. This spell can be a cantrip. You can also swap out spells by retraining during downtime.</p><hr><p><strong>Sorcerer</strong> The collection of spells you can cast is called your spell repertoire. At 1st level, you learn two 1st-rank spells of your choice and four cantrips of your choice, as well as an additional spell and cantrip from your bloodline. You choose these from the common spells from the tradition corresponding to your bloodline, or from other spells from that tradition to which you have access. You can cast any spell in your spell repertoire by using a spell slot of an appropriate spell rank.</p>\n<p>You add to this spell repertoire as you increase in level. Each time you get a spell slot (see the Sorcerer Spells per Day table above), you add a spell to your spell repertoire of the same rank. When you gain a new rank of spells, your first new spell is always the sorcerous gift spell for that rank that's listed in your bloodline, but you can choose the other spells. At 2nd level, you select another 1st-rank spell; at 3rd level, you gain a new spell from your bloodline and two other 2nd-rank spells, and so on. When you add spells, you might select a higher-rank version of a spell you already know so that you can cast a heightened version of that spell.</p>\n<p>Though you gain them at the same rate, your spell slots and the spells in your spell repertoire are separate. If a feat or other ability adds a spell to your spell repertoire, it wouldn't give you another spell slot or vice versa.</p>\n<p><strong>Swapping Spells in Your Repertoire</strong></p>\n<p>As you gain new spells in your spell repertoire, you might want to replace some of the spells you previously learned. Each time you gain a level and learn new spells, you can swap out one of your old spells for a different spell of the same rank. This spell can be a cantrip, but you can't swap out bloodline spells. You can also swap out spells by retraining during downtime.</p><hr><p><strong>Summoner</strong> The collection of spells you can cast is called your spell repertoire. At 1st level, you learn two 1st-rank spells of your choice and five cantrips of your choice. You choose these from the common spells from the tradition corresponding to your eidolon, or from other spells from that tradition to which you have access. You can cast any spell in your spell repertoire by using a spell slot of an appropriate spell rank. Your spell slots and the spells in your spell repertoire are separate. If a feat or other ability adds a spell to your spell repertoire, it doesn't give you another spell slot, and vice versa.</p>\n<p>You add to this spell repertoire as you increase in level. Each time you get a spell slot (see Table 2–4: Summoner Spells per Day), you add a spell of the same rank to your spell repertoire. At 2nd level, you select another 1st-rank spell. At 3rd level, you add the first 2nd-rank spell to your repertoire. At 4th level you gain your second and your spell repertoire reaches its maximum size of five spells.</p>\n<p>At 5th level, in addition to adding two 3rd-rank spells to your repertoire, you lose your lowest rank of spell slots. Any time you lose a rank of spell slots, you lose two spells in your repertoire as well. These can come from spells you already know or out of the number of new spells you're learning. On levels in which you don't change your spell slots, you can swap out multiple spells, as described below.</p>\n<p><strong>Swapping Spells in Your Repertoire</strong></p>\n<p>As you gain new spells in your repertoire, you might want to replace some of the spells you previously learned. Each time you gain a level and learn new spells, you can swap out one of your old spells for a different spell of the same rank. If it's a rank at which you lose a set of lower-rank slots, you can replace the two in either order. You can also instead swap a cantrip. You can also swap out spells by retraining during downtime.</p>\n<p>At 6th level and every even level thereafter, you can swap out any number of your spells for different spells of a rank you can cast. When you do, you must keep at least one spell you can cast with your lowest rank of spell slots so you don't end up with slots you can't use. For instance, at 6th level you would need to keep at least one 2nd-rank spell, but all your other spells could be 3rd rank.</p>",
     "feats": [],
     "choice": null
+   }
+  ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Signature Spells",
+    "slug": "signature-spells",
+    "proficiencies": {},
+    "description": "<p>Experience allows you to cast some spells more flexibly. For each spell rank you have access to, choose one spell of that rank to be a signature spell. You don't need to learn heightened versions of signature spells separately; instead, you can heighten these spells freely. If you've learned a signature spell at a higher rank than its minimum, you can also cast all its lower-rank versions without learning those separately. If you swap out a signature spell, you can choose a replacement signature spell of the same spell rank at which you learned the previous spell. You can also retrain specifically to change a signature spell to a different spell of that rank without swapping any spells; this takes as much time as retraining a spell normally does.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Expert Spellcaster",
+    "slug": "expert-spellcaster",
+    "proficiencies": {
+     "spellcasting": "expert"
+    },
+    "description": "<p><strong>Animist</strong> The magic of the spirits flows freely through you. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>\n<p><strong>Bard</strong> Your magical techniques grow stronger. Your proficiency ranks for spell attack modifiers and spell DCs increase to expert.</p>\n<p><strong>Druid</strong> Your command of primal forces has deepened, empowering your spells. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>\n<p><strong>Magus</strong> Your fundamental understanding of magic improves, making your spells harder to resist. Your proficiency ranks for arcane spell attack rolls and spell DCs increase to expert.</p>\n<p><strong>Oracle</strong> The intricacy of your divine power has grown clearer over time. Your proficiency ranks for divine spell attack rolls and spell DCs increase to expert.</p>\n<p><strong>Psychic</strong> Self-reflection has brought you greater knowledge of yourself and, with it, psychic power. Your proficiency ranks for occult spell attack rolls and spell DCs increase to expert.</p>\n<p><strong>Sorcerer</strong> Your inherent magic responds easily and powerfully to your command. Your proficiency ranks for spell attack modifier and spell DC for spells of your bloodline's tradition increase to expert.</p>\n<p><strong>Summoner</strong> As your connection to your eidolon deepens, the power of your spells increases. Your proficiency ranks for spell attack modifier and spell DC for spells of your eidolon's tradition increase to expert.</p>\n<p><strong>Witch</strong> You've learned to better control the power your patron has granted you. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>\n<p><strong>Wizard</strong> Extended practice of the arcane has improved your capabilities. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Mysterious Resolve",
+    "slug": "mysterious-resolve",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>The power of your mystery blazing in your soul makes it harder for other powers to grip your mind. Your proficiency rank for Will saves increases to master. When you roll a success on a Will save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Magical Fortitude",
+    "slug": "magical-fortitude",
+    "proficiencies": {
+     "fortitude": "expert"
+    },
+    "description": "<p><strong>Oracle, Sorcerer, Wizard</strong> Magical power has improved your body's resiliency. Your proficiency rank for Fortitude saves increases to expert.</p>\n<p><strong>Witch</strong> Your patron's power boosts your physical resiliency. Your proficiency rank for Fortitude saves increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Divine Access",
+    "slug": "divine-access",
+    "proficiencies": {},
+    "description": "<p>Your mystery offers you strange access to spells typically reserved for more conventional worshippers. Choose one deity who grants one of your mystery's granted domains. Add up to three cleric spells of your choice granted by that deity to your spell list, and to your spell repertoire as soon as you can cast spells of the appropriate rank.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Major Curse",
+    "slug": "major-curse",
+    "proficiencies": {},
+    "description": "<p>You've learned to better tolerate the conflicting powers wreaking havoc on your body. The maximum Cursebound value you can have increases from cursebound 2 to cursebound 3.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Oracular Senses",
+    "slug": "oracular-senses",
+    "proficiencies": {
+     "perception": "expert"
+    },
+    "description": "<p>You have always been able to sense a bit more than others. Your proficiency rank for Perception increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert"
+    },
+    "description": "<p><strong>Champion, Exemplar, Investigator, Magus</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert.</p>\n<p><strong>Druid, Kineticist</strong> You've improved your combat skill. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Oracle</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Psychic</strong> Training and magic improved your weapon technique. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Sorcerer</strong> You've improved your combat skill. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Swashbuckler</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert. You gain access to the critical specialization effects of all weapons for which you have expert proficiency.</p>\n<p><strong>Witch, Wizard</strong> Through sheer experience, you've improved your technique with your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Light Armor Expertise",
+    "slug": "light-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert"
+    },
+    "description": "<p>You've learned how to dodge while wearing light or no armor. Your proficiency ranks for light armor and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Premonition Reflexes",
+    "slug": "premonition-reflexes",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>A chill runs through your spine as danger strikes, giving you a hair's more time to dodge or cover yourself. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal an additional 2 damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Master Spellcaster",
+    "slug": "master-spellcaster",
+    "proficiencies": {
+     "spellcasting": "master"
+    },
+    "description": "<p><strong>Animist</strong> Your affinity with the apparitions you bond to has further enhanced the potency of your magic. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>\n<p><strong>Bard</strong> You pluck the threads of magic like the strings of a harp. Your proficiency ranks for spell attack modifiers and spell DCs increase to master.</p>\n<p><strong>Druid</strong> Primal magic answers your command. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>\n<p><strong>Magus</strong> You fortify your spells with masterful prowess. Your proficiency ranks for arcane spell attack rolls and spell DCs increase to master.</p>\n<p><strong>Oracle</strong> You truly understand the deep and complex divine power within your mystery. Your proficiency ranks for divine spell attack rolls and spell DCs increase to master.</p>\n<p><strong>Psychic</strong> You've gained access to the deepest corners of your own mind. Your proficiency ranks for occult spell attack rolls and spell DCs increase to master.</p>\n<p><strong>Sorcerer</strong> You have achieved mastery over the magic in your blood. Your proficiency ranks for spell attack modifier and spell DC for spells of your bloodline's tradition increase to master.</p>\n<p><strong>Summoner</strong> Your connection to your eidolon is strong enough to grant you mastery over associated spells. Your proficiency ranks for spell attack modifier and spell DC for spells of your eidolon's tradition increase to master.</p>\n<p><strong>Witch</strong> You've achieved mastery over your patron's magic. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>\n<p><strong>Wizard</strong> You command superlative spellcasting ability. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Extreme Curse",
+    "slug": "extreme-curse",
+    "proficiencies": {},
+    "description": "<p>You have mastered a precarious balance between the conflicting divine powers of your mystery, allowing you to tolerate a perilous degree of divine curse. The maximum Cursebound value you can have increases from cursebound 3 to cursebound 4.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Greater Mysterious Resolve",
+    "slug": "greater-mysterious-resolve",
+    "proficiencies": {
+     "will": "legendary"
+    },
+    "description": "<p>Your time spent in contemplation of the mysteries of creation has given you a powerful mind and soul. Your proficiency rank for Will saves increases to legendary. When you roll a success on a Will save, you get a critical success instead. When you roll a critical failure on a Will save, you get a failure instead. When you fail a Will save against a damaging effect, you take half damage.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Legendary Spellcaster",
+    "slug": "legendary-spellcaster",
+    "proficiencies": {
+     "spellcasting": "legendary"
+    },
+    "description": "<p><strong>Animist</strong> You are a near-perfect channel for the magical energies of the realms beyond. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>\n<p><strong>Bard</strong> Your command of magic is the stuff of legends. Your proficiency ranks for spell attack modifiers and spell DCs increase to legendary.</p>\n<p><strong>Druid</strong> You have developed an unparalleled rapport with the magic of nature. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>\n<p><strong>Oracle</strong> You can harness divine power at a level few others can match. Your proficiency ranks for divine spell attack rolls and spell DCs increase to legendary.</p>\n<p><strong>Psychic</strong> As your training reaches its peak, you understand not just your own mind, but the collective unconscious from which all psychic power stems. Your proficiency ranks for occult spell attack rolls and spell DCs increase to legendary.</p>\n<p><strong>Sorcerer</strong> You demonstrate prodigious talent for spellcasting. Your proficiency ranks for spell attack modifier and spell DC for spells of your bloodline's tradition increase to legendary.</p>\n<p><strong>Witch</strong> You've perfected your command of the magic your patron provides. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>\n<p><strong>Wizard</strong> You are a consummate spellcaster, blending both arcane theory and practical spellcraft. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Oracular Clarity",
+    "slug": "oracular-clarity",
+    "proficiencies": {},
+    "description": "<p>You now fully grasp the nature of the divine power behind your mystery, allowing you to work magic akin to miracles. Add two common 10th-rank divine spells to your repertoire. You gain a single 10th-rank spell slot you can use to cast one of those two spells using oracle spellcasting.</p>\n<p>You don't gain more 10th-rank spells as you level up, unlike other spell slots, and you can't use 10th-rank slots with abilities that give you more spell slots or that let you cast spells without expending spell slots. You can take the Oracular Providence feat to gain a second slot.</p>"
    }
   ],
   "rarity": "common",
@@ -1295,6 +2448,153 @@
     "choice": null
    }
   ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Signature Spells",
+    "slug": "signature-spells",
+    "proficiencies": {},
+    "description": "<p>Experience allows you to cast some spells more flexibly. For each spell rank you have access to, choose one spell of that rank to be a signature spell. You don't need to learn heightened versions of signature spells separately; instead, you can heighten these spells freely. If you've learned a signature spell at a higher rank than its minimum, you can also cast all its lower-rank versions without learning those separately. If you swap out a signature spell, you can choose a replacement signature spell of the same spell rank at which you learned the previous spell. You can also retrain specifically to change a signature spell to a different spell of that rank without swapping any spells; this takes as much time as retraining a spell normally does.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Magical Fortitude",
+    "slug": "magical-fortitude",
+    "proficiencies": {
+     "fortitude": "expert"
+    },
+    "description": "<p><strong>Oracle, Sorcerer, Wizard</strong> Magical power has improved your body's resiliency. Your proficiency rank for Fortitude saves increases to expert.</p>\n<p><strong>Witch</strong> Your patron's power boosts your physical resiliency. Your proficiency rank for Fortitude saves increases to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Expert Spellcaster",
+    "slug": "expert-spellcaster",
+    "proficiencies": {
+     "spellcasting": "expert"
+    },
+    "description": "<p><strong>Animist</strong> The magic of the spirits flows freely through you. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>\n<p><strong>Bard</strong> Your magical techniques grow stronger. Your proficiency ranks for spell attack modifiers and spell DCs increase to expert.</p>\n<p><strong>Druid</strong> Your command of primal forces has deepened, empowering your spells. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>\n<p><strong>Magus</strong> Your fundamental understanding of magic improves, making your spells harder to resist. Your proficiency ranks for arcane spell attack rolls and spell DCs increase to expert.</p>\n<p><strong>Oracle</strong> The intricacy of your divine power has grown clearer over time. Your proficiency ranks for divine spell attack rolls and spell DCs increase to expert.</p>\n<p><strong>Psychic</strong> Self-reflection has brought you greater knowledge of yourself and, with it, psychic power. Your proficiency ranks for occult spell attack rolls and spell DCs increase to expert.</p>\n<p><strong>Sorcerer</strong> Your inherent magic responds easily and powerfully to your command. Your proficiency ranks for spell attack modifier and spell DC for spells of your bloodline's tradition increase to expert.</p>\n<p><strong>Summoner</strong> As your connection to your eidolon deepens, the power of your spells increases. Your proficiency ranks for spell attack modifier and spell DC for spells of your eidolon's tradition increase to expert.</p>\n<p><strong>Witch</strong> You've learned to better control the power your patron has granted you. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>\n<p><strong>Wizard</strong> Extended practice of the arcane has improved your capabilities. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Reflex Expertise",
+    "slug": "reflex-expertise",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>You've developed a knack for dodging danger. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert"
+    },
+    "description": "<p><strong>Champion, Exemplar, Investigator, Magus</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert.</p>\n<p><strong>Druid, Kineticist</strong> You've improved your combat skill. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Oracle</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Psychic</strong> Training and magic improved your weapon technique. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Sorcerer</strong> You've improved your combat skill. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Swashbuckler</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert. You gain access to the critical specialization effects of all weapons for which you have expert proficiency.</p>\n<p><strong>Witch, Wizard</strong> Through sheer experience, you've improved your technique with your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Defensive Robes",
+    "slug": "defensive-robes",
+    "proficiencies": {
+     "unarmored": "expert"
+    },
+    "description": "<p>The flow of magic and your defensive training combine to help you get out of the way before an attack. Your proficiency rank in unarmored defense increases to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal an additional 2 damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Master Spellcaster",
+    "slug": "master-spellcaster",
+    "proficiencies": {
+     "spellcasting": "master"
+    },
+    "description": "<p><strong>Animist</strong> Your affinity with the apparitions you bond to has further enhanced the potency of your magic. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>\n<p><strong>Bard</strong> You pluck the threads of magic like the strings of a harp. Your proficiency ranks for spell attack modifiers and spell DCs increase to master.</p>\n<p><strong>Druid</strong> Primal magic answers your command. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>\n<p><strong>Magus</strong> You fortify your spells with masterful prowess. Your proficiency ranks for arcane spell attack rolls and spell DCs increase to master.</p>\n<p><strong>Oracle</strong> You truly understand the deep and complex divine power within your mystery. Your proficiency ranks for divine spell attack rolls and spell DCs increase to master.</p>\n<p><strong>Psychic</strong> You've gained access to the deepest corners of your own mind. Your proficiency ranks for occult spell attack rolls and spell DCs increase to master.</p>\n<p><strong>Sorcerer</strong> You have achieved mastery over the magic in your blood. Your proficiency ranks for spell attack modifier and spell DC for spells of your bloodline's tradition increase to master.</p>\n<p><strong>Summoner</strong> Your connection to your eidolon is strong enough to grant you mastery over associated spells. Your proficiency ranks for spell attack modifier and spell DC for spells of your eidolon's tradition increase to master.</p>\n<p><strong>Witch</strong> You've achieved mastery over your patron's magic. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>\n<p><strong>Wizard</strong> You command superlative spellcasting ability. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Majestic Will",
+    "slug": "majestic-will",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>Your mind and will are tempered by your mastery of magical forces. Your proficiency rank for Will saves increases to master. When you roll a success on a Will save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Bloodline Paragon",
+    "slug": "bloodline-paragon",
+    "proficiencies": {},
+    "description": "<p>You have perfected the magic in your bloodline. Add two common 10th-rank spells of your tradition to your repertoire. You gain a single 10th-rank spell slot you can use to cast these spells, using sorcerer spellcasting. Unlike other spell slots, you don't gain more 10th-rank spells as you level up, and they can't be used for abilities that let you cast spells without expending spell slots or abilities that give you more spell slots. You can take the Bloodline Perfection sorcerer feat to gain a second slot.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Legendary Spellcaster",
+    "slug": "legendary-spellcaster",
+    "proficiencies": {
+     "spellcasting": "legendary"
+    },
+    "description": "<p><strong>Animist</strong> You are a near-perfect channel for the magical energies of the realms beyond. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>\n<p><strong>Bard</strong> Your command of magic is the stuff of legends. Your proficiency ranks for spell attack modifiers and spell DCs increase to legendary.</p>\n<p><strong>Druid</strong> You have developed an unparalleled rapport with the magic of nature. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>\n<p><strong>Oracle</strong> You can harness divine power at a level few others can match. Your proficiency ranks for divine spell attack rolls and spell DCs increase to legendary.</p>\n<p><strong>Psychic</strong> As your training reaches its peak, you understand not just your own mind, but the collective unconscious from which all psychic power stems. Your proficiency ranks for occult spell attack rolls and spell DCs increase to legendary.</p>\n<p><strong>Sorcerer</strong> You demonstrate prodigious talent for spellcasting. Your proficiency ranks for spell attack modifier and spell DC for spells of your bloodline's tradition increase to legendary.</p>\n<p><strong>Witch</strong> You've perfected your command of the magic your patron provides. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>\n<p><strong>Wizard</strong> You are a consummate spellcaster, blending both arcane theory and practical spellcraft. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>"
+   }
+  ],
   "rarity": "common",
   "description": "<p><em>You didn't choose to become a spellcaster-you were born one. There's magic in your blood, whether a divinity touched one of your ancestors, a forebear communed with a primal creature, or a powerful occult ritual influenced your line. Self-reflection and study allow you to refine your inherent magical skills and unlock new, more powerful abilities. The power in your blood carries a risk, however, and you constantly face the choice of whether you'll rise to become a master spellcaster or fall into destruction.</em></p>\n<p><em>Sorcerer</em></p>",
   "source": "Player Core 2"
@@ -1496,6 +2796,224 @@
     "description": "<p>You gain a +1 circumstance bonus to skill checks with the bravado trait while in a combat encounter. While you have panache, you gain a +5-foot status bonus to your Speeds.</p>",
     "feats": [],
     "choice": null
+   }
+  ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    12,
+    14,
+    15,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Fortitude Expertise",
+    "slug": "fortitude-expertise",
+    "proficiencies": {
+     "fortitude": "expert"
+    },
+    "description": "<p><strong>Animist</strong> Spiritual energy reinforces your body, making you more resilient. Your proficiency rank for Fortitude saves increases to expert.</p>\n<p><strong>Bard, Investigator, Swashbuckler</strong> Your physique has grown hardy in your adventures. Your proficiency rank for Fortitude saves increases to expert.</p>\n<p><strong>Druid</strong> Adventures have made your physique more hardy. Your proficiency rank for Fortitude saves increases to expert.</p>"
+   },
+   {
+    "level": 3,
+    "name": "Opportune Riposte",
+    "slug": "opportune-riposte",
+    "proficiencies": {},
+    "description": "<p>You turn the tables on foes who fumble, capitalizing immediately on their mistake. You gain the Opportune Riposte reaction.</p>"
+   },
+   {
+    "level": 3,
+    "name": "Stylish Tricks",
+    "slug": "stylish-tricks",
+    "proficiencies": {},
+    "description": "<p>At 3rd level, 7th level, and 15th level, you gain an additional skill increase you can apply only to Acrobatics or the skill from your swashbuckler's style. You also gain an additional skill feat at these levels. This feat must be for Acrobatics or the trained skill from your swashbuckler's style.</p>"
+   },
+   {
+    "level": 3,
+    "name": "Vivacious Speed",
+    "slug": "vivacious-speed",
+    "proficiencies": {},
+    "description": "<p>When you've made an impression, you move even faster than normal, darting about the battlefield with incredible speed. Increase the status bonus to your Speeds from stylish combatant to a +10-foot status bonus; this bonus increases by 5 feet at 7th, 11th, 15th, and 19th levels. When you don't have panache, you still get half this status bonus to your Speed, rounded down to the nearest 5-foot increment.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert",
+     "martial": "expert"
+    },
+    "description": "<p><strong>Champion, Exemplar, Investigator, Magus</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert.</p>\n<p><strong>Druid, Kineticist</strong> You've improved your combat skill. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Oracle</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Psychic</strong> Training and magic improved your weapon technique. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>\n<p><strong>Sorcerer</strong> You've improved your combat skill. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>\n<p><strong>Swashbuckler</strong> You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert. You gain access to the critical specialization effects of all weapons for which you have expert proficiency.</p>\n<p><strong>Witch, Wizard</strong> Through sheer experience, you've improved your technique with your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Confident Evasion",
+    "slug": "confident-evasion",
+    "proficiencies": {
+     "reflex": "master"
+    },
+    "description": "<p>You've learned to move quickly to avoid explosions, a dragon's breath, and worse. Your proficiency rank for Reflex saves increases to master. When you roll a success on a Reflex save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal an additional 2 damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Exemplary Finisher",
+    "slug": "exemplary-finisher",
+    "proficiencies": {},
+    "description": "<p>You execute your finishing moves with spectacular flair, adding special effects to your finishers. If a Strike you make as part of a finisher hits a foe, you add one of the following effects to the Strike, depending on your swashbuckler's style.</p><ul><li><strong>Battledancer</strong> You can Step as a free action immediately after the finisher.</li><li><strong>Braggart</strong> If the foe was temporarily immune to your Demoralize, their temporary immunity ends.</li><li><strong>Fencer</strong> The foe is Off-Guard until your next turn.</li><li><strong>Gymnast</strong> If the foe is Grabbed, Restrained, or Prone, you gain a circumstance bonus to the damage roll equal to double the number of weapon damage dice.</li><li><strong>Rascal</strong> The foe takes a -10 circumstance penalty to its speed until the start of your next turn. Effect: Exemplary Finisher (Rascal)</li><li><strong>Wit</strong> The foe takes a -2 circumstance penalty to attack rolls against you until the start of your next turn. Effect: Exemplary Finisher (Wit)</li></ul>"
+   },
+   {
+    "level": 9,
+    "name": "Swashbuckler Expertise",
+    "slug": "swashbuckler-expertise",
+    "proficiencies": {
+     "classDc": "expert"
+    },
+    "description": "<p>You perform swashbuckling techniques with exceptional flair, making them harder to resist. Your circumstance bonus from Stylish Combatant increases to +2. Your proficiency rank for your swashbuckler class DC increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Continuous Flair",
+    "slug": "continuous-flair",
+    "proficiencies": {},
+    "description": "<p>While not equal to your panache in combat, you have a dramatic flair about you in any situation. The circumstance bonus from Stylish Combatant applies in exploration mode.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Perception Mastery",
+    "slug": "perception-mastery",
+    "proficiencies": {
+     "perception": "master"
+    },
+    "description": "<p><strong>Barbarian</strong> Your instinct heightens each of your senses further. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Bard, Gunslinger, Rogue</strong> You've developed keen awareness and attention to detail. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Exemplar</strong> Through your adventures, you've developed keen awareness and attention to detail, the better to watch over your wards and keep an eye out for monsters and other threats. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Ranger</strong> You have highly developed acuity and attention to detail. Your proficiency rank for Perception increases to master.</p>\n<p><strong>Swashbuckler</strong> Through your adventures, you've developed keen awareness and attention to detail. Your proficiency rank for Perception increases to master.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Assured Evasion",
+    "slug": "assured-evasion",
+    "proficiencies": {
+     "reflex": "legendary"
+    },
+    "description": "<p>Your ability to elude danger is matchless. Your proficiency rank for Reflex saves increases to legendary. When you roll a critical failure on a Reflex save, you get a failure instead. When you roll a failure on a Reflex save against a damaging effect, you take half damage.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Light Armor Expertise",
+    "slug": "light-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert"
+    },
+    "description": "<p>You've learned how to dodge while wearing light or no armor. Your proficiency ranks for light armor and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Martial Weapon Mastery",
+    "slug": "martial-weapon-mastery",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master",
+     "martial": "master"
+    },
+    "description": "<p>You fully understand your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to master.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Weapon Specialization",
+    "slug": "greater-weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>Your damage from weapon specialization increases to 4 with weapons and unarmed attacks in which you're an expert, 6 if you're a master, and 8 if you're legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Keen Flair",
+    "slug": "keen-flair",
+    "proficiencies": {},
+    "description": "<p>You inflict particularly devastating attacks on even well-defended foes. When you Strike with a weapon or unarmed attack with which you have master proficiency, if you roll a 19 on the die and the roll is a success, you critically succeed instead.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Reinforced Ego",
+    "slug": "reinforced-ego",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>You've steeled your mind with resolve. Your proficiency rank for Will saves increases to master. When you roll a success on a Will save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Eternal Confidence",
+    "slug": "eternal-confidence",
+    "proficiencies": {
+     "classDc": "master"
+    },
+    "description": "<p>As a swashbuckler at the peak of your skill, you swell with confidence and bravado in every attack. Your proficiency rank for your swashbuckler class DC increases to master.</p>\n<p>When you Strike as part of a finisher or Opportune Riposte, you can give the Strike the failure effect from the Confident Finisher action, including the increase from Precise Finisher if you have that feat.</p>\n<p>You can do so only if the Strike uses a weapon or unarmed attack that you could use for Confident Finisher.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Light Armor Mastery",
+    "slug": "light-armor-mastery",
+    "proficiencies": {
+     "unarmored": "master",
+     "light": "master"
+    },
+    "description": "<p>Your skill with light armor improves, increasing your ability to dodge blows. Your proficiency ranks for light armor and unarmored defense increase to master.</p>"
    }
   ],
   "rarity": "common",

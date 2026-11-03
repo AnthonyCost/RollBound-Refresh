@@ -51,7 +51,15 @@ function evaluate(formula) {
 
 // Formulas that scale with the character, which the data can't work out ahead of time.
 const ACTOR_FORMULAS = [
+  // Agonizing Rebuke: more dice at master and legendary in a skill.
+  [/ternary\(gte\(@actor\.system\.skills\.(\w+)\.rank,4\),(\d+),ternary\(gte\(@actor\.system\.skills\.\1\.rank,3\),(\d+),(\d+)\)\)d(\d+)/g,
+    (_m, skill, legendary, master, base, die) => `${base}d${die} (${master}d${die} if you're a master in ${skill[0].toUpperCase()}${skill.slice(1)}, ${legendary}d${die} if legendary)`],
+  // Megavolt: "(max(3,floor(@actor.level/2)))d4".
+  [/\(?max\((\d+),\s*floor\(@actor\.level\/2\)\)\)?d(\d+)/g, '1d$2 per 2 levels (at least $1d$2)'],
+  [/\(?\(?@actor\.level\)\)?d(\d+)/g, '1d$1 per level'],
   [/\(?ceil\(@actor\.level\/2\)\)?d(\d+)/g, '1d$1 per 2 levels (rounded up)'],
+  // A feat's own level stands in for the character's in a few class feats (Floral Restoration).
+  [/\(?ceil\(@item\.level\/2\)\)?d(\d+)/g, '1d$1 per 2 levels (rounded up)'],
   [/\(?2\*\(1\+@actor\.level\)\)?/g, '2 × (1 + your level)'],
   [/@(actor|self)\.level/g, 'your level'],
 ];
@@ -89,6 +97,7 @@ function damageText(expr, vars) {
       const formula = typed && !typed[1].includes('[') ? typed[1] : typed ? null : d;
       if (formula === null) return d.replace(/\[([^\]]+)\]/g, (_m, types) => ` ${types.replace(/,/g, ' ')}`).replace(/[()]/g, '');
       const amount = diceText(ACTOR_FORMULAS.reduce((f, [re, words]) => f.replace(re, words), formula), vars);
+      if (typed && typed[2].includes('@')) return amount;
       return typed ? `${amount} ${typed[2].replace(/,/g, ' ')}` : amount;
     })
     .join(' and ');

@@ -10,9 +10,9 @@
    "Impossible Magic"
   ],
   "license": "Game mechanics © Paizo Inc., used under the ORC License. Data via the Foundry VTT pf2e system and the Archives of Nethys.",
-  "generatedAt": "2026-11-01T16:36:33.103Z",
+  "generatedAt": "2026-11-03T23:12:43.386Z",
   "needsReview": [],
-  "version": "5adc62116b80"
+  "version": "6d758bc3e33b"
  },
  "files": [
   {
@@ -139,31 +139,31 @@
    "path": "dark-archive-remastered/feats.json",
    "type": "feats",
    "book": "Dark Archive (Remastered)",
-   "count": 18
+   "count": 217
   },
   {
    "path": "guns-gears/feats.json",
    "type": "feats",
    "book": "Guns & Gears",
-   "count": 25
+   "count": 145
   },
   {
    "path": "impossible-magic/feats.json",
    "type": "feats",
    "book": "Impossible Magic",
-   "count": 29
+   "count": 364
   },
   {
    "path": "player-core/feats.json",
    "type": "feats",
    "book": "Player Core",
-   "count": 203
+   "count": 792
   },
   {
    "path": "player-core-2/feats.json",
    "type": "feats",
    "book": "Player Core 2",
-   "count": 150
+   "count": 700
   },
   {
    "path": "secrets-of-magic/feats.json",
@@ -205,7 +205,7 @@
    "path": "impossible-magic/runes.json",
    "type": "runes",
    "book": "Impossible Magic",
-   "count": 16
+   "count": 44
   },
   {
    "path": "guns-gears/weapons.json",

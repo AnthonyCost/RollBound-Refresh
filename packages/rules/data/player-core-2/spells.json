@@ -2652,7 +2652,7 @@
   "target": "1 creature",
   "defense": "fortitude",
   "duration": null,
-  "description": "<p>You exhale a shimmering cloud of toxic breath at an enemy's face. The target takes 1d4 poison damage and 1d4 persistent poison, depending on its Fortitude save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The target takes half initial damage and no persistent damage.</p>\n<p><strong>Failure</strong> The target takes full initial and persistent damage.</p>\n<p><strong>Critical Failure</strong> The target takes double initial and persistent damage.</p><hr><p><strong>Heightened (+2)</strong> The initial poison damage increases by 1d4, and the persistent poison damage increases by 1d4.</p>",
+  "description": "<p>You exhale a shimmering cloud of toxic breath at an enemy's face. The target takes 1d4 poison damage and 1d4 per 2 levels (rounded up) persistent poison, depending on its Fortitude save.</p><hr><p><strong>Critical Success</strong> The creature is unaffected.</p>\n<p><strong>Success</strong> The target takes half initial damage and no persistent damage.</p>\n<p><strong>Failure</strong> The target takes full initial and persistent damage.</p>\n<p><strong>Critical Failure</strong> The target takes double initial and persistent damage.</p><hr><p><strong>Heightened (+2)</strong> The initial poison damage increases by 1d4, and the persistent poison damage increases by 1d4.</p>",
   "source": "Player Core 2"
  },
  {

@@ -297,6 +297,178 @@
     }
    }
   ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Signature Spells",
+    "slug": "signature-spells",
+    "proficiencies": {},
+    "description": "<p>You've learned to cast some of your spells more flexibly. For each spell rank you have access to, choose one spell of that rank to be a signature spell. You don't need to learn heightened versions of signature spells separately; instead, you can heighten these spells freely. If you've learned a signature spell at a higher rank than its minimum, you can also cast all its lower-rank versions without learning those separately. If you swap out a signature spell, you can choose a replacement signature spell of the same spell rank at which you learned the previous spell. You can also retrain specifically to change a signature spell to a different spell of that rank without swapping any spells; this takes as much time as retraining a spell normally does.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Clarity of Focus",
+    "slug": "clarity-of-focus",
+    "proficiencies": {},
+    "description": "<p>Your deepening connection to your mind grants you more power to fuel your psi amps. Increase the number  of Focus Points in your focus pool by 1. As normal, this ability can't increase the size of your focus pool above 3 points.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Precognitive Reflexes",
+    "slug": "precognitive-reflexes",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>Minor precognition ensures you can react to threats slightly before they occur. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Expert Spellcaster",
+    "slug": "expert-spellcaster",
+    "proficiencies": {
+     "spellcasting": "expert"
+    },
+    "description": "<p>Self-reflection has brought you greater knowledge of yourself and, with it, psychic power. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Fortitude Expertise ",
+    "slug": "fortitude-expertise",
+    "proficiencies": {
+     "fortitude": "expert"
+    },
+    "description": "<p>Your mind holds your body to a subconscious mental  image of yourself. Your proficiency rank for Fortitude saves increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Extrasensory Perception",
+    "slug": "extrasensory-perception",
+    "proficiencies": {
+     "perception": "expert"
+    },
+    "description": "<p>Minor applications of clairvoyance let you know when danger is near. Your proficiency rank for Perception increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Walls of Will",
+    "slug": "walls-of-will",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>Your practiced mind resists external influence. Your proficiency rank for Will saves increases to master.  When you succeed at a Will save, you get a critical  success instead.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert"
+    },
+    "description": "<p>Training has improved your weapon technique, possibly enhanced by your occult magic. Your proficiency rank   for simple weapons and unarmed attacks increases to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Personal Barrier",
+    "slug": "personal-barrier",
+    "proficiencies": {
+     "unarmored": "expert"
+    },
+    "description": "<p>Subtle telekinetic fields dampen and deflect incoming blows. Your proficiency rank in unarmored defense increases to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>As you touch a weapon, you glimpse the hands that made and wielded it, teaching you how to inflict greater injuries. You deal 2 additional damage with weapons and unarmed attacks in which you're an expert. This damage increases to 3 if you're a master and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Master Spellcaster",
+    "slug": "master-spellcaster",
+    "proficiencies": {
+     "spellcasting": "master"
+    },
+    "description": "<p>You've gained access to the deepest corners of your own mind. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Fortress of Will",
+    "slug": "fortress-of-will",
+    "proficiencies": {
+     "will": "legendary"
+    },
+    "description": "<p>Your trained mind is as a fortress that none can breach. Your proficiency rank for Will saves increases to legendary. When you critically fail a Will save, you get a failure instead. When you fail a Will save against a damaging effect, you take half damage.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Infinite Mind",
+    "slug": "infinite-mind",
+    "proficiencies": {},
+    "description": "<p>Anything you can imagine is now within the realm of possibility. Add two common 10th-rank occult spells to your repertoire; you gain a single 10th-rank spell slot you can use to cast one of those two spells using psychic spellcasting. You don't gain more 10th-rank spells as you level up, unlike other spell slots, and you can't use 10th-rank slots with abilities that give you more spell slots or that let you cast spells without expending spell slots. You can take the Mind over Matter psychic feat to gain a second slot.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Legendary Spellcaster",
+    "slug": "legendary-spellcaster",
+    "proficiencies": {
+     "spellcasting": "legendary"
+    },
+    "description": "<p>As your training reaches its peak, you understand not just your own mind, but the collective unconscious from which all psychic power stems. Your proficiency ranks for occult spell attack modifier and spell DC increase to legendary.</p>"
+   }
+  ],
   "rarity": "common",
   "description": "<p><em>The mind can perceive truths hidden to fine-tuned instruments, house more secrets than any tome, and move objects and hearts more deftly than any lever. By delving into both the conscious and subconscious aspects of your inner self, you have awoken to the might of psychic magic, allowing you to cast spells not through incantations or gestures but by the power of your will alone. While the thin line between your mind and reality means that a single errant thought could have unintended consequences for yourself and your companions, you know that anything is possible, if you can imagine it.</em></p>",
   "source": "Dark Archive (Remastered)"
@@ -527,6 +699,229 @@
     "description": "<p>The power of your implement can also be turned to the more common task of combat, its power adding to and amplifying the effects of runes and other magical empowerments. When you Strike, you can trace mystic patterns with an implement you're holding to empower the Strike, causing it to deal 2 additional damage per weapon damage die. Channeling the power requires full use of your hands. You don't gain the benefit of implement's empowerment if you are holding anything in either hand other than a single one-handed weapon, other implements, or esoterica, and you must be holding at least one implement to gain the benefit.</p>",
     "feats": [],
     "choice": null
+   }
+  ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Lightning Reflexes",
+    "slug": "lightning-reflexes",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>Your reflexes are lightning fast. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Second Implement",
+    "slug": "second-implement",
+    "proficiencies": {},
+    "description": "<p>You've added another implement of power to your toolkit. You choose a second implement, which must be a different type of implement than your first. You gain the initiate benefit of your new implement.</p>\n<p>While you're holding an implement in one hand, you can quickly switch it with another implement you're wearing to use an action from the implement you're switching to. To do so, you can Interact as a free action immediately before executing the implement's action. This allows you to meet requirements of having an implement in hand to use its action. For example, if you had your lantern implement in one hand, a weapon in the other, and a chalice implement you were wearing, you could swap your lantern for your chalice to use its reaction.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert",
+     "martial": "expert"
+    },
+    "description": "<p>You've learned the secret ways your weapons work most effectively. Your proficiency ranks for unarmed attacks, simple weapons, and martial weapons increase to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Disciplined Mind",
+    "slug": "disciplined-mind",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>You've steeled your mind with resolve. Your proficiency rank for Will saves increases to master. When you roll a success on a Will save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Implement Adept",
+    "slug": "implement-adept",
+    "proficiencies": {},
+    "description": "<p>You have deepened your connection to one of your implements, unlocking its adept power. Choose one of your implements and gain the adept benefit for that implement.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You've learned how to inflict greater injuries with the weapons you know best. You deal 2 additional damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you're a master, and 4 if you're legendary.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Intensify Vulnerability",
+    "slug": "intensify-vulnerability",
+    "proficiencies": {},
+    "description": "<p>You've learned to use your implement to further assault your quarry. You gain the intensify vulnerability benefit of all of your implements, as well as the following action.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Perception Expertise",
+    "slug": "perception-expertise",
+    "proficiencies": {
+     "perception": "master"
+    },
+    "description": "<p>You've developed keen awareness and attention to detail. Your proficiency rank for Perception increases to master.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Thaumaturgic Expertise",
+    "slug": "thaumaturgic-expertise",
+    "proficiencies": {
+     "classDc": "expert"
+    },
+    "description": "<p>You've learned deeper secrets of the supernatural, and your abilities are harder to resist. Your proficiency rank for your thaumaturge class DC increases to expert.</p>\n<p>You also gain an additional skill increase, which you can apply only to Arcana, Nature, Occultism, or Religion.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Medium Armor Expertise",
+    "slug": "medium-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert",
+     "medium": "expert"
+    },
+    "description": "<p>You've learned to defend yourself better against attacks. Your proficiency ranks for light armor, medium armor, and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Second Adept",
+    "slug": "second-adept",
+    "proficiencies": {},
+    "description": "<p>You've improved your link to your second implement. You gain the adept benefit of your second implement.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Perfected Mind",
+    "slug": "perfected-mind",
+    "proficiencies": {
+     "will": "legendary"
+    },
+    "description": "<p>Your unbelievable training grants you mental resiliency. Your proficiency rank for Will saves increases to legendary. When you roll a critical failure on a Will save, you get a failure instead. When you roll a failure on a Will save against a damaging effect, you take half damage.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Mastery",
+    "slug": "weapon-mastery",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master",
+     "martial": "master"
+    },
+    "description": "<p>You fully understand your weapons. Your proficiency ranks for unarmed attacks, simple weapons, and martial weapons increase to master.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Earned Resilience",
+    "slug": "earned-resilience",
+    "proficiencies": {
+     "fortitude": "master"
+    },
+    "description": "<p>Your body is accustomed to physical hardship and resistant to a wide range of ailments. Your proficiency rank for Fortitude saves increases to master. When you roll a success on a Fortitude save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Weapon Specialization",
+    "slug": "greater-weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>Your damage from weapon specialization increases to 4 with weapons and unarmed attacks in which you're an expert, 6 if you're a master, and 8 if you're legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Third Implement",
+    "slug": "third-implement",
+    "proficiencies": {},
+    "description": "<p>As you come closer to the culmination of your journey, you gain your final implement, completing your set of three. It must be a different type of implement than your first and second implements. You gain the initiate benefit and intensify vulnerability benefit of your new implement.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Implement Paragon",
+    "slug": "implement-paragon",
+    "proficiencies": {},
+    "description": "<p>You have unlocked the last secrets of an implement. Choose one of your implements that already gained the adept benefit; you gain the paragon benefit for that implement.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Thaumaturgic Mastery",
+    "slug": "thaumaturgic-mastery",
+    "proficiencies": {
+     "classDc": "master"
+    },
+    "description": "<p>You've learned deeper secrets of the supernatural, and your abilities are harder to resist. Your proficiency rank for your thaumaturge class DC increases to master.</p>\n<p>You also gain an additional skill increase, which you can apply only to Arcana, Nature, Occultism, or Religion.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Medium Armor Mastery",
+    "slug": "medium-armor-mastery",
+    "proficiencies": {
+     "light": "master",
+     "medium": "master"
+    },
+    "description": "<p>Your skill with light and medium armor improves, increasing your ability to avoid blows. Your proficiency ranks for light and medium armor, as well as for unarmed defense, increase to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Unlimited Esoterica",
+    "slug": "unlimited-esoterica",
+    "proficiencies": {},
+    "description": "<p>Your understanding of your esoterica becomes so complete that you can access your mystic tools without even thinking. You can use Exploit Vulnerability or Intensify Vulnerability as a free action, rather than a single action, though still with a frequency of only once per round.</p>"
    }
   ],
   "rarity": "common",

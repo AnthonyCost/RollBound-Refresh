@@ -212,6 +212,184 @@
     "choice": null
    }
   ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 5,
+    "name": "Reflex Expertise",
+    "slug": "reflex-expertise",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>You’ve developed a knack for dodging danger. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert",
+     "martial": "expert"
+    },
+    "description": "<p>You’ve dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Studious Spell",
+    "slug": "studious-spell",
+    "proficiencies": {},
+    "description": "<p>You've deeply studied certain beneficial spells to speedily enter Arcane Cascade when you cast them. When you cast a studious spell, you can use Arcane Cascade as a free action as your next action this turn. Add any studious spell you gain to your spellbook if you don't know it already. Your studious spells are <em>gecko grip</em> and an additional spell depending on your hybrid study, listed in the hybrid study's entry.</p>\n<p>At 11th level, add <em>haste</em> and an additional spell depending on your hybrid study to your studious spells.</p>\n<p>At 13th level, add <em>fly</em> and an additional spell depending on your hybrid study to your studious spells.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You’ve learned how to inflict greater injuries with the weapons you know best. You deal 2 additional damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you’re a master and 4 if you’re legendary.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Expert Spellcaster",
+    "slug": "expert-spellcaster",
+    "proficiencies": {
+     "spellcasting": "expert"
+    },
+    "description": "<p>Your fundamental understanding of magic improves, making your spells harder to resist. Your proficiency ranks for your spell attack modifier and spell DC increase to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Perception Expertise",
+    "slug": "perception-expertise",
+    "proficiencies": {
+     "perception": "expert"
+    },
+    "description": "<p>You remain alert to threats around you. Your proficiency rank for Perception increases to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Twofold Will",
+    "slug": "twofold-will",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>Mental diligence and combat resolve combine to fortify you against mental attacks. Your proficiency rank for Will saves increases to master. When you roll a success on a Will save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Medium Armor Expertise",
+    "slug": "medium-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert",
+     "medium": "expert"
+    },
+    "description": "<p>You’ve learned to defend yourself better against attacks. Your proficiency ranks for light armor, medium armor, and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Mastery",
+    "slug": "weapon-mastery",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master",
+     "martial": "master"
+    },
+    "description": "<p>You fully understand your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to master.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Weapon Specialization",
+    "slug": "greater-weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>Your damage from weapon specialization increases to 4 with weapons and unarmed attacks in which you’re an expert, 6 if you’re a master, and 8 if you’re legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Spell-Tempered Body",
+    "slug": "spell-tempered-body",
+    "proficiencies": {
+     "fortitude": "master"
+    },
+    "description": "<p>The mighty spells flowing through your body have bolstered you physically. Your proficiency rank for Fortitude saves increases to master. When you roll a success on a Fortitude save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Master Spellcaster",
+    "slug": "master-spellcaster",
+    "proficiencies": {
+     "spellcasting": "master"
+    },
+    "description": "<p>You fortify your spells with masterful prowess. Your proficiency ranks for your spell attack modifier and spell DC increase to master.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Medium Armor Mastery",
+    "slug": "medium-armor-mastery",
+    "proficiencies": {
+     "light": "master",
+     "medium": "master"
+    },
+    "description": "<p>Your skill with light and medium armor improves, increasing your ability to avoid blows. Your proficiency ranks for light and medium armor, as well as for unarmed defense, increase to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Double Spellstrike",
+    "slug": "double-spellstrike",
+    "proficiencies": {},
+    "description": "<p>When adding a spell to an attack simply isn’t enough, you combine two spells with your attack instead. You gain the Double Spellstrike activity.</p>"
+   }
+  ],
   "rarity": "common",
   "description": "<p><em>Combining the physicality and technique of a warrior with the ability to cast arcane magic, you seek to perfect the art of fusing spell and strike. While the hefty tome you carry reflects hours conducting arcane research, your enemies need no reminder of your training. They recognize it as you take them down.</em></p>",
   "source": "Impossible Magic"
@@ -424,6 +602,172 @@
     "choice": null
    }
   ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Inevitable Return",
+    "slug": "inevitable-return",
+    "proficiencies": {},
+    "description": "<p>The dead do not rest around you. You gain the Inevitable Return reaction.</p>"
+   },
+   {
+    "level": 3,
+    "name": "Mental Wards",
+    "slug": "mental-wards",
+    "proficiencies": {
+     "will": "expert"
+    },
+    "description": "<p>You have created wards to protect yourself against the mental effects caused by undead creatures and effects. Your proficiency rank for Will saves increases to expert. When you roll a success at a Will save against a mental or possession effect caused by an undead or haunt, you get a critical success instead.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Reflex Expertise",
+    "slug": "reflex-expertise",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>You’ve developed a knack for dodging danger. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Expert Necromancy",
+    "slug": "expert-necromancy",
+    "proficiencies": {
+     "spellcasting": "expert"
+    },
+    "description": "<p>You wield the necromantic arts with greater finesse. Your proficiency ranks for spell attack modifier and spell DC increase to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Perception Expertise",
+    "slug": "perception-expertise",
+    "proficiencies": {
+     "perception": "expert"
+    },
+    "description": "<p>You remain alert to threats around you. Your proficiency rank for Perception increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Unnatural Fortitude",
+    "slug": "unnatural-fortitude",
+    "proficiencies": {
+     "fortitude": "master"
+    },
+    "description": "<p>Your body has been necromantically enhanced. Your proficiency rank for Fortitude saves increases to master. When you roll a success at a Fortitude save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert"
+    },
+    "description": "<p>You’ve dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Light Armor Expertise",
+    "slug": "light-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert"
+    },
+    "description": "<p>You’ve learned how to dodge while wearing light or no armor. Your proficiency ranks for light armor and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You’ve learned how to inflict greater injuries with your weapons. You deal 2 additional damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you’re a master, and to 4 if you’re legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Master Necromancy",
+    "slug": "master-necromancy",
+    "proficiencies": {
+     "spellcasting": "master"
+    },
+    "description": "<p>The souls of the dead heed your beck and call. Your proficiency ranks for spell attack modifier and spell DC increase to master.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Undying Resilience",
+    "slug": "undying-resilience",
+    "proficiencies": {
+     "fortitude": "legendary"
+    },
+    "description": "<p>Your body has been necromantically enhanced. Your proficiency rank for Fortitude saves increases to legendary. When you roll a critical failure on a Fortitude save, you get a failure instead. When you fail a Fortitude save against a damaging effect, you take half damage.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Epitaph",
+    "slug": "epitaph",
+    "proficiencies": {},
+    "description": "<p>From the deepest crypts of magical knowledge, you summon forth a spell of immense occult power. You gain a single 10th-level spell slot and can prepare a spell in that slot using necromancer spellcasting. You don’t gain more 10th-level spells as you level up, unlike other spell slots, and you can’t use 10th-level slots with abilities that give you more spell slots or that let you cast spells without expending spell slots. You can take the Mortem Ultimatum necromancer feat to gain a second slot.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Legendary Necromancy",
+    "slug": "legendary-necromancy",
+    "proficiencies": {
+     "spellcasting": "legendary"
+    },
+    "description": "<p>Death in one hand, life in the other, you shape the cycles of necromancy. Your proficiency ranks for spell attack modifier and spell DC increase to legendary.</p>"
+   }
+  ],
   "rarity": "common",
   "description": "<p><em>Death is as common, if not more so, than life. Despite this, death and decay are considered subjects of the macabre, and those willing to dive headfirst into the fascinations they invoke are necromancers. These occult spellcasters seek the ever-changing borders of life and death, manipulating magic of vitality and void to suit their will. The undead both serve and cower before them.</em></p>",
   "source": "Impossible Magic",
@@ -493,6 +837,186 @@
      "jM72TjJ965jocBV8"
     ],
     "choice": null
+   }
+  ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 2,
+    "name": "Runic Crafter",
+    "slug": "runic-crafter",
+    "proficiencies": {},
+    "description": "<p>Your study of secret runes leaves you well practiced in crafting their more common cousins. You gain the Magical Crafting skill feat, even if you don't meet the prerequisites. You automatically learn the formulas for the fundamental armor runes (armor potency and resilient), fundamental shield rune (reinforcing), and fundamental weapon runes (weapon potency and striking) as soon as your level equals each item's. You practice your runes so thoroughly you can draw them by heart and thus do not need a formula book to record the formula of any runes you learn how to create.</p>\n<p>At 4th level and every 2 levels thereafter, you learn the formula for an armor or weapon property rune of your choice. The rune must be of your level or lower, and can be a common rune or another rune to which you have access.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Weapon Expertise",
+    "slug": "weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert",
+     "martial": "expert"
+    },
+    "description": "<p>You've dedicated yourself to learning the intricacies of your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Expert Runes",
+    "slug": "expert-runes",
+    "proficiencies": {
+     "classDc": "expert"
+    },
+    "description": "<p>Your expertise in magical scripting lends further power to your runic magic. Your proficiency rank for your runesmith class DC increases to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Reflex Expertise",
+    "slug": "reflex-expertise",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>You’ve developed a knack for dodging danger. Your proficiency rank for Reflex saves increases to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Runic Optimization",
+    "slug": "runic-optimization",
+    "proficiencies": {},
+    "description": "<p>You've learned to draw upon the magic of weapon runes to deal greater damage. You deal 2 additional damage with weapons bearing a <em>striking rune</em>. This damage increases to 3 if the weapon bears a <em>greater striking rune</em> and 4 if it bears a <em>major striking rune</em>.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Assured Runic Crafter",
+    "slug": "assured-runic-crafter",
+    "proficiencies": {},
+    "description": "<p>You're so used to tracing and etching runes in the field that when given the peace and quiet of a proper workshop, it's hard for things to go too astray. When you roll a check to Craft a magic item in downtime and that item is a permanent rune, you get the outcome one degree of success better than the result of your Crafting check.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Forged Endurance",
+    "slug": "forged-endurance",
+    "proficiencies": {
+     "fortitude": "master"
+    },
+    "description": "<p>Your body is toughened by long days immersed in crafting, without break for food or drink. Your proficiency rank for Fortitude saves increases to master. When you roll a success on a Fortitude save, you get a critical success instead.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Medium Armor Expertise",
+    "slug": "medium-armor-expertise",
+    "proficiencies": {
+     "unarmored": "expert",
+     "light": "expert",
+     "medium": "expert"
+    },
+    "description": "<p>You’ve learned to better defend yourself against attacks. Your proficiency ranks for light armor, medium armor, and unarmored defense increase to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Perception Expertise",
+    "slug": "perception-expertise",
+    "proficiencies": {
+     "perception": "expert"
+    },
+    "description": "<p>You remain alert to threats around you. Your proficiency rank for Perception increases to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Mastery",
+    "slug": "weapon-mastery",
+    "proficiencies": {
+     "unarmed": "master",
+     "simple": "master",
+     "martial": "master"
+    },
+    "description": "<p>You fully understand your weapons. Your proficiency ranks for simple weapons, martial weapons, and unarmed attacks increase to master.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Runic Optimization",
+    "slug": "greater-runic-optimization",
+    "proficiencies": {},
+    "description": "<p>Your weapon runes harmonize with your own innate magic, multiplying their damage even further. Your extra damage from runic optimization increases to 4 with weapons bearing a <em>striking rune</em>, 6 for a <em>greater striking rune</em>, and 8 for a <em>major striking rune</em>.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Masterful Runes",
+    "slug": "masterful-runes",
+    "proficiencies": {
+     "classDc": "master"
+    },
+    "description": "<p>You are a true master of the magical brush, quill, and engraver. Your proficiency rank for your runesmith class DC increases to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Legendary Runes",
+    "slug": "legendary-runes",
+    "proficiencies": {
+     "classDc": "legendary"
+    },
+    "description": "<p>The runes you carve are drawn with a legendary hand—each character precise, yet a style distinctly your own. Your proficiency rank for your runesmith class DC increases to legendary.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Medium Armor Mastery",
+    "slug": "medium-armor-mastery",
+    "proficiencies": {
+     "unarmored": "master",
+     "light": "master",
+     "medium": "master"
+    },
+    "description": "<p>Your skill with light and medium armor improves, helping you avoid more blows. Your proficiency ranks for light and medium armor, as well as for unarmored defense, increase to master.</p>"
    }
   ],
   "rarity": "common",
@@ -855,6 +1379,218 @@
     "description": "<p>Evolution feats are a special type of summoner class feat that allow you to customize your eidolon through your shared link. You select one evolution feat for your eidolon at 1st level, representing the differences that make them unique from other eidolons of their type. If you retrain this feat, the feat you replace it with must also be an evolution feat.</p>",
     "feats": [],
     "choice": null
+   }
+  ],
+  "progression": {
+   "ancestryFeats": [
+    1,
+    5,
+    9,
+    13,
+    17
+   ],
+   "classFeats": [
+    1,
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "generalFeats": [
+    3,
+    7,
+    11,
+    15,
+    19
+   ],
+   "skillFeats": [
+    2,
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20
+   ],
+   "skillIncreases": [
+    3,
+    5,
+    7,
+    9,
+    11,
+    13,
+    15,
+    17,
+    19
+   ]
+  },
+  "advancement": [
+   {
+    "level": 3,
+    "name": "Shared Vigilance",
+    "slug": "shared-vigilance",
+    "proficiencies": {
+     "perception": "expert"
+    },
+    "description": "<p>You and your eidolon work together to remain alert to threats around you, allowing you to perceive far more together than you could individually. Your proficiency rank in Perception and your eidolon’s proficiency rank in Perception increase to expert.</p>"
+   },
+   {
+    "level": 3,
+    "name": "Signature Spells",
+    "slug": "signature-spells",
+    "proficiencies": {},
+    "description": "<p>You have learned to cast some spells more flexibly. For each spell rank you can cast, choose one spell of that rank to be a signature spell. You don't need to learn heightened versions of signature spells separately; instead, you can heighten these spells freely. If you've learned a signature spell at a higher rank than its minimum, you can also cast all its lower-rank versions without learning those separately. If you swap out a signature spell, you can choose a replacement signature spell of the same spell rank at which you learned the previous spell. You can also retrain specifically to change a signature spell to a different spell of that rank without swapping any spells; this takes as much time as retraining a spell normally does.</p>"
+   },
+   {
+    "level": 5,
+    "name": "Eidolon Unarmed Expertise",
+    "slug": "eidolon-unarmed-expertise",
+    "proficiencies": {
+     "unarmed": "expert"
+    },
+    "description": "<p>Your eidolon becomes more capable of using their unarmed attacks. Their proficiency rank for unarmed attacks increases to expert.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Eidolon Symbiosis",
+    "slug": "eidolon-symbiosis",
+    "proficiencies": {},
+    "description": "<p>Your connection with your eidolon strengthens, granting your eidolon access to a new ability depending on their type, as described in Eidolon Abilities in each eidolon’s entry.</p>"
+   },
+   {
+    "level": 7,
+    "name": "Eidolon Weapon Specialization",
+    "slug": "eidolon-weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>Your eidolon has learned how to inflict greater injuries with their unarmed attacks. They deal 2 additional damage with unarmed attacks in which they’re an expert. This damage increases to 3 if they’re a master, and 4 if they’re legendary.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Expert Spellcaster",
+    "slug": "expert-spellcaster",
+    "proficiencies": {
+     "spellcasting": "expert"
+    },
+    "description": "<p>As your connection to your eidolon deepens, the power of your spells increases. Your proficiency ranks for the spell attack modifier and spell DC statistics increase to expert.</p>"
+   },
+   {
+    "level": 9,
+    "name": "Shared Reflexes",
+    "slug": "shared-reflexes",
+    "proficiencies": {
+     "reflex": "expert"
+    },
+    "description": "<p>You and your eidolon boost each other’s reflexes, allowing you both to roll away from danger. Your proficiency rank for Reflex saves and your eidolon’s proficiency rank for Reflex saves increase to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Eidolon Defensive Expertise",
+    "slug": "eidolon-defensive-expertise",
+    "proficiencies": {
+     "unarmored": "expert"
+    },
+    "description": "<p>Your eidolon increases their ability to avoid attacks. Their proficiency rank for unarmored defense increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Simple Weapon Expertise",
+    "slug": "simple-weapon-expertise",
+    "proficiencies": {
+     "unarmed": "expert",
+     "simple": "expert"
+    },
+    "description": "<p>Training and magic have improved your weapon technique. Your proficiency rank for simple weapons and unarmed attacks increases to expert.</p>"
+   },
+   {
+    "level": 11,
+    "name": "Twin Juggernauts",
+    "slug": "twin-juggernauts",
+    "proficiencies": {
+     "fortitude": "master"
+    },
+    "description": "<p>You and your eidolon fight off physical hardship together with your shared life force. Your proficiency rank for Fortitude saves and your eidolon’s proficiency rank for Fortitude saves increase to master. When you roll a success on a Fortitude save, you get a critical success instead. When your eidolon rolls a success on a Fortitude save, they get a critical success instead.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Defensive Robes",
+    "slug": "defensive-robes",
+    "proficiencies": {
+     "unarmored": "expert"
+    },
+    "description": "<p>The flow of magic around you increases your ability to avoid attacks. Your proficiency rank in unarmored defense increases to expert.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Eidolon Unarmed Mastery",
+    "slug": "eidolon-unarmed-mastery",
+    "proficiencies": {
+     "unarmed": "master"
+    },
+    "description": "<p>Your eidolon truly masters their unarmed attacks, reaching greater heights. Their proficiency rank for unarmed attacks increases to master.</p>"
+   },
+   {
+    "level": 13,
+    "name": "Weapon Specialization",
+    "slug": "weapon-specialization",
+    "proficiencies": {},
+    "description": "<p>You’ve learned how to inflict greater injuries with the weapons you know best. You deal 2 additional damage with weapons and unarmed attacks in which you are an expert. This damage increases to 3 if you’re a master, and 4 if you’re legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Greater Eidolon Specialization",
+    "slug": "greater-eidolon-specialization",
+    "proficiencies": {},
+    "description": "<p>Your eidolon’s damage from weapon specialization increases to 4 with unarmed attacks in which they’re an expert, 6 if they’re a master, and 8 if they’re legendary.</p>"
+   },
+   {
+    "level": 15,
+    "name": "Shared Resolve",
+    "slug": "shared-resolve",
+    "proficiencies": {
+     "will": "master"
+    },
+    "description": "<p>You and your eidolon steel your minds together against effects that threaten you, each protecting the other’s mind from danger. Your and your eidolon’s proficiency ranks for Will saves increase to master. When you roll a success on a Will save, you get a critical success instead. When your eidolon rolls a success on a Will save, they get a critical success instead.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Eidolon Transcendence",
+    "slug": "eidolon-transcendence",
+    "proficiencies": {},
+    "description": "<p>Your connection with your eidolon approaches its peak, granting your eidolon access to a powerful new ability depending on their type, as described in Eidolon Abilities in each eidolon’s entry. In addition, choose one of your eidolon’s attribute modifiers to increase by 1.</p>"
+   },
+   {
+    "level": 17,
+    "name": "Master Spellcaster",
+    "slug": "master-spellcaster",
+    "proficiencies": {
+     "spellcasting": "master"
+    },
+    "description": "<p>Your connection to your eidolon is strong enough to grant you mastery over associated spells. Your proficiency ranks for spell attack modifiers and spell DCs increase to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Eidolon Defensive Mastery",
+    "slug": "eidolon-defensive-mastery",
+    "proficiencies": {
+     "unarmored": "master"
+    },
+    "description": "<p>Your eidolon’s form becomes particularly difficult to assail. Their proficiency rank for unarmored defense increases to master.</p>"
+   },
+   {
+    "level": 19,
+    "name": "Instant Manifestation",
+    "slug": "instant-manifestation",
+    "proficiencies": {},
+    "description": "<p>You can manifest your eidolon with incredible speed. You can use Manifest Eidolon as a single action, instead of a three-action activity.</p>"
    }
   ],
   "rarity": "common",
