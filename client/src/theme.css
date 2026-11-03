@@ -859,18 +859,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .stat[aria-pressed='true'] { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 18px var(--hot-shadow), 0 0 14px var(--glow); }
 .stat[aria-pressed='true'] .stat__label { color: var(--blood-text); }
 
-.breakdown { display: flex; flex-direction: column; gap: 9px; }
-.breakdown__row { display: flex; justify-content: space-between; gap: 12px; }
-.breakdown__label { color: var(--text-soft); }
-.breakdown__value { font-family: var(--display); font-weight: 700; }
-.breakdown__group { display: flex; flex-direction: column; gap: 2px; }
-.breakdown__note { margin: 0; font-size: 13px; font-style: italic; color: var(--text-muted); }
-.breakdown__note--warn { color: var(--blood-text); }
-.breakdown__rule { height: 1px; background: var(--line); }
-.breakdown__total { display: flex; justify-content: space-between; align-items: baseline; }
-.breakdown__total span:first-child { font-family: var(--display); font-size: 14px; letter-spacing: 2px; }
-.breakdown__total span:last-child { font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--bronze); }
-
 .abilities { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
 .ability { min-height: 56px; border: 1px solid var(--line-soft); background: var(--panel); display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .ability span:first-child { font-family: var(--display); font-size: 10px; letter-spacing: 1px; color: var(--text-muted); }

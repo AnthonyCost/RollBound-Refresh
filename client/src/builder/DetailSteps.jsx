@@ -852,7 +852,7 @@ export function ReviewStep({ build, update, data, goTo, inventory = null, portra
         <div className="review-hero__main">
         <label className="review-hero__name">
           <span className="eyebrow">Character name</span>
-          <input value={build.name} maxLength={60} onChange={(e) => update({ name: e.target.value })} placeholder="Mira Ashvale" aria-invalid={!build.name.trim()} aria-describedby="review-name-note" />
+          <input value={build.name} maxLength={60} onChange={(e) => update({ name: e.target.value })} placeholder="Brave Hero" aria-invalid={!build.name.trim()} aria-describedby="review-name-note" />
         </label>
         {!build.name.trim() && <p id="review-name-note" className="rule-note--warn">Name your character to save them.</p>}
         <p className="review-hero__line">
