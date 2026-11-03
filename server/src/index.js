@@ -1,4 +1,5 @@
 import express from 'express';
+import { fileURLToPath } from 'node:url';
 import { characters } from './routes/characters.js';
 import { auth } from './routes/auth.js';
 import { campaigns } from './routes/campaigns.js';
@@ -28,8 +29,8 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Something went wrong' });
 });
 
-// Run directly, it serves; imported (by the tests), it only builds the app.
-if (import.meta.main) {
+// Run directly, it serves; imported (by the tests), it only builds the app. (import.meta.main needs Node 24.)
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const port = Number(process.env.PORT ?? 3001);
   scheduleDemoCleanup();
   app.listen(port, () => console.log(`RollBound API on http://localhost:${port}`));

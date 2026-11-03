@@ -60,8 +60,9 @@ function sheetFrom(body) {
     const problems = buildProblems(build, data);
     if (problems.length) return { errors: problems.slice(0, 5).map((p) => p.message) };
     return { sheet: buildCharacter(build, data) };
-  } catch {
-    // A build of the wrong shape (a list where a name belongs, and so on).
+  } catch (err) {
+    // A build of the wrong shape (a list where a name belongs, and so on), or a rules bug: log it so the second shows up.
+    console.error('Rebuilding a character failed:', err.message);
     return { errors: ["That character's build isn't valid."] };
   }
 }
