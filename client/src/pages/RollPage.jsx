@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { degreeRanges } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
@@ -17,6 +18,53 @@ const DEGREE_EXPLAIN = {
   failure: 'You missed the AC by less than 10. Your Strike misses.',
   'critical failure': 'You missed the AC by 10 or more. Your Strike misses.',
 };
+
+// Each roll object gets its own id, so "Strike again" replays the cast even when the numbers repeat.
+const rollIds = new WeakMap();
+let nextRollId = 0;
+function rollId(roll) {
+  if (!rollIds.has(roll)) rollIds.set(roll, ++nextRollId);
+  return rollIds.get(roll);
+}
+
+const TUMBLE_MS = 520;
+const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+/** The die tumbles through random faces, slowing as it goes, then lands on the real total. */
+function useTumble(final) {
+  const [shown, setShown] = useState(() => (reducedMotion() ? final : Math.ceil(Math.random() * 20)));
+  const [landed, setLanded] = useState(reducedMotion);
+  useEffect(() => {
+    const land = () => { setShown(final); setLanded(true); };
+    if (reducedMotion()) return land();
+    let frame;
+    let last = 0;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = (now - start) / TUMBLE_MS;
+      if (t >= 1) return land();
+      // Faces change quickly at first, then slower, like a die running out of energy.
+      if (now - last > 30 + t * t * 110) {
+        last = now;
+        setShown(Math.ceil(Math.random() * 20));
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [final]);
+  return [shown, landed];
+}
+
+function RollTotal({ total }) {
+  const [shown, landed] = useTumble(total);
+  return (
+    <span className={`roll__total ${landed ? 'roll__total--landed' : ''}`}>
+      <span aria-hidden="true">{shown}</span>
+      <span className="visually-hidden">{total}</span>
+    </span>
+  );
+}
 
 function rangeText(r) {
   if (r.max === null) return `${r.min} or higher`;
@@ -60,12 +108,14 @@ export default function RollPage() {
   const color = DEGREE_COLOR[degree.name];
   const gemClass =
     degree.name === 'critical success' ? '' : degree.name === 'critical failure' ? 'roll__gem--critfail' : 'roll__gem--plain';
+  const id = rollId(lastRoll);
+  const degreeClass = `roll--${degree.name.replace(' ', '-')}`;
   const natNote =
     natural === 20 ? 'Natural 20: the result moved up one step.' : natural === 1 ? 'Natural 1: the result moved down one step.' : null;
 
   return (
     <div className="split">
-      <div className="split__col">
+      <div className={`split__col roll-cast ${degreeClass}`} key={id}>
       <p className="eyebrow center" style={{ margin: '4px 0 0' }}>
         Strike #{attackNumber} · {weapon.name}
       </p>
@@ -73,7 +123,7 @@ export default function RollPage() {
       <section className="roll" aria-live="polite">
         <div className={`roll__gem ${gemClass}`}>
           <div className="roll__inner">
-            <span className="roll__total">{total}</span>
+            <RollTotal total={total} />
             <span className="eyebrow" style={{ color }}>Total</span>
           </div>
         </div>
@@ -100,7 +150,7 @@ export default function RollPage() {
       <div className="split__col">
       <section className="panel">
         <h2 className="panel__title">The four degrees of success</h2>
-        <div className="ladder">
+        <div className="ladder" key={id}>
           {degreeRanges(dc).map((r) => (
             <div
               key={r.name}

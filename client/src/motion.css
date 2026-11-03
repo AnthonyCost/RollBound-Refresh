@@ -80,6 +80,66 @@
   75% { transform: translateX(2px); }
 }
 
+/* ---------- The roll: the gem is cast, the die tumbles, the verdict lands ----------
+   One sequence, about 0.9s, replayed for every Strike (the column is keyed per roll).
+   0ms gem drops and turns into place · 520ms the total lands · 560ms verdict opens
+   · 680ms the matching degree lights up on the ladder. */
+
+:root { --ease-land: cubic-bezier(0.16, 1, 0.3, 1); }
+
+.roll-cast .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards; }
+@keyframes gem-cast {
+  from { opacity: 0; transform: translateY(-28px) rotate(-45deg) scale(0.72); filter: blur(4px) brightness(1.6); }
+  60% { opacity: 1; filter: none; }
+}
+.roll__total { display: inline-block; font-variant-numeric: tabular-nums; }
+.roll__total:not(.roll__total--landed) { color: var(--text-muted); }
+.roll__total--landed { animation: total-land 300ms var(--ease-land); }
+@keyframes total-land { from { transform: scale(1.22); text-shadow: 0 0 22px var(--gold); } }
+
+/* The landing glow: gold for a crit, blood for a critical failure, a quiet settle otherwise. */
+.roll-cast.roll--critical-success .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards, gem-flare 900ms ease-out 480ms; }
+@keyframes gem-flare { 25% { box-shadow: 0 0 80px 14px #c8902c, inset 0 0 36px #a8741c; border-color: #f7edda; } }
+.roll-cast.roll--critical-failure .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards, gem-crack 380ms ease-out 500ms; }
+@keyframes gem-crack {
+  20% { translate: -5px 0; box-shadow: 0 0 60px 10px #a01a10, inset 0 0 30px #6e120c; }
+  45% { translate: 4px 0; }
+  70% { translate: -2px 0; }
+}
+
+.roll-cast .roll__math { animation: fade-in var(--motion) ease-out 520ms backwards; }
+.roll-cast .verdict { animation: verdict-open 420ms var(--ease-land) 560ms backwards; }
+@keyframes verdict-open { from { opacity: 0; clip-path: inset(0 50%); letter-spacing: 9px; } }
+.roll-cast .verdict ~ * { animation: rise-in var(--motion-slow) var(--ease-out) 700ms backwards; }
+
+.ladder .ladder__row--active { animation: rung-light 520ms var(--ease-out) 680ms backwards; }
+@keyframes rung-light { from { border-color: transparent; background-color: transparent; } }
+.ladder .ladder__row--active .ladder__gem { animation: rung-gem 420ms var(--ease-land) 760ms backwards; }
+@keyframes rung-gem { from { transform: rotate(-135deg) scale(0.2); } }
+
+/* ---------- At the table: spending actions and changing conditions ---------- */
+
+.pip:not(.pip--open) { animation: pip-spend 360ms ease-out; }
+@keyframes pip-spend { from { background: #f7c2a6; box-shadow: 0 0 26px 6px #e0301e; transform: rotate(45deg) scale(1.15); } }
+ol.log > li { animation: rise-in var(--motion) var(--ease-out) backwards; }
+.condition { animation: drop-in var(--motion) var(--ease-out) backwards; }
+.next-strike__value { display: inline-block; }
+
+/* ---------- Expandable features: the body unfolds below its summary ---------- */
+
+details[open] > :not(summary) { animation: unfold var(--motion) var(--ease-out) backwards; }
+@keyframes unfold { from { opacity: 0; transform: translateY(-4px); clip-path: inset(0 0 100% 0); } }
+
+/* ---------- Signing in: the painting warms up from the dark, then the card settles ---------- */
+
+.auth__art img { animation: art-wake 1400ms var(--ease-land) backwards; }
+@keyframes art-wake { from { opacity: 0; transform: scale(1.06); filter: brightness(0.35) saturate(0.6); } }
+.auth > * { animation: rise-in 480ms var(--ease-land) backwards; }
+.auth > :nth-child(1) { animation-delay: 150ms; }
+.auth > :nth-child(2) { animation-delay: 230ms; }
+.auth > :nth-child(3) { animation-delay: 300ms; }
+.auth > :nth-child(n + 4) { animation-delay: 360ms; }
+
 /* ---------- The site's mark: the potion sways on hover ---------- */
 
 @media (hover: hover) {
@@ -99,6 +159,8 @@
   }
   .btn:not(:disabled):active, .chip:active, .tile:active { transform: none; }
   .tile:hover, .char-card:hover, .camp-card:hover { transform: none !important; }
+  /* The roll still says what kind of result it was: a crit keeps its gold glow, a fumble its red. */
+  .roll-cast.roll--critical-success .roll__gem { box-shadow: 0 0 60px 8px #c8902c, inset 0 0 30px #a8741c; }
   /* Still show that a hit landed, just without the shaking. */
   .orb--hit-0, .orb--hit-1 { box-shadow: 0 0 30px 4px #e0301e, inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
 }
