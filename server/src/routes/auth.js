@@ -18,12 +18,16 @@ import { rateLimit } from '../rateLimit.js';
 
 export const auth = Router();
 
+// The site's colour themes (client/src/themes.js). Infernal is the default.
+const THEMES = ['infernal', 'mirage', 'gothic', 'frigid', 'obscure', 'luminary', 'radiant', 'tunic'];
+
 const toJson = (u) => ({
   id: u.id,
   // Demo accounts have a made-up address; nobody needs to see it.
   email: u.is_demo ? null : u.email,
   displayName: u.display_name,
   avatarUrl: storage.publicUrl(u.avatar_key),
+  theme: THEMES.includes(u.theme) ? u.theme : 'infernal',
   isDemo: Boolean(u.is_demo),
   ...(u.is_demo && { demoExpiresAt: new Date(new Date(u.created_at).getTime() + DEMO_HOURS * 3600_000).toISOString() }),
 });
@@ -116,7 +120,7 @@ auth.get('/me', async (req, res) => {
   res.json(toJson(user));
 });
 
-// Update your profile: display name and/or avatar. avatarKey: null removes it.
+// Update your profile: display name, avatar and/or colour theme. avatarKey: null removes it.
 auth.patch('/me', requireUser, async (req, res) => {
   const errors = [];
   const { rows: current } = await pool.query('SELECT * FROM users WHERE id = $1', [req.user.id]);
@@ -134,11 +138,16 @@ auth.patch('/me', requireUser, async (req, res) => {
     if (checked.error) errors.push(checked.error);
     else avatarKey = checked.key;
   }
+  let theme = user.theme;
+  if (req.body?.theme !== undefined) {
+    if (THEMES.includes(req.body.theme)) theme = req.body.theme;
+    else errors.push(`Theme must be one of: ${THEMES.join(', ')}.`);
+  }
   if (errors.length) return res.status(400).json({ errors });
 
   const { rows } = await pool.query(
-    'UPDATE users SET display_name = $1, avatar_key = $2 WHERE id = $3 RETURNING *',
-    [displayName, avatarKey, req.user.id],
+    'UPDATE users SET display_name = $1, avatar_key = $2, theme = $3 WHERE id = $4 RETURNING *',
+    [displayName, avatarKey, theme, req.user.id],
   );
   await swapImages(user.avatar_key, avatarKey);
   res.json(toJson(rows[0]));

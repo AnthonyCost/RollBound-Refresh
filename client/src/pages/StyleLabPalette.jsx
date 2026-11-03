@@ -3,12 +3,13 @@ import { mira, armorClass, savingThrow, perception, skillCheck, strikeBonus, dam
 import RankPips from '../components/RankPips.jsx';
 import DetailsDrawer from '../components/DetailsDrawer.jsx';
 import { SKILLS } from '../sheet/sheetRules.js';
+import { THEMES } from '../themes.js';
 import { signed, titleCase } from '../format.js';
 
 /*
- * Style lab, palette tab: RollBound's real components recoloured with the palette from
- * Guild Wars 2: Path of Fire's site (guildwars2.com/en/path-of-fire). The specimen is the
- * site's own markup and classes; the .pof wrapper only swaps the colour tokens (and the
+ * Style lab, themes tab: RollBound's real components in each colour theme (themes.js),
+ * using data-theme on the specimen. Mirage's palette came from Guild Wars 2: Path of Fire's
+ * site (guildwars2.com/en/path-of-fire). The specimen is the site's own markup and classes; the theme only swaps the colour tokens (and the
  * few colours theme.css hard-codes), so this shows what a re-theme would actually look like.
  */
 
@@ -143,12 +144,12 @@ function Specimen() {
 }
 
 export default function StyleLabPalette() {
-  const [palette, setPalette] = useState('pof');
+  const [palette, setPalette] = useState('mirage');
   return (
     <div className="lab-col pal">
       <section className="lab-study" aria-labelledby="pal-title">
         <header className="lab-study__head">
-          <h2 id="pal-title">Path of Fire palette</h2>
+          <h2 id="pal-title">Mirage palette</h2>
           <p>
             Colours from <a href="https://www.guildwars2.com/en/path-of-fire/" target="_blank" rel="noreferrer">Guild Wars 2: Path of Fire</a>:
             plum-black and wine for the ground, magenta for decoration, a fire-orange gradient for actions, and gold and parchment for highlights and text.
@@ -173,13 +174,13 @@ export default function StyleLabPalette() {
             <h2 id="pal-specimen">On the character sheet</h2>
             <p>The sheet’s real components. Tap a skill to change what the drawer shows.</p>
           </div>
-          <div className="lab-toggle" role="group" aria-label="Colours">
-            {[['today', 'Today'], ['pof', 'Path of Fire']].map(([id, label]) => (
+          <div className="lab-toggle" role="group" aria-label="Theme">
+            {THEMES.map(({ id, name: label }) => (
               <button key={id} type="button" aria-pressed={palette === id} onClick={() => setPalette(id)}>{label}</button>
             ))}
           </div>
         </header>
-        <div className={`pal-stage ${palette === 'pof' ? 'pof' : ''}`}>
+        <div className="pal-stage" data-theme={palette}>
           <Specimen />
         </div>
       </section>

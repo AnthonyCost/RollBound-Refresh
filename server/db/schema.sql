@@ -150,3 +150,6 @@ CREATE TABLE IF NOT EXISTS encounters (
   updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS encounters_campaign_idx ON encounters (campaign_id, updated_at DESC);
+
+-- The colour theme each person picked in Account settings (client/src/themes.js).
+ALTER TABLE users ADD COLUMN IF NOT EXISTS theme TEXT NOT NULL DEFAULT 'infernal';

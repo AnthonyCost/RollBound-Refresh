@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { SIGNED_OUT_EVENT, api } from '../api.js';
+import { applyTheme } from '../themes.js';
 
 const AuthContext = createContext(null);
 
@@ -30,6 +31,11 @@ const lastSession = () => {
 export function AuthProvider({ children }) {
   const [status, setStatus] = useState('loading');
   const [user, setUser] = useState(null);
+  // Signed in, the account's theme wins (it follows them across devices); signed out, the
+  // page keeps whatever this device last used (set in index.html before React loads).
+  useEffect(() => {
+    if (user?.theme) applyTheme(user.theme);
+  }, [user?.theme]);
   const [endedReason, setEndedReason] = useState(null);
 
   // The server stopped recognizing us mid-session: back to sign-in, saying why.

@@ -56,7 +56,7 @@ export async function requireUser(req, res, next) {
 export async function userForToken(token) {
   if (!token) return null;
   const { rows } = await pool.query(
-    `SELECT u.id, u.email, u.display_name, u.avatar_key, u.is_demo, u.created_at
+    `SELECT u.id, u.email, u.display_name, u.avatar_key, u.theme, u.is_demo, u.created_at
      FROM sessions s JOIN users u ON u.id = s.user_id
      WHERE s.token_hash = $1 AND s.expires_at > now()
        -- A demo ends at DEMO_HOURS on the dot; the hourly cleanup deletes it later.

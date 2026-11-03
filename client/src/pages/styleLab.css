@@ -144,7 +144,7 @@
 .pal-swatch__hex { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--text-soft); }
 .pal-swatch__role { font-size: 12px; color: var(--text-muted); }
 .pal-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
-.pal-stage { padding: 20px; border: 1px solid var(--line-faint); background: radial-gradient(ellipse 120% 420px at 50% 0%, var(--glow) 0%, #160a08 45%, var(--bg) 80%); color: var(--text); transition: background-color var(--motion); }
+.pal-stage { padding: 20px; border: 1px solid var(--line-faint); background: radial-gradient(ellipse 120% 420px at 50% 0%, var(--glow) 0%, var(--glow-mid) 45%, var(--bg) 80%); color: var(--text); transition: background-color var(--motion); }
 .pal-specimen { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
 .pal-specimen__main { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
 .pal-cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
@@ -153,35 +153,3 @@
 /* The drawer, held in the specimen instead of sliding over the page. */
 .pal-specimen .details--inline { border: 1px solid var(--bronze); box-shadow: 0 10px 30px rgb(0 0 0 / 0.5); }
 
-/* Path of Fire: the colour tokens, then the colours theme.css hard-codes in these pieces. */
-.pof {
-  --bg: #0f040f;
-  --bg-deep: #080208;
-  --glow: #4f0537;
-  --panel: #1c0718;
-  --panel-hot: #2d0a22;
-  --line: #74214f;
-  --line-soft: #561840;
-  --line-faint: #3a0f2b;
-  --text: #ffecb6;
-  --text-soft: #efd5a4;
-  --text-muted: #c9a29b;
-  --text-dim: #a07d86;
-  --bronze: #ff8a3d;
-  --gold: #fff15d;
-  --blood: #ea600d;
-  --blood-text: #ff6d10;
-  --blood-dark: #7a0d19;
-  --deg-crit: #fff15d;
-  --deg-critfail: #ff6d10;
-  background: radial-gradient(ellipse 120% 420px at 50% 0%, #4f0537 0%, #230217 45%, #0f040f 80%);
-}
-.pof ::selection { background: #b51983; color: #fffae4; }
-.pof .btn--blood { border-color: #ff6d10; background: linear-gradient(#ea600d, #a62e0d 71%, #7a0d19); box-shadow: 0 2px 14px rgb(234 96 13 / 0.35), inset 0 1px 0 #ffb072; color: #fffae4; }
-.pof .panel--hot { border-color: #b51983; box-shadow: inset 0 0 18px #4f0537, 0 0 14px rgb(181 25 131 / 0.25); }
-.pof .sheet-panel { background: radial-gradient(ellipse 120% 70% at 50% 0%, #2c0a24 0%, #1c0718 60%, #140513 100%); }
-.pof .sheet-attr--key { border-color: #fff15d; box-shadow: 0 0 12px rgb(181 25 131 / 0.45); }
-.pof button.sheet-def[aria-pressed='true'], .pof .sheet-skill[aria-pressed='true'] { box-shadow: inset 0 0 16px #87055b; }
-.pof .rank-pips__pip--on { box-shadow: 0 0 6px #ea600d; }
-.pof .details { background: #1c0718; border-color: #b51983; }
-.pof .details__icon { background: radial-gradient(circle at 50% 35%, #4f0537, #0f040f); border-color: #b51983; color: #fff15d; }

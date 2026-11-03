@@ -68,13 +68,13 @@
 .orb--hit-0 { animation: orb-hit-a 420ms ease-out; }
 .orb--hit-1 { animation: orb-hit-b 420ms ease-out; }
 @keyframes orb-hit-a {
-  15% { transform: translateX(-4px); box-shadow: 0 0 40px 8px #e0301e, inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
+  15% { transform: translateX(-4px); box-shadow: 0 0 40px 8px var(--blood-flash), inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
   35% { transform: translateX(4px); }
   55% { transform: translateX(-3px); }
   75% { transform: translateX(2px); }
 }
 @keyframes orb-hit-b {
-  15% { transform: translateX(-4px); box-shadow: 0 0 40px 8px #e0301e, inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
+  15% { transform: translateX(-4px); box-shadow: 0 0 40px 8px var(--blood-flash), inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
   35% { transform: translateX(4px); }
   55% { transform: translateX(-3px); }
   75% { transform: translateX(2px); }
@@ -99,10 +99,10 @@
 
 /* The landing glow: gold for a crit, blood for a critical failure, a quiet settle otherwise. */
 .roll-cast.roll--critical-success .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards, gem-flare 900ms ease-out 480ms; }
-@keyframes gem-flare { 25% { box-shadow: 0 0 80px 14px #c8902c, inset 0 0 36px #a8741c; border-color: #f7edda; } }
+@keyframes gem-flare { 25% { box-shadow: 0 0 80px 14px var(--gold-flare), inset 0 0 36px var(--gold-flare-dim); border-color: var(--text-bright); } }
 .roll-cast.roll--critical-failure .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards, gem-crack 380ms ease-out 500ms; }
 @keyframes gem-crack {
-  20% { translate: -5px 0; box-shadow: 0 0 60px 10px #a01a10, inset 0 0 30px #6e120c; }
+  20% { translate: -5px 0; box-shadow: 0 0 60px 10px #a01a10, inset 0 0 30px var(--blood-dark); }
   45% { translate: 4px 0; }
   70% { translate: -2px 0; }
 }
@@ -120,7 +120,7 @@
 /* ---------- At the table: spending actions and changing conditions ---------- */
 
 .pip:not(.pip--open) { animation: pip-spend 360ms ease-out; }
-@keyframes pip-spend { from { background: #f7c2a6; box-shadow: 0 0 26px 6px #e0301e; transform: rotate(45deg) scale(1.15); } }
+@keyframes pip-spend { from { background: #f7c2a6; box-shadow: 0 0 26px 6px var(--blood-flash); transform: rotate(45deg) scale(1.15); } }
 ol.log > li { animation: rise-in var(--motion) var(--ease-out) backwards; }
 .condition { animation: drop-in var(--motion) var(--ease-out) backwards; }
 .next-strike__value { display: inline-block; }
@@ -160,7 +160,7 @@ details[open] > :not(summary) { animation: unfold var(--motion) var(--ease-out) 
   .btn:not(:disabled):active, .chip:active, .tile:active { transform: none; }
   .tile:hover, .char-card:hover, .camp-card:hover { transform: none !important; }
   /* The roll still says what kind of result it was: a crit keeps its gold glow, a fumble its red. */
-  .roll-cast.roll--critical-success .roll__gem { box-shadow: 0 0 60px 8px #c8902c, inset 0 0 30px #a8741c; }
+  .roll-cast.roll--critical-success .roll__gem { box-shadow: 0 0 60px 8px var(--gold-flare), inset 0 0 30px var(--gold-flare-dim); }
   /* Still show that a hit landed, just without the shaking. */
-  .orb--hit-0, .orb--hit-1 { box-shadow: 0 0 30px 4px #e0301e, inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
+  .orb--hit-0, .orb--hit-1 { box-shadow: 0 0 30px 4px var(--blood-flash), inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
 }

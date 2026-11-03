@@ -287,7 +287,7 @@ function SurfaceDemo() {
 
 const TABS = [
   { id: 'proposals', label: 'Proposals', icon: 'overview' },
-  { id: 'palette', label: 'Path of Fire', icon: 'spark' },
+  { id: 'palette', label: 'Themes', icon: 'spark' },
 ];
 
 /** The lab's tabs, as the site's own tab bar; the tab lives in the URL (?tab=palette) so it can be linked. */

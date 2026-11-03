@@ -6,6 +6,7 @@ import PageShell from '../components/PageShell.jsx';
 import ImagePicker from '../components/ImagePicker.jsx';
 import Avatar from '../components/Avatar.jsx';
 import Icon from '../components/Icon.jsx';
+import ThemePicker from '../components/ThemePicker.jsx';
 import { useCampaignService } from '../state/campaignService.js';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 
@@ -124,6 +125,8 @@ export default function AccountPage() {
             </button>
           </section>
         </div>
+
+        <ThemePicker />
       </div>
     </PageShell>
   );
