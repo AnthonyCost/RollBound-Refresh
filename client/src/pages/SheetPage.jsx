@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { armorClass, landSpeed, swimSpeed, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
@@ -6,7 +6,8 @@ import HealthOrb from '../components/HealthOrb.jsx';
 import Portrait from '../components/Portrait.jsx';
 import PortraitEditor from '../components/PortraitEditor.jsx';
 import ExportSheetButton from '../components/ExportSheetButton.jsx';
-import Breakdown from '../components/Breakdown.jsx';
+import DetailsDrawer from '../components/DetailsDrawer.jsx';
+import { ATTRIBUTES, KEY_ATTRIBUTE, DEFENSES, SKILLS, LORE, UNTRAINED_NOTE, STRIKE, traitRule, traitLabel } from '../sheet/sheetRules.js';
 import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
 import HpTracker from '../components/HpTracker.jsx';
 import ShieldTracker from '../components/ShieldTracker.jsx';
@@ -23,27 +24,26 @@ const WEAPON_CATEGORIES = ['unarmed', 'simple', 'martial', 'advanced'];
 /**
  * The character sheet, laid out like page one of Paizo's sheet: the header, the
  * attributes, the defense band (AC, saves, HP, Perception, Speed), then skills on the
- * left and Strikes and DCs on the right. Tap any number to see how it's worked out.
+ * left and Strikes and DCs on the right. Tap any number and the details drawer shows how
+ * it's worked out and the rules behind it.
  */
 export default function SheetPage() {
   const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, conditions, shieldRaised, shield } = useTable();
   const [editingPortrait, setEditingPortrait] = useState(false);
-  const [selected, setSelected] = useState('ac');
-  const [skill, setSkill] = useState(null);
-  const [magic, setMagic] = useState(null);
-  const [strike, setStrike] = useState(null);
+  // What the details drawer shows: 'attr:str', 'def:ac', 'skill:athletics', 'strike:0', 'magic:classDc'.
+  const [open, setOpen] = useState(null);
+  const toggle = (key) => setOpen((cur) => (cur === key ? null : key));
+  const close = useCallback(() => setOpen(null), []);
 
   const opts = { conditions, shieldRaised };
   const p = character.proficiencies;
-  const ac = armorClass(character, opts);
   const defenses = {
-    ac: { title: `Why your AC is ${ac.total}`, stat: ac, signed: false },
-    fortitude: { title: 'Fortitude save', stat: savingThrow(character, 'fortitude', opts) },
-    reflex: { title: 'Reflex save', stat: savingThrow(character, 'reflex', opts) },
-    will: { title: 'Will save', stat: savingThrow(character, 'will', opts) },
-    perception: { title: 'Perception', stat: perception(character, opts) },
+    ac: { stat: armorClass(character, opts), signed: false },
+    fortitude: { stat: savingThrow(character, 'fortitude', opts) },
+    reflex: { stat: savingThrow(character, 'reflex', opts) },
+    will: { stat: savingThrow(character, 'will', opts) },
+    perception: { stat: perception(character, opts) },
   };
-  const current = defenses[selected];
   const senses = SENSES[character.ancestry.vision];
   const header = [
     ['Ancestry', character.ancestry.name],
@@ -57,7 +57,7 @@ export default function SheetPage() {
 
   // A plain function, not a component: a component defined here would remount (and lose focus) on every render.
   const defenseBox = ({ id, label, rank, extra }) => (
-    <button key={id} type="button" className={`sheet-def sheet-def--${id}`} aria-pressed={selected === id} onClick={() => setSelected(id)}>
+    <button key={id} type="button" className={`sheet-def sheet-def--${id}`} aria-pressed={open === `def:${id}`} onClick={() => toggle(`def:${id}`)}>
       <span className="sheet-def__label">{label}</span>
       <span className="sheet-def__value">{defenses[id].signed === false ? defenses[id].stat.total : signed(defenses[id].stat.total)}</span>
       <RankPips rank={rank} />
@@ -121,14 +121,14 @@ export default function SheetPage() {
 
       <section className="sheet-attrs" aria-label="Attribute modifiers">
         {ABILITIES.map((a) => (
-          <div key={a} className={`sheet-attr ${a === character.keyAbility ? 'sheet-attr--key' : ''}`}>
+          <button key={a} type="button" className={`sheet-attr sheet-attr--button ${a === character.keyAbility ? 'sheet-attr--key' : ''}`} aria-pressed={open === `attr:${a}`} onClick={() => toggle(`attr:${a}`)}>
             <span className="sheet-attr__short">
               {a.toUpperCase()}
               {a === character.keyAbility && <span className="ledger__crown" title="Key attribute"> ♛<span className="visually-hidden"> (key attribute)</span></span>}
             </span>
             <span className="sheet-attr__value">{signed(character.abilities[a])}</span>
             <span className="sheet-attr__name">{abilityName(a)}</span>
-          </div>
+          </button>
         ))}
       </section>
 
@@ -165,17 +165,15 @@ export default function SheetPage() {
           </div>
         )}
         {defenseBox({ id: 'perception', label: 'Perception', rank: p.perception, extra: senses })}
-        <div className="sheet-def sheet-def--speed">
+        <button type="button" className="sheet-def sheet-def--speed" aria-pressed={open === 'def:speed'} onClick={() => toggle('def:speed')}>
           <span className="sheet-def__label">Speed</span>
           <span className="sheet-def__value">
             {landSpeed(character).total}
             <small> ft</small>
           </span>
           {swimSpeed(character) && <span className="sheet-def__extra">Swim {swimSpeed(character)} ft</span>}
-        </div>
+        </button>
       </section>
-
-      <Breakdown title={current.title} stat={current.stat} signTotal={current.signed !== false} />
 
       {!readOnly && <HpTracker />}
       {!readOnly && <ShieldTracker />}
@@ -189,7 +187,7 @@ export default function SheetPage() {
                 const check = skillCheck(character, name, opts);
                 return (
                   <li key={name}>
-                    <button type="button" className="sheet-skill" aria-pressed={skill === name} onClick={() => setSkill(skill === name ? null : name)}>
+                    <button type="button" className="sheet-skill" aria-pressed={open === `skill:${name}`} onClick={() => toggle(`skill:${name}`)}>
                       <span className="sheet-skill__name">{titleCase(name)}</span>
                       <span className="sheet-skill__attr">{check.ability.toUpperCase()}</span>
                       <RankPips rank={check.rank} />
@@ -199,7 +197,6 @@ export default function SheetPage() {
                 );
               })}
             </ul>
-            {skill && <Breakdown title={titleCase(skill)} stat={skillCheck(character, skill, opts)} />}
             <div className="sheet-langs">
               <span className="sheet-panel__label">Languages</span>
               <span>{(character.languages ?? []).map(titleCase).join(', ') || 'Common'}</span>
@@ -208,21 +205,102 @@ export default function SheetPage() {
         </div>
 
         <div className="sheet__col">
-          <Strikes character={character} opts={opts} readOnly={readOnly} selected={strike} onSelect={setStrike} />
-          {character.keyAbility && <MagicAndDcs character={character} opts={opts} selected={magic} onSelect={setMagic} />}
+          <Strikes character={character} opts={opts} readOnly={readOnly} selected={open} onSelect={toggle} />
+          {character.keyAbility && <MagicAndDcs character={character} opts={opts} selected={open} onSelect={toggle} />}
         </div>
       </div>
 
       {!readOnly && <ShareSheet />}
+
+      <DetailsDrawer detail={open ? describe(open, character, opts) : null} onClose={close} />
     </div>
   );
+}
+
+/** Everything the details drawer needs for one tapped number (see DetailsDrawer for the shape). */
+function describe(key, character, opts) {
+  const [kind, id] = [key.slice(0, key.indexOf(':')), key.slice(key.indexOf(':') + 1)];
+  const p = character.proficiencies;
+
+  if (kind === 'attr') {
+    const mod = character.abilities[id];
+    const skills = Object.keys(SKILL_ABILITY).filter((s) => SKILL_ABILITY[s] === id).map(titleCase);
+    if (id === 'int') skills.push('Lore');
+    return {
+      kind: 'Attribute',
+      name: abilityName(id),
+      icon: ATTRIBUTES[id].icon,
+      value: signed(mod),
+      facts: [
+        skills.length > 0 && ['Skills', skills.join(', ')],
+        id === 'str' && ['Encumbered above', `${5 + mod} Bulk`],
+        id === 'str' && ['Most you can carry', `${10 + mod} Bulk`],
+      ].filter(Boolean),
+      rules: [...ATTRIBUTES[id].rules, ...(id === character.keyAbility ? [KEY_ATTRIBUTE] : [])],
+    };
+  }
+
+  if (kind === 'def') {
+    const info = DEFENSES[id];
+    if (id === 'speed') {
+      const swim = swimSpeed(character);
+      return { ...info, stat: landSpeed(character), unsigned: true, unit: 'ft', facts: swim ? [['Swim Speed', `${swim} ft`]] : [] };
+    }
+    const stat = id === 'ac' ? armorClass(character, opts) : id === 'perception' ? perception(character, opts) : savingThrow(character, id, opts);
+    const rank = id === 'ac' ? p.armor[character.armor?.category ?? 'unarmored'] : p[id];
+    const facts = id === 'ac' ? [['Armor', character.armor?.name ?? 'None'], character.shield && ['Shield', `${character.shield.name}, +${character.shield.acBonus} when raised`]].filter(Boolean) : [];
+    return { ...info, stat, rank, unsigned: id === 'ac', facts };
+  }
+
+  if (kind === 'magic') {
+    const info = DEFENSES[id];
+    const stat = id === 'classDc' ? classDc(character) : id === 'spellAttack' ? spellAttack(character, opts) : spellDc(character, opts);
+    const rank = id === 'classDc' ? (p.classDc ?? 'trained') : (p.spellcasting ?? 'untrained');
+    return { ...info, stat, rank, unsigned: id !== 'spellAttack' };
+  }
+
+  if (kind === 'skill') {
+    const check = skillCheck(character, id, opts);
+    const info = SKILLS[id] ?? LORE;
+    return {
+      kind: SKILLS[id] ? 'Skill' : 'Lore',
+      name: titleCase(id),
+      icon: info.icon,
+      stat: check,
+      rank: check.rank,
+      ability: check.ability,
+      rules: [...info.rules, ...(check.rank === 'untrained' ? [UNTRAINED_NOTE] : [])],
+      uses: info.uses,
+    };
+  }
+
+  if (kind === 'strike') {
+    const w = character.weapons?.[Number(id)];
+    if (!w) return null;
+    const mod = damageModifier(w, character.abilities);
+    const unarmed = w.slug === 'fist' || w.category === 'unarmed';
+    return {
+      kind: w.ranged ? 'Ranged Strike' : 'Melee Strike',
+      name: w.name,
+      icon: unarmed ? 'strikeUnarmed' : w.ranged ? 'strikeRanged' : 'strikeBlade',
+      stat: strikeBonus(character, w, opts),
+      actions: '1',
+      rank: p.weapons?.[w.category] ?? undefined,
+      facts: [
+        ['Damage', `1d${w.die}${mod ? ` ${signed(mod)}` : ''} ${w.damageType}`],
+        w.ranged && w.range && ['Range increment', `${w.range} ft`],
+      ].filter(Boolean),
+      rules: [w.ranged ? STRIKE.ranged : STRIKE.melee, STRIKE.map],
+      traits: (w.traits ?? []).map((t) => [traitLabel(t), traitRule(t)]),
+    };
+  }
+  return null;
 }
 
 /** The equipped weapons as the sheet's Strikes table (melee, then ranged); tap one for the math. */
 function Strikes({ character, opts, readOnly, selected, onSelect }) {
   const weapons = character.weapons ?? [];
-  // Selected by position: someone can carry two of the same weapon.
-  const current = weapons[selected];
+  // Selected by position ('strike:0'): someone can carry two of the same weapon.
   const groups = [
     ['Melee', weapons.map((w, i) => [w, i]).filter(([w]) => !w.ranged)],
     ['Ranged', weapons.map((w, i) => [w, i]).filter(([w]) => w.ranged)],
@@ -238,7 +316,7 @@ function Strikes({ character, opts, readOnly, selected, onSelect }) {
               const mod = damageModifier(w, character.abilities);
               return (
                 <li key={`${w.slug}-${i}`}>
-                  <button type="button" className="sheet-strike" aria-pressed={selected === i} onClick={() => onSelect(selected === i ? null : i)}>
+                  <button type="button" className="sheet-strike" aria-pressed={selected === `strike:${i}`} onClick={() => onSelect(`strike:${i}`)}>
                     <span className="sheet-strike__bonus">{signed(strikeBonus(character, w, opts).total)}</span>
                     <span className="sheet-strike__main">
                       <span className="sheet-strike__name">{w.name}</span>
@@ -258,7 +336,6 @@ function Strikes({ character, opts, readOnly, selected, onSelect }) {
       {weapons.length === 1 && weapons[0].slug === 'fist' && (
         <p className="rule-note">{readOnly ? 'No weapons equipped.' : 'No weapons equipped. Equip one on the Inventory tab.'}</p>
       )}
-      {current && <Breakdown title={`${current.name} attack`} stat={strikeBonus(character, current, opts)} />}
       <dl className="sheet-profs">
         {WEAPON_CATEGORIES.map((c) => (
           <div key={c}>
@@ -332,7 +409,6 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
       spellDc: { label: 'Spell DC', title: 'Spell DC', stat: spellDc(character, opts), signed: false, rank: p.spellcasting ?? 'untrained' },
     }),
   };
-  const current = stats[selected];
   const title = casting ? `${casting.tradition ? titleCase(casting.tradition) : ''} Spells`.trim() : character.runes?.length ? 'Runes' : 'Class DC';
 
   return (
@@ -340,14 +416,13 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
       <h2 id="magic-title" className="sheet-panel__title">{title}</h2>
       <div className={`sheet-dcs sheet-dcs--${Object.keys(stats).length}`} role="group" aria-label="Class and spell DCs">
         {Object.entries(stats).map(([key, s]) => (
-          <button key={key} type="button" className="sheet-def" aria-pressed={selected === key} onClick={() => onSelect(selected === key ? null : key)}>
+          <button key={key} type="button" className="sheet-def" aria-pressed={selected === `magic:${key}`} onClick={() => onSelect(`magic:${key}`)}>
             <span className="sheet-def__label">{s.label}</span>
             <span className="sheet-def__value">{s.signed === false ? s.stat.total : signed(s.stat.total)}</span>
             <RankPips rank={s.rank} />
           </button>
         ))}
       </div>
-      {current && <Breakdown title={current.title} stat={current.stat} signTotal={current.signed !== false} />}
 
       {prepared && <PreparedToday casting={casting} prepared={prepared} readOnly={readOnly} />}
 

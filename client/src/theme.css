@@ -2788,6 +2788,69 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .sheet-strike__traits { font-size: 12px; font-style: italic; color: var(--text-muted); overflow-wrap: anywhere; }
 .sheet-strike__damage { font-size: 14px; color: var(--text-soft); text-align: right; }
 .sheet-strike__damage small { color: var(--text-muted); }
+
+/* Attribute boxes open the details drawer like every other number on the sheet. */
+.sheet-attr--button { font: inherit; color: var(--text); cursor: pointer; transition: border-color var(--motion-fast), background-color var(--motion-fast); }
+.sheet-attr--button[aria-pressed='true'] { border-color: var(--blood); background: var(--panel-hot); }
+@media (hover: hover) { .sheet-attr--button:not([aria-pressed='true']):hover { border-color: var(--bronze); } }
+
+/* ---------- Details drawer: tap a number on the sheet ----------
+   An overlay with no backdrop, so the sheet stays usable and tapping another number swaps
+   what it shows. It slides up from the bottom on phones and in from the right from 900px. */
+
+.details { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; max-height: 72vh; overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--bronze); background: var(--panel); box-shadow: 0 -14px 34px rgb(0 0 0 / 0.6); transform: translateY(105%); visibility: hidden; transition: transform 320ms var(--ease-out), visibility 0s 320ms; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.details--open { transform: none; visibility: visible; transition: transform 320ms var(--ease-out); }
+/* Phones: room below the sheet while the drawer is up, so any number can be scrolled above it. */
+@media (max-width: 899px) { .app__main:has(.details--open) { padding-bottom: 72vh; } }
+@media (min-width: 900px) {
+  .details { top: 0; left: auto; width: min(400px, 92vw); max-height: none; border-top: 0; border-left: 1px solid var(--bronze); box-shadow: -16px 0 40px rgb(0 0 0 / 0.6); transform: translateX(105%); }
+  .details--open { transform: none; }
+  /* Make room while it's open, so nothing on the sheet sits under the drawer:
+     the content re-centres in the space to its left. */
+  .app__main { transition: padding 320ms var(--ease-out); }
+  .app__main:has(.details--open) {
+    --beside-drawer: max(var(--gutter), calc((100% - 400px - var(--content-max)) / 2));
+    padding-left: var(--beside-drawer);
+    padding-right: calc(var(--beside-drawer) + 400px);
+  }
+}
+.details__panel { display: flex; flex-direction: column; padding: 14px 18px calc(20px + env(safe-area-inset-bottom)); animation: details-in 240ms var(--ease-out) backwards; }
+@keyframes details-in { from { opacity: 0; transform: translateX(10px); } }
+.details__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.details__kind { font: 600 13px/1 var(--display); color: var(--text-muted); }
+.details__close { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--line-soft); background: none; color: var(--text-muted); cursor: pointer; }
+.details__close:hover { color: var(--text); border-color: var(--bronze); }
+.details__head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.details__icon { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--line); border-radius: 50%; background: radial-gradient(circle at 50% 35%, #2a1a10, var(--bg)); color: var(--gold); }
+.details__name { margin: 0; font: 700 21px/1.15 var(--display); overflow-wrap: anywhere; }
+.details__name .act { vertical-align: -2px; margin-left: 4px; }
+.details__value { font: 700 30px/1 var(--display); font-variant-numeric: tabular-nums; color: var(--gold); white-space: nowrap; }
+.details__value small { font-size: 15px; font-weight: 400; color: var(--text-muted); }
+.details__meta { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; font: 600 12px/1 var(--display); letter-spacing: 1px; color: var(--text-muted); }
+.details__rank { font: 400 14px/1 var(--body); letter-spacing: 0; text-transform: capitalize; }
+.details__math, .details__facts { margin: 12px 0 0; }
+.details__row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--line-faint); }
+.details__row dt { font-size: 15px; color: var(--text-soft); }
+.details__row dt small { display: block; margin-top: 2px; font-size: 12px; font-style: italic; color: var(--text-muted); }
+.details__row dd { margin: 0; font: 700 16px/1.2 var(--display); font-variant-numeric: tabular-nums; text-align: right; }
+.details__facts dd { font: 15px/1.35 var(--body); color: var(--text); }
+.details__row--minus dd { color: var(--blood-text); }
+.details__total { margin-top: 2px; border-top: 1px solid var(--line); border-bottom: 0; }
+.details__total dt { font: 700 13px/1 var(--display); letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); }
+.details__total dd { font-size: 20px; color: var(--gold); }
+.details__rules { margin-top: 14px; }
+.details__rules p { margin: 0 0 10px; font-size: 15px; line-height: 1.6; color: var(--text-soft); }
+.details__sub { margin: 6px 0 8px; font: 700 14px/1.2 var(--display); color: var(--text); }
+.details__traits { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+.details__traits dt { font: 700 14px/1.3 var(--display); color: var(--bronze); }
+.details__traits dd { margin: 2px 0 0; font-size: 14px; line-height: 1.5; color: var(--text-soft); }
+.details__uses { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.details__uses li { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 4px 10px; border: 1px solid var(--line-faint); background: var(--bg); font-size: 15px; }
+.details__uses li > span:first-child { flex: 1; }
+.details__gate { padding: 1px 6px; border: 1px solid var(--line); font: 600 11px/1.4 var(--display); color: var(--bronze); }
+.details__cost { font-size: 12px; font-style: italic; color: var(--text-muted); }
+.details__use--locked { opacity: 0.5; }
+@media (prefers-reduced-motion: reduce) { .details { transition: none !important; } .details__panel { animation: none; } }
 .sheet-profs { margin: 6px 0 0; padding-top: 10px; border-top: 1px solid var(--line-faint); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; text-align: center; }
 .sheet-profs dt { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
 .sheet-profs dd { margin: 0; }
