@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { PREGENS } from '@rollbound/rules';
-import { artFor, PLACEHOLDER_ART } from './art.js';
+import { artFor } from './art.js';
 import Icon from '../components/Icon.jsx';
+import buildArt from '../assets/start/build-your-own.webp';
+import iconicArt from '../assets/start/iconic-hero.webp';
 
 // Heroes whose class art shows someone else have their own portrait.
 const PORTRAITS = Object.fromEntries(
@@ -55,7 +57,8 @@ export default function StartStep({ onCustom, onPregen }) {
     <ul className="start-choices">
       <li>
         <button type="button" className="start-choice" onClick={onCustom}>
-          <img className="start-choice__art" src={PLACEHOLDER_ART} alt="" />
+          {/* Framed on the party climbing the stairs. */}
+          <img className="start-choice__art" src={buildArt} alt="" style={{ objectPosition: '40% 100%' }} />
           <span className="start-choice__text">
             <span className="start-choice__name">Build your own</span>
             <span className="start-choice__blurb">Pick an ancestry, background and class, then the rest. Each step explains what your choices do.</span>
@@ -64,8 +67,8 @@ export default function StartStep({ onCustom, onPregen }) {
       </li>
       <li>
         <button type="button" className="start-choice" disabled={!PREGENS.length} onClick={() => setBrowsing(true)}>
-          {/* Placeholder until this panel gets its own art. */}
-          <img className="start-choice__art" src={PLACEHOLDER_ART} alt="" />
+          {/* Framed on the three heroes, centred on the swordsman. */}
+          <img className="start-choice__art" src={iconicArt} alt="" style={{ objectPosition: '50% 20%' }} />
           <span className="start-choice__text">
             <span className="start-choice__name">Take an iconic hero</span>
             <span className="start-choice__blurb">
