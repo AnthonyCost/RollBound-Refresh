@@ -2070,6 +2070,17 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 .party-card__confirm { flex-basis: 100%; }
 
 .danger { display: flex; flex-direction: column; gap: 10px; border-color: var(--blood); }
+/* Settings tabs (characters and campaigns). */
+.settings { display: flex; flex-direction: column; gap: 16px; }
+.settings__head { display: flex; flex-direction: column; gap: 6px; }
+.settings__head .title, .settings__head .rule-note { margin: 0; }
+.settings__section { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.settings__section .panel__title, .settings__section .rule-note { margin: 0; }
+.settings__section .portrait-editor { align-self: stretch; }
+.settings__portrait { display: flex; align-items: center; gap: 16px; }
+.settings__confirm { align-self: stretch; display: flex; flex-direction: column; gap: 10px; }
+.settings__confirm .field input { width: 100%; }
+.settings__delete { border-color: var(--blood); color: var(--blood-text); }
 .danger .panel__title, .danger p { margin: 0; }
 
 .join { display: flex; flex-direction: column; gap: 12px; }
@@ -2880,7 +2891,7 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
   /* Make room while it's open, so nothing on the sheet sits under the drawer:
      the content re-centres in the space to its left. */
   .app__main { transition: padding 320ms var(--ease-out); }
-  .app__main:has(.details--open) {
+  .app__main:has(.details--open:not(.details--left)) {
     --beside-drawer: max(var(--gutter), calc((100% - 400px - var(--content-max)) / 2));
     padding-left: var(--beside-drawer);
     padding-right: calc(var(--beside-drawer) + 400px);
@@ -2923,6 +2934,32 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .details__cost { font-size: 12px; font-style: italic; color: var(--text-muted); }
 .details__use--locked { opacity: 0.5; }
 @media (prefers-reduced-motion: reduce) { .details { transition: none !important; } .details__panel { animation: none; } }
+
+/* The character's own drawer: the same panel, from the left on wide screens. */
+@media (min-width: 900px) {
+  .details--left { left: 0; right: auto; border-left: 0; border-right: 1px solid var(--bronze); box-shadow: 16px 0 40px rgb(0 0 0 / 0.6); transform: translateX(-105%); }
+  .details--left.details--open { transform: none; }
+  .details--left .details__panel { animation-name: details-in-left; }
+  .app__main:has(.details--left.details--open) {
+    --beside-drawer: max(var(--gutter), calc((100% - 400px - var(--content-max)) / 2));
+    padding-left: calc(var(--beside-drawer) + 400px);
+    padding-right: var(--beside-drawer);
+  }
+}
+@keyframes details-in-left { from { opacity: 0; transform: translateX(-10px); } }
+.character-drawer__head { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.character-drawer__line { margin: 4px 0 0; font-size: 14px; color: var(--text-muted); }
+.character-drawer__section { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px 0; border-bottom: 1px solid var(--line-faint); }
+.character-drawer__section .details__sub { margin: 0; }
+.character-drawer__section .details__note { margin: 0; }
+.character-drawer__section .portrait-editor { align-self: stretch; }
+.character-drawer__rename { display: flex; gap: 8px; align-self: stretch; }
+.character-drawer__rename input { flex: 1; min-width: 0; min-height: 44px; padding: 0 12px; font: 16px var(--body); }
+.character-drawer .export { align-self: stretch; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.character-drawer .export .btn { align-self: stretch; }
+/* The share panel sits in the drawer without its own box. */
+.character-drawer__share .share { padding: 0; border: 0; background: none; box-shadow: none; align-self: stretch; }
+.character-drawer__share .share .panel__title { margin: 0 0 6px; font: 700 14px/1.2 var(--display); letter-spacing: 0; text-transform: none; color: var(--text); }
 .sheet-profs { margin: 6px 0 0; padding-top: 10px; border-top: 1px solid var(--line-faint); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; text-align: center; }
 .sheet-profs dt { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
 .sheet-profs dd { margin: 0; }

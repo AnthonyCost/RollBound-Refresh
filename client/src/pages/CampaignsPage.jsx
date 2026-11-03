@@ -78,7 +78,7 @@ export function CampaignCard({ campaign: c, hosting, onDeleted }) {
       ) : (
         <div className="char-card__actions">
           <Link to={`/campaigns/${c.id}`}>View</Link>
-          {hosting && <Link to={`/campaigns/${c.id}/edit`}>Edit</Link>}
+          {hosting && <Link to={`/campaigns/${c.id}/settings`}>Settings</Link>}
           {hosting && <Link to={`/campaigns/${c.id}/encounters`}>Encounters</Link>}
           {hosting && <button type="button" className="char-card__delete" onClick={() => setConfirming(true)}>Delete</button>}
           {!hosting && <Link to={`/campaigns/${c.id}/logs`}>Session Logs</Link>}

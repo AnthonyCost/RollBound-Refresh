@@ -11,6 +11,7 @@ const LINKS = [
   { to: 'lore', label: 'Lore', icon: 'lore' },
   { to: 'turn', label: 'Turn', icon: 'turn', encounter: true },
   { to: 'roll', label: 'Roll', icon: 'roll', encounter: true },
+  { to: 'settings', label: 'Settings', icon: 'settings' },
 ];
 
 export default function NavBar() {

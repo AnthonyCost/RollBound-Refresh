@@ -44,6 +44,7 @@ const ICONS = {
   lore: 'scroll-unfurled',
   turn: 'hourglass',
   roll: 'dice-twenty-faces-twenty',
+  settings: 'cog',
   // Character sheet details drawer: attributes, defenses, skills and Strikes
   statStr: 'biceps',
   statDex: 'feather',

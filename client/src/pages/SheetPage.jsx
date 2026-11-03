@@ -6,14 +6,13 @@ import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import ShieldGauge from '../components/ShieldGauge.jsx';
 import Portrait from '../components/Portrait.jsx';
-import PortraitEditor from '../components/PortraitEditor.jsx';
+import CharacterDrawer from '../components/CharacterDrawer.jsx';
 import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import DetailsDrawer from '../components/DetailsDrawer.jsx';
 import { ATTRIBUTES, KEY_ATTRIBUTE, DEFENSES, HIT_POINTS, SKILLS, LORE, UNTRAINED_NOTE, STRIKE, traitRule, traitLabel } from '../sheet/sheetRules.js';
 import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
 import HpTracker from '../components/HpTracker.jsx';
 import ShieldTracker from '../components/ShieldTracker.jsx';
-import ShareSheet from '../components/ShareSheet.jsx';
 import { sentenceCase, signed, titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
 import RankPips from '../components/RankPips.jsx';
@@ -51,7 +50,6 @@ function useSpellRules(needed) {
  */
 export default function SheetPage() {
   const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared } = useTable();
-  const [editingPortrait, setEditingPortrait] = useState(false);
   // What the details drawer shows: 'attr:str', 'def:ac', 'hp:', 'skill:athletics', 'strike:0', 'magic:classDc', 'spell:<id>'.
   const [open, setOpen] = useState(null);
   const spellRules = useSpellRules(Boolean(open?.startsWith('spell:')));
@@ -101,12 +99,12 @@ export default function SheetPage() {
           <button
             type="button"
             className="hero__portrait"
-            onClick={() => setEditingPortrait((v) => !v)}
-            aria-expanded={editingPortrait}
-            aria-label={portraitUrl ? 'Change portrait' : 'Add a portrait'}
+            onClick={() => toggle('profile:')}
+            aria-expanded={open === 'profile:'}
+            aria-label={`${character.name}: name, portrait, PDF and share link`}
           >
             <Portrait url={portraitUrl} name={character.name} size="lg" />
-            <span className="hero__portrait-hint">{portraitUrl ? 'Change' : 'Add portrait'}</span>
+            <span className="hero__portrait-hint">Edit</span>
           </button>
         )}
         <div className="sheet-head__body">
@@ -130,22 +128,11 @@ export default function SheetPage() {
         </div>
       </header>
 
-      <div className="sheet__actions">
-        {/* Only the owner reaches this sheet (the server checks), and only characters
-            made in the builder keep the choices it needs to reopen them. */}
-        {!readOnly && character.build && (
-          <Link to={`/characters/${characterId}/edit`} className="btn btn--small">Edit character</Link>
-        )}
-        <ExportSheetButton />
-      </div>
-
-      {editingPortrait && (
-        <PortraitEditor
-          characterId={characterId}
-          currentUrl={portraitUrl}
-          onSaved={setPortraitUrl}
-          onClose={() => setEditingPortrait(false)}
-        />
+      {/* The player opens the PDF and share link from their portrait's drawer; viewers get the PDF here. */}
+      {readOnly && (
+        <div className="sheet__actions">
+          <ExportSheetButton />
+        </div>
       )}
 
       <section className="sheet-attrs" aria-label="Attribute modifiers">
@@ -230,7 +217,7 @@ export default function SheetPage() {
         </div>
       </div>
 
-      {!readOnly && <ShareSheet />}
+      {!readOnly && <CharacterDrawer open={open === 'profile:'} onClose={close} />}
 
       <DetailsDrawer detail={open ? describe(open, character, opts, { shield, currentHp, maxHp, prepared, spellRules }) : null} onClose={close} />
     </div>

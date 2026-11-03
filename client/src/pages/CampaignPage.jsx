@@ -33,12 +33,17 @@ export function useCampaignCrumbs(crumbs) {
   }, [key, setCrumbs]);
 }
 
-/** The tabs under a campaign's header, like a GitHub repository's. Encounters is the GM's alone. */
+/** The tabs under a campaign's header, like a GitHub repository's. Encounters and Settings are the GM's alone. */
 function CampaignTabs({ id, isGm }) {
   const tabs = [
     { to: `/campaigns/${id}`, label: 'Overview', icon: 'overview', end: true },
     { to: `/campaigns/${id}/logs`, label: 'Session logs', icon: 'logs' },
-    ...(isGm ? [{ to: `/campaigns/${id}/encounters`, label: 'Encounters', icon: 'swords' }] : []),
+    ...(isGm
+      ? [
+          { to: `/campaigns/${id}/encounters`, label: 'Encounters', icon: 'swords' },
+          { to: `/campaigns/${id}/settings`, label: 'Settings', icon: 'settings' },
+        ]
+      : []),
   ];
   return (
     <nav className="nav" aria-label="Campaign">
@@ -97,9 +102,8 @@ export default function CampaignLayout() {
     );
   }
 
-  const actions = campaign.isGm && <Link to={`/campaigns/${id}/edit`} className="btn btn--small">Edit</Link>;
   return (
-    <PageShell crumbs={all} actions={actions} tabs={<CampaignTabs id={id} isGm={campaign.isGm} />}>
+    <PageShell crumbs={all} tabs={<CampaignTabs id={id} isGm={campaign.isGm} />}>
       <Outlet context={{ campaign, reload: load, setCrumbs }} />
     </PageShell>
   );

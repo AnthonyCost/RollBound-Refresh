@@ -15,7 +15,8 @@ import { SessionLogEditor, SessionLogsPage } from './pages/SessionLogPages.jsx';
 import { EncounterEditor, EncounterListPage } from './pages/EncountersPage.jsx';
 import BestiaryPage from './pages/BestiaryPage.jsx';
 import { CreatureByIdPage } from './pages/CreaturePage.jsx';
-import CampaignEditPage from './pages/CampaignEditPage.jsx';
+import CampaignSettingsPage from './pages/CampaignSettingsPage.jsx';
+import CharacterSettingsPage from './pages/CharacterSettingsPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import SharedSheetPage, { PartySheetPage } from './pages/SharedSheetPage.jsx';
 import CharacterSpellsPage from './pages/CharacterSpellsPage.jsx';
@@ -130,8 +131,10 @@ export default function App() {
           <Route path="encounters" element={<EncounterListPage />} />
           <Route path="encounters/new" element={<EncounterEditor />} />
           <Route path="encounters/:encounterId" element={<EncounterEditor key="edit" />} />
+          <Route path="settings" element={<CampaignSettingsPage />} />
         </Route>
-        <Route path="/campaigns/:id/edit" element={<CampaignEditPage />} />
+        {/* The old edit page is the Settings tab now. */}
+        <Route path="/campaigns/:id/edit" element={<Navigate to="../settings" relative="path" replace />} />
         {/* A party member's sheet; the server only shows it to the GM and the party. */}
         <Route path="/campaigns/:id/characters/:characterId" element={<PartySheetPage />}>
           <Route index element={<Navigate to="sheet" replace />} />
@@ -150,6 +153,7 @@ export default function App() {
           <Route path="lore" element={<LorePage />} />
           <Route path="turn" element={<EncounterOnly><TurnPage /></EncounterOnly>} />
           <Route path="roll" element={<EncounterOnly><RollPage /></EncounterOnly>} />
+          <Route path="settings" element={<CharacterSettingsPage />} />
         </Route>
       </Route>
       {/* Anyone with a share link, signed in or not. */}

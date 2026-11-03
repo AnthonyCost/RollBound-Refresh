@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { api } from '../api.js';
 import PageShell from '../components/PageShell.jsx';
 import Portrait from '../components/Portrait.jsx';
@@ -86,6 +86,8 @@ export function CharacterCard({ character: c, onDelete }) {
 
 /** Your characters: the home page. */
 export default function CharactersPage() {
+  // Set when a character's Settings tab deletes them and sends the player here.
+  const deleted = useLocation().state?.deleted;
   const [characters, setCharacters] = useState(null);
   const [failed, setFailed] = useState(false);
   const [query, setQuery] = useState('');
@@ -120,6 +122,7 @@ export default function CharactersPage() {
         </div>
         <Link to="/create" className="btn btn--blood">Create a Character</Link>
       </header>
+      {deleted && <p className="panel panel--hot center" role="status">Deleted {deleted}.</p>}
 
       {characters?.length > 0 && (
         <div className="panel list-tools">
