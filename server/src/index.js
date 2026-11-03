@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import { characters } from './routes/characters.js';
 import { auth } from './routes/auth.js';
 import { campaigns } from './routes/campaigns.js';
@@ -8,8 +7,10 @@ import { inbox, joinRequests } from './routes/inbox.js';
 import { scheduleDemoCleanup } from './demo.js';
 import { uploads } from './routes/uploads.js';
 
-const app = express();
-app.use(cors());
+export const app = express();
+// Behind a load balancer or proxy, TRUST_PROXY is how many sit in front, so req.ip is the
+// visitor's address (the rate limits count by it). Unset, nothing in front is trusted.
+if (process.env.TRUST_PROXY) app.set('trust proxy', Number(process.env.TRUST_PROXY));
 app.use(express.json());
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
@@ -27,6 +28,9 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Something went wrong' });
 });
 
-const port = Number(process.env.PORT ?? 3001);
-scheduleDemoCleanup();
-app.listen(port, () => console.log(`RollBound API on http://localhost:${port}`));
+// Run directly, it serves; imported (by the tests), it only builds the app.
+if (import.meta.main) {
+  const port = Number(process.env.PORT ?? 3001);
+  scheduleDemoCleanup();
+  app.listen(port, () => console.log(`RollBound API on http://localhost:${port}`));
+}

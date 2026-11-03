@@ -14,6 +14,7 @@ import {
 import { storage } from '../storage/index.js';
 import { checkImageKey, swapImages } from '../images.js';
 import { DEMO_HOURS, allowDemo, createDemo, deleteDemo } from '../demo.js';
+import { rateLimit } from '../rateLimit.js';
 
 export const auth = Router();
 
@@ -39,9 +40,15 @@ async function startSession(res, user) {
   res.cookie(SESSION_COOKIE, token, { ...cookieOptions, maxAge: SESSION_DAYS * 24 * 60 * 60 * 1000 });
 }
 
+// Per IP address, so a script can't guess passwords or mass-create accounts.
+const allowLogin = rateLimit(20, 15 * 60 * 1000);
+const allowRegister = rateLimit(10, 60 * 60 * 1000);
+const TOO_MANY = { errors: ['Too many attempts from here. Wait a few minutes and try again.'] };
+
 const normalizeEmail = (email) => (typeof email === 'string' ? email.trim().toLowerCase() : '');
 
 auth.post('/register', async (req, res) => {
+  if (!allowRegister(req.ip)) return res.status(429).json(TOO_MANY);
   const email = normalizeEmail(req.body?.email);
   const displayName = typeof req.body?.displayName === 'string' ? req.body.displayName.trim() : '';
   const password = req.body?.password;
@@ -68,6 +75,7 @@ auth.post('/register', async (req, res) => {
 });
 
 auth.post('/login', async (req, res) => {
+  if (!allowLogin(req.ip)) return res.status(429).json(TOO_MANY);
   const email = normalizeEmail(req.body?.email);
   const password = req.body?.password;
   if (!email || typeof password !== 'string') {

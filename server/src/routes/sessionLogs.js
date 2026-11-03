@@ -8,7 +8,8 @@ export const sessionLogs = Router({ mergeParams: true });
 
 export const LOG_LIMITS = { title: 120, body: 50_000 };
 const isId = (s) => /^\d{1,9}$/.test(String(s));
-const isDate = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s));
+// A real day: JavaScript reads 2026-02-30 as March 2, so check it reads back the same.
+const isDate = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s)) && new Date(s).toISOString().slice(0, 10) === s;
 
 export const logJson = (row, { full = true } = {}) => ({
   id: row.id,

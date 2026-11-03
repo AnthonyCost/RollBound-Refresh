@@ -8,13 +8,13 @@
     "start": "node --env-file-if-exists=.env src/index.js",
     "db:setup": "node --env-file-if-exists=.env db/setup.js",
     "db:migrate-builds": "node --env-file-if-exists=.env db/migrate-builds.js",
-    "inbox:post": "node --env-file-if-exists=.env db/post-message.js"
+    "inbox:post": "node --env-file-if-exists=.env db/post-message.js",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1156.0",
     "@aws-sdk/s3-request-presigner": "^3.1156.0",
     "@rollbound/rules": "*",
-    "cors": "^2.8.5",
     "express": "^5.1.0",
     "pg": "^8.16.0"
   }

@@ -13,6 +13,7 @@ import { rulesData } from './rules.js';
 import { generateInviteCode } from './inviteCode.js';
 import { generateShareId } from './shareId.js';
 import { decide, requestJoin } from './joinRequests.js';
+import { rateLimit } from './rateLimit.js';
 
 export const DEMO_HOURS = 24;
 /** How long Sam takes to answer a request to his campaign. */
@@ -125,23 +126,20 @@ export async function deleteExpiredDemos() {
   return rows.length;
 }
 
-/** Runs the cleanup now and every hour. */
+/** Runs the cleanup now and every hour: expired demos, and expired sign-ins so the sessions table doesn't grow forever. */
 export function scheduleDemoCleanup() {
-  const run = () => deleteExpiredDemos().then((n) => n && console.log(`Deleted ${n} expired demo account(s)`)).catch((err) => console.error('Demo cleanup failed:', err.message));
+  const run = async () => {
+    try {
+      const n = await deleteExpiredDemos();
+      if (n) console.log(`Deleted ${n} expired demo account(s)`);
+      await pool.query('DELETE FROM sessions WHERE expires_at < now()');
+    } catch (err) {
+      console.error('Cleanup failed:', err.message);
+    }
+  };
   run();
-  setInterval(() => {
-    run();
-    // Forget IP addresses with no demos in the last hour.
-    for (const [ip, times] of recent) if (times.every((t) => Date.now() - t > 60 * 60 * 1000)) recent.delete(ip);
-  }, CLEANUP_EVERY_MS).unref();
+  setInterval(run, CLEANUP_EVERY_MS).unref();
 }
 
-const recent = new Map();
 /** Whether this IP address may start another demo; counts it if so. */
-export function allowDemo(ip) {
-  const now = Date.now();
-  const times = (recent.get(ip) ?? []).filter((t) => now - t < 60 * 60 * 1000);
-  if (times.length >= DEMOS_PER_HOUR) return false;
-  recent.set(ip, [...times, now]);
-  return true;
-}
+export const allowDemo = rateLimit(DEMOS_PER_HOUR, 60 * 60 * 1000);

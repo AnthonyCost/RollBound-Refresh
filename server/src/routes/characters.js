@@ -1,12 +1,11 @@
 import { Router } from 'express';
-import { LIMITS, armorClass, equipCharacter, inventoryProblems, maxHp, preparedProblems } from '@rollbound/rules';
+import { LIMITS, armorClass, buildCharacter, buildProblems, equipCharacter, inventoryProblems, maxHp, migrateBuild, preparedProblems } from '@rollbound/rules';
 import { rulesData } from '../rules.js';
 import { answerBotRequests } from '../demo.js';
 import { pool } from '../db.js';
 import { requireUser } from '../auth.js';
 import { storage } from '../storage/index.js';
 import { checkImageKey, swapImages } from '../images.js';
-import { validateCharacter } from '../validate.js';
 import { generateShareId } from '../shareId.js';
 
 export const characters = Router();
@@ -49,6 +48,24 @@ const SELECT_WITH_CAMPAIGN = `
 
 const isId = (s) => /^\d{1,9}$/.test(s);
 
+/**
+ * The sheet to save, rebuilt here from the character's build with the server's rules,
+ * so a client can't save numbers the rules don't give. Returns { errors } or { sheet }.
+ */
+function sheetFrom(body) {
+  const data = rulesData();
+  try {
+    const build = body?.build && typeof body.build === 'object' ? migrateBuild(body.build, data) : null;
+    if (!build) return { errors: ['Send the character with its build.'] };
+    const problems = buildProblems(build, data);
+    if (problems.length) return { errors: problems.slice(0, 5).map((p) => p.message) };
+    return { sheet: buildCharacter(build, data) };
+  } catch {
+    // A build of the wrong shape (a list where a name belongs, and so on).
+    return { errors: ["That character's build isn't valid."] };
+  }
+}
+
 characters.get('/', async (req, res) => {
   if (req.user.is_demo) await answerBotRequests(req.user.id);
   const { rows } = await pool.query(`${SELECT_WITH_CAMPAIGN} WHERE ch.owner_id = $1 ORDER BY ch.name`, [req.user.id]);
@@ -63,9 +80,8 @@ characters.get('/:id', async (req, res) => {
 });
 
 characters.post('/', async (req, res) => {
-  const errors = validateCharacter(req.body);
-  if (errors.length) return res.status(400).json({ errors });
-  const c = req.body;
+  const { errors, sheet: c } = sheetFrom(req.body);
+  if (errors) return res.status(400).json({ errors });
   const { rows } = await pool.query(
     'INSERT INTO characters (owner_id, name, level, data, share_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
     [req.user.id, c.name.trim(), c.level, c, generateShareId()],
@@ -75,9 +91,8 @@ characters.post('/', async (req, res) => {
 
 characters.put('/:id', async (req, res) => {
   if (!isId(req.params.id)) return res.status(404).json({ error: 'Character not found' });
-  const errors = validateCharacter(req.body);
-  if (errors.length) return res.status(400).json({ errors });
-  const c = req.body;
+  const { errors, sheet: c } = sheetFrom(req.body);
+  if (errors) return res.status(400).json({ errors });
   const { rows } = await pool.query(
     `UPDATE characters SET name = $1, level = $2, data = $3, updated_at = now()
      WHERE id = $4 AND owner_id = $5 RETURNING *`,

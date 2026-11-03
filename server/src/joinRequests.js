@@ -36,6 +36,11 @@ export async function requestJoin({ campaign, character, player }) {
     return rows[0].id;
   } catch (err) {
     await client.query('ROLLBACK');
+    // Two requests at once (a double click): the other one won, so answer with it if it's for this campaign.
+    if (err.code === '23505' && err.constraint === 'join_requests_one_pending') {
+      const { rows } = await pool.query("SELECT id FROM join_requests WHERE character_id = $1 AND campaign_id = $2 AND status = 'pending'", [character.id, campaign.id]);
+      if (rows.length) return rows[0].id;
+    }
     throw err;
   } finally {
     client.release();

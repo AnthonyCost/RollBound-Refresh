@@ -96,6 +96,12 @@ npm test
 
 Runs the rules engine tests with Node's built-in test runner: proficiency, AC with Dex caps, saves, strikes and MAP, degrees of success, condition stacking, encounter budgets, and DCs by level.
 
+```bash
+TEST_DATABASE_URL=postgres://localhost:5432/rollbound_test npm test -w server
+```
+
+Runs the API's access tests against a throwaway database (they skip without one): nobody reaches another person's characters or campaigns, players only read session logs, saved sheets are rebuilt from their builds, and sign-in attempts are limited.
+
 ## API
 
 | Method | Path | |

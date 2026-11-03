@@ -454,6 +454,23 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 - **Demo mode:** the demo comes with a real request from Sam to answer, and Sam answers the visitor's requests (section 1).
 - **Why:** a leaked invite code can no longer get a stranger into a party, since the GM decides who joins.
 
+### 16. Server audit fixes (November 2026)
+
+A whole-repo audit found the server sound (every route checks ownership, every query is parameterized, share links and invite codes use secure randomness) but with eight gaps, all fixed:
+
+| Fix | Where | What changed |
+| --- | --- | --- |
+| Sign-in and sign-up limits | `src/rateLimit.js`, `routes/auth.js` | Per IP address: 20 sign-ins per 15 minutes, 10 new accounts an hour, then "Too many attempts from here" (429). Demos (20 an hour) use the same limiter, replacing the copy in `demo.js`. Counts live in memory (marked `shortcut:`): more than one server process would need them in Postgres. |
+| Saved sheets are rebuilt | `routes/characters.js` (`sheetFrom`) | Creating or saving a character rebuilds the sheet from `data.build` with the server's rules. A build with problems is refused with the builder's own messages; a missing or malformed build gets a 400. Numbers a client makes up (say `classHp: 99`) are never stored. `validate.js` was deleted. |
+| Proxy setting | `src/index.js`, `.env.example` | `TRUST_PROXY` = how many proxies sit in front (usually 1 behind a load balancer), so the limits see each visitor's address. Off by default: on without a proxy, anyone could fake their address. |
+| API access tests | `server/test/access.test.js` | See Testing and verification. To allow them, `index.js` exports `app` and only listens (and schedules cleanup) when run directly (`import.meta.main`). |
+| Expired sign-ins deleted | `demo.js` (`scheduleDemoCleanup`) | The hourly cleanup also runs `DELETE FROM sessions WHERE expires_at < now()`. |
+| Impossible dates | `routes/sessionLogs.js` (`isDate`) | "2026-02-30" now gets "The session date must be a date." instead of a server error (JavaScript reads it as March 2; Postgres refuses it). |
+| Double-click join | `joinRequests.js` (`requestJoin`) | Two requests for the same character at once: the second returns the first instead of failing on the one-pending-request index. |
+| `cors` removed | `src/index.js`, `server/package.json` | The client calls `/api` on its own site, so cross-site access wasn't needed. Removing it also stops other websites reading the API's public answers. |
+
+Side effects: a browser holding older rules data than the server can have a save refused ("choose again"), where before anything was accepted. The seeded sample character has no build, so it can't be saved through the API (the builder never could edit it).
+
 ## Key decisions and why
 
 | Decision | Why |
@@ -484,6 +501,8 @@ docs/                  Guides (art, S3, PDF sheet) and this file
 
 - `npm test`: 162 rules tests, covering the engine, builder rules, ID migration, ID uniqueness, the corrections, rules-data updates, the data files and their size budget, and an empty import report.
 - **Build sweep** (`test/sweep.test.js`): every class with every ancestry, heritage, background, subclass option and deity must produce a valid character with a complete sheet. A failure names the combinations that broke.
+- **API access tests** (`server/test/access.test.js`): `TEST_DATABASE_URL=… npm test -w server`, against a throwaway database (they skip without one). A second account gets "not found" on the first one's characters, campaigns, logs and encounters; a party member reads logs but can't write them; a sheet with made-up numbers is rebuilt from its build; the 21st sign-in attempt in 15 minutes is refused.
+- **Server hardening:** see section 16.
 - **GitHub Actions** runs the tests and a client build on every push and pull request.
 - **UI checks:** done with headless Windows Chrome screenshots from WSL, using a small proxy that sets demo or sign-in state. Tap-specific behavior wasn't testable this way.
 - **S3:** tested against Versity Gateway locally, not real AWS.
