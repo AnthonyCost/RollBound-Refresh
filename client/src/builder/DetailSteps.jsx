@@ -832,10 +832,11 @@ function GearLeaf({ i, owned, primary, untrained, replacing, over, onBuy, onSell
 const STEP_LABEL = { ancestry: 'Ancestry', background: 'Background', class: 'Class', attributes: 'Attributes', skills: 'Skills', feats: 'Feats', spells: 'Spells', gear: 'Gear' };
 
 /**
- * The finished page: the class banner behind the character's name, what's still to
- * do (each linking to its step), then the character laid out as a two-page spread.
+ * The finished page: the class banner behind the character's name (with the portrait
+ * picker across from it, when one is passed in), what's still to do (each linking to its
+ * step), then the character laid out as a two-page spread.
  */
-export function ReviewStep({ build, update, data, goTo, inventory = null }) {
+export function ReviewStep({ build, update, data, goTo, inventory = null, portrait = null }) {
   const problems = buildProblems(build, data).filter((p) => p.step !== 'review');
   // A saved character's sheet wears what its inventory has equipped, so show the same here.
   const character = problems.length ? null : equipCharacter(buildCharacter({ ...build, name: build.name || 'Unnamed' }, data), inventory, data);
@@ -846,7 +847,9 @@ export function ReviewStep({ build, update, data, goTo, inventory = null }) {
 
   return (
     <>
-      <header className="review-hero" style={banner ? { '--review-art': `url(${banner})` } : undefined}>
+      <header className={`review-hero ${portrait ? 'review-hero--portrait' : ''}`} style={banner ? { '--review-art': `url(${banner})` } : undefined}>
+        {portrait && <div className="review-hero__portrait">{portrait}</div>}
+        <div className="review-hero__main">
         <label className="review-hero__name">
           <span className="eyebrow">Character name</span>
           <input value={build.name} maxLength={60} onChange={(e) => update({ name: e.target.value })} placeholder="Mira Ashvale" aria-invalid={!build.name.trim()} aria-describedby="review-name-note" />
@@ -856,6 +859,7 @@ export function ReviewStep({ build, update, data, goTo, inventory = null }) {
           Level 1{line && ` ${line}`}
           {sub && <span className="muted"> · {sub}</span>}
         </p>
+        </div>
       </header>
 
       {problems.length > 0 && (

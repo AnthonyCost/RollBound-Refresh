@@ -157,6 +157,21 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     },
     [readOnly, shield, currentInventory, setInventory],
   );
+  /**
+   * Shield Block (Player Core): the raised shield prevents damage equal to its Hardness,
+   * and the shield and you each take whatever is left. A broken shield can't block.
+   * Returns { stopped, through }, or null when there's no shield that can block.
+   */
+  const shieldBlock = useCallback(
+    (amount) => {
+      if (readOnly || !shield || shield.broken) return null;
+      const through = Math.max(0, amount - shield.hardness);
+      setShieldDamage(shield.max - shield.current + through);
+      if (through) setHp(currentHp - through);
+      return { stopped: amount - through, through };
+    },
+    [readOnly, shield, setShieldDamage, setHp, currentHp],
+  );
   // Spells prepared today, for casters who prepare from the spells they know; null for others.
   const prepared = useMemo(() => preparedSpells(character, storedPrepared), [character, storedPrepared]);
   /** Saves a prepared list: { cantrips, slots } of spell keys (see preparedValue). */
@@ -267,6 +282,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       preparedStatus,
       shield,
       setShieldDamage,
+      shieldBlock,
       loading: loading || !gearReady,
       notFound,
       round,
@@ -284,7 +300,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       cycleCondition,
       resetEncounter,
     }),
-    [character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

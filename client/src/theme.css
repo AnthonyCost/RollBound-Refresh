@@ -297,15 +297,70 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .orb--healed-0, .orb--healed-1 { animation: none; box-shadow: 0 0 30px 4px var(--gold), inset 0 0 0 3px var(--gold), inset 0 0 0 5px var(--bg); }
 }
 
-.hp-tracker { display: flex; flex-direction: column; gap: 10px; }
-.hp-tracker__head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.hp-tracker__head .panel__title { margin: 0; }
-.hp-tracker__now { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1px; }
-.hp-tracker__row { display: flex; gap: 8px; }
-.hp-tracker__row .btn { min-height: 44px; }
+.hp-tracker { display: flex; flex-direction: column; gap: 4px; width: 92px; }
+.hp-tracker__btn { min-height: 32px; padding: 0 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); font: 700 11px/1 var(--display); letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: border-color var(--motion-fast), background-color var(--motion-fast), transform var(--motion-fast) var(--ease-out); }
+.hp-tracker__btn--heal { color: var(--gold); }
+.hp-tracker__btn--damage { color: var(--blood-text); }
+.hp-tracker__btn:not(:disabled):active { transform: scale(0.96); }
+@media (hover: hover) {
+  .hp-tracker__btn--heal:not(:disabled):hover { border-color: var(--gold); background: rgb(230 184 92 / 0.08); }
+  .hp-tracker__btn--damage:not(:disabled):hover { border-color: var(--blood); background: var(--panel-hot); }
+}
+.hp-tracker__btn:disabled { opacity: 0.45; cursor: default; }
 .hp-tracker__amount input, .share__url { min-height: 44px; border: 1px solid var(--line); background: var(--bg); color: var(--text); }
-.hp-tracker__amount input { width: 72px; padding: 0 6px; font-family: var(--display); font-size: 18px; text-align: center; }
-.hp-tracker__full { align-self: center; }
+.hp-tracker__amount input { width: 100%; padding: 0 6px; border-radius: 4px; font-family: var(--display); font-size: 20px; font-weight: 700; text-align: center; }
+/* The shield's tracker, below the defenses. */
+.shield-tracker { display: flex; flex-direction: column; gap: 10px; }
+.shield-tracker__head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.shield-tracker__head .panel__title { margin: 0; }
+.shield-tracker__now { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1px; }
+.shield-tracker__row { display: flex; gap: 8px; }
+.shield-tracker__row .btn { min-height: 44px; }
+.shield-tracker__amount input { min-height: 44px; width: 72px; padding: 0 6px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-family: var(--display); font-size: 18px; text-align: center; }
+.shield-tracker__full { align-self: center; }
+/* The header's hit point corner: the stack beside the orb. */
+.sheet-hp { position: relative; display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: flex-end; gap: 6px 14px; }
+.sheet-hp__error { flex-basis: 100%; max-width: 260px; margin: 0; }
+
+/* The shield beside the orb: whole, chipped, cracked, then shattered once broken. */
+.shield-gauge { position: relative; display: grid; place-items: center; width: 74px; height: 86px; padding: 0; border: 0; background: none; cursor: pointer; filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.6)); transition: filter var(--motion), transform var(--motion-fast) var(--ease-out); }
+.shield-gauge svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.shield-gauge__face { fill: #33281f; }
+.shield-gauge__face--lit { fill: #54432f; }
+.shield-gauge__rim { fill: none; stroke: var(--bronze); stroke-width: 2; opacity: 0.55; }
+.shield-gauge__edge { fill: none; stroke: var(--bronze); stroke-width: 3.5; stroke-linejoin: round; }
+.shield-gauge__crack, .shield-gauge__glint { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.shield-gauge__crack { stroke: #0b0807; }
+.shield-gauge__glint { stroke: var(--bronze); opacity: 0.7; }
+.shield-gauge__crack--chipped { stroke-width: 5; }
+.shield-gauge__crack--cracked { stroke-width: 4; }
+.shield-gauge__crack--shattered { stroke-width: 6; }
+.shield-gauge--shattered .shield-gauge__edge, .shield-gauge--shattered .shield-gauge__rim { stroke: var(--blood-text); }
+.shield-gauge--destroyed { opacity: 0.45; filter: grayscale(1); }
+.shield-gauge--raised { filter: drop-shadow(0 0 12px rgb(230 184 92 / 0.55)) drop-shadow(0 4px 10px rgb(0 0 0 / 0.6)); }
+.shield-gauge--raised .shield-gauge__edge { stroke: var(--gold); }
+.shield-gauge[aria-pressed='true'] .shield-gauge__edge { stroke: var(--gold); stroke-width: 4.5; }
+@media (hover: hover) { .shield-gauge:hover { transform: translateY(-2px); } }
+.shield-gauge__hp { position: relative; margin-top: -6px; font-family: var(--display); font-size: 22px; font-weight: 700; color: #f7edda; text-shadow: 0 1px 3px #000; }
+.shield-gauge--destroyed .shield-gauge__hp { color: var(--text-muted); }
+.shield-gauge--hit-0 { animation: shield-hit-a 420ms ease-out; }
+.shield-gauge--hit-1 { animation: shield-hit-b 420ms ease-out; }
+@keyframes shield-hit-a { 15% { transform: translateX(-4px) rotate(-3deg); } 40% { transform: translateX(4px) rotate(2deg); } 65% { transform: translateX(-2px); } }
+@keyframes shield-hit-b { 15% { transform: translateX(-4px) rotate(-3deg); } 40% { transform: translateX(4px) rotate(2deg); } 65% { transform: translateX(-2px); } }
+.vitals__status--raised { color: var(--gold); }
+/* "Block with your shield?": under the hit point corner, after Damage is pressed. */
+/* A dropdown under the hit point corner, floating over the page so nothing moves. */
+.hp-block { position: absolute; top: calc(100% + 10px); right: 0; z-index: 30; width: min(380px, calc(100vw - 32px)); display: flex; flex-direction: column; gap: 6px; margin: 0; text-align: left; box-shadow: 0 14px 34px rgb(0 0 0 / 0.65); }
+.hp-block .btn-row { flex-wrap: wrap; }
+.hp-block .btn-row .btn { flex: 1 1 120px; }
+.hp-block p { margin: 0; }
+.hp-block__q { font: 700 15px/1.3 var(--display); color: var(--text); }
+.hp-block__math { font-size: 14px; line-height: 1.5; color: var(--text-soft); }
+.hp-block__math strong { color: var(--blood-text); }
+.hp-block__note { font-size: 12px; }
+.hp-block .btn-row { margin-top: 4px; }
+.vitals__status { font-size: 12px; color: var(--blood-text); white-space: nowrap; }
+.vitals__status .link-button { font-size: 12px; }
 
 /* ---------- Spell Book, Inventory, Lore tabs ---------- */
 
@@ -1363,6 +1418,19 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   background: linear-gradient(180deg, rgba(11, 9, 8, 0.15), rgba(11, 9, 8, 0.92) 78%), var(--review-art, radial-gradient(ellipse at 50% 0%, #3a0f0a, var(--bg))) center 30% / cover;
 }
 .review-hero__name { display: flex; flex-direction: column; gap: 4px; }
+/* With the portrait: name and line on the left, the portrait in the top right corner. */
+.review-hero--portrait { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; column-gap: clamp(14px, 3vw, 28px); }
+.review-hero__main { display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; min-width: 0; }
+.review-hero__portrait { grid-column: 2; grid-row: 1; align-self: start; width: clamp(92px, 12vw + 40px, 168px); }
+.review-hero__portrait .form-field { gap: 4px; }
+.review-hero__portrait .form-field > span:first-child { font: 700 11px/1.2 var(--display); letter-spacing: 1.5px; text-transform: uppercase; color: var(--bronze); }
+.image-picker.image-picker--compact { max-width: none; width: 100%; border-color: var(--bronze); background: rgb(7 5 5 / 0.55); box-shadow: 0 8px 22px rgb(0 0 0 / 0.5); }
+.image-picker.image-picker--compact.image-picker--filled { border-style: solid; }
+.image-picker--compact .image-picker__label { padding: 8px; text-align: center; }
+.image-picker--compact.image-picker--filled .image-picker__label { position: absolute; inset: auto 6px 6px; padding: 4px 6px; opacity: 0; transition: opacity var(--motion-fast); }
+.image-picker--compact.image-picker--filled:is(:hover, :focus-within) .image-picker__label { opacity: 1; }
+@media (hover: none) { .image-picker--compact.image-picker--filled .image-picker__label { opacity: 1; } }
+.review-hero__portrait .link-button { font-size: 12px; }
 .review-hero__name input {
   width: 100%;
   padding: 4px 0 6px;
@@ -1536,6 +1604,10 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 .builder__header .rule-note { max-width: 62ch; }
 
 /* The builder's first screen: build your own, or a pregenerated hero. */
+/* A draft in progress, offered on the start screen. */
+.builder-resume { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; }
+.builder-resume p { flex: 1 1 280px; margin: 0; font-size: 15px; line-height: 1.5; color: var(--text-soft); }
+.builder-resume strong { color: var(--text); }
 .start-choices { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin: 0; padding: 0; list-style: none; }
 @container (min-width: 640px) { .start-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .start-choices > li { display: flex; }
@@ -2731,7 +2803,6 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .sheet-def__extra { font-size: 12px; font-style: italic; color: var(--text-muted); }
 /* AC in a shield shape, as on the sheet. */
 .sheet-def--ac { border-color: var(--line); border-radius: 6px 6px 50% 50% / 6px 6px 34% 34%; padding-bottom: 20px; }
-.sheet-def--hp .sheet-def__value { color: var(--blood-text); }
 .sheet-def--shield .sheet-def__value { color: var(--bronze); }
 .sheet-def--broken { border-color: var(--blood); }
 .sheet-def--broken .sheet-def__value, .sheet-def--broken .sheet-def__extra { color: var(--blood-text); font-style: normal; }
@@ -2860,8 +2931,8 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
   .sheet-attrs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (min-width: 900px) {
-  .sheet-defense { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.8fr); }
-  .sheet-defense--shield { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.1fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.8fr); }
+  .sheet-defense { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1fr) minmax(0, 0.8fr); }
+  .sheet-defense--shield { grid-template-columns: minmax(0, 1.05fr) minmax(0, 3fr) minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.8fr); }
   .sheet-def-group { grid-column: auto; }
   .sheet__columns { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
@@ -3165,7 +3236,8 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 /* The sheet's AC stands alone above the saves until the band fits on one row. */
 .sheet-def--ac { grid-column: 1 / -1; justify-self: center; width: min(280px, 100%); }
 @media (max-width: 899px) {
-  .sheet-defense:not(.sheet-defense--shield) .sheet-def--hp { grid-column: 1 / -1; }
+  /* With a shield there are three boxes after the saves: the shield gets its own row. */
+  .sheet-defense--shield .sheet-def--shield { grid-column: 1 / -1; }
   /* Only the current crumb, so it doesn't crowd the wordmark. */
   .crumbs__item:not(.crumbs__item--current), .crumbs__sep { display: none; }
 }
@@ -3204,18 +3276,18 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
   .nav a { flex: 1 0 auto; flex-direction: column; justify-content: center; gap: 3px; min-height: 56px; padding: 6px 6px 4px; font-size: 9px; letter-spacing: 0.5px; }
 
   /* The sheet's header: portrait and health side by side, then name and details at full width. */
-  .sheet-head { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'portrait orb' 'name name' 'fields fields' 'campaign campaign'; gap: 10px 16px; }
+  /* Portrait beside the name, then the hit point corner on its own row, then the details. */
+  .sheet-head { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'portrait name' 'hp hp' 'fields fields' 'campaign campaign'; gap: 12px 16px; }
   .sheet-head__body { display: contents; }
   .sheet-head .hero__portrait { grid-area: portrait; }
-  .sheet-head > :last-child { grid-area: orb; justify-self: end; }
+  .sheet-head > :last-child { grid-area: hp; justify-self: stretch; }
+  .sheet-head__name { align-self: center; }
+  .sheet-hp { flex-wrap: nowrap; justify-content: space-between; gap: 6px 10px; }
+  .sheet-hp .hp-block { right: auto; left: 0; width: 100%; }
   .sheet-head__name { grid-area: name; }
   .sheet-head__fields { grid-area: fields; }
   .sheet-head .hero__campaign { grid-area: campaign; }
 
-  /* The amount gets its own line, so the two buttons have room for their labels. */
-  .hp-tracker__row { flex-wrap: wrap; }
-  .hp-tracker__amount { flex: 1 1 100%; }
-  .hp-tracker__amount input { width: 100%; }
 }
 @media (max-width: 480px) {
   .threat-meter__scale { grid-template-columns: minmax(0, 1fr); text-align: left; }
@@ -3234,5 +3306,9 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
   .topbar .menu--create { display: none; }
   .btn-row { flex-wrap: wrap; }
   .btn-row .btn--grow { flex: 1 1 100%; }
-  .hp-tracker__row .btn { flex: 1 1 100%; }
+  /* The shield's amount gets its own line, so the two buttons have room for their labels. */
+  .shield-tracker__row { flex-wrap: wrap; }
+  .shield-tracker__amount { flex: 1 1 100%; }
+  .shield-tracker__amount input { width: 100%; }
+  .shield-tracker__row .btn { flex: 1 1 100%; }
 }

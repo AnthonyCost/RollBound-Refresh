@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { armorClass, landSpeed, swimSpeed, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
+import ShieldGauge from '../components/ShieldGauge.jsx';
 import Portrait from '../components/Portrait.jsx';
 import PortraitEditor from '../components/PortraitEditor.jsx';
 import ExportSheetButton from '../components/ExportSheetButton.jsx';
@@ -28,7 +29,7 @@ const WEAPON_CATEGORIES = ['unarmed', 'simple', 'martial', 'advanced'];
  * it's worked out and the rules behind it.
  */
 export default function SheetPage() {
-  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, conditions, shieldRaised, shield } = useTable();
+  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield } = useTable();
   const [editingPortrait, setEditingPortrait] = useState(false);
   // What the details drawer shows: 'attr:str', 'def:ac', 'skill:athletics', 'strike:0', 'magic:classDc'.
   const [open, setOpen] = useState(null);
@@ -98,7 +99,13 @@ export default function SheetPage() {
           </dl>
           <CampaignLine campaign={campaign} readOnly={readOnly} />
         </div>
-        <HealthOrb current={currentHp} max={maxHp} />
+        {/* Hit points, top right: Heal, amount and Damage beside the orb (just the orb when read-only). */}
+        <div className="sheet-hp">
+          {!readOnly && <HpTracker />}
+          {shield && <ShieldGauge shield={shield} raised={shieldRaised} pressed={open === 'def:shield'} onOpen={() => toggle('def:shield')} />}
+          <HealthOrb current={currentHp} max={maxHp} onRestore={readOnly ? undefined : () => setHp(maxHp)} />
+          {hpError && <p className="rule-note rule-note--warn sheet-hp__error" role="alert">{hpError}</p>}
+        </div>
       </header>
 
       <div className="sheet__actions">
@@ -144,14 +151,6 @@ export default function SheetPage() {
           {defenseBox({ id: 'reflex', label: 'Reflex', rank: p.reflex })}
           {defenseBox({ id: 'will', label: 'Will', rank: p.will })}
         </div>
-        <div className="sheet-def sheet-def--hp">
-          <span className="sheet-def__label">Hit Points</span>
-          <span className="sheet-def__value">
-            {currentHp}
-            <small> / {maxHp}</small>
-          </span>
-          <span className="sheet-def__extra">{currentHp === maxHp ? 'Unhurt' : currentHp === 0 ? 'Dying' : `${maxHp - currentHp} damage taken`}</span>
-        </div>
         {shield && (
           <div className={`sheet-def sheet-def--shield ${shield.broken ? 'sheet-def--broken' : ''}`}>
             <span className="sheet-def__label">Shield</span>
@@ -175,7 +174,6 @@ export default function SheetPage() {
         </button>
       </section>
 
-      {!readOnly && <HpTracker />}
       {!readOnly && <ShieldTracker />}
 
       <div className="sheet__columns">
@@ -212,13 +210,13 @@ export default function SheetPage() {
 
       {!readOnly && <ShareSheet />}
 
-      <DetailsDrawer detail={open ? describe(open, character, opts) : null} onClose={close} />
+      <DetailsDrawer detail={open ? describe(open, character, opts, shield) : null} onClose={close} />
     </div>
   );
 }
 
 /** Everything the details drawer needs for one tapped number (see DetailsDrawer for the shape). */
-function describe(key, character, opts) {
+function describe(key, character, opts, shield) {
   const [kind, id] = [key.slice(0, key.indexOf(':')), key.slice(key.indexOf(':') + 1)];
   const p = character.proficiencies;
 
@@ -242,6 +240,21 @@ function describe(key, character, opts) {
 
   if (kind === 'def') {
     const info = DEFENSES[id];
+    if (id === 'shield') {
+      if (!shield) return null;
+      return {
+        ...info,
+        name: shield.name,
+        value: `${shield.current}`,
+        unit: `/ ${shield.max} HP`,
+        facts: [
+          ['Hardness', shield.hardness],
+          ['Broken Threshold', `${shield.brokenAt} HP`],
+          character.shield?.acBonus != null && ['AC when raised', `+${character.shield.acBonus}`],
+          ['Condition', shield.destroyed ? 'Destroyed' : shield.broken ? 'Broken' : shield.current < shield.max ? `${shield.max - shield.current} damage` : 'Undamaged'],
+        ].filter(Boolean),
+      };
+    }
     if (id === 'speed') {
       const swim = swimSpeed(character);
       return { ...info, stat: landSpeed(character), unsigned: true, unit: 'ft', facts: swim ? [['Swim Speed', `${swim} ft`]] : [] };

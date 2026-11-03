@@ -1,9 +1,9 @@
 // Demo accounts. "Try the demo" makes a real, temporary account for each visitor,
 // so the demo runs the same code as everyone else. It comes with a character of every
 // class (DEMO_ROSTER); a sample campaign the visitor runs, which a pretend player Sam's
-// ranger asks to join; and Sam's own campaign, where Mira already plays and the visitor
+// ranger asks to join; and Sam's own campaign, where Valeros already plays and the visitor
 // can ask to bring more characters, which Sam answers by himself. A GM's own characters
-// can't join their campaign, so Mira plays in Sam's. Demo accounts are deleted after DEMO_HOURS, or when the visitor
+// can't join their campaign, so Valeros plays in Sam's. Demo accounts are deleted after DEMO_HOURS, or when the visitor
 // exits the demo.
 import { randomBytes } from 'node:crypto';
 import { SAMPLE_BUILDS, DEMO_ROSTER, PREGENS, buildCharacter, migrateBuild } from '@rollbound/rules';
@@ -23,10 +23,9 @@ const CLEANUP_EVERY_MS = 60 * 60 * 1000;
 const DEMOS_PER_HOUR = 20;
 
 // Demo characters' portraits, by name: each pregen's own headshot (see storage/index.js).
-// Mira has the fighter's, and Kestrel, an elf ranger, borrows Merisiel's.
+// Kestrel, an elf ranger, borrows Merisiel's.
 const STOCK_PORTRAITS = {
   ...Object.fromEntries(PREGENS.map((p) => [p.name, `stock/${p.slug}.webp`])),
-  'Mira Ashvale': 'stock/valeros.webp',
   Kestrel: 'stock/merisiel.webp',
 };
 
@@ -36,7 +35,7 @@ const WELCOME = (vaultCode) => `This is a temporary demo account. Everything in 
 
 You run Wolves at the Ford. Sam, a pretend player, has asked to bring his ranger Kestrel into it: accept or reject the request above.
 
-Sam runs a campaign too, The Sunken Vault, and your fighter Mira is already in its party. Its invite code is ${vaultCode}. Enter it on the Campaigns page to ask to bring another of your characters; Sam answers within a few seconds.`;
+Sam runs a campaign too, The Sunken Vault, and your fighter Valeros is already in its party. Its invite code is ${vaultCode}. Enter it on the Campaigns page to ask to bring another of your characters; Sam answers within a few seconds.`;
 
 /** Creates a demo account with its sample content. Returns the user row. */
 export async function createDemo() {
@@ -56,8 +55,8 @@ export async function createDemo() {
       const c = sheet(build);
       return (await client.query('INSERT INTO characters (owner_id, campaign_id, name, level, data, share_id, portrait_key) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [owner.id, campaignId, c.name, c.level, c, generateShareId(), STOCK_PORTRAITS[c.name] ?? null])).rows[0];
     };
-    const [mira, ...heroes] = DEMO_ROSTER;
-    await character(user, mira, vault.id);
+    const [valeros, ...heroes] = DEMO_ROSTER;
+    await character(user, valeros, vault.id);
     for (const build of heroes) await character(user, build, null);
     kestrel = await character(sam, SAMPLE_BUILDS.kestrel, null);
     await client.query("INSERT INTO messages (user_id, kind, title, body) VALUES ($1, 'announcement', 'Welcome to the RollBound demo', $2)", [user.id, WELCOME(vault.invite_code)]);

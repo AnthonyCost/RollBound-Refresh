@@ -7,9 +7,10 @@ const TYPES = ['image/jpeg', 'image/png', 'image/webp'];
  * { remove: true } to drop the current one, or {} to keep `currentUrl`.
  * Validates and previews locally; uploading happens when the form is saved.
  * shape is "wide" (16:9 covers), "square" (portraits) or "avatar" (a small round picture
- * with its text beside it, for profile pictures).
+ * with its text beside it, for profile pictures). compact keeps only a short call to action
+ * inside the frame (the file rules move to a tooltip), for tight spots like a page header.
  */
-export default function ImagePicker({ label, value, currentUrl, onChange, shape = 'wide', maxMb = 5, hint }) {
+export default function ImagePicker({ label, value, currentUrl, onChange, shape = 'wide', maxMb = 5, hint, compact = false }) {
   const id = useId();
   const [filePreview, setFilePreview] = useState(null);
   const [error, setError] = useState(null);
@@ -33,10 +34,11 @@ export default function ImagePicker({ label, value, currentUrl, onChange, shape 
   };
 
   return (
-    <div className="form-field">
+    <div className={`form-field ${compact ? 'form-field--compact' : ''}`}>
       <span id={`${id}-label`}>{label}</span>
       <div
-        className={`image-picker image-picker--${shape} ${dragging ? 'image-picker--drag' : ''} ${shown ? 'image-picker--filled' : ''}`}
+        className={`image-picker image-picker--${shape} ${compact ? 'image-picker--compact' : ''} ${dragging ? 'image-picker--drag' : ''} ${shown ? 'image-picker--filled' : ''}`}
+        title={compact ? `Tap or drag an image here · JPEG, PNG, or WebP up to ${maxMb} MB${hint ? ` · ${hint}` : ''}` : undefined}
         onDragOver={(e) => {
           e.preventDefault();
           setDragging(true);
@@ -50,10 +52,12 @@ export default function ImagePicker({ label, value, currentUrl, onChange, shape 
       >
         {shown && <img className="image-picker__img" src={shown} alt={`${label} preview`} />}
         <label htmlFor={id} className="image-picker__label">
-          <span className="eyebrow">{shown ? 'Change' : 'Choose an image'}</span>
-          <small className="muted italic">
-            or drag one here · JPEG, PNG, or WebP up to {maxMb} MB{hint ? ` · ${hint}` : ''}
-          </small>
+          <span className="eyebrow">{shown ? 'Change' : compact ? 'Add portrait' : 'Choose an image'}</span>
+          {!compact && (
+            <small className="muted italic">
+              or drag one here · JPEG, PNG, or WebP up to {maxMb} MB{hint ? ` · ${hint}` : ''}
+            </small>
+          )}
         </label>
         <input
           id={id}

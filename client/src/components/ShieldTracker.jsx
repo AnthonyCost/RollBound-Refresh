@@ -6,16 +6,16 @@ import { useTable } from '../state/TableContext.jsx';
  * the damage, and the shield and you each take the rest) or repair it.
  */
 export default function ShieldTracker() {
-  const { shield, setShieldDamage } = useTable();
+  const { shield, setShieldDamage, shieldBlock } = useTable();
   const [amount, setAmount] = useState('1');
   const [last, setLast] = useState(null);
   if (!shield) return null;
   const n = Math.max(0, Math.floor(Number(amount))) || 0;
   const damage = shield.max - shield.current;
 
+  // Shield Block applies to both the shield and your Hit Points (see shieldBlock).
   const block = () => {
-    const through = Math.max(0, n - shield.hardness);
-    setShieldDamage(damage + through);
+    const { through } = shieldBlock(n) ?? { through: 0 };
     setLast(
       through
         ? `Hardness ${shield.hardness} stopped ${n - through}. ${shield.name} and you each take ${through}.`
@@ -28,19 +28,19 @@ export default function ShieldTracker() {
   };
 
   return (
-    <section className="panel hp-tracker" aria-labelledby="shield-tracker-title">
-      <div className="hp-tracker__head">
+    <section className="panel shield-tracker" aria-labelledby="shield-tracker-title">
+      <div className="shield-tracker__head">
         <h2 id="shield-tracker-title" className="panel__title">{shield.name}</h2>
-        <span className="hp-tracker__now">
+        <span className="shield-tracker__now">
           {shield.current} / {shield.max}
         </span>
       </div>
-      <div className="hp-tracker__row">
-        <label className="hp-tracker__amount">
+      <div className="shield-tracker__row">
+        <label className="shield-tracker__amount">
           <span className="visually-hidden">Damage from the attack</span>
           <input type="number" inputMode="numeric" min="0" value={amount} onChange={(e) => setAmount(e.target.value)} />
         </label>
-        <button type="button" className="btn btn--blood btn--grow" disabled={!n || shield.destroyed} onClick={block}>
+        <button type="button" className="btn btn--blood btn--grow" disabled={!n || shield.broken} onClick={block}>
           Shield Block
         </button>
         <button type="button" className="btn btn--grow" disabled={!n || !damage} onClick={() => repair(n)}>
@@ -56,7 +56,7 @@ export default function ShieldTracker() {
         <p className="rule-note rule-note--warn" style={{ margin: 0 }}>Broken: at {shield.brokenAt} Hit Points or fewer it can't be raised or used to block until it's repaired.</p>
       ) : null}
       {damage > 0 && !shield.destroyed && (
-        <button type="button" className="link-button hp-tracker__full" onClick={() => repair(damage)}>
+        <button type="button" className="link-button shield-tracker__full" onClick={() => repair(damage)}>
           Repair fully
         </button>
       )}

@@ -1,5 +1,5 @@
-// Builder choices for the demo account's characters (server/src/demo.js): Mira, the
-// player's fighter, and Kestrel, the pretend player Sam's ranger. They're IDs into
+// Builder choices for sample characters: Mira, a custom fighter the tests build, and
+// Kestrel, the demo's pretend player Sam's ranger (server/src/demo.js). They're IDs into
 // the rules data, so a re-import that changes them fails test/builder.test.js.
 import { PREGENS } from './pregens.js';
 
@@ -115,5 +115,6 @@ export const SAMPLE_BUILDS = {
   }
 };
 
-/** The demo visitor's characters: Mira, then a pregenerated hero of every other class. */
-export const DEMO_ROSTER = [SAMPLE_BUILDS.mira, ...PREGENS.filter((p) => p.classSlug !== 'fighter').map((p) => p.build)];
+/** The demo visitor's characters: Valeros, the iconic fighter, then every other pregenerated hero. */
+const VALEROS = PREGENS.find((p) => p.slug === 'valeros');
+export const DEMO_ROSTER = [VALEROS.build, ...PREGENS.filter((p) => p !== VALEROS).map((p) => p.build)];

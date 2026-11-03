@@ -96,6 +96,15 @@ export const DEFENSES = {
       'Some armor lowers it. Meeting the armor’s Strength entry reduces that penalty by 5 feet.',
     ],
   },
+  shield: {
+    kind: 'Shield',
+    icon: 'shield',
+    rules: [
+      'Raise a Shield (one action) adds its circumstance bonus to your AC until the start of your next turn.',
+      'With the Shield Block reaction, a raised shield takes a hit for you: the damage is reduced by its Hardness, and you and the shield each take whatever is left.',
+      'At its Broken Threshold (half its Hit Points) it’s broken and gives no bonus until it’s repaired. At 0 Hit Points it’s destroyed.',
+    ],
+  },
   classDc: {
     kind: 'Class DC',
     name: 'Class DC',

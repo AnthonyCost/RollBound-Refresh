@@ -6,9 +6,10 @@ const HIT_MS = 420;
 
 /**
  * Hit points as a globe of blood that fills to match: 10 of 20 is half full.
- * The number inside is current HP; the maximum sits underneath.
+ * The number inside is current HP; the maximum sits underneath, then how hurt you are
+ * (and onRestore, if given, as a way back to full).
  */
-export default function HealthOrb({ current, max }) {
+export default function HealthOrb({ current, max, onRestore }) {
   // A gold glow when hit points go up, a red shake when they go down. Each change swaps
   // between two copies of the animation, which restarts it without remounting the globe.
   const previous = useRef(current);
@@ -43,6 +44,17 @@ export default function HealthOrb({ current, max }) {
       <span className="vitals__max">
         Max HP <strong>{max}</strong>
       </span>
+      {current < max && (
+        <span className="vitals__status">
+          {current === 0 ? 'Dying' : `${max - current} damage taken`}
+          {onRestore && (
+            <>
+              {' · '}
+              <button type="button" className="link-button" onClick={onRestore}>Restore</button>
+            </>
+          )}
+        </span>
+      )}
     </div>
   );
 }

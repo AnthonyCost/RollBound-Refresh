@@ -332,16 +332,27 @@ export default function BuilderPage() {
     setDraft((d) => ({ ...d, step: s }));
     window.scrollTo(0, 0);
   };
-  // The start screen shows for a new character until the player picks how to begin.
-  const choosing = !editId && !start;
+  // A new character always opens on the start screen, even with a draft saved: the
+  // player picks Build your own (a fresh build), an iconic hero, or Continue the draft.
+  const [picked, setPicked] = useState(false);
+  const choosing = !editId && !picked;
   const startCustom = () => {
-    setDraft((d) => ({ ...d, start: 'custom', step: STEPS[0] }));
+    // A fresh build, keeping the campaign it's for (from an invite link).
+    setDraft((d) => ({ ...BLANK, campaign: d.campaign ?? null, start: 'custom' }));
+    setRemoved([]);
     setPortrait({});
+    setPicked(true);
+    window.scrollTo(0, 0);
+  };
+  const continueDraft = () => {
+    setDraft((d) => ({ ...d, start: d.start ?? 'custom' }));
+    setPicked(true);
     window.scrollTo(0, 0);
   };
   const startPregen = (pregen, headshotUrl) => {
     const chosen = data ? dropBookIssues(dropMissingChoices(migrateBuild(pregen.build, data), data), data, campaign?.books ?? null) : pregen.build;
     setDraft((d) => ({ ...d, start: 'pregen', build: chosen, step: 'review' }));
+    setPicked(true);
     window.scrollTo(0, 0);
     // Their headshot as the portrait, ready to save with them (it can still be changed).
     if (headshotUrl) {
@@ -359,6 +370,8 @@ export default function BuilderPage() {
   const problems = view ? buildProblems(build, view) : [];
   const touched = (s) => STEP_TOUCHED[s](build);
   const anyTouched = STEPS.some(touched);
+  // A draft worth offering to continue: one the player had already started on.
+  const inProgress = !editId && hadDraft && (start === 'pregen' || anyTouched);
   const [confirmReset, setConfirmReset] = useState(false);
 
   const save = async () => {
@@ -405,7 +418,7 @@ export default function BuilderPage() {
         ]}
         actions={
           <>
-            {(anyTouched || (!editId && start)) && (
+            {!choosing && (anyTouched || (!editId && start)) && (
               <button type="button" className="btn btn--small" onClick={() => setConfirmReset(true)}>
                 Reset
               </button>
@@ -448,6 +461,15 @@ export default function BuilderPage() {
             </header>
             {!data && !loadFailed && <p className="muted italic center">Opening the rulebooks…</p>}
             {data && <CampaignBar campaign={campaign} removed={removed} onChoose={chooseCampaign} onClear={clearCampaign} />}
+            {inProgress && (
+              <div className="panel builder-resume">
+                <p>
+                  You have a character in progress: <strong>{build.name?.trim() || 'an unnamed hero'}</strong>, on step {index + 1} of {STEPS.length}.
+                  Build your own starts over.
+                </p>
+                <button type="button" className="btn btn--blood" onClick={continueDraft}>Continue</button>
+              </div>
+            )}
             <StartStep onCustom={startCustom} onPregen={startPregen} />
           </>
         ) : (
@@ -494,11 +516,20 @@ export default function BuilderPage() {
           </section>
         )}
 
-        {stepData && <info.Component build={build} update={update} data={stepData} goTo={goTo} inventory={editing?.inventory} />}
+        {stepData && (
+          <info.Component
+            build={build}
+            update={update}
+            data={stepData}
+            goTo={goTo}
+            inventory={editing?.inventory}
+            // The portrait sits in the review's header, across from the name. Edits change it from the sheet.
+            portrait={step === 'review' && !editId ? <ImagePicker label="Portrait (optional)" shape="square" compact hint="you can add or change it later from the sheet" value={portrait} onChange={setPortrait} /> : null}
+          />
+        )}
 
         {step === 'review' && (
           <>
-            {!editId && <ImagePicker label="Portrait (optional)" shape="square" hint="you can add or change it later from the sheet" value={portrait} onChange={setPortrait} />}
             <FormErrors errors={errors} />
             {isDemo && !editId && <p className="rule-note center">Demo characters are deleted with the demo. Create an account to keep yours.</p>}
             <button type="button" className="btn btn--blood builder__save" disabled={!ready || problems.length > 0 || saving} onClick={save}>
