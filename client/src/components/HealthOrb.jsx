@@ -9,7 +9,7 @@ const HIT_MS = 420;
  * The number inside is current HP; the maximum sits underneath, then how hurt you are
  * (and onRestore, if given, as a way back to full).
  */
-export default function HealthOrb({ current, max, onRestore }) {
+export default function HealthOrb({ current, max, onRestore, onOpen, pressed = false }) {
   // A gold glow when hit points go up, a red shake when they go down. Each change swaps
   // between two copies of the animation, which restarts it without remounting the globe.
   const previous = useRef(current);
@@ -27,8 +27,7 @@ export default function HealthOrb({ current, max, onRestore }) {
   }, [current]);
 
   const pct = max > 0 ? Math.max(0, Math.min(1, current / max)) * 100 : 0;
-  return (
-    <div className="vitals">
+  const orb = (
       <div
         className={`orb${current === 0 ? ' orb--down' : pct <= 25 ? ' orb--low' : ''}${effect ? ` orb--${effect} orb--${effect}-${changes % 2}` : ''}`}
         role="meter"
@@ -41,6 +40,15 @@ export default function HealthOrb({ current, max, onRestore }) {
         <div className="orb__fill" style={{ height: `${pct}%` }} />
         <span className="orb__hp">{current}</span>
       </div>
+  );
+  return (
+    <div className="vitals">
+      {/* Tappable when onOpen is given: the sheet's details drawer explains hit points. */}
+      {onOpen ? (
+        <button type="button" className="orb-button" aria-pressed={pressed} onClick={onOpen} aria-label={`Hit points: ${current} of ${max}. Show details`}>
+          {orb}
+        </button>
+      ) : orb}
       <span className="vitals__max">
         Max HP <strong>{max}</strong>
       </span>

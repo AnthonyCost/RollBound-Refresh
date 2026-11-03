@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Icon from './Icon.jsx';
 import RankPips from './RankPips.jsx';
 import ActionCost from './ActionCost.jsx';
@@ -14,8 +15,9 @@ export const detailValue = (d) => d.value ?? (d.unsigned ? d.stat.total : signed
  * wide screens, up from the bottom on phones) with where the number comes from and the
  * rules behind it. It has no backdrop, so tapping another number swaps what it shows.
  *
- * detail: { kind, name, icon, stat?, value?, unsigned?, unit?, rank?, ability?, actions?,
- *           facts?: [label, value][], rules: string[], traits?: [name, rule][], uses?: [name, cost, trainedOnly][] }
+ * detail: { kind, name, icon, stat?, value?, unsigned?, unit?, total?, totalLabel?, rank?, ability?, actions?,
+ *           facts?: [label, value][], rules?: string[], html?: rules text as HTML, note?,
+ *           sections?: { title, items: [name, text][], empty? }[], uses?: [name, cost, trainedOnly][], link?: { to, label } }
  * inline: shown in place, not sliding over the page (for previews such as the style lab).
  */
 export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
@@ -72,8 +74,8 @@ export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
                 </div>
               ))}
               <div className="details__row details__total">
-                <dt>Total</dt>
-                <dd>{detailValue(d)}</dd>
+                <dt>{d.totalLabel ?? 'Total'}</dt>
+                <dd>{d.total ?? detailValue(d)}</dd>
               </div>
             </dl>
           )}
@@ -89,23 +91,31 @@ export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
             </dl>
           )}
 
-          <div className="details__rules">
-            {d.rules.map((r) => <p key={r.slice(0, 40)}>{r}</p>)}
-          </div>
-
-          {d.traits?.length > 0 && (
-            <>
-              <h3 className="details__sub">Traits</h3>
-              <dl className="details__traits">
-                {d.traits.map(([name, rule]) => (
-                  <div key={name}>
-                    <dt>{name}</dt>
-                    {rule && <dd>{rule}</dd>}
-                  </div>
-                ))}
-              </dl>
-            </>
+          {d.rules?.length > 0 && (
+            <div className="details__rules">
+              {d.rules.map((r) => <p key={r.slice(0, 40)}>{r}</p>)}
+            </div>
           )}
+          {d.note && <p className="details__note">{d.note}</p>}
+          {d.html && <div className="option__desc details__html" dangerouslySetInnerHTML={{ __html: d.html }} />}
+
+          {d.sections?.map((sec) => (sec.items.length > 0 || sec.empty) && (
+            <section key={sec.title}>
+              <h3 className="details__sub">{sec.title}</h3>
+              {sec.items.length > 0 ? (
+                <dl className="details__traits">
+                  {sec.items.map(([name, text]) => (
+                    <div key={name}>
+                      <dt>{name}</dt>
+                      {text && <dd>{text}</dd>}
+                    </div>
+                  ))}
+                </dl>
+              ) : (
+                <p className="details__note">{sec.empty}</p>
+              )}
+            </section>
+          ))}
 
           {d.uses?.length > 0 && (
             <>
@@ -121,6 +131,7 @@ export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
               </ul>
             </>
           )}
+          {d.link && <Link to={d.link.to} className="details__link">{d.link.label}</Link>}
         </div>
       )}
     </aside>

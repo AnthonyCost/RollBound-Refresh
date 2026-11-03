@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { armorClass, landSpeed, swimSpeed, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey } from '@rollbound/rules';
+import { armorClass, landSpeed, swimSpeed, savingThrow, perception, abilityName, skillCheck, SKILL_ABILITY, spellAttack, spellDc, classDc, strikeBonus, damageModifier, spellKey, describeCondition } from '@rollbound/rules';
+import { loadRules } from '../state/rulesData.js';
 import { useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import ShieldGauge from '../components/ShieldGauge.jsx';
@@ -8,12 +9,12 @@ import Portrait from '../components/Portrait.jsx';
 import PortraitEditor from '../components/PortraitEditor.jsx';
 import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import DetailsDrawer from '../components/DetailsDrawer.jsx';
-import { ATTRIBUTES, KEY_ATTRIBUTE, DEFENSES, SKILLS, LORE, UNTRAINED_NOTE, STRIKE, traitRule, traitLabel } from '../sheet/sheetRules.js';
+import { ATTRIBUTES, KEY_ATTRIBUTE, DEFENSES, HIT_POINTS, SKILLS, LORE, UNTRAINED_NOTE, STRIKE, traitRule, traitLabel } from '../sheet/sheetRules.js';
 import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
 import HpTracker from '../components/HpTracker.jsx';
 import ShieldTracker from '../components/ShieldTracker.jsx';
 import ShareSheet from '../components/ShareSheet.jsx';
-import { signed, titleCase } from '../format.js';
+import { sentenceCase, signed, titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
 import RankPips from '../components/RankPips.jsx';
 
@@ -21,6 +22,26 @@ const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 const SIZE = { tiny: 'Tiny', sm: 'Small', med: 'Medium', lg: 'Large' };
 const SENSES = { darkvision: 'Darkvision', 'low-light-vision': 'Low-light vision' };
 const WEAPON_CATEGORIES = ['unarmed', 'simple', 'martial', 'advanced'];
+const SPELL_TYPES = ['spells'];
+
+/** The spells' full rules text, loaded the first time it's needed (when a spell is tapped). */
+function useSpellRules(needed) {
+  const [data, setData] = useState(null);
+  const [wanted, setWanted] = useState(false);
+  if (needed && !wanted) setWanted(true);
+  useEffect(() => {
+    if (!wanted) return undefined;
+    let cancelled = false;
+    loadRules({ types: SPELL_TYPES }).then(
+      (d) => !cancelled && setData(d),
+      () => !cancelled && setData({ error: true }),
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [wanted]);
+  return data;
+}
 
 /**
  * The character sheet, laid out like page one of Paizo's sheet: the header, the
@@ -29,10 +50,11 @@ const WEAPON_CATEGORIES = ['unarmed', 'simple', 'martial', 'advanced'];
  * it's worked out and the rules behind it.
  */
 export default function SheetPage() {
-  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield } = useTable();
+  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared } = useTable();
   const [editingPortrait, setEditingPortrait] = useState(false);
-  // What the details drawer shows: 'attr:str', 'def:ac', 'skill:athletics', 'strike:0', 'magic:classDc'.
+  // What the details drawer shows: 'attr:str', 'def:ac', 'hp:', 'skill:athletics', 'strike:0', 'magic:classDc', 'spell:<id>'.
   const [open, setOpen] = useState(null);
+  const spellRules = useSpellRules(Boolean(open?.startsWith('spell:')));
   const toggle = (key) => setOpen((cur) => (cur === key ? null : key));
   const close = useCallback(() => setOpen(null), []);
 
@@ -103,7 +125,7 @@ export default function SheetPage() {
         <div className="sheet-hp">
           {!readOnly && <HpTracker />}
           {shield && <ShieldGauge shield={shield} raised={shieldRaised} pressed={open === 'def:shield'} onOpen={() => toggle('def:shield')} />}
-          <HealthOrb current={currentHp} max={maxHp} onRestore={readOnly ? undefined : () => setHp(maxHp)} />
+          <HealthOrb current={currentHp} max={maxHp} onRestore={readOnly ? undefined : () => setHp(maxHp)} onOpen={() => toggle('hp:')} pressed={open === 'hp:'} />
           {hpError && <p className="rule-note rule-note--warn sheet-hp__error" role="alert">{hpError}</p>}
         </div>
       </header>
@@ -210,15 +232,80 @@ export default function SheetPage() {
 
       {!readOnly && <ShareSheet />}
 
-      <DetailsDrawer detail={open ? describe(open, character, opts, shield) : null} onClose={close} />
+      <DetailsDrawer detail={open ? describe(open, character, opts, { shield, currentHp, maxHp, prepared, spellRules }) : null} onClose={close} />
     </div>
   );
 }
 
 /** Everything the details drawer needs for one tapped number (see DetailsDrawer for the shape). */
-function describe(key, character, opts, shield) {
+function describe(key, character, opts, { shield, currentHp, maxHp, prepared, spellRules } = {}) {
   const [kind, id] = [key.slice(0, key.indexOf(':')), key.slice(key.indexOf(':') + 1)];
   const p = character.proficiencies;
+
+  if (kind === 'hp') {
+    const { ancestry, classHp, level, abilities } = character;
+    const con = abilities.con;
+    return {
+      ...HIT_POINTS,
+      value: `${currentHp}`,
+      unit: `/ ${maxHp}`,
+      stat: {
+        total: maxHp,
+        parts: [
+          { label: `${ancestry.name} ancestry`, value: ancestry.hp },
+          { label: `${character.className}, ${classHp} per level`, value: classHp * level },
+          { label: `Constitution, ${signed(con)} per level`, value: con * level },
+        ],
+      },
+      total: maxHp,
+      totalLabel: 'Max HP',
+      facts: [
+        ['Damage taken', maxHp - currentHp],
+        ['State', currentHp === 0 ? 'Down and dying' : currentHp === maxHp ? 'Unhurt' : 'Hurt'],
+      ],
+      sections: [
+        {
+          title: 'Conditions',
+          items: (opts.conditions ?? []).map((c) => {
+            const d = describeCondition(c);
+            return [d.name, d.summary];
+          }),
+          empty: 'No conditions right now. Set them on the Turn tab during an encounter.',
+        },
+      ],
+    };
+  }
+
+  if (kind === 'spell') {
+    const casting = character.spellcasting;
+    const known = [...(casting?.cantrips ?? []), ...(casting?.spells ?? []), ...(prepared ? [...prepared.cantrips, ...prepared.slots].filter(Boolean) : [])];
+    const s = known.find((x) => spellKey(x) === id);
+    if (!s) return null;
+    const full = spellRules?.spells?.find((x) => x.id === s.id || x.slug === s.slug) ?? s;
+    const attack = full.traits?.includes('attack');
+    const dc = spellDc(character, opts).total;
+    const atk = signed(spellAttack(character, opts).total);
+    return {
+      kind: s.rank === 0 ? 'Cantrip' : `Spell ${s.rank ?? ''}`.trim(),
+      name: full.name,
+      icon: 'spells',
+      actions: full.actions,
+      value: full.defense ? `${dc}` : attack ? atk : '',
+      unit: full.defense ? 'DC' : attack ? 'to hit' : undefined,
+      facts: [
+        ['Range', sentenceCase(full.range)],
+        ['Area', sentenceCase(full.area)],
+        ['Targets', sentenceCase(full.target)],
+        full.defense && ['Defense', `${titleCase(full.defense)} against your spell DC ${dc}`],
+        attack && ['Spell attack', `${atk} against the target’s AC`],
+        ['Duration', sentenceCase(full.duration)],
+        ['Traits', full.traits?.map(titleCase).join(', ')],
+      ].filter((f) => f && f[1]),
+      html: full.description,
+      note: !spellRules ? 'Loading the rules text…' : spellRules.error ? 'Couldn’t load the spell’s rules text. Try refreshing.' : null,
+      link: full.slug ? { to: `/spells/${full.slug}`, label: 'Open in the Spell Book' } : null,
+    };
+  }
 
   if (kind === 'attr') {
     const mod = character.abilities[id];
@@ -304,7 +391,7 @@ function describe(key, character, opts, shield) {
         w.ranged && w.range && ['Range increment', `${w.range} ft`],
       ].filter(Boolean),
       rules: [w.ranged ? STRIKE.ranged : STRIKE.melee, STRIKE.map],
-      traits: (w.traits ?? []).map((t) => [traitLabel(t), traitRule(t)]),
+      sections: [{ title: 'Traits', items: (w.traits ?? []).map((t) => [traitLabel(t), traitRule(t)]) }],
     };
   }
   return null;
@@ -372,28 +459,33 @@ function CampaignLine({ campaign, readOnly }) {
   );
 }
 
-/** A spell on the sheet: its name, a dot leader, and its action cost. */
-const spellLine = (s, key) => (
-  <li key={key}>
-    <span>{s.name}</span>
-    <span className="book__entry-dots" aria-hidden="true" />
-    <ActionCost actions={s.actions} />
-  </li>
-);
+/** A spell on the sheet: its name, a dot leader, and its action cost. Tapping it opens it in the details drawer. */
+const spellLine = (s, key, pick) => {
+  const id = `spell:${spellKey(s)}`;
+  return (
+    <li key={key}>
+      <button type="button" className="sheet-spell" aria-pressed={pick?.selected === id} onClick={() => pick?.onSelect(id)}>
+        <span className="sheet-spell__name">{s.name}</span>
+        <span className="book__entry-dots" aria-hidden="true" />
+        <ActionCost actions={s.actions} />
+      </button>
+    </li>
+  );
+};
 
 /** What a caster who prepares from their spellbook or familiar has prepared today (chosen on the Spells tab). */
-function PreparedToday({ casting, prepared, readOnly }) {
+function PreparedToday({ casting, prepared, readOnly, pick }) {
   const unprepared = [...prepared.unprepared.cantrips, ...prepared.unprepared.spells];
   return (
     <>
       <div className="sheet-spells">
         <span className="sheet-panel__label">Cantrips prepared</span>
-        {prepared.cantrips.length ? <ul className="sheet-list">{prepared.cantrips.map((s) => spellLine(s, spellKey(s)))}</ul> : <p className="muted italic">No cantrips prepared.</p>}
+        {prepared.cantrips.length ? <ul className="sheet-list">{prepared.cantrips.map((s) => spellLine(s, spellKey(s), pick))}</ul> : <p className="muted italic">No cantrips prepared.</p>}
       </div>
       <div className="sheet-spells">
         <span className="sheet-panel__label">{casting.slots} first-rank slot{casting.slots === 1 ? '' : 's'}</span>
         <ul className="sheet-list">
-          {prepared.slots.map((s, i) => (s ? spellLine(s, i) : <li key={i}><span className="muted italic">Empty slot</span></li>))}
+          {prepared.slots.map((s, i) => (s ? spellLine(s, i, pick) : <li key={i}><span className="muted italic">Empty slot</span></li>))}
         </ul>
       </div>
       {unprepared.length > 0 && (
@@ -437,7 +529,7 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
         ))}
       </div>
 
-      {prepared && <PreparedToday casting={casting} prepared={prepared} readOnly={readOnly} />}
+      {prepared && <PreparedToday casting={casting} prepared={prepared} readOnly={readOnly} pick={{ selected, onSelect }} />}
 
       {casting && casting.kind !== 'focus' && !prepared && (
         <>
@@ -448,7 +540,7 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
           ].map(([label, list]) => (
             <div key={label} className="sheet-spells">
               <span className="sheet-panel__label">{label}</span>
-              <ul className="sheet-list">{list.map((s) => spellLine(s, s.slug))}</ul>
+              <ul className="sheet-list">{list.map((s) => spellLine(s, s.slug, { selected, onSelect }))}</ul>
             </div>
           ))}
         </>

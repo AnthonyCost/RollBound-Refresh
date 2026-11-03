@@ -47,6 +47,17 @@ export const ATTRIBUTES = {
 export const KEY_ATTRIBUTE =
   'This is your key attribute. Your class chose it, and it adds to your class DC (and, for most spellcasters, to your spell attacks and spell DC).';
 
+export const HIT_POINTS = {
+  kind: 'Hit Points',
+  name: 'Hit Points',
+  icon: 'statCon',
+  rules: [
+    'Your maximum Hit Points are your ancestry’s Hit Points plus, for each level, your class’s Hit Points and your Constitution modifier.',
+    'At 0 Hit Points you’re knocked out and dying 1 (dying 2 if a critical hit or a critically failed save put you there), plus your wounded value. At the start of each of your turns, roll a flat check against DC 10 plus your dying value: success lowers dying by 1 and a critical success by 2; failure raises it by 1 and a critical failure by 2. At dying 4 you die.',
+    'When you stop dying you’re wounded 1, or your wounded value goes up by 1. It goes away when someone successfully treats your wounds, or when you’re back at full Hit Points and rest for 10 minutes.',
+  ],
+};
+
 export const BASIC_SAVE =
   'Many damaging effects call for a basic save: no damage on a critical success, half on a success, full damage on a failure and double on a critical failure.';
 

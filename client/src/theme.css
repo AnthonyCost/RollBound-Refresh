@@ -2948,6 +2948,19 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .sheet-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
 .sheet-list li { display: flex; align-items: baseline; gap: 8px; font-size: 15px; }
 .sheet-list .act { flex: none; }
+/* Spells open in the details drawer. */
+.sheet-spell { display: flex; align-items: baseline; gap: 8px; width: 100%; min-height: 32px; padding: 4px 0; border: 0; background: none; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.sheet-spell__name { transition: color var(--motion-fast); }
+.sheet-spell[aria-pressed='true'] .sheet-spell__name { color: var(--gold); }
+@media (hover: hover) { .sheet-spell:hover .sheet-spell__name { color: var(--gold); } }
+/* The health orb opens the drawer too. */
+.orb-button { display: block; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; transition: transform var(--motion-fast) var(--ease-out); }
+@media (hover: hover) { .orb-button:hover { transform: translateY(-2px); } }
+.orb-button[aria-pressed='true'] .orb { box-shadow: 0 0 26px #8e1c14, inset 0 0 0 3px var(--gold), inset 0 0 0 5px var(--bg); }
+.orb-button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.details__note { margin: 8px 0 0; font-size: 14px; font-style: italic; color: var(--text-muted); }
+.details__html.option__desc { margin: 12px 0 0; padding: 0; border: 0; font-size: 15px; line-height: 1.6; color: var(--text-soft); }
+.details__link { display: inline-block; margin-top: 14px; font-size: 14px; color: var(--bronze); }
 
 /* The Feats tab: everything the character has gained, as a book. (pages/CharacterFeatsPage.jsx) */
 .feats-tab { display: flex; flex-direction: column; gap: 12px; }
