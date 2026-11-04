@@ -13,6 +13,8 @@ export function inline(text) {
       const [k, label] = ACTION_ICONS[a] ?? ['', a];
       return `<span class="act act--${k}" role="img" aria-label="${label}"></span>`;
     })
+    // A few entries list options inline as raw HTML (a cassisian's Change Shape forms): keep those lists as lists.
+    .replace(/&lt;(\/?)(ul|ol|li)&gt;/g, '<$1$2>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/ {2,}/g, ' ')
     .replace(/(^|[\s(])_([^_]+)_(?=[\s),.;:]|$)/g, '$1<em>$2</em>');

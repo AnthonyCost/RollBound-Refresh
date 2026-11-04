@@ -15,7 +15,7 @@ import HealthOrb from '../components/HealthOrb.jsx';
 import { signed } from '../format.js';
 
 /** A creature in the drawer: the bestiary's numbers and full stat block (its actions), with its HP in this fight. */
-function creatureDetail(c, b) {
+function creatureDetail(c, b, controls) {
   return {
     kind: b ? `Creature ${b.level}` : 'Homebrew creature',
     name: c.name,
@@ -28,14 +28,16 @@ function creatureDetail(c, b) {
       ...(b ? [['Fortitude', signed(b.saves.fortitude)], ['Reflex', signed(b.saves.reflex)], ['Will', signed(b.saves.will)], ['Perception', signed(b.perception)], ['Speed', b.speed]] : []),
       ['Condition', c.defeated ? 'Down' : c.maxHp && c.hp < c.maxHp ? `${c.maxHp - c.hp} damage` : 'Unhurt'],
     ],
-    ...(b ? { html: b.statBlock, link: { to: creaturePath(b), label: 'Open in the Bestiary' } } : { note: 'A homebrew creature: it has no stat block.' }),
+    tool: controls,
+    ...(b ? { html: b.statBlock, link: { to: creaturePath(b), label: 'Open in the Bestiary', newTab: true } } : { note: 'A homebrew creature: it has no stat block.' }),
   };
 }
 
 /** A character in the drawer: their health orb and the numbers that matter in a fight, from their sheet as it is now. */
-function characterDetail(c, row) {
+function characterDetail(c, row, controls, sheetUrl) {
   const ch = row?.data;
-  if (!ch) return { kind: 'Character', name: c.name, icon: 'user', value: '…', note: row?.error ? "Couldn't load their sheet." : 'Opening their sheet…' };
+  const link = { to: sheetUrl, label: 'View character sheet', newTab: true };
+  if (!ch) return { kind: 'Character', name: c.name, icon: 'user', value: '…', tool: controls, link, note: row?.error ? "Couldn't load their sheet." : 'Opening their sheet…' };
   const caster = ch.spellcasting;
   return {
     kind: `Level ${ch.level} ${ch.className ?? 'character'}`,
@@ -43,7 +45,13 @@ function characterDetail(c, row) {
     icon: 'user',
     value: row.summary.ac,
     unit: 'AC',
-    tool: <HealthOrb current={row.currentHp} max={row.summary.maxHp} />,
+    tool: (
+      <>
+        <HealthOrb current={row.currentHp} max={row.summary.maxHp} />
+        {controls}
+      </>
+    ),
+    link,
     facts: [
       ['Initiative', c.initiative ?? '—'],
       ['Fortitude', signed(savingThrow(ch, 'fortitude').total)],
@@ -120,6 +128,32 @@ function HpControls({ c, onChange }) {
       <input type="number" inputMode="numeric" min="0" value={amount} placeholder="0" aria-label={`Damage or healing for ${c.name}`} onChange={(e) => setAmount(e.target.value)} />
       <button type="button" className="btn btn--small" disabled={!n} onClick={() => apply(-n)}>Damage</button>
       <button type="button" className="btn btn--small" disabled={!n} onClick={() => apply(n)}>Heal</button>
+    </span>
+  );
+}
+
+/** In the drawer: a creature's Hit Points controls, and the Down switch for anyone. */
+function DrawerControls({ c, onChange }) {
+  return (
+    <div className="tracker__controls">
+      {c.kind === 'creature' && <HpControls c={c} onChange={onChange} />}
+      <label className="toggle tracker__down">
+        <input type="checkbox" checked={c.defeated} onChange={(e) => onChange({ defeated: e.target.checked })} />
+        <span>Down (skipped in the turn order)</span>
+      </label>
+    </div>
+  );
+}
+
+/** A creature's Hit Points as a bar in its row, or what's missing. */
+function HpBar({ c }) {
+  if (c.kind === 'pc') return <span className="tracker__hpbar tracker__hpbar--none">HP on their sheet</span>;
+  if (c.hp == null) return <span className="tracker__hpbar tracker__hpbar--none">HP not set</span>;
+  const pct = c.maxHp ? Math.max(0, Math.min(100, (c.hp / c.maxHp) * 100)) : 100;
+  return (
+    <span className="tracker__hpbar" role="meter" aria-label={`${c.name}'s Hit Points`} aria-valuemin={0} aria-valuemax={c.maxHp ?? c.hp} aria-valuenow={c.hp}>
+      <span className="tracker__hpbar-track"><span className={`tracker__hpbar-fill ${pct <= 25 ? 'tracker__hpbar-fill--low' : ''}`} style={{ width: `${pct}%` }} /></span>
+      <span className="tracker__hpbar-num">{c.hp}<small>/{c.maxHp ?? '?'}</small></span>
     </span>
   );
 }
@@ -226,50 +260,77 @@ export default function EncounterRunPage() {
 
   const order = initiativeOrder(state.combatants);
   const now = currentCombatant(state);
+  const next = now && currentCombatant(advanceTurn(state));
   const portraitOf = (c) =>
     c.kind === 'pc' ? campaign.characters.find((x) => x.id === c.characterId)?.portraitUrl : (bestiary.get(c.creatureId) && creatureThumb(bestiary.get(c.creatureId)));
   const opened = state.combatants.find((c) => c.key === open);
-  const detail = !opened ? null : opened.kind === 'pc' ? characterDetail(opened, sheet) : creatureDetail(opened, bestiary.get(opened.creatureId));
+  const controls = opened && <DrawerControls c={opened} onChange={(patch) => setCombatant(opened.key, patch)} />;
+  const detail = !opened
+    ? null
+    : opened.kind === 'pc'
+      ? characterDetail(opened, sheet, controls, `/campaigns/${id}/characters/${opened.characterId}/sheet`)
+      : creatureDetail(opened, bestiary.get(opened.creatureId), controls);
+  const standing = state.combatants.filter((c) => !c.defeated);
+  const foes = standing.filter((c) => c.kind === 'creature').length;
 
   return (
     <div className="tracker">
       <header className="tracker__head">
-        <div>
+        <div className="tracker__round">
           <span className="eyebrow">{encounter.name}</span>
-          <h1 className="title" aria-live="polite">Round {state.round}{now ? ` · ${now.name}’s turn` : ''}</h1>
+          <span className="tracker__round-num" aria-live="polite">Round {state.round}</span>
+          <span className="tracker__tally">{foes} foe{foes === 1 ? '' : 's'} standing · {standing.length - foes} character{standing.length - foes === 1 ? '' : 's'}</span>
         </div>
-        <div className="btn-row">
+        <div className="tracker__spotlight" aria-live="polite">
+          {now ? (
+            <>
+              <Portrait url={portraitOf(now)} name={now.name} size="md" />
+              <span className="tracker__spotlight-text">
+                <span className="eyebrow">Now acting</span>
+                <span className="tracker__spotlight-name">{now.name}</span>
+                {next && next.key !== now.key && <span className="tracker__up-next">Up next: {next.name}</span>}
+              </span>
+            </>
+          ) : (
+            <span className="tracker__spotlight-text"><span className="tracker__spotlight-name">Everyone is down</span><span className="tracker__up-next">End the encounter, or bring someone back.</span></span>
+          )}
+        </div>
+        <div className="tracker__turn-buttons">
           <button type="button" className="btn" onClick={() => save(advanceTurn(state, -1))}>Previous</button>
-          <button type="button" className="btn btn--blood" disabled={!now} onClick={() => save(advanceTurn(state))}>Next turn</button>
+          <button type="button" className="btn btn--blood tracker__next" disabled={!now} onClick={() => save(advanceTurn(state))}>Next turn</button>
         </div>
       </header>
       <FormErrors errors={errors} />
-      {!now && <p className="rule-note">Everyone is down. End the encounter, or bring someone back.</p>}
 
       <ol className="tracker__order" aria-label="Initiative order">
         {order.map((c) => (
-          <li key={c.key} className={`tracker__row ${c.defeated ? 'tracker__row--down' : ''}`} aria-current={c.key === state.current ? 'true' : undefined}>
+          <li
+            key={c.key}
+            className={`tracker__row tracker__row--${c.kind} ${c.defeated ? 'tracker__row--down' : ''} ${open === c.key ? 'tracker__row--open' : ''}`}
+            aria-current={c.key === state.current ? 'true' : undefined}
+          >
             <label className="tracker__init">
               <span className="visually-hidden">Initiative for {c.name}</span>
               <input type="number" inputMode="numeric" value={c.initiative ?? ''} onChange={(e) => setCombatant(c.key, { initiative: e.target.value === '' ? null : Math.trunc(Number(e.target.value)) })} />
             </label>
             <button type="button" className="tracker__name" aria-pressed={open === c.key} onClick={() => setOpen(open === c.key ? null : c.key)}>
               <Portrait url={portraitOf(c)} name={c.name} size="sm" />
-              {c.key === state.current && <span className="tracker__now">Acting</span>}
-              {c.name}
-              <span className="tag">{c.kind === 'pc' ? 'Character' : 'Creature'}</span>
+              <span className="tracker__who">
+                <span className="tracker__who-name">{c.name}</span>
+                <span className="tracker__who-sub">
+                  {c.key === state.current ? <span className="tracker__now">Acting</span> : c.defeated ? <span className="tracker__downtag">Down</span> : null}
+                  {c.kind === 'pc' ? 'Character' : 'Creature'}
+                </span>
+              </span>
             </button>
-            <span className="tracker__stat">AC {c.ac ?? '—'}</span>
-            {c.kind === 'creature' ? <HpControls c={c} onChange={(patch) => setCombatant(c.key, patch)} /> : <span className="tracker__hp muted">HP on their sheet</span>}
-            <label className="toggle tracker__down">
-              <input type="checkbox" checked={c.defeated} onChange={(e) => setCombatant(c.key, { defeated: e.target.checked })} />
-              <span>Down</span>
-            </label>
+            <HpBar c={c} />
+            <span className="tracker__ac" title="Armor Class"><small>AC</small>{c.ac ?? '—'}</span>
           </li>
         ))}
       </ol>
+      <p className="rule-note">Tap anyone for their details, Hit Points and actions. Changes save as you go, so you can leave and come back.</p>
 
-      <div className="btn-row">
+      <div className="tracker__foot">
         <Link to={`/campaigns/${id}/encounters/${encounterId}`} className="btn">Back to the encounter</Link>
         {confirmEnd ? (
           <>
@@ -280,7 +341,6 @@ export default function EncounterRunPage() {
           <button type="button" className="btn" onClick={() => setConfirmEnd(true)}>End encounter…</button>
         )}
       </div>
-      <p className="rule-note">Changes save as you go, so you can leave and come back to it. Tap anyone for their details.</p>
       <DetailsDrawer detail={detail} onClose={() => setOpen(null)} />
     </div>
   );

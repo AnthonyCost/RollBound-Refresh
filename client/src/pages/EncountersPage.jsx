@@ -49,6 +49,69 @@ function CreatureThumb({ creature, index }) {
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, Math.round(Number(n)) || lo));
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
+/**
+ * One saved encounter on the war table: the card (it opens the editor), then Edit, Run (or
+ * Resume while it's running) and Delete, which asks first, like the character cards.
+ */
+function EncounterCard({ e, r, total, top, index, saved, onDelete }) {
+  const { id } = useParams();
+  const [confirming, setConfirming] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [errors, setErrors] = useState([]);
+  const remove = async () => {
+    setBusy(true);
+    try {
+      await api.deleteEncounter(id, e.id);
+      onDelete(e.id);
+    } catch (err) {
+      setErrors(errorsFrom(err));
+      setBusy(false);
+    }
+  };
+  return (
+    <li className={`war-card-item ${saved ? 'war-card-item--saved' : ''}`}>
+      <Link to={String(e.id)} className="war-card">
+        <span className="war-card__top">
+          <span className="war-card__name">{e.name}</span>
+          <ThreatSeal threat={r.threat} empty={!e.creatures.length} />
+        </span>
+        {e.creatures.length > 0 ? (
+          <span className="war-card__thumbs" aria-hidden="true">
+            {e.creatures.slice(0, THUMBS_SHOWN).map((c) => <CreatureThumb key={c.key} creature={c} index={index} />)}
+            {e.creatures.length > THUMBS_SHOWN && <span className="war-thumb war-thumb--more">+{e.creatures.length - THUMBS_SHOWN}</span>}
+          </span>
+        ) : null}
+        <span className="war-card__creatures">
+          {e.creatures.length ? e.creatures.map((c) => `${c.count > 1 ? `${c.count} × ` : ''}${c.name}`).join(', ') : 'No creatures yet.'}
+        </span>
+        <span className={`war-card__bar war-card__bar--${threatSlug(r.threat)}`} aria-hidden="true">
+          <span style={{ width: `${Math.min(100, ((r.xp ?? top) / top) * 100)}%` }} />
+        </span>
+        <span className="log-meta">
+          {r.xp ?? '—'} XP of {top} · {plural(total, 'creature')} · for {r.party.size} at level {r.party.level}
+          {e.state && ` · Running, round ${e.state.round}`}
+        </span>
+      </Link>
+      {confirming ? (
+        <div className="char-card__confirm" role="alertdialog" aria-label={`Delete ${e.name}`}>
+          <p>Delete “{e.name}” for good?{e.state ? ' It’s running: the fight ends for everyone.' : ''}</p>
+          <div className="btn-row">
+            <button type="button" className="btn btn--small btn--grow" onClick={() => setConfirming(false)}>Keep</button>
+            <button type="button" className="btn btn--small btn--blood btn--grow" disabled={busy} onClick={remove}>{busy ? 'Deleting…' : 'Delete'}</button>
+          </div>
+          <FormErrors errors={errors} />
+        </div>
+      ) : (
+        <div className="char-card__actions">
+          <Link to={String(e.id)}>Edit</Link>
+          {e.creatures.length ? <Link to={`${e.id}/run`}>{e.state ? 'Resume' : 'Run'}</Link> : <span className="char-card__off" title="Add creatures to run it">Run</span>}
+          <button type="button" className="char-card__delete" onClick={() => setConfirming(true)}>Delete</button>
+        </div>
+      )}
+    </li>
+  );
+}
+
 /** The GM's saved encounters for this campaign, as cards: threat, creatures, and XP against the budget. */
 export function EncounterListPage() {
   const { id } = useParams();
@@ -93,32 +156,7 @@ export function EncounterListPage() {
             const r = encounterRating(e, campaign);
             const total = e.creatures.reduce((t, c) => t + c.count, 0);
             const top = budgets(r.party.size).at(-1).budget;
-            return (
-              <li key={e.id}>
-                <Link to={String(e.id)} className={`war-card ${justSaved && String(justSaved.id) === String(e.id) ? 'war-card--saved' : ''}`}>
-                  <span className="war-card__top">
-                    <span className="war-card__name">{e.name}</span>
-                    <ThreatSeal threat={r.threat} empty={!e.creatures.length} />
-                  </span>
-                  {e.creatures.length > 0 ? (
-                    <span className="war-card__thumbs" aria-hidden="true">
-                      {e.creatures.slice(0, THUMBS_SHOWN).map((c) => <CreatureThumb key={c.key} creature={c} index={index} />)}
-                      {e.creatures.length > THUMBS_SHOWN && <span className="war-thumb war-thumb--more">+{e.creatures.length - THUMBS_SHOWN}</span>}
-                    </span>
-                  ) : null}
-                  <span className="war-card__creatures">
-                    {e.creatures.length ? e.creatures.map((c) => `${c.count > 1 ? `${c.count} × ` : ''}${c.name}`).join(', ') : 'No creatures yet.'}
-                  </span>
-                  <span className={`war-card__bar war-card__bar--${threatSlug(r.threat)}`} aria-hidden="true">
-                    <span style={{ width: `${Math.min(100, ((r.xp ?? top) / top) * 100)}%` }} />
-                  </span>
-                  <span className="log-meta">
-                    {r.xp ?? '—'} XP of {top} · {plural(total, 'creature')} · for {r.party.size} at level {r.party.level}
-                    {e.state && ` · Running, round ${e.state.round}`}
-                  </span>
-                </Link>
-              </li>
-            );
+            return <EncounterCard key={e.id} e={e} r={r} total={total} top={top} index={index} saved={justSaved && String(justSaved.id) === String(e.id)} onDelete={(gone) => setList((l) => l.filter((x) => x.id !== gone))} />;
           })}
         </ul>
       )}

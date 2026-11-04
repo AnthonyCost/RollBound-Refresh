@@ -18,7 +18,7 @@ export const detailValue = (d) => d.value ?? (d.unsigned ? d.stat.total : signed
  * detail: { kind, name, icon, stat?, value?, unsigned?, unit?, total?, totalLabel?, rank?, ability?, actions?,
  *           facts?: [label, value][], rules?: string[], html?: rules text as HTML, note?,
  *           sections?: { title, items: [name, text][], empty? }[], uses?: [name, cost, trainedOnly][], link?: { to, label },
- *           tool?: controls for the thing itself, under its facts (a shield's Shield Block and Repair) }
+ *           link.newTab opens it in a new tab; tool?: controls for the thing itself, under its facts (a shield's Shield Block and Repair) }
  * inline: shown in place, not sliding over the page (for previews such as the style lab).
  */
 export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
@@ -133,7 +133,7 @@ export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
               </ul>
             </>
           )}
-          {d.link && <Link to={d.link.to} className="details__link">{d.link.label}</Link>}
+          {d.link && <Link to={d.link.to} className="details__link" {...(d.link.newTab && { target: '_blank', rel: 'noreferrer' })}>{d.link.label}{d.link.newTab && <span className="visually-hidden"> (opens in a new tab)</span>}</Link>}
         </div>
       )}
     </aside>

@@ -3937,9 +3937,12 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
 .threat-seal--extreme, .threat-seal--beyond-extreme { color: var(--blood-text); background: color-mix(in srgb, var(--blood) 15%, transparent); }
 
 .war-cards { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
-.war-card { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 16px; border: 1px solid var(--line); border-radius: 4px; background: radial-gradient(ellipse 120% 70% at 50% 0%, var(--panel-warm) 0%, var(--panel-mid) 60%, var(--panel-deep) 100%); color: var(--text); text-decoration: none; }
-@media (hover: hover) { .war-card:hover { border-color: var(--bronze); } .war-card:hover .war-card__name { color: var(--gold); } }
-.war-card--saved { border-color: var(--gold); box-shadow: 0 0 18px var(--glow); }
+/* A card and its Edit / Run / Delete bar share one border. */
+.war-card-item { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; }
+.war-card-item--saved { border-color: var(--gold); box-shadow: 0 0 18px var(--glow); }
+@media (hover: hover) { .war-card-item:has(.war-card:hover) { border-color: var(--bronze); } }
+.war-card { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 16px; background: radial-gradient(ellipse 120% 70% at 50% 0%, var(--panel-warm) 0%, var(--panel-mid) 60%, var(--panel-deep) 100%); color: var(--text); text-decoration: none; }
+@media (hover: hover) { .war-card:hover .war-card__name { color: var(--gold); } }
 .war-saved { margin: 0; }
 .war-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .war-card__name { font-family: var(--display); font-size: 17px; font-weight: 700; letter-spacing: 1px; overflow-wrap: anywhere; }
@@ -4224,37 +4227,92 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .details__tool .shield-tracker__row .btn { flex: 1 1 120px; }
 
 /* ---------- GM: initiative tracker (EncounterRunPage) ---------- */
+/* A command bar (round, who's acting and who's next, the turn buttons), then the order as
+   slim rows: initiative, who, a Hit Points bar and AC. Details and HP controls live in the drawer. */
 
 .tracker { display: flex; flex-direction: column; gap: 14px; }
-.tracker__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
-.tracker__head .title { margin: 2px 0 0; }
+.tracker__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: radial-gradient(ellipse 80% 140% at 50% 0%, var(--panel-hot) 0%, var(--panel-mid) 70%);
+}
+.tracker__round { display: flex; flex-direction: column; gap: 2px; padding-right: 20px; border-right: 1px solid var(--line-soft); }
+.tracker__round-num { font-family: var(--display); font-size: 30px; font-weight: 900; letter-spacing: 2px; line-height: 1.1; color: var(--gold); text-transform: uppercase; }
+.tracker__tally { font-size: 13px; color: var(--text-muted); }
+.tracker__spotlight { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.tracker__spotlight .portrait { border-color: var(--blood-text); box-shadow: inset 0 0 0 3px var(--bg), 0 0 14px var(--blood-glow); }
+.tracker__spotlight-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tracker__spotlight-name { font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--text-bright); overflow-wrap: anywhere; }
+.tracker__up-next { font-size: 13px; color: var(--text-muted); }
+.tracker__turn-buttons { display: flex; gap: 8px; }
+.tracker__next { min-width: 150px; }
+.portrait--md { width: 64px; height: 64px; }
+.portrait--md .portrait__letter { font-size: 28px; }
+
 .tracker__order { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .tracker__row {
+  position: relative;
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) auto auto auto;
+  grid-template-columns: 58px minmax(0, 1fr) minmax(120px, 220px) 64px;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
+  gap: 14px;
+  padding: 8px 14px 8px 10px;
   border: 1px solid var(--line-soft);
+  border-radius: 4px;
   background: var(--panel);
+  transition: border-color 160ms ease, background 160ms ease;
 }
-.tracker__row[aria-current='true'] { border-color: var(--blood-text); background: var(--panel-hot); box-shadow: 0 0 12px var(--blood-glow); }
-.tracker__row--down { opacity: 0.55; }
-.tracker__row--down .tracker__name { text-decoration: line-through; }
-.tracker__init input { width: 100%; min-height: 44px; border: 1px solid var(--line); background: var(--bg); color: var(--gold); font-family: var(--display); font-size: 20px; font-weight: 700; text-align: center; }
-.tracker__name { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; min-width: 0; padding: 0; border: 0; background: none; color: var(--text); font-family: var(--display); font-size: 16px; font-weight: 700; text-align: left; cursor: pointer; }
-.tracker__name[aria-pressed='true'] { color: var(--gold); }
-@media (hover: hover) { .tracker__name:hover { color: var(--gold); } }
-.tracker__now { padding: 2px 8px; border-radius: 999px; background: var(--blood); color: var(--on-action); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
-.tracker__stat { font-family: var(--display); color: var(--text-soft); white-space: nowrap; }
-.tracker__hp { display: flex; align-items: center; gap: 6px; }
-.tracker__hp-now { min-width: 64px; font-family: var(--display); font-size: 17px; font-weight: 700; text-align: right; }
-.tracker__hp-now small { font-size: 12px; color: var(--text-muted); }
-.tracker__hp input { width: 64px; min-height: 40px; border: 1px solid var(--line); background: var(--bg); color: var(--text); text-align: center; }
+/* Creatures and characters are told apart by a thin edge colour as well as their label. */
+.tracker__row::before { content: ''; position: absolute; left: -1px; top: -1px; bottom: -1px; width: 3px; border-radius: 4px 0 0 4px; background: var(--line); }
+.tracker__row--pc::before { background: var(--bronze); }
+.tracker__row--creature::before { background: var(--steel-light); }
+.tracker__row[aria-current='true'] { border-color: var(--blood-text); background: var(--panel-hot); box-shadow: 0 0 14px var(--blood-glow); }
+.tracker__row[aria-current='true']::before { width: 5px; background: var(--blood-text); }
+.tracker__row--open { border-color: var(--gold); }
+.tracker__row--down { opacity: 0.5; }
+.tracker__row--down .tracker__who-name { text-decoration: line-through; }
+.tracker__init input { width: 100%; min-height: 44px; border: 1px solid transparent; border-radius: 4px; background: var(--panel-deep); color: var(--gold); font-family: var(--display); font-size: 22px; font-weight: 700; text-align: center; }
+.tracker__init input:focus-visible { border-color: var(--gold); outline: none; }
+.tracker__name { display: flex; align-items: center; gap: 12px; min-width: 0; min-height: 48px; padding: 0; border: 0; background: none; color: var(--text); text-align: left; cursor: pointer; }
+.tracker__who { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.tracker__who-name { font-family: var(--display); font-size: 17px; font-weight: 700; overflow-wrap: anywhere; }
+.tracker__who-sub { display: flex; align-items: center; gap: 8px; font-size: 12px; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; }
+@media (hover: hover) { .tracker__name:hover .tracker__who-name { color: var(--gold); } }
+.tracker__name[aria-pressed='true'] .tracker__who-name { color: var(--gold); }
+.tracker__now, .tracker__downtag { padding: 1px 8px; border-radius: 999px; font-family: var(--display); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; }
+.tracker__now { background: var(--blood); color: var(--on-action); }
+.tracker__downtag { border: 1px solid var(--line); color: var(--text-muted); }
+.tracker__hpbar { display: flex; align-items: center; gap: 10px; }
+.tracker__hpbar--none { font-size: 13px; font-style: italic; color: var(--text-dim); }
+.tracker__hpbar-track { flex: 1; height: 8px; overflow: hidden; border-radius: 999px; background: var(--panel-deep); box-shadow: inset 0 0 0 1px var(--line-faint); }
+.tracker__hpbar-fill { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--hp), var(--hp-hi)); transition: width 300ms var(--ease-out); }
+.tracker__hpbar-fill--low { background: var(--hp-deep); box-shadow: inset 0 0 0 1px var(--hp); }
+.tracker__hpbar-num { min-width: 52px; font-family: var(--display); font-size: 15px; font-weight: 700; text-align: right; }
+.tracker__hpbar-num small { font-size: 11px; color: var(--text-muted); }
+.tracker__ac { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 52px; height: 52px; justify-self: end; clip-path: polygon(50% 0, 100% 14%, 100% 60%, 50% 100%, 0 60%, 0 14%); background: var(--panel-raised); font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1; color: var(--text-bright); }
+.tracker__ac small { font-size: 9px; letter-spacing: 1px; color: var(--text-muted); }
+.tracker__foot { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* In the drawer: HP and the Down switch. */
+.tracker__controls { display: flex; flex-direction: column; gap: 12px; }
+.tracker__hp { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.tracker__hp-now { font-family: var(--display); font-size: 20px; font-weight: 700; }
+.tracker__hp-now small { font-size: 13px; color: var(--text-muted); }
+.tracker__hp input { width: 80px; min-height: 44px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-size: 16px; text-align: center; }
 .tracker__down { margin: 0; }
-@media (max-width: 760px) {
-  .tracker__row { grid-template-columns: 56px minmax(0, 1fr) auto; }
-  .tracker__hp, .tracker__down { grid-column: 1 / -1; justify-self: start; }
+
+@media (max-width: 860px) {
+  .tracker__head { grid-template-columns: 1fr; gap: 12px; }
+  .tracker__round { padding: 0 0 12px; border-right: 0; border-bottom: 1px solid var(--line-soft); }
+  .tracker__turn-buttons > * { flex: 1; }
+  .tracker__row { grid-template-columns: 50px minmax(0, 1fr) 52px; }
+  .tracker__hpbar { grid-column: 2 / 4; grid-row: 2; }
+  .tracker__ac { grid-row: 1; grid-column: 3; }
 }
 
 /* A player's view of the running encounter, on the Combat tab. */
