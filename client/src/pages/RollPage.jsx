@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { degreeRanges } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
+import Icon from '../components/Icon.jsx';
 import { titleCase } from '../format.js';
 
 const DEGREE_COLOR = {
@@ -17,6 +18,13 @@ const DEGREE_EXPLAIN = {
   success: 'You met or beat the AC. Your Strike hits for normal damage.',
   failure: 'You missed the AC by less than 10. Your Strike misses.',
   'critical failure': 'You missed the AC by 10 or more. Your Strike misses.',
+};
+// A check from the sheet (a skill, a save…): what each result means against the DC.
+const CHECK_EXPLAIN = {
+  'critical success': 'You beat the DC by 10 or more: the best outcome.',
+  success: 'You met or beat the DC.',
+  failure: 'You fell short of the DC by less than 10.',
+  'critical failure': 'You missed the DC by 10 or more: the worst outcome.',
 };
 
 // Each roll object gets its own id, so "Strike again" replays the cast even when the numbers repeat.
@@ -66,17 +74,34 @@ function RollTotal({ total }) {
   );
 }
 
+// A d20 seen face-on (an icosahedron): a hexagon outline cut into triangular faces, with the
+// big middle face holding the total. Faces take the theme's colours through --die-* (theme.css),
+// so the die matches every theme and the result (gold for a crit, the crit-fail colour for a fumble).
+const D20_FACES = {
+  light: ['50,2 8,26 50,18', '50,2 92,26 50,18'],
+  side: ['8,26 18,70 50,18', '92,26 82,70 50,18', '8,26 8,74 18,70', '92,26 92,74 82,70'],
+  low: ['8,74 18,70 50,98', '18,70 82,70 50,98', '82,70 92,74 50,98'],
+};
+function D20() {
+  return (
+    <svg className="roll__die" viewBox="0 0 100 100" aria-hidden="true">
+      {Object.entries(D20_FACES).flatMap(([shade, faces]) => faces.map((pts) => <polygon key={pts} className={`roll__die-face roll__die-face--${shade}`} points={pts} />))}
+      <polygon className="roll__die-face roll__die-face--front" points="50,18 82,70 18,70" />
+    </svg>
+  );
+}
+
 function rangeText(r) {
   if (r.max === null) return `${r.min} or higher`;
   if (r.min === null) return `${r.max} or lower`;
   return `${r.min} – ${r.max}`;
 }
 
-function TargetAC() {
+function TargetAC({ what = 'AC' }) {
   const { targetAC, setTargetAC } = useTable();
   return (
     <div className="panel field">
-      <label htmlFor="target-ac">Target AC (ask your GM)</label>
+      <label htmlFor="target-ac">{what === 'AC' ? 'Target AC' : 'DC'} (ask your GM)</label>
       <input
         id="target-ac"
         type="number"
@@ -96,7 +121,7 @@ function TargetAC() {
  * as two columns on the Roll page, or stacked in the Combat tab's roll drawer (onBack closes it).
  */
 export function RollView({ onBack = null }) {
-  const { lastRoll, strike, actionsLeft } = useTable();
+  const { lastRoll, strike, rollCheck, actionsLeft } = useTable();
 
   if (!lastRoll) {
     return (
@@ -110,6 +135,9 @@ export function RollView({ onBack = null }) {
   }
 
   const { natural, bonus, total, dc, degree, damageRoll, damageMod, damage, weapon, attackNumber } = lastRoll;
+  // A Combat-tab Strike spends an action and counts toward the multiple attack penalty; a check from the sheet doesn't.
+  const check = lastRoll.kind === 'check';
+  const against = weapon ? 'AC' : 'DC';
   const color = DEGREE_COLOR[degree.name];
   const gemClass =
     degree.name === 'critical success' ? '' : degree.name === 'critical failure' ? 'roll__gem--critfail' : 'roll__gem--plain';
@@ -122,18 +150,19 @@ export function RollView({ onBack = null }) {
     <div className={onBack ? 'roll-view roll-view--stacked' : 'split'}>
       <div className={`split__col roll-cast ${degreeClass}`} key={id}>
       <p className="eyebrow center" style={{ margin: '4px 0 0' }}>
-        Strike #{attackNumber} · {weapon.name}
+        {check ? lastRoll.label : `Strike #${attackNumber} · ${weapon.name}`}
       </p>
 
       <section className="roll" aria-live="polite">
         <div className={`roll__gem ${gemClass}`}>
+          <D20 />
           <div className="roll__inner">
+            <span className="visually-hidden">Total </span>
             <RollTotal total={total} />
-            <span className="eyebrow" style={{ color }}>Total</span>
           </div>
         </div>
         <div className="roll__math">
-          d20 <strong>{natural}</strong> + bonus <strong>{bonus.total}</strong> vs. AC <strong>{dc}</strong>
+          d20 <strong>{natural}</strong> {bonus.total < 0 ? '−' : '+'} bonus <strong>{Math.abs(bonus.total)}</strong> vs. {against} <strong>{dc}</strong>
         </div>
       </section>
 
@@ -141,10 +170,11 @@ export function RollView({ onBack = null }) {
 
       <section className="center" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         <h1 className="verdict" style={{ color }}>{degree.name}</h1>
-        <p className="italic" style={{ margin: 0, color: 'var(--text-soft)' }}>{DEGREE_EXPLAIN[degree.name]}</p>
+        <p className="italic" style={{ margin: 0, color: 'var(--text-soft)' }}>{(weapon ? DEGREE_EXPLAIN : CHECK_EXPLAIN)[degree.name]}</p>
         {natNote && <p className="italic" style={{ margin: 0, color: 'var(--gold)' }}>{natNote}</p>}
         {damage > 0 && (
-          <p className="eyebrow" style={{ color: 'var(--text)', fontSize: 15, margin: '4px 0 0' }}>
+          <p className="eyebrow roll__damage" style={{ color: 'var(--text)', fontSize: 15, margin: '4px 0 0' }}>
+            <span className="roll__damage-die" title={`d${weapon.die}`}><Icon name={`dieD${weapon.die}`} size={20} /></span>
             ({damageRoll} {damageMod < 0 ? '−' : '+'} {Math.abs(damageMod)}){degree.name === 'critical success' ? ' × 2' : ''} ={' '}
             <span style={{ color: 'var(--blood-text)' }}>{damage} {weapon.damageType}</span>
           </p>
@@ -173,14 +203,18 @@ export function RollView({ onBack = null }) {
         </p>
       </section>
 
-      <TargetAC />
+      <TargetAC what={against} />
 
       <div className="btn-row">
-        <button type="button" className="btn btn--grow" disabled={actionsLeft <= 0} onClick={() => strike(lastRoll.weapon)}>
-          Strike again
-        </button>
+        {check ? (
+          <button type="button" className="btn btn--grow" onClick={() => rollCheck(lastRoll.label, lastRoll.bonus, lastRoll.weapon)}>Roll again</button>
+        ) : (
+          <button type="button" className="btn btn--grow" disabled={actionsLeft <= 0} onClick={() => strike(lastRoll.weapon)}>
+            Strike again
+          </button>
+        )}
         {onBack ? (
-          <button type="button" className="btn btn--blood btn--grow" onClick={onBack}>Back to your turn</button>
+          <button type="button" className="btn btn--blood btn--grow" onClick={onBack}>{check ? 'Close' : 'Back to your turn'}</button>
         ) : (
           <Link to="../combat" className="btn btn--blood btn--grow">Back to your turn</Link>
         )}

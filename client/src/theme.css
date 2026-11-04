@@ -1322,18 +1322,35 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 .roll { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 22px; }
 .roll__gem {
-  width: clamp(112px, 22vw, 156px);
-  height: clamp(112px, 22vw, 156px);
-  transform: rotate(45deg);
-  border: 1px solid var(--gold);
-  background: radial-gradient(circle, var(--gold-deep) 0%, #140c08 80%);
-  box-shadow: 0 0 40px var(--gold-dark), inset 0 0 24px var(--bronze-dark);
+  /* The die's colours: the theme's action colour, gold on a critical success, the crit-fail colour on a fumble. */
+  --die-edge: var(--blood-text);
+  --die-front: var(--blood-shadow);
+  --die-light: var(--blood-dark);
+  --die-side: var(--panel-ember);
+  --die-low: var(--bg-deep);
+  --die-glow: var(--blood-glow);
+  position: relative;
   display: grid;
   place-items: center;
+  width: clamp(160px, 22vw, 196px);
+  aspect-ratio: 1;
+  container-type: inline-size;
+  filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.55)) drop-shadow(0 0 16px color-mix(in srgb, var(--die-glow) 45%, transparent));
 }
-.roll__gem--critfail { border-color: var(--blood-text); box-shadow: 0 0 40px var(--blood-dark), inset 0 0 24px var(--hot-shadow); background: radial-gradient(circle, var(--art-hi) 0%, var(--panel-ember) 80%); }
-.roll__gem--plain { border-color: var(--line); box-shadow: inset 0 0 24px var(--line-faint); background: var(--panel); }
-.roll__inner { transform: rotate(-45deg); display: flex; flex-direction: column; align-items: center; }
+.roll__die { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.roll__die-face { stroke: var(--die-edge); stroke-width: 1.2; stroke-linejoin: round; }
+.roll__die-face--front { fill: var(--die-front); }
+.roll__die-face--light { fill: var(--die-light); }
+.roll__die-face--side { fill: var(--die-side); }
+.roll__die-face--low { fill: var(--die-low); }
+/* A critical success: gold. A critical failure: the theme's crit-fail colour, gone dark. */
+.roll__gem:not(.roll__gem--plain):not(.roll__gem--critfail) { --die-edge: var(--gold); --die-front: var(--gold-deep); --die-light: var(--gold-dark); --die-side: var(--panel-raised); --die-glow: var(--gold-flare); }
+.roll__gem--critfail { --die-edge: var(--deg-critfail); --die-front: var(--panel-ember); --die-light: var(--blood-dark); --die-side: var(--bg); --die-glow: var(--blood-dark); }
+/* The total sits on the middle face (its centre is 53% down), sized to the die so it stays inside the face. */
+.roll__inner { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: 6%; }
+.roll__gem .roll__total { font-size: 24cqi; }
+.roll__damage { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; }
+.roll__damage-die { display: inline-grid; color: var(--blood-text); }
 .roll__total { font-family: var(--display); font-size: clamp(44px, 4vw + 30px, 64px); font-weight: 900; line-height: 1; color: var(--text-bright); }
 .roll__math { margin-top: 18px; color: var(--text-soft); }
 .roll__math strong { font-family: var(--display); color: var(--text); }
@@ -4494,3 +4511,39 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .combat-vitals__controls .hp-tracker__btn { min-height: 44px; }
 /* The Shield Block question spans the panel instead of a fixed width. */
 .combat-vitals__controls .hp-block { left: 0; right: 0; width: auto; margin: 0; }
+
+/* ---------- Rolling from the sheet ----------
+   A rollable entry (a skill, save, Perception, spell attack or Strike): an invisible
+   button covers it and opens its details; the boxed modifier sits above it and rolls. */
+.sheet-rollable { position: relative; }
+.sheet-open { position: absolute; inset: 0; z-index: 1; padding: 0; border: 0; border-radius: inherit; background: none; cursor: pointer; }
+.sheet-open:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+/* The label, pips and so on let taps through to the details button beneath. */
+.sheet-rollable > :not(.sheet-open):not(.sheet-roll) { position: relative; pointer-events: none; }
+.sheet-roll {
+  position: relative;
+  z-index: 2;
+  display: inline-grid;
+  place-items: center;
+  min-width: 48px;
+  min-height: 36px;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color var(--motion-fast), color var(--motion-fast), transform var(--motion-fast) var(--ease-out);
+}
+.sheet-roll:active { transform: scale(0.95); }
+.sheet-roll:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+@media (hover: hover) { .sheet-roll:hover { border-color: var(--gold); color: var(--gold); } }
+.sheet-def__value.sheet-roll { min-width: 64px; min-height: 44px; }
+.sheet-skill__total.sheet-roll { justify-self: end; }
+/* Open in the details drawer: the same look the whole-button entries have when pressed. */
+.sheet-def.is-open { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 16px var(--hot-shadow); }
+.sheet-skill.is-open { background: var(--panel-hot); box-shadow: inset 2px 0 0 var(--blood); }
+.sheet-strike.is-open { border-color: var(--blood); background: var(--panel-hot); }
+@media (hover: hover) {
+  .sheet-def.sheet-rollable:not(.is-open):hover, .sheet-strike.sheet-rollable:not(.is-open):hover { border-color: var(--bronze); }
+}

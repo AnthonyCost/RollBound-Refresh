@@ -36,6 +36,12 @@ const ICONS = {
   compass: 'compass',
   swords: 'crossed-swords',
   crown: 'crown',
+  // Damage dice, by weapon die (the roller's damage line)
+  dieD4: 'd4',
+  dieD6: 'dice-six-faces-six',
+  dieD8: 'dice-eight-faces-eight',
+  dieD10: 'd10',
+  dieD12: 'd12',
   // Conditions (the Combat tab and the encounter tracker)
   conditionFrightened: 'terror',
   conditionSickened: 'vomiting',

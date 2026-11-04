@@ -264,6 +264,28 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     [character, conditions, strikesSoFar, targetAC, actionsLeft],
   );
 
+  /**
+   * Rolls a check from the sheet (d20 + a modifier: a skill, a save, Perception, a spell
+   * attack, or a weapon's attack, which also rolls its damage) against the target's AC or DC.
+   * It spends no actions; the Combat tab's Strike does that. label names it, stat is its { total, parts }.
+   */
+  const rollCheck = useCallback(
+    (label, stat, weapon = null) => {
+      const natural = rollDie(20);
+      const total = natural + stat.total;
+      const degree = degreeOfSuccess(total, targetAC, natural);
+      const roll = { kind: 'check', label, natural, bonus: stat, total, dc: targetAC, degree };
+      if (weapon) {
+        const damageRoll = rollDie(weapon.die);
+        const damageMod = damageModifier(weapon, character.abilities);
+        Object.assign(roll, { weapon, damageRoll, damageMod, damage: strikeDamage(damageRoll, damageMod, degree.name) });
+      }
+      setLastRoll(roll);
+      return roll;
+    },
+    [character, targetAC],
+  );
+
   const endTurn = useCallback(() => {
     setUsed([]);
     setConditions((c) => endOfTurn(c));
@@ -325,13 +347,14 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       targetAC,
       setTargetAC,
       lastRoll,
+      rollCheck,
       takeAction,
       strike,
       endTurn,
       cycleCondition,
       resetEncounter,
     }),
-    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, rollCheck, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

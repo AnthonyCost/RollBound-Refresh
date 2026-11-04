@@ -9,6 +9,7 @@ import Portrait from '../components/Portrait.jsx';
 import CharacterDrawer from '../components/CharacterDrawer.jsx';
 import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import DetailsDrawer from '../components/DetailsDrawer.jsx';
+import RollDrawer from '../components/RollDrawer.jsx';
 import {
   ATTRIBUTES, KEY_ATTRIBUTE, DEFENSES, HIT_POINTS, SKILLS, LORE, UNTRAINED_NOTE, STRIKE, traitRule, traitLabel,
   SIZE_RULES, LEVEL_RULES, HERO_POINT_RULES, LANGUAGE_RULES, VISION_RULES, WEAPON_CATEGORY_RULES, WEAPON_PROFICIENCY_RULE, RUNE_RULES,
@@ -64,18 +65,51 @@ function useDetailRules(needed) {
 }
 
 /**
+ * A sheet entry that rolls: an invisible button covers the whole row or box and opens its
+ * details, and the boxed modifier (RollButton) sits above it and rolls. Two real buttons,
+ * so each has its own name for screen readers and its own focus stop.
+ */
+function OpenButton({ label, pressed, onClick }) {
+  return (
+    <button type="button" className="sheet-open" aria-pressed={pressed} onClick={onClick}>
+      <span className="visually-hidden">{label} details</span>
+    </button>
+  );
+}
+
+/** A modifier you can roll, boxed like a die face: d20 + it, in the roll drawer. */
+function RollButton({ label, stat, onRoll, className }) {
+  return (
+    <button type="button" className={`sheet-roll ${className}`} aria-label={`Roll ${label}: ${signed(stat.total)}`} title={`Roll ${label}`} onClick={() => onRoll(label, stat)}>
+      {signed(stat.total)}
+    </button>
+  );
+}
+
+/**
  * The character sheet, laid out like page one of Paizo's sheet: the header, the
  * attributes, the defense band (AC, saves, HP, Perception, Speed), then skills on the
  * left and Strikes and DCs on the right. Tap any number and the details drawer shows how
  * it's worked out and the rules behind it.
  */
 export default function SheetPage() {
-  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared } = useTable();
+  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared, rollCheck } = useTable();
   // What the details drawer shows: 'attr:str', 'def:ac', 'hp:', 'skill:athletics', 'strike:0', 'magic:classDc', 'spell:<id>'.
   const [open, setOpen] = useState(null);
   const spellRules = useDetailRules(/^(spell|origin|rune):/.test(open ?? ''));
-  const toggle = (key) => setOpen((cur) => (cur === key ? null : key));
+  const toggle = (key) => {
+    setRolling(false);
+    setOpen((cur) => (cur === key ? null : key));
+  };
   const close = useCallback(() => setOpen(null), []);
+  // Tapping a modifier rolls it (d20 + the modifier) in the roll drawer, from the left; tapping its name opens its details.
+  const [rolling, setRolling] = useState(false);
+  const closeRoll = useCallback(() => setRolling(false), []);
+  const roll = (label, stat, weapon = null) => {
+    rollCheck(label, stat, weapon);
+    setOpen(null);
+    setRolling(true);
+  };
 
   const opts = { conditions, shieldRaised };
   const p = character.proficiencies;
@@ -98,14 +132,23 @@ export default function SheetPage() {
   ].filter(([, v]) => v != null && v !== '');
 
   // A plain function, not a component: a component defined here would remount (and lose focus) on every render.
-  const defenseBox = ({ id, label, rank, extra }) => (
+  // AC isn't rolled; saves and Perception are: the box opens their details, the boxed modifier rolls.
+  const defenseBox = ({ id, label, rank, extra }) => (defenses[id].signed === false ? (
     <button key={id} type="button" className={`sheet-def sheet-def--${id}`} aria-pressed={open === `def:${id}`} onClick={() => toggle(`def:${id}`)}>
       <span className="sheet-def__label">{label}</span>
-      <span className="sheet-def__value">{defenses[id].signed === false ? defenses[id].stat.total : signed(defenses[id].stat.total)}</span>
+      <span className="sheet-def__value">{defenses[id].stat.total}</span>
       <RankPips rank={rank} />
       {extra && <span className="sheet-def__extra">{extra}</span>}
     </button>
-  );
+  ) : (
+    <div key={id} className={`sheet-def sheet-def--${id} sheet-rollable ${open === `def:${id}` ? 'is-open' : ''}`}>
+      <OpenButton label={label} pressed={open === `def:${id}`} onClick={() => toggle(`def:${id}`)} />
+      <span className="sheet-def__label">{label}</span>
+      <RollButton label={label} stat={defenses[id].stat} onRoll={roll} className="sheet-def__value" />
+      <RankPips rank={rank} />
+      {extra && <span className="sheet-def__extra">{extra}</span>}
+    </div>
+  ));
 
   return (
     <div className="sheet">
@@ -211,12 +254,13 @@ export default function SheetPage() {
                 const check = skillCheck(character, name, opts);
                 return (
                   <li key={name}>
-                    <button type="button" className="sheet-skill" aria-pressed={open === `skill:${name}`} onClick={() => toggle(`skill:${name}`)}>
+                    <div className={`sheet-skill sheet-rollable ${open === `skill:${name}` ? 'is-open' : ''}`}>
+                      <OpenButton label={titleCase(name)} pressed={open === `skill:${name}`} onClick={() => toggle(`skill:${name}`)} />
                       <span className="sheet-skill__name">{titleCase(name)}</span>
                       <span className="sheet-skill__attr">{check.ability.toUpperCase()}</span>
                       <RankPips rank={check.rank} />
-                      <span className="sheet-skill__total">{signed(check.total)}</span>
-                    </button>
+                      <RollButton label={titleCase(name)} stat={check} onRoll={roll} className="sheet-skill__total" />
+                    </div>
                   </li>
                 );
               })}
@@ -229,13 +273,14 @@ export default function SheetPage() {
         </div>
 
         <div className="sheet__col">
-          <Strikes character={character} opts={opts} readOnly={readOnly} selected={open} onSelect={toggle} />
-          {character.keyAbility && <MagicAndDcs character={character} opts={opts} selected={open} onSelect={toggle} />}
+          <Strikes character={character} opts={opts} readOnly={readOnly} selected={open} onSelect={toggle} onRoll={roll} />
+          {character.keyAbility && <MagicAndDcs character={character} opts={opts} selected={open} onSelect={toggle} onRoll={roll} />}
         </div>
       </div>
 
       {!readOnly && <CharacterDrawer open={open === 'profile:'} onClose={close} />}
 
+      <RollDrawer open={rolling} onClose={closeRoll} />
       <DetailsDrawer detail={open ? describe(open, character, opts, { shield, currentHp, maxHp, prepared, spellRules, readOnly }) : null} onClose={close} />
     </div>
   );
@@ -481,7 +526,7 @@ function describe(key, character, opts, { shield, currentHp, maxHp, prepared, sp
 }
 
 /** The equipped weapons as the sheet's Strikes table (melee, then ranged); tap one for the math. */
-function Strikes({ character, opts, readOnly, selected, onSelect }) {
+function Strikes({ character, opts, readOnly, selected, onSelect, onRoll }) {
   const weapons = character.weapons ?? [];
   // Selected by position ('strike:0'): someone can carry two of the same weapon.
   const groups = [
@@ -499,8 +544,9 @@ function Strikes({ character, opts, readOnly, selected, onSelect }) {
               const mod = damageModifier(w, character.abilities);
               return (
                 <li key={`${w.slug}-${i}`}>
-                  <button type="button" className="sheet-strike" aria-pressed={selected === `strike:${i}`} onClick={() => onSelect(`strike:${i}`)}>
-                    <span className="sheet-strike__bonus">{signed(strikeBonus(character, w, opts).total)}</span>
+                  <div className={`sheet-strike sheet-rollable ${selected === `strike:${i}` ? 'is-open' : ''}`}>
+                    <OpenButton label={w.name} pressed={selected === `strike:${i}`} onClick={() => onSelect(`strike:${i}`)} />
+                    <RollButton label={`${w.name} Strike`} stat={strikeBonus(character, w, opts)} onRoll={(label, stat) => onRoll(label, stat, w)} className="sheet-strike__bonus" />
                     <span className="sheet-strike__main">
                       <span className="sheet-strike__name">{w.name}</span>
                       {w.traits?.length > 0 && <span className="sheet-strike__traits">{w.traits.join(', ')}</span>}
@@ -509,7 +555,7 @@ function Strikes({ character, opts, readOnly, selected, onSelect }) {
                       1d{w.die}{mod ? ` ${signed(mod)}` : ''} {w.damageType}
                       {w.ranged && w.range ? <small> · {w.range} ft</small> : null}
                     </span>
-                  </button>
+                  </div>
                 </li>
               );
             })}
@@ -594,7 +640,7 @@ function PreparedToday({ casting, prepared, readOnly, pick }) {
 }
 
 /** Class DC, spell attack and spell DC as the sheet's boxes, then the spells or runes the character has. */
-function MagicAndDcs({ character, opts, selected, onSelect }) {
+function MagicAndDcs({ character, opts, selected, onSelect, onRoll }) {
   const { prepared, readOnly } = useTable();
   const casting = character.spellcasting;
   const p = character.proficiencies;
@@ -612,13 +658,20 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
     <section className="sheet-panel sheet-magic" aria-labelledby="magic-title">
       <h2 id="magic-title" className="sheet-panel__title">{title}</h2>
       {casting && <div className={`sheet-dcs sheet-dcs--${Object.keys(stats).length}`} role="group" aria-label="Spell attack and DC">
-        {Object.entries(stats).map(([key, s]) => (
+        {Object.entries(stats).map(([key, s]) => (s.signed === false ? (
           <button key={key} type="button" className="sheet-def" aria-pressed={selected === `magic:${key}`} onClick={() => onSelect(`magic:${key}`)}>
             <span className="sheet-def__label">{s.label}</span>
-            <span className="sheet-def__value">{s.signed === false ? s.stat.total : signed(s.stat.total)}</span>
+            <span className="sheet-def__value">{s.stat.total}</span>
             <RankPips rank={s.rank} />
           </button>
-        ))}
+        ) : (
+          <div key={key} className={`sheet-def sheet-rollable ${selected === `magic:${key}` ? 'is-open' : ''}`}>
+            <OpenButton label={s.label} pressed={selected === `magic:${key}`} onClick={() => onSelect(`magic:${key}`)} />
+            <span className="sheet-def__label">{s.label}</span>
+            <RollButton label={s.label} stat={s.stat} onRoll={onRoll} className="sheet-def__value" />
+            <RankPips rank={s.rank} />
+          </div>
+        )))}
       </div>}
 
       {prepared && <PreparedToday casting={casting} prepared={prepared} readOnly={readOnly} pick={{ selected, onSelect }} />}

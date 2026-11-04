@@ -89,8 +89,8 @@
 
 .roll-cast .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards; }
 @keyframes gem-cast {
-  from { opacity: 0; transform: translateY(-28px) rotate(-45deg) scale(0.72); filter: blur(4px) brightness(1.6); }
-  60% { opacity: 1; filter: none; }
+  from { opacity: 0; transform: translateY(-28px) rotate(-60deg) scale(0.72); }
+  60% { opacity: 1; }
 }
 .roll__total { display: inline-block; font-variant-numeric: tabular-nums; }
 .roll__total:not(.roll__total--landed) { color: var(--text-muted); }
@@ -99,10 +99,10 @@
 
 /* The landing glow: gold for a crit, blood for a critical failure, a quiet settle otherwise. */
 .roll-cast.roll--critical-success .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards, gem-flare 900ms ease-out 480ms; }
-@keyframes gem-flare { 25% { box-shadow: 0 0 80px 14px var(--gold-flare), inset 0 0 36px var(--gold-flare-dim); border-color: var(--text-bright); } }
+@keyframes gem-flare { 25% { filter: drop-shadow(0 0 28px var(--gold-flare)) drop-shadow(0 0 10px var(--gold-flare-dim)) brightness(1.25); } }
 .roll-cast.roll--critical-failure .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards, gem-crack 380ms ease-out 500ms; }
 @keyframes gem-crack {
-  20% { translate: -5px 0; box-shadow: 0 0 60px 10px #a01a10, inset 0 0 30px var(--blood-dark); }
+  20% { translate: -5px 0; filter: drop-shadow(0 0 24px var(--deg-critfail)); }
   45% { translate: 4px 0; }
   70% { translate: -2px 0; }
 }
@@ -160,7 +160,7 @@ details[open] > :not(summary) { animation: unfold var(--motion) var(--ease-out) 
   .btn:not(:disabled):active, .chip:active, .tile:active { transform: none; }
   .tile:hover, .char-card:hover, .camp-card:hover { transform: none !important; }
   /* The roll still says what kind of result it was: a crit keeps its gold glow, a fumble its red. */
-  .roll-cast.roll--critical-success .roll__gem { box-shadow: 0 0 60px 8px var(--gold-flare), inset 0 0 30px var(--gold-flare-dim); }
+  .roll-cast.roll--critical-success .roll__gem { filter: drop-shadow(0 0 22px var(--gold-flare)); }
   /* Still show that a hit landed, just without the shaking. */
   .orb--hit-0, .orb--hit-1 { box-shadow: 0 0 30px 4px var(--blood-flash), inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   armorClass, classDc, damageModifier, describeCondition, landSpeed, perception, savingThrow, skillCheck, strikeBonus,
@@ -14,7 +14,7 @@ import ShieldGauge from '../components/ShieldGauge.jsx';
 import HpTracker from '../components/HpTracker.jsx';
 import ShieldTracker from '../components/ShieldTracker.jsx';
 import Icon from '../components/Icon.jsx';
-import { RollView } from './RollPage.jsx';
+import RollDrawer from '../components/RollDrawer.jsx';
 import { sentenceCase, signed, titleCase } from '../format.js';
 
 const COSTS = new Set(['1', '2', '3', 'reaction', 'free']);
@@ -319,12 +319,7 @@ export default function CombatPage() {
   // The details drawer: an option's id, or 'shield'. The roll drawer, after a Strike.
   const [open, setOpen] = useState(null);
   const [rolling, setRolling] = useState(false);
-  useEffect(() => {
-    if (!rolling) return undefined;
-    const esc = (e) => e.key === 'Escape' && setRolling(false);
-    document.addEventListener('keydown', esc);
-    return () => document.removeEventListener('keydown', esc);
-  }, [rolling]);
+  const closeRoll = useCallback(() => setRolling(false), []);
   const spellRules = useSpellRules(String(open).startsWith('spell:'));
   const reactionUsed = used.some((u) => u.reaction);
   const opts = { conditions, shieldRaised };
@@ -499,20 +494,7 @@ export default function CombatPage() {
       </div>
 
       <DetailsDrawer detail={detail} onClose={() => setOpen(null)} />
-      {/* The roller: the last Strike, sliding in from the left (up from the bottom on phones). */}
-      <aside className={`details details--left roll-drawer ${rolling ? 'details--open' : ''}`} aria-label="Roll" aria-hidden={!rolling}>
-        {rolling && (
-          <div className="details__panel">
-            <div className="details__top">
-              <span className="details__kind">Roll</span>
-              <button type="button" className="details__close" onClick={() => setRolling(false)} aria-label="Close the roll">
-                <Icon name="close" size={16} />
-              </button>
-            </div>
-            <RollView onBack={() => setRolling(false)} />
-          </div>
-        )}
-      </aside>
+      <RollDrawer open={rolling} onClose={closeRoll} />
     </div>
   );
 }
