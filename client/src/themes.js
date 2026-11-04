@@ -38,7 +38,7 @@ export const THEMES = [
   {
     id: 'luminary',
     name: 'Luminary',
-    blurb: 'A hero’s colours: royal blue, crimson, parchment and gold.',
+    blurb: 'A hero’s colours: gold and orange, lettering blue, a violet swoosh and magenta smoke.',
     browser: '#0a0d1f',
   },
   {
@@ -50,8 +50,56 @@ export const THEMES = [
   {
     id: 'tunic',
     name: 'Tunic',
-    blurb: 'Forest canopy over bark brown, Kokiri green and gold lettering.',
-    browser: '#120d08',
+    blurb: 'Forest canopy over bark brown: Kokiri green everywhere, gold buttons and diamonds.',
+    browser: '#0f0d08',
+  },
+  {
+    id: 'ethereal',
+    name: 'Ethereal',
+    blurb: 'Art-deco grime: teal-black, cream and brass, lit by glowing souls.',
+    browser: '#0b0f0e',
+  },
+  {
+    id: 'badge',
+    name: 'Badge',
+    blurb: 'A black-and-white picture: charcoal, ivory and silver, and a brass detective’s badge.',
+    browser: '#0c0c0d',
+  },
+  {
+    id: 'traveler',
+    name: 'Traveler',
+    blurb: 'An array of espresso browns: dark roast, mocha, latte, crema and caramel.',
+    browser: '#140d09',
+  },
+  {
+    id: 'judgement',
+    name: 'Judgement',
+    blurb: 'Black plate and gold filigree, electric-blue and red gems, white light.',
+    browser: '#07080b',
+  },
+  {
+    id: 'atrophy',
+    name: 'Atrophy',
+    blurb: 'Obsidian black, deep indigo and white.',
+    browser: '#08080b',
+  },
+  {
+    id: 'emblem',
+    name: 'Emblem',
+    blurb: 'Dusk indigo and ivory, crimson-magenta cloaks and a sunburst of gold.',
+    browser: '#0e0c18',
+  },
+  {
+    id: 'tarnished',
+    name: 'Tarnished',
+    blurb: 'A teal night and mist over the Lands Between, lit by the Erdtree’s gold.',
+    browser: '#081210',
+  },
+  {
+    id: 'briar',
+    name: 'Briar',
+    blurb: 'A sleeping kingdom’s briar-rose keep: rosewood, dusty rose, antique silver and bone.',
+    browser: '#140c0f',
   },
 ];
 

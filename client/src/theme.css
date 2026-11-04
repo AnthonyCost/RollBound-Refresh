@@ -274,54 +274,56 @@
   --deg-critfail: #e2604a;
 }
 
-/* Luminary: a hero’s colours. Royal-indigo ground,
-   parchment text, crimson-red actions that
-   stand out from the blue, gold labels and borders, and orange flares. */
+/* Luminary: the Dragon Quest XI logo. Navy night ground, the XI's gold for labels, values,
+   buttons and diamonds (dark navy lettering on them), its orange as the deeper gold, the
+   lettering's bright blue for anything selected and successful rolls, the purple swoosh as
+   the glow, magenta smoke for flares, and silver trim. */
 [data-theme='luminary'] {
-  --bg: #0a0d1f;
-  --bg-deep: #060815;
-  --glow: #24306e;
-  --glow-mid: #111838;
-  --panel: #10152c;
-  --panel-hot: #2c1834;
-  --panel-deep: #0c1024;
-  --panel-warm: #141a35;
-  --panel-mid: #0f1429;
-  --panel-ember: #121a33;
-  --panel-raised: #1d2650;
-  --line: #5a5480;
-  --line-soft: #3e3d68;
-  --line-faint: #20284b;
-  --text: #f3efe2;
-  --text-soft: #d9d4c2;
-  --text-muted: #a3a7c2;
-  --text-dim: #7f84a3;
-  --text-bright: #fdfaf0;
-  --bronze: #f0c64a;
-  --bronze-dark: #7a6420;
-  --gold: #ffd968;
-  --gold-light: #fff0c2;
-  --gold-dark: #c8922a;
-  --gold-deep: #26220f;
-  --gold-flare: #ff9a3a;
-  --gold-flare-dim: #d0602a;
-  --blood: #c8302e;
-  --blood-text: #ff6a4e;
-  --blood-dark: #6e1018;
-  --blood-top: #dc4234;
-  --blood-glow: #c8302e;
-  --blood-shadow: #4a1018;
-  --blood-flash: #ffb04a;
-  --hot-shadow: #4a1420;
-  --art-hi: #1d2650;
-  --art-lo: #060815;
-  --orb-hi: #2a1424;
-  --steel-dark: #2a3050;
-  --steel-light: #4c5680;
-  --deg-crit: #ffd968;
-  --deg-success: #ff9a3a;
-  --deg-fail: #7f84a3;
-  --deg-critfail: #ff6a4e;
+  --bg: #0a0c22;
+  --bg-deep: #060818;
+  --glow: #3a2a6e;
+  --glow-mid: #15163a;
+  --panel: #10142e;
+  --panel-hot: #16285a;
+  --panel-deep: #0c1026;
+  --panel-warm: #141938;
+  --panel-mid: #0f132b;
+  --panel-ember: #1a1638;
+  --panel-raised: #1c2654;
+  --line: #4a5a9a;
+  --line-soft: #36407a;
+  --line-faint: #1e2550;
+  --text: #f3f1ea;
+  --text-soft: #d7dbe8;
+  --text-muted: #a3abc8;
+  --text-dim: #7c84a8;
+  --text-bright: #fdfcf6;
+  --bronze: #f6c437;
+  --bronze-dark: #7a5a14;
+  --gold: #ffd85a;
+  --gold-light: #fff0b8;
+  --gold-dark: #e07a1e;
+  --gold-deep: #2a1e08;
+  --gold-flare: #e0609e;
+  --gold-flare-dim: #a85aa8;
+  --blood: #f2b62e;
+  --blood-top: #ffd25a;
+  --blood-dark: #b8641a;
+  --blood-text: #ffd04a;
+  --blood-glow: #e09a22;
+  --blood-shadow: #3a2408;
+  --blood-flash: #fff4c4;
+  --hot-shadow: #2e7ad8;
+  --art-hi: #1c2654;
+  --art-lo: #060818;
+  --orb-hi: #20163e;
+  --steel-dark: #2a3256;
+  --steel-light: #8a94b8;
+  --deg-crit: #ffd85a;
+  --deg-success: #7cc4ff;
+  --deg-fail: #7c84a8;
+  --deg-critfail: #ff6a6a;
+  --on-action: #0a0c22;
 }
 
 /* Radiant: a paladin in the noon sun. Scorched umber rock under a burnt-orange sky, cream
@@ -375,53 +377,456 @@
   --on-action: #2a1206;
 }
 
-/* Tunic: Ocarina of Time. Bark-brown ground under a forest-green canopy,
-   cream text (#f2f2dc), gold lettering and borders (#e2c07b to #f5e8b5), and Kokiri green for actions. */
+/* Tunic: Ocarina of Time. Bark-brown ground under a forest-green canopy, cream text
+   (#f2f2dc), gold for buttons and diamonds (with dark lettering on them), and Kokiri green
+   (#8cc46f) for labels, borders, the glow and anything selected. */
 [data-theme='tunic'] {
-  --bg: #120d08;
-  --bg-deep: #0f0d07;
-  --glow: #1f312b;
-  --glow-mid: #1a1a12;
-  --panel: #1c140d;
-  --panel-hot: #2a3220;
-  --panel-deep: #150f09;
-  --panel-warm: #241a11;
-  --panel-mid: #19120b;
-  --panel-ember: #1d1610;
-  --panel-raised: #302017;
-  --line: #7a6234;
-  --line-soft: #5a4626;
-  --line-faint: #3a2d1a;
+  --bg: #0f0d08;
+  --bg-deep: #0b0a06;
+  --glow: #2c4a26;
+  --glow-mid: #16200f;
+  --panel: #17140c;
+  --panel-hot: #23361f;
+  --panel-deep: #12100a;
+  --panel-warm: #1d1a10;
+  --panel-mid: #15120b;
+  --panel-ember: #1a2014;
+  --panel-raised: #263220;
+  --line: #4f6a34;
+  --line-soft: #3d5229;
+  --line-faint: #2a3820;
   --text: #f2f2dc;
   --text-soft: #e6dcb4;
   --text-muted: #b4a682;
   --text-dim: #8f8264;
   --text-bright: #fbfbec;
-  --bronze: #e2c07b;
-  --bronze-dark: #70552e;
+  --bronze: #8cc46f;
+  --bronze-dark: #3f6a2e;
   --gold: #f5e8b5;
   --gold-light: #fbf4d6;
   --gold-dark: #c49a52;
   --gold-deep: #302017;
-  --gold-flare: #f5e8b5;
-  --gold-flare-dim: #e2c07b;
-  --blood: #3f7a3a;
-  --blood-text: #8cc46f;
-  --blood-dark: #1f312b;
-  --blood-top: #4f8f45;
-  --blood-glow: #3f7a3a;
-  --blood-shadow: #1f312b;
-  --blood-flash: #c8f0a0;
-  --hot-shadow: #1f312b;
-  --art-hi: #2a3a24;
-  --art-lo: #0f0d07;
-  --orb-hi: #241a11;
-  --steel-dark: #3e3222;
-  --steel-light: #70552e;
+  --gold-flare: #e2c07b;
+  --gold-flare-dim: #c49a52;
+  --blood: #d9b45a;
+  --blood-top: #ecca72;
+  --blood-dark: #8a6a2c;
+  --blood-text: #ecc96a;
+  --blood-glow: #c49a3a;
+  --blood-shadow: #3a2c10;
+  --blood-flash: #fff3c4;
+  --hot-shadow: #3f5a2a;
+  --art-hi: #2a4224;
+  --art-lo: #0b0a06;
+  --orb-hi: #1d2a16;
+  --steel-dark: #2f3a24;
+  --steel-light: #5f7a44;
   --deg-crit: #f5e8b5;
-  --deg-success: #e2c07b;
+  --deg-success: #8cc46f;
   --deg-fail: #8f8264;
   --deg-critfail: #e2604a;
+  --on-action: #1a1208;
+}
+
+/* Ethereal: Deadlock. Grimy art-deco teal-black, cream text, brass labels and trim, and the
+   souls' teal-cyan glow for buttons and diamonds. */
+[data-theme='ethereal'] {
+  --bg: #0b0f0e;
+  --bg-deep: #070a09;
+  --glow: #17403a;
+  --glow-mid: #0f1a18;
+  --panel: #111614;
+  --panel-hot: #13302b;
+  --panel-deep: #0d1210;
+  --panel-warm: #161b18;
+  --panel-mid: #101513;
+  --panel-ember: #12201d;
+  --panel-raised: #1d2a26;
+  --line: #4a5a4f;
+  --line-soft: #36443c;
+  --line-faint: #212b26;
+  --text: #ebe3cf;
+  --text-soft: #cfc6ae;
+  --text-muted: #9a9a88;
+  --text-dim: #77786a;
+  --text-bright: #f7f1e0;
+  --bronze: #c9a35c;
+  --bronze-dark: #6a5428;
+  --gold: #e3c27a;
+  --gold-light: #f2e0b0;
+  --gold-dark: #8a6a30;
+  --gold-deep: #221c0e;
+  --gold-flare: #4fd6c8;
+  --gold-flare-dim: #2a9a90;
+  --blood: #1f9e92;
+  --blood-top: #2fbcae;
+  --blood-dark: #0e4a44;
+  --blood-text: #5fe0d2;
+  --blood-glow: #1f9e92;
+  --blood-shadow: #0a2e2a;
+  --blood-flash: #b8fff6;
+  --hot-shadow: #0e3a35;
+  --art-hi: #1d2a26;
+  --art-lo: #070a09;
+  --orb-hi: #13221e;
+  --steel-dark: #2c3430;
+  --steel-light: #5a6a62;
+  --deg-crit: #e3c27a;
+  --deg-success: #5fe0d2;
+  --deg-fail: #77786a;
+  --deg-critfail: #e2604a;
+}
+
+/* Badge: L.A. Noire. A black-and-white picture: cool charcoal ground, ivory type, silver
+   labels, and the detective's brass badge for buttons and diamonds (dark lettering on them). */
+[data-theme='badge'] {
+  --bg: #0c0c0d;
+  --bg-deep: #070708;
+  --glow: #2a2a2e;
+  --glow-mid: #141416;
+  --panel: #141415;
+  --panel-hot: #262420;
+  --panel-deep: #101011;
+  --panel-warm: #18181a;
+  --panel-mid: #121213;
+  --panel-ember: #1a1916;
+  --panel-raised: #232325;
+  --line: #4e4e52;
+  --line-soft: #3a3a3e;
+  --line-faint: #26262a;
+  --text: #e8e6df;
+  --text-soft: #c8c6be;
+  --text-muted: #9a9892;
+  --text-dim: #78776f;
+  --text-bright: #f6f4ee;
+  --bronze: #c9c9cc;
+  --bronze-dark: #5c5c62;
+  --gold: #e0c068;
+  --gold-light: #f2e2a8;
+  --gold-dark: #8f7330;
+  --gold-deep: #221d0e;
+  --gold-flare: #f0d27a;
+  --gold-flare-dim: #b8932e;
+  --blood: #d4b25a;
+  --blood-top: #e6c872;
+  --blood-dark: #6e5a24;
+  --blood-text: #e6c46a;
+  --blood-glow: #b8932e;
+  --blood-shadow: #2a2410;
+  --blood-flash: #fff6d6;
+  --hot-shadow: #3a3326;
+  --art-hi: #26262a;
+  --art-lo: #070708;
+  --orb-hi: #1c1c1f;
+  --steel-dark: #2e2e32;
+  --steel-light: #6a6a70;
+  --deg-crit: #e6c46a;
+  --deg-success: #c9c9cc;
+  --deg-fail: #78776f;
+  --deg-critfail: #d0463c;
+  --on-action: #141210;
+}
+
+/* Traveler: Octopath Traveler, brewed. An array of espresso browns: dark-roast ground, mocha
+   lines, latte labels, crema values, caramel for buttons and diamonds (dark lettering on them),
+   and moss green for successful rolls. */
+[data-theme='traveler'] {
+  --bg: #140d09;
+  --bg-deep: #0c0805;
+  --glow: #4a2e1c;
+  --glow-mid: #1e140d;
+  --panel: #1c130e;
+  --panel-hot: #33221a;
+  --panel-deep: #170f0b;
+  --panel-warm: #231811;
+  --panel-mid: #1a110c;
+  --panel-ember: #2a1b12;
+  --panel-raised: #33241a;
+  --line: #6b4a35;
+  --line-soft: #4e3627;
+  --line-faint: #2e2018;
+  --text: #f2e6d6;
+  --text-soft: #dccab2;
+  --text-muted: #ab9680;
+  --text-dim: #857260;
+  --text-bright: #fbf3e8;
+  --bronze: #d6b994;
+  --bronze-dark: #6b4a35;
+  --gold: #e8cfa6;
+  --gold-light: #f6e6cc;
+  --gold-dark: #9a6e46;
+  --gold-deep: #24170e;
+  --gold-flare: #c8925a;
+  --gold-flare-dim: #9a6a3a;
+  --blood: #b8834a;
+  --blood-top: #cc9a60;
+  --blood-dark: #6b4426;
+  --blood-text: #d8a46a;
+  --blood-glow: #a8743e;
+  --blood-shadow: #2e1c0e;
+  --blood-flash: #f6e2c4;
+  --hot-shadow: #4a2e1c;
+  --art-hi: #33241a;
+  --art-lo: #0c0805;
+  --orb-hi: #2a1b12;
+  --steel-dark: #3a2c22;
+  --steel-light: #7a6656;
+  --deg-crit: #e8cfa6;
+  --deg-success: #8aa86a;
+  --deg-fail: #857260;
+  --deg-critfail: #e2604a;
+  --on-action: #1a0f08;
+}
+
+/* Judgement: the paladin's armor. Black plate, gold filigree for labels, borders, trim and
+   values, the red gems and cape as the glow, selected states, flares and critical failures,
+   white text, and electric blue only for buttons and diamonds. */
+[data-theme='judgement'] {
+  --bg: #07080b;
+  --bg-deep: #040507;
+  --glow: #4e0c18;
+  --glow-mid: #1a080c;
+  --panel: #0e1014;
+  --panel-hot: #2e0c14;
+  --panel-deep: #0b0d10;
+  --panel-warm: #12151a;
+  --panel-mid: #0d0f13;
+  --panel-ember: #24090f;
+  --panel-raised: #1a1e26;
+  --line: #8a6e2e;
+  --line-soft: #5c4a22;
+  --line-faint: #2c2414;
+  --text: #f4f2ec;
+  --text-soft: #d6d3ca;
+  --text-muted: #9e9b92;
+  --text-dim: #78766e;
+  --text-bright: #ffffff;
+  --bronze: #e0b84a;
+  --bronze-dark: #6e561e;
+  --gold: #f6cc58;
+  --gold-light: #fff0b8;
+  --gold-dark: #a07a22;
+  --gold-deep: #221a08;
+  --gold-flare: #e8283c;
+  --gold-flare-dim: #a01828;
+  --blood: #1a7cff;
+  --blood-top: #3a96ff;
+  --blood-dark: #0a2a6e;
+  --blood-text: #5cc0ff;
+  --blood-glow: #1a7cff;
+  --blood-shadow: #08204a;
+  --blood-flash: #eef8ff;
+  --hot-shadow: #6a0f1a;
+  --art-hi: #2a0e14;
+  --art-lo: #040507;
+  --orb-hi: #2a0c12;
+  --steel-dark: #262a32;
+  --steel-light: #5a6270;
+  --deg-crit: #f6cc58;
+  --deg-success: #fae6a8;
+  --deg-fail: #78766e;
+  --deg-critfail: #ff3a4a;
+}
+
+/* Atrophy: obsidian black, indigo and white. Near-black ground with an indigo haze, white
+   text and values, pale-lavender labels, and deep indigo for buttons and diamonds. */
+[data-theme='atrophy'] {
+  --bg: #08080b;
+  --bg-deep: #040406;
+  --glow: #1e1450;
+  --glow-mid: #0e0c1a;
+  --panel: #0f0f14;
+  --panel-hot: #1a1440;
+  --panel-deep: #0b0b0f;
+  --panel-warm: #14141a;
+  --panel-mid: #0e0e12;
+  --panel-ember: #12102a;
+  --panel-raised: #1e1c2a;
+  --line: #3e3c56;
+  --line-soft: #2c2a3e;
+  --line-faint: #1c1b26;
+  --text: #f2f1f6;
+  --text-soft: #d4d2de;
+  --text-muted: #9e9cae;
+  --text-dim: #787688;
+  --text-bright: #ffffff;
+  --bronze: #d8d4ff;
+  --bronze-dark: #3a3470;
+  --gold: #ffffff;
+  --gold-light: #ffffff;
+  --gold-dark: #a8a6bc;
+  --gold-deep: #14121e;
+  --gold-flare: #7a6aff;
+  --gold-flare-dim: #4f3bd8;
+  --blood: #4f3bd8;
+  --blood-top: #6652ec;
+  --blood-dark: #1e1460;
+  --blood-text: #8f80ff;
+  --blood-glow: #4f3bd8;
+  --blood-shadow: #160f40;
+  --blood-flash: #d8d2ff;
+  --hot-shadow: #22185a;
+  --art-hi: #1c1638;
+  --art-lo: #040406;
+  --orb-hi: #140f2a;
+  --steel-dark: #26252e;
+  --steel-light: #5e5c6e;
+  --deg-crit: #ffffff;
+  --deg-success: #a89cff;
+  --deg-fail: #787688;
+  --deg-critfail: #ff6a4a;
+}
+
+/* Emblem: Fire Emblem: Fortune's Weave. A dusk-indigo ground under a sandstone haze, ivory
+   text and values, sand-gold labels, the crimson-magenta cloaks for buttons and diamonds, the
+   heroes' indigo as the glow and successful rolls, and the sunburst's gold for flares. */
+[data-theme='emblem'] {
+  --bg: #0e0c18;
+  --bg-deep: #08070f;
+  --glow: #2e2a6a;
+  --glow-mid: #161430;
+  --panel: #15121f;
+  --panel-hot: #2e1430;
+  --panel-deep: #110f1a;
+  --panel-warm: #1a1626;
+  --panel-mid: #13111d;
+  --panel-ember: #24142a;
+  --panel-raised: #24203a;
+  --line: #5e5070;
+  --line-soft: #433a56;
+  --line-faint: #252036;
+  --text: #f4efe4;
+  --text-soft: #dcd4c4;
+  --text-muted: #a8a0b0;
+  --text-dim: #80788e;
+  --text-bright: #fffbf2;
+  --bronze: #e0c08a;
+  --bronze-dark: #6e5a36;
+  --gold: #f4e4c0;
+  --gold-light: #fff6e0;
+  --gold-dark: #b08a4e;
+  --gold-deep: #221a10;
+  --gold-flare: #f6c45a;
+  --gold-flare-dim: #d0943a;
+  --blood: #b02a5a;
+  --blood-top: #c83c6e;
+  --blood-dark: #5a1030;
+  --blood-text: #ec5e8e;
+  --blood-glow: #b02a5a;
+  --blood-shadow: #3a0c22;
+  --blood-flash: #ffd8e4;
+  --hot-shadow: #2e2a6a;
+  --art-hi: #24203a;
+  --art-lo: #08070f;
+  --orb-hi: #24142a;
+  --steel-dark: #2c2838;
+  --steel-light: #6a6480;
+  --deg-crit: #f6c45a;
+  --deg-success: #9a9ae8;
+  --deg-fail: #80788e;
+  --deg-critfail: #ff5a5a;
+}
+
+/* Tarnished: Elden Ring. The Lands Between at night: deep teal-black ground under mist,
+   pale mist text, muted gold labels, and the Erdtree's burning gold for buttons, diamonds,
+   values and flares (dark lettering on buttons), with misty teal for successful rolls. */
+[data-theme='tarnished'] {
+  --bg: #081210;
+  --bg-deep: #040a09;
+  --glow: #1a4a46;
+  --glow-mid: #0c1c1a;
+  --panel: #0e1816;
+  --panel-hot: #1a3a34;
+  --panel-deep: #0b1412;
+  --panel-warm: #121e1b;
+  --panel-mid: #0d1715;
+  --panel-ember: #1e2416;
+  --panel-raised: #18282a;
+  --line: #3e5a52;
+  --line-soft: #2c443e;
+  --line-faint: #1a2a26;
+  --text: #e6e6d8;
+  --text-soft: #c8cbbc;
+  --text-muted: #909a90;
+  --text-dim: #6e786e;
+  --text-bright: #f6f4e8;
+  --bronze: #cfb87a;
+  --bronze-dark: #5e5030;
+  --gold: #ffd27a;
+  --gold-light: #fff0c4;
+  --gold-dark: #b07a22;
+  --gold-deep: #201808;
+  --gold-flare: #ffb03a;
+  --gold-flare-dim: #d07a1a;
+  --blood: #e0a030;
+  --blood-top: #f2bc4a;
+  --blood-dark: #7a5010;
+  --blood-text: #ffc24a;
+  --blood-glow: #f0a830;
+  --blood-shadow: #2a1c06;
+  --blood-flash: #fff2c8;
+  --hot-shadow: #6a4a10;
+  --art-hi: #18282a;
+  --art-lo: #040a09;
+  --orb-hi: #1e2416;
+  --steel-dark: #24302e;
+  --steel-light: #5a6e68;
+  --deg-crit: #ffd27a;
+  --deg-success: #7ac0b8;
+  --deg-fail: #6e786e;
+  --deg-critfail: #e2604a;
+  --on-action: #140e04;
+}
+
+/* Briar: the briar-rose castle of a sleeping kingdom. Rosewood-black ground under a dusky-rose
+   haze, bone-ivory text and values, antique-silver labels, dusty rose for buttons and diamonds
+   (dark lettering on them), blush for successful rolls and dewdrop silver for flares. */
+[data-theme='briar'] {
+  --bg: #140c0f;
+  --bg-deep: #0b0608;
+  --glow: #4a2232;
+  --glow-mid: #1e1015;
+  --panel: #1c1216;
+  --panel-hot: #3a1e28;
+  --panel-deep: #170e12;
+  --panel-warm: #22161b;
+  --panel-mid: #1a1014;
+  --panel-ember: #2a141c;
+  --panel-raised: #2e1e24;
+  --line: #6a4450;
+  --line-soft: #4c303a;
+  --line-faint: #2c1c22;
+  --text: #f4e8e4;
+  --text-soft: #dccbc8;
+  --text-muted: #a8949a;
+  --text-dim: #82707a;
+  --text-bright: #fdf6f2;
+  --bronze: #c8c0c4;
+  --bronze-dark: #5e545a;
+  --gold: #f6ece6;
+  --gold-light: #ffffff;
+  --gold-dark: #b0a0a6;
+  --gold-deep: #1e1418;
+  --gold-flare: #f0e6ea;
+  --gold-flare-dim: #c8b8c0;
+  --blood: #d88896;
+  --blood-top: #e8a0ac;
+  --blood-dark: #7a3a48;
+  --blood-text: #eca4b2;
+  --blood-glow: #d07888;
+  --blood-shadow: #3a1620;
+  --blood-flash: #ffe8ee;
+  --hot-shadow: #5a2638;
+  --art-hi: #2e1e24;
+  --art-lo: #0b0608;
+  --orb-hi: #2a141c;
+  --steel-dark: #2e2428;
+  --steel-light: #6e6266;
+  --deg-crit: #f6ece6;
+  --deg-success: #f0b8c4;
+  --deg-fail: #82707a;
+  --deg-critfail: #e04a5a;
+  --on-action: #1e0c10;
 }
 
 :root {

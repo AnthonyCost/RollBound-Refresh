@@ -19,7 +19,7 @@ import { rateLimit } from '../rateLimit.js';
 export const auth = Router();
 
 // The site's colour themes (client/src/themes.js). Infernal is the default.
-const THEMES = ['infernal', 'mirage', 'gothic', 'frigid', 'obscure', 'luminary', 'radiant', 'tunic'];
+const THEMES = ['infernal', 'mirage', 'gothic', 'frigid', 'obscure', 'luminary', 'radiant', 'tunic', 'ethereal', 'badge', 'traveler', 'judgement', 'atrophy', 'emblem', 'tarnished', 'briar'];
 
 const toJson = (u) => ({
   id: u.id,
