@@ -57,7 +57,7 @@ function DamageView({ roll, onAgain, onBack }) {
         {dice.length === 1 ? (
           // One die: the total lives inside it, like the d20's.
           <div className="roll__gem roll__gem--plain">
-            <DieShape sides={dice[0].sides} className="roll__die" />
+            <DieShape sides={dice[0].sides} className="roll__die" spin={TUMBLE_MS} />
             <div className="roll__inner" style={dieTextAt(dice[0].sides)}>
               <span className="visually-hidden">Total </span>
               <RollTotal total={total} faces={dice[0].sides} />

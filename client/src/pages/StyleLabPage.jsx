@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import PageShell from '../components/PageShell.jsx';
 import StyleLabPalette from './StyleLabPalette.jsx';
+import StyleLabDice from './StyleLabDice.jsx';
 import Portrait from '../components/Portrait.jsx';
 import Icon from '../components/Icon.jsx';
 import { cardArtFor, artFor, PLACEHOLDER_ART } from '../builder/art.js';
@@ -288,6 +289,7 @@ function SurfaceDemo() {
 const TABS = [
   { id: 'proposals', label: 'Proposals', icon: 'overview' },
   { id: 'palette', label: 'Themes', icon: 'spark' },
+  { id: 'dice', label: 'Dice', icon: 'roll' },
 ];
 
 /** The lab's tabs, as the site's own tab bar; the tab lives in the URL (?tab=palette) so it can be linked. */
@@ -314,7 +316,7 @@ export default function StyleLabPage() {
         <header className="lab-intro">
           <h1 className="x-title">Style lab</h1>
           <p className="x-body">
-            {tab === 'palette'
+            {tab === 'dice' ? 'Every die in the current theme. Click one to roll it.' : tab === 'palette'
               ? 'A colour scheme to try on RollBound, shown on the site’s real components. Nothing here is live anywhere else on the site.'
               : 'Proposed changes to make RollBound feel made rather than generated, on sample content. Nothing here is live anywhere else on the site.'}
           </p>
@@ -327,7 +329,7 @@ export default function StyleLabPage() {
           )}
         </header>
 
-        {tab === 'palette' ? <StyleLabPalette /> : (
+        {tab === 'dice' ? <StyleLabDice /> : tab === 'palette' ? <StyleLabPalette /> : (
         <>
 
         <Study mode={mode} n={1} title="Capitals only where they label, and a second typeface"

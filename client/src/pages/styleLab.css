@@ -153,3 +153,9 @@
 /* The drawer, held in the specimen instead of sliding over the page. */
 .pal-specimen .details--inline { border: 1px solid var(--bronze); box-shadow: 0 10px 30px rgb(0 0 0 / 0.5); }
 
+
+/* Dice tab: a box per die, clicked to roll. */
+.lab-dice { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.lab-die { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; cursor: pointer; font: inherit; color: inherit; min-height: 300px; justify-content: center; }
+.lab-die:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.lab-die .roll__gem { width: 180px; }

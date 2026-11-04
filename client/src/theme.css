@@ -1338,11 +1338,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.55)) drop-shadow(0 0 16px color-mix(in srgb, var(--die-glow) 45%, transparent));
 }
 .roll__die { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.roll__die-face { stroke: var(--die-edge); stroke-width: 1.2; stroke-linejoin: round; }
-.roll__die-face--front { fill: var(--die-front); }
-.roll__die-face--light { fill: var(--die-light); }
-.roll__die-face--side { fill: var(--die-side); }
-.roll__die-face--low { fill: var(--die-low); }
 .die-3d__face { stroke: var(--die-edge); stroke-width: 1.2; stroke-linejoin: round; }
 /* A critical success: gold. A critical failure: the theme's crit-fail colour, gone dark. */
 .roll__gem:not(.roll__gem--plain):not(.roll__gem--critfail) { --die-edge: var(--gold); --die-front: var(--gold-deep); --die-light: var(--gold-dark); --die-side: var(--panel-raised); --die-glow: var(--gold-flare); }

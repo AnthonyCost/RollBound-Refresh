@@ -1,70 +1,9 @@
 import { useEffect, useState } from 'react';
 
-// The dice, drawn face-on as inline SVG on a 100 × 100 grid: d4, d6, d8, d10, d12, d20, and
-// d100 as two d10s (tens and units). Every face takes the theme's colours through --die-*
-// (theme.css, .die and .roll__gem), so the dice match each theme and each roll's result.
-
-const pts = (list) => list.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
-const ring = (n, r, start, cx = 50, cy = 50) => Array.from({ length: n }, (_, i) => {
-  const a = ((start + (360 / n) * i) * Math.PI) / 180;
-  return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
-});
-
-// A d12: the front pentagon, and the five faces around it out to a ten-sided outline.
-const D12_IN = ring(5, 22, -90, 50, 52);
-const D12_OUT = ring(10, 47, -90, 50, 52);
-
-/** Each die's faces ([shade, points]) and where its number sits. Shades: front, light, side, low. */
-const SHAPES = {
-  4: {
-    faces: [
-      ['front', '50,8 89,80 11,80'],
-      ['low', '11,80 89,80 95,90 5,90'],
-    ],
-    text: [50, 58, 30],
-  },
-  6: {
-    faces: [
-      ['front', '8,30 70,30 70,92 8,92'],
-      ['light', '8,30 30,8 92,8 70,30'],
-      ['side', '70,30 92,8 92,70 70,92'],
-    ],
-    text: [39, 63, 34],
-  },
-  8: {
-    faces: [
-      ['front', '50,4 80,64 20,64'],
-      ['side', '50,4 20,64 6,50'],
-      ['side', '50,4 94,50 80,64'],
-      ['low', '6,50 20,64 50,96'],
-      ['low', '20,64 80,64 50,96'],
-      ['low', '80,64 94,50 50,96'],
-    ],
-    text: [50, 46, 26],
-  },
-  10: {
-    faces: [
-      ['front', '50,4 74,50 50,64 26,50'],
-      ['side', '50,4 26,50 6,46'],
-      ['side', '50,4 94,46 74,50'],
-      ['low', '6,46 26,50 50,64 50,96'],
-      ['low', '94,46 74,50 50,64 50,96'],
-    ],
-    text: [50, 40, 24],
-  },
-  12: {
-    faces: [
-      ['front', pts(D12_IN)],
-      ...D12_IN.map((p, k) => [k === 0 || k === 1 || k === 4 ? 'side' : 'low', pts([p, D12_OUT[2 * k], D12_OUT[(2 * k + 1) % 10], D12_OUT[(2 * k + 2) % 10], D12_IN[(k + 1) % 5]])]),
-    ],
-    text: [50, 54, 26],
-  },
-};
-
-// ---------- The d20 in 3D ----------
-// A real icosahedron: rotated each frame, projected face-on into the same 100 × 100 grid,
-// its visible faces shaded by how they face a light from the upper left. It comes to rest
-// with one face pointing at the viewer, apex up: the face the total sits on.
+// The dice, in 3D: d4, d6, d8, d10, d12, d20, and d100 as two d10s (tens and units). Each is
+// a real solid, rotated each frame and projected into a 100 × 100 SVG grid, its visible faces
+// dark and lit from the upper left, outlined in the theme's colour (--die-*, theme.css). A
+// fresh roll spins it (fast, then slowing) until it rests with its number face toward you.
 
 const PHI = (1 + Math.sqrt(5)) / 2;
 const norm = (v) => { const l = Math.hypot(...v); return v.map((x) => x / l); };
@@ -73,47 +12,122 @@ const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 const mul = (m, v) => m.map((row) => dot(row, v));
 const matMul = (a, b) => a.map((row) => [0, 1, 2].map((j) => row[0] * b[0][j] + row[1] * b[1][j] + row[2] * b[2][j]));
+const centroid = (ps) => [0, 1, 2].map((k) => ps.reduce((t, p) => t + p[k], 0) / ps.length);
 
-const ICO_V = [[-1, PHI, 0], [1, PHI, 0], [-1, -PHI, 0], [1, -PHI, 0], [0, -1, PHI], [0, 1, PHI], [0, -1, -PHI], [0, 1, -PHI], [PHI, 0, -1], [PHI, 0, 1], [-PHI, 0, -1], [-PHI, 0, 1]].map(norm);
-// Faces wound so their normals point outward.
-const ICO_F = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]]
-  .map(([a, b, c]) => (dot(cross(sub(ICO_V[b], ICO_V[a]), sub(ICO_V[c], ICO_V[a])), ICO_V[a]) < 0 ? [a, c, b] : [a, b, c]));
-
-// The resting turn: face 0's normal toward the viewer (+z), its first corner straight up (−y on screen).
-const REST = (() => {
-  const [a, b, c] = ICO_F[0].map((i) => ICO_V[i]);
-  const centre = [0, 1, 2].map((k) => (a[k] + b[k] + c[k]) / 3);
-  const z = norm(centre);
-  const up = norm(sub(a, centre));
-  const y = up.map((x) => -x);
-  return [cross(y, z), y, z];
-})();
-const LIGHT = norm([-0.45, -0.6, 0.65]);
-
-/** A turn of angle about an axis (Rodrigues). */
+/** A turn of angle t about an axis (Rodrigues). */
 function axisAngle([x, y, z], t) {
   const c = Math.cos(t), s = Math.sin(t), k = 1 - c;
   return [[c + x * x * k, x * y * k - z * s, x * z * k + y * s], [y * x * k + z * s, c + y * y * k, y * z * k - x * s], [z * x * k - y * s, z * y * k + x * s, c + z * z * k]];
 }
 
-/** The faces seen from the front under turn m: [points, light 0–1, the resting front face?]. */
-function icoFaces(m) {
-  const v = ICO_V.map((p) => mul(m, p));
-  return ICO_F.map((f, i) => {
-    const n = norm(cross(sub(v[f[1]], v[f[0]]), sub(v[f[2]], v[f[0]])));
-    return n[2] > 0.01 ? [f.map((k) => `${(50 + v[k][0] * 47).toFixed(1)},${(50 + v[k][1] * 47).toFixed(1)}`).join(' '), Math.max(0, dot(n, LIGHT)), i === 0] : null;
-  }).filter(Boolean);
-}
-const REST_FACES = icoFaces(REST);
-// Self-check: face-on, ten faces show and the resting face points straight out.
-console.assert(REST_FACES.length === 10 && REST_FACES.some(([, , front]) => front), 'd20 rest pose');
+// The d10: a pentagonal trapezohedron. Two rings of five, offset by 36°, between two apexes
+// set so each kite face is flat.
+const D10_A = 0.105;
+const D10_H = (D10_A * (1 + Math.cos(Math.PI / 5))) / (1 - Math.cos(Math.PI / 5));
+const ringAt = (z, offset) => Array.from({ length: 5 }, (_, k) => [Math.cos((2 * Math.PI * k) / 5 + offset), Math.sin((2 * Math.PI * k) / 5 + offset), z]);
+
+/** Each die's corners. */
+const CORNERS = {
+  4: [[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]],
+  6: [-1, 1].flatMap((x) => [-1, 1].flatMap((y) => [-1, 1].map((z) => [x, y, z]))),
+  8: [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]],
+  10: [[0, 0, D10_H], [0, 0, -D10_H], ...ringAt(D10_A, 0), ...ringAt(-D10_A, Math.PI / 5)],
+  12: [
+    ...[-1, 1].flatMap((x) => [-1, 1].flatMap((y) => [-1, 1].map((z) => [x, y, z]))),
+    ...[-1, 1].flatMap((a) => [-1, 1].flatMap((b) => [[0, a / PHI, b * PHI], [a / PHI, b * PHI, 0], [a * PHI, 0, b / PHI]])),
+  ],
+  20: [[-1, PHI, 0], [1, PHI, 0], [-1, -PHI, 0], [1, -PHI, 0], [0, -1, PHI], [0, 1, PHI], [0, -1, -PHI], [0, 1, -PHI], [PHI, 0, -1], [PHI, 0, 1], [-PHI, 0, -1], [-PHI, 0, 1]],
+};
 
 /**
- * The d20, in 3D. spin: ms to tumble before it comes to rest (a fresh roll); without it (or
- * with reduced motion) it rests face-on at once.
+ * A convex solid's faces from its corners: every plane through three corners with all the
+ * others on one side, its corners ordered around it so the face's normal points outward.
  */
-export function D20({ spin = null, className = '' }) {
-  const [faces, setFaces] = useState(REST_FACES);
+function hullFaces(vs) {
+  const faces = [];
+  const seen = new Set();
+  for (let i = 0; i < vs.length; i++) for (let j = i + 1; j < vs.length; j++) for (let k = j + 1; k < vs.length; k++) {
+    let n = cross(sub(vs[j], vs[i]), sub(vs[k], vs[i]));
+    if (Math.hypot(...n) < 1e-9) continue;
+    n = norm(n);
+    let d = dot(n, vs[i]);
+    const side = vs.map((p) => dot(n, p) - d);
+    if (side.some((x) => x > 1e-6) && side.some((x) => x < -1e-6)) continue;
+    if (side.some((x) => x > 1e-6)) { n = n.map((x) => -x); d = -d; }
+    const on = vs.map((_, m) => m).filter((m) => Math.abs(dot(n, vs[m]) - d) < 1e-6);
+    const key = on.join(',');
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const c = centroid(on.map((m) => vs[m]));
+    const u = norm(sub(vs[on[0]], c));
+    const w = cross(n, u);
+    on.sort((a, b) => Math.atan2(dot(sub(vs[a], c), w), dot(sub(vs[a], c), u)) - Math.atan2(dot(sub(vs[b], c), w), dot(sub(vs[b], c), u)));
+    faces.push(on);
+  }
+  return faces;
+}
+
+const LIGHT = norm([-0.45, -0.6, 0.65]);
+// Each die rests with its number face toward you. The d4, d6 and d10 tip it up a little, so the
+// faces below show and give it depth; the rest are face-on.
+const view = (x, z = 0) => matMul(axisAngle([1, 0, 0], x), axisAngle([0, 0, 1], z));
+const TILT = {
+  4: view(0.35),
+  // The cube comes to rest corner-up (a diamond); an eighth of a turn stands it square.
+  6: view(0.35, Math.PI / 4),
+  10: view(0.35),
+};
+// The number's size on each die, in grid units (and cqi in the roller).
+const TEXT_SIZE = { 4: 22, 6: 30, 8: 22, 10: 20, 12: 24, 20: 22 };
+
+/**
+ * Each die, ready to draw: its corners and faces, its resting turn (face 0 toward the viewer,
+ * its farthest corner straight up, leaned back for a d4 or d6), and the scale and offset that
+ * fit it in the grid at rest, with where its number sits.
+ */
+const SOLIDS = Object.fromEntries(Object.entries(CORNERS).map(([sides, raw]) => {
+  const vs = raw.map((p) => { const r = Math.max(...raw.map((q) => Math.hypot(...q))); return p.map((x) => x / r); });
+  const faces = hullFaces(vs);
+  const front = faces[0].map((m) => vs[m]);
+  const c = centroid(front);
+  const z = norm(cross(sub(front[1], front[0]), sub(front[2], front[0])));
+  const far = front.reduce((a, b) => (Math.hypot(...sub(b, c)) > Math.hypot(...sub(a, c)) ? b : a));
+  const lift = sub(far, c);
+  const y = norm(sub(lift, z.map((x) => x * dot(lift, z)))).map((x) => -x);
+  const rest = matMul(TILT[sides] ?? [[1, 0, 0], [0, 1, 0], [0, 0, 1]], [cross(y, z), y, z]);
+  const seen = vs.map((p) => mul(rest, p));
+  const xs = seen.map((p) => p[0]), ys = seen.map((p) => p[1]);
+  const scale = 46 / Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) * 2;
+  const offset = [50 - ((Math.max(...xs) + Math.min(...xs)) / 2) * scale, 50 - ((Math.max(...ys) + Math.min(...ys)) / 2) * scale];
+  const label = mul(rest, c);
+  return [sides, { vs, faces, rest, scale, offset, text: [offset[0] + label[0] * scale, offset[1] + label[1] * scale, TEXT_SIZE[sides]] }];
+}));
+// Self-check: each solid has the faces its name promises.
+for (const [sides, s] of Object.entries(SOLIDS)) console.assert(s.faces.length === Number(sides), `d${sides} has ${s.faces.length} faces`);
+
+/** The faces seen under turn m, as [points, light 0–1], back faces dropped. */
+function facesUnder(solid, m) {
+  const v = solid.vs.map((p) => mul(m, p));
+  return solid.faces.map((f) => {
+    const n = norm(cross(sub(v[f[1]], v[f[0]]), sub(v[f[2]], v[f[0]])));
+    return n[2] > 0.01 ? [f.map((k) => `${(solid.offset[0] + v[k][0] * solid.scale).toFixed(1)},${(solid.offset[1] + v[k][1] * solid.scale).toFixed(1)}`).join(' '), Math.max(0, dot(n, LIGHT))] : null;
+  }).filter(Boolean);
+}
+const REST_FACES = Object.fromEntries(Object.entries(SOLIDS).map(([sides, s]) => [sides, facesUnder(s, s.rest)]));
+
+/** Where a die's number sits on its resting front face, as percentages of the die, and its size (cqi). */
+export const dieTextAt = (sides) => {
+  const [x, y, size] = SOLIDS[sides === 100 ? 10 : sides].text;
+  return { left: `${x}%`, top: `${y}%`, fontSize: `${size * 0.92}cqi` };
+};
+
+/**
+ * One die in 3D, with an optional label on its front face. spin: ms to tumble before it
+ * comes to rest (a fresh roll); without it (or with reduced motion) it rests at once.
+ */
+export function DieShape({ sides, label = null, className = '', spin = null }) {
+  const solid = SOLIDS[sides];
+  const [faces, setFaces] = useState(REST_FACES[sides]);
   useEffect(() => {
     if (!spin || reducedMotion()) return undefined;
     const axis = norm([Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5]);
@@ -124,39 +138,19 @@ export function D20({ spin = null, className = '' }) {
       const t = Math.min(1, (now - start) / spin);
       const left = 1 - t;
       // Fast at first, slowing as it settles: the turn still to go shrinks with the cube of the time left.
-      setFaces(t < 1 ? icoFaces(matMul(REST, axisAngle(axis, turns * left * left * left))) : REST_FACES);
+      setFaces(t < 1 ? facesUnder(solid, matMul(solid.rest, axisAngle(axis, turns * left * left * left))) : REST_FACES[sides]);
       if (t < 1) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [spin]);
+  }, [spin, sides, solid]);
+  const [x, y, size] = solid.text;
   return (
     <svg className={`die__shape ${className}`} viewBox="0 0 100 100" aria-hidden="true">
-      {/* Dark faces lit from the upper left, outlined in the die's bright colour (like the other dice). */}
+      {/* Dark faces lit from the upper left, outlined in the die's bright colour. */}
       {faces.map(([pts, light]) => (
         <polygon key={pts} className="die-3d__face" points={pts} style={{ fill: `color-mix(in oklab, var(--die-edge) ${Math.round(12 + light * 33)}%, var(--die-low))` }} />
       ))}
-    </svg>
-  );
-}
-
-/** Where a die's number sits on its front face, as percentages of the die, and its size (cqi). */
-export const dieTextAt = (sides) => {
-  // The d20 rests with its front face centred.
-  const [x, y, size] = sides === 20 ? [50, 50, 22] : SHAPES[sides === 100 ? 10 : sides].text;
-  return { left: `${x}%`, top: `${y}%`, fontSize: `${size * 0.92}cqi` };
-};
-
-/** One die's shape, with an optional label on its front face. */
-export function DieShape({ sides, label = null, className = '' }) {
-  if (sides === 20) return <D20 className={className} />;
-  const shape = SHAPES[sides];
-  // The front face is drawn last, so its edges sit on top.
-  const faces = [...shape.faces.filter(([s]) => s !== 'front'), ...shape.faces.filter(([s]) => s === 'front')];
-  const [x, y, size] = shape.text;
-  return (
-    <svg className={`die__shape ${className}`} viewBox="0 0 100 100" aria-hidden="true">
-      {faces.map(([shade, p]) => <polygon key={p} className={`roll__die-face roll__die-face--${shade}`} points={p} />)}
       {label != null && (
         <text className="die__value" x={x} y={y} fontSize={String(label).length > 2 ? size * 0.75 : size} textAnchor="middle" dominantBaseline="central">
           {label}
@@ -165,6 +159,9 @@ export function DieShape({ sides, label = null, className = '' }) {
     </svg>
   );
 }
+
+/** The d20 (the roller's check die). */
+export const D20 = (props) => <DieShape sides={20} {...props} />;
 
 /** How long a die tumbles before it lands (ms). */
 export const TUMBLE_MS = 520;
@@ -215,14 +212,14 @@ export function Die({ sides, value = null, size = 64, tumble = null }) {
     const units = value != null ? String(value % 10) : '0';
     return (
       <span className={`die die--d100 ${tumble != null && landed ? 'die--landed' : ''}`} role="img" aria-label={name} style={{ '--die-size': `${size}px` }}>
-        <DieShape sides={10} label={tens} />
-        <DieShape sides={10} label={units} />
+        <DieShape sides={10} label={tens} spin={tumble} />
+        <DieShape sides={10} label={units} spin={tumble} />
       </span>
     );
   }
   return (
     <span className={`die ${tumble != null && landed ? 'die--landed' : ''}`} role="img" aria-label={name} style={{ '--die-size': `${size}px` }}>
-      <DieShape sides={sides} label={value} />
+      <DieShape sides={sides} label={value} spin={tumble} />
     </span>
   );
 }
