@@ -15,6 +15,7 @@ import HpTracker from '../components/HpTracker.jsx';
 import ShieldTracker from '../components/ShieldTracker.jsx';
 import Icon from '../components/Icon.jsx';
 import RollDrawer from '../components/RollDrawer.jsx';
+import { DamageButton, damageExpr } from '../components/Dice.jsx';
 import { sentenceCase, signed, titleCase } from '../format.js';
 
 const COSTS = new Set(['1', '2', '3', 'reaction', 'free']);
@@ -312,7 +313,7 @@ function Guide({ character, ac, open, onToggle }) {
 export default function CombatPage() {
   const {
     character, conditions, used, actionsLeft, strikesSoFar, takeAction, strike, endTurn, cycleCondition, resetEncounter,
-    shieldRaised, encounter, myTurn, round, campaign, currentHp, maxHp, setHp, shield,
+    shieldRaised, encounter, myTurn, round, campaign, currentHp, maxHp, setHp, shield, rollDamage,
   } = useTable();
   const feats = useFeatActions(character);
   const [guideOpen, setGuideOpen] = useRemembered('rollbound:combat-guide', true);
@@ -363,6 +364,11 @@ export default function CombatPage() {
     if (cost) takeAction(o, actions ? `${actions} action${actions === 1 ? '' : 's'}` : '', cost);
     else takeAction(o, o.cost === 'reaction' ? 'reaction' : 'free action', 0);
     setOpen(null);
+  };
+  const onRollDamage = (label, expr, damageType) => {
+    if (!rollDamage(label, expr, damageType)) return;
+    setOpen(null);
+    setRolling(true);
   };
   const onStrike = (w) => {
     if (!strike(w)) return;
@@ -428,7 +434,9 @@ export default function CombatPage() {
                 <span className="combat-strike__weapon">
                   <span className="combat-strike__name">{w.name}</span>
                   <span className="combat-strike__dmg">
-                    1d{w.die}{mod ? signed(mod) : ''} {w.damageType ?? ''}
+                    <DamageButton label={w.name} expr={damageExpr(w.die, mod)} die={w.die} damageType={w.damageType} onRoll={onRollDamage}>
+                      1d{w.die}{mod ? signed(mod) : ''} {w.damageType ?? ''}
+                    </DamageButton>
                     {w.traits?.includes('agile') && <span className="tag">agile</span>}
                   </span>
                 </span>
@@ -493,7 +501,7 @@ export default function CombatPage() {
         </aside>
       </div>
 
-      <DetailsDrawer detail={detail} onClose={() => setOpen(null)} />
+      <DetailsDrawer detail={detail} onClose={() => setOpen(null)} onRollDice={onRollDamage} />
       <RollDrawer open={rolling} onClose={closeRoll} />
     </div>
   );

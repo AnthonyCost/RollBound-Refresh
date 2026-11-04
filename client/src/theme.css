@@ -1346,9 +1346,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 /* A critical success: gold. A critical failure: the theme's crit-fail colour, gone dark. */
 .roll__gem:not(.roll__gem--plain):not(.roll__gem--critfail) { --die-edge: var(--gold); --die-front: var(--gold-deep); --die-light: var(--gold-dark); --die-side: var(--panel-raised); --die-glow: var(--gold-flare); }
 .roll__gem--critfail { --die-edge: var(--deg-critfail); --die-front: var(--panel-ember); --die-light: var(--blood-dark); --die-side: var(--bg); --die-glow: var(--blood-dark); }
-/* The total sits on the middle face (its centre is 53% down), sized to the die so it stays inside the face. */
-.roll__inner { position: relative; display: flex; flex-direction: column; align-items: center; margin-top: 6%; }
-.roll__gem .roll__total { font-size: 24cqi; }
+/* The total sits on the die's front face (dieTextAt places it per die), sized to the die so it stays inside the face. */
+.roll__gem .roll__die { width: 100%; height: 100%; }
+.roll__inner { position: absolute; display: flex; flex-direction: column; align-items: center; translate: -50% -50%; }
+.roll__gem .roll__total { font-size: inherit; }
 .roll__damage { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; }
 .roll__damage-die { display: inline-grid; color: var(--blood-text); }
 .roll__total { font-family: var(--display); font-size: clamp(44px, 4vw + 30px, 64px); font-weight: 900; line-height: 1; color: var(--text-bright); }
@@ -4547,3 +4548,42 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 @media (hover: hover) {
   .sheet-def.sheet-rollable:not(.is-open):hover, .sheet-strike.sheet-rollable:not(.is-open):hover { border-color: var(--bronze); }
 }
+
+/* ---------- Dice (components/Dice.jsx) ----------
+   Every die takes the theme's colours, like the roller's d20; a damage amount is a box that rolls. */
+.die {
+  --die-edge: var(--blood-text);
+  --die-front: var(--blood-shadow);
+  --die-light: var(--blood-dark);
+  --die-side: var(--panel-ember);
+  --die-low: var(--bg-deep);
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+}
+.die__shape { width: var(--die-size, 64px); height: var(--die-size, 64px); overflow: visible; }
+.die__value { fill: var(--text-bright); font-family: var(--display); font-weight: 700; }
+.dice-roll {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color var(--motion-fast), color var(--motion-fast);
+}
+@media (hover: hover) { .dice-roll:hover { border-color: var(--gold); color: var(--gold); } }
+.dice-roll:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.dice-roll .die__shape { width: 18px; height: 18px; }
+.details__html .dice-roll { padding: 0 6px; font-weight: 700; vertical-align: baseline; }
+/* In a rollable row, the damage box sits above the details button, like the modifier. */
+.sheet-rollable .dice-roll { position: relative; z-index: 2; pointer-events: auto; }
+.sheet-strike__damage { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
+/* The roller's damage view: each die with what it rolled, then the total. */
+.roll-damage__dice { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.roll-damage__total { display: flex; flex-direction: column; align-items: center; gap: 2px; }

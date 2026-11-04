@@ -10,6 +10,7 @@ import CharacterDrawer from '../components/CharacterDrawer.jsx';
 import ExportSheetButton from '../components/ExportSheetButton.jsx';
 import DetailsDrawer from '../components/DetailsDrawer.jsx';
 import RollDrawer from '../components/RollDrawer.jsx';
+import { DamageButton, damageExpr } from '../components/Dice.jsx';
 import {
   ATTRIBUTES, KEY_ATTRIBUTE, DEFENSES, HIT_POINTS, SKILLS, LORE, UNTRAINED_NOTE, STRIKE, traitRule, traitLabel,
   SIZE_RULES, LEVEL_RULES, HERO_POINT_RULES, LANGUAGE_RULES, VISION_RULES, WEAPON_CATEGORY_RULES, WEAPON_PROFICIENCY_RULE, RUNE_RULES,
@@ -93,7 +94,7 @@ function RollButton({ label, stat, onRoll, className }) {
  * it's worked out and the rules behind it.
  */
 export default function SheetPage() {
-  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared, rollCheck } = useTable();
+  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared, rollCheck, rollDamage } = useTable();
   // What the details drawer shows: 'attr:str', 'def:ac', 'hp:', 'skill:athletics', 'strike:0', 'magic:classDc', 'spell:<id>'.
   const [open, setOpen] = useState(null);
   const spellRules = useDetailRules(/^(spell|origin|rune):/.test(open ?? ''));
@@ -107,6 +108,12 @@ export default function SheetPage() {
   const closeRoll = useCallback(() => setRolling(false), []);
   const roll = (label, stat, weapon = null) => {
     rollCheck(label, stat, weapon);
+    setOpen(null);
+    setRolling(true);
+  };
+  // Damage: a Strike's damage box, or dice in a spell's or feat's rules text.
+  const rollDmg = (label, expr, damageType) => {
+    if (!rollDamage(label, expr, damageType)) return;
     setOpen(null);
     setRolling(true);
   };
@@ -273,7 +280,7 @@ export default function SheetPage() {
         </div>
 
         <div className="sheet__col">
-          <Strikes character={character} opts={opts} readOnly={readOnly} selected={open} onSelect={toggle} onRoll={roll} />
+          <Strikes character={character} opts={opts} readOnly={readOnly} selected={open} onSelect={toggle} onRoll={roll} onRollDamage={rollDmg} />
           {character.keyAbility && <MagicAndDcs character={character} opts={opts} selected={open} onSelect={toggle} onRoll={roll} />}
         </div>
       </div>
@@ -281,7 +288,7 @@ export default function SheetPage() {
       {!readOnly && <CharacterDrawer open={open === 'profile:'} onClose={close} />}
 
       <RollDrawer open={rolling} onClose={closeRoll} />
-      <DetailsDrawer detail={open ? describe(open, character, opts, { shield, currentHp, maxHp, prepared, spellRules, readOnly }) : null} onClose={close} />
+      <DetailsDrawer detail={open ? describe(open, character, opts, { shield, currentHp, maxHp, prepared, spellRules, readOnly }) : null} onClose={close} onRollDice={rollDmg} />
     </div>
   );
 }
@@ -526,7 +533,7 @@ function describe(key, character, opts, { shield, currentHp, maxHp, prepared, sp
 }
 
 /** The equipped weapons as the sheet's Strikes table (melee, then ranged); tap one for the math. */
-function Strikes({ character, opts, readOnly, selected, onSelect, onRoll }) {
+function Strikes({ character, opts, readOnly, selected, onSelect, onRoll, onRollDamage }) {
   const weapons = character.weapons ?? [];
   // Selected by position ('strike:0'): someone can carry two of the same weapon.
   const groups = [
@@ -552,7 +559,9 @@ function Strikes({ character, opts, readOnly, selected, onSelect, onRoll }) {
                       {w.traits?.length > 0 && <span className="sheet-strike__traits">{w.traits.join(', ')}</span>}
                     </span>
                     <span className="sheet-strike__damage">
-                      1d{w.die}{mod ? ` ${signed(mod)}` : ''} {w.damageType}
+                      <DamageButton label={w.name} expr={damageExpr(w.die, mod)} die={w.die} damageType={w.damageType} onRoll={onRollDamage}>
+                        1d{w.die}{mod ? ` ${signed(mod)}` : ''} {w.damageType}
+                      </DamageButton>
                       {w.ranged && w.range ? <small> · {w.range} ft</small> : null}
                     </span>
                   </div>

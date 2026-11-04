@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { degreeRanges } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
-import Icon from '../components/Icon.jsx';
+import { Die, DieShape, TUMBLE_MS, dieTextAt, useTumble } from '../components/Dice.jsx';
 import { titleCase } from '../format.js';
 
 const DEGREE_COLOR = {
@@ -35,37 +35,9 @@ function rollId(roll) {
   return rollIds.get(roll);
 }
 
-const TUMBLE_MS = 520;
-const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-
-/** The die tumbles through random faces, slowing as it goes, then lands on the real total. */
-function useTumble(final) {
-  const [shown, setShown] = useState(() => (reducedMotion() ? final : Math.ceil(Math.random() * 20)));
-  const [landed, setLanded] = useState(reducedMotion);
-  useEffect(() => {
-    const land = () => { setShown(final); setLanded(true); };
-    if (reducedMotion()) return land();
-    let frame;
-    let last = 0;
-    const start = performance.now();
-    const tick = (now) => {
-      const t = (now - start) / TUMBLE_MS;
-      if (t >= 1) return land();
-      // Faces change quickly at first, then slower, like a die running out of energy.
-      if (now - last > 30 + t * t * 110) {
-        last = now;
-        setShown(Math.ceil(Math.random() * 20));
-      }
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [final]);
-  return [shown, landed];
-}
-
-function RollTotal({ total }) {
-  const [shown, landed] = useTumble(total);
+/** A total that tumbles through a die's faces (1 to faces) before it lands. */
+function RollTotal({ total, faces = 20, ms }) {
+  const [shown, landed] = useTumble(total, faces, ms);
   return (
     <span className={`roll__total ${landed ? 'roll__total--landed' : ''}`}>
       <span aria-hidden="true">{shown}</span>
@@ -74,20 +46,44 @@ function RollTotal({ total }) {
   );
 }
 
-// A d20 seen face-on (an icosahedron): a hexagon outline cut into triangular faces, with the
-// big middle face holding the total. Faces take the theme's colours through --die-* (theme.css),
-// so the die matches every theme and the result (gold for a crit, the crit-fail colour for a fumble).
-const D20_FACES = {
-  light: ['50,2 8,26 50,18', '50,2 92,26 50,18'],
-  side: ['8,26 18,70 50,18', '92,26 82,70 50,18', '8,26 8,74 18,70', '92,26 92,74 82,70'],
-  low: ['8,74 18,70 50,98', '18,70 82,70 50,98', '82,70 92,74 50,98'],
-};
-function D20() {
+/** A damage roll: each die with what it rolled, the modifier, the total, and double that for a critical hit. */
+function DamageView({ roll, onAgain, onBack }) {
+  const { label, dice, mod, total, damageType, expr } = roll;
   return (
-    <svg className="roll__die" viewBox="0 0 100 100" aria-hidden="true">
-      {Object.entries(D20_FACES).flatMap(([shade, faces]) => faces.map((pts) => <polygon key={pts} className={`roll__die-face roll__die-face--${shade}`} points={pts} />))}
-      <polygon className="roll__die-face roll__die-face--front" points="50,18 82,70 18,70" />
-    </svg>
+    // --damage-land: when the total lands (later with more dice), so nothing after it spoils the number.
+    <div className={`roll-cast ${onBack ? 'roll-view roll-view--stacked' : 'narrow'}`} key={rollId(roll)} style={{ '--damage-land': `${dice.length === 1 ? TUMBLE_MS : TUMBLE_MS + dice.length * 140}ms` }}>
+      <p className="eyebrow center" style={{ margin: '4px 0 0' }}>{label} · {expr}</p>
+      <section className="roll roll-damage" aria-live="polite">
+        {dice.length === 1 ? (
+          // One die: the total lives inside it, like the d20's.
+          <div className="roll__gem roll__gem--plain">
+            <DieShape sides={dice[0].sides} className="roll__die" />
+            <div className="roll__inner" style={dieTextAt(dice[0].sides)}>
+              <span className="visually-hidden">Total </span>
+              <RollTotal total={total} faces={dice[0].sides} />
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Each die tumbles and lands a moment after the one before; the total lands last. */}
+            <div className="roll-damage__dice">
+              {dice.map((d, i) => <Die key={i} sides={d.sides} value={d.value} size={dice.length > 4 ? 52 : 72} tumble={TUMBLE_MS + i * 140} />)}
+            </div>
+            <div className="roll-damage__total"><RollTotal total={total} faces={dice.reduce((t, d) => t + d.sides, 0)} ms={TUMBLE_MS + dice.length * 140} /></div>
+          </>
+        )}
+        <span className="eyebrow">{damageType ? `${damageType} damage` : 'damage'}</span>
+        <div className="roll__math">
+          {dice.length === 1 ? `d${dice[0].sides} ` : ''}<strong>{dice.map((d) => d.value).join(' + ')}</strong>
+          {mod ? <> {mod < 0 ? '−' : '+'} <strong>{Math.abs(mod)}</strong></> : null} = <strong>{total}</strong>
+        </div>
+      </section>
+      <p className="rule-note center roll-damage__crit">A critical hit doubles it: <strong>{total * 2}</strong>.</p>
+      <div className="btn-row">
+        <button type="button" className="btn btn--grow" onClick={onAgain}>Roll again</button>
+        {onBack ? <button type="button" className="btn btn--blood btn--grow" onClick={onBack}>Close</button> : null}
+      </div>
+    </div>
   );
 }
 
@@ -121,7 +117,8 @@ function TargetAC({ what = 'AC' }) {
  * as two columns on the Roll page, or stacked in the Combat tab's roll drawer (onBack closes it).
  */
 export function RollView({ onBack = null }) {
-  const { lastRoll, strike, rollCheck, actionsLeft } = useTable();
+  const { lastRoll, strike, rollCheck, rollDamage, actionsLeft } = useTable();
+  if (lastRoll?.kind === 'damage') return <DamageView roll={lastRoll} onAgain={() => rollDamage(lastRoll.label, lastRoll.expr, lastRoll.damageType)} onBack={onBack} />;
 
   if (!lastRoll) {
     return (
@@ -155,8 +152,8 @@ export function RollView({ onBack = null }) {
 
       <section className="roll" aria-live="polite">
         <div className={`roll__gem ${gemClass}`}>
-          <D20 />
-          <div className="roll__inner">
+          <DieShape sides={20} className="roll__die" />
+          <div className="roll__inner" style={dieTextAt(20)}>
             <span className="visually-hidden">Total </span>
             <RollTotal total={total} />
           </div>
@@ -174,7 +171,7 @@ export function RollView({ onBack = null }) {
         {natNote && <p className="italic" style={{ margin: 0, color: 'var(--gold)' }}>{natNote}</p>}
         {damage > 0 && (
           <p className="eyebrow roll__damage" style={{ color: 'var(--text)', fontSize: 15, margin: '4px 0 0' }}>
-            <span className="roll__damage-die" title={`d${weapon.die}`}><Icon name={`dieD${weapon.die}`} size={20} /></span>
+            <Die sides={weapon.die} size={26} />
             ({damageRoll} {damageMod < 0 ? '−' : '+'} {Math.abs(damageMod)}){degree.name === 'critical success' ? ' × 2' : ''} ={' '}
             <span style={{ color: 'var(--blood-text)' }}>{damage} {weapon.damageType}</span>
           </p>

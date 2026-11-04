@@ -111,3 +111,28 @@ export function strikeDamage(rolled, modifier, degree) {
 export function rollDie(sides, rng = Math.random) {
   return 1 + Math.floor(rng() * sides);
 }
+
+export const DIE_SIZES = [4, 6, 8, 10, 12, 20, 100];
+
+/** A dice expression ("2d6+3", "1d8 + 4", "1d4−1", "d6") as { count, sides, mod }, or null. */
+export function parseDice(expr) {
+  const m = /^\s*(\d*)d(\d+)\s*(?:([+\-−])\s*(\d+))?\s*$/i.exec(String(expr ?? ''));
+  if (!m) return null;
+  const count = m[1] === '' ? 1 : Number(m[1]);
+  const sides = Number(m[2]);
+  if (count < 1 || count > 50 || !DIE_SIZES.includes(sides)) return null;
+  const mod = m[3] ? (m[3] === '+' ? 1 : -1) * Number(m[4]) : 0;
+  return { count, sides, mod };
+}
+
+/**
+ * Rolls a damage expression: each die, the modifier, and the total. Damage is never less
+ * than 1 (Player Core: after penalties, a hit deals at least 1). Returns null if the
+ * expression can't be read.
+ */
+export function rollDice(expr, rng = Math.random) {
+  const p = parseDice(expr);
+  if (!p) return null;
+  const dice = Array.from({ length: p.count }, () => ({ sides: p.sides, value: rollDie(p.sides, rng) }));
+  return { ...p, dice, total: Math.max(1, dice.reduce((t, d) => t + d.value, 0) + p.mod) };
+}

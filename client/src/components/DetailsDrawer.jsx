@@ -4,6 +4,7 @@ import Icon from './Icon.jsx';
 import RankPips from './RankPips.jsx';
 import ActionCost from './ActionCost.jsx';
 import { signed } from '../format.js';
+import { boxDice } from './Dice.jsx';
 
 const COST_WORDS = { exploration: 'Exploration', downtime: 'Downtime', varies: 'Varies' };
 
@@ -20,8 +21,9 @@ export const detailValue = (d) => d.value ?? (d.unsigned ? d.stat.total : signed
  *           sections?: { title, items: [name, text][], empty? }[], uses?: [name, cost, trainedOnly][], link?: { to, label },
  *           link.newTab opens it in a new tab; tool?: controls for the thing itself, under its facts (a shield's Shield Block and Repair) }
  * inline: shown in place, not sliding over the page (for previews such as the style lab).
+ * onRollDice(label, expr, damageType): makes the rules text's dice rollable.
  */
-export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
+export default function DetailsDrawer({ detail: d, onClose, inline = false, onRollDice = null }) {
   useEffect(() => {
     if (!d) return undefined;
     const esc = (e) => e.key === 'Escape' && onClose();
@@ -99,7 +101,17 @@ export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
             </div>
           )}
           {d.note && <p className="details__note">{d.note}</p>}
-          {d.html && <div className="option__desc details__html" dangerouslySetInnerHTML={{ __html: d.html }} />}
+          {/* With onRollDice, every dice expression in the rules text is a box that rolls it (see boxDice). */}
+          {d.html && (
+            <div
+              className="option__desc details__html"
+              dangerouslySetInnerHTML={{ __html: onRollDice ? boxDice(d.html) : d.html }}
+              onClick={onRollDice ? (e) => {
+                const b = e.target.closest('[data-dice]');
+                if (b) onRollDice(d.name, b.dataset.dice, b.dataset.type);
+              } : undefined}
+            />
+          )}
 
           {d.sections?.map((sec) => (sec.items.length > 0 || sec.empty) && (
             <section key={sec.title}>

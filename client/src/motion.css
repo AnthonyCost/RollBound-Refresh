@@ -108,6 +108,14 @@
 }
 
 .roll-cast .roll__math { animation: fade-in var(--motion) ease-out 520ms backwards; }
+/* The damage roller: each die drops in like the d20, and settles with a little bump when it lands. */
+.roll-cast .roll-damage__dice .die { animation: gem-cast 520ms var(--ease-land) backwards; }
+.roll-cast .roll-damage__dice .die:nth-child(2) { animation-delay: 70ms; }
+.roll-cast .roll-damage__dice .die:nth-child(3) { animation-delay: 140ms; }
+.roll-cast .roll-damage__dice .die:nth-child(n + 4) { animation-delay: 210ms; }
+.die--landed .die__shape { animation: total-land 300ms var(--ease-land); }
+/* After a damage total lands: its type, the math and the critical-hit amount, so none spoils the number. */
+.roll-cast .roll-damage .eyebrow, .roll-cast .roll-damage .roll__math, .roll-cast .roll-damage__crit { animation: fade-in var(--motion) ease-out var(--damage-land, 520ms) backwards; }
 .roll-cast .verdict { animation: verdict-open 420ms var(--ease-land) 560ms backwards; }
 @keyframes verdict-open { from { opacity: 0; clip-path: inset(0 50%); letter-spacing: 9px; } }
 .roll-cast .verdict ~ * { animation: rise-in var(--motion-slow) var(--ease-out) 700ms backwards; }

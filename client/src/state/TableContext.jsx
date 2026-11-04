@@ -6,6 +6,7 @@ import {
   strikeDamage,
   damageModifier,
   rollDie,
+  rollDice,
   endOfTurn,
   cycleCondition as nextConditions,
   equipCharacter,
@@ -286,6 +287,15 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     [character, targetAC],
   );
 
+  /** Rolls damage ("1d8+4", "2d6"), for a weapon or a spell's text: { kind: 'damage', dice, mod, total }. */
+  const rollDamage = useCallback((label, expr, damageType = '') => {
+    const r = rollDice(expr);
+    if (!r) return null;
+    const roll = { kind: 'damage', label, expr, damageType, ...r };
+    setLastRoll(roll);
+    return roll;
+  }, []);
+
   const endTurn = useCallback(() => {
     setUsed([]);
     setConditions((c) => endOfTurn(c));
@@ -348,13 +358,14 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       setTargetAC,
       lastRoll,
       rollCheck,
+      rollDamage,
       takeAction,
       strike,
       endTurn,
       cycleCondition,
       resetEncounter,
     }),
-    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, rollCheck, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, rollCheck, rollDamage, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;
