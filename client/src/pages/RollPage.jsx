@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { degreeRanges } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
-import { Die, DieShape, TUMBLE_MS, dieTextAt, useTumble } from '../components/Dice.jsx';
+import { D20, Die, DieShape, TUMBLE_MS, dieTextAt, useTumble } from '../components/Dice.jsx';
 import { titleCase } from '../format.js';
 
 const DEGREE_COLOR = {
@@ -152,7 +152,7 @@ export function RollView({ onBack = null }) {
 
       <section className="roll" aria-live="polite">
         <div className={`roll__gem ${gemClass}`}>
-          <DieShape sides={20} className="roll__die" />
+          <D20 spin={TUMBLE_MS} className="roll__die" />
           <div className="roll__inner" style={dieTextAt(20)}>
             <span className="visually-hidden">Total </span>
             <RollTotal total={total} />

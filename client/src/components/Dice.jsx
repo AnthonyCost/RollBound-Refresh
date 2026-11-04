@@ -59,31 +59,97 @@ const SHAPES = {
     ],
     text: [50, 54, 26],
   },
-  20: {
-    faces: [
-      ['light', '50,2 8,26 50,18'],
-      ['light', '50,2 92,26 50,18'],
-      ['side', '8,26 18,70 50,18'],
-      ['side', '92,26 82,70 50,18'],
-      ['side', '8,26 8,74 18,70'],
-      ['side', '92,26 92,74 82,70'],
-      ['low', '8,74 18,70 50,98'],
-      ['low', '18,70 82,70 50,98'],
-      ['low', '82,70 92,74 50,98'],
-      ['front', '50,18 82,70 18,70'],
-    ],
-    text: [50, 54, 26],
-  },
 };
+
+// ---------- The d20 in 3D ----------
+// A real icosahedron: rotated each frame, projected face-on into the same 100 × 100 grid,
+// its visible faces shaded by how they face a light from the upper left. It comes to rest
+// with one face pointing at the viewer, apex up: the face the total sits on.
+
+const PHI = (1 + Math.sqrt(5)) / 2;
+const norm = (v) => { const l = Math.hypot(...v); return v.map((x) => x / l); };
+const sub = (a, b) => a.map((x, i) => x - b[i]);
+const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const mul = (m, v) => m.map((row) => dot(row, v));
+const matMul = (a, b) => a.map((row) => [0, 1, 2].map((j) => row[0] * b[0][j] + row[1] * b[1][j] + row[2] * b[2][j]));
+
+const ICO_V = [[-1, PHI, 0], [1, PHI, 0], [-1, -PHI, 0], [1, -PHI, 0], [0, -1, PHI], [0, 1, PHI], [0, -1, -PHI], [0, 1, -PHI], [PHI, 0, -1], [PHI, 0, 1], [-PHI, 0, -1], [-PHI, 0, 1]].map(norm);
+// Faces wound so their normals point outward.
+const ICO_F = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]]
+  .map(([a, b, c]) => (dot(cross(sub(ICO_V[b], ICO_V[a]), sub(ICO_V[c], ICO_V[a])), ICO_V[a]) < 0 ? [a, c, b] : [a, b, c]));
+
+// The resting turn: face 0's normal toward the viewer (+z), its first corner straight up (−y on screen).
+const REST = (() => {
+  const [a, b, c] = ICO_F[0].map((i) => ICO_V[i]);
+  const centre = [0, 1, 2].map((k) => (a[k] + b[k] + c[k]) / 3);
+  const z = norm(centre);
+  const up = norm(sub(a, centre));
+  const y = up.map((x) => -x);
+  return [cross(y, z), y, z];
+})();
+const LIGHT = norm([-0.45, -0.6, 0.65]);
+
+/** A turn of angle about an axis (Rodrigues). */
+function axisAngle([x, y, z], t) {
+  const c = Math.cos(t), s = Math.sin(t), k = 1 - c;
+  return [[c + x * x * k, x * y * k - z * s, x * z * k + y * s], [y * x * k + z * s, c + y * y * k, y * z * k - x * s], [z * x * k - y * s, z * y * k + x * s, c + z * z * k]];
+}
+
+/** The faces seen from the front under turn m: [points, light 0–1, the resting front face?]. */
+function icoFaces(m) {
+  const v = ICO_V.map((p) => mul(m, p));
+  return ICO_F.map((f, i) => {
+    const n = norm(cross(sub(v[f[1]], v[f[0]]), sub(v[f[2]], v[f[0]])));
+    return n[2] > 0.01 ? [f.map((k) => `${(50 + v[k][0] * 47).toFixed(1)},${(50 + v[k][1] * 47).toFixed(1)}`).join(' '), Math.max(0, dot(n, LIGHT)), i === 0] : null;
+  }).filter(Boolean);
+}
+const REST_FACES = icoFaces(REST);
+// Self-check: face-on, ten faces show and the resting face points straight out.
+console.assert(REST_FACES.length === 10 && REST_FACES.some(([, , front]) => front), 'd20 rest pose');
+
+/**
+ * The d20, in 3D. spin: ms to tumble before it comes to rest (a fresh roll); without it (or
+ * with reduced motion) it rests face-on at once.
+ */
+export function D20({ spin = null, className = '' }) {
+  const [faces, setFaces] = useState(REST_FACES);
+  useEffect(() => {
+    if (!spin || reducedMotion()) return undefined;
+    const axis = norm([Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5]);
+    const turns = (3 + Math.random()) * Math.PI;
+    let frame;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / spin);
+      const left = 1 - t;
+      // Fast at first, slowing as it settles: the turn still to go shrinks with the cube of the time left.
+      setFaces(t < 1 ? icoFaces(matMul(REST, axisAngle(axis, turns * left * left * left))) : REST_FACES);
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [spin]);
+  return (
+    <svg className={`die__shape ${className}`} viewBox="0 0 100 100" aria-hidden="true">
+      {/* Dark faces lit from the upper left, outlined in the die's bright colour (like the other dice). */}
+      {faces.map(([pts, light]) => (
+        <polygon key={pts} className="die-3d__face" points={pts} style={{ fill: `color-mix(in oklab, var(--die-edge) ${Math.round(12 + light * 33)}%, var(--die-low))` }} />
+      ))}
+    </svg>
+  );
+}
 
 /** Where a die's number sits on its front face, as percentages of the die, and its size (cqi). */
 export const dieTextAt = (sides) => {
-  const [x, y, size] = SHAPES[sides === 100 ? 10 : sides].text;
+  // The d20 rests with its front face centred.
+  const [x, y, size] = sides === 20 ? [50, 50, 22] : SHAPES[sides === 100 ? 10 : sides].text;
   return { left: `${x}%`, top: `${y}%`, fontSize: `${size * 0.92}cqi` };
 };
 
 /** One die's shape, with an optional label on its front face. */
 export function DieShape({ sides, label = null, className = '' }) {
+  if (sides === 20) return <D20 className={className} />;
   const shape = SHAPES[sides];
   // The front face is drawn last, so its edges sit on top.
   const faces = [...shape.faces.filter(([s]) => s !== 'front'), ...shape.faces.filter(([s]) => s === 'front')];

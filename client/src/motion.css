@@ -89,7 +89,7 @@
 
 .roll-cast .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards; }
 @keyframes gem-cast {
-  from { opacity: 0; transform: translateY(-28px) rotate(-60deg) scale(0.72); }
+  from { opacity: 0; transform: translateY(-28px) scale(0.72); }
   60% { opacity: 1; }
 }
 .roll__total { display: inline-block; font-variant-numeric: tabular-nums; }
