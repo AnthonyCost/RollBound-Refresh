@@ -2,7 +2,7 @@ import { Routes, Route, Navigate, Link, Outlet, useParams } from 'react-router-d
 import NavBar from './components/NavBar.jsx';
 import SheetPage from './pages/SheetPage.jsx';
 import CombatPage from './pages/CombatPage.jsx';
-import EncounterRunPage from './pages/EncounterRunPage.jsx';
+import EncounterRunPage, { EncounterWatchPage } from './pages/EncounterRunPage.jsx';
 import RollPage from './pages/RollPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
@@ -128,6 +128,7 @@ export default function App() {
           <Route path="encounters/new" element={<EncounterEditor />} />
           <Route path="encounters/:encounterId" element={<EncounterEditor key="edit" />} />
           <Route path="encounters/:encounterId/run" element={<EncounterRunPage />} />
+          <Route path="encounter" element={<EncounterWatchPage />} />
           <Route path="settings" element={<CampaignSettingsPage />} />
         </Route>
         {/* The old edit page is the Settings tab now. */}

@@ -77,6 +77,8 @@ export const api = {
   removeFromCampaign: (campaignId, characterId) => post(`/campaigns/${campaignId}/remove`, { characterId }),
   getCampaignCharacter: (campaignId, characterId) => request(`/campaigns/${campaignId}/characters/${characterId}`),
   // Revalidates each time, so an unchanged encounter comes back as a 304 from the browser cache.
+  // The GM damages, heals, Shield Blocks for, or repairs the shield of, a character in the fight.
+  characterCombat: (campaignId, characterId, action, amount) => post(`/campaigns/${campaignId}/characters/${characterId}/combat`, { action, amount }),
   getRunningEncounter: (campaignId) => request(`/campaigns/${campaignId}/encounter`, { cache: 'no-cache' }),
 
   /**

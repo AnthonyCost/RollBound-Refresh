@@ -4,9 +4,10 @@ import { requireUser } from '../auth.js';
 import { generateInviteCode, normalizeInviteCode } from '../inviteCode.js';
 import { storage } from '../storage/index.js';
 import { checkImageKey, swapImages } from '../images.js';
-import { adventurePath, bookIssues, campaignBooks, migrateBuild } from '@rollbound/rules';
+import { COMBAT_ACTIONS, adventurePath, applyCombatAction, bookIssues, campaignBooks, maxHp, migrateBuild } from '@rollbound/rules';
 import { rulesData } from '../rules.js';
 import { sheetJson } from './sheets.js';
+import { currentHp, shieldOf } from './characters.js';
 import { requestJoin } from '../joinRequests.js';
 import { canJoin } from '../demo.js';
 import { logJson, sessionLogs } from './sessionLogs.js';
@@ -313,8 +314,9 @@ campaigns.get('/:id/characters/:characterId', async (req, res) => {
 });
 
 // The campaign's running encounter, for its players' Combat tabs (they check every few
-// seconds; Express's ETag turns an unchanged one into a 304). Players see the order, the
-// round and whose turn it is, never a creature's HP, AC or Perception: those stay the GM's.
+// seconds; Express's ETag turns an unchanged one into a 304). Players see the order (as the
+// GM has it), the round and whose turn it is, never a creature's HP, AC or Perception: those
+// stay the GM's. creatureId is only for its portrait; the bestiary is public anyway.
 campaigns.get('/:id/encounter', async (req, res) => {
   if (!isId(req.params.id)) return res.status(404).json({ errors: ['Campaign not found.'] });
   const { rows: member } = await pool.query(
@@ -326,15 +328,66 @@ campaigns.get('/:id/encounter', async (req, res) => {
   const { rows } = await pool.query('SELECT id, name, state FROM encounters WHERE campaign_id = $1 AND state IS NOT NULL ORDER BY id DESC LIMIT 1', [req.params.id]);
   const e = rows[0];
   if (!e) return res.json({ encounter: null });
+  // Characters' Hit Points and shields as they are now (the party can see each other's sheets anyway).
+  const { rows: party } = await pool.query('SELECT id, data, current_hp, inventory FROM characters WHERE campaign_id = $1', [req.params.id]);
+  const vitals = new Map(party.map((r) => [r.id, { hp: currentHp(r), maxHp: maxHp(r.data), shield: shieldOf(r) }]));
   res.json({
     encounter: {
       id: e.id,
       name: e.name,
       round: e.state.round,
       current: e.state.current,
-      combatants: (e.state.combatants ?? []).map((c) => ({ key: c.key, kind: c.kind, name: c.name, initiative: c.initiative, defeated: c.defeated, characterId: c.characterId ?? null })),
+      combatants: (e.state.combatants ?? []).map((c) => ({
+        key: c.key, kind: c.kind, name: c.name, initiative: c.initiative, defeated: c.defeated, characterId: c.characterId ?? null, creatureId: c.creatureId ?? null,
+        // A character's conditions, as the GM set them; a creature's stay the GM's.
+        ...(c.kind === 'pc' && { ...vitals.get(c.characterId), conditions: c.conditions ?? [] }),
+      })),
     },
   });
+});
+
+// The GM changes a character in the fight (the initiative tracker's drawer): { action, amount },
+// where action is damage, heal, block (Shield Block) or repair (their shield). Worked out here,
+// in a transaction, so a change the player makes at the same moment isn't lost. The player's
+// sheet picks it up from the encounter feed.
+campaigns.post('/:id/characters/:characterId/combat', async (req, res) => {
+  const { id, characterId } = req.params;
+  if (!isId(id) || !isId(characterId)) return res.status(404).json({ errors: ['Character not found.'] });
+  const { action, amount } = req.body ?? {};
+  if (!COMBAT_ACTIONS.includes(action)) return res.status(400).json({ errors: [`Action must be one of: ${COMBAT_ACTIONS.join(', ')}.`] });
+  if (!Number.isInteger(amount) || amount < 1 || amount > 9999) return res.status(400).json({ errors: ['Amount must be a whole number from 1 to 9,999.'] });
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows } = await client.query(
+      `SELECT ch.* FROM characters ch JOIN campaigns c ON c.id = ch.campaign_id
+       WHERE ch.id = $1 AND c.id = $2 AND c.gm_user_id = $3 FOR UPDATE OF ch`,
+      [characterId, id, req.user.id],
+    );
+    if (!rows.length) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ errors: ['Character not found.'] });
+    }
+    const row = rows[0];
+    const result = applyCombatAction({ character: row.data, hp: currentHp(row), inventory: row.inventory }, action, amount, rulesData());
+    if (result.error) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ errors: [result.error] });
+    }
+    const max = maxHp(row.data);
+    const shieldChanged = action === 'block' || action === 'repair';
+    await client.query(
+      `UPDATE characters SET current_hp = $1${shieldChanged ? ', inventory = $3' : ''} WHERE id = $2`,
+      shieldChanged ? [result.hp === max ? null : result.hp, characterId, result.inventory] : [result.hp === max ? null : result.hp, characterId],
+    );
+    await client.query('COMMIT');
+    res.json({ currentHp: result.hp, maxHp: max, shield: result.shield, stopped: result.stopped, through: result.through });
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
 });
 
 // A player removes their own character from a campaign.

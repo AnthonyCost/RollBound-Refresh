@@ -1,7 +1,7 @@
 // Strikes, the multiple attack penalty, and the four degrees of success.
 
 import { RANKS, proficiencyPart } from './proficiency.js';
-import { statusPenalty } from './conditions.js';
+import { circumstancePenaltyToAttacks, statusPenalty } from './conditions.js';
 
 export const DEGREES = ['critical failure', 'failure', 'success', 'critical success'];
 
@@ -64,6 +64,8 @@ export function strikeBonus(character, weapon, { attacksSoFar = 0, conditions = 
 
   const p = statusPenalty(conditions, ability);
   if (p.value) parts.push({ label: p.source, value: p.value, note: 'Status penalty from a condition.' });
+  const prone = circumstancePenaltyToAttacks(conditions);
+  if (prone) parts.push({ label: 'Prone', value: prone, note: 'Circumstance penalty to attack rolls while prone.' });
 
   return { total: parts.reduce((t, x) => t + x.value, 0), parts };
 }

@@ -18,8 +18,8 @@ function sum(parts) {
   return parts.reduce((t, p) => t + p.value, 0);
 }
 
-function withPenalty(parts, conditions, ability) {
-  const p = statusPenalty(conditions, ability);
+function withPenalty(parts, conditions, ability, kind = null) {
+  const p = statusPenalty(conditions, ability, kind);
   if (p.value) parts.push({ label: p.source, value: p.value, note: 'Status penalty from a condition.' });
   return parts;
 }
@@ -82,9 +82,9 @@ export function armorClass(character, { conditions = [], shieldRaised = false } 
   if (shieldRaised) parts.push({ label: 'Raised shield', value: 2, note: 'Circumstance bonus until your next turn.' });
 
   const offGuard = circumstancePenaltyToAC(conditions);
-  if (offGuard) parts.push({ label: 'Off-Guard', value: offGuard, note: 'Circumstance penalty to AC.' });
+  if (offGuard) parts.push({ label: 'Off-Guard', value: offGuard, note: 'Circumstance penalty to AC (off-guard, or a condition that includes it, like prone).' });
 
-  withPenalty(parts, conditions, 'dex');
+  withPenalty(parts, conditions, 'dex', 'ac');
   return { total: sum(parts), parts };
 }
 
@@ -95,7 +95,7 @@ export function savingThrow(character, save, { conditions = [] } = {}) {
     { label: ABILITY_NAME[ability], value: character.abilities[ability] },
     proficiencyPart(character.proficiencies[save], character.level),
   ];
-  withPenalty(parts, conditions, ability);
+  withPenalty(parts, conditions, ability, save);
   return { total: sum(parts), parts };
 }
 
@@ -104,7 +104,7 @@ export function perception(character, { conditions = [] } = {}) {
     { label: 'Wisdom', value: character.abilities.wis },
     proficiencyPart(character.proficiencies.perception, character.level),
   ];
-  withPenalty(parts, conditions, 'wis');
+  withPenalty(parts, conditions, 'wis', 'perception');
   return { total: sum(parts), parts };
 }
 

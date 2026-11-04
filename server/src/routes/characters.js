@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { LIMITS, armorClass, buildCharacter, buildProblems, equipCharacter, inventoryProblems, maxHp, migrateBuild, preparedProblems } from '@rollbound/rules';
+import { LIMITS, armorClass, buildCharacter, buildProblems, equipCharacter, inventoryProblems, maxHp, migrateBuild, preparedProblems, shieldState, startingInventory } from '@rollbound/rules';
 import { rulesData } from '../rules.js';
 import { answerBotRequests } from '../demo.js';
 import { pool } from '../db.js';
@@ -16,6 +16,9 @@ export const currentHp = (row) => Math.min(row.current_hp ?? Infinity, maxHp(row
 
 /** The sheet with the inventory's equipped gear (see equipCharacter), for numbers the server reports. */
 export const equippedSheet = (row) => equipCharacter(row.data, row.inventory, rulesData());
+
+/** The equipped shield's state ({ name, hardness, max, current, brokenAt, broken, destroyed }), or null. */
+export const shieldOf = (row) => shieldState(row.inventory ?? startingInventory(row.data, rulesData()), rulesData());
 
 const toJson = (row) => ({
   id: row.id,

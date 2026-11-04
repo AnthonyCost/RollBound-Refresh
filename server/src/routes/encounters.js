@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { CONDITIONS, MAX_CONDITION_VALUE } from '@rollbound/rules';
 import { pool } from '../db.js';
 
 // A campaign's saved encounters. Only its GM can see or change them. Mounted under
@@ -68,10 +69,16 @@ function validState(body) {
     if (!intOrNull(c?.hp, -9999, 99999) || !intOrNull(c?.maxHp, 0, 99999) || !intOrNull(c?.ac, 0, 100)) errors.push(`${at}: HP and AC must be whole numbers.`);
     if (c?.characterId != null && !isId(c.characterId)) errors.push(`${at}: unknown character.`);
     if (c?.creatureId != null && (typeof c.creatureId !== 'string' || c.creatureId.length > 64)) errors.push(`${at}: unknown bestiary creature.`);
+    // Conditions: { id, value? } from the rules' list, a value 1 to MAX_CONDITION_VALUE on the valued ones.
+    const conds = c?.conditions ?? [];
+    const okConds = Array.isArray(conds) && conds.length <= Object.keys(CONDITIONS).length && conds.every((x) =>
+      CONDITIONS[x?.id] && (CONDITIONS[x.id].valued ? isInt(x.value, 1, MAX_CONDITION_VALUE) : x.value === undefined)) && new Set(conds.map((x) => x.id)).size === conds.length;
+    if (!okConds) errors.push(`${at}: unknown or repeated conditions.`);
     return {
       key: c?.key, kind: c?.kind, name,
       initiative: c?.initiative ?? null, perception: c?.perception ?? 0, hp: c?.hp ?? null, maxHp: c?.maxHp ?? null, ac: c?.ac ?? null,
       defeated: Boolean(c?.defeated), characterId: c?.characterId ?? null, creatureId: c?.creatureId ?? null,
+      conditions: okConds ? conds.map((x) => (CONDITIONS[x.id].valued ? { id: x.id, value: x.value } : { id: x.id })) : [],
     };
   });
   if (new Set(combatants.map((c) => c.key)).size !== combatants.length) errors.push('Each combatant needs its own key.');

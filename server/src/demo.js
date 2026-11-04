@@ -1,9 +1,10 @@
 // Demo accounts. "Try the demo" makes a real, temporary account for each visitor,
 // so the demo runs the same code as everyone else. It comes with a character of every
-// class (DEMO_ROSTER); a sample campaign the visitor runs, which a pretend player Sam's
-// ranger asks to join; and Sam's own campaign, where Valeros already plays and the visitor
-// can ask to bring more characters, which Sam answers by himself. A GM's own characters
-// can't join their campaign, so Valeros plays in Sam's. Demo accounts are deleted after DEMO_HOURS, or when the visitor
+// class (DEMO_ROSTER); a sample campaign the visitor runs, where a pretend player Sam already
+// plays his own Valeros (a fighter with a shield, for trying the encounter tracker) and asks
+// to bring his ranger too; and Sam's own campaign, where the visitor's Valeros already plays
+// and the visitor can ask to bring more characters, which Sam answers by himself. A GM's own
+// characters can't join their campaign, so the visitor's Valeros plays in Sam's. Demo accounts are deleted after DEMO_HOURS, or when the visitor
 // exits the demo.
 import { randomBytes } from 'node:crypto';
 import { SAMPLE_BUILDS, DEMO_ROSTER, PREGENS, buildCharacter, migrateBuild } from '@rollbound/rules';
@@ -33,7 +34,7 @@ const fakeEmail = (tag) => `demo-${randomBytes(8).toString('hex')}${tag}@demo.in
 
 const WELCOME = (vaultCode) => `This is a temporary demo account. Everything in it is deleted after ${DEMO_HOURS} hours, or when you exit the demo.
 
-You run Wolves at the Ford. Sam, a pretend player, has asked to bring his ranger Kestrel into it: accept or reject the request above.
+You run Wolves at the Ford. Sam, a pretend player, already plays his own Valeros there (a fighter with a shield, to try your encounters on), and has asked to bring his ranger Kestrel too: accept or reject the request above.
 
 Sam runs a campaign too, The Sunken Vault, and your fighter Valeros is already in its party. Its invite code is ${vaultCode}. Enter it on the Campaigns page to ask to bring another of your characters; Sam answers within a few seconds.`;
 
@@ -58,6 +59,8 @@ export async function createDemo() {
     const [valeros, ...heroes] = DEMO_ROSTER;
     await character(user, valeros, vault.id);
     for (const build of heroes) await character(user, build, null);
+    // Sam's own Valeros, already in the visitor's campaign.
+    await character(sam, valeros, wolves.id);
     kestrel = await character(sam, SAMPLE_BUILDS.kestrel, null);
     await client.query("INSERT INTO messages (user_id, kind, title, body) VALUES ($1, 'announcement', 'Welcome to the RollBound demo', $2)", [user.id, WELCOME(vault.invite_code)]);
     await client.query('COMMIT');

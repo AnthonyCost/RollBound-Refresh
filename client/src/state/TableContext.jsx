@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   maxHp,
   strikeBonus,
@@ -7,6 +7,7 @@ import {
   damageModifier,
   rollDie,
   endOfTurn,
+  cycleCondition as nextConditions,
   equipCharacter,
   withEquipped,
   preparedSpells,
@@ -18,6 +19,7 @@ import { api } from '../api.js';
 import { useDelayedSave } from './useDelayedSave.js';
 import { useRules } from './useRules.js';
 import { useCampaignService } from './campaignService.js';
+import { useRunningEncounter } from './runningEncounter.js';
 
 const TableContext = createContext(null);
 
@@ -26,8 +28,6 @@ const TableContext = createContext(null);
 // show off condition math; with the Turn tab hidden there'd be no way to clear it.)
 const STARTING_CONDITIONS = [];
 
-/** How often a character's sheet checks for the campaign's running encounter (ms). */
-const ENCOUNTER_CHECK = 3000;
 
 /** How long to wait after the last change before saving it. */
 const HP_SAVE_DELAY = 500;
@@ -68,8 +68,6 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
   const [used, setUsed] = useState([]);
   const [targetAC, setTargetAC] = useState(15);
   const [lastRoll, setLastRoll] = useState(null);
-  // The campaign's running encounter, as players see it (no creature stats), or null.
-  const [encounter, setEncounter] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -182,32 +180,38 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
   );
   const hpError = hpStatus === 'error' ? "Couldn't save hit points. Check your connection and try again." : null;
 
-  // While this is your own character in a campaign, check every few seconds (and as soon as
-  // the page is shown again) for the GM's running encounter. Paused while the page is hidden;
-  // an unchanged answer keeps the same object, so nothing re-renders.
-  const campaignId = campaign?.id ?? null;
-  useEffect(() => {
-    setEncounter(null);
-    if (readOnly || !campaignId) return undefined;
-    let cancelled = false;
-    const check = () => {
-      if (document.hidden) return;
-      api.getRunningEncounter(campaignId).then(
-        ({ encounter: next }) => !cancelled && setEncounter((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next)),
-        () => {}, // Offline for a moment: keep what we had and try again next time.
-      );
-    };
-    check();
-    const timer = setInterval(check, ENCOUNTER_CHECK);
-    document.addEventListener('visibilitychange', check);
-    return () => {
-      cancelled = true;
-      clearInterval(timer);
-      document.removeEventListener('visibilitychange', check);
-    };
-  }, [readOnly, campaignId]);
+  // While this is your own character in a campaign, follow the GM's running encounter.
+  const encounter = useRunningEncounter(campaign?.id ?? null, !readOnly);
   const me = encounter?.combatants.find((c) => String(c.characterId) === String(characterId)) ?? null;
   const encounterActive = Boolean(me) && !readOnly;
+  // The GM can change your Hit Points and shield from the tracker. Take a change from the feed
+  // only when the server's value has moved since we last saw it, so a change of yours that's
+  // still saving is never undone by an older answer.
+  const seen = useRef({});
+  const feedHp = me?.hp;
+  const feedShield = me?.shield ? `${me.shield.key}:${me.shield.current}` : null;
+  useEffect(() => {
+    if (feedHp == null) return;
+    if (seen.current.hp !== undefined && feedHp !== seen.current.hp) setStoredHp(feedHp);
+    seen.current.hp = feedHp;
+  }, [feedHp]);
+  // Conditions the GM sets on you in the tracker. They're only kept with the encounter, so
+  // take them on first sight too (a fresh page starts with none); after that, on each change.
+  const feedConditions = me?.conditions ? JSON.stringify(me.conditions) : null;
+  useEffect(() => {
+    if (!feedConditions) return;
+    if (feedConditions !== seen.current.conditions) setConditions(me.conditions);
+    seen.current.conditions = feedConditions;
+  }, [feedConditions]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!feedShield) return;
+    // On our own equipped shield: an inventory that was never edited gets fresh item keys
+    // wherever it's built, so the server's key needn't match ours.
+    if (seen.current.shield !== undefined && feedShield !== seen.current.shield && currentInventory && shield) {
+      setStoredInventory(setItemDamage(currentInventory, shield.key, me.shield.max - me.shield.current));
+    }
+    seen.current.shield = feedShield;
+  }, [feedShield]); // eslint-disable-line react-hooks/exhaustive-deps
   const myTurn = encounterActive && encounter.current === me.key;
   // A new turn of yours: three fresh actions, and a raised shield comes down.
   useEffect(() => {
@@ -267,15 +271,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     setRound((r) => r + 1);
   }, []);
 
-  const cycleCondition = useCallback((id, valued) => {
-    setConditions((list) => {
-      const current = list.find((c) => c.id === id);
-      if (!valued) return current ? list.filter((c) => c.id !== id) : [...list, { id }];
-      if (!current) return [...list, { id, value: 1 }];
-      if (current.value >= 3) return list.filter((c) => c.id !== id);
-      return list.map((c) => (c.id === id ? { ...c, value: c.value + 1 } : c));
-    });
-  }, []);
+  const cycleCondition = useCallback((id) => setConditions((list) => nextConditions(list, id)), []);
 
   const resetEncounter = useCallback(() => {
     setUsed([]);

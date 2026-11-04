@@ -50,6 +50,8 @@ export default function ShieldGauge({ shield, raised = false, pressed = false, o
         type="button"
         className={`shield-gauge shield-gauge--${stage}${shield.destroyed ? ' shield-gauge--destroyed' : ''}${raised ? ' shield-gauge--raised' : ''}${hit ? ` shield-gauge--hit-${hits % 2}` : ''}`}
         aria-pressed={pressed}
+        // Just a gauge when there's nothing to open (the encounter tracker's drawer).
+        disabled={!onOpen}
         onClick={onOpen}
         aria-label={`${shield.name}: ${shield.current} of ${shield.max} Hit Points, ${shield.destroyed ? 'destroyed' : STAGE_LABEL[stage]}${raised ? ', raised' : ''}`}
       >

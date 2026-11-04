@@ -16,6 +16,7 @@ import { useAuth } from '../state/AuthContext.jsx';
 import { rememberCampaign } from '../state/lastCampaign.js';
 import { cardArtFor } from '../builder/art.js';
 import { encounterRating } from '../state/encounters.js';
+import { useRunningEncounter } from '../state/runningEncounter.js';
 
 /** What each tab under a campaign gets: { campaign, reload, setCrumbs }. */
 export const useCampaign = () => useOutletContext();
@@ -33,8 +34,11 @@ export function useCampaignCrumbs(crumbs) {
   }, [key, setCrumbs]);
 }
 
-/** The tabs under a campaign's header, like a GitHub repository's. Encounters and Settings are the GM's alone. */
-function CampaignTabs({ id, isGm }) {
+/**
+ * The tabs under a campaign's header, like a GitHub repository's. Encounters and Settings
+ * are the GM's alone; while the GM runs an encounter, players get an Encounter tab to watch it.
+ */
+function CampaignTabs({ id, isGm, running }) {
   const tabs = [
     { to: `/campaigns/${id}`, label: 'Overview', icon: 'overview', end: true },
     { to: `/campaigns/${id}/logs`, label: 'Session logs', icon: 'logs' },
@@ -43,7 +47,9 @@ function CampaignTabs({ id, isGm }) {
           { to: `/campaigns/${id}/encounters`, label: 'Encounters', icon: 'swords' },
           { to: `/campaigns/${id}/settings`, label: 'Settings', icon: 'settings' },
         ]
-      : []),
+      : running
+        ? [{ to: `/campaigns/${id}/encounter`, label: 'Encounter', icon: 'swords' }]
+        : []),
   ];
   return (
     <nav className="nav" aria-label="Campaign">
@@ -66,6 +72,8 @@ export default function CampaignLayout() {
   const [crumbs, setCrumbs] = useState([]);
   const service = useCampaignService();
   const { user } = useAuth();
+  // Players follow the GM's running encounter (the Encounter tab and page).
+  const running = useRunningEncounter(id, Boolean(campaign && !campaign.isGm));
 
   const load = useCallback(() => {
     service
@@ -103,8 +111,8 @@ export default function CampaignLayout() {
   }
 
   return (
-    <PageShell crumbs={all} tabs={<CampaignTabs id={id} isGm={campaign.isGm} />}>
-      <Outlet context={{ campaign, reload: load, setCrumbs }} />
+    <PageShell crumbs={all} tabs={<CampaignTabs id={id} isGm={campaign.isGm} running={running} />}>
+      <Outlet context={{ campaign, reload: load, setCrumbs, running }} />
     </PageShell>
   );
 }

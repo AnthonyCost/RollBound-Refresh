@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { strikeBonus, damageModifier, describeCondition, landSpeed, perception, skillCheck, CONDITIONS } from '@rollbound/rules';
+import { strikeBonus, damageModifier, describeCondition, landSpeed, perception, skillCheck } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import { loadRules } from '../state/rulesData.js';
 import { SKILLS } from '../sheet/sheetRules.js';
 import Ornament from '../components/Ornament.jsx';
 import ActionCost from '../components/ActionCost.jsx';
+import ConditionChips from '../components/ConditionChips.jsx';
 import { signed, titleCase } from '../format.js';
 
 const COSTS = new Set(['1', '2', '3', 'reaction', 'free']);
@@ -116,7 +117,7 @@ function Group({ title, options, actionsLeft, reactionUsed, onUse }) {
  */
 function EncounterBanner({ encounter, myTurn }) {
   const acting = encounter.combatants.find((c) => c.key === encounter.current);
-  const order = [...encounter.combatants].sort((a, b) => (b.initiative ?? -99) - (a.initiative ?? -99));
+  const order = encounter.combatants; // the GM's turn order
   return (
     <section className={`panel encounter-banner ${myTurn ? 'encounter-banner--mine' : ''}`} aria-labelledby="encounter-banner-title">
       <span className="eyebrow">{encounter.name} · Round {encounter.round}</span>
@@ -214,17 +215,7 @@ export default function CombatPage() {
         </section>
 
         <section aria-label="Conditions" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div className="condition-row">
-            {Object.entries(CONDITIONS).map(([id, def]) => {
-              const active = conditions.find((x) => x.id === id);
-              return (
-                <button key={id} type="button" className="chip" aria-pressed={!!active} onClick={() => cycleCondition(id, def.valued)}>
-                  {def.name.toUpperCase()}
-                  {def.valued && active ? ` ${active.value}` : ''}
-                </button>
-              );
-            })}
-          </div>
+          <ConditionChips conditions={conditions} onToggle={cycleCondition} />
           {conditions.map((x) => {
             const d = describeCondition(x);
             return (
