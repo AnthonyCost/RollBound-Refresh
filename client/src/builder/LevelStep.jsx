@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import {
   MAX_LEVEL, RANKS, buildProblems, entryFor, featPrerequisites, featSummary, levelDown, levelFeatOptions, levelOf, levelPlan,
   levelSpellOptions, levelUp, maxSkillRank, skillRanksOf, spellcastingOf,
@@ -97,33 +97,14 @@ function LevelPage({ level, build, update, data, todo }) {
   const spellsFull = picks.length >= plan.spells;
   const casting = spellcastingOf(build, data);
 
-  // Skill ranks before this level's increase.
-  const before = skillRanksOf({ ...build, level: level - 1 }, data).ranks;
-  const cap1 = RANKS.indexOf(maxSkillRank(level));
-  const nextRank = (s) => RANKS[RANKS.indexOf(before[s] ?? 'untrained') + 1];
-  // Problems that aren't just "choose …" (a prerequisite, a skill above its cap).
-  const warnings = todo.filter((p) => !/: (choose|make your|learn) /.test(p.message));
-
-  return (
-    <section className="choice level-page" aria-labelledby="level-page-title">
-      <div className="choice-head">
-        <h2 id="level-page-title" className="choice-head__title">Level {level}</h2>
-        <span className={`choice-head__status ${todo.length ? '' : 'choice-head__status--done'}`}>{todo.length ? `${todo.length} to do` : '✓ Complete'}</span>
-      </div>
-      {warnings.map((p) => <p key={p.message} className="rule-note rule-note--warn">{p.message.replace(/^Level \d+: /, '')}</p>)}
-
-      {plan.features.map((f) => (
-        <details key={f.slug} className="feature">
-          <summary>{f.name} <span className="feature__from">class feature</span></summary>
-          <div className="option__desc" dangerouslySetInnerHTML={{ __html: f.description }} />
-        </details>
-      ))}
-
-      {slots.map((slot) => (
+  // Each feat slot, bonus feat and the new spells: a tab each, hosting that choice's own book.
+  const books = [
+    ...slots.map((slot) => ({
+      key: slot.key,
+      title: slot.name,
+      chosen: slot.chosen && nameOf(slot.chosen),
+      book: (
         <LevelBook
-          key={slot.key}
-          title={slot.name}
-          chosen={slot.chosen && nameOf(slot.chosen)}
           noun="feats"
           // Tabs by feat level, newest first.
           items={featItems(levelFeatOptions(build, data, level, slot.field))}
@@ -145,13 +126,14 @@ function LevelPage({ level, build, update, data, todo }) {
           blankIcon="feats"
           blank={`Choose your ${slot.name.toLowerCase()}`}
         />
-      ))}
-
-      {bonus.map((b) => (
+      ),
+    })),
+    ...bonus.map((b) => ({
+      key: b.parent.id,
+      title: b.name,
+      chosen: b.chosen && nameOf(b.chosen),
+      book: (
         <LevelBook
-          key={b.parent.id}
-          title={b.name}
-          chosen={b.chosen && nameOf(b.chosen)}
           noun="feats"
           items={featItems(b.options.filter((f) => f.id !== b.parent.id))}
           tab={featTab}
@@ -172,13 +154,15 @@ function LevelPage({ level, build, update, data, todo }) {
           blankIcon="feats"
           blank={`Choose your ${b.name.toLowerCase()}`}
         />
-      ))}
-
-      {plan.spells > 0 && (
+      ),
+    })),
+    ...(plan.spells > 0 ? [{
+      key: 'spells',
+      title: 'New spells',
+      chosen: spellsFull && `${picks.length} of ${plan.spells}`,
+      need: `${picks.length} of ${plan.spells} chosen`,
+      book: (
         <LevelBook
-          title="New spells"
-          chosen={spellsFull && `${picks.length} of ${plan.spells}`}
-          need={`${picks.length} of ${plan.spells} chosen`}
           noun="spells"
           // Tabs by rank, highest first.
           items={levelSpellOptions(build, data, level).sort((a, b) => b.rank - a.rank || byName(a, b)).map((s) => ({ id: s.id, name: s.name, spell: s, section: s.rank }))}
@@ -202,7 +186,33 @@ function LevelPage({ level, build, update, data, todo }) {
           blankIcon="spells"
           blank="Choose your new spells"
         />
-      )}
+      ),
+    }] : []),
+  ];
+
+  // Skill ranks before this level's increase.
+  const before = skillRanksOf({ ...build, level: level - 1 }, data).ranks;
+  const cap1 = RANKS.indexOf(maxSkillRank(level));
+  const nextRank = (s) => RANKS[RANKS.indexOf(before[s] ?? 'untrained') + 1];
+  // Problems that aren't just "choose …" (a prerequisite, a skill above its cap).
+  const warnings = todo.filter((p) => !/: (choose|make your|learn) /.test(p.message));
+
+  return (
+    <section className="choice level-page" aria-labelledby="level-page-title">
+      <div className="choice-head">
+        <h2 id="level-page-title" className="choice-head__title">Level {level}</h2>
+        <span className={`choice-head__status ${todo.length ? '' : 'choice-head__status--done'}`}>{todo.length ? `${todo.length} to do` : '✓ Complete'}</span>
+      </div>
+      {warnings.map((p) => <p key={p.message} className="rule-note rule-note--warn">{p.message.replace(/^Level \d+: /, '')}</p>)}
+
+      {plan.features.map((f) => (
+        <details key={f.slug} className="feature">
+          <summary>{f.name} <span className="feature__from">class feature</span></summary>
+          <div className="option__desc" dangerouslySetInnerHTML={{ __html: f.description }} />
+        </details>
+      ))}
+
+      {books.length > 0 && <ChoiceTabs books={books} />}
 
       {plan.skillIncrease && (
         <div className="choice">
@@ -244,16 +254,60 @@ function LevelPage({ level, build, update, data, todo }) {
 }
 
 /**
- * One level-up choice as its own book: a heading with its status, then the index (tabbed
- * by items' section, highest first) and the open entry. leaf(item, close) draws the page.
+ * The tabs for a level's feat slots, bonus feats and new spells, each with its status in
+ * words, and the selected one's book beneath. Arrow keys move between tabs (WAI-ARIA tabs).
  */
-function LevelBook({ title, chosen, need, noun, items, tab, startOpen, marked, blocked, meta, leaf, blank, blankIcon }) {
+function ChoiceTabs({ books }) {
+  const [picked, setPicked] = useState(() => (books.find((b) => !b.chosen) ?? books[0]).key);
+  const current = books.find((b) => b.key === picked) ?? books[0];
+  const onKeyDown = (e) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (!step) return;
+    e.preventDefault(); // so the book doesn't turn its page too
+    const next = books[(books.indexOf(current) + step + books.length) % books.length];
+    setPicked(next.key);
+    document.getElementById(`level-tab-${next.key}`)?.focus();
+  };
+  return (
+    <>
+      <div className="level-tabs" role="tablist" aria-label="This level's feats and spells" onKeyDown={onKeyDown}>
+        {books.map((b) => (
+          <button
+            key={b.key}
+            id={`level-tab-${b.key}`}
+            type="button"
+            role="tab"
+            className="level-tab"
+            aria-selected={b === current}
+            aria-controls="level-tab-panel"
+            tabIndex={b === current ? 0 : -1}
+            onClick={() => setPicked(b.key)}
+          >
+            <span className="choice-head__title">{b.title}</span>
+            <span className={`choice-head__status ${b.chosen ? 'choice-head__status--done' : ''}`}>
+              {b.chosen ? <><span aria-hidden="true">✓ </span><span className="visually-hidden">Chosen: </span>{b.chosen}</> : b.need ?? 'Choose one'}
+            </span>
+          </button>
+        ))}
+      </div>
+      <div id="level-tab-panel" role="tabpanel" aria-labelledby={`level-tab-${current.key}`}>
+        {/* Keyed, so each choice's book starts fresh rather than keeping the last one's open entry or page. */}
+        <Fragment key={current.key}>{current.book}</Fragment>
+      </div>
+    </>
+  );
+}
+
+/**
+ * One level-up choice's book: the index (tabbed by items' section, highest first) and
+ * the open entry. leaf(item, close) draws the page.
+ */
+function LevelBook({ noun, items, tab, startOpen, marked, blocked, meta, leaf, blank, blankIcon }) {
   const [openId, setOpenId] = useState(() => (wide() && startOpen ? startOpen : null));
   const open = items.find((i) => i.id === openId) ?? null;
   const sections = [...new Set(items.map((i) => i.section))].map((key) => ({ key, ...tab(key) }));
   return (
-    <section className="choice" aria-label={title}>
-      <ChoiceHeading title={title} chosen={chosen} need={need} level={3} />
+    <div className="choice">
       <BookSpread
         items={items}
         total={items.length}
@@ -276,6 +330,6 @@ function LevelBook({ title, chosen, need, noun, items, tab, startOpen, marked, b
           </>
         }
       />
-    </section>
+    </div>
   );
 }

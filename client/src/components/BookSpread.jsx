@@ -77,7 +77,7 @@ export default function BookSpread({
   const ref = useRef(null);
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target.closest('input, select, textarea, [contenteditable]') || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.defaultPrevented || e.target.closest('input, select, textarea, [contenteditable]') || e.altKey || e.ctrlKey || e.metaKey) return;
       if (document.querySelectorAll('.book').length > 1 && !ref.current?.contains(document.activeElement)) return;
       if (e.key === 'ArrowLeft' && current > 1) turn(current - 1);
       if (e.key === 'ArrowRight' && current < pages) turn(current + 1);

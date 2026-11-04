@@ -3001,12 +3001,13 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   color: var(--text);
   text-decoration: none;
 }
-.book__entry-name { font-size: 16px; overflow-wrap: anywhere; }
+/* Names break only between words; a long meta line (a feat's traits) wraps and gives way first, so a name never goes vertical. */
+.book__entry-name { font-size: 16px; overflow-wrap: break-word; }
 /* A number before the name, like a journal's session numbers. */
 .book__lead { flex: none; align-self: center; min-width: 30px; height: 26px; padding: 0 6px; display: inline-grid; place-items: center; border: 1px solid var(--line); border-radius: 3px; background: var(--bg); font-family: var(--display); font-size: 13px; font-weight: 700; color: var(--bronze); font-variant-numeric: tabular-nums; }
 /* Dot leaders, as in a table of contents. */
 .book__entry-dots { flex: 1; min-width: 12px; border-bottom: 1px dotted var(--line); transform: translateY(-4px); }
-.book__entry-meta { flex: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
+.book__entry-meta { flex: 0 3 auto; display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0 8px; font-size: 13px; text-align: right; color: var(--text-muted); }
 @media (hover: hover) { .book__entry-link:hover .book__entry-name { color: var(--gold); } }
 .book__entry-link--open { background: var(--panel-hot); box-shadow: inset 2px 0 0 var(--blood); }
 /* In the builder, entries are buttons that open the entry; the diamond marks what's chosen. */
@@ -3803,3 +3804,19 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .level-track__tile--done .level-track__state { color: var(--gold); }
 .level-page { gap: 16px; }
 .ledger__partial { display: block; margin-top: 2px; font-size: 11px; color: var(--gold); }
+/* A level's feat slots and new spells as tabs: each shows its status, the selected one's book sits beneath. */
+.level-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.level-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-bottom-width: 3px;
+  background: var(--panel);
+  text-align: left;
+}
+.level-tab .choice-head__status { max-width: 100%; overflow-wrap: anywhere; }
+.level-tab[aria-selected='true'] { border-color: var(--blood-text); background: var(--panel-hot); box-shadow: 0 0 10px var(--blood-glow); }
+@media (hover: hover) { .level-tab:not([aria-selected='true']):hover { border-color: var(--bronze); } }
