@@ -4484,4 +4484,13 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .roll-view--stacked .split__col { width: 100%; }
 .encounter-banner__open { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); text-decoration: none; }
 @media (hover: hover) { .encounter-banner__open:hover { text-decoration: underline; } }
-.combat-vitals .sheet-hp { justify-content: center; }
+/* Health on the Combat tab: the readings (orb leading, shield beside it) on one row, then a
+   full-width Heal | amount | Damage row below a hairline. 4px scale: 8 within, 16 between. */
+.combat-side .combat-vitals { gap: 16px; }
+.combat-vitals__readings { display: flex; justify-content: center; align-items: flex-start; gap: 32px; padding-top: 4px; }
+.combat-vitals__readings .vitals { gap: 8px; }
+.combat-vitals__controls { position: relative; padding-top: 16px; border-top: 1px solid var(--line-faint); }
+.combat-vitals__controls .hp-tracker { display: grid; grid-template-columns: minmax(0, 1fr) 88px minmax(0, 1fr); align-items: stretch; gap: 8px; width: 100%; }
+.combat-vitals__controls .hp-tracker__btn { min-height: 44px; }
+/* The Shield Block question spans the panel instead of a fixed width. */
+.combat-vitals__controls .hp-block { left: 0; right: 0; width: auto; margin: 0; }

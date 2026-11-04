@@ -458,11 +458,15 @@ export default function CombatPage() {
         <OptionTabs groups={groups} canUse={canUse} open={open} onOpen={(o) => { setRolling(false); setOpen(open === o.id ? null : o.id); }} />
 
         <aside className="combat-side">
-          <section className="panel combat-vitals" aria-label="Hit Points and shield">
-            <div className="sheet-hp">
-              <HpTracker />
-              {shield && <ShieldGauge shield={shield} raised={shieldRaised} pressed={open === 'shield'} onOpen={() => { setRolling(false); setOpen(open === 'shield' ? null : 'shield'); }} />}
+          {/* Your state first (the orb leads, the shield beside it), then the controls that change it. */}
+          <section className="panel combat-vitals" aria-labelledby="combat-vitals-title">
+            <h2 id="combat-vitals-title" className="sheet-panel__title">Health</h2>
+            <div className="combat-vitals__readings">
               <HealthOrb current={currentHp} max={maxHp} onRestore={() => setHp(maxHp)} />
+              {shield && <ShieldGauge shield={shield} raised={shieldRaised} pressed={open === 'shield'} onOpen={() => { setRolling(false); setOpen(open === 'shield' ? null : 'shield'); }} />}
+            </div>
+            <div className="combat-vitals__controls">
+              <HpTracker />
             </div>
           </section>
 
