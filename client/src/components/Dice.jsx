@@ -149,7 +149,7 @@ export function DieShape({ sides, label = null, className = '', spin = null }) {
     <svg className={`die__shape ${className}`} viewBox="0 0 100 100" aria-hidden="true">
       {/* Dark faces lit from the upper left, outlined in the die's bright colour. */}
       {faces.map(([pts, light]) => (
-        <polygon key={pts} className="die-3d__face" points={pts} style={{ fill: `color-mix(in oklab, var(--die-edge) ${Math.round(12 + light * 33)}%, var(--die-low))` }} />
+        <polygon key={pts} className="die-3d__face" points={pts} style={{ '--lit': light.toFixed(2) }} />
       ))}
       {label != null && (
         <text className="die__value" x={x} y={y} fontSize={String(label).length > 2 ? size * 0.75 : size} textAnchor="middle" dominantBaseline="central">

@@ -1338,9 +1338,13 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.55)) drop-shadow(0 0 16px color-mix(in srgb, var(--die-glow) 45%, transparent));
 }
 .roll__die { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.die-3d__face { stroke: var(--die-edge); stroke-width: 1.2; stroke-linejoin: round; }
-/* A critical success: gold. A critical failure: the theme's crit-fail colour, gone dark. */
-.roll__gem:not(.roll__gem--plain):not(.roll__gem--critfail) { --die-edge: var(--gold); --die-front: var(--gold-deep); --die-light: var(--gold-dark); --die-side: var(--panel-raised); --die-glow: var(--gold-flare); }
+/* Each face: the edge colour mixed into the dark by how much light it catches (--lit, 0–1, from Dice.jsx). */
+.die-3d__face {
+  stroke: var(--die-edge); stroke-width: 1.2; stroke-linejoin: round;
+  fill: color-mix(in oklab, var(--die-edge) calc(var(--die-lit-min, 12%) + var(--lit) * var(--die-lit-range, 33%)), var(--die-low));
+}
+/* A critical success: gold, its faces lit up, so it reads even in themes whose die is already gold. A critical failure: the theme's crit-fail colour, gone dark. */
+.roll__gem:not(.roll__gem--plain):not(.roll__gem--critfail) { --die-edge: var(--gold); --die-front: var(--gold-deep); --die-light: var(--gold-dark); --die-side: var(--panel-raised); --die-glow: var(--gold); --die-lit-min: 46%; --die-lit-range: 42%; }
 .roll__gem--critfail { --die-edge: var(--deg-critfail); --die-front: var(--panel-ember); --die-light: var(--blood-dark); --die-side: var(--bg); --die-glow: var(--blood-dark); }
 /* The total sits on the die's front face (dieTextAt places it per die), sized to the die so it stays inside the face. */
 .roll__gem .roll__die { width: 100%; height: 100%; }
