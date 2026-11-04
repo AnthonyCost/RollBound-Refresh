@@ -35,6 +35,7 @@ import {
   loresOf,
   skillCheck,
   SKILL_ABILITY,
+  levelOf,
 } from '@rollbound/rules';
 import Chips from './Chips.jsx';
 import ChoiceHeading from './ChoiceHeading.jsx';
@@ -877,7 +878,7 @@ export function ReviewStep({ build, update, data, goTo, inventory = null, portra
         </label>
         {!build.name.trim() && <p id="review-name-note" className="rule-note--warn">Name your character to save them.</p>}
         <p className="review-hero__line">
-          Level 1{line && ` ${line}`}
+          Level {levelOf(build)}{line && ` ${line}`}
           {sub && <span className="muted"> · {sub}</span>}
         </p>
         </div>

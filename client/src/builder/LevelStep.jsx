@@ -11,17 +11,22 @@ import { wide } from './BookLeaf.jsx';
 import { BoostLedger, FeatLeaf, SpellLeaf, featMeta } from './DetailSteps.jsx';
 import { cap } from './labels.js';
 
-const FEAT_FIELDS = [['classFeat', 'Class feat', 'Class'], ['ancestryFeat', 'Ancestry feat', 'Ancestry'], ['skillFeat', 'Skill feat', 'Skill'], ['generalFeat', 'General feat', 'General']];
+const FEAT_FIELDS = [['classFeat', 'Class feat'], ['ancestryFeat', 'Ancestry feat'], ['skillFeat', 'Skill feat'], ['generalFeat', 'General feat']];
 const byName = (a, b) => a.name.localeCompare(b.name);
 
 /**
  * Levels 2-20: a level counter, a track of the levels reached (each with what's left to
  * choose), and the open level's page: the class features it brings, its feats and new
- * spells as a book (like the Feats step), its skill increase, boosts and feature choices.
+ * spells as a book each (like the Feats step), its skill increase, boosts and feature choices.
  */
 export function LevelStep({ build, update, data }) {
   const level = levelOf(build);
-  const problems = buildProblems(build, data).filter((p) => p.step === 'level');
+  // A level's to-do: its own problems, plus any bonus feat a feat picked there still needs.
+  const pickedAt = new Map((build.levels ?? []).flatMap((e, i) => FEAT_FIELDS.map(([f]) => [e[f], i + 2])));
+  const problems = [
+    ...buildProblems(build, data).filter((p) => p.step === 'level'),
+    ...featSummary(build, data).slots.filter((b) => !b.chosen && pickedAt.has(b.parent.id)).map((b) => ({ message: `Level ${pickedAt.get(b.parent.id)}: choose the feat from ${b.parent.name}.` })),
+  ];
   const todo = (lv) => problems.filter((p) => p.message.startsWith(`Level ${lv}:`));
   const [picked, setOpen] = useState(() => Array.from({ length: level - 1 }, (_, i) => i + 2).find((lv) => todo(lv).length) ?? level);
   const open = Math.min(Math.max(picked, 2), level);
@@ -75,23 +80,22 @@ function LevelPage({ level, build, update, data, todo }) {
   const setEntry = (patch) => update({ levels: build.levels.map((e, i) => (i === level - 2 ? { ...e, ...patch } : e)) });
   const nameOf = (id) => data.feats.find((f) => f.id === id)?.name;
 
-  // The feat slots and the new spells share one book, a tab each.
-  const slots = FEAT_FIELDS.filter(([field]) => plan[field]).map(([field, name, tab]) => ({ key: field, field, name, tab, chosen: entry[field] }));
-  const owned = new Set(featSummary(build, data).owned.map((o) => o.feat.id));
-  const spells = plan.spells ? levelSpellOptions(build, data, level) : [];
+  const slots = FEAT_FIELDS.filter(([field]) => plan[field]).map(([field, name]) => ({ key: field, field, name, chosen: entry[field] }));
+  const summary = featSummary(build, data);
+  const owned = new Set(summary.owned.map((o) => o.feat.id));
+  // Feats picked here that grant another feat (Ancestral Paragon): their slot is chosen here too.
+  const picked = new Set(slots.map((slot) => slot.chosen).filter(Boolean));
+  const bonus = summary.slots.filter((b) => picked.has(b.parent.id)).map((b) => ({ ...b, name: `Bonus feat from ${b.parent.name}` }));
+  const featItems = (feats) => feats.sort((a, b) => b.level - a.level || byName(a, b)).map((f) => ({ id: f.id, name: f.name, feat: f, section: f.level }));
+  const featBlocked = (chosenId) => (i) => {
+    if (chosenId !== i.id && owned.has(i.id) && !/more than once/i.test(i.feat.description)) return 'You already have this feat';
+    const pre = featPrerequisites(i.feat, at, data);
+    return pre.met ? null : `Requires ${pre.failed.join('; ')}`;
+  };
+  const featTab = (lv) => ({ tab: String(lv), name: `Level ${lv} feats` });
   const picks = entry.spells ?? [];
-  const casting = spellcastingOf(build, data);
-  const items = [
-    ...slots.flatMap((slot) => levelFeatOptions(build, data, level, slot.field).sort(byName).map((f) => ({ id: `${slot.key}:${f.id}`, name: f.name, feat: f, slot }))),
-    ...[...spells].sort(byName).map((s) => ({ id: `spells:${s.id}`, name: s.name, spell: s })),
-  ];
-  const sections = [...slots.map(({ key, tab, name }) => ({ key, tab, name })), ...(plan.spells ? [{ key: 'spells', tab: 'Spells', name: 'New spells' }] : [])];
-  const [openId, setOpenId] = useState(() => {
-    const first = slots.find((s) => s.chosen);
-    return wide() && first ? `${first.key}:${first.chosen}` : null;
-  });
-  const openItem = items.find((i) => i.id === openId) ?? null;
   const spellsFull = picks.length >= plan.spells;
+  const casting = spellcastingOf(build, data);
 
   // Skill ranks before this level's increase.
   const before = skillRanksOf({ ...build, level: level - 1 }, data).ranks;
@@ -115,62 +119,89 @@ function LevelPage({ level, build, update, data, todo }) {
         </details>
       ))}
 
-      {sections.length > 0 && (
-        <>
-          <div className="feat-slots">
-            {slots.map((slot) => <ChoiceHeading key={slot.key} title={slot.name} chosen={slot.chosen && nameOf(slot.chosen)} level={3} />)}
-            {plan.spells > 0 && <ChoiceHeading title="New spells" chosen={spellsFull && `${picks.length} of ${plan.spells}`} need={`${picks.length} of ${plan.spells} chosen`} level={3} />}
-          </div>
-          <BookSpread
-            items={items}
-            total={items.length}
-            noun={plan.spells ? 'feats and spells' : 'feats'}
-            sections={sections}
-            sectionOf={(i) => (i.feat ? i.slot.key : 'spells')}
-            tabsOnTop
-            open={openItem}
-            onOpen={(i) => setOpenId(i.id)}
-            marked={(i) => (i.feat ? i.slot.chosen === i.feat.id : picks.includes(i.spell.id))}
-            blocked={(i) => {
-              if (i.spell) return !picks.includes(i.spell.id) && spellsFull ? `You've chosen ${plan.spells}` : null;
-              if (i.slot.chosen !== i.feat.id && owned.has(i.feat.id) && !/more than once/i.test(i.feat.description)) return 'You already have this feat';
-              const pre = featPrerequisites(i.feat, at, data);
-              return pre.met ? null : `Requires ${pre.failed.join('; ')}`;
-            }}
-            meta={(i) => (i.feat ? [`Level ${i.feat.level}`, featMeta(i.feat)].filter(Boolean).join(' · ') : <>Rank {i.spell.rank} <ActionCost actions={i.spell.actions} /></>)}
-            emptyText="Nothing to choose from here."
-            leaf={openItem && (openItem.feat ? (
-              <FeatLeaf
-                key={openItem.id}
-                item={openItem}
-                build={at}
-                data={data}
-                onChoose={() => setEntry({ [openItem.slot.field]: openItem.feat.id })}
-                onRemove={() => setEntry({ [openItem.slot.field]: null })}
-                onClose={() => setOpenId(null)}
-              />
-            ) : (
-              <SpellLeaf
-                key={openItem.id}
-                spell={openItem.spell}
-                kind={casting?.kind}
-                chosen={picks.includes(openItem.spell.id)}
-                full={spellsFull}
-                fullNote={`You've chosen ${plan.spells} new spell${plan.spells === 1 ? '' : 's'}. Remove one to add this.`}
-                add={() => setEntry({ spells: [...picks, openItem.spell.id] })}
-                remove={() => setEntry({ spells: picks.filter((x) => x !== openItem.spell.id) })}
-                close={() => setOpenId(null)}
-              />
-            ))}
-            blankIcon="feats"
-            blank={
-              <>
-                <p className="book__blank-title">Choose this level’s {plan.spells ? 'feats and spells' : 'feats'}</p>
-                <p className="rule-note">Open an entry from the index to read it here. Each tab is one of this level’s choices. Greyed-out entries need something you don’t have yet.</p>
-              </>
-            }
-          />
-        </>
+      {slots.map((slot) => (
+        <LevelBook
+          key={slot.key}
+          title={slot.name}
+          chosen={slot.chosen && nameOf(slot.chosen)}
+          noun="feats"
+          // Tabs by feat level, newest first.
+          items={featItems(levelFeatOptions(build, data, level, slot.field))}
+          tab={featTab}
+          startOpen={slot.chosen}
+          marked={(i) => slot.chosen === i.id}
+          blocked={featBlocked(slot.chosen)}
+          meta={(i) => featMeta(i.feat)}
+          leaf={(i, close) => (
+            <FeatLeaf
+              item={{ feat: i.feat, slot }}
+              build={at}
+              data={data}
+              onChoose={() => setEntry({ [slot.field]: i.id })}
+              onRemove={() => setEntry({ [slot.field]: null })}
+              onClose={close}
+            />
+          )}
+          blankIcon="feats"
+          blank={`Choose your ${slot.name.toLowerCase()}`}
+        />
+      ))}
+
+      {bonus.map((b) => (
+        <LevelBook
+          key={b.parent.id}
+          title={b.name}
+          chosen={b.chosen && nameOf(b.chosen)}
+          noun="feats"
+          items={featItems(b.options.filter((f) => f.id !== b.parent.id))}
+          tab={featTab}
+          startOpen={b.chosen}
+          marked={(i) => b.chosen === i.id}
+          blocked={featBlocked(b.chosen)}
+          meta={(i) => featMeta(i.feat)}
+          leaf={(i, close) => (
+            <FeatLeaf
+              item={{ feat: i.feat, slot: b }}
+              build={at}
+              data={data}
+              onChoose={() => update({ bonusFeats: { ...build.bonusFeats, [b.parent.id]: i.id } })}
+              onRemove={() => update({ bonusFeats: { ...build.bonusFeats, [b.parent.id]: null } })}
+              onClose={close}
+            />
+          )}
+          blankIcon="feats"
+          blank={`Choose your ${b.name.toLowerCase()}`}
+        />
+      ))}
+
+      {plan.spells > 0 && (
+        <LevelBook
+          title="New spells"
+          chosen={spellsFull && `${picks.length} of ${plan.spells}`}
+          need={`${picks.length} of ${plan.spells} chosen`}
+          noun="spells"
+          // Tabs by rank, highest first.
+          items={levelSpellOptions(build, data, level).sort((a, b) => b.rank - a.rank || byName(a, b)).map((s) => ({ id: s.id, name: s.name, spell: s, section: s.rank }))}
+          tab={(r) => ({ tab: `Rank ${r}`, name: `Rank ${r} spells` })}
+          startOpen={picks[0]}
+          marked={(i) => picks.includes(i.id)}
+          blocked={(i) => (!picks.includes(i.id) && spellsFull ? `You've chosen ${plan.spells}` : null)}
+          meta={(i) => <ActionCost actions={i.spell.actions} />}
+          leaf={(i, close) => (
+            <SpellLeaf
+              spell={i.spell}
+              kind={casting?.kind}
+              chosen={picks.includes(i.id)}
+              full={spellsFull}
+              fullNote={`You've chosen ${plan.spells} new spell${plan.spells === 1 ? '' : 's'}. Remove one to add this.`}
+              add={() => setEntry({ spells: [...picks, i.id] })}
+              remove={() => setEntry({ spells: picks.filter((x) => x !== i.id) })}
+              close={close}
+            />
+          )}
+          blankIcon="spells"
+          blank="Choose your new spells"
+        />
       )}
 
       {plan.skillIncrease && (
@@ -208,6 +239,43 @@ function LevelPage({ level, build, update, data, todo }) {
           />
         </div>
       ))}
+    </section>
+  );
+}
+
+/**
+ * One level-up choice as its own book: a heading with its status, then the index (tabbed
+ * by items' section, highest first) and the open entry. leaf(item, close) draws the page.
+ */
+function LevelBook({ title, chosen, need, noun, items, tab, startOpen, marked, blocked, meta, leaf, blank, blankIcon }) {
+  const [openId, setOpenId] = useState(() => (wide() && startOpen ? startOpen : null));
+  const open = items.find((i) => i.id === openId) ?? null;
+  const sections = [...new Set(items.map((i) => i.section))].map((key) => ({ key, ...tab(key) }));
+  return (
+    <section className="choice" aria-label={title}>
+      <ChoiceHeading title={title} chosen={chosen} need={need} level={3} />
+      <BookSpread
+        items={items}
+        total={items.length}
+        noun={noun}
+        sections={sections}
+        sectionOf={(i) => i.section}
+        tabsOnTop
+        open={open}
+        onOpen={(i) => setOpenId(i.id)}
+        marked={marked}
+        blocked={blocked}
+        meta={meta}
+        emptyText={`No ${noun} to choose from.`}
+        leaf={open && leaf(open, () => setOpenId(null))}
+        blankIcon={blankIcon}
+        blank={
+          <>
+            <p className="book__blank-title">{blank}</p>
+            <p className="rule-note">Open an entry from the index to read it here. Greyed-out entries need something you don’t have yet.</p>
+          </>
+        }
+      />
     </section>
   );
 }

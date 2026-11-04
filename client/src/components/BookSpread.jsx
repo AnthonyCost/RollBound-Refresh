@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Icon from './Icon.jsx';
 
@@ -72,10 +72,13 @@ export default function BookSpread({
   const last = onPage.at(-1) && sectionOf(onPage.at(-1));
   const runningHead = first ? (first === last ? nameOf(first) : `${nameOf(first)} – ${nameOf(last)}`) : `No ${noun}`;
 
-  // The arrow keys turn pages, except while typing in a field.
+  // The arrow keys turn pages, except while typing in a field. With several books on
+  // the page (the Level step), only the book that has focus turns.
+  const ref = useRef(null);
   useEffect(() => {
     const onKey = (e) => {
       if (e.target.closest('input, select, textarea, [contenteditable]') || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (document.querySelectorAll('.book').length > 1 && !ref.current?.contains(document.activeElement)) return;
       if (e.key === 'ArrowLeft' && current > 1) turn(current - 1);
       if (e.key === 'ArrowRight' && current < pages) turn(current + 1);
     };
@@ -84,7 +87,7 @@ export default function BookSpread({
   });
 
   return (
-    <div className={`book ${open ? 'book--open' : ''} ${tabsOnTop ? 'book--tabs-top' : ''}`}>
+    <div ref={ref} className={`book ${open ? 'book--open' : ''} ${tabsOnTop ? 'book--tabs-top' : ''}`}>
       {!short && <nav className="book__tabs" aria-label="Sections">
         {sections.map((x) => (
           <button
