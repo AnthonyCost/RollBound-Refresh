@@ -3772,3 +3772,34 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .theme-card__name { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font: 700 17px/1.2 var(--display); color: var(--text); }
 .theme-card__check { font: 600 12px/1 var(--display); color: var(--gold); }
 .theme-card__blurb { font-size: 14px; line-height: 1.45; color: var(--text-muted); }
+
+/* ---------- Builder: Level step ---------- */
+
+.level-step { display: flex; flex-direction: column; gap: 18px; }
+.level-head { display: flex; flex-direction: column; gap: 14px; }
+.level-head__row { display: flex; align-items: center; justify-content: center; gap: 24px; }
+.level-head__now { display: flex; flex-direction: column; align-items: center; min-width: 96px; }
+.level-head__num { font-family: var(--display); font-size: 48px; font-weight: 700; line-height: 1; color: var(--gold); }
+.level-head__step { min-width: 48px; min-height: 48px; padding: 0; font-size: 22px; }
+.level-track { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.level-track__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 76px;
+  min-height: 56px;
+  border: 1px dashed var(--line);
+  background: var(--panel);
+  font-family: var(--display);
+  color: var(--text-soft);
+}
+.level-track__tile--done { border: 1px solid var(--bronze); }
+.level-track__tile[aria-current='true'] { border: 1px solid var(--blood-text); background: var(--panel-hot); box-shadow: 0 0 10px var(--blood-glow); color: var(--text); }
+@media (hover: hover) { .level-track__tile:not([aria-current='true']):hover { border-color: var(--bronze); color: var(--text); } }
+.level-track__num { font-size: 18px; font-weight: 700; }
+.level-track__state { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+.level-track__tile--done .level-track__state { color: var(--gold); }
+.level-page { gap: 16px; }
+.ledger__partial { display: block; margin-top: 2px; font-size: 11px; color: var(--gold); }

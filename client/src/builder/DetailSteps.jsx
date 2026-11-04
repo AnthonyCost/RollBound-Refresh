@@ -64,13 +64,13 @@ const FIELD_OF = { ancestry: 'ancestryBoosts', background: 'backgroundBoosts' };
 
 /**
  * Attributes as a ledger: a column for each attribute and a row for each source of
- * boosts (ancestry, background, class, free), with the totals beneath. Clicking a cell
- * boosts that attribute from that source, filling whichever of the source's slots it
- * fits (the most limited first), or removes the boost.
+ * boosts (ancestry, background, class, free, and the boosts at levels 5, 10, 15 and 20),
+ * with the totals beneath. Clicking a cell boosts that attribute from that source,
+ * filling whichever of the source's slots it fits (the most limited first), or removes
+ * the boost. only: show just that source's row (the Level step shows one level's boosts).
  */
-export function AttributesStep({ build, update, data }) {
-  const { sources, mods } = attributes(build, data);
-  const { ancestry } = lookup(build, data);
+export function BoostLedger({ build, update, data, only = null }) {
+  const { sources, mods, partial } = attributes(build, data);
   const key = keyAbilityOf(build, data);
 
   // Where a new boost of `a` from source s would go: the empty slot that allows it, most limited first.
@@ -93,6 +93,10 @@ export function AttributesStep({ build, update, data }) {
       update({ freeBoosts: c.on ? build.freeBoosts.filter((x) => x !== a) : [...build.freeBoosts, a] });
     } else if (s.id === 'class') {
       update({ keyAbility: c.on ? null : a });
+    } else if (s.level) {
+      const next = [...s.boosts];
+      next[c.i] = c.on ? null : a;
+      update({ levels: build.levels.map((e, i) => (i === s.level - 2 ? { ...e, boosts: next } : e)) });
     } else {
       const field = FIELD_OF[s.id];
       const next = [...build[field]];
@@ -105,71 +109,81 @@ export function AttributesStep({ build, update, data }) {
   const describe = (s) => (s.id === 'class' ? (s.slots[0].length === 1 ? 'Fixed' : `One of ${s.slots[0].map((a) => ABILITY_SHORT[a]).join(', ')}`) : s.slots.map((slot) => (slot.length === 1 ? ABILITY_SHORT[slot[0]] : slot.length === 6 ? 'free' : slot.map((a) => ABILITY_SHORT[a]).join('/'))).join(' · '));
 
   return (
+    <div className="ledger__scroll">
+      <table className="ledger__table">
+        <thead>
+          <tr>
+            <th scope="col" className="ledger__source">Source</th>
+            {ABILITIES.map((a) => (
+              <th key={a} scope="col">
+                <abbr title={abilityName(a)}>{ABILITY_SHORT[a]}</abbr>
+                {a === key && <span className="ledger__crown" title="Key attribute"> ♛<span className="visually-hidden"> (key attribute)</span></span>}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {sources.filter((s) => !only || s.id === only).map((s) => (
+            <tr key={s.id}>
+              <th scope="row" className="ledger__source">
+                <span className="ledger__label">{s.id === 'free' ? 'Free boosts' : s.label}</span>
+                <span className={`ledger__count ${filled(s) === s.slots.length ? 'ledger__count--done' : ''}`}>
+                  {filled(s)}/{s.slots.length} · {describe(s)}
+                </span>
+              </th>
+              {ABILITIES.map((a) => {
+                const c = cell(s, a);
+                const flaw = s.flaws.includes(a);
+                const open = c.on || c.i >= 0;
+                return (
+                  <td key={a} className={flaw ? 'ledger__flawed' : ''}>
+                    {open ? (
+                      <button
+                        type="button"
+                        className={`ledger__cell ${c.on ? 'ledger__cell--on' : ''}`}
+                        aria-pressed={c.on}
+                        disabled={c.locked}
+                        aria-label={`${c.on ? 'Remove the' : 'Boost'} ${abilityName(a)} ${c.on ? 'boost ' : ''}from ${s.id === 'free' ? 'your free boosts' : s.label}${c.locked ? ' (fixed)' : ''}`}
+                        onClick={() => toggle(s, a)}
+                      >
+                        {c.on ? '+1' : ''}
+                      </button>
+                    ) : (
+                      <span className="ledger__cell ledger__cell--closed" aria-hidden="true" />
+                    )}
+                    {flaw && <span className="ledger__flaw" title="Flaw">−1<span className="visually-hidden"> flaw</span></span>}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row" className="ledger__source">Modifier</th>
+            {ABILITIES.map((a) => (
+              <td key={a} className={`ledger__total ${mods[a] > 0 ? 'ledger__total--up' : mods[a] < 0 ? 'ledger__total--down' : ''}`}>{signed(mods[a])}
+                {partial.has(a) && <span className="ledger__partial" title="A partial boost: one more raises this by 1">+½<span className="visually-hidden"> (a partial boost)</span></span>}
+              </td>
+            ))}
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  );
+}
+
+export function AttributesStep({ build, update, data }) {
+  const { ancestry } = lookup(build, data);
+
+  return (
     <>
       <section className="panel ledger" aria-labelledby="ledger-title">
         <div className="pack__head">
           <h2 id="ledger-title" className="choice-head__title">Boost ledger</h2>
           <span className="muted">Each boost adds 1. A source can't boost the same attribute twice.</span>
         </div>
-        <div className="ledger__scroll">
-          <table className="ledger__table">
-            <thead>
-              <tr>
-                <th scope="col" className="ledger__source">Source</th>
-                {ABILITIES.map((a) => (
-                  <th key={a} scope="col">
-                    <abbr title={abilityName(a)}>{ABILITY_SHORT[a]}</abbr>
-                    {a === key && <span className="ledger__crown" title="Key attribute"> ♛<span className="visually-hidden"> (key attribute)</span></span>}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {sources.map((s) => (
-                <tr key={s.id}>
-                  <th scope="row" className="ledger__source">
-                    <span className="ledger__label">{s.id === 'free' ? 'Free boosts' : s.label}</span>
-                    <span className={`ledger__count ${filled(s) === s.slots.length ? 'ledger__count--done' : ''}`}>
-                      {filled(s)}/{s.slots.length} · {describe(s)}
-                    </span>
-                  </th>
-                  {ABILITIES.map((a) => {
-                    const c = cell(s, a);
-                    const flaw = s.flaws.includes(a);
-                    const open = c.on || c.i >= 0;
-                    return (
-                      <td key={a} className={flaw ? 'ledger__flawed' : ''}>
-                        {open ? (
-                          <button
-                            type="button"
-                            className={`ledger__cell ${c.on ? 'ledger__cell--on' : ''}`}
-                            aria-pressed={c.on}
-                            disabled={c.locked}
-                            aria-label={`${c.on ? 'Remove the' : 'Boost'} ${abilityName(a)} ${c.on ? 'boost ' : ''}from ${s.id === 'free' ? 'your free boosts' : s.label}${c.locked ? ' (fixed)' : ''}`}
-                            onClick={() => toggle(s, a)}
-                          >
-                            {c.on ? '+1' : ''}
-                          </button>
-                        ) : (
-                          <span className="ledger__cell ledger__cell--closed" aria-hidden="true" />
-                        )}
-                        {flaw && <span className="ledger__flaw" title="Flaw">−1<span className="visually-hidden"> flaw</span></span>}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <th scope="row" className="ledger__source">Modifier</th>
-                {ABILITIES.map((a) => (
-                  <td key={a} className={`ledger__total ${mods[a] > 0 ? 'ledger__total--up' : mods[a] < 0 ? 'ledger__total--down' : ''}`}>{signed(mods[a])}</td>
-                ))}
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+        <BoostLedger build={build} update={update} data={data} />
         {ancestry && (
           <label className="toggle" style={{ margin: 0 }}>
             <input type="checkbox" checked={build.altAncestryBoosts} onChange={(e) => update({ altAncestryBoosts: e.target.checked, ancestryBoosts: [] })} />
@@ -306,7 +320,7 @@ const actionLabel = (a) => {
   return cap(String(a));
 };
 
-const featMeta = (f) =>
+export const featMeta = (f) =>
   [actionLabel(f.actions), f.traits.filter((t) => t !== 'general' && t !== 'skill').map(cap).join(', ')]
     .filter(Boolean)
     .join(' · ');
@@ -330,7 +344,7 @@ function featSlots(build, data) {
 }
 
 /** A feat as the right-hand page: what it needs, its full text, and the choose button for its slot. */
-function FeatLeaf({ item, build, data, onChoose, onRemove, onClose }) {
+export function FeatLeaf({ item, build, data, onChoose, onRemove, onClose }) {
   const { feat: f, slot } = item;
   const pre = featPrerequisites(f, build, data);
   const chosen = slot.chosen === f.id;
@@ -570,6 +584,34 @@ function RunesPicker({ build, update, data, known }) {
 const SPELL_ADD = { repertoire: 'Add to your repertoire', prepared: 'Prepare it', spellbook: 'Add to your spellbook', familiar: 'Add to your familiar' };
 const SPELL_HAVE = { repertoire: 'In your repertoire', prepared: 'Prepared', spellbook: 'In your spellbook', familiar: 'Your familiar knows it' };
 
+/** A spell as the right-hand page, with the button that adds it to (or removes it from) the caster's spells. */
+export function SpellLeaf({ spell: s, kind, chosen, full, fullNote, add, remove, close }) {
+  return (
+    <BookLeaf
+      eyebrow={`${s.rank === 0 ? 'Cantrip' : `Spell ${s.rank}`} · ${sourceTag(s.source)}${s.rarity !== 'common' ? ` · ${s.rarity}` : ''}`}
+      title={s.name}
+      facts={[
+        ['Cast', <ActionCost key="cast" actions={s.actions} />],
+        ['Range', sentenceCase(s.range)],
+        ['Area', sentenceCase(s.area)],
+        ['Targets', sentenceCase(s.target)],
+        ['Defense', s.defense && titleCase(s.defense)],
+        ['Duration', sentenceCase(s.duration)],
+        ['Traits', s.traits.map(titleCase).join(', ')],
+      ]}
+      description={s.description}
+      onClose={close}
+    >
+      {chosen ? <ChosenActions label={SPELL_HAVE[kind]} onRemove={remove} /> : (
+        <>
+          <button type="button" className="btn btn--blood" disabled={full} onClick={add}>{SPELL_ADD[kind]}</button>
+          {full && <span className="rule-note">{fullNote}</span>}
+        </>
+      )}
+    </BookLeaf>
+  );
+}
+
 export function SpellsStep({ build, update, data }) {
   const casting = spellcastingOf(build, data);
   const { cls } = lookup(build, data);
@@ -627,30 +669,9 @@ export function SpellsStep({ build, update, data }) {
           </>
         )}
         leaf={(i, { chosen, full, add, remove, close }) => {
-          const s = i.option;
           return (
-            <BookLeaf
-              eyebrow={`${s.rank === 0 ? 'Cantrip' : 'Spell 1'} · ${sourceTag(s.source)}${s.rarity !== 'common' ? ` · ${s.rarity}` : ''}`}
-              title={s.name}
-              facts={[
-                ['Cast', <ActionCost key="cast" actions={s.actions} />],
-                ['Range', sentenceCase(s.range)],
-                ['Area', sentenceCase(s.area)],
-                ['Targets', sentenceCase(s.target)],
-                ['Defense', s.defense && titleCase(s.defense)],
-                ['Duration', sentenceCase(s.duration)],
-                ['Traits', s.traits.map(titleCase).join(', ')],
-              ]}
-              description={s.description}
-              onClose={close}
-            >
-              {chosen ? <ChosenActions label={SPELL_HAVE[casting.kind]} onRemove={remove} /> : (
-                <>
-                  <button type="button" className="btn btn--blood" disabled={full} onClick={add}>{SPELL_ADD[casting.kind]}</button>
-                  {full && <span className="rule-note">You've chosen {i.group.max} {i.group.name.toLowerCase()}. Remove one to add this.</span>}
-                </>
-              )}
-            </BookLeaf>
+            <SpellLeaf spell={i.option} kind={casting.kind} chosen={chosen} full={full} add={add} remove={remove} close={close}
+              fullNote={`You've chosen ${i.group.max} ${i.group.name.toLowerCase()}. Remove one to add this.`} />
           );
         }}
         blankIcon="spells"
