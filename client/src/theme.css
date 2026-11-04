@@ -4242,7 +4242,9 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .tracker__row--down { opacity: 0.55; }
 .tracker__row--down .tracker__name { text-decoration: line-through; }
 .tracker__init input { width: 100%; min-height: 44px; border: 1px solid var(--line); background: var(--bg); color: var(--gold); font-family: var(--display); font-size: 20px; font-weight: 700; text-align: center; }
-.tracker__name { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--display); font-size: 16px; font-weight: 700; }
+.tracker__name { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; min-width: 0; padding: 0; border: 0; background: none; color: var(--text); font-family: var(--display); font-size: 16px; font-weight: 700; text-align: left; cursor: pointer; }
+.tracker__name[aria-pressed='true'] { color: var(--gold); }
+@media (hover: hover) { .tracker__name:hover { color: var(--gold); } }
 .tracker__now { padding: 2px 8px; border-radius: 999px; background: var(--blood); color: var(--on-action); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
 .tracker__stat { font-family: var(--display); color: var(--text-soft); white-space: nowrap; }
 .tracker__hp { display: flex; align-items: center; gap: 6px; }
