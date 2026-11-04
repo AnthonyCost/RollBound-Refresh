@@ -5,6 +5,7 @@ export * from './combat.js';
 export * from './gm.js';
 export { mira } from './sample.js';
 export * from './builder.js';
+export * from './leveling.js';
 export * from './data.js';
 export * from './inventory.js';
 export * from './spells.js';

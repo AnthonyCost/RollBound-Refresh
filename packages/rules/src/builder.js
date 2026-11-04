@@ -1,4 +1,4 @@
-// Level 1 character building (Player Core ch. 1). Pure functions over a
+// Character building (Player Core ch. 1), level 1 here and levels 2-20 with leveling.js. Pure functions over a
 // "build" (the player's choices) and the imported rules data (see data.js).
 // Builds refer to rules items by their Foundry ID, which stays the same across
 // imports and renames. Book-specific rules come from the data (corrections/), so
@@ -6,6 +6,10 @@
 
 import { RANKS } from './proficiency.js';
 import { bookAllowed } from './data.js';
+import {
+  levelOf, entryFor, reachedEntries, levelGrants, applyLevelBoosts, skillRanks, applyAdvancement, featureChoice,
+  spellSlots, spellsLearnedAt, maxSpellRank,
+} from './leveling.js';
 
 export const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 export const STARTING_GOLD_CP = 1500;
@@ -59,6 +63,9 @@ export function emptyBuild() {
     armor: null,
     shield: null,
     weapons: [],
+    // Leveling up (leveling.js): the character's level, and one entry per level from 2.
+    level: 1,
+    levels: [],
   };
 }
 
@@ -133,8 +140,8 @@ export function keyAbilityOf(build, data) {
   return options.includes(build.keyAbility) ? build.keyAbility : null;
 }
 
-/** Every boost and flaw, grouped by where it came from, plus the resulting modifiers. */
-export function attributes(build, data) {
+/** Level-1 boosts and flaws, grouped by where they came from, plus the resulting modifiers. */
+function level1Attributes(build, data) {
   const { ancestry, background, cls } = lookup(build, data);
   const sources = [];
 
@@ -182,6 +189,18 @@ export function attributes(build, data) {
   return { sources, mods };
 }
 
+/**
+ * Every boost and flaw, grouped by where it came from, plus the resulting modifiers:
+ * level 1's, then the boosts at 5, 10, 15 and 20 the character has reached (with
+ * partial boosts above +4; see leveling.js).
+ */
+export function attributes(build, data) {
+  const base = level1Attributes(build, data);
+  const leveled = applyLevelBoosts(base.mods, build);
+  const levelSources = leveled.sources.map((s) => ({ ...s, slots: [ABILITIES, ABILITIES, ABILITIES, ABILITIES], flaws: [] }));
+  return { sources: [...base.sources, ...levelSources], mods: leveled.mods, partial: leveled.partial };
+}
+
 // ---------- Feats ----------
 
 function featPool(data, { category, traits = [], level = 1 }) {
@@ -206,6 +225,8 @@ export function classFeatOptions(build, data) {
   // Some classes' 1st-level feat must have a trait, e.g. the summoner's evolution feat.
   return featPool(data, { category: 'class', traits: [cls.slug, ...(cls.classFeatTraits ?? [])] });
 }
+
+const LEVEL_FEAT_FIELDS = [['classFeat', 'class feat'], ['ancestryFeat', 'ancestry feat'], ['skillFeat', 'skill feat'], ['generalFeat', 'general feat']];
 
 /** Named conditions a correction can attach to a granted feat. */
 const GRANT_CONDITIONS = {
@@ -263,6 +284,9 @@ export function featSummary(build, data) {
 
   if (build.ancestryFeat) add(build.ancestryFeat, 'Ancestry feat', 'chosen');
   if (build.classFeat) add(build.classFeat, 'Class feat', 'chosen');
+  for (const [level, entry] of reachedEntries(build)) {
+    for (const [field, label] of LEVEL_FEAT_FIELDS) if (entry[field]) add(entry[field], `Level ${level} ${label}`, 'chosen');
+  }
   for (const g of fixedFeatGrants(build, data)) add(g.id, g.from, 'granted');
   // Versatile Human: a 1st-level general feat (skill feats count). Keyed by the heritage's ID.
   const { heritage } = lookup(build, data);
@@ -319,7 +343,7 @@ export function skillPicks(build, data) {
     if (fixed.has(g.skill)) overlaps += 1;
     fixed.add(g.skill);
   }
-  const int = Math.max(0, attributes(build, data).mods.int);
+  const int = Math.max(0, level1Attributes(build, data).mods.int);
   const fromClass = cls?.additionalSkills ?? 0;
   return { fixed, grants, fromClass, fromInt: int, overlaps, total: fromClass + int + overlaps };
 }
@@ -329,12 +353,17 @@ export function trainedSkills(build, data) {
   return new Set([...fixed, ...build.skills]);
 }
 
+/** Every skill's rank after leveling up (skill increases; see leveling.js), as { ranks, errors }. */
+export function skillRanksOf(build, data) {
+  return skillRanks(trainedSkills(build, data), build);
+}
+
 export function languagePicks(build, data) {
   const { ancestry } = lookup(build, data);
   if (!ancestry) return { granted: [], options: [], total: 0 };
   const granted = ancestry.languages;
   const pool = ancestry.additionalLanguages.options.length ? ancestry.additionalLanguages.options : data.languages;
-  const int = Math.max(0, attributes(build, data).mods.int);
+  const int = Math.max(0, level1Attributes(build, data).mods.int);
   return {
     granted,
     options: pool.filter((l) => !granted.includes(l)),
@@ -354,7 +383,8 @@ const SUBCLASS_WORDS = /^(.+?) (muse|cause|order|instinct|racket|methodology|sty
 export function checkPrerequisite(text, build, data) {
   const t = text.trim().toLowerCase();
   const { ancestry, heritage, cls, deity } = lookup(build, data);
-  const skills = trainedSkills(build, data);
+  const { ranks } = skillRanksOf(build, data);
+  const skills = new Set(Object.keys(ranks));
   const lores = loresOf(build, data).map((l) => l.toLowerCase());
   const feats = featSummary(build, data).owned;
   const options = chosenOptions(build, data).map((c) => c.option.name.toLowerCase());
@@ -368,8 +398,12 @@ export function checkPrerequisite(text, build, data) {
     return parts.some((p) => skills.has(p) || lores.includes(p));
   }
 
-  // Every skill a 1st-level build gets is trained, so higher ranks can't be met yet.
-  if (/^(expert|master|legendary) in /.test(t)) return false;
+  m = /^(expert|master|legendary) in (.+)$/.exec(t);
+  if (m) {
+    const need = RANKS.indexOf(m[1]);
+    const parts = m[2].split(/,\s*(?:or\s+)?|\s+or\s+/).map((p) => p.trim()).filter(Boolean);
+    return parts.some((p) => RANKS.indexOf(ranks[p] ?? 'untrained') >= need);
+  }
   if (t === 'follower of a specific religion' && deity) return true;
 
   m = /^(strength|dexterity|constitution|intelligence|wisdom|charisma) \+(\d)$/.exec(t);
@@ -534,6 +568,8 @@ export function proficienciesOf(build, data) {
     if (feat.slug === 'weapon-proficiency' && (!p.weapons.martial || p.weapons.martial === 'untrained')) p.weapons.martial = 'trained';
   }
   if (spellcastingOf(build, data)) p.spellcasting = 'trained';
+  // Class features above 1st level (Weapon Expertise, Bravery and so on).
+  applyAdvancement(p, cls, build);
   // Some classes (cleric) are trained with their deity's favored weapon.
   if (cls.deityFavoredWeapon && deity) {
     p.favoredWeapons = deity.weapons;
@@ -625,7 +661,118 @@ export function buildProblems(build, data) {
   if (armor && !armorAllowed(armor, build, data)) add('gear', `${armor.name} is only for ${ARMOR_REQUIRES[armor.slug].who}.`);
 
   if (!build.name.trim()) add('review', 'Name your character.');
+  for (const p of levelProblems(build, data)) add('level', p);
   return problems;
+}
+
+// ---------- Leveling up ----------
+
+/** Feats that may be taken more than once say so ("You can select this feat more than once"). */
+const repeatable = (feat) => /more than once/i.test(feat?.description ?? '');
+
+/** The feat options for one kind of slot at a level ('classFeat', 'ancestryFeat', 'skillFeat' or 'generalFeat'). */
+export function levelFeatOptions(build, data, level, field) {
+  const { cls, ancestry, heritage } = lookup(build, data);
+  if (field === 'classFeat') return featPool(data, { category: 'class', traits: [cls?.slug].filter(Boolean), level });
+  if (field === 'skillFeat') return featPool(data, { category: 'skill', level });
+  if (field === 'generalFeat') return [...featPool(data, { category: 'general', level }), ...featPool(data, { category: 'skill', level })];
+  if (field === 'ancestryFeat') {
+    const traits = new Set((ancestry?.traits ?? []).filter((t) => t !== 'humanoid'));
+    for (const t of heritage?.traits ?? []) traits.add(t);
+    for (const a of heritage?.featAncestries ?? []) traits.add(a);
+    return data.feats.filter((f) => f.category === 'ancestry' && f.level <= level && f.traits.some((t) => traits.has(t)));
+  }
+  return [];
+}
+
+/** Spells a caster can learn at a level: common spells of their tradition up to the highest rank they can cast. */
+export function levelSpellOptions(build, data, level) {
+  const casting = spellcastingOf(build, data);
+  if (!casting?.tradition) return [];
+  const known = new Set([...build.spells, ...casting.granted.map((s) => s.id), ...reachedEntries({ ...build, level: level - 1 }).flatMap(([, e]) => e.spells ?? [])]);
+  return data.spells.filter(
+    (s) => (s.kind ?? 'spell') === 'spell' && s.rarity === 'common' && s.traditions.includes(casting.tradition) && s.rank >= 1 && s.rank <= maxSpellRank(level) && !known.has(s.id),
+  );
+}
+
+/**
+ * Everything a level asks the player for, for the level-up screen: the grants (see
+ * levelGrants), how many spells to learn, and the class features that need a choice.
+ */
+export function levelPlan(build, data, level) {
+  const { cls } = lookup(build, data);
+  const grants = levelGrants(cls, level);
+  const casting = spellcastingOf(build, data);
+  return {
+    ...grants,
+    spells: casting && casting.kind !== 'focus' ? spellsLearnedAt(casting, cls.slug, level) : 0,
+    choices: grants.features.map((f) => ({ feature: f, choice: featureChoice(f) })).filter((c) => c.choice),
+  };
+}
+
+/** What's missing or invalid in the levels the character has reached, as messages. */
+function levelProblems(build, data) {
+  const out = [];
+  const { cls } = lookup(build, data);
+  if (!cls) return out;
+  const level = levelOf(build);
+  if ((build.levels?.length ?? 0) < level - 1) out.push(`Choose what you gain at each level up to ${level}.`);
+  const seen = new Map();
+  for (const { feat } of featSummary({ ...build, level: 1 }, data).owned) seen.set(feat.id, 'level 1');
+  for (const [lv, entry] of reachedEntries(build)) {
+    const plan = levelPlan(build, data, lv);
+    const at = { ...build, level: lv };
+    for (const [field, label] of LEVEL_FEAT_FIELDS) {
+      if (!plan[field]) continue;
+      const id = entry[field];
+      if (!id) {
+        out.push(`Level ${lv}: choose a ${label}.`);
+        continue;
+      }
+      const feat = find(data.feats, id);
+      if (!feat || !levelFeatOptions(build, data, lv, field).some((f) => f.id === id)) {
+        out.push(`Level ${lv}: that ${label} isn't one you can take at level ${lv}.`);
+        continue;
+      }
+      if (seen.has(id) && !repeatable(feat)) out.push(`Level ${lv}: you already have ${feat.name}.`);
+      seen.set(id, `level ${lv}`);
+      const pre = featPrerequisites(feat, at, data);
+      if (!pre.met) out.push(`Level ${lv}: ${feat.name} requires ${pre.failed.join('; ')}.`);
+    }
+    if (plan.skillIncrease && !entry.skillIncrease) out.push(`Level ${lv}: choose a skill to increase.`);
+    if (plan.boosts) {
+      const boosts = (entry.boosts ?? []).filter(Boolean);
+      if (boosts.length !== 4) out.push(`Level ${lv}: choose four attribute boosts.`);
+      else if (new Set(boosts).size !== 4) out.push(`Level ${lv}: boost four different attributes.`);
+    }
+    for (const { feature, choice } of plan.choices) {
+      if (!choice.options.includes(entry.choices?.[feature.slug])) out.push(`Level ${lv}: make your ${feature.name} choice.`);
+    }
+    if (plan.spells) {
+      const picked = entry.spells ?? [];
+      const allowed = new Set(levelSpellOptions(build, data, lv).map((s) => s.id));
+      if (picked.length !== plan.spells) out.push(`Level ${lv}: learn ${plan.spells} new spell${plan.spells === 1 ? '' : 's'} (${picked.length} chosen).`);
+      if (picked.some((id) => !allowed.has(id)) || new Set(picked).size !== picked.length) out.push(`Level ${lv}: one of those spells can't be learned at level ${lv}.`);
+    }
+  }
+  for (const e of skillRanksOf(build, data).errors) out.push(e.message);
+  return out;
+}
+
+/** The build at the next level, with an empty entry for it (or unchanged at 20). */
+export function levelUp(build) {
+  const level = levelOf(build);
+  if (level >= 20) return build;
+  const levels = [...(build.levels ?? []).slice(0, level - 1)];
+  while (levels.length < level) levels.push({});
+  return { ...build, level: level + 1, levels };
+}
+
+/** The build a level down, dropping that level's choices (or unchanged at 1). */
+export function levelDown(build) {
+  const level = levelOf(build);
+  if (level <= 1) return build;
+  return { ...build, level: level - 1, levels: (build.levels ?? []).slice(0, level - 2) };
 }
 
 // ---------- Output ----------
@@ -667,8 +814,10 @@ export function buildCharacter(build, data) {
   const { ancestry, heritage, background, cls, deity } = lookup(build, data);
   const { mods } = attributes(build, data);
 
+  const level = levelOf(build);
+  const { ranks } = skillRanksOf(build, data);
   const skills = {};
-  for (const s of trainedSkills(build, data)) skills[s] = 'trained';
+  for (const [s, rank] of Object.entries(ranks)) if (data.skills.includes(s)) skills[s] = rank;
 
   const armor = find(data.armor, build.armor);
   const shield = find(data.shields, build.shield);
@@ -679,7 +828,7 @@ export function buildCharacter(build, data) {
 
   return {
     name: build.name.trim(),
-    level: 1,
+    level,
     // A few heritages change the ancestry's Hit Points (Defensive Automaton: 10).
     ancestry: { slug: ancestry.slug, name: ancestry.name, hp: heritage.ancestryHp ?? ancestry.hp, speed: ancestry.speed, size: ancestry.size, vision: ancestry.vision },
     heritage: heritage.name,
@@ -695,10 +844,16 @@ export function buildCharacter(build, data) {
     // Lores that use another attribute than Int (a thaumaturge's Esoteric Lore uses Cha).
     ...(cls.loreAbilities && { loreAbilities: cls.loreAbilities }),
     languages: [...languagePicks(build, data).granted, ...build.languages],
-    classFeatures: cls.features.map((f) => ({
-      name: f.name,
-      ...(f.choice && { choice: options.find((o) => o.key === f.choice.key)?.option.name }),
-    })),
+    classFeatures: [
+      ...cls.features.map((f) => ({
+        name: f.name,
+        ...(f.choice && { choice: options.find((o) => o.key === f.choice.key)?.option.name }),
+      })),
+      // Features gained by leveling up, with the player's choice where one was made.
+      ...(cls.advancement ?? [])
+        .filter((a) => a.level <= level)
+        .map((a) => ({ name: a.name, level: a.level, ...(entryFor(build, a.level).choices?.[a.slug] && { choice: entryFor(build, a.level).choices[a.slug] }) })),
+    ],
     ...(cls.deity && deity && {
       deity: { name: deity.name, font: fontOf(build, data), sanctification: sanctificationOf(build, data), weapons: deity.weapons },
     }),
@@ -709,10 +864,19 @@ export function buildCharacter(build, data) {
         tradition: casting.tradition,
         // Usually the key attribute; the magus casts with Intelligence instead.
         ability: casting.ability ?? keyAbilityOf(build, data),
-        slots: casting.slots,
+        // Rank 1 slots (kept for screens that only know rank 1), and slots at every rank.
+        slots: spellSlots(casting, cls.slug, level)[1] ?? casting.slots,
+        slotsByRank: spellSlots(casting, cls.slug, level),
+        maxRank: casting.kind === 'focus' ? 0 : maxSpellRank(level),
         ...(casting.prepares && { prepares: casting.prepares }),
         cantrips: [...casting.granted.filter((s) => s.rank === 0), ...build.cantrips.map((s) => find(data.spells, s))].filter(Boolean).map(toSpell),
-        spells: [...casting.granted.filter((s) => s.rank === 1), ...build.spells.map((s) => find(data.spells, s))].filter(Boolean).map(toSpell),
+        spells: [
+          ...casting.granted.filter((s) => s.rank >= 1),
+          ...build.spells.map((s) => find(data.spells, s)),
+          ...reachedEntries(build).flatMap(([, e]) => (e.spells ?? []).map((s) => find(data.spells, s))),
+        ]
+          .filter(Boolean)
+          .map(toSpell),
       },
     }),
     armor: armor && toArmor(armor),
@@ -771,6 +935,15 @@ function choiceRefs(build, data) {
   one('gear', 'armor', 'armor', data.armor);
   one('gear', 'shield', 'shield', data.shields);
   many('gear', 'weapon', 'weapons', data.weapons);
+  (build.levels ?? []).forEach((entry, i) => {
+    const setEntry = (b, patch) => ({ ...b, levels: b.levels.map((e, j) => (j === i ? { ...e, ...patch } : e)) });
+    for (const [field] of LEVEL_FEAT_FIELDS) {
+      if (entry[field]) refs.push({ step: 'level', kind: 'feat', id: entry[field], item: find(data.feats, entry[field]), clear: (b) => setEntry(b, { [field]: null }) });
+    }
+    for (const id of entry.spells ?? []) {
+      refs.push({ step: 'level', kind: 'spell', id, item: find(data.spells, id), clear: (b) => setEntry(b, { spells: (b.levels[i].spells ?? []).filter((x) => x !== id) }) });
+    }
+  });
   return refs;
 }
 

@@ -1,13 +1,28 @@
 // Prepared spells for casters who prepare from the spells they know: a wizard, magus or
 // necromancer from their spellbook (or dirge), a witch from her familiar. Each day they
-// pick spellcasting.prepares.cantrips of their cantrips, and fill each of their
-// prepares.spells rank 1 slots with one of their rank 1 spells (the same spell can fill
-// more than one slot). It's kept apart from the sheet the builder makes, like the
-// inventory. Shape: { cantrips: [spellKey], slots: [spellKey or null] }, where a
-// spell's key is its id (or slug, on sheets from before spells had ids).
+// pick spellcasting.prepares.cantrips of their cantrips, and fill each spell slot with a
+// spell they know of that rank or lower (the same spell can fill more than one slot).
+// It's kept apart from the sheet the builder makes, like the inventory. Shape:
+// { cantrips: [spellKey], slots: [spellKey or null] }: slots run in rank order (all the
+// rank 1 slots, then rank 2, …; see slotRanks), and a spell's key is its id (or slug, on
+// sheets from before spells had ids). A level 1 character's slots are all rank 1.
 
 /** A spell's key in a prepared list. */
 export const spellKey = (s) => s.id ?? s.slug;
+
+/**
+ * The rank of each spell slot, in order: [1, 1, 1, 2, 2, …]. From the sheet's slots by
+ * rank (levels 2-20), or its rank 1 slots for sheets from before leveling.
+ */
+export function slotRanks(character) {
+  const sc = character?.spellcasting;
+  if (!sc) return [];
+  const byRank = sc.slotsByRank && Object.keys(sc.slotsByRank).length ? sc.slotsByRank : { 1: sc.prepares?.spells ?? sc.slots ?? 0 };
+  return Object.entries(byRank)
+    .map(([r, n]) => [Number(r), n])
+    .sort((a, b) => a[0] - b[0])
+    .flatMap(([r, n]) => Array.from({ length: n }, () => r));
+}
 
 /** Whether this character prepares spells from the ones they know. */
 export const preparesFromKnown = (character) => Boolean(character?.spellcasting?.prepares);
@@ -29,9 +44,21 @@ export function preparedSpells(character, prepared) {
   const cantrips = prepared
     ? [...new Set(prepared.cantrips ?? [])].map((k) => cantripsByKey.get(k)).filter(Boolean).slice(0, prepares.cantrips)
     : knownCantrips.slice(0, prepares.cantrips);
-  const slots = Array.from({ length: prepares.spells }, (_, i) =>
-    prepared ? spellsByKey.get(prepared.slots?.[i]) ?? null : known[i] ?? null,
-  );
+  // Each slot holds a spell of its rank or lower; before anything's chosen, fill each
+  // with the first known spell of exactly its rank.
+  const ranks = slotRanks(character);
+  const fits = (s, rank) => s && (s.rank ?? 1) <= rank;
+  const defaults = new Map();
+  const slots = ranks.map((rank, i) => {
+    if (prepared) {
+      const s = spellsByKey.get(prepared.slots?.[i]) ?? null;
+      return fits(s, rank) ? s : null;
+    }
+    const pool = known.filter((s) => (s.rank ?? 1) === rank);
+    const n = defaults.get(rank) ?? 0;
+    defaults.set(rank, n + 1);
+    return pool[n] ?? null;
+  });
   const inUse = new Set([...cantrips, ...slots].filter(Boolean).map(spellKey));
   return {
     cantrips,
@@ -59,7 +86,10 @@ export function preparedProblems(character, prepared) {
   if (prepared.cantrips.length > prepares.cantrips) errors.push(`You can prepare at most ${prepares.cantrips} cantrips.`);
   if (new Set(prepared.cantrips).size !== prepared.cantrips.length) errors.push('A cantrip can only be prepared once.');
   if (prepared.cantrips.some((k) => !cantripKeys.has(k))) errors.push(`You can only prepare cantrips ${character.name} knows.`);
-  if (prepared.slots.length !== prepares.spells) errors.push(`${character.name} has ${prepares.spells} rank 1 slots to fill.`);
-  if (prepared.slots.some((k) => k !== null && !spellKeys.has(k))) errors.push(`You can only prepare rank 1 spells ${character.name} knows.`);
+  const ranks = slotRanks(character);
+  const rankOf = new Map(known.map((s) => [spellKey(s), s.rank ?? 1]));
+  if (prepared.slots.length !== ranks.length) errors.push(`${character.name} has ${ranks.length} spell slots to fill.`);
+  if (prepared.slots.some((k) => k !== null && !spellKeys.has(k))) errors.push(`You can only prepare spells ${character.name} knows.`);
+  if (prepared.slots.some((k, i) => k !== null && rankOf.get(k) > ranks[i])) errors.push('A slot can only hold a spell of its rank or lower.');
   return errors;
 }
