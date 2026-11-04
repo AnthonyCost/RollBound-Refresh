@@ -16,7 +16,7 @@ import {
 import RulesUpdateNotice from '../components/RulesUpdateNotice.jsx';
 import HpTracker from '../components/HpTracker.jsx';
 import ShieldTracker from '../components/ShieldTracker.jsx';
-import { sentenceCase, signed, titleCase } from '../format.js';
+import { sentenceCase, signed, slotsText, titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
 import RankPips from '../components/RankPips.jsx';
 
@@ -581,7 +581,7 @@ function PreparedToday({ casting, prepared, readOnly, pick }) {
         {prepared.cantrips.length ? <ul className="sheet-list">{prepared.cantrips.map((s) => spellLine(s, spellKey(s), pick))}</ul> : <p className="muted italic">No cantrips prepared.</p>}
       </div>
       <div className="sheet-spells">
-        <span className="sheet-panel__label">{casting.slots} first-rank slot{casting.slots === 1 ? '' : 's'}</span>
+        <span className="sheet-panel__label">{slotsText(casting)}</span>
         <ul className="sheet-list">
           {prepared.slots.map((s, i) => (s ? spellLine(s, i, pick) : <li key={i}><span className="muted italic">Empty slot</span></li>))}
         </ul>
@@ -638,10 +638,10 @@ function MagicAndDcs({ character, opts, selected, onSelect }) {
 
       {casting && casting.kind !== 'focus' && !prepared && (
         <>
-          <p className="rule-note" style={{ margin: 0 }}>{casting.slots} first-rank slot{casting.slots === 1 ? '' : 's'} a day.</p>
+          <p className="rule-note" style={{ margin: 0 }}>{slotsText(casting)} a day.</p>
           {[
             ['Cantrips', casting.cantrips],
-            ['1st rank', casting.spells],
+            ['Spells', casting.spells],
           ].map(([label, list]) => (
             <div key={label} className="sheet-spells">
               <span className="sheet-panel__label">{label}</span>

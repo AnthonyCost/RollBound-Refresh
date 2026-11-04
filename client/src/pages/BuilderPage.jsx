@@ -26,6 +26,7 @@ import { useCampaignService } from '../state/campaignService.js';
 import { savePortrait } from '../state/portraits.js';
 import ImagePicker from '../components/ImagePicker.jsx';
 import StartStep from '../builder/StartStep.jsx';
+import { LevelStep } from '../builder/LevelStep.jsx';
 
 const DRAFT_KEY = 'rollbound:draft';
 
@@ -75,6 +76,11 @@ const STEP_INFO = {
     Component: GearStep,
     note: 'You start with 15 gp to spend on armor, a shield, and weapons of 1st level or lower.',
   },
+  level: {
+    title: 'Level',
+    Component: LevelStep,
+    note: 'Start above 1st level by leveling up here. Each level brings feats, a skill increase or attribute boosts, and class features; your Hit Points grow every level.',
+  },
   review: {
     title: 'Review',
     Component: ReviewStep,
@@ -99,6 +105,7 @@ const STEP_TOUCHED = {
   feats: (b) => Boolean(b.ancestryFeat || b.classFeat || Object.values(b.bonusFeats).some(Boolean)),
   spells: (b) => b.cantrips.length > 0 || b.spells.length > 0 || b.runes?.length > 0,
   gear: (b) => Boolean(b.armor || b.shield || b.weapons.length),
+  level: (b) => (b.level ?? 1) > 1,
   review: (b) => Boolean(b.name.trim()),
 };
 

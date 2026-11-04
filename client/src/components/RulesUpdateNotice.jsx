@@ -5,7 +5,7 @@ import { useTable } from '../state/TableContext.jsx';
 import { isOutdated, loadRules, replaceCharacter } from '../state/rulesData.js';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 
-const STEP_TITLES = { ancestry: 'Ancestry', heritage: 'Heritage', background: 'Background', class: 'Class', attributes: 'Attributes', skills: 'Skills', feats: 'Feats', spells: 'Spells', gear: 'Gear', review: 'Review' };
+const STEP_TITLES = { ancestry: 'Ancestry', heritage: 'Heritage', background: 'Background', class: 'Class', attributes: 'Attributes', skills: 'Skills', feats: 'Feats', spells: 'Spells', gear: 'Gear', level: 'Level', review: 'Review' };
 
 /**
  * Checks a saved character against the current rules data after a re-import.

@@ -580,7 +580,7 @@ export function proficienciesOf(build, data) {
 
 // ---------- Validation ----------
 
-export const STEPS = ['ancestry', 'heritage', 'background', 'class', 'attributes', 'skills', 'feats', 'spells', 'gear', 'review'];
+export const STEPS = ['ancestry', 'heritage', 'background', 'class', 'attributes', 'skills', 'feats', 'spells', 'gear', 'level', 'review'];
 
 /** What's still missing or invalid, as [{ step, message }]. Empty means ready to save. */
 export function buildProblems(build, data) {

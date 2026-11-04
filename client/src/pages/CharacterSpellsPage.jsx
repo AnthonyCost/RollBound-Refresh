@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { spellAttack, spellDc, spellKey, preparedValue } from '@rollbound/rules';
+import { spellAttack, spellDc, spellKey, preparedValue, slotRanks } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import { useRules } from '../state/useRules.js';
 import Ornament from '../components/Ornament.jsx';
-import { sentenceCase, signed, titleCase } from '../format.js';
+import { sentenceCase, signed, slotsText, titleCase } from '../format.js';
 import ActionCost from '../components/ActionCost.jsx';
 import Chips from '../builder/Chips.jsx';
 import BookSpread from '../components/BookSpread.jsx';
@@ -26,7 +26,7 @@ const savedLabel = { waiting: 'Saving…', saving: 'Saving…', saved: 'Saved', 
 
 /**
  * Today's preparations for a caster who prepares from their spellbook or familiar:
- * pick their cantrips, and fill each rank 1 slot with a spell they know (the same
+ * pick their cantrips, and fill each slot with a spell they know of its rank or lower (the same
  * spell can fill more than one slot). Read-only views show it without the controls.
  */
 function PreparePanel({ casting, prepared, setPrepared, status, readOnly }) {
@@ -38,12 +38,13 @@ function PreparePanel({ casting, prepared, setPrepared, status, readOnly }) {
   const setSlot = (i, key) => setPrepared({ ...value, slots: value.slots.map((k, j) => (j === i ? key || null : k)) });
   const source = casting.kind === 'familiar' ? 'your familiar' : `your ${casting.listName ?? 'spellbook'}`;
   const names = new Map(casting.cantrips.map((s) => [spellKey(s), s.name]));
+  const ranks = slotRanks({ spellcasting: casting });
 
   return (
     <section className="sheet-panel prepare" aria-labelledby="prepare-title">
       <h2 id="prepare-title" className="sheet-panel__title">Prepared today</h2>
       <p className="rule-note">
-        During your daily preparations, choose {maxCantrips} cantrips and a spell for each rank 1 slot from {source}. A spell can fill more than one slot.
+        During your daily preparations, choose {maxCantrips} cantrips and a spell for each slot from {source}, of the slot's rank or lower. A spell can fill more than one slot.
       </p>
 
       <div className="prepare__group">
@@ -59,14 +60,14 @@ function PreparePanel({ casting, prepared, setPrepared, status, readOnly }) {
       </div>
 
       <div className="prepare__group">
-        <span className="eyebrow">Rank 1 slots</span>
+        <span className="eyebrow">Spell slots</span>
         {value.slots.map((key, i) => (
           <label key={i} className="form-field prepare__slot">
-            <span>Slot {i + 1}</span>
+            <span>Rank {ranks[i]} slot</span>
             <select value={key ?? ''} disabled={readOnly} onChange={(e) => setSlot(i, e.target.value)}>
               <option value="">Empty</option>
-              {casting.spells.map((s) => (
-                <option key={spellKey(s)} value={spellKey(s)}>{s.name}</option>
+              {casting.spells.filter((s) => (s.rank ?? 1) <= ranks[i]).map((s) => (
+                <option key={spellKey(s)} value={spellKey(s)}>{s.name}{(s.rank ?? 1) > 1 ? ` (rank ${s.rank})` : ''}</option>
               ))}
             </select>
           </label>
@@ -132,8 +133,8 @@ export default function CharacterSpellsPage() {
         </div>
         {casting.kind !== 'focus' && (
           <div className="sheet-def">
-            <span className="sheet-def__label">Rank 1 slots</span>
-            <span className="sheet-def__value">{casting.slots}</span>
+            <span className="sheet-def__label">Spell slots</span>
+            <span className="sheet-def__value">{slotsText(casting).replace(/ slots$/, '')}</span>
           </div>
         )}
       </div>

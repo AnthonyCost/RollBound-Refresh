@@ -238,7 +238,7 @@ function fillSpells(w, c) {
   if (!casting || casting.kind === 'focus') return;
   if (FIELDS[`tradition.${casting.tradition}`]) w.check(`tradition.${casting.tradition}`);
   w.check(casting.kind === 'repertoire' ? 'caster.spontaneous' : 'caster.prepared');
-  w.set('spellsPerDay.1', casting.slots);
+  for (const [rank, n] of Object.entries(casting.slotsByRank ?? { 1: casting.slots })) w.set(`spellsPerDay.${rank}`, n);
 
   const atk = spellAttack(c);
   const dc = spellDc(c);

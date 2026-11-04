@@ -829,7 +829,7 @@ function GearLeaf({ i, owned, primary, untrained, replacing, over, onBuy, onSell
   );
 }
 
-const STEP_LABEL = { ancestry: 'Ancestry', background: 'Background', class: 'Class', attributes: 'Attributes', skills: 'Skills', feats: 'Feats', spells: 'Spells', gear: 'Gear' };
+const STEP_LABEL = { ancestry: 'Ancestry', background: 'Background', class: 'Class', attributes: 'Attributes', skills: 'Skills', feats: 'Feats', spells: 'Spells', gear: 'Gear', level: 'Level' };
 
 /**
  * The finished page: the class banner behind the character's name (with the portrait
