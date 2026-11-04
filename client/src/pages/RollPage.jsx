@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { degreeRanges } from '@rollbound/rules';
+import { degreeOfSuccess, degreeRanges, strikeDamage } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import Ornament from '../components/Ornament.jsx';
 import { D20, Die, DieShape, TUMBLE_MS, dieTextAt, useTumble } from '../components/Dice.jsx';
@@ -93,31 +93,32 @@ function rangeText(r) {
   return `${r.min} – ${r.max}`;
 }
 
-function TargetAC({ what = 'AC' }) {
-  const { targetAC, setTargetAC } = useTable();
+/** The target's AC or DC, entered after the roll (ask your GM); empty until then. */
+function TargetDC({ what, value, onChange }) {
   return (
     <div className="panel field">
-      <label htmlFor="target-ac">{what === 'AC' ? 'Target AC' : 'DC'} (ask your GM)</label>
+      <label htmlFor="target-dc">{what === 'AC' ? 'Target’s AC' : 'DC'} (ask your GM)</label>
       <input
-        id="target-ac"
+        id="target-dc"
         type="number"
         inputMode="numeric"
         min="1"
         max="60"
-        value={targetAC}
-        onChange={(e) => setTargetAC(Number(e.target.value) || 0)}
+        value={value ?? ''}
+        onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
       />
     </div>
   );
 }
 
 /**
- * The last Strike: the die, the total against the target's AC, what the result means and
- * the damage, then the four degrees of success, the target's AC and Strike again. Laid out
- * as two columns on the Roll page, or stacked in the Combat tab's roll drawer (onBack closes it).
+ * The last Strike or check: the die and its total, then the target's AC or DC (entered
+ * after the roll), what the result means and the damage, the four degrees of success and
+ * Roll again. Laid out as two columns on the Roll page, or stacked in the Combat tab's roll
+ * drawer (onBack closes it).
  */
 export function RollView({ onBack = null }) {
-  const { lastRoll, strike, rollCheck, rollDamage, actionsLeft } = useTable();
+  const { lastRoll, rollDamage } = useTable();
   if (lastRoll?.kind === 'damage') return <DamageView roll={lastRoll} onAgain={() => rollDamage(lastRoll.label, lastRoll.expr, lastRoll.damageType)} onBack={onBack} />;
 
   if (!lastRoll) {
@@ -125,29 +126,37 @@ export function RollView({ onBack = null }) {
       <div className="narrow">
         <h1 className="title center" style={{ paddingTop: 16 }}>No roll yet</h1>
         <p className="italic muted center">Choose Strike on your turn, and the result shows up here with what it means.</p>
-        <TargetAC />
         {!onBack && <Link to="../combat" className="btn btn--blood">Go to the Combat tab</Link>}
       </div>
     );
   }
+  // Keyed by roll, so each roll starts with an empty DC and its own cast.
+  return <CheckView key={rollId(lastRoll)} roll={lastRoll} onBack={onBack} />;
+}
 
-  const { natural, bonus, total, dc, degree, damageRoll, damageMod, damage, weapon, attackNumber } = lastRoll;
+function CheckView({ roll, onBack }) {
+  const { strike, rollCheck, actionsLeft } = useTable();
+  const [dc, setDc] = useState(null);
+  const { natural, bonus, total, damageRoll, damageMod, weapon, attackNumber } = roll;
+  const [shown, landed] = useTumble(total);
   // A Combat-tab Strike spends an action and counts toward the multiple attack penalty; a check from the sheet doesn't.
-  const check = lastRoll.kind === 'check';
+  const check = roll.kind === 'check';
   const against = weapon ? 'AC' : 'DC';
-  const color = DEGREE_COLOR[degree.name];
-  const gemClass =
-    degree.name === 'critical success' ? '' : degree.name === 'critical failure' ? 'roll__gem--critfail' : 'roll__gem--plain';
-  const id = rollId(lastRoll);
-  const degreeClass = `roll--${degree.name.replace(' ', '-')}`;
+  const degree = dc == null ? null : degreeOfSuccess(total, dc, natural);
+  const damage = degree && weapon ? strikeDamage(damageRoll, damageMod, degree.name) : 0;
+  // A natural 20 or a critical success turns the die gold with a flare, a natural 1 or a critical
+  // failure red with a shake: as the total lands, or when the DC entered makes it a critical.
+  const glow = natural === 20 || degree?.name === 'critical success' ? 'gold' : natural === 1 || degree?.name === 'critical failure' ? 'red' : null;
+  const gemClass = !landed || !glow ? 'roll__gem--plain' : glow === 'red' ? 'roll__gem--critfail roll__gem--nat1' : 'roll__gem--nat20';
   const natNote =
-    natural === 20 ? 'Natural 20: the result moved up one step.' : natural === 1 ? 'Natural 1: the result moved down one step.' : null;
+    natural === 20 ? 'Natural 20: the result moves up one step.' : natural === 1 ? 'Natural 1: the result moves down one step.' : null;
+  const hitDamage = weapon ? Math.max(1, damageRoll + damageMod) : 0;
 
   return (
     <div className={onBack ? 'roll-view roll-view--stacked' : 'split'}>
-      <div className={`split__col roll-cast ${degreeClass}`} key={id}>
+      <div className="split__col roll-cast">
       <p className="eyebrow center" style={{ margin: '4px 0 0' }}>
-        {check ? lastRoll.label : `Strike #${attackNumber} · ${weapon.name}`}
+        {check ? roll.label : `Strike #${attackNumber} · ${weapon.name}`}
       </p>
 
       <section className="roll" aria-live="polite">
@@ -155,58 +164,70 @@ export function RollView({ onBack = null }) {
           <D20 spin={TUMBLE_MS} className="roll__die" />
           <div className="roll__inner" style={dieTextAt(20)}>
             <span className="visually-hidden">Total </span>
-            <RollTotal total={total} />
+            <span className={`roll__total ${landed ? 'roll__total--landed' : ''}`}>
+              <span aria-hidden="true">{shown}</span>
+              <span className="visually-hidden">{total}</span>
+            </span>
           </div>
         </div>
         <div className="roll__math">
-          d20 <strong>{natural}</strong> {bonus.total < 0 ? '−' : '+'} bonus <strong>{Math.abs(bonus.total)}</strong> vs. {against} <strong>{dc}</strong>
+          d20 <strong>{natural}</strong> {bonus.total < 0 ? '−' : '+'} bonus <strong>{Math.abs(bonus.total)}</strong>
+          {dc != null && <> vs. {against} <strong>{dc}</strong></>}
         </div>
       </section>
 
-      <Ornament />
+      <TargetDC what={against} value={dc} onChange={setDc} />
 
-      <section className="center" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <h1 className="verdict" style={{ color }}>{degree.name}</h1>
-        <p className="italic" style={{ margin: 0, color: 'var(--text-soft)' }}>{(weapon ? DEGREE_EXPLAIN : CHECK_EXPLAIN)[degree.name]}</p>
-        {natNote && <p className="italic" style={{ margin: 0, color: 'var(--gold)' }}>{natNote}</p>}
-        {damage > 0 && (
-          <p className="eyebrow roll__damage" style={{ color: 'var(--text)', fontSize: 15, margin: '4px 0 0' }}>
-            <Die sides={weapon.die} size={26} />
-            ({damageRoll} {damageMod < 0 ? '−' : '+'} {Math.abs(damageMod)}){degree.name === 'critical success' ? ' × 2' : ''} ={' '}
-            <span style={{ color: 'var(--blood-text)' }}>{damage} {weapon.damageType}</span>
-          </p>
-        )}
-      </section>
-
-      </div>
-      <div className="split__col">
-      <section className="panel">
-        <h2 className="panel__title">The four degrees of success</h2>
-        <div className="ladder" key={id}>
-          {degreeRanges(dc).map((r) => (
-            <div
-              key={r.name}
-              className={`ladder__row ${r.name === degree.name ? 'ladder__row--active' : ''}`}
-              style={{ color: DEGREE_COLOR[r.name] }}
-            >
-              <span className="ladder__gem" />
-              <span className="ladder__name">{titleCase(r.name)}</span>
-              <span className="ladder__range">{rangeText(r)}</span>
-            </div>
-          ))}
-        </div>
-        <p className="italic muted center" style={{ fontSize: 13, margin: '10px 0 0' }}>
-          A natural 20 raises the result one step; a natural 1 lowers it one step.
+      {degree ? (
+        <section className={`center roll-verdict roll--${degree.name.replace(' ', '-')}`} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <Ornament />
+          <h1 className="verdict" style={{ color: DEGREE_COLOR[degree.name] }}>{degree.name}</h1>
+          <p className="italic" style={{ margin: 0, color: 'var(--text-soft)' }}>{(weapon ? DEGREE_EXPLAIN : CHECK_EXPLAIN)[degree.name]}</p>
+          {natNote && <p className="italic" style={{ margin: 0, color: 'var(--gold)' }}>{natNote}</p>}
+          {damage > 0 && (
+            <p className="eyebrow roll__damage" style={{ color: 'var(--text)', fontSize: 15, margin: '4px 0 0' }}>
+              <Die sides={weapon.die} size={26} />
+              ({damageRoll} {damageMod < 0 ? '−' : '+'} {Math.abs(damageMod)}){degree.name === 'critical success' ? ' × 2' : ''} ={' '}
+              <span style={{ color: 'var(--blood-text)' }}>{damage} {weapon.damageType}</span>
+            </p>
+          )}
+        </section>
+      ) : (
+        <p className="rule-note center roll-damage__crit" style={{ margin: 0 }}>
+          Enter the {against} to see how you did.
+          {weapon && <> On a hit: <strong>{hitDamage} {weapon.damageType}</strong>; on a critical hit, <strong>{hitDamage * 2}</strong>.</>}
         </p>
-      </section>
+      )}
+      </div>
 
-      <TargetAC what={against} />
+      <div className="split__col">
+      {degree && (
+        <section className="panel">
+          <h2 className="panel__title">The four degrees of success</h2>
+          <div className="ladder" key={dc}>
+            {degreeRanges(dc).map((r) => (
+              <div
+                key={r.name}
+                className={`ladder__row ${r.name === degree.name ? 'ladder__row--active' : ''}`}
+                style={{ color: DEGREE_COLOR[r.name] }}
+              >
+                <span className="ladder__gem" />
+                <span className="ladder__name">{titleCase(r.name)}</span>
+                <span className="ladder__range">{rangeText(r)}</span>
+              </div>
+            ))}
+          </div>
+          <p className="italic muted center" style={{ fontSize: 13, margin: '10px 0 0' }}>
+            A natural 20 raises the result one step; a natural 1 lowers it one step.
+          </p>
+        </section>
+      )}
 
       <div className="btn-row">
         {check ? (
-          <button type="button" className="btn btn--grow" onClick={() => rollCheck(lastRoll.label, lastRoll.bonus, lastRoll.weapon)}>Roll again</button>
+          <button type="button" className="btn btn--grow" onClick={() => rollCheck(roll.label, roll.bonus, roll.weapon)}>Roll again</button>
         ) : (
-          <button type="button" className="btn btn--grow" disabled={actionsLeft <= 0} onClick={() => strike(lastRoll.weapon)}>
+          <button type="button" className="btn btn--grow" disabled={actionsLeft <= 0} onClick={() => strike(roll.weapon)}>
             Strike again
           </button>
         )}

@@ -96,7 +96,8 @@ const SOLIDS = Object.fromEntries(Object.entries(CORNERS).map(([sides, raw]) => 
   const rest = matMul(TILT[sides] ?? [[1, 0, 0], [0, 1, 0], [0, 0, 1]], [cross(y, z), y, z]);
   const seen = vs.map((p) => mul(rest, p));
   const xs = seen.map((p) => p[0]), ys = seen.map((p) => p[1]);
-  const scale = 46 / Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) * 2;
+  // A flat square fills its box more than the other shapes, so the d6 rests a little smaller.
+  const scale = ((sides === '6' ? 40 : 46) / Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys))) * 2;
   const offset = [50 - ((Math.max(...xs) + Math.min(...xs)) / 2) * scale, 50 - ((Math.max(...ys) + Math.min(...ys)) / 2) * scale];
   const label = mul(rest, c);
   return [sides, { vs, faces, rest, scale, offset, text: [offset[0] + label[0] * scale, offset[1] + label[1] * scale, TEXT_SIZE[sides]] }];

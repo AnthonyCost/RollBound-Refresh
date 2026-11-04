@@ -81,9 +81,9 @@
 }
 
 /* ---------- The roll: the gem is cast, the die tumbles, the verdict lands ----------
-   One sequence, about 0.9s, replayed for every Strike (the column is keyed per roll).
-   0ms gem drops and turns into place · 520ms the total lands · 560ms verdict opens
-   · 680ms the matching degree lights up on the ladder. */
+   Replayed for every roll (the view is keyed per roll): 0ms the gem drops into place ·
+   520ms the total lands (a natural 20 flares gold, a natural 1 shakes red). The verdict
+   opens, and its degree lights up on the ladder, once the DC is entered. */
 
 :root { --ease-land: cubic-bezier(0.16, 1, 0.3, 1); }
 
@@ -97,10 +97,12 @@
 .roll__total--landed { animation: total-land 300ms var(--ease-land); }
 @keyframes total-land { from { transform: scale(1.22); text-shadow: 0 0 22px var(--gold); } }
 
-/* The landing glow: gold for a crit, blood for a critical failure, a quiet settle otherwise. */
-.roll-cast.roll--critical-success .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards, gem-flare 900ms ease-out 480ms; }
+/* The glow, added as the total lands or when the DC makes it a critical: gold for a natural 20 or a
+   critical success, a red shake for a natural 1 or a critical failure. gem-cast stays in the list so
+   it isn't replayed when the glow comes off again. */
+.roll-cast .roll__gem--nat20 { animation: gem-cast 520ms var(--ease-land) backwards, gem-flare 900ms ease-out; }
 @keyframes gem-flare { 25% { filter: drop-shadow(0 0 28px var(--gold-flare)) drop-shadow(0 0 10px var(--gold-flare-dim)) brightness(1.25); } }
-.roll-cast.roll--critical-failure .roll__gem { animation: gem-cast 520ms var(--ease-land) backwards, gem-crack 380ms ease-out 500ms; }
+.roll-cast .roll__gem--nat1 { animation: gem-cast 520ms var(--ease-land) backwards, gem-crack 380ms ease-out; }
 @keyframes gem-crack {
   20% { translate: -5px 0; filter: drop-shadow(0 0 24px var(--deg-critfail)); }
   45% { translate: 4px 0; }
@@ -116,13 +118,13 @@
 .die--landed .die__shape { animation: total-land 300ms var(--ease-land); }
 /* After a damage total lands: its type, the math and the critical-hit amount, so none spoils the number. */
 .roll-cast .roll-damage .eyebrow, .roll-cast .roll-damage .roll__math, .roll-cast .roll-damage__crit { animation: fade-in var(--motion) ease-out var(--damage-land, 520ms) backwards; }
-.roll-cast .verdict { animation: verdict-open 420ms var(--ease-land) 560ms backwards; }
+.roll-cast .verdict { animation: verdict-open 420ms var(--ease-land) backwards; }
 @keyframes verdict-open { from { opacity: 0; clip-path: inset(0 50%); letter-spacing: 9px; } }
-.roll-cast .verdict ~ * { animation: rise-in var(--motion-slow) var(--ease-out) 700ms backwards; }
+.roll-cast .verdict ~ * { animation: rise-in var(--motion-slow) var(--ease-out) 140ms backwards; }
 
-.ladder .ladder__row--active { animation: rung-light 520ms var(--ease-out) 680ms backwards; }
+.ladder .ladder__row--active { animation: rung-light 520ms var(--ease-out) 120ms backwards; }
 @keyframes rung-light { from { border-color: transparent; background-color: transparent; } }
-.ladder .ladder__row--active .ladder__gem { animation: rung-gem 420ms var(--ease-land) 760ms backwards; }
+.ladder .ladder__row--active .ladder__gem { animation: rung-gem 420ms var(--ease-land) 200ms backwards; }
 @keyframes rung-gem { from { transform: rotate(-135deg) scale(0.2); } }
 
 /* ---------- At the table: spending actions and changing conditions ---------- */
@@ -167,8 +169,8 @@ details[open] > :not(summary) { animation: unfold var(--motion) var(--ease-out) 
   }
   .btn:not(:disabled):active, .chip:active, .tile:active { transform: none; }
   .tile:hover, .char-card:hover, .camp-card:hover { transform: none !important; }
-  /* The roll still says what kind of result it was: a crit keeps its gold glow, a fumble its red. */
-  .roll-cast.roll--critical-success .roll__gem { filter: drop-shadow(0 0 22px var(--gold-flare)); }
+  /* The roll still says what kind of result it was: a natural 20 keeps its gold glow, a natural 1 its red. */
+  .roll-cast .roll__gem--nat20 { filter: drop-shadow(0 0 22px var(--gold-flare)); }
   /* Still show that a hit landed, just without the shaking. */
   .orb--hit-0, .orb--hit-1 { box-shadow: 0 0 30px 4px var(--blood-flash), inset 0 0 0 3px var(--blood-text), inset 0 0 0 5px var(--bg); }
 }

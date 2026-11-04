@@ -8,25 +8,30 @@ const rollOf = (sides) => ({ value: Math.ceil(Math.random() * sides), id: Math.r
 function DieBox({ sides }) {
   const [roll, setRoll] = useState(() => rollOf(sides));
   return (
-    <button type="button" className="panel lab-die" onClick={() => setRoll(rollOf(sides))} aria-label={`Roll a d${sides}`}>
+    <button type="button" className="panel lab-die roll-cast" onClick={() => setRoll(rollOf(sides))} aria-label={`Roll a d${sides}`}>
       <span className="eyebrow">d{sides}</span>
       {sides === 100 ? (
         <Die key={roll.id} sides={100} value={roll.value} size={92} tumble={TUMBLE_MS} />
       ) : (
-        // A natural 20 or 1 on the d20 takes the crit and fumble colours, as in the roller.
-        <span key={roll.id} className={`roll__gem roll-cast ${sides === 20 && roll.value === 20 ? '' : sides === 20 && roll.value === 1 ? 'roll__gem--critfail' : 'roll__gem--plain'}`}>
-          <DieShape sides={sides} className="roll__die" spin={TUMBLE_MS} />
-          <span className="roll__inner" style={dieTextAt(sides)}><Total value={roll.value} sides={sides} /></span>
-        </span>
+        <Gem key={roll.id} sides={sides} value={roll.value} />
       )}
       <span className="visually-hidden" aria-live="polite">Rolled {roll.value}</span>
     </button>
   );
 }
 
-function Total({ value, sides }) {
+/** A die as the roller shows it; on the d20 a natural 20 or 1 flares gold or shakes red as it lands. */
+function Gem({ sides, value }) {
   const [shown, landed] = useTumble(value, sides);
-  return <span className={`roll__total ${landed ? 'roll__total--landed' : ''}`} aria-hidden="true">{shown}</span>;
+  const nat = sides === 20 && landed ? { 20: 'roll__gem--nat20', 1: 'roll__gem--critfail roll__gem--nat1' }[value] : null;
+  return (
+    <span className={`roll__gem ${nat ?? 'roll__gem--plain'}`}>
+      <DieShape sides={sides} className="roll__die" spin={TUMBLE_MS} />
+      <span className="roll__inner" style={dieTextAt(sides)}>
+        <span className={`roll__total ${landed ? 'roll__total--landed' : ''}`} aria-hidden="true">{shown}</span>
+      </span>
+    </span>
+  );
 }
 
 /** Every die, each in a box you click to roll, to see how they look and land in the current theme. */

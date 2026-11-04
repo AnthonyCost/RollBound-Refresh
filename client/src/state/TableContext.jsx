@@ -2,8 +2,6 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import {
   maxHp,
   strikeBonus,
-  degreeOfSuccess,
-  strikeDamage,
   damageModifier,
   rollDie,
   rollDice,
@@ -67,7 +65,6 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
   const [conditions, setConditions] = useState(STARTING_CONDITIONS);
   const [shieldRaised, setShieldRaised] = useState(false);
   const [used, setUsed] = useState([]);
-  const [targetAC, setTargetAC] = useState(15);
   const [lastRoll, setLastRoll] = useState(null);
 
   useEffect(() => {
@@ -241,50 +238,38 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       const bonus = strikeBonus(character, weapon, { attacksSoFar: strikesSoFar, conditions });
       const natural = rollDie(20);
       const total = natural + bonus.total;
-      const degree = degreeOfSuccess(total, targetAC, natural);
-      const damageRoll = rollDie(weapon.die);
-      const damageMod = damageModifier(weapon, character.abilities);
-      const damage = strikeDamage(damageRoll, damageMod, degree.name);
-
+      // The target's AC, the result and the damage it deals are settled after the roll (RollPage).
       const roll = {
         weapon,
         natural,
         bonus,
         total,
-        dc: targetAC,
-        degree,
-        damageRoll,
-        damageMod,
-        damage,
+        damageRoll: rollDie(weapon.die),
+        damageMod: damageModifier(weapon, character.abilities),
         attackNumber: strikesSoFar + 1,
       };
       setLastRoll(roll);
-      setUsed((u) => [...u, { id: 'strike', name: `Strike (${weapon.name})`, detail: `${total} vs AC ${targetAC}: ${degree.name}`, cost: 1 }]);
+      setUsed((u) => [...u, { id: 'strike', name: `Strike (${weapon.name})`, detail: `${total} to hit`, cost: 1 }]);
       return roll;
     },
-    [character, conditions, strikesSoFar, targetAC, actionsLeft],
+    [character, conditions, strikesSoFar, actionsLeft],
   );
 
   /**
    * Rolls a check from the sheet (d20 + a modifier: a skill, a save, Perception, a spell
-   * attack, or a weapon's attack, which also rolls its damage) against the target's AC or DC.
+   * attack, or a weapon's attack, which also rolls its damage); the DC is entered after it.
    * It spends no actions; the Combat tab's Strike does that. label names it, stat is its { total, parts }.
    */
   const rollCheck = useCallback(
     (label, stat, weapon = null) => {
       const natural = rollDie(20);
       const total = natural + stat.total;
-      const degree = degreeOfSuccess(total, targetAC, natural);
-      const roll = { kind: 'check', label, natural, bonus: stat, total, dc: targetAC, degree };
-      if (weapon) {
-        const damageRoll = rollDie(weapon.die);
-        const damageMod = damageModifier(weapon, character.abilities);
-        Object.assign(roll, { weapon, damageRoll, damageMod, damage: strikeDamage(damageRoll, damageMod, degree.name) });
-      }
+      const roll = { kind: 'check', label, natural, bonus: stat, total };
+      if (weapon) Object.assign(roll, { weapon, damageRoll: rollDie(weapon.die), damageMod: damageModifier(weapon, character.abilities) });
       setLastRoll(roll);
       return roll;
     },
-    [character, targetAC],
+    [character],
   );
 
   /** Rolls damage ("1d8+4", "2d6"), for a weapon or a spell's text: { kind: 'damage', dice, mod, total }. */
@@ -354,8 +339,6 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       used,
       actionsLeft,
       strikesSoFar,
-      targetAC,
-      setTargetAC,
       lastRoll,
       rollCheck,
       rollDamage,
@@ -365,7 +348,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       cycleCondition,
       resetEncounter,
     }),
-    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, rollCheck, rollDamage, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, lastRoll, rollCheck, rollDamage, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;
