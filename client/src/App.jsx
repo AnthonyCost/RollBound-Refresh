@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate, Link, Outlet, useParams } from 'react-router-dom';
 import NavBar from './components/NavBar.jsx';
 import SheetPage from './pages/SheetPage.jsx';
-import TurnPage from './pages/TurnPage.jsx';
+import CombatPage from './pages/CombatPage.jsx';
+import EncounterRunPage from './pages/EncounterRunPage.jsx';
 import RollPage from './pages/RollPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
@@ -66,11 +67,6 @@ function Play() {
 }
 
 /** Turn, Roll and GM screens: only during an active encounter, otherwise the sheet. */
-function EncounterOnly({ children }) {
-  const { encounterActive } = useTable();
-  return encounterActive ? children : <Navigate to="../sheet" replace />;
-}
-
 function PlayShell() {
   const { round, loading, notFound, encounterActive, character } = useTable();
 
@@ -131,6 +127,7 @@ export default function App() {
           <Route path="encounters" element={<EncounterListPage />} />
           <Route path="encounters/new" element={<EncounterEditor />} />
           <Route path="encounters/:encounterId" element={<EncounterEditor key="edit" />} />
+          <Route path="encounters/:encounterId/run" element={<EncounterRunPage />} />
           <Route path="settings" element={<CampaignSettingsPage />} />
         </Route>
         {/* The old edit page is the Settings tab now. */}
@@ -151,8 +148,9 @@ export default function App() {
           <Route path="spells" element={<CharacterSpellsPage />} />
           <Route path="inventory" element={<InventoryPage />} />
           <Route path="lore" element={<LorePage />} />
-          <Route path="turn" element={<EncounterOnly><TurnPage /></EncounterOnly>} />
-          <Route path="roll" element={<EncounterOnly><RollPage /></EncounterOnly>} />
+          <Route path="combat" element={<CombatPage />} />
+          <Route path="turn" element={<Navigate to="../combat" replace />} />
+          <Route path="roll" element={<RollPage />} />
           <Route path="settings" element={<CharacterSettingsPage />} />
         </Route>
       </Route>

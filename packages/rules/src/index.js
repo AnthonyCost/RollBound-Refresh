@@ -12,3 +12,4 @@ export * from './spells.js';
 export { SAMPLE_BUILDS, DEMO_ROSTER } from './sampleBuilds.js';
 export { PREGENS } from './pregens.js';
 export * from './adventurePaths.js';
+export * from './encounter.js';

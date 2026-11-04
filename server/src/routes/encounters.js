@@ -5,7 +5,7 @@ import { pool } from '../db.js';
 // /api/campaigns/:id/encounters, after requireUser.
 export const encounters = Router({ mergeParams: true });
 
-export const ENCOUNTER_LIMITS = { name: 80, notes: 5000, creatures: 40, count: 20, creatureName: 80 };
+export const ENCOUNTER_LIMITS = { name: 80, notes: 5000, creatures: 40, count: 20, creatureName: 80, combatants: 200 };
 const isId = (s) => /^\d{1,9}$/.test(String(s));
 
 const toJson = (row) => ({
@@ -15,6 +15,7 @@ const toJson = (row) => ({
   partySize: row.party_size,
   partyLevel: row.party_level,
   creatures: row.creatures,
+  state: row.state,
   createdAt: row.created_at,
   updatedAt: row.updated_at,
 });
@@ -44,6 +45,39 @@ function validEncounter(body) {
     return { key: c?.key, creatureId: c?.creatureId ?? null, name: cname, level: c?.level, count: c?.count };
   });
   return errors.length ? { errors: errors.slice(0, 5) } : { name, notes, partySize: size, partyLevel: level, creatures };
+}
+
+const isInt = (n, min, max) => Number.isInteger(n) && n >= min && n <= max;
+const intOrNull = (n, min, max) => n === null || n === undefined || isInt(n, min, max);
+
+/** Checks a running encounter's state from the GM's tracker (see rules encounter.js). Returns { errors } or the clean state. */
+function validState(body) {
+  const L = ENCOUNTER_LIMITS;
+  const list = body?.combatants;
+  if (!isInt(body?.round, 1, 9999)) return { errors: ['Round must be 1 or more.'] };
+  if (!Array.isArray(list) || !list.length || list.length > L.combatants) return { errors: [`An encounter needs 1 to ${L.combatants} combatants.`] };
+  const errors = [];
+  const combatants = list.map((c, i) => {
+    const at = `Combatant ${i + 1}`;
+    const name = typeof c?.name === 'string' ? c.name.trim() : '';
+    if (typeof c?.key !== 'string' || !c.key || c.key.length > 60) errors.push(`${at} needs a key.`);
+    if (!['creature', 'pc'].includes(c?.kind)) errors.push(`${at}: kind must be creature or pc.`);
+    if (!name || name.length > L.creatureName) errors.push(`${at}: name must be 1–${L.creatureName} characters.`);
+    if (!intOrNull(c?.initiative, -50, 200)) errors.push(`${at}: initiative must be a whole number.`);
+    if (!intOrNull(c?.perception, -20, 100)) errors.push(`${at}: Perception must be a whole number.`);
+    if (!intOrNull(c?.hp, -9999, 99999) || !intOrNull(c?.maxHp, 0, 99999) || !intOrNull(c?.ac, 0, 100)) errors.push(`${at}: HP and AC must be whole numbers.`);
+    if (c?.characterId != null && !isId(c.characterId)) errors.push(`${at}: unknown character.`);
+    if (c?.creatureId != null && (typeof c.creatureId !== 'string' || c.creatureId.length > 64)) errors.push(`${at}: unknown bestiary creature.`);
+    return {
+      key: c?.key, kind: c?.kind, name,
+      initiative: c?.initiative ?? null, perception: c?.perception ?? 0, hp: c?.hp ?? null, maxHp: c?.maxHp ?? null, ac: c?.ac ?? null,
+      defeated: Boolean(c?.defeated), characterId: c?.characterId ?? null, creatureId: c?.creatureId ?? null,
+    };
+  });
+  if (new Set(combatants.map((c) => c.key)).size !== combatants.length) errors.push('Each combatant needs its own key.');
+  const current = body?.current ?? null;
+  if (current !== null && !combatants.some((c) => c.key === current)) errors.push("Whose turn it is must be one of the combatants.");
+  return errors.length ? { errors: errors.slice(0, 5) } : { state: { round: body.round, current, combatants } };
 }
 
 encounters.param('encounterId', (req, res, next, value) => (isId(value) ? next() : res.status(404).json({ errors: ['Encounter not found.'] })));
@@ -85,6 +119,25 @@ encounters.put('/:encounterId', async (req, res) => {
      WHERE id = $6 AND campaign_id = $7 RETURNING *`,
     [e.name, e.notes, e.partySize, e.partyLevel, JSON.stringify(e.creatures), req.params.encounterId, req.params.id],
   );
+  if (!rows.length) return res.status(404).json({ errors: ['Encounter not found.'] });
+  res.json(toJson(rows[0]));
+});
+
+// Run the encounter: save the tracker's live state (starting it, or any change after).
+encounters.put('/:encounterId/state', async (req, res) => {
+  const v = validState(req.body);
+  if (v.errors) return res.status(400).json({ errors: v.errors });
+  const { rows } = await pool.query(
+    'UPDATE encounters SET state = $1 WHERE id = $2 AND campaign_id = $3 RETURNING *',
+    [JSON.stringify(v.state), req.params.encounterId, req.params.id],
+  );
+  if (!rows.length) return res.status(404).json({ errors: ['Encounter not found.'] });
+  res.json(toJson(rows[0]));
+});
+
+// End the encounter: it stays saved, ready to run again.
+encounters.delete('/:encounterId/state', async (req, res) => {
+  const { rows } = await pool.query('UPDATE encounters SET state = NULL WHERE id = $1 AND campaign_id = $2 RETURNING *', [req.params.encounterId, req.params.id]);
   if (!rows.length) return res.status(404).json({ errors: ['Encounter not found.'] });
   res.json(toJson(rows[0]));
 });

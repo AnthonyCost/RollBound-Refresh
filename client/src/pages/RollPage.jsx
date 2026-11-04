@@ -91,7 +91,7 @@ function TargetAC() {
 }
 
 export default function RollPage() {
-  const { lastRoll, strike, character, actionsLeft } = useTable();
+  const { lastRoll, strike, actionsLeft } = useTable();
 
   if (!lastRoll) {
     return (
@@ -171,7 +171,7 @@ export default function RollPage() {
       <TargetAC />
 
       <div className="btn-row">
-        <button type="button" className="btn btn--grow" disabled={actionsLeft <= 0} onClick={() => strike(character.weapons[0])}>
+        <button type="button" className="btn btn--grow" disabled={actionsLeft <= 0} onClick={() => strike(lastRoll.weapon)}>
           Strike again
         </button>
         <Link to="../turn" className="btn btn--blood btn--grow">Back to turn</Link>

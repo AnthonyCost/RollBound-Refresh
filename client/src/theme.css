@@ -4222,3 +4222,45 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .details__tool { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-faint); }
 .details__tool .shield-tracker__row { flex-wrap: wrap; }
 .details__tool .shield-tracker__row .btn { flex: 1 1 120px; }
+
+/* ---------- GM: initiative tracker (EncounterRunPage) ---------- */
+
+.tracker { display: flex; flex-direction: column; gap: 14px; }
+.tracker__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.tracker__head .title { margin: 2px 0 0; }
+.tracker__order { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.tracker__row {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--line-soft);
+  background: var(--panel);
+}
+.tracker__row[aria-current='true'] { border-color: var(--blood-text); background: var(--panel-hot); box-shadow: 0 0 12px var(--blood-glow); }
+.tracker__row--down { opacity: 0.55; }
+.tracker__row--down .tracker__name { text-decoration: line-through; }
+.tracker__init input { width: 100%; min-height: 44px; border: 1px solid var(--line); background: var(--bg); color: var(--gold); font-family: var(--display); font-size: 20px; font-weight: 700; text-align: center; }
+.tracker__name { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-family: var(--display); font-size: 16px; font-weight: 700; }
+.tracker__now { padding: 2px 8px; border-radius: 999px; background: var(--blood); color: var(--on-action); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+.tracker__stat { font-family: var(--display); color: var(--text-soft); white-space: nowrap; }
+.tracker__hp { display: flex; align-items: center; gap: 6px; }
+.tracker__hp-now { min-width: 64px; font-family: var(--display); font-size: 17px; font-weight: 700; text-align: right; }
+.tracker__hp-now small { font-size: 12px; color: var(--text-muted); }
+.tracker__hp input { width: 64px; min-height: 40px; border: 1px solid var(--line); background: var(--bg); color: var(--text); text-align: center; }
+.tracker__down { margin: 0; }
+@media (max-width: 760px) {
+  .tracker__row { grid-template-columns: 56px minmax(0, 1fr) auto; }
+  .tracker__hp, .tracker__down { grid-column: 1 / -1; justify-self: start; }
+}
+
+/* A player's view of the running encounter, on the Combat tab. */
+.encounter-banner { display: flex; flex-direction: column; gap: 8px; }
+.encounter-banner .title { margin: 0; }
+.encounter-banner--mine { border-color: var(--blood-text); background: var(--panel-hot); box-shadow: 0 0 14px var(--blood-glow); }
+.encounter-banner__order { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 0; padding: 0; list-style: none; }
+.encounter-banner__order li { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px; border: 1px solid var(--line-soft); background: var(--panel-deep); font-size: 14px; }
+.encounter-banner__order li[aria-current='true'] { border-color: var(--blood-text); color: var(--text-bright); }
+.encounter-banner__down { opacity: 0.5; text-decoration: line-through; }
+.encounter-banner__init { min-width: 26px; padding: 1px 4px; background: var(--panel-raised); font-family: var(--display); font-weight: 700; color: var(--gold); text-align: center; }

@@ -71,9 +71,13 @@ export const api = {
   createEncounter: (campaignId, e) => post(`/campaigns/${campaignId}/encounters`, e),
   updateEncounter: (campaignId, id, e) => request(`/campaigns/${campaignId}/encounters/${id}`, { method: 'PUT', body: JSON.stringify(e) }),
   deleteEncounter: (campaignId, id) => request(`/campaigns/${campaignId}/encounters/${id}`, { method: 'DELETE' }),
+  saveEncounterState: (campaignId, id, state) => request(`/campaigns/${campaignId}/encounters/${id}/state`, { method: 'PUT', body: JSON.stringify(state) }),
+  endEncounter: (campaignId, id) => request(`/campaigns/${campaignId}/encounters/${id}/state`, { method: 'DELETE' }),
   deleteCampaign: (campaignId) => request(`/campaigns/${campaignId}`, { method: 'DELETE' }),
   removeFromCampaign: (campaignId, characterId) => post(`/campaigns/${campaignId}/remove`, { characterId }),
   getCampaignCharacter: (campaignId, characterId) => request(`/campaigns/${campaignId}/characters/${characterId}`),
+  // Revalidates each time, so an unchanged encounter comes back as a 304 from the browser cache.
+  getRunningEncounter: (campaignId) => request(`/campaigns/${campaignId}/encounter`, { cache: 'no-cache' }),
 
   /**
    * Uploads an image the way S3 presigned uploads work: get a signed URL from the

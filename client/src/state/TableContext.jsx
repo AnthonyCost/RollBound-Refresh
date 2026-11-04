@@ -26,13 +26,8 @@ const TableContext = createContext(null);
 // show off condition math; with the Turn tab hidden there'd be no way to clear it.)
 const STARTING_CONDITIONS = [];
 
-/**
- * Whether the character is in an active encounter. The Turn, Roll and GM screens
- * only show during one. Always false until the campaign manager's encounter
- * tracker exists; then it should be true when this character's campaign has an
- * encounter with an active status that includes them.
- */
-const ENCOUNTER_ACTIVE = false;
+/** How often a character's sheet checks for the campaign's running encounter (ms). */
+const ENCOUNTER_CHECK = 3000;
 
 /** How long to wait after the last change before saving it. */
 const HP_SAVE_DELAY = 500;
@@ -73,6 +68,8 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
   const [used, setUsed] = useState([]);
   const [targetAC, setTargetAC] = useState(15);
   const [lastRoll, setLastRoll] = useState(null);
+  // The campaign's running encounter, as players see it (no creature stats), or null.
+  const [encounter, setEncounter] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -185,22 +182,57 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
   );
   const hpError = hpStatus === 'error' ? "Couldn't save hit points. Check your connection and try again." : null;
 
+  // While this is your own character in a campaign, check every few seconds (and as soon as
+  // the page is shown again) for the GM's running encounter. Paused while the page is hidden;
+  // an unchanged answer keeps the same object, so nothing re-renders.
+  const campaignId = campaign?.id ?? null;
+  useEffect(() => {
+    setEncounter(null);
+    if (readOnly || !campaignId) return undefined;
+    let cancelled = false;
+    const check = () => {
+      if (document.hidden) return;
+      api.getRunningEncounter(campaignId).then(
+        ({ encounter: next }) => !cancelled && setEncounter((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next)),
+        () => {}, // Offline for a moment: keep what we had and try again next time.
+      );
+    };
+    check();
+    const timer = setInterval(check, ENCOUNTER_CHECK);
+    document.addEventListener('visibilitychange', check);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', check);
+    };
+  }, [readOnly, campaignId]);
+  const me = encounter?.combatants.find((c) => String(c.characterId) === String(characterId)) ?? null;
+  const encounterActive = Boolean(me) && !readOnly;
+  const myTurn = encounterActive && encounter.current === me.key;
+  // A new turn of yours: three fresh actions, and a raised shield comes down.
+  useEffect(() => {
+    if (!myTurn) return;
+    setUsed([]);
+    setShieldRaised(false);
+  }, [myTurn, encounter?.round]);
+
   const strikesSoFar = used.filter((a) => a.id === 'strike').length;
-  const actionsLeft = 3 - used.length;
+  // Each action spent this turn has a cost: 1, 2 or 3 actions (reactions and free actions cost none).
+  const actionsLeft = 3 - used.reduce((n, a) => n + (a.cost ?? 1), 0);
 
   const takeAction = useCallback(
-    (action, detail = '') => {
-      if (used.length >= 3) return false;
-      setUsed((u) => [...u, { id: action.id, name: action.name, detail }]);
+    (action, detail = '', cost = 1) => {
+      if (cost > actionsLeft) return false;
+      setUsed((u) => [...u, { id: action.id, name: action.name, detail, cost, reaction: action.cost === 'reaction' }]);
       if (action.id === 'shield') setShieldRaised(true);
       return true;
     },
-    [used.length],
+    [actionsLeft],
   );
 
   const strike = useCallback(
     (weapon) => {
-      if (used.length >= 3) return null;
+      if (actionsLeft < 1) return null;
       const bonus = strikeBonus(character, weapon, { attacksSoFar: strikesSoFar, conditions });
       const natural = rollDie(20);
       const total = natural + bonus.total;
@@ -222,10 +254,10 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
         attackNumber: strikesSoFar + 1,
       };
       setLastRoll(roll);
-      setUsed((u) => [...u, { id: 'strike', name: 'Strike', detail: `${total} vs AC ${targetAC}: ${degree.name}` }]);
+      setUsed((u) => [...u, { id: 'strike', name: `Strike (${weapon.name})`, detail: `${total} vs AC ${targetAC}: ${degree.name}`, cost: 1 }]);
       return roll;
     },
-    [character, conditions, strikesSoFar, targetAC, used.length],
+    [character, conditions, strikesSoFar, targetAC, actionsLeft],
   );
 
   const endTurn = useCallback(() => {
@@ -260,7 +292,9 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       characterId,
       setCharacter,
       readOnly,
-      encounterActive: ENCOUNTER_ACTIVE && !readOnly,
+      encounterActive,
+      encounter: encounterActive ? encounter : null,
+      myTurn,
       portraitUrl,
       setPortraitUrl,
       campaign,
@@ -285,7 +319,8 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       shieldBlock,
       loading: loading || !gearReady,
       notFound,
-      round,
+      // In a running encounter, the GM's round; otherwise the practice round on the Combat tab.
+      round: encounterActive ? encounter.round : round,
       conditions,
       shieldRaised,
       used,
@@ -300,7 +335,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       cycleCondition,
       resetEncounter,
     }),
-    [character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, targetAC, lastRoll, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

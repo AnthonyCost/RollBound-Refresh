@@ -312,6 +312,31 @@ campaigns.get('/:id/characters/:characterId', async (req, res) => {
   res.json({ ...sheetJson(rows[0]), mine: rows[0].owner_id === req.user.id });
 });
 
+// The campaign's running encounter, for its players' Combat tabs (they check every few
+// seconds; Express's ETag turns an unchanged one into a 304). Players see the order, the
+// round and whose turn it is, never a creature's HP, AC or Perception: those stay the GM's.
+campaigns.get('/:id/encounter', async (req, res) => {
+  if (!isId(req.params.id)) return res.status(404).json({ errors: ['Campaign not found.'] });
+  const { rows: member } = await pool.query(
+    `SELECT 1 FROM campaigns c WHERE c.id = $1
+       AND (c.gm_user_id = $2 OR EXISTS (SELECT 1 FROM characters ch WHERE ch.campaign_id = c.id AND ch.owner_id = $2))`,
+    [req.params.id, req.user.id],
+  );
+  if (!member.length) return res.status(404).json({ errors: ['Campaign not found.'] });
+  const { rows } = await pool.query('SELECT id, name, state FROM encounters WHERE campaign_id = $1 AND state IS NOT NULL ORDER BY id DESC LIMIT 1', [req.params.id]);
+  const e = rows[0];
+  if (!e) return res.json({ encounter: null });
+  res.json({
+    encounter: {
+      id: e.id,
+      name: e.name,
+      round: e.state.round,
+      current: e.state.current,
+      combatants: (e.state.combatants ?? []).map((c) => ({ key: c.key, kind: c.kind, name: c.name, initiative: c.initiative, defeated: c.defeated, characterId: c.characterId ?? null })),
+    },
+  });
+});
+
 // A player removes their own character from a campaign.
 campaigns.post('/:id/leave', async (req, res) => {
   const characterId = String(req.body?.characterId ?? '');

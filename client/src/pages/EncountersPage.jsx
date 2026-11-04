@@ -114,6 +114,7 @@ export function EncounterListPage() {
                   </span>
                   <span className="log-meta">
                     {r.xp ?? '—'} XP of {top} · {plural(total, 'creature')} · for {r.party.size} at level {r.party.level}
+                    {e.state && ` · Running, round ${e.state.round}`}
                   </span>
                 </Link>
               </li>
@@ -297,6 +298,9 @@ export function EncounterEditor() {
         <div className="encounter-head__actions">
           {changed && encounterId && <span className="encounter-head__unsaved">Unsaved changes</span>}
           <Link to={`/campaigns/${id}/encounters`} className="btn btn--small">{changed ? 'Cancel' : 'Back'}</Link>
+          {encounterId && !changed && form.creatures.length > 0 && (
+            <Link to={`/campaigns/${id}/encounters/${encounterId}/run`} className="btn btn--small">{saved.state ? `Resume · round ${saved.state.round}` : 'Run encounter'}</Link>
+          )}
           <button type="submit" className="btn btn--blood btn--small" disabled={busy || !form.name.trim() || (encounterId && !changed)}>
             {busy ? 'Saving…' : encounterId ? 'Save' : 'Save encounter'}
           </button>
