@@ -158,20 +158,7 @@ export default function SheetPage() {
         </div>
       )}
 
-      <section className="sheet-attrs" aria-label="Attribute modifiers">
-        {ABILITIES.map((a) => (
-          <button key={a} type="button" className={`sheet-attr sheet-attr--button ${a === character.keyAbility ? 'sheet-attr--key' : ''}`} aria-pressed={open === `attr:${a}`} onClick={() => toggle(`attr:${a}`)}>
-            <span className="sheet-attr__short">
-              {a.toUpperCase()}
-              {a === character.keyAbility && <span className="ledger__crown" title="Key attribute"> ♛<span className="visually-hidden"> (key attribute)</span></span>}
-            </span>
-            <span className="sheet-attr__value">{signed(character.abilities[a])}</span>
-            <span className="sheet-attr__name">{abilityName(a)}</span>
-          </button>
-        ))}
-      </section>
-
-      <section className={`sheet-panel sheet-defense ${shield ? 'sheet-defense--shield' : ''}`} aria-label="Defenses">
+      <section className="sheet-panel sheet-defense" aria-label="Defenses">
         {defenseBox({
           id: 'ac',
           label: 'Armor Class',
@@ -183,18 +170,6 @@ export default function SheetPage() {
           {defenseBox({ id: 'reflex', label: 'Reflex', rank: p.reflex })}
           {defenseBox({ id: 'will', label: 'Will', rank: p.will })}
         </div>
-        {shield && (
-          <button type="button" className={`sheet-def sheet-def--shield ${shield.broken ? 'sheet-def--broken' : ''}`} aria-pressed={open === 'def:shield'} onClick={() => toggle('def:shield')}>
-            <span className="sheet-def__label">Shield</span>
-            <span className="sheet-def__value">
-              {shield.current}
-              <small> / {shield.max}</small>
-            </span>
-            <span className="sheet-def__extra">
-              {shield.destroyed ? 'Destroyed' : shield.broken ? 'Broken' : `Hardness ${shield.hardness} · BT ${shield.brokenAt}`}
-            </span>
-          </button>
-        )}
         {defenseBox({ id: 'perception', label: 'Perception', rank: p.perception, extra: senses })}
         {/* Class DC sits with the other numbers foes roll against, for casters and non-casters alike. */}
         {character.keyAbility && (
@@ -214,7 +189,18 @@ export default function SheetPage() {
         </button>
       </section>
 
-      {!readOnly && <ShieldTracker />}
+      <section className="sheet-attrs" aria-label="Attribute modifiers">
+        {ABILITIES.map((a) => (
+          <button key={a} type="button" className={`sheet-attr sheet-attr--button ${a === character.keyAbility ? 'sheet-attr--key' : ''}`} aria-pressed={open === `attr:${a}`} onClick={() => toggle(`attr:${a}`)}>
+            <span className="sheet-attr__short">
+              {a.toUpperCase()}
+              {a === character.keyAbility && <span className="ledger__crown" title="Key attribute"> ♛<span className="visually-hidden"> (key attribute)</span></span>}
+            </span>
+            <span className="sheet-attr__value">{signed(character.abilities[a])}</span>
+            <span className="sheet-attr__name">{abilityName(a)}</span>
+          </button>
+        ))}
+      </section>
 
       <div className="sheet__columns">
         <div className="sheet__col">
@@ -250,13 +236,13 @@ export default function SheetPage() {
 
       {!readOnly && <CharacterDrawer open={open === 'profile:'} onClose={close} />}
 
-      <DetailsDrawer detail={open ? describe(open, character, opts, { shield, currentHp, maxHp, prepared, spellRules }) : null} onClose={close} />
+      <DetailsDrawer detail={open ? describe(open, character, opts, { shield, currentHp, maxHp, prepared, spellRules, readOnly }) : null} onClose={close} />
     </div>
   );
 }
 
 /** Everything the details drawer needs for one tapped number (see DetailsDrawer for the shape). */
-function describe(key, character, opts, { shield, currentHp, maxHp, prepared, spellRules } = {}) {
+function describe(key, character, opts, { shield, currentHp, maxHp, prepared, spellRules, readOnly = true } = {}) {
   const [kind, id] = [key.slice(0, key.indexOf(':')), key.slice(key.indexOf(':') + 1)];
   const p = character.proficiencies;
 
@@ -432,6 +418,7 @@ function describe(key, character, opts, { shield, currentHp, maxHp, prepared, sp
           character.shield?.acBonus != null && ['AC when raised', `+${character.shield.acBonus}`],
           ['Condition', shield.destroyed ? 'Destroyed' : shield.broken ? 'Broken' : shield.current < shield.max ? `${shield.max - shield.current} damage` : 'Undamaged'],
         ].filter(Boolean),
+        tool: !readOnly && <ShieldTracker bare />,
       };
     }
     if (id === 'speed') {

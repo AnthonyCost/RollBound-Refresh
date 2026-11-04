@@ -3,9 +3,10 @@ import { useTable } from '../state/TableContext.jsx';
 
 /**
  * The equipped shield's Hit Points: Shield Block an attack (its Hardness stops part of
- * the damage, and the shield and you each take the rest) or repair it.
+ * the damage, and the shield and you each take the rest) or repair it. bare: without its
+ * panel and heading, for the shield's details drawer, which already shows both.
  */
-export default function ShieldTracker() {
+export default function ShieldTracker({ bare = false }) {
   const { shield, setShieldDamage, shieldBlock } = useTable();
   const [amount, setAmount] = useState('1');
   const [last, setLast] = useState(null);
@@ -28,13 +29,15 @@ export default function ShieldTracker() {
   };
 
   return (
-    <section className="panel shield-tracker" aria-labelledby="shield-tracker-title">
-      <div className="shield-tracker__head">
-        <h2 id="shield-tracker-title" className="panel__title">{shield.name}</h2>
-        <span className="shield-tracker__now">
-          {shield.current} / {shield.max}
-        </span>
-      </div>
+    <section className={`shield-tracker ${bare ? '' : 'panel'}`} aria-label={bare ? `Block with or repair ${shield.name}` : undefined} aria-labelledby={bare ? undefined : 'shield-tracker-title'}>
+      {!bare && (
+        <div className="shield-tracker__head">
+          <h2 id="shield-tracker-title" className="panel__title">{shield.name}</h2>
+          <span className="shield-tracker__now">
+            {shield.current} / {shield.max}
+          </span>
+        </div>
+      )}
       <div className="shield-tracker__row">
         <label className="shield-tracker__amount">
           <span className="visually-hidden">Damage from the attack</span>

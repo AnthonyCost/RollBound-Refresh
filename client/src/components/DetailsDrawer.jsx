@@ -17,7 +17,8 @@ export const detailValue = (d) => d.value ?? (d.unsigned ? d.stat.total : signed
  *
  * detail: { kind, name, icon, stat?, value?, unsigned?, unit?, total?, totalLabel?, rank?, ability?, actions?,
  *           facts?: [label, value][], rules?: string[], html?: rules text as HTML, note?,
- *           sections?: { title, items: [name, text][], empty? }[], uses?: [name, cost, trainedOnly][], link?: { to, label } }
+ *           sections?: { title, items: [name, text][], empty? }[], uses?: [name, cost, trainedOnly][], link?: { to, label },
+ *           tool?: controls for the thing itself, under its facts (a shield's Shield Block and Repair) }
  * inline: shown in place, not sliding over the page (for previews such as the style lab).
  */
 export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
@@ -90,6 +91,7 @@ export default function DetailsDrawer({ detail: d, onClose, inline = false }) {
               ))}
             </dl>
           )}
+          {d.tool && <div className="details__tool">{d.tool}</div>}
 
           {d.rules?.length > 0 && (
             <div className="details__rules">
