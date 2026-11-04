@@ -68,13 +68,12 @@ function hullFaces(vs) {
 }
 
 const LIGHT = norm([-0.45, -0.6, 0.65]);
-// Each die rests with its number face toward you. The d4, d6 and d10 tip it up a little, so the
-// faces below show and give it depth; the rest are face-on.
+// Each die rests with its number face toward you. The d10 tips it up a little, so the faces
+// below show and give it depth; the rest are face-on.
 const view = (x, z = 0) => matMul(axisAngle([1, 0, 0], x), axisAngle([0, 0, 1], z));
 const TILT = {
-  4: view(0.35),
   // The cube comes to rest corner-up (a diamond); an eighth of a turn stands it square.
-  6: view(0.35, Math.PI / 4),
+  6: view(0, Math.PI / 4),
   10: view(0.35),
 };
 // The number's size on each die, in grid units (and cqi in the roller).
