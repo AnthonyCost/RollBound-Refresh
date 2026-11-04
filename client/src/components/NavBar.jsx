@@ -10,9 +10,9 @@ const LINKS = [
   { to: 'spells', label: 'Spells', icon: 'spells' },
   { to: 'inventory', label: 'Inventory', icon: 'inventory' },
   { to: 'lore', label: 'Lore', icon: 'lore' },
-  { to: 'combat', label: 'Combat', icon: 'turn', own: true },
+  { to: 'combat', label: 'Combat', icon: 'swords', own: true },
   { to: 'roll', label: 'Roll', icon: 'roll', encounter: true },
-  { to: 'settings', label: 'Settings', icon: 'settings' },
+  { to: 'settings', label: 'Settings', icon: 'settings', own: true },
 ];
 
 export default function NavBar() {

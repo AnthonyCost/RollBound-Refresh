@@ -90,7 +90,12 @@ function TargetAC() {
   );
 }
 
-export default function RollPage() {
+/**
+ * The last Strike: the die, the total against the target's AC, what the result means and
+ * the damage, then the four degrees of success, the target's AC and Strike again. Laid out
+ * as two columns on the Roll page, or stacked in the Combat tab's roll drawer (onBack closes it).
+ */
+export function RollView({ onBack = null }) {
   const { lastRoll, strike, actionsLeft } = useTable();
 
   if (!lastRoll) {
@@ -99,7 +104,7 @@ export default function RollPage() {
         <h1 className="title center" style={{ paddingTop: 16 }}>No roll yet</h1>
         <p className="italic muted center">Choose Strike on your turn, and the result shows up here with what it means.</p>
         <TargetAC />
-        <Link to="../turn" className="btn btn--blood">Go to your turn</Link>
+        {!onBack && <Link to="../combat" className="btn btn--blood">Go to the Combat tab</Link>}
       </div>
     );
   }
@@ -114,7 +119,7 @@ export default function RollPage() {
     natural === 20 ? 'Natural 20: the result moved up one step.' : natural === 1 ? 'Natural 1: the result moved down one step.' : null;
 
   return (
-    <div className="split">
+    <div className={onBack ? 'roll-view roll-view--stacked' : 'split'}>
       <div className={`split__col roll-cast ${degreeClass}`} key={id}>
       <p className="eyebrow center" style={{ margin: '4px 0 0' }}>
         Strike #{attackNumber} · {weapon.name}
@@ -174,9 +179,17 @@ export default function RollPage() {
         <button type="button" className="btn btn--grow" disabled={actionsLeft <= 0} onClick={() => strike(lastRoll.weapon)}>
           Strike again
         </button>
-        <Link to="../turn" className="btn btn--blood btn--grow">Back to turn</Link>
+        {onBack ? (
+          <button type="button" className="btn btn--blood btn--grow" onClick={onBack}>Back to your turn</button>
+        ) : (
+          <Link to="../combat" className="btn btn--blood btn--grow">Back to your turn</Link>
+        )}
       </div>
       </div>
     </div>
   );
+}
+
+export default function RollPage() {
+  return <RollView />;
 }
