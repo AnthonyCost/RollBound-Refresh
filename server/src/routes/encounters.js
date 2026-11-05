@@ -134,9 +134,16 @@ encounters.put('/:encounterId', async (req, res) => {
 encounters.put('/:encounterId/state', async (req, res) => {
   const v = validState(req.body);
   if (v.errors) return res.status(400).json({ errors: v.errors });
+  // Starting or a new round clears everyone's actions; a turn moving to someone clears theirs
+  // (a fresh 3 actions and reaction). (The right-hand side reads the row as it was, before this save.)
   const { rows } = await pool.query(
-    'UPDATE encounters SET state = $1 WHERE id = $2 AND campaign_id = $3 RETURNING *',
-    [JSON.stringify(v.state), req.params.encounterId, req.params.id],
+    `UPDATE encounters SET
+       actions = CASE WHEN state IS NULL OR (state->>'round')::int IS DISTINCT FROM $5::int THEN '{}'::jsonb
+                      WHEN $4::text IS NOT NULL AND state->>'current' IS DISTINCT FROM $4::text THEN actions - $4::text
+                      ELSE actions END,
+       state = $1
+     WHERE id = $2 AND campaign_id = $3 RETURNING *`,
+    [JSON.stringify(v.state), req.params.encounterId, req.params.id, v.state.current, v.state.round],
   );
   if (!rows.length) return res.status(404).json({ errors: ['Encounter not found.'] });
   res.json(toJson(rows[0]));
@@ -144,7 +151,7 @@ encounters.put('/:encounterId/state', async (req, res) => {
 
 // End the encounter: it stays saved, ready to run again.
 encounters.delete('/:encounterId/state', async (req, res) => {
-  const { rows } = await pool.query('UPDATE encounters SET state = NULL WHERE id = $1 AND campaign_id = $2 RETURNING *', [req.params.encounterId, req.params.id]);
+  const { rows } = await pool.query("UPDATE encounters SET state = NULL, actions = '{}' WHERE id = $1 AND campaign_id = $2 RETURNING *", [req.params.encounterId, req.params.id]);
   if (!rows.length) return res.status(404).json({ errors: ['Encounter not found.'] });
   res.json(toJson(rows[0]));
 });

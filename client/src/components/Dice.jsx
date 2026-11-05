@@ -225,7 +225,7 @@ export function Die({ sides, value = null, size = 64, tumble = null }) {
 }
 
 const DAMAGE_TYPES = 'acid|bludgeoning|cold|electricity|fire|force|mental|piercing|poison|slashing|sonic|spirit|vitality|void|bleed|precision|persistent|untyped';
-const DICE_TEXT = new RegExp(`(\\b\\d*d(?:4|6|8|10|12|20|100)\\b(?:\\s*[+\\-−]\\s*\\d+\\b)?)(\\s+(?:${DAMAGE_TYPES})\\b)?`, 'gi');
+const DICE_TEXT = new RegExp(`(\\b\\d*d(?:4|6|8|10|12|20|100)\\b(?:\\s*[+\\-−–]\\s*\\d+\\b)?)(\\s+(?:${DAMAGE_TYPES})\\b)?`, 'gi');
 
 /**
  * Rules text with every dice expression ("2d6 fire", "1d4+1") boxed as a button that rolls
@@ -235,9 +235,24 @@ export function boxDice(html) {
   return html
     .split(/(<[^>]+>)/)
     .map((part) => (part.startsWith('<') ? part : part.replace(DICE_TEXT, (m, expr, type = '') => (
-      `<button type="button" class="dice-roll" data-dice="${expr.replace(/\s+/g, '').replace('−', '-')}" data-type="${type.trim().toLowerCase()}" aria-label="Roll ${m.trim()}">${m}</button>`
+      `<button type="button" class="dice-roll" data-dice="${expr.replace(/\s+/g, '').replace(/[−–]/, '-')}" data-type="${type.trim().toLowerCase()}" aria-label="Roll ${m.trim()}">${m}</button>`
     ))))
     .join('');
+}
+
+/**
+ * A stat block's attacks made rollable: in each Melee or Ranged line, its attack bonus (the
+ * first "+7" after the name) becomes a box that rolls d20 + 7, named for the attack (data-attack,
+ * data-label). Pair with boxDice for the damage.
+ */
+export function boxAttacks(html) {
+  // The name may be italic (<em>glaive</em>), and a few bonuses have a stray space ("+ 12").
+  return html.replace(/(<strong>(?:Melee|Ranged)<\/strong>(?:\s|<span[^>]*><\/span>)*)((?:[^<+\-−–]|<\/?em>)*?)\s([+\-−–])\s?(\d+)/g, (m, head, name, sign, digits) => {
+    const n = Number(`${sign === '+' ? '' : '-'}${digits}`);
+    const label = name.replace(/<[^>]+>/g, '').trim();
+    const shown = `${sign}${digits}`;
+    return `${head}${name} <button type="button" class="dice-roll dice-roll--attack" data-attack="${n}" data-label="${label}" aria-label="Roll ${label} attack: ${shown}">${shown}</button>`;
+  });
 }
 
 /** A weapon's damage dice as an expression: 1d8 and +4 make "1d8+4". */

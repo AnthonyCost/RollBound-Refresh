@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import {
   advanceTurn, currentCombatant, cycleCondition, endTurn, moveCombatant, perception, placeByInitiative, startEncounter,
@@ -11,9 +11,12 @@ import { creaturePath, creatureThumb, creatureType, loadBestiary } from '../stat
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import Portrait from '../components/Portrait.jsx';
 import DetailsDrawer from '../components/DetailsDrawer.jsx';
+import RollDrawer from '../components/RollDrawer.jsx';
+import { RollProvider, useTable } from '../state/TableContext.jsx';
 import HealthOrb from '../components/HealthOrb.jsx';
 import ShieldGauge from '../components/ShieldGauge.jsx';
 import ConditionChips, { ConditionBadges } from '../components/ConditionChips.jsx';
+import ActionPips from '../components/ActionPips.jsx';
 import { useRunningEncounter } from '../state/runningEncounter.js';
 import { signed } from '../format.js';
 
@@ -325,7 +328,7 @@ function TrackerHead({ name, state, portraitOf, mine, children }) {
  * touch). Without it (a player watching): names and initiatives only, and only characters
  * open in the drawer; creatures' details stay the GM's.
  */
-function OrderList({ combatants, current, open, onOpen, portraitOf, gm, vitals = new Map(), linkOf }) {
+function OrderList({ combatants, current, open, onOpen, portraitOf, gm, vitals = new Map(), linkOf, actions = {}, onActions = null }) {
   const [dragging, setDragging] = useState(null);
   const [over, setOver] = useState(null);
   const drop = (target) => {
@@ -411,6 +414,10 @@ function OrderList({ combatants, current, open, onOpen, portraitOf, gm, vitals =
                 <button type="button" className="icon-button" aria-label={`Move ${c.name} down the order`} disabled={i === combatants.length - 1} onClick={() => gm.move(c.key, i + 1)}>▼</button>
               </span>
             )}
+            {/* Last, so it takes its own line under the row without pushing the cells above. */}
+            <span className="tracker__actions">
+              <ActionPips name={c.name} entry={actions[c.key]} onChange={onActions && ((entry) => onActions(c.key, entry))} />
+            </span>
           </li>
         );
       })}
@@ -441,6 +448,14 @@ export default function EncounterRunPage() {
   // Characters' Hit Points and shields as they are now (the players change them too).
   const live = useRunningEncounter(id, Boolean(state));
   const vitals = new Map((live?.combatants ?? []).filter((c) => c.kind === 'pc').map((c) => [c.characterId, c]));
+  // Everyone's actions this turn: the feed's (players mark their own), with the GM's marks shown at once.
+  const [actions, setActions] = useState({});
+  const liveActions = JSON.stringify(live?.actions ?? {});
+  useEffect(() => setActions(JSON.parse(liveActions)), [liveActions]);
+  const markActions = (key, entry) => {
+    setActions((a) => ({ ...a, [key]: entry }));
+    api.setEncounterActions(id, key, entry).then(({ actions: saved }) => setActions(saved), (err) => setErrors(errorsFrom(err)));
+  };
   useCampaignCrumbs([
     { label: 'Encounters', to: `/campaigns/${id}/encounters` },
     { label: encounter?.name ?? 'Encounter', to: `/campaigns/${id}/encounters/${encounterId}` },
@@ -463,6 +478,9 @@ export default function EncounterRunPage() {
 
   // Every change goes to the server; if a save fails, say so and keep the change on screen.
   const save = (next) => {
+    // A new round gives everyone fresh actions, and a turn moving to someone gives them theirs (the server clears them too).
+    if (next.round !== state?.round) setActions({});
+    else if (next.current && next.current !== state?.current) setActions(({ [next.current]: _, ...rest }) => rest);
     setState(next);
     setErrors([]);
     api.saveEncounterState(id, encounterId, next).catch((err) => setErrors(errorsFrom(err)));
@@ -533,6 +551,7 @@ export default function EncounterRunPage() {
   };
 
   return (
+    <RollProvider targets={state.combatants.filter((c) => !c.defeated && c.ac != null)}>
     <div className="tracker">
       <TrackerHead name={encounter.name} state={state} portraitOf={portraitOf}>
         <div className="tracker__turn-buttons">
@@ -541,8 +560,9 @@ export default function EncounterRunPage() {
         </div>
       </TrackerHead>
       <FormErrors errors={errors} />
-      <OrderList combatants={state.combatants} current={state.current} open={open} onOpen={setOpen} portraitOf={portraitOf} gm={gm} vitals={vitals} />
+      <OrderList combatants={state.combatants} current={state.current} open={open} onOpen={setOpen} portraitOf={portraitOf} gm={gm} vitals={vitals} actions={actions} onActions={markActions} />
       <p className="rule-note">
+        Tap the diamonds to mark the actions and reaction someone has spent; everyone at the table sees them, and players mark their own from the Combat tab.
         Tap anyone for their details, Hit Points and actions. Drag a row by its handle (or use its arrows) to move someone in the order.
         Changes save as you go, and your players see the order, never your creatures' numbers.
       </p>
@@ -558,8 +578,31 @@ export default function EncounterRunPage() {
           <button type="button" className="btn" onClick={() => setConfirmEnd(true)}>End encounter…</button>
         )}
       </div>
-      <DetailsDrawer detail={detail} onClose={() => setOpen(null)} />
+      <Drawers detail={detail} onClose={() => setOpen(null)} />
     </div>
+    </RollProvider>
+  );
+}
+
+/**
+ * The tracker's drawers: someone's details on the right, where a creature's attack bonuses and
+ * damage dice roll (as on a character sheet), and the roll on the left.
+ */
+function Drawers({ detail, onClose }) {
+  const { rollCheck, rollDamage } = useTable();
+  const [rolling, setRolling] = useState(false);
+  const closeRoll = useCallback(() => setRolling(false), []);
+  const rolled = (roll) => roll && setRolling(true);
+  return (
+    <>
+      <RollDrawer open={rolling} onClose={closeRoll} />
+      <DetailsDrawer
+        detail={detail}
+        onClose={() => { setRolling(false); onClose(); }}
+        onRollAttack={(label, bonus) => rolled(rollCheck(label, { total: bonus, parts: [] }))}
+        onRollDice={(label, expr, type) => rolled(rollDamage(label, expr, type))}
+      />
+    </>
   );
 }
 
@@ -585,7 +628,7 @@ export function EncounterWatchPage() {
   return (
     <div className="tracker">
       <TrackerHead name={running.name} state={running} portraitOf={portraitOf} mine={mine} />
-      <OrderList combatants={running.combatants} current={running.current} portraitOf={portraitOf} gm={null} vitals={vitals} linkOf={linkOf} />
+      <OrderList combatants={running.combatants} current={running.current} portraitOf={portraitOf} gm={null} vitals={vitals} linkOf={linkOf} actions={running.actions} />
       <p className="rule-note">Your GM runs the turns; this follows along. Tap a character to open their sheet in a new tab.</p>
     </div>
   );

@@ -94,10 +94,10 @@ function rangeText(r) {
 }
 
 /** The target's AC or DC, entered after the roll (ask your GM); empty until then. */
-function TargetDC({ what, value, onChange }) {
+function TargetDC({ what, value, onChange, gm }) {
   return (
     <div className="panel field">
-      <label htmlFor="target-dc">{what === 'AC' ? 'Target’s AC' : 'DC'} (ask your GM)</label>
+      <label htmlFor="target-dc">{what === 'AC' ? 'Target’s AC' : 'DC'}{gm ? '' : ' (ask your GM)'}</label>
       <input
         id="target-dc"
         type="number"
@@ -135,13 +135,17 @@ export function RollView({ onBack = null }) {
 }
 
 function CheckView({ roll, onBack }) {
-  const { strike, rollCheck, actionsLeft } = useTable();
+  const { strike, rollCheck, actionsLeft, gm, targets } = useTable();
   const [dc, setDc] = useState(null);
+  // The GM's attack: pick who it's aimed at, and their AC fills in (still editable).
+  const [target, setTarget] = useState('');
   const { natural, bonus, total, damageRoll, damageMod, weapon, attackNumber } = roll;
   const [shown, landed] = useTumble(total);
   // A Combat-tab Strike spends an action and counts toward the multiple attack penalty; a check from the sheet doesn't.
   const check = roll.kind === 'check';
-  const against = weapon ? 'AC' : 'DC';
+  // The GM's roller (RollProvider) rolls creatures' attacks, so it asks for the target's AC too.
+  const attack = Boolean(weapon || gm);
+  const against = attack ? 'AC' : 'DC';
   const degree = dc == null ? null : degreeOfSuccess(total, dc, natural);
   const damage = degree && weapon ? strikeDamage(damageRoll, damageMod, degree.name) : 0;
   // A natural 20 or a critical success turns the die gold with a flare; a natural 1, a negative total
@@ -176,13 +180,30 @@ function CheckView({ roll, onBack }) {
         </div>
       </section>
 
-      <TargetDC what={against} value={dc} onChange={setDc} />
+      {attack && targets?.length > 0 && (
+        <div className="panel field">
+          <label htmlFor="roll-target">Target</label>
+          <select
+            id="roll-target"
+            value={target}
+            onChange={(e) => {
+              setTarget(e.target.value);
+              const t = targets.find((x) => x.key === e.target.value);
+              setDc(t ? t.ac : null);
+            }}
+          >
+            <option value="">Choose a target…</option>
+            {targets.map((t) => <option key={t.key} value={t.key}>{t.name} (AC {t.ac})</option>)}
+          </select>
+        </div>
+      )}
+      <TargetDC what={against} value={dc} onChange={(v) => { setDc(v); setTarget(''); }} gm={gm} />
 
       {degree ? (
         <section className={`center roll-verdict roll--${degree.name.replace(' ', '-')}`} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <Ornament />
           <h1 className="verdict" style={{ color: DEGREE_COLOR[degree.name] }}>{degree.name}</h1>
-          <p className="italic" style={{ margin: 0, color: 'var(--text-soft)' }}>{(weapon ? DEGREE_EXPLAIN : CHECK_EXPLAIN)[degree.name]}</p>
+          <p className="italic" style={{ margin: 0, color: 'var(--text-soft)' }}>{(attack ? DEGREE_EXPLAIN : CHECK_EXPLAIN)[degree.name]}</p>
           {natNote && <p className="italic" style={{ margin: 0, color: 'var(--gold)' }}>{natNote}</p>}
           {damage > 0 && (
             <p className="eyebrow roll__damage" style={{ color: 'var(--text)', fontSize: 15, margin: '4px 0 0' }}>

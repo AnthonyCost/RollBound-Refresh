@@ -325,7 +325,7 @@ campaigns.get('/:id/encounter', async (req, res) => {
     [req.params.id, req.user.id],
   );
   if (!member.length) return res.status(404).json({ errors: ['Campaign not found.'] });
-  const { rows } = await pool.query('SELECT id, name, state FROM encounters WHERE campaign_id = $1 AND state IS NOT NULL ORDER BY id DESC LIMIT 1', [req.params.id]);
+  const { rows } = await pool.query('SELECT id, name, state, actions FROM encounters WHERE campaign_id = $1 AND state IS NOT NULL ORDER BY id DESC LIMIT 1', [req.params.id]);
   const e = rows[0];
   if (!e) return res.json({ encounter: null });
   // Characters' Hit Points and shields as they are now (the party can see each other's sheets anyway).
@@ -337,6 +337,8 @@ campaigns.get('/:id/encounter', async (req, res) => {
       name: e.name,
       round: e.state.round,
       current: e.state.current,
+      // Everyone's actions and reaction this turn (creatures' too: the table can see those).
+      actions: e.actions,
       combatants: (e.state.combatants ?? []).map((c) => ({
         key: c.key, kind: c.kind, name: c.name, initiative: c.initiative, defeated: c.defeated, characterId: c.characterId ?? null, creatureId: c.creatureId ?? null,
         // A character's conditions, as the GM set them; a creature's stay the GM's.
@@ -344,6 +346,34 @@ campaigns.get('/:id/encounter', async (req, res) => {
       })),
     },
   });
+});
+
+// Marks a combatant's actions this turn in the running encounter: { used: 0–3, reaction: bool }.
+// The GM can mark anyone; a player only their own character (their Combat tab does it as they act).
+// One key at a time, in place, so the GM's tracker and the players never overwrite each other.
+campaigns.put('/:id/encounter/actions/:key', async (req, res) => {
+  const { id, key } = req.params;
+  if (!isId(id) || key.length > 60) return res.status(404).json({ errors: ['Combatant not found.'] });
+  const { used, reaction } = req.body ?? {};
+  if (!Number.isInteger(used) || used < 0 || used > 3) return res.status(400).json({ errors: ['Actions used must be 0 to 3.'] });
+  if (typeof reaction !== 'boolean') return res.status(400).json({ errors: ['Reaction must be true or false.'] });
+  const { rows } = await pool.query(
+    `SELECT e.id, e.state, c.gm_user_id FROM encounters e JOIN campaigns c ON c.id = e.campaign_id
+     WHERE e.campaign_id = $1 AND e.state IS NOT NULL ORDER BY e.id DESC LIMIT 1`,
+    [id],
+  );
+  const e = rows[0];
+  const who = e?.state.combatants.find((c) => c.key === key);
+  if (!who) return res.status(404).json({ errors: ['Combatant not found.'] });
+  if (String(e.gm_user_id) !== String(req.user.id)) {
+    const { rows: mine } = await pool.query('SELECT 1 FROM characters WHERE id = $1 AND owner_id = $2 AND campaign_id = $3', [who.characterId, req.user.id, id]);
+    if (who.kind !== 'pc' || !mine.length) return res.status(404).json({ errors: ['Combatant not found.'] });
+  }
+  const { rows: saved } = await pool.query(
+    'UPDATE encounters SET actions = jsonb_set(actions, ARRAY[$2::text], $3::jsonb) WHERE id = $1 RETURNING actions',
+    [e.id, key, JSON.stringify({ used, reaction })],
+  );
+  res.json({ actions: saved[0].actions });
 });
 
 // The GM changes a character in the fight (the initiative tracker's drawer): { action, amount },

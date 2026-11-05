@@ -4,7 +4,7 @@ import Icon from './Icon.jsx';
 import RankPips from './RankPips.jsx';
 import ActionCost from './ActionCost.jsx';
 import { signed } from '../format.js';
-import { boxDice } from './Dice.jsx';
+import { boxAttacks, boxDice } from './Dice.jsx';
 
 const COST_WORDS = { exploration: 'Exploration', downtime: 'Downtime', varies: 'Varies' };
 
@@ -22,8 +22,9 @@ export const detailValue = (d) => d.value ?? (d.unsigned ? d.stat.total : signed
  *           link.newTab opens it in a new tab; tool?: controls for the thing itself, under its facts (a shield's Shield Block and Repair) }
  * inline: shown in place, not sliding over the page (for previews such as the style lab).
  * onRollDice(label, expr, damageType): makes the rules text's dice rollable.
+ * onRollAttack(label, bonus): makes a stat block's Melee and Ranged attack bonuses rollable (d20 + bonus).
  */
-export default function DetailsDrawer({ detail: d, onClose, inline = false, onRollDice = null }) {
+export default function DetailsDrawer({ detail: d, onClose, inline = false, onRollDice = null, onRollAttack = null }) {
   useEffect(() => {
     if (!d) return undefined;
     const esc = (e) => e.key === 'Escape' && onClose();
@@ -105,8 +106,10 @@ export default function DetailsDrawer({ detail: d, onClose, inline = false, onRo
           {d.html && (
             <div
               className="option__desc details__html"
-              dangerouslySetInnerHTML={{ __html: onRollDice ? boxDice(d.html) : d.html }}
-              onClick={onRollDice ? (e) => {
+              dangerouslySetInnerHTML={{ __html: onRollAttack ? boxAttacks(boxDice(d.html)) : onRollDice ? boxDice(d.html) : d.html }}
+              onClick={onRollDice || onRollAttack ? (e) => {
+                const a = e.target.closest('[data-attack]');
+                if (a) return onRollAttack(`${d.name} · ${a.dataset.label}`, Number(a.dataset.attack));
                 const b = e.target.closest('[data-dice]');
                 if (b) onRollDice(d.name, b.dataset.dice, b.dataset.type);
               } : undefined}

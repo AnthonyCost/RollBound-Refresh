@@ -153,6 +153,10 @@ CREATE INDEX IF NOT EXISTS encounters_campaign_idx ON encounters (campaign_id, u
 -- A running encounter's live state, from the GM's initiative tracker (rules: encounter.js):
 -- { round, current, combatants: [...] }. NULL when it isn't running.
 ALTER TABLE encounters ADD COLUMN IF NOT EXISTS state JSONB;
+-- Each combatant's actions this turn, kept apart from state so the GM's saves and the players'
+-- don't overwrite each other: { [combatant key]: { used: 0–3, reaction: bool } }. A combatant's
+-- entry clears when their turn begins (the GM's next turn), and all of it when the encounter starts or ends.
+ALTER TABLE encounters ADD COLUMN IF NOT EXISTS actions JSONB NOT NULL DEFAULT '{}';
 
 -- The colour theme each person picked in Account settings (client/src/themes.js).
 ALTER TABLE users ADD COLUMN IF NOT EXISTS theme TEXT NOT NULL DEFAULT 'infernal';

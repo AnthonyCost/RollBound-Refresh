@@ -80,6 +80,7 @@ export const api = {
   // The GM damages, heals, Shield Blocks for, or repairs the shield of, a character in the fight.
   characterCombat: (campaignId, characterId, action, amount) => post(`/campaigns/${campaignId}/characters/${characterId}/combat`, { action, amount }),
   getRunningEncounter: (campaignId) => request(`/campaigns/${campaignId}/encounter`, { cache: 'no-cache' }),
+  setEncounterActions: (campaignId, key, entry) => request(`/campaigns/${campaignId}/encounter/actions/${encodeURIComponent(key)}`, { method: 'PUT', body: JSON.stringify(entry) }),
 
   /**
    * Uploads an image the way S3 presigned uploads work: get a signed URL from the

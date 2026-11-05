@@ -4277,7 +4277,7 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .tracker__row {
   position: relative;
   display: grid;
-  grid-template-columns: 18px 58px minmax(0, 1fr) minmax(120px, 220px) 56px 30px;
+  grid-template-columns: 18px 58px minmax(0, 1fr) minmax(0, 1fr) minmax(120px, 220px) 56px 30px;
   align-items: center;
   gap: 12px;
   padding: 8px 14px 8px 10px;
@@ -4328,7 +4328,7 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 .tracker__row--over { box-shadow: inset 0 3px 0 var(--gold); }
 
 /* A player's view: the order and who's acting, nothing of the creatures' numbers. */
-.tracker__order--watch .tracker__row { grid-template-columns: 58px minmax(0, 1fr) minmax(120px, 220px); }
+.tracker__order--watch .tracker__row { grid-template-columns: 58px minmax(0, 1fr) minmax(0, 1fr) minmax(120px, 220px); }
 .tracker__init--read { display: grid; place-items: center; min-height: 44px; border-radius: 4px; background: var(--panel-deep); font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--gold); }
 .tracker__name--still { cursor: default; }
 .tracker__head--yours { border-color: var(--blood-text); box-shadow: 0 0 18px var(--blood-glow); }
@@ -4588,3 +4588,22 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 /* The roller's damage view: each die with what it rolled, then the total. */
 .roll-damage__dice { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .roll-damage__total { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+/* Everyone's actions this turn in the initiative order: 3 actions and a reaction, dimmed once spent (ActionPips),
+   centred in their own column between the name and the Hit Points (placed there, though last in the markup). */
+.tracker__actions { grid-row: 1; grid-column: 4; display: flex; justify-content: center; }
+.tracker__order--watch .tracker__actions { grid-column: 3; }
+.action-pips { display: inline-flex; align-items: center; gap: 4px; }
+.action-pip { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 1px dashed var(--bronze); border-radius: 50%; background: none; font-size: 15px; transition: opacity 200ms ease, border-color 200ms ease; }
+.action-pip .act { margin: 0; background-color: var(--blood-text); }
+.action-pip--reaction { margin-left: 6px; }
+.action-pip--reaction .act { background-color: var(--gold); }
+.action-pip--spent { opacity: 0.3; border-style: solid; border-color: var(--line); }
+button.action-pip { cursor: pointer; }
+button.action-pip:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+@media (max-width: 860px) {
+  /* Too narrow beside the name: their own line under the Hit Points. */
+  .tracker__actions { grid-column: 2 / 5; grid-row: 3; justify-content: flex-start; }
+  .tracker__order--watch .tracker__actions { grid-column: 2 / -1; grid-row: 2; }
+  .tracker__order--watch .tracker__row { grid-template-columns: 58px minmax(0, 1fr) minmax(90px, 160px); }
+}

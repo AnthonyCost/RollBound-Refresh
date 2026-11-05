@@ -22,6 +22,34 @@ import { useRunningEncounter } from './runningEncounter.js';
 
 const TableContext = createContext(null);
 
+/** A d20 check: d20 + stat.total ({ total, parts }). */
+const newCheck = (label, stat) => {
+  const natural = rollDie(20);
+  return { kind: 'check', label, natural, bonus: stat, total: natural + stat.total };
+};
+/** Damage dice ("1d8+4", "2d6"): { kind: 'damage', dice, mod, total }, or null if expr isn't dice. */
+const newDamage = (label, expr, damageType = '') => {
+  const r = rollDice(expr);
+  return r && { kind: 'damage', label, expr, damageType, ...r };
+};
+
+/**
+ * The roller without a character, for the GM's encounter tracker: just the last roll and the
+ * two ways to make one, on the same context, so the roll drawer (RollView) works as on a sheet.
+ * gm: the roller leaves out "ask your GM". targets: the combatants an attack can be aimed at ({ key, name, ac }).
+ */
+export function RollProvider({ targets = [], children }) {
+  const [lastRoll, setLastRoll] = useState(null);
+  const value = useMemo(() => ({
+    gm: true,
+    targets,
+    lastRoll,
+    rollCheck: (label, stat) => { const roll = newCheck(label, stat); setLastRoll(roll); return roll; },
+    rollDamage: (label, expr, damageType) => { const roll = newDamage(label, expr, damageType); if (roll) setLastRoll(roll); return roll; },
+  }), [lastRoll, targets]);
+  return <TableContext.Provider value={value}>{children}</TableContext.Provider>;
+}
+
 
 // Characters start with no conditions. (This used to be a sample Frightened 1 to
 // show off condition math; with the Turn tab hidden there'd be no way to clear it.)
@@ -211,16 +239,36 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     seen.current.shield = feedShield;
   }, [feedShield]); // eslint-disable-line react-hooks/exhaustive-deps
   const myTurn = encounterActive && encounter.current === me.key;
-  // A new turn of yours: three fresh actions, and a raised shield comes down.
+  // A new turn of yours: three fresh actions, and a raised shield comes down. A new round
+  // refreshes your actions and reaction even before your turn, as the table's do.
+  const encounterRound = encounterActive ? encounter.round : null;
+  useEffect(() => {
+    if (encounterRound != null) setUsed([]);
+  }, [encounterRound]);
   useEffect(() => {
     if (!myTurn) return;
     setUsed([]);
     setShieldRaised(false);
   }, [myTurn, encounter?.round]);
 
+  // In a running encounter, your actions and reaction go to the table (the tracker and the
+  // Encounter tab show everyone's). Only after you change them here, so opening the page
+  // doesn't wipe what the GM marked; a new turn of yours clears them on the server already.
+  const spent = Math.min(3, used.reduce((n, a) => n + (a.cost ?? 1), 0));
+  const reactionUsed = used.some((a) => a.reaction);
+  const pushed = useRef(null);
+  useEffect(() => {
+    const entry = JSON.stringify({ used: spent, reaction: reactionUsed });
+    if (!encounterActive) { pushed.current = null; return; }
+    if (pushed.current === null) { pushed.current = entry; return; }
+    if (entry === pushed.current) return;
+    pushed.current = entry;
+    api.setEncounterActions(campaign.id, me.key, { used: spent, reaction: reactionUsed }).catch(() => {}); // a missed push is caught up by the next
+  }, [encounterActive, spent, reactionUsed]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const strikesSoFar = used.filter((a) => a.id === 'strike').length;
   // Each action spent this turn has a cost: 1, 2 or 3 actions (reactions and free actions cost none).
-  const actionsLeft = 3 - used.reduce((n, a) => n + (a.cost ?? 1), 0);
+  const actionsLeft = 3 - spent;
 
   const takeAction = useCallback(
     (action, detail = '', cost = 1) => {
@@ -262,9 +310,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
    */
   const rollCheck = useCallback(
     (label, stat, weapon = null) => {
-      const natural = rollDie(20);
-      const total = natural + stat.total;
-      const roll = { kind: 'check', label, natural, bonus: stat, total };
+      const roll = newCheck(label, stat);
       if (weapon) Object.assign(roll, { weapon, damageRoll: rollDie(weapon.die), damageMod: damageModifier(weapon, character.abilities) });
       setLastRoll(roll);
       return roll;
@@ -274,10 +320,8 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
 
   /** Rolls damage ("1d8+4", "2d6"), for a weapon or a spell's text: { kind: 'damage', dice, mod, total }. */
   const rollDamage = useCallback((label, expr, damageType = '') => {
-    const r = rollDice(expr);
-    if (!r) return null;
-    const roll = { kind: 'damage', label, expr, damageType, ...r };
-    setLastRoll(roll);
+    const roll = newDamage(label, expr, damageType);
+    if (roll) setLastRoll(roll);
     return roll;
   }, []);
 
