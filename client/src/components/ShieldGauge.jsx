@@ -5,7 +5,7 @@ const HIT_MS = 420;
 // The shield's outline on a 100 x 120 grid, and the same shape inset for its rim line.
 const OUTLINE = 'M50 4 C63 12 80 15 94 12 L94 50 C94 82 75 103 50 116 C25 103 6 82 6 50 L6 12 C20 15 37 12 50 4 Z';
 
-// Fracture lines, drawn in the background colour so they read as gaps in the shield.
+// Fracture lines, drawn in the background color so they read as gaps in the shield.
 const CRACKS = {
   intact: [],
   chipped: ['M97 64 L79 73 L95 71'],

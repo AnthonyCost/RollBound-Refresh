@@ -224,12 +224,13 @@ function CampaignBar({ campaign, removed, onChoose, onClear }) {
  * back picks up where the player was.
  */
 export default function BuilderPage() {
-  const { isDemo } = useAuth();
+  const { isDemo, user } = useAuth();
   const navigate = useNavigate();
   const service = useCampaignService();
   const [search, setSearch] = useSearchParams();
   const { characterId: editId } = useParams();
-  const draftKey = editId ? `${DRAFT_KEY}:${editId}` : DRAFT_KEY;
+  // Each account keeps its own drafts, so someone else's on a shared browser never shows up as yours.
+  const draftKey = `${DRAFT_KEY}:u${user?.id}${editId ? `:${editId}` : ''}`;
   const [data, setData] = useState(null);
   const [early, setEarly] = useState(null);
   const [loadFailed, setLoadFailed] = useState(false);

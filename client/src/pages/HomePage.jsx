@@ -12,6 +12,11 @@ import Icon from '../components/Icon.jsx';
 import Portrait from '../components/Portrait.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import homeMap from '../assets/home-map.webp';
+import buildArt from '../assets/start/build-your-own.webp';
+import campaignArt from '../assets/campaign-covers/snowy-village.webp';
+import bestiaryArt from '../assets/creatures/adult-cinder-dragon.webp';
+import spellsArt from '../assets/art/class-wizard.webp';
+import learnArt from '../assets/resources/free-rules.webp';
 import { adventurePath } from '@rollbound/rules';
 import { classArtOf, lineOf } from './CharactersPage.jsx';
 
@@ -33,6 +38,38 @@ const REFERENCE = [
   { to: '/learn/overview', icon: 'learn', name: 'Learn' },
   { to: '/resources', icon: 'links', name: 'Resources' },
 ];
+
+// A new account's first look: the places to start, as big art panels like the builder's
+// start screen. The first two are what you make; the rest are what you can explore.
+const WELCOME = [
+  { to: '/create', art: buildArt, at: '40% 100%', name: 'Build your first hero', blurb: 'Pick an ancestry, background and class, or start with an iconic hero. Each step explains what your choices do.' },
+  { to: '/campaigns/new', art: campaignArt, at: '50% 60%', name: 'Start a campaign', blurb: 'Gather a party with an invite code, then run encounters, track initiative and keep session logs.' },
+  { to: '/bestiary', art: bestiaryArt, at: '50% 25%', name: 'Bestiary', blurb: 'Hundreds of creatures with full stat blocks.' },
+  { to: '/spells', art: spellsArt, at: '50% 8%', name: 'Spell Book', blurb: 'Every spell with its ranks, traditions and full rules text.' },
+  { to: '/learn/overview', art: learnArt, at: '50% 35%', name: 'Learn the Game', blurb: 'New to Pathfinder? Short guides to checks, combat and your first session.' },
+];
+
+function Welcome() {
+  return (
+    <section className="home-welcome" aria-labelledby="home-welcome-title">
+      <h2 id="home-welcome-title" className="eyebrow">Where to begin</h2>
+      <ul className="home-welcome__grid">
+        {WELCOME.map((w) => (
+          <li key={w.to}>
+            <Link className="start-choice" to={w.to}>
+              <img className="start-choice__art" src={w.art} alt="" style={{ objectPosition: w.at }} />
+              <span className="start-choice__text">
+                <span className="start-choice__name">{w.name}</span>
+                <span className="start-choice__blurb">{w.blurb}</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <p className="rule-note">Have an invite code from your GM? <Link to="/campaigns">Join a campaign</Link>.</p>
+    </section>
+  );
+}
 
 /** A home section: its title links to the full page, with the section's main action beside it. */
 function Section({ id, title, to, count, action, children }) {
@@ -326,13 +363,7 @@ export default function HomePage() {
               <Link to="/campaigns/new" className="btn">Start a Campaign</Link>
             </Spotlight>
           )}
-          {brandNew && (
-            <Spotlight title="Your first adventure" lines={['Build a hero, or gather a party of your own. RollBound explains the rules as you go.']}>
-              <Link to="/create" className="btn btn--blood">Create a Character</Link>
-              <Link to="/campaigns" className="btn">Start or Join a Campaign</Link>
-              <Link to="/learn/overview" className="btn">Learn the Game</Link>
-            </Spotlight>
-          )}
+          {brandNew && <Welcome />}
 
           <NeedsAttention />
 

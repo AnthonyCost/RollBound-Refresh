@@ -275,7 +275,7 @@ function StartAfter() {
 function SurfaceDemo() {
   return (
     <div className="lab-col">
-      <p className="x-body">Select this sentence to see the highlight colour. Then try the dropdown and the checkbox.</p>
+      <p className="x-body">Select this sentence to see the highlight color. Then try the dropdown and the checkbox.</p>
       <div className="lab-row">
         <label className="x-field x-field--inline">Sort by
           <select defaultValue="name"><option value="name">Name</option><option value="level">Level</option><option value="newest">Newest</option></select>
@@ -317,7 +317,7 @@ export default function StyleLabPage() {
           <h1 className="x-title">Style lab</h1>
           <p className="x-body">
             {tab === 'dice' ? 'Every die in the current theme. Click one to roll it.' : tab === 'palette'
-              ? 'A colour scheme to try on RollBound, shown on the site’s real components. Nothing here is live anywhere else on the site.'
+              ? 'A color scheme to try on RollBound, shown on the site’s real components. Nothing here is live anywhere else on the site.'
               : 'Proposed changes to make RollBound feel made rather than generated, on sample content. Nothing here is live anywhere else on the site.'}
           </p>
           {tab === 'proposals' && (
@@ -360,7 +360,7 @@ export default function StyleLabPage() {
         <section className="lab-study" aria-labelledby="lab-7">
           <header className="lab-study__head">
             <h2 id="lab-7">The browser's own parts</h2>
-            <p>Text selection, dropdowns and checkboxes in the site's colours rather than browser blue and grey.</p>
+            <p>Text selection, dropdowns and checkboxes in the site's colors rather than browser blue and grey.</p>
           </header>
           <div className={`lab-stage lab-stage--${mode}`}>
             {mode !== 'after' && <div className="lab-pane lab-before"><span className="lab-pane__tag">Today</span><SurfaceDemo /></div>}

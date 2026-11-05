@@ -1,4 +1,4 @@
-// The site's colour themes. Each is a set of colour tokens in theme.css, picked with
+// The site's color themes. Each is a set of color tokens in theme.css, picked with
 // data-theme on <html>. People choose one in Account settings; it's saved to their
 // account (users.theme on the server) and remembered on this device, so the page can
 // start in it before anyone has signed in (see the script in index.html).
@@ -38,7 +38,7 @@ export const THEMES = [
   {
     id: 'luminary',
     name: 'Luminary',
-    blurb: 'A hero’s colours: gold and orange, lettering blue, a violet swoosh and magenta smoke.',
+    blurb: 'A hero’s colors: gold and orange, lettering blue, a violet swoosh and magenta smoke.',
     browser: '#0a0d1f',
   },
   {

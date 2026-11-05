@@ -18,7 +18,7 @@ import { rateLimit } from '../rateLimit.js';
 
 export const auth = Router();
 
-// The site's colour themes (client/src/themes.js). Infernal is the default.
+// The site's color themes (client/src/themes.js). Infernal is the default.
 const THEMES = ['infernal', 'mirage', 'gothic', 'frigid', 'obscure', 'luminary', 'radiant', 'tunic', 'ethereal', 'badge', 'traveler', 'judgement', 'atrophy', 'emblem', 'tarnished', 'briar'];
 
 const toJson = (u) => ({
@@ -120,7 +120,7 @@ auth.get('/me', async (req, res) => {
   res.json(toJson(user));
 });
 
-// Update your profile: display name, avatar and/or colour theme. avatarKey: null removes it.
+// Update your profile: display name, avatar and/or color theme. avatarKey: null removes it.
 auth.patch('/me', requireUser, async (req, res) => {
   const errors = [];
   const { rows: current } = await pool.query('SELECT * FROM users WHERE id = $1', [req.user.id]);

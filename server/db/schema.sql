@@ -158,5 +158,5 @@ ALTER TABLE encounters ADD COLUMN IF NOT EXISTS state JSONB;
 -- entry clears when their turn begins (the GM's next turn), and all of it when the encounter starts or ends.
 ALTER TABLE encounters ADD COLUMN IF NOT EXISTS actions JSONB NOT NULL DEFAULT '{}';
 
--- The colour theme each person picked in Account settings (client/src/themes.js).
+-- The color theme each person picked in Account settings (client/src/themes.js).
 ALTER TABLE users ADD COLUMN IF NOT EXISTS theme TEXT NOT NULL DEFAULT 'infernal';

@@ -13,7 +13,7 @@
 @font-face { font-family: 'Beaufort for LOL'; src: url('./assets/fonts/beaufort-bolditalic.woff2') format('woff2'); font-weight: 600 700; font-style: italic; font-display: swap; }
 @font-face { font-family: 'Beaufort for LOL'; src: url('./assets/fonts/beaufort-heavy.woff2') format('woff2'); font-weight: 800 900; font-style: normal; font-display: swap; }
 
-/* Colour themes (themes.js). Infernal, the red and gold, is the default; each theme is a
+/* Color themes (themes.js). Infernal, the red and gold, is the default; each theme is a
    set of these tokens, so a theme can also be applied to a single element (data-theme="…")
    to preview it, as Account settings does. */
 :root, [data-theme='infernal'] {
@@ -65,7 +65,7 @@
   --bronze-dark: #6b5530;
   --steel-dark: #33281f;
   --steel-light: #54432f;
-  /* Text on the action colour (filled buttons, badges, selected text). */
+  /* Text on the action color (filled buttons, badges, selected text). */
   --on-action: var(--text-bright);
   /* Health stays red in every theme. */
   --hp: #c0392b;
@@ -74,9 +74,9 @@
   --hp-shine: #ff8a6e;
 }
 
-/* Every theme's own default for text on its action colour, so a preview card in one theme
+/* Every theme's own default for text on its action color, so a preview card in one theme
    (data-theme on the card) doesn't inherit the page's value from another. Themes with light
-   action colours override it below (Radiant). */
+   action colors override it below (Radiant). */
 [data-theme] { --on-action: var(--text-bright); }
 
 /* Mirage: plum-black and wine, magenta glow, fire-orange actions, gold and parchment. */
@@ -1322,7 +1322,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 .roll { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-top: 22px; }
 .roll__gem {
-  /* The die's colours: the theme's action colour, gold on a critical success, the crit-fail colour on a fumble. */
+  /* The die's colors: the theme's action color, gold on a critical success, the crit-fail color on a fumble. */
   --die-edge: var(--blood-text);
   --die-front: var(--blood-shadow);
   --die-light: var(--blood-dark);
@@ -1338,12 +1338,12 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.55)) drop-shadow(0 0 16px color-mix(in srgb, var(--die-glow) 45%, transparent));
 }
 .roll__die { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-/* Each face: the edge colour mixed into the dark by how much light it catches (--lit, 0–1, from Dice.jsx). */
+/* Each face: the edge color mixed into the dark by how much light it catches (--lit, 0–1, from Dice.jsx). */
 .die-3d__face {
   stroke: var(--die-edge); stroke-width: 1.2; stroke-linejoin: round;
   fill: color-mix(in oklab, var(--die-edge) calc(var(--die-lit-min, 12%) + var(--lit) * var(--die-lit-range, 33%)), var(--die-low));
 }
-/* A critical success: gold, its faces lit up, so it reads even in themes whose die is already gold. A critical failure: the theme's crit-fail colour, gone dark. */
+/* A critical success: gold, its faces lit up, so it reads even in themes whose die is already gold. A critical failure: the theme's crit-fail color, gone dark. */
 .roll__gem:not(.roll__gem--plain):not(.roll__gem--critfail) { --die-edge: var(--gold); --die-front: var(--gold-deep); --die-light: var(--gold-dark); --die-side: var(--panel-raised); --die-glow: var(--gold); --die-lit-min: 46%; --die-lit-range: 42%; }
 .roll__gem--critfail { --die-edge: var(--deg-critfail); --die-front: var(--panel-ember); --die-light: var(--blood-dark); --die-side: var(--bg); --die-glow: var(--blood-dark); }
 /* The total sits on the die's front face (dieTextAt places it per die), sized to the die so it stays inside the face. */
@@ -1390,7 +1390,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .home-spotlight__art img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; opacity: 0.9; }
 /* The map alone is grey: warm it to sit with the reds and golds. */
 .home-spotlight__art--map img { object-position: center 40%; opacity: 0.6; filter: sepia(0.75) saturate(1.3) brightness(0.8); }
-/* A mask, not a gradient on top: the panel behind varies in colour, so no flat colour could blend into it. */
+/* A mask, not a gradient on top: the panel behind varies in color, so no flat color could blend into it. */
 .home-spotlight__art { mask-image: linear-gradient(to top, transparent, #000 70%); }
 .home-spotlight__text { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; padding: 14px 16px 18px; }
 .home-spotlight__text .camp-row__role { margin-bottom: 2px; }
@@ -1712,7 +1712,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .statblock__body table { display: block; max-width: 100%; overflow-x: auto; margin: 6px 0; border-collapse: collapse; font-size: 14px; }
 .statblock__body td, .statblock__body th { padding: 3px 8px; border: 1px solid var(--line-soft); text-align: left; }
 /* Pathfinder's action symbols. */
-/* Pathfinder's action symbols, drawn as shapes and filled with the text colour (red by
+/* Pathfinder's action symbols, drawn as shapes and filled with the text color (red by
    default): one, two or three actions (a small diamond and chevrons), reaction, free action. */
 .act { display: inline-block; height: 1em; margin: 0 4px; vertical-align: -0.15em; background-color: var(--blood-text); -webkit-mask: no-repeat center / contain; mask: no-repeat center / contain; }
 .act--1 { width: 0.900em; -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%224 2 18 20%22%3E%3Cpolygon points=%224.5,12 7.5,9 10.5,12 7.5,15%22/%3E%3Cpolygon points=%2213,3 22,12 13,21 8.5,16.5 13,12 8.5,7.5%22/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%224 2 18 20%22%3E%3Cpolygon points=%224.5,12 7.5,9 10.5,12 7.5,15%22/%3E%3Cpolygon points=%2213,3 22,12 13,21 8.5,16.5 13,12 8.5,7.5%22/%3E%3C/svg%3E"); }
@@ -4173,7 +4173,7 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 
 /* ---------- Theme picker (Account settings) ----------
-   Each card carries data-theme, so its colours are that theme's. */
+   Each card carries data-theme, so its colors are that theme's. */
 .theme-picker { display: flex; flex-direction: column; gap: 12px; }
 .theme-picker .sheet-panel__title, .theme-picker > p { margin: 0; }
 .theme-picker__options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
@@ -4286,7 +4286,7 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
   background: var(--panel);
   transition: border-color 160ms ease, background 160ms ease;
 }
-/* Creatures and characters are told apart by a thin edge colour as well as their label. */
+/* Creatures and characters are told apart by a thin edge color as well as their label. */
 .tracker__row::before { content: ''; position: absolute; left: -1px; top: -1px; bottom: -1px; width: 3px; border-radius: 4px 0 0 4px; background: var(--line); }
 .tracker__row--pc::before { background: var(--bronze); }
 .tracker__row--creature::before { background: var(--steel-light); }
@@ -4551,7 +4551,7 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 
 /* ---------- Dice (components/Dice.jsx) ----------
-   Every die takes the theme's colours, like the roller's d20; a damage amount is a box that rolls. */
+   Every die takes the theme's colors, like the roller's d20; a damage amount is a box that rolls. */
 .die {
   --die-edge: var(--blood-text);
   --die-front: var(--blood-shadow);
@@ -4606,4 +4606,19 @@ button.action-pip:focus-visible { outline: 2px solid var(--gold); outline-offset
   .tracker__actions { grid-column: 2 / 5; grid-row: 3; justify-content: flex-start; }
   .tracker__order--watch .tracker__actions { grid-column: 2 / -1; grid-row: 2; }
   .tracker__order--watch .tracker__row { grid-template-columns: 58px minmax(0, 1fr) minmax(90px, 160px); }
+}
+
+/* Home for a new account (Welcome in HomePage.jsx): the builder's start panels, as links to where to begin.
+   Two wide panels for what you make, then three for what you can explore. */
+.home-welcome { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+.home-welcome__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.home-welcome__grid > li { display: flex; }
+.home-welcome a.start-choice { text-decoration: none; }
+.home-welcome__grid > li:nth-child(n + 3) .start-choice { min-height: 260px; }
+.home-welcome__grid > li:nth-child(n + 3) .start-choice__name { font-size: clamp(28px, 1.2vw + 20px, 36px); }
+@media (min-width: 720px) {
+  .home-welcome__grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .home-welcome__grid > li { grid-column: span 3; }
+  .home-welcome__grid > li:nth-child(n + 3) { grid-column: span 2; }
+  .home-welcome__grid > li:nth-child(-n + 2) .start-choice { min-height: clamp(300px, 40vh, 440px); }
 }

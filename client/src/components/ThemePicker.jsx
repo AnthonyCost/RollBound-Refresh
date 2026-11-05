@@ -4,7 +4,7 @@ import { THEMES, applyTheme } from '../themes.js';
 import FormErrors, { errorsFrom } from './FormErrors.jsx';
 
 /**
- * Choose the site's colour theme. Each option is drawn in its own theme (data-theme on
+ * Choose the site's color theme. Each option is drawn in its own theme (data-theme on
  * the card), so what you see is what you get. Picking one applies it at once and saves
  * it to the account; if saving fails, it goes back.
  */
@@ -32,7 +32,7 @@ export default function ThemePicker() {
   return (
     <section className="sheet-panel theme-picker" aria-labelledby="theme-title">
       <h2 id="theme-title" className="sheet-panel__title">Theme</h2>
-      <p className="muted">The colours RollBound uses everywhere, saved to your account.</p>
+      <p className="muted">The colors RollBound uses everywhere, saved to your account.</p>
       <div className="theme-picker__options" role="radiogroup" aria-labelledby="theme-title">
         {THEMES.map((t) => {
           const on = (saving ?? current) === t.id;

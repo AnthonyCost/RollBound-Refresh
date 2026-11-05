@@ -7,10 +7,10 @@ import { THEMES } from '../themes.js';
 import { signed, titleCase } from '../format.js';
 
 /*
- * Style lab, themes tab: RollBound's real components in each colour theme (themes.js),
+ * Style lab, themes tab: RollBound's real components in each color theme (themes.js),
  * using data-theme on the specimen. Mirage's palette came from Guild Wars 2: Path of Fire's
- * site (guildwars2.com/en/path-of-fire). The specimen is the site's own markup and classes; the theme only swaps the colour tokens (and the
- * few colours theme.css hard-codes), so this shows what a re-theme would actually look like.
+ * site (guildwars2.com/en/path-of-fire). The specimen is the site's own markup and classes; the theme only swaps the color tokens (and the
+ * few colors theme.css hard-codes), so this shows what a re-theme would actually look like.
  */
 
 // Taken from the page's computed styles.
@@ -151,7 +151,7 @@ export default function StyleLabPalette() {
         <header className="lab-study__head">
           <h2 id="pal-title">Mirage palette</h2>
           <p>
-            Colours from <a href="https://www.guildwars2.com/en/path-of-fire/" target="_blank" rel="noreferrer">Guild Wars 2: Path of Fire</a>:
+            Colors from <a href="https://www.guildwars2.com/en/path-of-fire/" target="_blank" rel="noreferrer">Guild Wars 2: Path of Fire</a>:
             plum-black and wine for the ground, magenta for decoration, a fire-orange gradient for actions, and gold and parchment for highlights and text.
             The type stays RollBound’s.
           </p>

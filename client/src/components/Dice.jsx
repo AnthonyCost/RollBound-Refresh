@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 // The dice, in 3D: d4, d6, d8, d10, d12, d20, and d100 as two d10s (tens and units). Each is
 // a real solid, rotated each frame and projected into a 100 × 100 SVG grid, its visible faces
-// dark and lit from the upper left, outlined in the theme's colour (--die-*, theme.css). A
+// dark and lit from the upper left, outlined in the theme's color (--die-*, theme.css). A
 // fresh roll spins it (fast, then slowing) until it rests with its number face toward you.
 
 const PHI = (1 + Math.sqrt(5)) / 2;
@@ -147,7 +147,7 @@ export function DieShape({ sides, label = null, className = '', spin = null }) {
   const [x, y, size] = solid.text;
   return (
     <svg className={`die__shape ${className}`} viewBox="0 0 100 100" aria-hidden="true">
-      {/* Dark faces lit from the upper left, outlined in the die's bright colour. */}
+      {/* Dark faces lit from the upper left, outlined in the die's bright color. */}
       {faces.map(([pts, light]) => (
         <polygon key={pts} className="die-3d__face" points={pts} style={{ '--lit': light.toFixed(2) }} />
       ))}

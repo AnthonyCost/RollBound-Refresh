@@ -100,8 +100,8 @@
 /* The glow, added as the total lands or when the DC makes it a critical: gold for a natural 20 or a
    critical success, a red shake for a natural 1 or a critical failure. gem-cast stays in the list so
    it isn't replayed when the glow comes off again. */
-/* The flare's filter lists the same three shadows as the die at rest, its colours written the same way (color-mix),
-   so the browser eases between them: mismatched lists jump, and a plain colour against a mix blends wildly. */
+/* The flare's filter lists the same three shadows as the die at rest, its colors written the same way (color-mix),
+   so the browser eases between them: mismatched lists jump, and a plain color against a mix blends wildly. */
 @keyframes gem-flare { 25% { filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.55)) drop-shadow(0 0 12px color-mix(in srgb, var(--gold) 100%, transparent)) drop-shadow(0 0 36px color-mix(in srgb, var(--gold) 70%, transparent)); } }
 /* A critical success stays radiant: a layered gold halo that breathes, and slow light rays behind the die. */
 .roll__gem--nat20 {
