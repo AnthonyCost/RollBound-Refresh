@@ -1,8 +1,8 @@
 # Moving uploaded images to AWS S3
 
-The code for S3 is already in place. This guide covers the AWS setup you do by hand, and the settings that switch RollBound from local storage to S3.
+The code for S3 is already in place. This guide covers the AWS setup you do by hand, and the settings that switch RollBound from local storage to S3. The bucket is **`rollbound-refresh`**; the config files in `infra/aws/` already use that name.
 
-RollBound stores three kinds of uploaded image, each in its own folder (prefix) in one bucket:
+RollBound stores three kinds of uploaded image, each in its own folder (prefix) in the bucket:
 
 | Image | Prefix | Max size | Set from |
 | --- | --- | --- | --- |
@@ -30,29 +30,31 @@ Players ◀─4. load the image────────────────�
 
 The code for all of this is in `server/src/storage/s3.js`.
 
-Every config file referenced below is in `infra/aws/`. Replace the placeholders as you go:
+You'll fill in three placeholders as you go, all in `infra/aws/`:
 
-| Placeholder | Replace with |
-| --- | --- |
-| `YOUR_BUCKET_NAME` | Your bucket name, e.g. `rollbound-covers-prod` |
-| `YOUR_ACCOUNT_ID` | Your 12-digit AWS account ID |
-| `YOUR_DISTRIBUTION_ID` | The CloudFront distribution ID (from step 4) |
-| `YOUR_APP_DOMAIN` | Where the site is hosted, e.g. `rollbound.example.com` |
+| Placeholder | Replace with | File |
+| --- | --- | --- |
+| `YOUR_ACCOUNT_ID` | Your 12-digit AWS account ID (top-right account menu in the console) | `s3-bucket-policy.json` |
+| `YOUR_DISTRIBUTION_ID` | The CloudFront distribution ID (from step 4) | `s3-bucket-policy.json` |
+| `YOUR_APP_DOMAIN` | Where the site will be hosted, e.g. `rollbound.example.com`. Leave it until you deploy; `localhost:5173` works meanwhile. | `s3-cors.json` |
+
+Pick one **region** close to where the server will run (e.g. `us-east-2`) and use it everywhere below. The commands assume the AWS CLI v2, signed in with an admin profile (`aws configure` or `aws sso login`). Every step also has a console route.
 
 ## 1. Create the bucket
 
 In the **S3** console, choose **Create bucket**:
 
-- **Name:** a globally unique name, e.g. `rollbound-covers-prod`.
-- **Region:** the one closest to your server, e.g. `us-east-2`. You'll put it in `AWS_REGION`.
+- **Bucket type:** General purpose.
+- **Name:** `rollbound-refresh`. Bucket names are global; if it's taken, pick another and replace `rollbound-refresh` in `infra/aws/*.json` and below.
+- **Region:** your chosen region. It goes in `AWS_REGION`.
 - **Object Ownership:** ACLs disabled (the default).
 - **Block all public access:** leave it **on**. CloudFront reads the bucket privately.
 - **Default encryption:** SSE-S3 (the default) is fine.
 
-Or with the AWS CLI:
+Or with the CLI:
 
 ```bash
-aws s3api create-bucket --bucket YOUR_BUCKET_NAME --region us-east-2 \
+aws s3api create-bucket --bucket rollbound-refresh --region us-east-2 \
   --create-bucket-configuration LocationConstraint=us-east-2
 ```
 
@@ -60,81 +62,72 @@ Leave out `--create-bucket-configuration` if you use `us-east-1`.
 
 ## 2. Allow browser uploads (CORS)
 
-Browsers upload straight to the bucket, so the bucket must allow your site's origin. Edit `infra/aws/s3-cors.json`:
-
-- Replace `YOUR_APP_DOMAIN` with your real domain.
-- Keep `http://localhost:5173` if you want to test S3 from the dev server.
-
-Then apply it:
+Browsers upload straight to the bucket, so the bucket must allow your site's origin. `infra/aws/s3-cors.json` allows `http://localhost:5173` (the dev server) and `https://YOUR_APP_DOMAIN`. Replace the domain when you deploy, or delete that line for now.
 
 ```bash
-aws s3api put-bucket-cors --bucket YOUR_BUCKET_NAME --cors-configuration file://infra/aws/s3-cors.json
+aws s3api put-bucket-cors --bucket rollbound-refresh --cors-configuration file://infra/aws/s3-cors.json
 ```
 
-In the console, the setting is under **Bucket → Permissions → Cross-origin resource sharing (CORS)**. The console wants only the array, so paste the `[ ... ]` part of `CORSRules`.
+In the console it's under **Bucket → Permissions → Cross-origin resource sharing (CORS)**. The console wants only the array, so paste the `[ ... ]` part of `CORSRules`.
 
 ## 3. Delete abandoned uploads automatically
 
 ```bash
-aws s3api put-bucket-lifecycle-configuration --bucket YOUR_BUCKET_NAME \
+aws s3api put-bucket-lifecycle-configuration --bucket rollbound-refresh \
   --lifecycle-configuration file://infra/aws/s3-lifecycle.json
 ```
 
 This deletes any object still tagged `state=pending` after one day, whether it's a cover, avatar or portrait. Images in use are tagged `state=attached`, so the rule never touches them.
 
-In the console, go to **Bucket → Management → Create lifecycle rule**:
-1. Limit the rule to the object tag `state` = `pending`, with no prefix.
-2. Choose **Expire current versions of objects**, with **1** day.
+In the console: **Bucket → Management → Create lifecycle rule**. Limit the rule to the object tag `state` = `pending` (no prefix), and choose **Expire current versions of objects** after **1** day.
 
-## 4. Serve covers through CloudFront
+## 4. Serve images through CloudFront
 
-1. Open **CloudFront → Create distribution**.
-2. **Origin:** pick the bucket (`YOUR_BUCKET_NAME.s3.<region>.amazonaws.com`). Under **Origin access**, choose **Origin access control settings (recommended)** and create a new OAC.
-3. **Viewer protocol policy:** Redirect HTTP to HTTPS.
-4. **Cache policy:** `CachingOptimized`. Image keys are unique and never change, so they can be cached for a long time.
-5. Create the distribution, then note its **ID** and **domain** (like `d1234abcd.cloudfront.net`).
-6. Allow CloudFront to read the bucket:
-   1. Edit `infra/aws/s3-bucket-policy.json` with your bucket name, account ID and distribution ID.
+1. Open **CloudFront → Create distribution**. If the console asks you to choose a pricing plan, the free or pay-as-you-go option is plenty for this site.
+2. **Origin:** choose **Amazon S3** and pick `rollbound-refresh`. Choose the option that keeps the bucket private and grants CloudFront access: **Origin access control (OAC)**, often shown as "Allow private S3 bucket access to CloudFront". Don't pick the legacy OAI or the bucket's website endpoint (OAC doesn't work with website endpoints).
+3. **Recommended settings:** the wizard's recommended cache settings for an S3 origin use `CachingOptimized`, which suits these images (each key is unique and never changes). Make sure viewers are redirected from HTTP to HTTPS.
+4. **Security:** web application firewall (WAF) protection is optional; you can skip it.
+5. Create the distribution, then note its **ID** (like `E1ABCDEF2GHIJK`) and **domain** (like `d1234abcd.cloudfront.net`). It takes a few minutes to deploy.
+6. **Bucket policy:** the wizard may add a policy to the bucket for you. Replace it with the stricter one in `infra/aws/s3-bucket-policy.json`, which lets CloudFront read only the three image folders and refuses any request made without HTTPS:
+   1. Put your account ID and distribution ID into the file.
    2. Paste it into **Bucket → Permissions → Bucket policy**, or run:
 
       ```bash
-      aws s3api put-bucket-policy --bucket YOUR_BUCKET_NAME --policy file://infra/aws/s3-bucket-policy.json
+      aws s3api put-bucket-policy --bucket rollbound-refresh --policy file://infra/aws/s3-bucket-policy.json
       ```
 
-The policy lets CloudFront read all three image folders, and refuses any request made without HTTPS.
-
-7. So the app can read images back (it does this to put a character's portrait into the exported PDF sheet), edit the distribution's behavior:
-   - set **Origin request policy** to `CORS-S3Origin`,
-   - set **Response headers policy** to `CORS-With-Preflight`.
+7. **CORS for reading images back:** the app fetches a character's portrait to put it into the exported PDF sheet. In the distribution, open **Behaviors**, edit the default behavior, and set:
+   - **Origin request policy:** `CORS-S3Origin`
+   - **Response headers policy:** `CORS-With-Preflight`
 
    The bucket's CORS rules from step 2 already allow `GET` from your site.
 
-Your `S3_PUBLIC_URL` will be `https://d1234abcd.cloudfront.net`, or a custom domain if you attach one to the distribution.
+Your `S3_PUBLIC_URL` is `https://` plus the distribution's domain, or a custom domain if you attach one later.
 
-> **Without CloudFront:** you can turn off "Block public access" and allow public `s3:GetObject` on `covers/*`, then set `S3_PUBLIC_URL=https://YOUR_BUCKET_NAME.s3.<region>.amazonaws.com`. It's simpler, but slower, costlier at scale, and the bucket is public. CloudFront is recommended.
+> **Without CloudFront:** you can turn off "Block public access" and allow public `s3:GetObject` on `covers/*`, `avatars/*` and `portraits/*`, then set `S3_PUBLIC_URL=https://rollbound-refresh.s3.<region>.amazonaws.com`. It's simpler, but the bucket is public and there's no caching. CloudFront is recommended.
 
 ## 5. Give the server permission
 
-The server needs exactly the permissions in `infra/aws/iam-policy.json`:
+The server needs exactly the permissions in `infra/aws/iam-policy.json` (already filled in for `rollbound-refresh`):
 - put, tag, read and delete objects under `covers/`, `avatars/` and `portraits/`,
 - list the bucket, so a missing file returns "not found" instead of "access denied".
 
-Replace `YOUR_BUCKET_NAME`, then:
+**For local development:**
+1. In **IAM → Users**, create a user such as `rollbound-dev`. It doesn't need console access.
+2. On the user, choose **Add permissions → Create inline policy → JSON**, paste `infra/aws/iam-policy.json`, and name it `rollbound-images`.
+3. Under **Security credentials**, create an **access key**. When asked for a use case, choose **Application running outside AWS** (or **Local code**); the console suggests alternatives, but a scoped key is fine for a dev machine.
+4. Put the key ID and secret in `server/.env` (step 6). That file is in `.gitignore`; never commit it. If a key ever leaks, deactivate it in IAM and create a new one.
 
-- **For local development:**
-  1. In **IAM**, create a user such as `rollbound-dev`.
-  2. Attach the policy as an inline policy.
-  3. Create an **access key** for it, and put the key and secret in `server/.env`. That file is in `.gitignore`; never commit it.
-- **In production:** give the server an **IAM role** with the policy (an EC2 instance profile, ECS task role, etc.) and leave the access keys out of `.env`. The AWS SDK finds role credentials on its own.
+**In production:** give the server an **IAM role** with the same policy (an EC2 instance profile, an ECS task role, etc.) and leave the access keys out of `.env`. The AWS SDK finds role credentials on its own.
 
 ## 6. Switch RollBound to S3
 
-Add these to `server/.env` (the same block is in `server/.env.example`):
+In `server/.env`, change `STORAGE_DRIVER` and add the S3 settings (the same block is commented out in `server/.env.example`):
 
 ```bash
 STORAGE_DRIVER=s3
 AWS_REGION=us-east-2
-S3_BUCKET=YOUR_BUCKET_NAME
+S3_BUCKET=rollbound-refresh
 S3_PUBLIC_URL=https://d1234abcd.cloudfront.net
 
 # Development only; use an IAM role in production.
@@ -142,41 +135,43 @@ AWS_ACCESS_KEY_ID=...
 AWS_SECRET_ACCESS_KEY=...
 ```
 
-Restart the API (`npm run dev:server`). If anything required is missing, it refuses to start and names the missing setting. `UPLOAD_SECRET` and `UPLOAD_DIR` only apply to the local driver, so you can leave them out.
+Restart the API (`npm run dev:server`, or `npm run dev` for both). If anything required is missing, it refuses to start and names the missing setting. `UPLOAD_SECRET` and `UPLOAD_DIR` only apply to the local driver, so you can leave them out.
 
-You don't need to change anything in the client or the database.
+You don't need to change anything in the client or the database. To go back to local storage, set `STORAGE_DRIVER=local` and restart.
 
 ## 7. Move existing images (if any)
 
 Images uploaded while using local storage live in `server/uploads/`. Their keys are the same in S3, so copy them across and everything keeps working:
 
 ```bash
-aws s3 sync server/uploads s3://YOUR_BUCKET_NAME
+aws s3 sync server/uploads s3://rollbound-refresh
 ```
 
-Copied files have no `state` tag, so the lifecycle rule leaves them alone.
+Copied files have no `state` tag, so the lifecycle rule leaves them alone. They show from CloudFront once `S3_PUBLIC_URL` is set.
 
 ## 8. Check it works
 
 1. Sign in and create a campaign with a cover image.
-2. In the browser's dev tools **Network** tab, the upload should be a `PUT` to `YOUR_BUCKET_NAME.s3...amazonaws.com` returning **200**.
+2. In the browser's dev tools **Network** tab, the upload should be a `PUT` to `rollbound-refresh.s3.<region>.amazonaws.com` returning **200**.
 3. The campaign page's cover should load from your CloudFront domain.
 4. In the S3 console, the object under `covers/` should be tagged `state=attached`.
 5. Edit the campaign and replace the cover. The old object should disappear from the bucket.
 6. Set a profile image on the Account page, and a portrait from a character sheet. They should land under `avatars/` and `portraits/`.
+7. Export a character sheet as a PDF. The portrait should be in it (this checks step 4.7).
 
 ## Troubleshooting
 
 | Symptom | Likely cause |
 | --- | --- |
 | Upload fails in the browser with a **CORS** error | Your site's origin isn't in `s3-cors.json`, or `x-amz-tagging` is missing from `AllowedHeaders`. Origins must match exactly, including `https://` and the port. |
+| Upload returns **400** mentioning a **checksum** (e.g. `BadDigest`) | The upload URL was signed with a checksum. `s3.js` sets `requestChecksumCalculation: 'WHEN_REQUIRED'` to prevent this; check that it's still there. |
 | Upload returns **403 SignatureDoesNotMatch** | The browser sent different headers than were signed. The client sends exactly the `headers` the API returns, so look for a proxy or extension that changes the request. A server clock that's minutes off also causes this. |
-| Upload returns **403 AccessDenied** | The IAM user or role is missing `s3:PutObject` or `s3:PutObjectTagging`, or its policy names the wrong bucket. |
+| Upload returns **403 AccessDenied** | The IAM user or role is missing `s3:PutObject` or `s3:PutObjectTagging`, or its policy names a different bucket. |
 | Saving says **"That image upload was not found"** | The upload didn't finish, the file isn't a real image, or the server lacks `s3:GetObject` on that prefix. |
 | Server logs show **AccessDenied** when saving | The role is missing `s3:ListBucket`. Without it, S3 reports missing files as "access denied" instead of "not found". |
-| The PDF sheet exports without the portrait | CloudFront isn't passing CORS headers. Check the origin request and response headers policies in step 4. |
-| Images upload but don't display | `S3_PUBLIC_URL` is wrong, or the bucket policy doesn't name your CloudFront distribution. Also check that the bucket policy lists all three prefixes. Open an image URL directly to see the error. |
+| The PDF sheet exports without the portrait | CloudFront isn't passing CORS headers. Check the origin request and response headers policies in step 4.7. |
+| Images upload but don't display (**403** from CloudFront) | The bucket policy doesn't name your account and distribution IDs, or the distribution uses OAI instead of OAC. Also check `S3_PUBLIC_URL`. Open an image URL directly to see the error. |
 
 ## Testing without AWS
 
-`S3_ENDPOINT` points the driver at any S3-compatible server, such as LocalStack (`http://localhost:4566`). Set `STORAGE_DRIVER=s3` with test credentials and a test bucket to exercise the whole flow locally. The driver was tested this way against an S3-compatible gateway: presigned uploads, the signed size, type and tag checks, image verification, tagging, and deleting replaced images, for all three kinds.
+`S3_ENDPOINT` points the driver at any S3-compatible server, such as LocalStack (`http://localhost:4566`). Set `STORAGE_DRIVER=s3` with test credentials and a test bucket to exercise the whole flow locally. Some S3-compatible servers are more lenient than AWS (the checksum problem above didn't show up on one), so step 8 against the real bucket is the real check.

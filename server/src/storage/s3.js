@@ -26,8 +26,12 @@ if (missing.length) {
 // Credentials come from the standard AWS chain: AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY
 // in .env for development, or an IAM role when deployed. Never hard-code them.
 // S3_ENDPOINT points at an S3-compatible service (MinIO, LocalStack) for local testing.
+// Checksums only where S3 requires them: by default the SDK (3.729+) signs a CRC32 of the empty
+// body into presigned upload URLs, and S3 then rejects the browser's real file as a mismatch.
 const client = new S3Client({
   region: REGION,
+  requestChecksumCalculation: 'WHEN_REQUIRED',
+  responseChecksumValidation: 'WHEN_REQUIRED',
   ...(process.env.S3_ENDPOINT && { endpoint: process.env.S3_ENDPOINT, forcePathStyle: true }),
 });
 

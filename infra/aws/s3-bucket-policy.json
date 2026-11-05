@@ -9,9 +9,9 @@
       },
       "Action": "s3:GetObject",
       "Resource": [
-        "arn:aws:s3:::YOUR_BUCKET_NAME/covers/*",
-        "arn:aws:s3:::YOUR_BUCKET_NAME/avatars/*",
-        "arn:aws:s3:::YOUR_BUCKET_NAME/portraits/*"
+        "arn:aws:s3:::rollbound-refresh/covers/*",
+        "arn:aws:s3:::rollbound-refresh/avatars/*",
+        "arn:aws:s3:::rollbound-refresh/portraits/*"
       ],
       "Condition": {
         "StringEquals": {
@@ -25,8 +25,8 @@
       "Principal": "*",
       "Action": "s3:*",
       "Resource": [
-        "arn:aws:s3:::YOUR_BUCKET_NAME",
-        "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+        "arn:aws:s3:::rollbound-refresh",
+        "arn:aws:s3:::rollbound-refresh/*"
       ],
       "Condition": {
         "Bool": {

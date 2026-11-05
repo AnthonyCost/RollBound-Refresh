@@ -6,16 +6,16 @@
       "Effect": "Allow",
       "Action": ["s3:PutObject", "s3:PutObjectTagging", "s3:GetObject", "s3:DeleteObject"],
       "Resource": [
-        "arn:aws:s3:::YOUR_BUCKET_NAME/covers/*",
-        "arn:aws:s3:::YOUR_BUCKET_NAME/avatars/*",
-        "arn:aws:s3:::YOUR_BUCKET_NAME/portraits/*"
+        "arn:aws:s3:::rollbound-refresh/covers/*",
+        "arn:aws:s3:::rollbound-refresh/avatars/*",
+        "arn:aws:s3:::rollbound-refresh/portraits/*"
       ]
     },
     {
       "Sid": "MissingImagesReturn404Not403",
       "Effect": "Allow",
       "Action": "s3:ListBucket",
-      "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME",
+      "Resource": "arn:aws:s3:::rollbound-refresh",
       "Condition": { "StringLike": { "s3:prefix": ["covers/*", "avatars/*", "portraits/*"] } }
     }
   ]
