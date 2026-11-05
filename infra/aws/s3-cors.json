@@ -4,7 +4,8 @@
       "ID": "browser-image-uploads",
       "AllowedOrigins": [
         "http://localhost:5173",
-        "https://YOUR_APP_DOMAIN"
+        "https://rollbound.com",
+        "https://www.rollbound.com"
       ],
       "AllowedMethods": [
         "PUT",

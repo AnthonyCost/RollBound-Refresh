@@ -1,6 +1,6 @@
 # Moving uploaded images to AWS S3
 
-The code for S3 is already in place. This guide covers the AWS setup you do by hand, and the settings that switch RollBound from local storage to S3. The bucket is **`rollbound-refresh`**; the config files in `infra/aws/` already use that name.
+The code for S3 is already in place. This guide covers the AWS setup you do by hand, and the settings that switch RollBound from local storage to S3. The bucket is **`rollbound-refresh`** and the site will live at **`rollbound.com`**; the config files in `infra/aws/` already use both.
 
 RollBound stores three kinds of uploaded image, each in its own folder (prefix) in the bucket:
 
@@ -30,13 +30,12 @@ Players ◀─4. load the image────────────────�
 
 The code for all of this is in `server/src/storage/s3.js`.
 
-You'll fill in three placeholders as you go, all in `infra/aws/`:
+You'll fill in two placeholders as you go, both in `infra/aws/s3-bucket-policy.json`:
 
-| Placeholder | Replace with | File |
-| --- | --- | --- |
-| `YOUR_ACCOUNT_ID` | Your 12-digit AWS account ID (top-right account menu in the console) | `s3-bucket-policy.json` |
-| `YOUR_DISTRIBUTION_ID` | The CloudFront distribution ID (from step 4) | `s3-bucket-policy.json` |
-| `YOUR_APP_DOMAIN` | Where the site will be hosted, e.g. `rollbound.example.com`. Leave it until you deploy; `localhost:5173` works meanwhile. | `s3-cors.json` |
+| Placeholder | Replace with |
+| --- | --- |
+| `YOUR_ACCOUNT_ID` | Your 12-digit AWS account ID (top-right account menu in the console) |
+| `YOUR_DISTRIBUTION_ID` | The CloudFront distribution ID (from step 4) |
 
 Pick one **region** close to where the server will run (e.g. `us-east-2`) and use it everywhere below. The commands assume the AWS CLI v2, signed in with an admin profile (`aws configure` or `aws sso login`). Every step also has a console route.
 
@@ -62,7 +61,7 @@ Leave out `--create-bucket-configuration` if you use `us-east-1`.
 
 ## 2. Allow browser uploads (CORS)
 
-Browsers upload straight to the bucket, so the bucket must allow your site's origin. `infra/aws/s3-cors.json` allows `http://localhost:5173` (the dev server) and `https://YOUR_APP_DOMAIN`. Replace the domain when you deploy, or delete that line for now.
+Browsers upload straight to the bucket, so the bucket must allow the site's origin. `infra/aws/s3-cors.json` allows `http://localhost:5173` (the dev server), `https://rollbound.com` and `https://www.rollbound.com`. Origins must match exactly, so if the site ever runs anywhere else (a staging subdomain, another port), add it here and re-run the command.
 
 ```bash
 aws s3api put-bucket-cors --bucket rollbound-refresh --cors-configuration file://infra/aws/s3-cors.json
@@ -102,7 +101,18 @@ In the console: **Bucket → Management → Create lifecycle rule**. Limit the r
 
    The bucket's CORS rules from step 2 already allow `GET` from your site.
 
-Your `S3_PUBLIC_URL` is `https://` plus the distribution's domain, or a custom domain if you attach one later.
+Your `S3_PUBLIC_URL` is `https://` plus the distribution's domain, or `https://images.rollbound.com` once you do step 4b.
+
+### 4b. Optional: serve images from images.rollbound.com
+
+Images work fine from the `cloudfront.net` address; this only makes the URLs your own. RollBound stores image keys, not full URLs, so you can do this any time: existing images switch over as soon as `S3_PUBLIC_URL` changes.
+
+1. **Certificate:** in **AWS Certificate Manager**, switch the region to **US East (N. Virginia) `us-east-1`** (CloudFront only uses certificates from there, whatever region the bucket is in). Request a public certificate for `images.rollbound.com` with **DNS validation**, and add the CNAME record it gives you at your DNS provider. Wait until it shows **Issued**.
+2. **Distribution:** edit the distribution's settings, add `images.rollbound.com` as an **alternate domain name**, and choose that certificate.
+3. **DNS:** at your DNS provider, point `images.rollbound.com` at the distribution: a **CNAME** to `d1234abcd.cloudfront.net`, or an **alias A/AAAA** record if the domain is in Route 53.
+4. Set `S3_PUBLIC_URL=https://images.rollbound.com` and restart the API.
+
+Use a subdomain rather than `rollbound.com` itself, which the app will use.
 
 > **Without CloudFront:** you can turn off "Block public access" and allow public `s3:GetObject` on `covers/*`, `avatars/*` and `portraits/*`, then set `S3_PUBLIC_URL=https://rollbound-refresh.s3.<region>.amazonaws.com`. It's simpler, but the bucket is public and there's no caching. CloudFront is recommended.
 
@@ -118,7 +128,7 @@ The server needs exactly the permissions in `infra/aws/iam-policy.json` (already
 3. Under **Security credentials**, create an **access key**. When asked for a use case, choose **Application running outside AWS** (or **Local code**); the console suggests alternatives, but a scoped key is fine for a dev machine.
 4. Put the key ID and secret in `server/.env` (step 6). That file is in `.gitignore`; never commit it. If a key ever leaks, deactivate it in IAM and create a new one.
 
-**In production:** give the server an **IAM role** with the same policy (an EC2 instance profile, an ECS task role, etc.) and leave the access keys out of `.env`. The AWS SDK finds role credentials on its own.
+**In production:** if rollbound.com runs on AWS (EC2, ECS, App Runner, Lambda), give the server an **IAM role** with the same policy and leave the access keys out of `.env`; the AWS SDK finds role credentials on its own. On a host outside AWS (Render, Fly.io, a VPS), create a separate IAM user such as `rollbound-prod` with the same inline policy, and set its keys as that host's environment variables. Don't reuse the dev key.
 
 ## 6. Switch RollBound to S3
 
@@ -163,7 +173,7 @@ Copied files have no `state` tag, so the lifecycle rule leaves them alone. They 
 
 | Symptom | Likely cause |
 | --- | --- |
-| Upload fails in the browser with a **CORS** error | Your site's origin isn't in `s3-cors.json`, or `x-amz-tagging` is missing from `AllowedHeaders`. Origins must match exactly, including `https://` and the port. |
+| Upload fails in the browser with a **CORS** error | Your site's origin isn't in `s3-cors.json` (e.g. you're on `www.` but only the bare domain is listed), or `x-amz-tagging` is missing from `AllowedHeaders`. Origins must match exactly, including `https://` and the port. |
 | Upload returns **400** mentioning a **checksum** (e.g. `BadDigest`) | The upload URL was signed with a checksum. `s3.js` sets `requestChecksumCalculation: 'WHEN_REQUIRED'` to prevent this; check that it's still there. |
 | Upload returns **403 SignatureDoesNotMatch** | The browser sent different headers than were signed. The client sends exactly the `headers` the API returns, so look for a proxy or extension that changes the request. A server clock that's minutes off also causes this. |
 | Upload returns **403 AccessDenied** | The IAM user or role is missing `s3:PutObject` or `s3:PutObjectTagging`, or its policy names a different bucket. |
