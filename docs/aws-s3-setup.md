@@ -100,6 +100,14 @@ S3 runs lifecycle rules about once a day, so an abandoned upload can linger for 
 
 If the console asks you to acknowledge that the rule applies to **all objects in the bucket**, stop: the tag filter didn't get added. Go back to step 5.
 
+**If the console requires a prefix too:** a rule takes only one prefix, so make three rules, one per image folder, each with the same tag and action (expire current versions, 1 day after creation). Include the trailing `/` in each prefix:
+
+| Rule name | Prefix | Tag key | Tag value |
+| --- | --- | --- | --- |
+| `expire-abandoned-covers` | `covers/` | `state` | `pending` |
+| `expire-abandoned-avatars` | `avatars/` | `state` | `pending` |
+| `expire-abandoned-portraits` | `portraits/` | `state` | `pending` |
+
 Or with the CLI: `aws s3api put-bucket-lifecycle-configuration --bucket rollbound-refresh --lifecycle-configuration file://infra/aws/s3-lifecycle.json`
 
 ## 4. Let browsers load the images
