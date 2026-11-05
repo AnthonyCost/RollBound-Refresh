@@ -239,15 +239,15 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     seen.current.shield = feedShield;
   }, [feedShield]); // eslint-disable-line react-hooks/exhaustive-deps
   const myTurn = encounterActive && encounter.current === me.key;
-  // A new turn of yours: three fresh actions, and a raised shield comes down. A new round
-  // refreshes your actions and reaction even before your turn, as the table's do.
+  // A new turn of yours: three fresh actions (a reaction spent earlier this round stays spent),
+  // and a raised shield comes down. A new round refreshes your actions and reaction, as the table's do.
   const encounterRound = encounterActive ? encounter.round : null;
   useEffect(() => {
     if (encounterRound != null) setUsed([]);
   }, [encounterRound]);
   useEffect(() => {
     if (!myTurn) return;
-    setUsed([]);
+    setUsed((u) => u.filter((a) => a.reaction));
     setShieldRaised(false);
   }, [myTurn, encounter?.round]);
 

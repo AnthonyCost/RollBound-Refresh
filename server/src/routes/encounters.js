@@ -134,12 +134,14 @@ encounters.put('/:encounterId', async (req, res) => {
 encounters.put('/:encounterId/state', async (req, res) => {
   const v = validState(req.body);
   if (v.errors) return res.status(400).json({ errors: v.errors });
-  // Starting or a new round clears everyone's actions; a turn moving to someone clears theirs
-  // (a fresh 3 actions and reaction). (The right-hand side reads the row as it was, before this save.)
+  // Starting or a new round clears everyone's actions and reactions; a turn moving to someone gives
+  // them 3 fresh actions, but a reaction they spent earlier this round stays spent.
+  // (The right-hand side reads the row as it was, before this save.)
   const { rows } = await pool.query(
     `UPDATE encounters SET
        actions = CASE WHEN state IS NULL OR (state->>'round')::int IS DISTINCT FROM $5::int THEN '{}'::jsonb
-                      WHEN $4::text IS NOT NULL AND state->>'current' IS DISTINCT FROM $4::text THEN actions - $4::text
+                      WHEN $4::text IS NOT NULL AND state->>'current' IS DISTINCT FROM $4::text AND actions ? $4::text
+                        THEN jsonb_set(actions, ARRAY[$4::text], (actions -> $4::text) || '{"used": 0}')
                       ELSE actions END,
        state = $1
      WHERE id = $2 AND campaign_id = $3 RETURNING *`,

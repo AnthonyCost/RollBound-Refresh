@@ -478,9 +478,10 @@ export default function EncounterRunPage() {
 
   // Every change goes to the server; if a save fails, say so and keep the change on screen.
   const save = (next) => {
-    // A new round gives everyone fresh actions, and a turn moving to someone gives them theirs (the server clears them too).
+    // A new round refreshes everyone; a turn moving to someone gives them fresh actions but keeps a
+    // reaction they spent earlier this round (the server does the same).
     if (next.round !== state?.round) setActions({});
-    else if (next.current && next.current !== state?.current) setActions(({ [next.current]: _, ...rest }) => rest);
+    else if (next.current && next.current !== state?.current) setActions((a) => (a[next.current] ? { ...a, [next.current]: { ...a[next.current], used: 0 } } : a));
     setState(next);
     setErrors([]);
     api.saveEncounterState(id, encounterId, next).catch((err) => setErrors(errorsFrom(err)));
