@@ -67,7 +67,19 @@ Browsers upload straight to the bucket, so the bucket must allow the site's orig
 aws s3api put-bucket-cors --bucket rollbound-refresh --cors-configuration file://infra/aws/s3-cors.json
 ```
 
-In the console it's under **Bucket → Permissions → Cross-origin resource sharing (CORS)**. The console wants only the array, so paste the `[ ... ]` part of `CORSRules`.
+In the console it's under **Bucket → Permissions → Cross-origin resource sharing (CORS) → Edit**. The console takes only the list of rules, not the file's `{ "CORSRules": ... }` wrapper (pasting the whole file gives "The XML you provided was not well-formed"). Replace everything in the box with:
+
+```json
+[
+  {
+    "AllowedOrigins": ["http://localhost:5173", "https://rollbound.com", "https://www.rollbound.com"],
+    "AllowedMethods": ["PUT", "GET"],
+    "AllowedHeaders": ["Content-Type", "x-amz-tagging"],
+    "ExposeHeaders": ["ETag"],
+    "MaxAgeSeconds": 3000
+  }
+]
+```
 
 ## 3. Delete abandoned uploads automatically
 
@@ -88,8 +100,50 @@ In the console: **Bucket → Management → Create lifecycle rule**. Limit the r
 4. **Security:** web application firewall (WAF) protection is optional; you can skip it.
 5. Create the distribution, then note its **ID** (like `E1ABCDEF2GHIJK`) and **domain** (like `d1234abcd.cloudfront.net`). It takes a few minutes to deploy.
 6. **Bucket policy:** the wizard may add a policy to the bucket for you. Replace it with the stricter one in `infra/aws/s3-bucket-policy.json`, which lets CloudFront read only the three image folders and refuses any request made without HTTPS:
-   1. Put your account ID and distribution ID into the file.
-   2. Paste it into **Bucket → Permissions → Bucket policy**, or run:
+   1. In **Bucket → Permissions → Bucket policy → Edit**, replace everything with the policy below, swapping in your 12-digit account ID for `YOUR_ACCOUNT_ID` and the distribution ID (like `E1ABCDEF2GHIJK`) for `YOUR_DISTRIBUTION_ID`:
+
+      ```json
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AllowCloudFrontToReadImages",
+            "Effect": "Allow",
+            "Principal": {
+              "Service": "cloudfront.amazonaws.com"
+            },
+            "Action": "s3:GetObject",
+            "Resource": [
+              "arn:aws:s3:::rollbound-refresh/covers/*",
+              "arn:aws:s3:::rollbound-refresh/avatars/*",
+              "arn:aws:s3:::rollbound-refresh/portraits/*"
+            ],
+            "Condition": {
+              "StringEquals": {
+                "AWS:SourceArn": "arn:aws:cloudfront::YOUR_ACCOUNT_ID:distribution/YOUR_DISTRIBUTION_ID"
+              }
+            }
+          },
+          {
+            "Sid": "DenyInsecureTransport",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+              "arn:aws:s3:::rollbound-refresh",
+              "arn:aws:s3:::rollbound-refresh/*"
+            ],
+            "Condition": {
+              "Bool": {
+                "aws:SecureTransport": "false"
+              }
+            }
+          }
+        ]
+      }
+      ```
+
+   2. Or with the CLI, put the two IDs into `infra/aws/s3-bucket-policy.json` and run:
 
       ```bash
       aws s3api put-bucket-policy --bucket rollbound-refresh --policy file://infra/aws/s3-bucket-policy.json
@@ -124,7 +178,33 @@ The server needs exactly the permissions in `infra/aws/iam-policy.json` (already
 
 **For local development:**
 1. In **IAM → Users**, create a user such as `rollbound-dev`. It doesn't need console access.
-2. On the user, choose **Add permissions → Create inline policy → JSON**, paste `infra/aws/iam-policy.json`, and name it `rollbound-images`.
+2. On the user, choose **Add permissions → Create inline policy → JSON**, replace everything in the editor with the policy below (nothing to fill in), and name it `rollbound-images`:
+
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Sid": "ManageUploadedImages",
+         "Effect": "Allow",
+         "Action": ["s3:PutObject", "s3:PutObjectTagging", "s3:GetObject", "s3:DeleteObject"],
+         "Resource": [
+           "arn:aws:s3:::rollbound-refresh/covers/*",
+           "arn:aws:s3:::rollbound-refresh/avatars/*",
+           "arn:aws:s3:::rollbound-refresh/portraits/*"
+         ]
+       },
+       {
+         "Sid": "MissingImagesReturn404Not403",
+         "Effect": "Allow",
+         "Action": "s3:ListBucket",
+         "Resource": "arn:aws:s3:::rollbound-refresh",
+         "Condition": { "StringLike": { "s3:prefix": ["covers/*", "avatars/*", "portraits/*"] } }
+       }
+     ]
+   }
+   ```
+
 3. Under **Security credentials**, create an **access key**. When asked for a use case, choose **Application running outside AWS** (or **Local code**); the console suggests alternatives, but a scoped key is fine for a dev machine.
 4. Put the key ID and secret in `server/.env` (step 6). That file is in `.gitignore`; never commit it. If a key ever leaks, deactivate it in IAM and create a new one.
 
