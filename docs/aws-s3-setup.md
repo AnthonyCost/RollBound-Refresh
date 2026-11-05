@@ -82,14 +82,25 @@ In the console it's under **Bucket → Permissions → Cross-origin resource sha
 
 ## 3. Delete abandoned uploads automatically
 
-```bash
-aws s3api put-bucket-lifecycle-configuration --bucket rollbound-refresh \
-  --lifecycle-configuration file://infra/aws/s3-lifecycle.json
-```
+This rule deletes any image still tagged `state=pending` a day after it was uploaded: one someone picked but never saved, whether it's a cover, avatar or portrait. Images in use are tagged `state=attached`, so the rule never touches them.
 
-This deletes any object still tagged `state=pending` after one day, whether it's a cover, avatar or portrait. Images in use are tagged `state=attached`, so the rule never touches them.
+1. In the **S3** console, open the `rollbound-refresh` bucket and choose the **Management** tab.
+2. Under **Lifecycle rules**, choose **Create lifecycle rule**.
+3. **Lifecycle rule name:** `expire-abandoned-image-uploads`.
+4. **Choose a rule scope:** select **Limit the scope of this rule using one or more filters**.
+5. **Filter type:**
+   - **Prefix:** leave it empty, so the rule covers all three image folders.
+   - **Object tags:** choose **Add tag**, then enter **Key** `state` and **Value** `pending` (lowercase, no spaces).
+   - **Object size:** leave both boxes unchecked.
+6. **Lifecycle rule actions:** check only **Expire current versions of objects**.
+7. **Expire current versions of objects:** set **Days after object creation** to `1`.
+8. Choose **Create rule**. The rule should show as **Enabled** in the list, with the scope `state=pending`.
 
-In the console: **Bucket → Management → Create lifecycle rule**. Limit the rule to the object tag `state` = `pending` (no prefix), and choose **Expire current versions of objects** after **1** day.
+S3 runs lifecycle rules about once a day, so an abandoned upload can linger for a day or two before it's gone. That's expected.
+
+If the console asks you to acknowledge that the rule applies to **all objects in the bucket**, stop: the tag filter didn't get added. Go back to step 5.
+
+Or with the CLI: `aws s3api put-bucket-lifecycle-configuration --bucket rollbound-refresh --lifecycle-configuration file://infra/aws/s3-lifecycle.json`
 
 ## 4. Let browsers load the images
 
