@@ -74,7 +74,8 @@ export function strikeBonus(character, weapon, { attacksSoFar = 0, conditions = 
  * Degree of success for a check against a DC.
  * Beat the DC by 10+ = critical success; meet it = success; miss by less than
  * 10 = failure; miss by 10+ = critical failure. A natural 20 raises the result
- * one step and a natural 1 lowers it one step.
+ * one step and a natural 1 lowers it one step. A negative total is always a
+ * critical failure (a house rule, not the Core Rulebook's).
  */
 export function degreeOfSuccess(total, dc, natural = null) {
   const diff = total - dc;
@@ -86,6 +87,7 @@ export function degreeOfSuccess(total, dc, natural = null) {
 
   if (natural === 20) index = Math.min(3, index + 1);
   if (natural === 1) index = Math.max(0, index - 1);
+  if (total < 0) index = 0;
 
   return { index, name: DEGREES[index], margin: diff };
 }

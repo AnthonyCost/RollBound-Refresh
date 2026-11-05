@@ -144,9 +144,9 @@ function CheckView({ roll, onBack }) {
   const against = weapon ? 'AC' : 'DC';
   const degree = dc == null ? null : degreeOfSuccess(total, dc, natural);
   const damage = degree && weapon ? strikeDamage(damageRoll, damageMod, degree.name) : 0;
-  // A natural 20 or a critical success turns the die gold with a flare, a natural 1 or a critical
-  // failure red with a shake: as the total lands, or when the DC entered makes it a critical.
-  const glow = natural === 20 || degree?.name === 'critical success' ? 'gold' : natural === 1 || degree?.name === 'critical failure' ? 'red' : null;
+  // A natural 20 or a critical success turns the die gold with a flare; a natural 1, a negative total
+  // or a critical failure, red with a shake: as the total lands, or when the DC entered makes it a critical.
+  const glow = natural === 20 || degree?.name === 'critical success' ? 'gold' : natural === 1 || total < 0 || degree?.name === 'critical failure' ? 'red' : null;
   const gemClass = !landed || !glow ? 'roll__gem--plain' : glow === 'red' ? 'roll__gem--critfail roll__gem--nat1' : 'roll__gem--nat20';
   const natNote =
     natural === 20 ? 'Natural 20: the result moves up one step.' : natural === 1 ? 'Natural 1: the result moves down one step.' : null;

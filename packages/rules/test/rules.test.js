@@ -99,6 +99,10 @@ describe('degrees of success', () => {
     expect(degreeOfSuccess(16, 15, 1).name).toBe('failure');
     expect(degreeOfSuccess(3, 15, 1).name).toBe('critical failure');
   });
+  it('makes a negative total a critical failure, even against a low DC', () => {
+    expect(degreeOfSuccess(-1, 5).name).toBe('critical failure');
+    expect(degreeOfSuccess(0, 5).name).toBe('failure');
+  });
   it('reports the ranges for a DC', () => {
     expect(degreeRanges(15)).toEqual([
       { name: 'critical success', min: 25, max: null },
