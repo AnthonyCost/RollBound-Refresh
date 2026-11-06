@@ -73,7 +73,9 @@ export default function ImageCropper({ file, width, height, round = false, title
     canvas.height = height;
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(img, -left / scale, -top / scale, box.w / scale, box.h / scale, 0, 0, width, height);
+    // In the file's exact shape, centred on the frame, so a frame a few pixels off can never stretch the picture.
+    const cropH = (box.w * height) / width;
+    ctx.drawImage(img, -left / scale, (box.h / 2 - cropH / 2 - top) / scale, box.w / scale, cropH / scale, 0, 0, width, height);
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', 0.88));
     if (!blob) {
       setBusy(false);

@@ -4622,14 +4622,15 @@ button.action-pip:focus-visible { outline: 2px solid var(--gold); outline-offset
 }
 
 /* Cropping an image before it's uploaded (ImageCropper): a modal over the page, the frame in the image's final shape. */
-.cropper { box-sizing: border-box; width: min(600px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 22px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--text); box-shadow: 0 24px 60px rgb(0 0 0 / 0.6); }
+.cropper { box-sizing: border-box; width: min(600px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 22px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--text); box-shadow: 0 24px 60px rgb(0 0 0 / 0.6); }
 .cropper[open] { display: flex; flex-direction: column; gap: 14px; }
 .cropper::backdrop { background: rgb(0 0 0 / 0.72); }
-.cropper__stage { position: relative; display: flex; justify-content: center; padding: clamp(18px, 5vw, 44px); overflow: hidden; border: 1px solid var(--line); background: var(--bg-deep); cursor: grab; touch-action: none; user-select: none; }
+.cropper__stage { position: relative; flex: none; display: flex; justify-content: center; align-items: center; padding: clamp(18px, 5vw, 44px); overflow: hidden; border: 1px solid var(--line); background: var(--bg-deep); cursor: grab; touch-action: none; user-select: none; }
 .cropper__stage:active { cursor: grabbing; }
 .cropper__stage:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-/* The crop: the image spills past it, and everything outside is dimmed (the huge shadow, clipped by the stage). */
-.cropper__frame { position: relative; flex: none; overflow: hidden; outline: 2px dashed var(--gold); }
+/* The crop, always at its exact shape: not stretched by the stage, and the stage isn't squeezed by a short dialog
+   (it scrolls instead). The saved file is drawn from this box, so a squashed box would stretch the picture. */
+.cropper__frame { position: relative; flex: none; align-self: center; overflow: hidden; outline: 2px dashed var(--gold); }
 /* A profile picture is saved square but shown round: the circle is the crop you'll see. */
 .cropper__frame--round { border-radius: 50%; }
 .cropper__img--outside { filter: brightness(0.28) saturate(0.6); }
