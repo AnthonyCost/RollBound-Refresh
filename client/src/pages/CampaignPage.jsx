@@ -178,7 +178,7 @@ export function CampaignOverview() {
       {/* Below the cover: the story so far as a timeline, beside the table's card (host, details, party). */}
       <div className="tale">
         <section className="tale__story" aria-labelledby="story-title">
-          <h2 id="story-title" className="tale__heading">The story so far</h2>
+          <h2 id="story-title" className="tale__heading">The story so far…</h2>
           <ol className="timeline">
             <li className="timeline__node timeline__node--prologue">
               <span className="timeline__mark" aria-hidden="true"><Icon name="lore" size={20} /></span>
