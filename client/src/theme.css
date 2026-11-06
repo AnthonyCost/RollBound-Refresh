@@ -175,71 +175,74 @@
   --deg-critfail: #c8414a;
 }
 
-/* Cosmic: deep space. Near-black ground under a magenta-and-violet nebula, starlight-white
-   text, nebula-cyan labels, star-gold highlights and magenta actions; stars behind the page. */
+/* Cosmic: the Messier 78 nebula. Black space, deep violet panels and lines, a magenta and
+   electric-blue nebula glowing over the page, lavender-white light for text, orange-gold
+   starlight for highlights, magenta actions and blue successes; stars scattered behind. */
 [data-theme='cosmic'] {
-  --bg: #06040f;
-  --bg-deep: #030209;
-  --glow: #3b1458;
-  --glow-mid: #150a2a;
-  --panel: #0e0b1e;
-  --panel-hot: #24113d;
-  --panel-deep: #0a0817;
-  --panel-warm: #161130;
-  --panel-mid: #0c0a1b;
-  --panel-ember: #140c27;
-  --panel-raised: #241b48;
-  --line: #463c86;
-  --line-soft: #342c66;
-  --line-faint: #221d47;
-  --text: #eef0ff;
-  --text-soft: #cfd2f3;
-  --text-muted: #9c9fcc;
-  --text-dim: #7a7cab;
+  --bg: #05030c;
+  --bg-deep: #020107;
+  --glow: #4a167e;
+  --glow-mid: #170a33;
+  --panel: #110a24;
+  --panel-hot: #26114a;
+  --panel-deep: #0c071b;
+  --panel-warm: #1a0f36;
+  --panel-mid: #0f0921;
+  --panel-ember: #1d0c38;
+  --panel-raised: #2c1a5a;
+  --line: #6a3fb8;
+  --line-soft: #4b2c88;
+  --line-faint: #2c1a55;
+  --text: #f5eeff;
+  --text-soft: #dcccf6;
+  --text-muted: #a993d4;
+  --text-dim: #8774b3;
   --text-bright: #ffffff;
-  --bronze: #7fd6ff;
-  --bronze-dark: #2c5a7a;
-  --gold: #ffe9a8;
-  --gold-light: #fff6d6;
-  --gold-dark: #b8984a;
-  --gold-deep: #1f1830;
-  --gold-flare: #ff9ff0;
-  --gold-flare-dim: #b05fc2;
-  --blood: #c43ad6;
-  --blood-text: #f07bff;
-  --blood-dark: #4d1260;
-  --blood-top: #d653e6;
-  --blood-glow: #9d2fd0;
-  --blood-shadow: #2c0a40;
-  --blood-flash: #ffb8ff;
-  --hot-shadow: #3b1458;
-  --art-hi: #2c1450;
-  --art-lo: #030209;
-  --orb-hi: #1c1236;
-  --steel-dark: #232044;
-  --steel-light: #4a4680;
-  --deg-crit: #ffe9a8;
-  --deg-success: #7fd6ff;
-  --deg-fail: #7a7cab;
-  --deg-critfail: #ff5a7a;
+  --bronze: #c99cff;
+  --bronze-dark: #5a3a9a;
+  --gold: #ffc46b;
+  --gold-light: #ffe2b0;
+  --gold-dark: #b8813a;
+  --gold-deep: #24150c;
+  --gold-flare: #e99cf8;
+  --gold-flare-dim: #b751ba;
+  --blood: #c62c9a;
+  --blood-text: #f06ad0;
+  --blood-dark: #5c0f4a;
+  --blood-top: #d84ab0;
+  --blood-glow: #b42773;
+  --blood-shadow: #2e0828;
+  --blood-flash: #ffc2f0;
+  --hot-shadow: #4a167e;
+  --art-hi: #3a1670;
+  --art-lo: #020107;
+  --orb-hi: #1e1240;
+  --steel-dark: #221545;
+  --steel-light: #5a4590;
+  --deg-crit: #ffc46b;
+  --deg-success: #7c8cff;
+  --deg-fail: #8774b3;
+  --deg-critfail: #ff5a8a;
 }
-/* Cosmic's stars: small points of light over the page's nebula glow (the page itself only,
-   not the theme preview cards). */
+/* Cosmic's sky: white, blue-white and orange-gold stars over a magenta and blue nebula
+   (the page itself only, not the theme preview cards). */
 html[data-theme='cosmic'] .app {
   background:
     radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 27% 62%, #cfe8ff 50%, transparent 51%),
+    radial-gradient(1px 1px at 27% 62%, #ffc46b 50%, transparent 51%),
     radial-gradient(1.5px 1.5px at 41% 9%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 58% 41%, #ffe9a8 50%, transparent 51%),
-    radial-gradient(1px 1px at 69% 77%, #fff 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 83% 23%, #cfe8ff 50%, transparent 51%),
-    radial-gradient(1px 1px at 91% 58%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 6% 84%, #ffd6fb 50%, transparent 51%),
+    radial-gradient(1px 1px at 58% 41%, #ffb070 50%, transparent 51%),
+    radial-gradient(1px 1px at 69% 77%, #dfe6ff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 83% 23%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 91% 58%, #ffc46b 50%, transparent 51%),
+    radial-gradient(1px 1px at 6% 84%, #e99cf8 50%, transparent 51%),
     radial-gradient(1px 1px at 35% 33%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 76% 6%, #fff 50%, transparent 51%),
-    radial-gradient(ellipse 60% 380px at 22% 0%, color-mix(in srgb, #2a4fa8 45%, transparent), transparent 70%),
-    radial-gradient(ellipse 120% 480px at 60% 0%, var(--glow) 0%, var(--glow-mid) 45%, var(--bg) 75%);
-  background-size: 360px 360px, 420px 420px, 380px 380px, 460px 460px, 340px 340px, 400px 400px, 440px 440px, 360px 360px, 300px 300px, 520px 520px, auto, auto;
+    radial-gradient(1px 1px at 76% 6%, #bfcaff 50%, transparent 51%),
+    radial-gradient(ellipse 40% 380px at 28% 0%, rgb(180 39 160 / 0.32), transparent 70%),
+    radial-gradient(ellipse 34% 340px at 64% 0%, rgb(84 96 255 / 0.28), transparent 70%),
+    radial-gradient(ellipse 30% 300px at 88% 0%, rgb(186 110 235 / 0.22), transparent 70%),
+    radial-gradient(ellipse 120% 480px at 50% 0%, var(--glow) 0%, var(--glow-mid) 45%, var(--bg) 75%);
+  background-size: 360px 360px, 420px 420px, 380px 380px, 460px 460px, 340px 340px, 400px 400px, 440px 440px, 360px 360px, 300px 300px, 520px 520px, auto, auto, auto, auto;
   background-color: var(--bg);
 }
 
@@ -396,37 +399,38 @@ html[data-theme='cosmic'] .app {
   --on-action: #2a1206;
 }
 
-/* Tunic: Ocarina of Time. Bark-brown ground under a forest-green canopy, cream text
-   (#f2f2dc), gold for buttons and diamonds (with dark lettering on them), and Kokiri green
-   (#8cc46f) for labels, borders, the glow and anything selected. */
+/* Tunic: Ocarina of Time. Bark-brown ground and panels, gold for labels, buttons, diamonds and
+   highlights (Triforce gold, with dark lettering on buttons), and Kokiri green in the mossy
+   borders, the forest canopy glowing over the page, anything selected, and successes.
+   Cream text (#f2f2dc). */
 [data-theme='tunic'] {
-  --bg: #0f0d08;
-  --bg-deep: #0b0a06;
+  --bg: #100d08;
+  --bg-deep: #0b0906;
   --glow: #2c4a26;
-  --glow-mid: #16200f;
-  --panel: #17140c;
+  --glow-mid: #17150c;
+  --panel: #19140c;
   --panel-hot: #23361f;
-  --panel-deep: #12100a;
-  --panel-warm: #1d1a10;
-  --panel-mid: #15120b;
-  --panel-ember: #1a2014;
-  --panel-raised: #263220;
-  --line: #4f6a34;
-  --line-soft: #3d5229;
-  --line-faint: #2a3820;
+  --panel-deep: #140f09;
+  --panel-warm: #201910;
+  --panel-mid: #17120b;
+  --panel-ember: #1f180e;
+  --panel-raised: #2a2c18;
+  --line: #5f6a36;
+  --line-soft: #4a5229;
+  --line-faint: #30361e;
   --text: #f2f2dc;
   --text-soft: #e6dcb4;
   --text-muted: #b4a682;
   --text-dim: #8f8264;
   --text-bright: #fbfbec;
-  --bronze: #8cc46f;
-  --bronze-dark: #3f6a2e;
-  --gold: #f5e8b5;
-  --gold-light: #fbf4d6;
-  --gold-dark: #c49a52;
-  --gold-deep: #302017;
-  --gold-flare: #e2c07b;
-  --gold-flare-dim: #c49a52;
+  --bronze: #e2b84e;
+  --bronze-dark: #7a5c22;
+  --gold: #f6d465;
+  --gold-light: #fbe9a8;
+  --gold-dark: #b88a2c;
+  --gold-deep: #302314;
+  --gold-flare: #f6d465;
+  --gold-flare-dim: #c49a3a;
   --blood: #d9b45a;
   --blood-top: #ecca72;
   --blood-dark: #8a6a2c;
@@ -434,13 +438,13 @@ html[data-theme='cosmic'] .app {
   --blood-glow: #c49a3a;
   --blood-shadow: #3a2c10;
   --blood-flash: #fff3c4;
-  --hot-shadow: #3f5a2a;
-  --art-hi: #2a4224;
-  --art-lo: #0b0a06;
-  --orb-hi: #1d2a16;
-  --steel-dark: #2f3a24;
-  --steel-light: #5f7a44;
-  --deg-crit: #f5e8b5;
+  --hot-shadow: #4a3a16;
+  --art-hi: #2f2a16;
+  --art-lo: #0b0906;
+  --orb-hi: #221c12;
+  --steel-dark: #352a1a;
+  --steel-light: #7a6340;
+  --deg-crit: #f6d465;
   --deg-success: #8cc46f;
   --deg-fail: #8f8264;
   --deg-critfail: #e2604a;

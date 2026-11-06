@@ -26,8 +26,8 @@ export const THEMES = [
   {
     id: 'cosmic',
     name: 'Cosmic',
-    blurb: 'Deep space under a nebula: magenta and violet clouds, cyan starlight and a sky of stars.',
-    browser: '#06040f',
+    blurb: 'The Messier 78 nebula: violet and magenta clouds, an electric-blue core and golden stars.',
+    browser: '#05030c',
   },
   {
     id: 'obscure',
@@ -50,7 +50,7 @@ export const THEMES = [
   {
     id: 'tunic',
     name: 'Tunic',
-    blurb: 'Forest canopy over bark brown: Kokiri green everywhere, gold buttons and diamonds.',
+    blurb: 'Bark and leather brown, Triforce gold, and Kokiri green under the forest canopy.',
     browser: '#0f0d08',
   },
   {
