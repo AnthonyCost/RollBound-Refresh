@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { loreOptions, lookup, keyAbilityOptions, keyAbilityOf, sanctificationOptions, TRADITIONS } from '@rollbound/rules';
-import OptionList from './OptionList.jsx';
+import { loreOptions, lookup } from '@rollbound/rules';
 import Showcase, { Emblem } from './Showcase.jsx';
 import Chips, { pick } from './Chips.jsx';
 import ChoiceHeading from './ChoiceHeading.jsx';
@@ -330,8 +329,7 @@ export function BackgroundStep({ build, update, data }) {
 }
 
 export function ClassStep({ build, update, data }) {
-  const { cls, deity } = lookup(build, data);
-  const keyOptions = keyAbilityOptions(build, data);
+  const { cls } = lookup(build, data);
 
   const select = (id) =>
     id !== build.class &&
@@ -347,16 +345,6 @@ export function ClassStep({ build, update, data }) {
       sanctification: null,
       classFeat: null,
       bonusFeats: {},
-      cantrips: [],
-      spells: [],
-    });
-
-  const chooseOption = (key, id) =>
-    update({
-      classChoices: { ...build.classChoices, [key]: id },
-      classChoiceSkills: { ...build.classChoiceSkills, [key]: null },
-      tradition: null,
-      keyAbility: null,
       cantrips: [],
       spells: [],
     });
@@ -379,141 +367,7 @@ export function ClassStep({ build, update, data }) {
           ['Spellcasting', c.spellcasting ? 'Yes' : 'No'],
         ]}
       />
-
-      {cls && (
-        <>
-
-          {cls.skillChoice && (
-            <section className="panel choice">
-              <ChoiceHeading title={`${cls.name} skill`} chosen={build.classSkill && cap(build.classSkill)} />
-              <Chips
-                label="Class skill"
-                options={cls.skillChoice}
-                isOn={(s) => build.classSkill === s}
-                onToggle={pick(build.classSkill, (s) => update({ classSkill: s }))}
-                render={cap}
-              />
-            </section>
-          )}
-
-          {cls.deity && (
-            <section className="choice">
-              <ChoiceHeading title="Deity" chosen={deity?.name} />
-              <p className="rule-note">
-                Your deity trains you in their divine skill{cls.deityFavoredWeapon ? ' and favored weapon' : ''}
-                {cls.divineFont ? ', and sets your divine font' : ''}. Their
-                sanctification decides whether you can be holy or unholy.
-              </p>
-              <OptionList
-                label="Deities"
-                items={data.deities}
-                selected={build.deity}
-                onSelect={(id) => id !== build.deity && update({ deity: id, font: null, sanctification: null })}
-                meta={(d) =>
-                  [
-                    `Font ${d.font.join(' or ')}`,
-                    `Skill ${d.skills.map(cap).join(', ')}`,
-                    `Weapon ${d.weapons.map(cap).join(', ')}`,
-                    d.sanctification ? `${d.sanctification.modal} be ${d.sanctification.what.join(' or ')}` : 'No sanctification',
-                  ].join(' · ')
-                }
-              />
-            </section>
-          )}
-
-          {deity && cls.divineFont && deity.font.length > 1 && (
-            <section className="panel choice">
-              <ChoiceHeading title="Divine font" chosen={build.font && cap(build.font)} />
-              <Chips label="Divine font" options={deity.font} isOn={(f) => build.font === f} onToggle={pick(build.font, (f) => update({ font: f }))} render={cap} />
-            </section>
-          )}
-
-          {deity && sanctificationOptions(deity).length > 1 && (
-            <section className="panel choice">
-              <ChoiceHeading title="Sanctification" chosen={build.sanctification && (build.sanctification === 'none' ? 'Neither' : cap(build.sanctification))} />
-              <Chips
-                label="Sanctification"
-                options={sanctificationOptions(deity)}
-                isOn={(o) => build.sanctification === o}
-                onToggle={pick(build.sanctification, (o) => update({ sanctification: o }))}
-                render={(o) => (o === 'none' ? 'Neither' : cap(o))}
-              />
-            </section>
-          )}
-
-          {keyOptions.length > 1 && (
-            <section className="panel choice">
-              <ChoiceHeading title="Key attribute" chosen={keyAbilityOf(build, data) && abilityList([keyAbilityOf(build, data)])} />
-              <p className="rule-note">Your key attribute gets a boost and sets your class DC.</p>
-              <Chips
-                label="Key attribute"
-                options={keyOptions}
-                isOn={(a) => keyAbilityOf(build, data) === a}
-                onToggle={pick(build.keyAbility, (a) => update({ keyAbility: a }))}
-                render={(a) => abilityList([a])}
-              />
-            </section>
-          )}
-
-          {cls.features.map((f) => {
-            if (!f.choice) {
-              return (
-                <details key={f.name} className="feature">
-                  <summary>{f.name}</summary>
-                  <div className="option__desc" dangerouslySetInnerHTML={{ __html: f.description }} />
-                </details>
-              );
-            }
-            const option = f.choice.options.find((o) => o.id === build.classChoices[f.choice.key]);
-            return (
-              <section key={f.name} className="choice">
-                <ChoiceHeading title={f.name} chosen={option?.name} />
-                <OptionList
-                  label={f.name}
-                  items={f.choice.options}
-                  selected={build.classChoices[f.choice.key] ?? null}
-                  onSelect={(id) => id !== build.classChoices[f.choice.key] && chooseOption(f.choice.key, id)}
-                  meta={(o) =>
-                    [
-                      o.skills.length && `Trained ${o.skills.map(cap).join(', ')}`,
-                      o.tradition && !o.traditionChoice && `${cap(o.tradition)} spells`,
-                      o.tags.includes('holy') && 'Must be holy',
-                      o.tags.includes('unholy') && 'Must be unholy',
-                    ]
-                      .filter(Boolean)
-                      .join(' · ')
-                  }
-                />
-                {option?.skillChoice && (
-                  <div className="panel choice">
-                    <ChoiceHeading title={`${option.name} skill`} chosen={build.classChoiceSkills[f.choice.key] && cap(build.classChoiceSkills[f.choice.key])} level={3} />
-                    <Chips
-                      label={`${option.name} skill`}
-                      options={option.skillChoice}
-                      isOn={(s) => build.classChoiceSkills[f.choice.key] === s}
-                      onToggle={pick(build.classChoiceSkills[f.choice.key], (s) => update({ classChoiceSkills: { ...build.classChoiceSkills, [f.choice.key]: s } }))}
-                      render={cap}
-                    />
-                  </div>
-                )}
-                {option?.traditionChoice && (
-                  <div className="panel choice">
-                    <ChoiceHeading title={`${option.name} tradition`} chosen={build.tradition && cap(build.tradition)} level={3} />
-                    <p className="rule-note">Your tradition comes from the kind of creature in your bloodline. Pick the one that matches.</p>
-                    <Chips
-                      label="Tradition"
-                      options={TRADITIONS}
-                      isOn={(t) => build.tradition === t}
-                      onToggle={pick(build.tradition, (t) => update({ tradition: t, cantrips: [], spells: [] }))}
-                      render={cap}
-                    />
-                  </div>
-                )}
-              </section>
-            );
-          })}
-        </>
-      )}
+      {cls && <p className="rule-note">Next, Class Options: what the {cls.name.toLowerCase()} asks you to choose{cls.deity ? ', including your deity' : ''}.</p>}
     </>
   );
 }

@@ -20,6 +20,7 @@ import { useAuth } from '../state/AuthContext.jsx';
 import TopBar from '../components/TopBar.jsx';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import { AncestryStep, HeritageStep, BackgroundStep, ClassStep } from '../builder/IdentitySteps.jsx';
+import { ClassOptionsStep } from '../builder/ClassOptions.jsx';
 import { AttributesStep, SkillsStep, FeatsStep, SpellsStep, GearStep, ReviewStep } from '../builder/DetailSteps.jsx';
 import { booksLabel, isOutdated, loadRules, replaceCharacter } from '../state/rulesData.js';
 import { useCampaignService } from '../state/campaignService.js';
@@ -50,6 +51,11 @@ const STEP_INFO = {
     title: 'Class',
     Component: ClassStep,
     note: 'Your class is your adventuring profession. It sets your Hit Points per level, your key attribute, and what you start trained in.',
+  },
+  classOptions: {
+    title: 'Class Options',
+    Component: ClassOptionsStep,
+    note: 'The choices your class asks for: its key attribute, a skill, a deity for divine classes, and the path within it, like a doctrine, bloodline or school.',
   },
   attributes: {
     title: 'Attributes',
@@ -100,6 +106,7 @@ const STEP_TOUCHED = {
   heritage: (b) => Boolean(b.heritage),
   background: (b) => Boolean(b.background),
   class: (b) => Boolean(b.class),
+  classOptions: (b) => Boolean(b.keyAbility || b.classSkill || b.deity || b.tradition || Object.values(b.classChoices ?? {}).some(Boolean)),
   attributes: (b) => b.altAncestryBoosts || b.freeBoosts.length > 0 || [...b.ancestryBoosts, ...b.backgroundBoosts].some(Boolean) || Boolean(b.keyAbility),
   skills: (b) => b.skills.length > 0 || b.languages.length > 0,
   feats: (b) => Boolean(b.ancestryFeat || b.classFeat || Object.values(b.bonusFeats).some(Boolean)),
@@ -113,7 +120,7 @@ const STEP_TOUCHED = {
 const BLANK = { build: emptyBuild(), step: STEPS[0], start: null };
 
 // Steps that only need EARLY_TYPES, so they can show before feats, spells and gear arrive.
-const EARLY_STEPS = ['ancestry', 'heritage', 'background', 'class'];
+const EARLY_STEPS = ['ancestry', 'heritage', 'background', 'class', 'classOptions'];
 
 /** The saved draft under this key, or null if there isn't one. */
 function loadDraft(key) {

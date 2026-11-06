@@ -580,7 +580,7 @@ export function proficienciesOf(build, data) {
 
 // ---------- Validation ----------
 
-export const STEPS = ['ancestry', 'heritage', 'background', 'class', 'attributes', 'skills', 'feats', 'spells', 'gear', 'level', 'review'];
+export const STEPS = ['ancestry', 'heritage', 'background', 'class', 'classOptions', 'attributes', 'skills', 'feats', 'spells', 'gear', 'level', 'review'];
 
 /** What's still missing or invalid, as [{ step, message }]. Empty means ready to save. */
 export function buildProblems(build, data) {
@@ -595,28 +595,29 @@ export function buildProblems(build, data) {
   if (!background) add('background', 'Choose a background.');
   else if (background.lore.length && !build.lore.trim()) add('background', 'Choose your Lore skill.');
 
+  // Choosing the class is its own step; what the class then asks you to choose comes on Class Options.
   if (!cls) add('class', 'Choose a class.');
   else {
-    if (!keyAbilityOf(build, data)) add('class', 'Choose your key attribute.');
-    if (cls.skillChoice && !build.classSkill) add('class', `Choose your ${cls.name} skill.`);
+    if (!keyAbilityOf(build, data)) add('classOptions', 'Choose your key attribute.');
+    if (cls.skillChoice && !build.classSkill) add('classOptions', `Choose your ${cls.name} skill.`);
     for (const f of cls.features) {
       if (!f.choice) continue;
       const option = find(f.choice.options, build.classChoices[f.choice.key]);
-      if (!option) add('class', `Choose your ${f.name.toLowerCase()}.`);
+      if (!option) add('classOptions', `Choose your ${f.name.toLowerCase()}.`);
       else {
-        if (option.skillChoice && !build.classChoiceSkills[f.choice.key]) add('class', `Choose the skill from ${option.name}.`);
-        if (option.traditionChoice && !build.tradition) add('class', `Choose your ${option.name} tradition.`);
+        if (option.skillChoice && !build.classChoiceSkills[f.choice.key]) add('classOptions', `Choose the skill from ${option.name}.`);
+        if (option.traditionChoice && !build.tradition) add('classOptions', `Choose your ${option.name} tradition.`);
       }
     }
     if (cls.deity) {
-      if (!deity) add('class', 'Choose a deity.');
+      if (!deity) add('classOptions', 'Choose a deity.');
       else {
-        if (!sanctificationOf(build, data)) add('class', `Choose whether you're holy, unholy, or neither.`);
-        if (cls.divineFont && !fontOf(build, data)) add('class', 'Choose your divine font.');
+        if (!sanctificationOf(build, data)) add('classOptions', `Choose whether you're holy, unholy, or neither.`);
+        if (cls.divineFont && !fontOf(build, data)) add('classOptions', 'Choose your divine font.');
         for (const { option } of chosenOptions(build, data)) {
           for (const need of ['holy', 'unholy']) {
             if (option.tags.includes(need) && sanctificationOf(build, data) !== need) {
-              add('class', `The ${option.name} cause requires you to be ${need}${sanctificationOptions(deity).includes(need) ? '' : `, which ${deity.name} doesn't allow`}.`);
+              add('classOptions', `The ${option.name} cause requires you to be ${need}${sanctificationOptions(deity).includes(need) ? '' : `, which ${deity.name} doesn't allow`}.`);
             }
           }
         }
@@ -918,9 +919,9 @@ function choiceRefs(build, data) {
   for (const [key, id] of Object.entries(build.classChoices ?? {})) {
     if (!id) continue;
     const clear = (b) => ({ ...b, classChoices: { ...b.classChoices, [key]: null }, classChoiceSkills: { ...b.classChoiceSkills, [key]: null } });
-    refs.push({ step: 'class', kind: 'class option', id, item: find(options, id), clear });
+    refs.push({ step: 'classOptions', kind: 'class option', id, item: find(options, id), clear });
   }
-  one('class', 'deity', 'deity', data.deities);
+  one('classOptions', 'deity', 'deity', data.deities);
   one('feats', 'feat', 'ancestryFeat', data.feats);
   one('feats', 'feat', 'classFeat', data.feats);
   for (const [parent, id] of Object.entries(build.bonusFeats ?? {})) {
