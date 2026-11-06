@@ -5,6 +5,7 @@ import { useAuth } from '../state/AuthContext.jsx';
 import PageShell from '../components/PageShell.jsx';
 import ImagePicker from '../components/ImagePicker.jsx';
 import Avatar from '../components/Avatar.jsx';
+import Portrait from '../components/Portrait.jsx';
 import Icon from '../components/Icon.jsx';
 import ThemePicker from '../components/ThemePicker.jsx';
 import { useCampaignService } from '../state/campaignService.js';
@@ -156,11 +157,13 @@ export default function AccountPage() {
                   ) : (
                     <ul className="prof__heroes">
                       {(table?.characters ?? []).slice(0, SHOWN).map((c) => {
-                        const art = c.portraitUrl ?? classArtOf(c).banner;
+                        // The class's art behind, and the hero's portrait (or their initial) framed in front.
+                        const art = classArtOf(c).banner;
                         return (
                           <li key={c.id}>
                             <Link to={`/play/${c.id}/sheet`} className="prof-hero">
                               {art && <img className="prof-hero__art" src={art} alt="" />}
+                              <Portrait url={c.portraitUrl} name={c.name} size="lg" />
                               <span className="prof-hero__text">
                                 <span className="prof-hero__name">{c.name}</span>
                                 <span className="prof-hero__line">{lineOf(c)}</span>

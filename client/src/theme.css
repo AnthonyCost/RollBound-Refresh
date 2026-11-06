@@ -3360,6 +3360,10 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 .prof-hero { position: relative; isolation: isolate; display: flex; align-items: flex-end; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid var(--line); background: radial-gradient(circle at 50% 30%, var(--panel-raised), var(--bg-deep)); text-decoration: none; transition: border-color 0.2s, translate 0.25s var(--ease-land, ease-out); }
 .prof-hero__art { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transition: scale 0.5s var(--ease-land, ease-out); }
 .prof-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgb(0 0 0 / 0.92), transparent 60%); }
+.prof-hero { flex-direction: column; justify-content: space-between; align-items: stretch; }
+.prof-hero__art { opacity: 0.45; }
+.prof-hero > .portrait { align-self: center; width: 96px; height: 96px; margin-top: 18px; box-shadow: 0 6px 18px rgb(0 0 0 / 0.6); transition: border-color 0.2s; }
+@media (hover: hover) { .prof-hero:hover > .portrait { border-color: var(--gold); } }
 .prof-hero__text { display: flex; flex-direction: column; gap: 2px; padding: 12px; min-width: 0; }
 .prof-hero__name { font: 400 22px/1 var(--accent-font); color: var(--text); overflow-wrap: anywhere; }
 .prof-hero__line { font-size: 12px; color: var(--text-soft); }
