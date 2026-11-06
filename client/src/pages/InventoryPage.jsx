@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
   COINS,
   COIN_NAMES,
   LIMITS,
   bulkLimits,
   bulkTotal,
-  campaignData,
   coinValue,
   customItem,
   formatBulk,
@@ -21,23 +21,14 @@ import {
 } from '@rollbound/rules';
 import { useTable } from '../state/TableContext.jsx';
 import { useRules } from '../state/useRules.js';
-import BookSpread from '../components/BookSpread.jsx';
-import BookLeaf from '../builder/BookLeaf.jsx';
-import { gearFacts } from '../builder/gearFacts.js';
-import { sourceTag } from '../builder/labels.js';
 import Icon from '../components/Icon.jsx';
 import Portrait from '../components/Portrait.jsx';
-import { useCarriedConsumables } from '../state/carriedItems.js';
+import { ARMORY_CATEGORIES, categoryIcon, loadArmory, loadItemDetails } from '../state/armory.js';
+import { armoryWares, bulkOf } from '../builder/armoryGear.js';
 
 const GEAR_TYPES = ['weapons', 'armor', 'shields', 'items'];
-const KIND_OF = { weapons: 'weapon', armor: 'armor', shields: 'shield', items: 'item' };
 const LIST_OF = { weapon: 'weapons', armor: 'armor', shield: 'shields', item: 'items' };
-const MERCHANT_SECTIONS = [
-  { key: 'armor', tab: 'Armor', name: 'Armor' },
-  { key: 'shields', tab: 'Shields', name: 'Shields' },
-  { key: 'weapons', tab: 'Weapons', name: 'Weapons' },
-  { key: 'items', tab: 'Gear', name: 'Adventuring gear' },
-];
+const ARMORY_KIND = { Weapons: 'weapon', Armor: 'armor', Shields: 'shield' };
 
 const bulkLabel = (bulk) => (bulk >= 1 ? String(bulk) : bulk > 0 ? 'L' : '—');
 const savedLabel = { waiting: 'Saving…', saving: 'Saving…', saved: 'Saved', error: "Couldn't save. Check your connection; your next change will try again." };
@@ -48,17 +39,28 @@ const savedLabel = { waiting: 'Saving…', saving: 'Saving…', saved: 'Saved', 
  * of armor, shields, weapons and adventuring gear; buying pays from the purse.
  */
 export default function InventoryPage() {
-  const { character, baseCharacter, readOnly, campaign, inventory, setInventory, inventoryStatus, portraitUrl } = useTable();
+  const { character, baseCharacter, readOnly, inventory, setInventory, inventoryStatus, portraitUrl } = useTable();
   const rules = useRules(GEAR_TYPES);
-  // The campaign's books limit what can be added from the rules; custom items are always allowed.
-  const view = useMemo(() => (rules && !rules.error ? campaignData(rules, campaign?.books ?? null) : null), [rules, campaign]);
   // Until the first edit, the builder's gear and leftover gold; saved on the first change.
   const starting = useMemo(() => (rules && !rules.error ? startingInventory(baseCharacter, rules) : null), [baseCharacter, rules]);
   // Every equipped flag spelled out, including for inventories saved before equipping.
   const inv = useMemo(() => (inventory ?? starting) && withEquipped(inventory ?? starting), [inventory, starting]);
-  const [shopping, setShopping] = useState(false);
+  // The merchant is a sub tab, in the URL (?tab=merchant) so it can be linked and Back leaves it.
+  const [params] = useSearchParams();
+  const shopping = !readOnly && params.get('tab') === 'merchant';
   const [selectedKey, setSelectedKey] = useState(null);
-  const usable = useCarriedConsumables(inv);
+  // The armory: the merchant's wares, and each carried item's icon and rules text by its name.
+  const [armory, setArmory] = useState(null);
+  useEffect(() => {
+    let live = true;
+    loadArmory().then((a) => live && setArmory(a), () => live && setArmory([]));
+    return () => { live = false; };
+  }, []);
+  const armoryByName = useMemo(() => {
+    const m = new Map();
+    for (const a of armory ?? []) for (const n of [a.name, ...(a.variants ?? []).map((v) => v.name)]) m.set(n.toLowerCase(), a);
+    return m;
+  }, [armory]);
 
   if (!inv) {
     return <p className="muted italic center">{rules?.error ? "Couldn't load the item list. Try refreshing." : 'Unpacking…'}</p>;
@@ -67,6 +69,7 @@ export default function InventoryPage() {
   const update = (changes) => setInventory({ ...inv, ...changes });
   const setItem = (key, changes) => update({ items: inv.items.map((i) => (i.key === key ? { ...i, ...changes } : i)) });
   const ruleOf = (item) => rules?.[LIST_OF[item.kind]]?.find((x) => x.id === item.id);
+  const iconFor = (item) => iconOf(item, ruleOf(item), armoryByName.get(item.name.toLowerCase()));
   const equip = (key) => setInventory(toggleEquipped(inv, key));
   const total = bulkTotal(inv.items);
   const limits = bulkLimits(character);
@@ -75,8 +78,9 @@ export default function InventoryPage() {
   const equipped = inv.items.filter((i) => i.equipped);
   const pack = inv.items.filter((i) => !i.equipped);
   // The pack in order: weapons and armor, consumables, treasure, gear; then empty sockets to fill out the bag.
-  const ORDER = ['itemWeapons', 'itemArmor', 'itemShields', 'itemConsumables', 'coins', 'itemAdventuringGear'];
-  const bag = [...pack].sort((x, y) => ORDER.indexOf(iconOf(x, ruleOf(x))) - ORDER.indexOf(iconOf(y, ruleOf(y))));
+  const ORDER = ['itemWeapons', 'itemArmor', 'itemShields', 'itemConsumables', 'itemAlchemicalItems'];
+  const rank = (i) => (ORDER.includes(iconFor(i)) ? ORDER.indexOf(iconFor(i)) : ORDER.length);
+  const bag = [...pack].sort((x, y) => rank(x) - rank(y) || iconFor(x).localeCompare(iconFor(y)));
   const sockets = Math.max(20, Math.ceil(bag.length / 5) * 5) - bag.length;
 
   const selected = inv.items.find((i) => i.key === selectedKey) ?? null;
@@ -89,6 +93,17 @@ export default function InventoryPage() {
 
   return (
     <div className="sheet inventory-tab">
+      {!readOnly && (
+        <nav className="nav subnav" aria-label="Inventory">
+          {[['Pack', 'inventory', ''], ['Merchant', 'coins', '?tab=merchant']].map(([label, icon, search]) => (
+            <Link key={label} to={{ search }} className={shopping === Boolean(search) ? 'active' : undefined} aria-current={shopping === Boolean(search) ? 'page' : undefined}>
+              <Icon name={icon} size={20} />
+              {label.toUpperCase()}
+            </Link>
+          ))}
+        </nav>
+      )}
+      {!shopping ? (
       <section className="inv" aria-label={`${character.name}'s inventory`}>
         <div className="inv__doll" aria-labelledby="equipped-title">
           <div className="inv__hero">
@@ -122,12 +137,12 @@ export default function InventoryPage() {
           <ul className="inv__grid">
             {bag.map((item) => (
               <li key={item.key}>
-                <ItemTile item={item} icon={iconOf(item, ruleOf(item))} selected={selected?.key === item.key} onSelect={() => select(item.key)} />
+                <ItemTile item={item} icon={iconFor(item)} selected={selected?.key === item.key} onSelect={() => select(item.key)} />
               </li>
             ))}
             {Array.from({ length: sockets }, (_, n) => <li key={`socket-${n}`} className="inv-tile inv-tile--socket" aria-hidden="true" />)}
           </ul>
-          {!bag.length && <p className="inv__empty">{readOnly ? 'Nothing else in the pack.' : 'Nothing else in the pack. Visit the merchant to add gear.'}</p>}
+          {!bag.length && <p className="inv__empty">{readOnly ? 'Nothing else in the pack.' : <>Nothing else in the pack. <Link to={{ search: '?tab=merchant' }}>Visit the merchant</Link> to add gear.</>}</p>}
         </div>
 
         <div className="inv__card" aria-live="polite">
@@ -136,8 +151,8 @@ export default function InventoryPage() {
               key={selected.key}
               item={selected}
               rule={ruleOf(selected)}
-              icon={iconOf(selected, ruleOf(selected))}
-              use={usable.find((u) => u.key === selected.key)}
+              icon={iconFor(selected)}
+              armory={selected.kind === 'custom' ? armoryByName.get(selected.name.toLowerCase()) : null}
               character={baseCharacter}
               readOnly={readOnly}
               onChange={(changes) => setItem(selected.key, changes)}
@@ -187,23 +202,20 @@ export default function InventoryPage() {
           <LoadMeter load={load} limits={limits} label={formatBulk(total)} name={character.name} />
         </div>
       </section>
-
-      {!readOnly && view && (
-        <section className="merchant" aria-labelledby="merchant-title">
-          <div className="merchant__head">
-            <h2 id="merchant-title" className="sheet-panel__title">The merchant</h2>
-            <button type="button" className={`btn ${shopping ? '' : 'btn--blood'}`} aria-expanded={shopping} onClick={() => setShopping((v) => !v)}>
-              {shopping ? 'Close the shop' : 'Visit the merchant'}
-            </button>
-          </div>
-          {shopping && (
-            <Merchant
-              view={view}
-              coins={inv.coins}
-              full={inv.items.length >= LIMITS.items}
-              onAdd={(entry, coins) => update({ items: [...inv.items, entry], ...(coins && { coins }) })}
-            />
-          )}
+      ) : (
+        <section className="merchant" aria-label="The merchant">
+          <Merchant
+            armory={armory}
+            rules={rules && !rules.error ? rules : null}
+            coins={inv.coins}
+            full={inv.items.length >= LIMITS.items}
+            onAdd={(entry, coins) => {
+              // The same thing again stacks onto what's in the pack.
+              const same = inv.items.find((i) => !i.equipped && i.kind === entry.kind && i.name === entry.name && i.id === entry.id && i.qty < LIMITS.qty);
+              const items = same ? inv.items.map((i) => (i === same ? { ...i, qty: i.qty + 1 } : i)) : [...inv.items, entry];
+              update({ items, ...(coins && { coins }) });
+            }}
+          />
         </section>
       )}
 
@@ -271,12 +283,26 @@ function untrainedNote(item, rule, character) {
   return null;
 }
 
-/** An item's icon: its kind, or for gear, what it's for. */
-function iconOf(item, rule) {
+/** An item's icon: its kind, or for anything else its armory category (by name), or what it looks like it's for. */
+function iconOf(item, rule, armory) {
   if (item.kind !== 'item' && item.kind !== 'custom') return { weapon: 'itemWeapons', armor: 'itemArmor', shield: 'itemShields' }[item.kind];
+  if (armory) return categoryIcon(armory.category);
   if (rule?.category === 'consumable' || /potion|elixir|oil|scroll|bomb|talisman/i.test(item.name)) return 'itemConsumables';
   if (rule?.category === 'treasure') return 'coins';
   return 'itemAdventuringGear';
+}
+
+/** An armory item's rules text (HTML), once it loads: null until then. */
+function useItemText(armory) {
+  const [html, setHtml] = useState(null);
+  useEffect(() => {
+    setHtml(null);
+    if (!armory) return undefined;
+    let live = true;
+    loadItemDetails(armory).then((h) => live && setHtml(h), () => live && setHtml(''));
+    return () => { live = false; };
+  }, [armory]);
+  return html;
 }
 
 /** One item as a tile: its icon, with how many; equipped slots are wide, with the name and what it does. */
@@ -305,10 +331,11 @@ function ItemTile({ item, icon, sub, selected, onSelect, wide }) {
 }
 
 /** The item you're looking at, large: what it is, how many, equip, a note, its rules text, remove. */
-function ItemCard({ item, rule, icon, use, character, readOnly, onChange, onEquip, onRemove }) {
+function ItemCard({ item, rule, icon, armory, character, readOnly, onChange, onEquip, onRemove }) {
   const equippable = EQUIPPABLE.includes(item.kind);
   const untrained = equippable && untrainedNote(item, rule, character);
   const stat = slotStat(item, rule);
+  const text = useItemText(armory);
   return (
     <article className="inv-card">
       <header className="inv-card__head">
@@ -340,7 +367,7 @@ function ItemCard({ item, rule, icon, use, character, readOnly, onChange, onEqui
         </div>
       )}
       {readOnly && item.qty > 1 && <p className="inv-card__state">You carry {item.qty}.</p>}
-      {use?.text && <p className="inv-card__use">{use.text}</p>}
+      {text && <div className="item-text inv-card__desc" dangerouslySetInnerHTML={{ __html: text }} />}
       {rule?.description && <div className="option__desc book__desc inv-card__desc" dangerouslySetInnerHTML={{ __html: rule.description }} />}
       {readOnly ? (
         item.note && <p className="inventory__note">{item.note}</p>
@@ -357,89 +384,121 @@ function ItemCard({ item, rule, icon, use, character, readOnly, onChange, onEqui
   );
 }
 
+const ALL_WARES = 'All wares';
+// shortcut: the list shows the first 200 matches, so a big category asks for a search; virtualize if that annoys.
+const SHOWN = 200;
+const rarityNote = {
+  uncommon: 'Uncommon: ask your GM before buying it, since it needs access.',
+  rare: 'Rare: only with your GM’s say-so, usually as treasure or a reward.',
+  unique: 'Unique: there’s only one. Your GM decides whether it’s yours.',
+};
+
 /**
- * The merchant: armor, shields, weapons and adventuring gear as a book. Open an item to
- * read it, then buy it (paid from the purse) or add it for free (loot, gifts). Custom
- * items are added below.
+ * The merchant: the whole armory as a shop. Categories down the left with your purse, the
+ * wares in the middle, the one you're looking at on the right to buy (paid from the purse)
+ * or add for free (loot, gifts). Weapons, armor and shields the sheet knows can be equipped.
+ * Custom items are added below.
  */
-function Merchant({ view, coins, full, onAdd }) {
+function Merchant({ armory, rules, coins, full, onAdd }) {
+  const wares = useMemo(() => (armory ? armoryWares(armory) : null), [armory]);
+  const [tab, setTab] = useState(ALL_WARES);
   const [query, setQuery] = useState('');
-  const [openId, setOpenId] = useState(null);
+  const [lookId, setLookId] = useState(null);
+  const [said, setSaid] = useState(null);
   const [custom, setCustom] = useState({ name: '', qty: '1', bulk: '0' });
-  const [added, setAdded] = useState(null);
+  const counts = useMemo(() => {
+    const c = new Map();
+    for (const w of wares ?? []) c.set(w.armory.category, (c.get(w.armory.category) ?? 0) + 1);
+    return c;
+  }, [wares]);
+  if (!wares) return <p className="muted italic center">The merchant is unpacking…</p>;
+
   const q = query.trim().toLowerCase();
-  const all = useMemo(
-    () =>
-      MERCHANT_SECTIONS.flatMap(({ key }) =>
-        [...(view[key] ?? [])].sort((a, b) => a.name.localeCompare(b.name)).map((item) => ({ id: `${key}:${item.id}`, name: item.name, type: key, item })),
-      ),
-    [view],
-  );
-  const items = q ? all.filter((i) => i.name.toLowerCase().includes(q)) : all;
-  const open = all.find((i) => i.id === openId) ?? null;
+  const list = wares.filter((w) => (tab === ALL_WARES || w.armory.category === tab) && (!q || w.name.toLowerCase().includes(q)));
+  const shown = list.slice(0, SHOWN);
+  const look = list.find((w) => w.id === lookId) ?? shown[0] ?? null;
   const money = coinValue(coins);
   const customOk = custom.name.trim() && Number(custom.qty) >= 1;
-  const add = (i, pay) => {
-    onAdd(inventoryItem(KIND_OF[i.type], i.item), pay ? payCoins(coins, i.item.price) : null);
-    setAdded(`${i.name} ${pay ? 'bought' : 'added'}.`);
+  const tabs = [[ALL_WARES, wares.length], ...ARMORY_CATEGORIES.filter((c) => counts.has(c.name)).map((c) => [c.name, counts.get(c.name)])];
+
+  // A weapon, armor or shield the sheet has numbers for goes in as that, so it can be equipped.
+  const ruleFor = (w) => {
+    const kind = ARMORY_KIND[w.armory.category];
+    const rule = kind && rules?.[LIST_OF[kind]]?.find((r) => r.name.toLowerCase() === w.name.toLowerCase());
+    return rule ? { kind, rule } : null;
+  };
+  const add = (w, pay) => {
+    const m = ruleFor(w);
+    const entry = m ? inventoryItem(m.kind, m.rule) : { ...customItem(w.name, 1, bulkOf(w.armory.bulk)), price: w.price };
+    onAdd(entry, pay ? payCoins(coins, w.price) : null);
+    setSaid({ id: w.id, text: `${w.name} ${pay ? 'bought' : 'added'}.` });
   };
 
   return (
     <div className="merchant__body">
       {full && <p className="rule-note rule-note--warn">The inventory is full ({LIMITS.items} entries). Remove something first.</p>}
-      <label className="filters__field">
-        <span className="filters__label">Search the shelves</span>
-        <input className="options__search" type="search" placeholder="Rope, healing potion, longsword…" value={query} onChange={(e) => setQuery(e.target.value)} />
-      </label>
-      <p className="visually-hidden" role="status">{added}</p>
-      <BookSpread
-        items={items}
-        total={all.length}
-        noun="items"
-        sections={MERCHANT_SECTIONS}
-        sectionOf={(i) => i.type}
-        tabsOnTop
-        open={open}
-        onOpen={(i) => setOpenId(i.id)}
-        resetKey={q}
-        filtered={Boolean(q)}
-        meta={(i) => (
-          <>
-            {i.item.rarity && i.item.rarity !== 'common' && <span className={`tag tag--rarity-${i.item.rarity}`}>{i.item.rarity}</span>}
-            <span>{i.item.price ? formatPrice(i.item.price) : '—'}</span>
-          </>
-        )}
-        emptyText={`Nothing matches “${query}”. Add it as a custom item below.`}
-        leaf={open && (
-          <BookLeaf
-            key={open.id}
-            eyebrow={`${MERCHANT_SECTIONS.find((s) => s.key === open.type).name} · ${sourceTag(open.item.source)}${open.item.rarity && open.item.rarity !== 'common' ? ` · ${open.item.rarity}` : ''}`}
-            title={open.item.name}
-            facts={gearFacts(KIND_OF[open.type], open.item)}
-            description={open.item.description}
-            onClose={() => setOpenId(null)}
-          >
-            <button
-              type="button"
-              className="btn btn--blood"
-              disabled={full || !open.item.price || open.item.price > money}
-              onClick={() => add(open, true)}
-            >
-              {open.item.price ? `Buy for ${formatPrice(open.item.price)}` : 'Not for sale'}
-            </button>
-            <button type="button" className="btn" disabled={full} onClick={() => add(open, false)}>Add for free</button>
-            {open.item.price > money && <span className="rule-note">You have {formatPrice(money)}.</span>}
-            {added && <span className="rule-note" aria-hidden="true">{added}</span>}
-          </BookLeaf>
-        )}
-        blankIcon="inventory"
-        blank={
-          <>
-            <p className="book__blank-title">The merchant's shelves</p>
-            <p className="rule-note">Open an item to read it. Buy it from your purse, or add it for free if it's loot or a gift.</p>
-          </>
-        }
-      />
+      <div className="co shop">
+        <div className="co__rail">
+          <div className="co__class">
+            <span className="shop__sigil"><Icon name="coins" size={30} /></span>
+            <div>
+              <h1 className="co__class-name">The Merchant</h1>
+              <p className="co__class-count">You have {formatPrice(money)}</p>
+            </div>
+          </div>
+          <div className="co__tabs" role="tablist" aria-label="What the merchant sells">
+            {tabs.map(([name, n]) => (
+              <button
+                key={name}
+                type="button"
+                role="tab"
+                aria-selected={tab === name}
+                className="co__tab shop__tab"
+                onClick={() => { setTab(name); setLookId(null); }}
+              >
+                <span className="shop__tab-icon"><Icon name={name === ALL_WARES ? 'armory' : categoryIcon(name)} size={18} /></span>
+                <span className="co__tab-title">{name}</span>
+                <span className="shop__tab-count">{n}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="co__body" role="tabpanel" aria-label={tab}>
+          <div className="co__list-wrap">
+            <input
+              className="options__search co__search"
+              type="search"
+              aria-label="Search the wares"
+              placeholder="Rope, healing potion, longsword…"
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); setLookId(null); }}
+            />
+            <p className="co__intro" aria-live="polite">
+              {list.length > SHOWN ? `First ${SHOWN} of ${list.length.toLocaleString('en-US')}. Search to narrow it down.` : `${list.length.toLocaleString('en-US')} ${list.length === 1 ? 'ware' : 'wares'}`}
+            </p>
+            <ul className="co__list">
+              {shown.map((w) => (
+                <li key={w.id}>
+                  <button type="button" className={`co-option shop-ware ${look?.id === w.id ? 'co-option--looking' : ''}`} aria-pressed={look?.id === w.id} onClick={() => setLookId(w.id)}>
+                    <span className={`shop-ware__icon shop-ware__icon--${w.armory.rarity}`}><Icon name={categoryIcon(w.armory.category)} size={18} /></span>
+                    <span className="co-option__name shop-ware__name">{w.name}</span>
+                    <span className={`shop-ware__price ${w.price > money ? 'shop-ware__price--dear' : ''}`}>{w.price != null ? formatPrice(w.price) : '—'}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {!list.length && <p className="co__intro">Nothing matches “{query}”. Add it as a custom item below.</p>}
+          </div>
+          <div className="co__detail">
+            {look ? (
+              <Ware key={look.id} w={look} equippable={Boolean(ruleFor(look))} money={money} full={full} said={said?.id === look.id ? said.text : null} onBuy={() => add(look, true)} onAdd={() => add(look, false)} />
+            ) : (
+              <div className="inv__card-blank"><Icon name="armory" size={44} /><p>Choose something to look at it.</p></div>
+            )}
+          </div>
+        </div>
+      </div>
+      <p className="visually-hidden" role="status">{said?.text}</p>
 
       <form
         className="sheet-panel add-item__custom"
@@ -447,7 +506,7 @@ function Merchant({ view, coins, full, onAdd }) {
           e.preventDefault();
           if (!customOk || full) return;
           onAdd(customItem(custom.name, Math.min(LIMITS.qty, Math.floor(Number(custom.qty))), Number(custom.bulk)));
-          setAdded(`${custom.name.trim()} added.`);
+          setSaid({ id: null, text: `${custom.name.trim()} added.` });
           setCustom({ name: '', qty: '1', bulk: '0' });
         }}
       >
@@ -472,6 +531,45 @@ function Merchant({ view, coins, full, onAdd }) {
           <button type="submit" className="btn" disabled={!customOk || full}>Add</button>
         </div>
       </form>
+    </div>
+  );
+}
+
+/** The ware you're looking at: what it is, its rules text, and buy or add for free. */
+function Ware({ w, equippable, money, full, said, onBuy, onAdd }) {
+  const a = w.armory;
+  const html = useItemText(a);
+  const facts = [a.category, `Level ${w.level}`, `Bulk ${a.bulk || '—'}`, a.usage && `Usage: ${a.usage}`, a.hands && `Hands ${a.hands}`].filter(Boolean);
+  return (
+    <div className="co__detail-inner">
+      <header className="inv-card__head">
+        <span className="inv-card__icon"><Icon name={categoryIcon(a.category)} size={40} /></span>
+        <div>
+          <h3 className="co__detail-name shop__name">{w.name}</h3>
+          <p className="inv-card__state">
+            <span className="shop__price">{w.price != null ? formatPrice(w.price) : 'No price'}</span>
+            {a.rarity !== 'common' && <span className={`tag tag--rarity-${a.rarity}`}>{a.rarity}</span>}
+          </p>
+        </div>
+      </header>
+      <ul className="co__facts">{facts.map((f) => <li key={f}>{f}</li>)}</ul>
+      {a.traits?.length > 0 && <p className="co__source">{a.traits.join(' · ')}</p>}
+      <div className="co__actions">
+        <button type="button" className="btn btn--blood" disabled={full || w.price == null || w.price > money} onClick={onBuy}>
+          {w.price != null ? `Buy for ${formatPrice(w.price)}` : 'Not for sale'}
+        </button>
+        <button type="button" className="btn" disabled={full} onClick={onAdd}>Add for free</button>
+        {said && <span className="co__chosen" aria-hidden="true">{said}</span>}
+      </div>
+      {w.price > money && <p className="rule-note" style={{ margin: 0 }}>You have {formatPrice(money)}.</p>}
+      {rarityNote[a.rarity] && <p className="rule-note" style={{ margin: 0 }}>{rarityNote[a.rarity]}</p>}
+      {ARMORY_KIND[a.category] && !equippable && (
+        <p className="rule-note" style={{ margin: 0 }}>This goes in the pack as gear: it can't be equipped, so it won't change your AC or Strikes.</p>
+      )}
+      <div className="item-text co__desc">
+        {html == null ? <p className="muted italic">Reading the rules…</p> : html ? <div dangerouslySetInnerHTML={{ __html: html }} /> : <p className="muted italic">No rules text beyond its price and Bulk.</p>}
+      </div>
+      <p className="co__source">{a.book}{a.page ? `, page ${a.page}` : ''}</p>
     </div>
   );
 }

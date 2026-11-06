@@ -3897,7 +3897,7 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .inv-tile__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .inv-tile__name { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); overflow-wrap: anywhere; }
 .inv-tile__sub { font-size: 12px; color: var(--text-muted); }
-.inv-tile--socket { cursor: default; border-color: var(--line-faint); opacity: 0.55; }
+.inv-tile--socket { pointer-events: none; cursor: default; border-color: var(--line-faint); opacity: 0.55; }
 .inv-tile--empty { border-style: dashed; background: none; box-shadow: none; cursor: default; }
 .inv-tile--empty .inv-tile__icon { color: var(--line); opacity: 0.7; }
 .inv-tile--empty .inv-tile__name { font-family: var(--body); font-size: 14px; font-weight: 400; font-style: italic; letter-spacing: 0; text-transform: none; color: var(--text-muted); }
@@ -3934,6 +3934,7 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
   .inv__hero { flex-direction: row; text-align: left; }
   .inv__hero-name { margin: 0; font-size: 24px; }
   .inv__grid { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
+  .inv__grid > .inv-tile--socket:nth-child(n+10) { display: none; }
   .inv .coins__row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) { .inv-card { animation: none; } .inv-tile, .inv-tile__icon { transition: none; } }
@@ -3943,6 +3944,29 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .merchant__head .sheet-panel__title { margin: 0; padding: 0; border: 0; }
 .merchant__body { display: flex; flex-direction: column; gap: 12px; }
 .merchant .add-item__custom { display: flex; flex-direction: column; gap: 8px; }
+.merchant { padding-top: 0; }
+/* The inventory's sub tabs (Pack, Merchant): the site's tab bar, smaller, inside the page. */
+.nav.subnav { margin: -4px 0 2px; padding: 0; background: none; }
+.nav.subnav a { min-height: 42px; }
+/* The merchant's shop: the Class Options frame, with categories in the rail and prices in the list. */
+.shop__sigil { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold); background: radial-gradient(circle, var(--panel-raised), var(--bg-deep) 80%); box-shadow: 0 4px 12px rgb(0 0 0 / 0.5); }
+.co__tab.shop__tab { grid-template-columns: 20px minmax(0, 1fr) auto; align-items: center; padding: 9px 16px; }
+.shop__tab-icon { position: relative; z-index: 1; display: grid; place-items: center; color: var(--bronze); }
+.shop__tab[aria-selected='true'] .shop__tab-icon { color: var(--gold); }
+.co__tab.shop__tab .co__tab-title { font-size: 12px; letter-spacing: 1.2px; }
+.shop__tab-count { position: relative; z-index: 1; font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.co-option.shop-ware { grid-template-columns: 22px minmax(0, 1fr) auto; padding: 8px 16px; }
+.shop-ware__icon { position: relative; display: grid; place-items: center; color: var(--bronze); }
+.shop-ware__icon--uncommon { color: #e0a06a; }
+.shop-ware__icon--rare { color: #8fb3d9; }
+.shop-ware__icon--unique { color: #b77ad9; }
+.shop-ware__name { font-size: 14px; letter-spacing: 0.5px; overflow-wrap: anywhere; }
+.shop-ware__price { position: relative; font-size: 13px; color: var(--gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.shop-ware__price--dear { color: var(--text-muted); }
+.shop__name { font-size: clamp(28px, 1.6vw + 16px, 40px); }
+.shop__price { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1px; color: var(--gold); }
+.shop .co__detail .item-text { max-width: 62ch; }
+@media (max-width: 980px) { .co__tab.shop__tab { min-width: 0; } }
 
 
 /* ---------- Campaign Overview, as a title page ----------
