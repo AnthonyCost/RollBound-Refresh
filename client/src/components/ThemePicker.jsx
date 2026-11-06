@@ -8,7 +8,8 @@ import FormErrors, { errorsFrom } from './FormErrors.jsx';
  * the card), so what you see is what you get. Picking one applies it at once and saves
  * it to the account; if saving fails, it goes back.
  */
-export default function ThemePicker() {
+/** bare: just the choices, for a page that gives them its own heading (Account settings). */
+export default function ThemePicker({ bare = false }) {
   const { user, updateProfile } = useAuth();
   const current = user.theme ?? 'infernal';
   const [errors, setErrors] = useState([]);
@@ -30,10 +31,10 @@ export default function ThemePicker() {
   };
 
   return (
-    <section className="sheet-panel theme-picker" aria-labelledby="theme-title">
-      <h2 id="theme-title" className="sheet-panel__title">Theme</h2>
-      <p className="muted">The colors RollBound uses everywhere, saved to your account.</p>
-      <div className="theme-picker__options" role="radiogroup" aria-labelledby="theme-title">
+    <section className={`theme-picker ${bare ? '' : 'sheet-panel'}`} aria-labelledby={bare ? undefined : 'theme-title'} aria-label={bare ? 'Theme' : undefined}>
+      {!bare && <h2 id="theme-title" className="sheet-panel__title">Theme</h2>}
+      <p className={bare ? 'settings-menu__lede' : 'muted'}>The colors RollBound uses everywhere, saved to your account.</p>
+      <div className="theme-picker__options" role="radiogroup" aria-label="Theme">
         {THEMES.map((t) => {
           const on = (saving ?? current) === t.id;
           return (

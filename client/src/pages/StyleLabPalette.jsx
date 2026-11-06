@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { mira, armorClass, savingThrow, perception, skillCheck, strikeBonus, damageModifier, abilityName } from '@rollbound/rules';
 import RankPips from '../components/RankPips.jsx';
 import DetailsDrawer from '../components/DetailsDrawer.jsx';
@@ -13,18 +13,49 @@ import { signed, titleCase } from '../format.js';
  * few colors theme.css hard-codes), so this shows what a re-theme would actually look like.
  */
 
-// Taken from the page's computed styles.
+// The palette's roles, as theme tokens: the swatches show whichever theme is picked.
 const SWATCHES = [
-  { hex: '#0F040F', name: 'Plum black', role: 'Page background', token: '--bg' },
-  { hex: '#230217', name: 'Wine', role: 'Panels', token: '--panel' },
-  { hex: '#4F0537', name: 'Deep magenta', role: 'Glow behind the page', token: '--glow' },
-  { hex: '#B51983', name: 'Magenta', role: 'Decoration, borders', token: '--line' },
-  { hex: '#EA600D', name: 'Fire', role: 'Primary buttons, active states', token: '--blood' },
-  { hex: '#FF6D10', name: 'Flame', role: 'Headings, labels, links', token: '--bronze' },
-  { hex: '#7A0D19', name: 'Ember', role: 'Button shadow end', token: '--blood-dark' },
-  { hex: '#FFF15D', name: 'Spark', role: 'Highlights, key items', token: '--gold' },
-  { hex: '#FFECB6', name: 'Parchment', role: 'Text', token: '--text' },
+  { name: 'Background', role: 'Page background', token: '--bg' },
+  { name: 'Panel', role: 'Panels', token: '--panel' },
+  { name: 'Glow', role: 'Glow behind the page', token: '--glow' },
+  { name: 'Line', role: 'Decoration, borders', token: '--line' },
+  { name: 'Blood', role: 'Primary buttons, active states', token: '--blood' },
+  { name: 'Bronze', role: 'Headings, labels, links', token: '--bronze' },
+  { name: 'Blood dark', role: 'Button shadow end', token: '--blood-dark' },
+  { name: 'Gold', role: 'Highlights, key items', token: '--gold' },
+  { name: 'Text', role: 'Text', token: '--text' },
 ];
+
+/** A computed color ("rgb(15, 4, 15)") as hex, alpha included when it isn't opaque. */
+function toHex(color) {
+  const [r, g, b, a = 1] = (color.match(/[\d.]+/g) ?? []).map(Number);
+  const h = (n) => Math.round(n).toString(16).padStart(2, '0').toUpperCase();
+  return r == null ? '' : `#${h(r)}${h(g)}${h(b)}${a < 1 ? h(a * 255) : ''}`;
+}
+console.assert(toHex('rgb(15, 4, 15)') === '#0F040F' && toHex('rgba(255, 0, 0, 0.5)') === '#FF000080', 'toHex');
+
+/** The theme's swatches: each drawn with its token inside the theme, its hex read back from the page. */
+function Swatches({ theme }) {
+  const list = useRef(null);
+  const [hexes, setHexes] = useState({});
+  useLayoutEffect(() => {
+    const found = {};
+    list.current?.querySelectorAll('[data-token]').forEach((el) => (found[el.dataset.token] = toHex(getComputedStyle(el).backgroundColor)));
+    setHexes(found);
+  }, [theme]);
+  return (
+    <ul className="pal-swatches" data-theme={theme} ref={list}>
+      {SWATCHES.map((s) => (
+        <li key={s.token}>
+          <span className="pal-swatch" data-token={s.token} style={{ background: `var(${s.token})` }} />
+          <span className="pal-swatch__name">{s.name}</span>
+          <span className="pal-swatch__hex">{hexes[s.token]}</span>
+          <span className="pal-swatch__role">{s.role}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 const c = mira;
 const weapon = c.weapons[0];
@@ -145,27 +176,21 @@ function Specimen() {
 
 export default function StyleLabPalette() {
   const [palette, setPalette] = useState('mirage');
+  const chosen = THEMES.find((t) => t.id === palette);
   return (
     <div className="lab-col pal">
       <section className="lab-study" aria-labelledby="pal-title">
         <header className="lab-study__head">
-          <h2 id="pal-title">Mirage palette</h2>
+          <h2 id="pal-title">{chosen.name} palette</h2>
           <p>
-            Colors from <a href="https://www.guildwars2.com/en/path-of-fire/" target="_blank" rel="noreferrer">Guild Wars 2: Path of Fire</a>:
-            plum-black and wine for the ground, magenta for decoration, a fire-orange gradient for actions, and gold and parchment for highlights and text.
-            The type stays RollBound’s.
+            {chosen.blurb}
+            {palette === 'mirage' && (
+              <> Colors from <a href="https://www.guildwars2.com/en/path-of-fire/" target="_blank" rel="noreferrer">Guild Wars 2: Path of Fire</a>.</>
+            )}{' '}
+            Pick a theme below to see its colors here.
           </p>
         </header>
-        <ul className="pal-swatches">
-          {SWATCHES.map((s) => (
-            <li key={s.hex}>
-              <span className="pal-swatch" style={{ background: s.hex }} />
-              <span className="pal-swatch__name">{s.name}</span>
-              <span className="pal-swatch__hex">{s.hex}</span>
-              <span className="pal-swatch__role">{s.role}</span>
-            </li>
-          ))}
-        </ul>
+        <Swatches theme={palette} />
       </section>
 
       <section className="lab-study" aria-labelledby="pal-specimen">
