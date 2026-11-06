@@ -2781,7 +2781,7 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 
 .image-picker {
   position: relative;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 5 / 2; /* a campaign cover; the square and avatar shapes override it */
   max-height: 240px;
   width: 100%;
   display: grid;
@@ -2808,7 +2808,8 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 
 .cover {
   position: relative;
-  aspect-ratio: 16 / 9;
+  /* The campaign form's preview, in the campaign page banner's shape. */
+  aspect-ratio: 5 / 2;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -2841,9 +2842,6 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
   text-shadow: 0 2px 12px #000;
 }
 .cover__subtitle { margin: 4px 0 0; font-style: italic; color: var(--text-soft); }
-@media (min-width: 1024px) {
-  .app__main > .cover { aspect-ratio: 21 / 8; }
-}
 
 .backstory { max-width: var(--measure); margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; color: var(--text-soft); }
 
@@ -4032,16 +4030,16 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
   position: relative;
   display: flex;
   align-items: flex-end;
-  aspect-ratio: 3 / 1;
+  /* The shape covers are cropped to (ImagePicker's CROPS.wide), so the banner shows the whole crop. */
+  aspect-ratio: 5 / 2;
   min-height: 200px;
-  max-height: 320px;
   width: 100%;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 4px;
   background: radial-gradient(ellipse 80% 70% at 50% 40%, var(--glow) 0%, var(--panel-ember) 60%, var(--bg-deep) 100%);
 }
-.campaign-banner__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+.campaign-banner__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .campaign-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--bg-deep) 0%, transparent) 30%, color-mix(in srgb, var(--bg-deep) 90%, transparent)); }
 .campaign-banner__text { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; }
 .campaign-banner__name { margin: 0; font-family: var(--display); font-size: clamp(24px, 2vw + 16px, 40px); font-weight: 900; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 2px 10px #000; overflow-wrap: anywhere; }
@@ -4622,3 +4620,20 @@ button.action-pip:focus-visible { outline: 2px solid var(--gold); outline-offset
   .home-welcome__grid > li:nth-child(n + 3) { grid-column: span 2; }
   .home-welcome__grid > li:nth-child(-n + 2) .start-choice { min-height: clamp(300px, 40vh, 440px); }
 }
+
+/* Cropping an image before it's uploaded (ImageCropper): a modal over the page, the frame in the image's final shape. */
+.cropper { box-sizing: border-box; width: min(600px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 22px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--text); box-shadow: 0 24px 60px rgb(0 0 0 / 0.6); }
+.cropper[open] { display: flex; flex-direction: column; gap: 14px; }
+.cropper::backdrop { background: rgb(0 0 0 / 0.72); }
+.cropper__stage { position: relative; display: flex; justify-content: center; padding: clamp(18px, 5vw, 44px); overflow: hidden; border: 1px solid var(--line); background: var(--bg-deep); cursor: grab; touch-action: none; user-select: none; }
+.cropper__stage:active { cursor: grabbing; }
+.cropper__stage:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+/* The crop: the image spills past it, and everything outside is dimmed (the huge shadow, clipped by the stage). */
+.cropper__frame { position: relative; flex: none; overflow: hidden; outline: 2px dashed var(--gold); }
+/* A profile picture is saved square but shown round: the circle is the crop you'll see. */
+.cropper__frame--round { border-radius: 50%; }
+.cropper__img--outside { filter: brightness(0.28) saturate(0.6); }
+.cropper__img { position: absolute; left: 50%; top: 50%; max-width: none; pointer-events: none; }
+.cropper__status { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; }
+.cropper__zoom { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text-soft); }
+.cropper__zoom input { flex: 1; accent-color: var(--gold); }
