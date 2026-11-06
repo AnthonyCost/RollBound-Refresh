@@ -130,6 +130,8 @@ Your image uploads use S3. On AWS itself, the server would get a role; Render ha
    | `RESEND_API_KEY` | your **`rollbound-prod`** Resend key |
    | `EMAIL_FROM` | `RollBound <no-reply@rollbound.com>` (no quotes needed here) |
    | `APP_URL` | `https://rollbound.com` |
+| `RESEND_TEMPLATE_PASSWORD_RESET` | optional: your reset template's ID or alias |
+| `RESEND_TEMPLATE_WELCOME` | optional: your welcome template's ID or alias |
 
 4. Open **Advanced** and set **Health Check Path** to `/api/health`. Render then only switches to a new version once it answers.
 5. Choose **Deploy Web Service**.

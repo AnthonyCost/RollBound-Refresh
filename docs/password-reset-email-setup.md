@@ -124,7 +124,48 @@ Good to know:
 - Asking again replaces the older link.
 - Five requests an hour from the same place, and then RollBound asks you to wait. Restarting the server resets that count.
 
-## If something goes wrong
+## Using your own email designs (Resend templates)
+
+RollBound sends two emails: the **password reset** and a **welcome** email when someone creates an account. Each one uses a template you design in Resend if you tell RollBound which one. Otherwise it sends RollBound's plain built-in version.
+
+### 1. Add the variables to each template
+
+In Resend, open **Templates** and choose the template. Where RollBound's details belong, add a variable: type `{{` in the editor, or choose **Variable**. Use these exact names, in capitals:
+
+| Template | Variable | What RollBound fills in |
+| --- | --- | --- |
+| Password reset | `DISPLAY_NAME` | The person's display name |
+| | `RESET_URL` | Their one-time reset link. Use it as your button's link. |
+| | `EXPIRES_IN` | How long the link works: `30 minutes` |
+| Welcome | `DISPLAY_NAME` | The person's display name |
+| | `APP_URL` | A link to RollBound's home page |
+
+You don't have to use every variable. But every variable a template **does** use must be on this list, or have a fallback value set in Resend. Otherwise Resend refuses to send it. Resend reserves `FIRST_NAME`, `LAST_NAME`, `EMAIL` and `UNSUBSCRIBE_URL` for its own contacts feature, so a template can't get those from RollBound: use `DISPLAY_NAME` for the name.
+
+Also give each template:
+
+- a **Subject**, since RollBound uses the template's subject;
+- a **From** address ending in `@rollbound.com`, or leave it blank and RollBound uses `EMAIL_FROM`.
+
+Then **Publish** the template. Resend only sends published templates. After later edits, publish again.
+
+### 2. Tell RollBound which template is which
+
+1. In Resend, open each template and copy its **ID**. If you gave it an **alias**, such as `password-reset`, the alias works too and is easier to read.
+2. Add these lines to `server/.env`, with your IDs:
+
+   ```bash
+   RESEND_TEMPLATE_PASSWORD_RESET=paste-the-reset-template-id
+   RESEND_TEMPLATE_WELCOME=paste-the-welcome-template-id
+   ```
+
+3. Restart the server (**Ctrl+C**, then `npm run dev`).
+
+To test them, use **Forgot your password?**, and create a new account with an email you can open. On the live site, add the same two settings to Render's **Environment** (`docs/render-deployment.md`, step 5).
+
+To go back to the built-in email, delete that line from `server/.env` and restart.
+
+
 
 **Look at the terminal running the server first.** RollBound never tells the visitor when an email fails, since that would reveal the account exists, but it prints the reason in the terminal.
 
@@ -133,6 +174,8 @@ Good to know:
 | The terminal shows `[email not configured]` and the whole email | The server isn't reading the settings. Check all three lines are in `server/.env` (not `.env.example`), saved, then restart the server. |
 | `Resend refused the email (401)` or `(403)` | The API key is wrong or was deleted. Make a new key and replace the old one in `server/.env`, then restart. |
 | `Resend refused the email (403)` mentioning the domain isn't verified | Step 2c isn't finished yet, or `EMAIL_FROM` isn't an `@rollbound.com` address. |
+| `Resend refused the email (404)` and `Template not found` | A `RESEND_TEMPLATE_…` value doesn't match a template's ID or alias, or the template isn't published yet. |
+| `Resend refused the email (422)` mentioning a variable | The template uses a variable RollBound doesn't send. Check its spelling against the table above, or give it a fallback value in Resend. |
 | `Resend refused the email (422)` | Usually `EMAIL_FROM` is written wrong. It should look exactly like `"RollBound <no-reply@rollbound.com>"`, quotes included. |
 | `Resend refused the email (429)` | You've hit Resend's free daily limit (100). Wait until tomorrow. |
 | Nothing in the terminal, no email, and Resend's Emails list is empty | No account has that exact email, so nothing was sent. Check the spelling, or sign up with that address first. |

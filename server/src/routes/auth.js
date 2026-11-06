@@ -79,7 +79,19 @@ auth.post('/register', async (req, res) => {
     if (err.code === '23505') return res.status(409).json({ errors: ['An account with that email already exists.'] });
     throw err;
   }
+  // A welcome email, after the account is made: a failed send is logged and never stops sign-up.
+  const home = `${appUrl()}/home`;
+  sendEmail({
+    to: email,
+    subject: 'Welcome to RollBound',
+    text: `Hi ${displayName},\n\nYour RollBound account is ready. Build your first hero, or join your GM's campaign with their invite code:\n\n${home}\n\nSee you at the table.`,
+    html: `<p>Hi ${escapeHtml(displayName)},</p><p>Your RollBound account is ready. Build your first hero, or join your GM's campaign with their invite code.</p><p><a href="${home}">Open RollBound</a></p><p>See you at the table.</p>`,
+    template: { id: process.env.RESEND_TEMPLATE_WELCOME, variables: { DISPLAY_NAME: escapeHtml(displayName), APP_URL: home } },
+  }).catch((e) => console.error('Welcome email failed:', e.message));
 });
+
+/** Where links in emails point: APP_URL, without a trailing slash. */
+const appUrl = () => (process.env.APP_URL ?? 'http://localhost:5173').replace(/\/+$/, '');
 
 const RESET_MINUTES = 30;
 const allowResetRequest = rateLimit(5, 60 * 60 * 1000);
@@ -102,7 +114,7 @@ auth.post('/forgot-password', async (req, res) => {
       `INSERT INTO password_resets (token_hash, user_id, expires_at) VALUES ($1, $2, now() + make_interval(mins => $3))`,
       [hashToken(token), user.id, RESET_MINUTES],
     );
-    const link = `${(process.env.APP_URL ?? 'http://localhost:5173').replace(/\/+$/, '')}/reset-password?token=${token}`;
+    const link = `${appUrl()}/reset-password?token=${token}`;
     const name = user.display_name;
     try {
       await sendEmail({
@@ -110,6 +122,8 @@ auth.post('/forgot-password', async (req, res) => {
         subject: 'Reset your RollBound password',
         text: `Hi ${name},\n\nSomeone (hopefully you) asked to reset your RollBound password. Open this link to choose a new one:\n\n${link}\n\nThe link works once, for ${RESET_MINUTES} minutes. If you didn't ask, ignore this email; your password hasn't changed.`,
         html: `<p>Hi ${escapeHtml(name)},</p><p>Someone (hopefully you) asked to reset your RollBound password.</p><p><a href="${link}">Choose a new password</a></p><p>The link works once, for ${RESET_MINUTES} minutes. If you didn't ask, ignore this email; your password hasn't changed.</p>`,
+        // Escaped: Resend's {{{triple braces}}} put a value in the HTML as it is.
+        template: { id: process.env.RESEND_TEMPLATE_PASSWORD_RESET, variables: { DISPLAY_NAME: escapeHtml(name), RESET_URL: link, EXPIRES_IN: `${RESET_MINUTES} minutes` } },
       });
     } catch (err) {
       // Logged, not shown: telling the visitor would reveal that the account exists.
