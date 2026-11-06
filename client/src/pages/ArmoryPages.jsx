@@ -30,6 +30,10 @@ const INDEXES = {
   price: { sections: PRICE_BANDS, sectionOf: priceBand, tabsOnTop: true },
 };
 
+const TRAIT_SECTION = '~trait';
+/** Whether a search finds this item only by a trait or its former name, not its name. */
+const isTraitMatch = (i, q) => Boolean(q) && !i.name.toLowerCase().includes(q);
+
 /** Filters live in the address, so a filtered list can be bookmarked or shared. */
 function useFilters() {
   const [params, setParams] = useSearchParams();
@@ -100,17 +104,31 @@ export default function ArmoryPage() {
         i.level >= filters.min &&
         i.level <= filters.max,
     );
-    if (filters.sort === 'level') return [...list].sort((a, b) => a.level - b.level || a.name.localeCompare(b.name));
-    // Items without a price (artifacts and the like) go last.
-    if (filters.sort === 'price') return [...list].sort((a, b) => (a.cp ?? Infinity) - (b.cp ?? Infinity) || a.name.localeCompare(b.name));
-    return list;
+    // A search lists items named for it before ones that only have it as a trait or a former name:
+    // "healing" shows Healing Potion first, not after the 48 items with the Healing trait.
+    const named = (i) => (isTraitMatch(i, q) ? 1 : 0);
+    const order =
+      filters.sort === 'level' ? (a, b) => a.level - b.level || a.name.localeCompare(b.name)
+      // Items without a price (artifacts and the like) go last.
+      : filters.sort === 'price' ? (a, b) => (a.cp ?? Infinity) - (b.cp ?? Infinity) || a.name.localeCompare(b.name)
+      : () => 0;
+    return [...list].sort((a, b) => named(a) - named(b) || order(a, b));
   }, [items, filters]);
 
   const filtered = filters.q || filters.category || filters.sub || filters.rarity || filters.book || filters.min !== 0 || filters.max !== MAX_LEVEL;
   const total = ARMORY_CATEGORIES.reduce((t, c) => t + c.count, 0);
   const open = slug && items ? items.find((x) => x.slug === slug) ?? null : null;
   const closeTo = `/armory${search}`;
-  const index = INDEXES[filters.sort] ?? INDEXES.name;
+  const sorted = INDEXES[filters.sort] ?? INDEXES.name;
+  // Items found only by trait or former name get a section of their own, after the named ones.
+  const q = filters.q.trim().toLowerCase();
+  const index = q && matches.some((i) => isTraitMatch(i, q))
+    ? {
+        ...sorted,
+        sections: [...sorted.sections, { key: TRAIT_SECTION, tab: 'Trait', name: 'Has the trait or a former name' }],
+        sectionOf: (i) => (isTraitMatch(i, q) ? TRAIT_SECTION : sorted.sectionOf(i)),
+      }
+    : sorted;
   const chooseCategory = (category) => setFilters({ category: category === filters.category ? '' : category, sub: '' });
 
   return (

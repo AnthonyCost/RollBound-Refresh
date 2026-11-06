@@ -324,6 +324,12 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     if (roll) setLastRoll(roll);
     return roll;
   }, []);
+  // Healing from an item (a potion): rolled like damage, shown as Hit Points regained.
+  const rollHealing = useCallback((label, expr) => {
+    const roll = newDamage(label, expr);
+    if (roll) setLastRoll({ ...roll, heal: true });
+    return roll;
+  }, []);
 
   const endTurn = useCallback(() => {
     setUsed([]);
@@ -363,6 +369,8 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       setHp,
       hpError,
       inventory,
+      // What they carry now: the saved inventory, or the builder's until it's first edited.
+      carried: currentInventory,
       setInventory,
       inventoryStatus,
       backstory,
@@ -386,13 +394,14 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       lastRoll,
       rollCheck,
       rollDamage,
+      rollHealing,
       takeAction,
       strike,
       endTurn,
       cycleCondition,
       resetEncounter,
     }),
-    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, lastRoll, rollCheck, rollDamage, takeAction, strike, endTurn, cycleCondition, resetEncounter],
+    [encounter, encounterActive, myTurn, character, baseCharacter, gearReady, characterId, readOnly, portraitUrl, campaign, shareId, max, currentHp, setHp, hpError, inventory, currentInventory, setInventory, inventoryStatus, backstory, setBackstory, backstoryStatus, prepared, setPrepared, preparedStatus, shield, setShieldDamage, shieldBlock, loading, notFound, round, conditions, shieldRaised, used, actionsLeft, strikesSoFar, lastRoll, rollCheck, rollDamage, rollHealing, takeAction, strike, endTurn, cycleCondition, resetEncounter],
   );
 
   return <TableContext.Provider value={value}>{children}</TableContext.Provider>;

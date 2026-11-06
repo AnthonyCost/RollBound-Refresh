@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useCarriedConsumables } from '../state/carriedItems.js';
 import { Link } from 'react-router-dom';
 import {
   armorClass, classDc, damageModifier, describeCondition, landSpeed, perception, savingThrow, skillCheck, strikeBonus,
@@ -103,7 +104,7 @@ function useSpellRules(needed) {
   return spells;
 }
 
-const KIND_LABEL = { basic: 'Basic action', skill: 'Skill action', spell: 'Spell', feat: 'Feat' };
+const KIND_LABEL = { basic: 'Basic action', skill: 'Skill action', spell: 'Spell', feat: 'Feat', item: 'Item' };
 const skillIcon = (skill) => (skill ? `skill${skill[0].toUpperCase()}${skill.slice(1)}` : 'skillLore');
 
 /**
@@ -117,7 +118,7 @@ function optionDetail(o, { spellRules, canUse, actionsLeft, onUse }) {
   // A cost like "1 to 3" (Force Barrage, Heal): a button for each number of actions, as you choose when you cast.
   const range = /^([123]) to ([123])$/.exec(String(o.cost));
   const counts = range ? Array.from({ length: range[2] - range[1] + 1 }, (_, i) => Number(range[1]) + i) : null;
-  const noun = o.kind === 'spell' ? 'spell' : reaction ? 'reaction' : o.cost === 'free' ? 'free action' : 'action';
+  const noun = o.kind === 'spell' ? 'spell' : o.kind === 'item' ? (o.heal ? `and roll ${o.heal} HP` : 'item') : reaction ? 'reaction' : o.cost === 'free' ? 'free action' : 'action';
   const button = (
     <div className="combat-use">
       {counts ? (
@@ -152,6 +153,14 @@ function optionDetail(o, { spellRules, canUse, actionsLeft, onUse }) {
   }
   if (o.kind === 'feat') {
     return { ...base, icon: 'feats', facts: [['Level', o.feat.level], ['Traits', o.feat.traits.map(titleCase).join(', ')]], html: o.feat.description };
+  }
+  if (o.kind === 'item') {
+    return {
+      ...base,
+      icon: 'inventory',
+      facts: [['In your pack', o.qty], ['Restores', o.heal && `${o.heal} Hit Points`]].filter(([, v]) => v),
+      note: `${o.text}${o.qty === 1 ? ' This is your last one.' : ''}`,
+    };
   }
   if (o.kind === 'skill') return { ...base, icon: skillIcon(o.skill), note: `${o.hint}. Roll your skill check against the DC your GM sets.` };
   return { ...base, icon: 'swords', note: o.hint, facts: o.traits?.length ? [['Traits', o.traits.map(titleCase).join(', ')]] : [] };
@@ -313,8 +322,9 @@ function Guide({ character, ac, open, onToggle }) {
 export default function CombatPage() {
   const {
     character, conditions, used, actionsLeft, strikesSoFar, takeAction, strike, endTurn, cycleCondition, resetEncounter,
-    shieldRaised, encounter, myTurn, round, campaign, currentHp, maxHp, setHp, shield, rollDamage,
+    shieldRaised, encounter, myTurn, round, campaign, currentHp, maxHp, setHp, shield, rollDamage, rollHealing, carried, setInventory,
   } = useTable();
+  const consumables = useCarriedConsumables(carried);
   const feats = useFeatActions(character);
   const [guideOpen, setGuideOpen] = useRemembered('rollbound:combat-guide', true);
   // The details drawer: an option's id, or 'shield'. The roll drawer, after a Strike.
@@ -342,6 +352,7 @@ export default function CombatPage() {
         .map(({ s, what }) => ({ id: `spell:${s.id ?? s.slug}`, kind: 'spell', spell: s, name: s.name, cost: s.actions, hint: what, traits: (s.traits ?? []).slice(0, 4) }))
     : [];
   const featOptions = feats.map((f) => ({ id: `feat:${f.id}`, kind: 'feat', feat: f, name: f.name, cost: String(f.actions), hint: `${titleCase(f.category)} feat`, traits: f.traits.filter((t) => t !== f.category).slice(0, 4) }));
+  const itemOptions = consumables.map((x) => ({ id: `item:${x.key}`, kind: 'item', name: x.name, cost: x.cost, qty: x.qty, heal: x.heal, text: x.text, itemKey: x.key, hint: `${x.qty} in your pack${x.heal ? ` · restores ${x.heal} HP` : ''}`, traits: [] }));
   const byCost = (list, test) => list.filter((o) => test(String(o.cost)));
   const isAction = (k) => /^[123]$/.test(k) || / to /.test(k);
   const groups = [
@@ -349,6 +360,7 @@ export default function CombatPage() {
     { key: 'skills', label: 'Skills', options: byCost(skills, isAction), note: 'Skill actions you can use in a fight, with your modifier.' },
     { key: 'spells', label: 'Spells', options: byCost(spells, isAction), note: 'Tap a spell to read it and cast it.' },
     { key: 'feats', label: 'Feats', options: byCost(featOptions, isAction) },
+    { key: 'items', label: 'Items', options: itemOptions, note: 'Potions, elixirs and other consumables you carry. Using one spends its actions and uses it up.' },
     {
       key: 'reactions',
       label: 'Reactions & free',
@@ -364,6 +376,18 @@ export default function CombatPage() {
     if (cost) takeAction(o, actions ? `${actions} action${actions === 1 ? '' : 's'}` : '', cost);
     else takeAction(o, o.cost === 'reaction' ? 'reaction' : 'free action', 0);
     setOpen(null);
+    if (o.kind === 'item') consumeItem(o);
+  };
+  // An item is used up: one fewer in the pack; a healing one rolls its Hit Points and adds them.
+  const consumeItem = (o) => {
+    if (carried) {
+      setInventory({ ...carried, items: carried.items.flatMap((i) => (i.key !== o.itemKey ? [i] : i.qty > 1 ? [{ ...i, qty: i.qty - 1 }] : [])) });
+    }
+    if (!o.heal) return;
+    const roll = rollHealing(o.name, o.heal);
+    if (!roll) return;
+    setHp(currentHp + roll.total);
+    setRolling(true);
   };
   const onRollDamage = (label, expr, damageType) => {
     if (!rollDamage(label, expr, damageType)) return;

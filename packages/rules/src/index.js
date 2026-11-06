@@ -8,6 +8,7 @@ export * from './builder.js';
 export * from './leveling.js';
 export * from './data.js';
 export * from './inventory.js';
+export * from './consumables.js';
 export * from './spells.js';
 export { SAMPLE_BUILDS, DEMO_ROSTER } from './sampleBuilds.js';
 export { PREGENS } from './pregens.js';

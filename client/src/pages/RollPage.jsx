@@ -72,15 +72,20 @@ function DamageView({ roll, onAgain, onBack }) {
             <div className="roll-damage__total"><RollTotal total={total} faces={dice.reduce((t, d) => t + d.sides, 0)} ms={TUMBLE_MS + dice.length * 140} /></div>
           </>
         )}
-        <span className="eyebrow">{damageType ? `${damageType} damage` : 'damage'}</span>
+        <span className="eyebrow">{roll.heal ? 'Hit Points regained' : damageType ? `${damageType} damage` : 'damage'}</span>
         <div className="roll__math">
           {dice.length === 1 ? `d${dice[0].sides} ` : ''}<strong>{dice.map((d) => d.value).join(' + ')}</strong>
           {mod ? <> {mod < 0 ? '−' : '+'} <strong>{Math.abs(mod)}</strong></> : null} = <strong>{total}</strong>
         </div>
       </section>
-      <p className="rule-note center roll-damage__crit">A critical hit doubles it: <strong>{total * 2}</strong>.</p>
+      {roll.heal ? (
+        <p className="rule-note center roll-damage__crit">Added to your Hit Points, up to your maximum.</p>
+      ) : (
+        <p className="rule-note center roll-damage__crit">A critical hit doubles it: <strong>{total * 2}</strong>.</p>
+      )}
       <div className="btn-row">
-        <button type="button" className="btn btn--grow" onClick={onAgain}>Roll again</button>
+        {/* Rolling a potion again would heal twice; it's used up. */}
+        {!roll.heal && <button type="button" className="btn btn--grow" onClick={onAgain}>Roll again</button>}
         {onBack ? <button type="button" className="btn btn--blood btn--grow" onClick={onBack}>Close</button> : null}
       </div>
     </div>

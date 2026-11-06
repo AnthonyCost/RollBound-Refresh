@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import * as R from '../src/index.js';
@@ -144,5 +145,20 @@ describe('shield damage', () => {
     assert.deepEqual(R.inventoryProblems(hurt), []);
     assert.ok(R.inventoryProblems({ ...hurt, items: [{ ...hurt.items[0], damage: -1 }] }).length);
     assert.ok(R.inventoryProblems({ ...hurt, items: [{ ...hurt.items[0], damage: 1.5 }] }).length);
+  });
+});
+
+describe('consumables', () => {
+  const armory = JSON.parse(readFileSync(new URL('../armory/details/consumables.json', import.meta.url)));
+  const potion = armory['aon-equipment-2943'];
+  it("reads a healing potion's action and each grade's healing", () => {
+    assert.deepEqual(
+      ['Healing Potion (Minor)', 'Healing Potion (Lesser)', 'Healing Potion (Major)'].map((n) => R.consumableUse(potion, n)).map(({ cost, heal }) => [cost, heal]),
+      [['1', '1d8'], ['1', '2d8+5'], ['1', '8d8+30']],
+    );
+    assert.match(R.consumableUse(potion, 'Healing Potion (Minor)').text, /regain the listed number of Hit Points.*restores 1d8/);
+  });
+  it('is empty for an item with no rules text', () => {
+    assert.deepEqual(R.consumableUse(''), { cost: null, heal: null, text: '' });
   });
 });
