@@ -28,6 +28,7 @@ import ArmoryPage from './pages/ArmoryPages.jsx';
 import InventoryPage from './pages/InventoryPage.jsx';
 import LorePage from './pages/LorePage.jsx';
 import LearnPage from './pages/LearnPage.jsx';
+import GlossaryPage from './pages/GlossaryPage.jsx';
 import ResourcesPage from './pages/ResourcesPage.jsx';
 import StyleLabPage from './pages/StyleLabPage.jsx';
 import { TableProvider, useTable } from './state/TableContext.jsx';
@@ -162,6 +163,8 @@ export default function App() {
       {/* Open to everyone, signed in or not. */}
       <Route path="/learn" element={<Navigate to="/learn/overview" replace />} />
       <Route path="/learn/:topic" element={<LearnPage />} />
+      <Route path="/glossary" element={<GlossaryPage />} />
+      <Route path="/glossary/:slug" element={<GlossaryPage />} />
       <Route path="/resources" element={<ResourcesPage />} />
       <Route path="/sheets/:shareId" element={<SharedSheetPage />}>
         <Route index element={<Navigate to="sheet" replace />} />

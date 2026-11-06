@@ -1,0 +1,28 @@
+{
+ "source": "Archives of Nethys (2e.aonprd.com): rulebook rules, conditions and traits, and the core books’ actions; legacy entries replaced by their Remaster versions",
+ "license": "Game mechanics © Paizo Inc., used under the ORC License.",
+ "generatedAt": "2026-11-06T16:52:38.320Z",
+ "count": 2736,
+ "kinds": [
+  {
+   "kind": "Rule",
+   "file": "rules.json",
+   "count": 2063
+  },
+  {
+   "kind": "Condition",
+   "file": "conditions.json",
+   "count": 42
+  },
+  {
+   "kind": "Trait",
+   "file": "traits.json",
+   "count": 480
+  },
+  {
+   "kind": "Action",
+   "file": "actions.json",
+   "count": 151
+  }
+ ]
+}

@@ -36,6 +36,8 @@ const ICONS = {
   compass: 'compass',
   swords: 'crossed-swords',
   crown: 'crown',
+  // Conditions in general (the Rules Glossary's shelf and index)
+  condition: 'aura',
   // Conditions (the Combat tab and the encounter tracker)
   conditionFrightened: 'terror',
   conditionSickened: 'vomiting',

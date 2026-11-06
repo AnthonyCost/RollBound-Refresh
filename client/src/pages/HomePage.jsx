@@ -36,6 +36,7 @@ const REFERENCE = [
   { to: '/spells', icon: 'spells', name: 'Spells' },
   { to: '/armory', icon: 'armory', name: 'Armory' },
   { to: '/learn/overview', icon: 'learn', name: 'Learn' },
+  { to: '/glossary', icon: 'book', name: 'Glossary' },
   { to: '/resources', icon: 'links', name: 'Resources' },
 ];
 
