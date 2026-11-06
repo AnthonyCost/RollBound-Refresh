@@ -161,4 +161,10 @@ describe('consumables', () => {
   it('is empty for an item with no rules text', () => {
     assert.deepEqual(R.consumableUse(''), { cost: null, heal: null, text: '' });
   });
+  it("keeps only one grade's section of the rules text", () => {
+    const minor = R.gradeText(potion, 'Healing Potion (Minor)');
+    assert.match(minor, /ruby-red liquid[\s\S]*1d8 Hit Points/);
+    assert.doesNotMatch(minor, /2d8|Lesser/);
+    assert.equal(R.gradeText(potion, 'Healing Potion'), potion);
+  });
 });

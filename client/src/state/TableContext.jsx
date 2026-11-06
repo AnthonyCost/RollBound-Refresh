@@ -325,9 +325,10 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     return roll;
   }, []);
   // Healing from an item (a potion): rolled like damage, shown as Hit Points regained.
-  const rollHealing = useCallback((label, expr) => {
+  // applied false: only rolled (from an item's rules text), not added to Hit Points.
+  const rollHealing = useCallback((label, expr, applied = true) => {
     const roll = newDamage(label, expr);
-    if (roll) setLastRoll({ ...roll, heal: true });
+    if (roll) setLastRoll({ ...roll, heal: true, applied });
     return roll;
   }, []);
 

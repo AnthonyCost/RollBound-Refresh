@@ -9,6 +9,16 @@ const strip = (html) => html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(
  * when it has no Activate entry); heal is dice like '2d8+5' or null; text is the effect, in
  * plain words. name picks the grade of an item that has several (Healing Potion (Lesser)).
  */
+/**
+ * An item's rules text (HTML) for one grade (Healing Potion (Minor)): what all grades share and
+ * that grade's own section, without the other grades. The whole text when name isn't a grade.
+ */
+export function gradeText(html, name) {
+  const sections = (html ?? '').split(/<h3 class="item-variant">/);
+  const own = name && sections.slice(1).find((s) => strip(s.split('<span')[0]).toLowerCase() === name.toLowerCase());
+  return own ? `${sections[0]}<h3 class="item-variant">${own}` : html;
+}
+
 export function consumableUse(html, name = null) {
   if (!html) return { cost: null, heal: null, text: '' };
   const act = /<strong>Activate<\/strong>\s*<span class="act act--([123rf])"/.exec(html);

@@ -79,7 +79,7 @@ function DamageView({ roll, onAgain, onBack }) {
         </div>
       </section>
       {roll.heal ? (
-        <p className="rule-note center roll-damage__crit">Added to your Hit Points, up to your maximum.</p>
+        <p className="rule-note center roll-damage__crit">{roll.applied === false ? 'Only rolled: drink it from the Combat tab to heal.' : 'Added to your Hit Points, up to your maximum.'}</p>
       ) : (
         <p className="rule-note center roll-damage__crit">A critical hit doubles it: <strong>{total * 2}</strong>.</p>
       )}

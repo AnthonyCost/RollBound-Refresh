@@ -12,6 +12,7 @@ import {
   formatPrice,
   inventoryItem,
   payCoins,
+  gradeText,
   startingInventory,
   toggleEquipped,
   withEquipped,
@@ -23,6 +24,8 @@ import { useTable } from '../state/TableContext.jsx';
 import { useRules } from '../state/useRules.js';
 import Icon from '../components/Icon.jsx';
 import Portrait from '../components/Portrait.jsx';
+import RollDrawer from '../components/RollDrawer.jsx';
+import { boxDice } from '../components/Dice.jsx';
 import { ARMORY_CATEGORIES, categoryIcon, loadArmory, loadItemDetails } from '../state/armory.js';
 import { armoryWares, bulkOf } from '../builder/armoryGear.js';
 
@@ -39,7 +42,7 @@ const savedLabel = { waiting: 'Saving…', saving: 'Saving…', saved: 'Saved', 
  * of armor, shields, weapons and adventuring gear; buying pays from the purse.
  */
 export default function InventoryPage() {
-  const { character, baseCharacter, readOnly, inventory, setInventory, inventoryStatus, portraitUrl } = useTable();
+  const { character, baseCharacter, readOnly, inventory, setInventory, inventoryStatus, portraitUrl, rollDamage, rollHealing } = useTable();
   const rules = useRules(GEAR_TYPES);
   // Until the first edit, the builder's gear and leftover gold; saved on the first change.
   const starting = useMemo(() => (rules && !rules.error ? startingInventory(baseCharacter, rules) : null), [baseCharacter, rules]);
@@ -49,6 +52,9 @@ export default function InventoryPage() {
   const [params] = useSearchParams();
   const shopping = !readOnly && params.get('tab') === 'merchant';
   const [selectedKey, setSelectedKey] = useState(null);
+  // Dice in an item's rules text roll in the roll drawer; dice of Hit Points (a potion) roll as healing.
+  const [rolling, setRolling] = useState(false);
+  const rollDice = (label, expr, type, heal) => (heal ? rollHealing(label, expr, false) : rollDamage(label, expr, type)) && setRolling(true);
   // The armory: the merchant's wares, and each carried item's icon and rules text by its name.
   const [armory, setArmory] = useState(null);
   useEffect(() => {
@@ -157,6 +163,7 @@ export default function InventoryPage() {
               readOnly={readOnly}
               onChange={(changes) => setItem(selected.key, changes)}
               onEquip={() => equip(selected.key)}
+              onRollDice={rollDice}
               onRemove={() => {
                 update({ items: inv.items.filter((i) => i.key !== selected.key) });
                 setSelectedKey(null);
@@ -218,6 +225,8 @@ export default function InventoryPage() {
           />
         </section>
       )}
+
+      <RollDrawer open={rolling} onClose={() => setRolling(false)} />
 
       {!readOnly && inventoryStatus !== 'idle' && (
         <p className={`rule-note center ${inventoryStatus === 'error' ? 'rule-note--warn' : ''}`} role="status">{savedLabel[inventoryStatus]}</p>
@@ -305,6 +314,20 @@ function useItemText(armory) {
   return html;
 }
 
+/** An item's rules text, with each dice expression a box that rolls it; healing when the dice are Hit Points. */
+function RulesText({ html, name, className, onRollDice }) {
+  return (
+    <div
+      className={className}
+      dangerouslySetInnerHTML={{ __html: boxDice(html) }}
+      onClick={(e) => {
+        const b = e.target.closest('[data-dice]');
+        if (b) onRollDice(name, b.dataset.dice, b.dataset.type, /^\s*(?:Hit Points|HP)\b/i.test(b.nextSibling?.textContent ?? ''));
+      }}
+    />
+  );
+}
+
 /** One item as a tile: its icon, with how many; equipped slots are wide, with the name and what it does. */
 function ItemTile({ item, icon, sub, selected, onSelect, wide }) {
   return (
@@ -331,11 +354,12 @@ function ItemTile({ item, icon, sub, selected, onSelect, wide }) {
 }
 
 /** The item you're looking at, large: what it is, how many, equip, a note, its rules text, remove. */
-function ItemCard({ item, rule, icon, armory, character, readOnly, onChange, onEquip, onRemove }) {
+function ItemCard({ item, rule, icon, armory, character, readOnly, onChange, onEquip, onRemove, onRollDice }) {
   const equippable = EQUIPPABLE.includes(item.kind);
   const untrained = equippable && untrainedNote(item, rule, character);
   const stat = slotStat(item, rule);
-  const text = useItemText(armory);
+  const all = useItemText(armory);
+  const text = all && gradeText(all, item.name);
   return (
     <article className="inv-card">
       <header className="inv-card__head">
@@ -367,8 +391,8 @@ function ItemCard({ item, rule, icon, armory, character, readOnly, onChange, onE
         </div>
       )}
       {readOnly && item.qty > 1 && <p className="inv-card__state">You carry {item.qty}.</p>}
-      {text && <div className="item-text inv-card__desc" dangerouslySetInnerHTML={{ __html: text }} />}
-      {rule?.description && <div className="option__desc book__desc inv-card__desc" dangerouslySetInnerHTML={{ __html: rule.description }} />}
+      {text && <RulesText className="item-text inv-card__desc" html={text} name={item.name} onRollDice={onRollDice} />}
+      {rule?.description && <RulesText className="option__desc book__desc inv-card__desc" html={rule.description} name={item.name} onRollDice={onRollDice} />}
       {readOnly ? (
         item.note && <p className="inventory__note">{item.note}</p>
       ) : (
