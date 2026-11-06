@@ -1533,6 +1533,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .home-spotlight__art { mask-image: linear-gradient(to top, transparent, #000 70%); }
 .home-spotlight__text { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; padding: 14px 16px 18px; }
 .home-spotlight__text .camp-row__role { margin-bottom: 2px; }
+.home-spotlight__head { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }
+.home-spotlight__who { display: flex; align-items: center; gap: 18px; min-width: 0; }
+.home-spotlight__who > .portrait { flex: none; }
 /* Couldn't load: the message, and a way to try again. */
 .form-errors.home-failed { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
 .home-failed p { margin: 0; }

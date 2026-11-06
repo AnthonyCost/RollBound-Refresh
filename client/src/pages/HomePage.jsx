@@ -92,16 +92,22 @@ function Section({ id, title, to, count, action, children }) {
 }
 
 /** The top of the page: art beside what to do next. */
-function Spotlight({ art, tag, gm = false, title, lines, party, children }) {
+function Spotlight({ art, tag, gm = false, title, lines, party, portrait, children }) {
   return (
     <section className="home-spotlight" aria-labelledby="home-spotlight-title">
       <div className={`home-spotlight__art ${art ? '' : 'home-spotlight__art--map'}`} aria-hidden="true">
         <img src={art ?? homeMap} alt="" />
       </div>
       <div className="home-spotlight__text">
-        <h2 id="home-spotlight-title" className="home-spotlight__title">{title}</h2>
-        {tag && <span className={`camp-row__role ${gm ? 'camp-row__role--gm' : ''}`}>{tag}</span>}
-        {lines.filter(Boolean).map((line) => <p key={line} className="home-spotlight__line">{line}</p>)}
+        {/* A hero's spotlight leads with their portrait, beside the name and what they are. */}
+        <div className={portrait ? 'home-spotlight__who' : 'home-spotlight__head'}>
+          {portrait}
+          <div className="home-spotlight__head">
+            <h2 id="home-spotlight-title" className="home-spotlight__title">{title}</h2>
+            {tag && <span className={`camp-row__role ${gm ? 'camp-row__role--gm' : ''}`}>{tag}</span>}
+            {lines.filter(Boolean).map((line) => <p key={line} className="home-spotlight__line">{line}</p>)}
+          </div>
+        </div>
         {party}
         <div className="home-spotlight__actions">{children}</div>
       </div>
@@ -358,7 +364,13 @@ export default function HomePage() {
         <>
           {current && <ContinueCampaign key={current.c.id} campaign={current.c} hosting={current.hosting} />}
           {!current && characters[0] && (
-            <Spotlight art={classArtOf(characters[0]).banner} tag="Newest hero" title={characters[0].name} lines={[lineOf(characters[0]), 'Not in a campaign yet.']}>
+            <Spotlight
+              art={classArtOf(characters[0]).banner}
+              tag="Newest hero"
+              title={characters[0].name}
+              lines={[lineOf(characters[0]), 'Not in a campaign yet.']}
+              portrait={<Portrait url={characters[0].portraitUrl} name={characters[0].name} size="lg" />}
+            >
               <Link to={`/play/${characters[0].id}/sheet`} className="btn btn--blood">Open Sheet</Link>
               <Link to="/campaigns" className="btn">Join a Campaign</Link>
               <Link to="/campaigns/new" className="btn">Start a Campaign</Link>
