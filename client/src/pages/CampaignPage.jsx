@@ -165,7 +165,6 @@ export function CampaignOverview() {
         <img className="saga__splash-art" src={campaignCover(campaign)} alt="" />
         <div className="saga__title">
           <h1 className="saga__name">{campaign.name}</h1>
-          <p className="saga__subtitle">{campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`}</p>
         </div>
       </header>
 
