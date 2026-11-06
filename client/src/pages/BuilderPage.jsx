@@ -547,9 +547,6 @@ export default function BuilderPage() {
           <>
             <FormErrors errors={errors} />
             {isDemo && !editId && <p className="rule-note center">Demo characters are deleted with the demo. Create an account to keep yours.</p>}
-            <button type="button" className="btn btn--blood builder__save" disabled={!ready || problems.length > 0 || saving} onClick={save}>
-              {saving ? 'Saving…' : editId ? 'Save changes' : 'Save character'}
-            </button>
           </>
         )}
         </>
@@ -558,9 +555,16 @@ export default function BuilderPage() {
 
       {!choosing && <footer className="builder__footer">
         <button type="button" className="btn" disabled={index === 0 && Boolean(editId)} onClick={() => (index === 0 ? setDraft((d) => ({ ...d, start: null })) : goTo(STEPS[index - 1]))}>Back</button>
-        <button type="button" className="btn btn--blood btn--grow" disabled={index === STEPS.length - 1} onClick={() => goTo(STEPS[index + 1])}>
-          {index < STEPS.length - 1 ? `Next: ${infoFor(STEPS[index + 1]).title}` : 'Last step'}
-        </button>
+        {/* The last step's forward button saves, so it's always in the same place. */}
+        {index < STEPS.length - 1 ? (
+          <button type="button" className="btn btn--blood btn--grow" onClick={() => goTo(STEPS[index + 1])}>
+            Next: {infoFor(STEPS[index + 1]).title}
+          </button>
+        ) : (
+          <button type="button" className="btn btn--blood btn--grow" disabled={!ready || problems.length > 0 || saving} onClick={save}>
+            {saving ? 'Saving…' : editId ? 'Save changes' : 'Save character'}
+          </button>
+        )}
       </footer>}
     </div>
   );
