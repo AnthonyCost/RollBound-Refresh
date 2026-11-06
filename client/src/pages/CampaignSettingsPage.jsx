@@ -4,6 +4,11 @@ import { useCampaignService } from '../state/campaignService.js';
 import CampaignForm from '../components/CampaignForm.jsx';
 import SettingsMenu from '../components/SettingsMenu.jsx';
 import Icon from '../components/Icon.jsx';
+import InviteCode from '../components/InviteCode.jsx';
+import Portrait from '../components/Portrait.jsx';
+import Avatar from '../components/Avatar.jsx';
+import { api } from '../api.js';
+import { inboxChanged } from '../state/inbox.js';
 import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 
 /**
@@ -15,7 +20,7 @@ export default function CampaignSettingsPage() {
   const campaigns = useCampaignService();
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
-  const [section, setSection] = useState('details');
+  const [section, setSection] = useState('invite');
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -25,6 +30,16 @@ export default function CampaignSettingsPage() {
     await campaigns.update(campaign.id, input);
     reload();
     navigate(`/campaigns/${campaign.id}`, { replace: true });
+  };
+  const answer = async (requestId, accept) => {
+    setErrors([]);
+    try {
+      await api.answerJoinRequest(requestId, accept);
+      inboxChanged();
+    } catch (err) {
+      setErrors(errorsFrom(err));
+      reload();
+    }
   };
   const remove = async () => {
     setDeleting(true);
@@ -39,6 +54,7 @@ export default function CampaignSettingsPage() {
   };
 
   const sections = [
+    { id: 'invite', label: 'Invite players', hint: campaign.requests?.length ? `${campaign.requests.length} waiting to join` : 'Your invite code', icon: 'user' },
     { id: 'details', label: 'Details', hint: 'Title and party level', icon: 'map' },
     { id: 'books', label: 'Books', hint: 'What players can build from', icon: 'book' },
     { id: 'story', label: 'Backstory', hint: 'What the heroes know', icon: 'lore' },
@@ -67,8 +83,39 @@ export default function CampaignSettingsPage() {
           </>
         }
       >
-        <div hidden={section === 'delete'}>
-          <CampaignForm initial={campaign} submitLabel="Save changes" onSubmit={save} panel={section === 'delete' ? null : section} />
+        {section === 'invite' && (
+          <>
+            <InviteCode code={campaign.inviteCode} />
+            <FormErrors errors={errors} />
+            {campaign.requests?.length > 0 && (
+              <div className="campaign-requests">
+                <span className="sheet-panel__label">Waiting to join</span>
+                <ul className="hub__list">
+                  {campaign.requests.map((r) => (
+                    <li key={r.id} className="hub-card party-card request-card">
+                      <Portrait url={r.character.portraitUrl} name={r.character.name} size="sm" />
+                      <div className="hub-card__body">
+                        <span className="hub-card__name">{r.character.name}</span>
+                        <span className="hub-card__sub">
+                          {[r.character.ancestry, r.character.className].filter(Boolean).join(' ')} · Level {r.character.level}
+                        </span>
+                        <span className="hub-card__tag hub-card__player">
+                          <Avatar url={r.playerAvatarUrl} name={r.player} size={18} /> Played by {r.player}
+                        </span>
+                      </div>
+                      <div className="hub-card__actions">
+                        <button type="button" className="chip" onClick={() => answer(r.id, false)}>Reject</button>
+                        <button type="button" className="chip chip--accept" onClick={() => answer(r.id, true)}>Accept</button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        )}
+        <div hidden={section === 'delete' || section === 'invite'}>
+          <CampaignForm initial={campaign} submitLabel="Save changes" onSubmit={save} panel={section === 'delete' || section === 'invite' ? null : section} />
         </div>
         {section === 'delete' && (
           <div className="settings-menu__danger">

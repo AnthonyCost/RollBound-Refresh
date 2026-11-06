@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { api } from '../api.js';
 import { useAuth } from '../state/AuthContext.jsx';
 
@@ -27,6 +28,7 @@ function timeLeftLabel(ms) {
 export default function DemoBanner() {
   const { user, isDemo, logout } = useAuth();
   const [now, setNow] = useState(() => Date.now());
+  const { pathname } = useLocation();
 
   const left = isDemo ? new Date(user.demoExpiresAt) - now : Infinity;
   const lastMinute = left < MINUTE;
@@ -54,5 +56,7 @@ export default function DemoBanner() {
       </p>
     );
   }
+  // The everyday reminder stays off the campaign pages; the last-hour warning above still shows there.
+  if (pathname.startsWith('/campaigns')) return null;
   return <p className="demo-banner">Demo mode · this temporary account is deleted when you exit, or {timeLeftLabel(left)}</p>;
 }
