@@ -184,7 +184,7 @@ export function CampaignOverview() {
             <li className="timeline__node timeline__node--prologue">
               <span className="timeline__mark" aria-hidden="true"><Icon name="lore" size={20} /></span>
               <div className="timeline__body">
-                <span className="timeline__kicker">Prologue</span>
+                <span className="timeline__kicker">Synopsis</span>
                 {campaign.backstory?.trim() ? (
                   <p className="timeline__prologue">{campaign.backstory.trim()}</p>
                 ) : (
