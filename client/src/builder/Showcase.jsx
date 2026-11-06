@@ -68,6 +68,7 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
   return (
     <section className="showcase" aria-label={label}>
       <div className={`showcase__art ${current ? '' : 'showcase__art--empty'}`} aria-hidden="true">
+        {/* The glow under a chosen figure, fading in and out: nothing to light before one is picked. */}
         <div className="showcase__glow" />
         {showArt ? (
           <img
