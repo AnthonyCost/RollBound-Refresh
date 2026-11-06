@@ -6,6 +6,7 @@ import {
   createSession,
   deleteSession,
   hashPassword,
+  hashToken,
   readSessionToken,
   userForToken,
   verifyPassword,
@@ -15,6 +16,8 @@ import { storage } from '../storage/index.js';
 import { checkImageKey, swapImages } from '../images.js';
 import { DEMO_HOURS, allowDemo, createDemo, deleteDemo } from '../demo.js';
 import { rateLimit } from '../rateLimit.js';
+import { randomBytes } from 'node:crypto';
+import { sendEmail } from '../email.js';
 
 export const auth = Router();
 
@@ -75,6 +78,78 @@ auth.post('/register', async (req, res) => {
   } catch (err) {
     if (err.code === '23505') return res.status(409).json({ errors: ['An account with that email already exists.'] });
     throw err;
+  }
+});
+
+const RESET_MINUTES = 30;
+const allowResetRequest = rateLimit(5, 60 * 60 * 1000);
+const SENT = { ok: true, message: "If there's an account with that email, we've sent a link to reset its password. It works for 30 minutes." };
+const escapeHtml = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+// Forgot password: emails a single-use link. The answer is the same whether or not the
+// account exists, so nobody can use this to find out who has an account.
+auth.post('/forgot-password', async (req, res) => {
+  if (!allowResetRequest(req.ip)) return res.status(429).json(TOO_MANY);
+  const email = normalizeEmail(req.body?.email);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ errors: ['Enter a valid email address.'] });
+  const { rows } = await pool.query('SELECT id, display_name FROM users WHERE email = $1 AND NOT is_demo AND password_hash IS NOT NULL', [email]);
+  const user = rows[0];
+  if (user) {
+    const token = randomBytes(32).toString('base64url');
+    // A new link replaces any older one that wasn't used.
+    await pool.query('DELETE FROM password_resets WHERE user_id = $1', [user.id]);
+    await pool.query(
+      `INSERT INTO password_resets (token_hash, user_id, expires_at) VALUES ($1, $2, now() + make_interval(mins => $3))`,
+      [hashToken(token), user.id, RESET_MINUTES],
+    );
+    const link = `${(process.env.APP_URL ?? 'http://localhost:5173').replace(/\/+$/, '')}/reset-password?token=${token}`;
+    const name = user.display_name;
+    try {
+      await sendEmail({
+        to: email,
+        subject: 'Reset your RollBound password',
+        text: `Hi ${name},\n\nSomeone (hopefully you) asked to reset your RollBound password. Open this link to choose a new one:\n\n${link}\n\nThe link works once, for ${RESET_MINUTES} minutes. If you didn't ask, ignore this email; your password hasn't changed.`,
+        html: `<p>Hi ${escapeHtml(name)},</p><p>Someone (hopefully you) asked to reset your RollBound password.</p><p><a href="${link}">Choose a new password</a></p><p>The link works once, for ${RESET_MINUTES} minutes. If you didn't ask, ignore this email; your password hasn't changed.</p>`,
+      });
+    } catch (err) {
+      // Logged, not shown: telling the visitor would reveal that the account exists.
+      console.error('Password reset email failed:', err.message);
+    }
+  }
+  res.json(SENT);
+});
+
+// Set a new password with a link from the email. Signs the account out everywhere else.
+auth.post('/reset-password', async (req, res) => {
+  if (!allowLogin(req.ip)) return res.status(429).json(TOO_MANY);
+  const token = typeof req.body?.token === 'string' ? req.body.token : '';
+  const password = req.body?.password;
+  if (typeof password !== 'string' || password.length < 8 || password.length > 200) {
+    return res.status(400).json({ errors: ['Password must be at least 8 characters.'] });
+  }
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const { rows } = await client.query(
+      `UPDATE password_resets SET used_at = now()
+       WHERE token_hash = $1 AND used_at IS NULL AND expires_at > now() RETURNING user_id`,
+      [hashToken(token)],
+    );
+    if (!rows.length) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ errors: ['That reset link has expired or was already used. Ask for a new one.'] });
+    }
+    const userId = rows[0].user_id;
+    const { rows: users } = await client.query('UPDATE users SET password_hash = $1 WHERE id = $2 RETURNING *', [await hashPassword(password), userId]);
+    await client.query('DELETE FROM sessions WHERE user_id = $1', [userId]);
+    await client.query('COMMIT');
+    await startSession(res, users[0]);
+    res.json(toJson(users[0]));
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
   }
 });
 

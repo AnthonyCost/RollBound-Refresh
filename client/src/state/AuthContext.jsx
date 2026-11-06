@@ -90,6 +90,8 @@ export function AuthProvider({ children }) {
   );
 
   const enterDemo = useCallback(async () => signIn(await api.startDemo()), [signIn]);
+  // A password reset signs you in with the new password.
+  const resetPassword = useCallback(async (token, password) => signIn(await api.resetPassword(token, password)), [signIn]);
 
   // Signing out of a demo deletes it on the server.
   const logout = useCallback(async () => {
@@ -103,8 +105,8 @@ export function AuthProvider({ children }) {
   const updateProfile = useCallback(async (changes) => setUser(await api.updateProfile(changes)), []);
 
   const value = useMemo(
-    () => ({ status, user, isDemo: Boolean(user?.isDemo), endedReason, login, register, enterDemo, logout, updateProfile }),
-    [status, user, endedReason, login, register, enterDemo, logout, updateProfile],
+    () => ({ status, user, isDemo: Boolean(user?.isDemo), endedReason, login, register, enterDemo, resetPassword, logout, updateProfile }),
+    [status, user, endedReason, login, register, enterDemo, resetPassword, logout, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

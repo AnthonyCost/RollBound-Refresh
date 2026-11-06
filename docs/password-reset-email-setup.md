@@ -4,7 +4,7 @@ RollBound sends "Forgot password" emails through **Resend**. You don't run a mai
 
 You'll do four things: make a Resend account, prove you own `rollbound.com`, make an API key, and put three settings in `server/.env`. It takes about 15 minutes, plus waiting for DNS.
 
-> The app code that sends these emails comes next. These steps get the account ready, and the setting names below are the ones the code will use.
+> The code is in place (`server/src/email.js`, and `/forgot-password` in `server/src/routes/auth.js`). Until `RESEND_API_KEY` is set, the server prints each reset email, link included, to its terminal instead of sending it, so you can try the flow before Resend is ready.
 
 ## 1. Make a Resend account
 
@@ -51,8 +51,6 @@ APP_URL=http://localhost:5173
 Then restart the API (`npm run dev:server`, or `npm run dev`).
 
 ## 5. Check it works
-
-Once the reset code is in:
 
 1. Sign out, choose **Forgot password**, and enter your own account's email.
 2. The email should arrive within a minute. If it's not in your inbox, check spam.

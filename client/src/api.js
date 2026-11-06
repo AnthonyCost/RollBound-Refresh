@@ -33,6 +33,8 @@ const post = (path, data) => request(path, { method: 'POST', body: JSON.stringif
 export const api = {
   me: () => request('/auth/me'),
   login: (email, password) => post('/auth/login', { email, password }),
+  forgotPassword: (email) => post('/auth/forgot-password', { email }),
+  resetPassword: (token, password) => post('/auth/reset-password', { token, password }),
   startDemo: () => post('/auth/demo', {}),
   register: (displayName, email, password) => post('/auth/register', { displayName, email, password }),
   logout: () => request('/auth/logout', { method: 'POST' }),

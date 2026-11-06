@@ -41,6 +41,9 @@ export default function LoginPage() {
         <p className="center muted auth__switch">
           New to the table? <Link to="/register">Create an account</Link>
         </p>
+        <p className="center muted auth__switch auth__forgot">
+          <Link to="/forgot-password">Forgot your password?</Link>
+        </p>
       </form>
     </AuthLayout>
   );

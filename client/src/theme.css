@@ -4730,3 +4730,6 @@ button.action-pip:focus-visible { outline: 2px solid var(--gold); outline-offset
   .co__detail-inner { animation: none; }
   .co__tab, .co__tab::after, .co-option::before, .co-option__gem, .co-option__name, .co__tab-title { transition: none; }
 }
+
+/* Sign in's "Forgot your password?", tucked right under "Create an account". */
+.auth__switch.auth__forgot { margin-top: -6px; }

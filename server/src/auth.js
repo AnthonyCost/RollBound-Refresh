@@ -21,7 +21,7 @@ export async function verifyPassword(password, stored) {
   return timingSafeEqual(actual, expected);
 }
 
-const hashToken = (token) => createHash('sha256').update(token).digest('hex');
+export const hashToken = (token) => createHash('sha256').update(token).digest('hex');
 
 export async function createSession(userId) {
   const token = randomBytes(32).toString('base64url');

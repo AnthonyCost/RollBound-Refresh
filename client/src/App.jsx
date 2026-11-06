@@ -6,6 +6,7 @@ import EncounterRunPage, { EncounterWatchPage } from './pages/EncounterRunPage.j
 import RollPage from './pages/RollPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
+import { ForgotPasswordPage, ResetPasswordPage } from './pages/PasswordResetPages.jsx';
 import HomePage from './pages/HomePage.jsx';
 import CharactersPage from './pages/CharactersPage.jsx';
 import CampaignsPage from './pages/CampaignsPage.jsx';
@@ -100,6 +101,8 @@ export default function App() {
       <Route element={<SignedOutOnly />}>
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Route>
       <Route element={<SignedInOnly />}>
         <Route path="/home" element={<HomePage />} />
