@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ABILITIES,
   STARTING_GOLD_CP,
@@ -46,6 +46,8 @@ import BookLeaf, { ChosenActions, wide } from './BookLeaf.jsx';
 import { ABILITY_SHORT, cap, sourceTag } from './labels.js';
 import { cardArtFor } from './art.js';
 import { gearFacts } from './gearFacts.js';
+import { starterGear } from './armoryGear.js';
+import { loadArmory, loadItemDetails } from '../state/armory.js';
 import { sentenceCase, signed, titleCase } from '../format.js';
 
 function AbilityTiles({ mods }) {
@@ -691,7 +693,11 @@ const GEAR_SECTIONS = [
   { key: 'armor', tab: 'Armor', name: 'Armor' },
   { key: 'shield', tab: 'Shields', name: 'Shields' },
   { key: 'weapon', tab: 'Weapons', name: 'Weapons' },
+  { key: 'gear', tab: 'Gear', name: 'Adventuring gear' },
+  { key: 'consumable', tab: 'Consumables', name: 'Consumables' },
 ];
+const KIND_LABEL = { armor: 'Armor', shield: 'Shield', weapon: 'Weapon', gear: 'Gear', consumable: 'Consumable' };
+const isArmoryGear = (i) => i.kind === 'gear' || i.kind === 'consumable';
 
 /**
  * Gear as a merchant's ledger: your pack and purse above, then a book of armor, shields
@@ -711,21 +717,39 @@ export function GearStep({ build, update, data }) {
     return false;
   };
   const byName = (a, b) => a.name.localeCompare(b.name);
+  // Everything else from the armory loads behind the rest: armor, shields and weapons show at once.
+  const [armoryGear, setArmoryGear] = useState([]);
+  useEffect(() => {
+    let live = true;
+    loadArmory().then((a) => live && setArmoryGear(starterGear(a)), () => {});
+    return () => { live = false; };
+  }, []);
+  const gear = build.gear ?? [];
+  const qtyOf = (id) => gear.find((g) => g.id === id)?.qty ?? 0;
   const items = [
     // Armor a build can't start with stays listed if it's already in the pack, so it can be sold.
     ...data.armor.filter((a) => a.id === build.armor || armorAllowed(a, build, data)).sort(byName).map((a) => ({ id: `armor:${a.id}`, name: a.name, kind: 'armor', item: a })),
     ...[...data.shields].sort(byName).map((x) => ({ id: `shield:${x.id}`, name: x.name, kind: 'shield', item: x })),
     ...[...data.weapons].sort(byName).map((w) => ({ id: `weapon:${w.id}`, name: w.name, kind: 'weapon', item: w })),
+    ...armoryGear,
   ];
-  const owns = (i) => (i.kind === 'weapon' ? build.weapons.includes(i.item.id) : build[i.kind] === i.item.id);
+  // Search by name or trait across every tab (what's in the pack stays listed, so it can be sold).
+  const [query, setQuery] = useState('');
+  const q = query.trim().toLowerCase();
+  const shown = q ? items.filter((i) => i.name.toLowerCase().includes(q) || i.item.traits?.some((t) => t.toLowerCase().includes(q))) : items;
+  const owns = (i) => (isArmoryGear(i) ? qtyOf(i.item.id) > 0 : i.kind === 'weapon' ? build.weapons.includes(i.item.id) : build[i.kind] === i.item.id);
   const [openId, setOpenId] = useState(() => {
     const first = build.armor ? `armor:${build.armor}` : build.weapons[0] ? `weapon:${build.weapons[0]}` : build.shield ? `shield:${build.shield}` : null;
     return wide() ? first : null;
   });
   const open = items.find((i) => i.id === openId) ?? null;
 
-  const buy = (i) => update(i.kind === 'weapon' ? { weapons: [...build.weapons, i.item.id] } : { [i.kind]: i.item.id });
-  const sell = (i) => update(i.kind === 'weapon' ? { weapons: build.weapons.filter((w) => w !== i.item.id) } : { [i.kind]: null });
+  // Armory gear stacks (two potions, ten torches); armor and a shield replace, weapons add.
+  const buyGear = (x) =>
+    update({ gear: qtyOf(x.id) ? gear.map((g) => (g.id === x.id ? { ...g, qty: g.qty + 1 } : g)) : [...gear, { id: x.id, name: x.name, price: x.price, bulk: x.bulk, qty: 1 }] });
+  const sellGear = (id) => update({ gear: gear.flatMap((g) => (g.id !== id ? [g] : g.qty > 1 ? [{ ...g, qty: g.qty - 1 }] : [])) });
+  const buy = (i) => (isArmoryGear(i) ? buyGear(i.item) : update(i.kind === 'weapon' ? { weapons: [...build.weapons, i.item.id] } : { [i.kind]: i.item.id }));
+  const sell = (i) => (isArmoryGear(i) ? sellGear(i.item.id) : update(i.kind === 'weapon' ? { weapons: build.weapons.filter((w) => w !== i.item.id) } : { [i.kind]: null }));
   const makePrimary = (id) => update({ weapons: [id, ...build.weapons.filter((w) => w !== id)] });
 
   const find = (list, id) => list.find((x) => x.id === id);
@@ -733,6 +757,7 @@ export function GearStep({ build, update, data }) {
     build.armor && { kind: 'armor', item: find(data.armor, build.armor) },
     build.shield && { kind: 'shield', item: find(data.shields, build.shield) },
     ...build.weapons.map((id, n) => ({ kind: 'weapon', item: find(data.weapons, id), primary: n === 0 })),
+    ...gear.map((g) => ({ kind: 'gear', item: g, qty: g.qty })),
   ].filter((p) => p && p.item);
 
   return (
@@ -760,12 +785,16 @@ export function GearStep({ build, update, data }) {
                 <span className="pack__name">
                   {p.primary && <span className="pack__star" title="Primary weapon">★<span className="visually-hidden"> Primary weapon:</span></span>}
                   {p.item.name}
+                  {p.qty > 1 && <span className="pack__qty"> ×{p.qty}</span>}
                 </span>
                 {p.kind === 'weapon' && !p.primary && (
                   <button type="button" className="link-button" onClick={() => makePrimary(p.item.id)}>Make primary</button>
                 )}
                 <span className="pack__dots" aria-hidden="true" />
-                <span className="pack__price">{formatPrice(p.item.price)}</span>
+                {p.kind === 'gear' && (
+                  <button type="button" className="link-button" aria-label={`Remove one ${p.item.name}`} onClick={() => sellGear(p.item.id)}>Remove</button>
+                )}
+                <span className="pack__price">{formatPrice(p.item.price * (p.qty ?? 1))}</span>
               </li>
             ))}
             <li className="pack__total">
@@ -775,15 +804,31 @@ export function GearStep({ build, update, data }) {
             </li>
           </ul>
         ) : (
-          <p className="muted italic" style={{ margin: 0 }}>Nothing yet. You have 15 gp to spend on armor, a shield and weapons.</p>
+          <p className="muted italic" style={{ margin: 0 }}>Nothing yet. You have 15 gp to spend on armor, a shield, weapons, gear and consumables.</p>
         )}
         {build.weapons.length > 1 && <p className="rule-note" style={{ margin: 0 }}>★ Your primary weapon is the one your Turn screen strikes with.</p>}
       </section>
 
+      <div className="filters" role="search">
+        <label className="filters__field filters__field--wide">
+          <span className="filters__label">Search</span>
+          <input
+            className="options__search"
+            type="search"
+            value={query}
+            placeholder={`Search ${items.length} items by name or trait: rope, potion, healing…`}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </label>
+        {q && <p className="filters__count">{shown.length ? `${shown.length} match${shown.length === 1 ? '' : 'es'}` : `Nothing matches “${query.trim()}”.`}</p>}
+      </div>
+
       <BookSpread
-        items={items}
+        items={shown}
         total={items.length}
         noun="items"
+        resetKey={q}
+        filtered={Boolean(q)}
         sections={GEAR_SECTIONS}
         sectionOf={(i) => i.kind}
         tabsOnTop
@@ -793,19 +838,22 @@ export function GearStep({ build, update, data }) {
         meta={(i) => (
           <>
             {untrainedWith(i) && <span className="tag tag--warn">Untrained</span>}
+            {i.item.rarity === 'uncommon' && <span className="tag tag--rare">Uncommon</span>}
+            {qtyOf(i.item.id) > 1 && <span>×{qtyOf(i.item.id)}</span>}
             <span>{formatPrice(i.item.price)}</span>
           </>
         )}
-        emptyText="Nothing for sale."
+        emptyText={q ? `Nothing matches “${query.trim()}”.` : "Nothing for sale."}
         leaf={open && (
           <GearLeaf
             key={open.id}
             i={open}
             owned={owns(open)}
+            qty={isArmoryGear(open) ? qtyOf(open.item.id) : 0}
             primary={open.kind === 'weapon' && build.weapons[0] === open.item.id}
             untrained={untrainedWith(open)}
             replacing={open.kind !== 'weapon' && build[open.kind] && build[open.kind] !== open.item.id ? find(open.kind === 'armor' ? data.armor : data.shields, build[open.kind])?.name : null}
-            over={left - (owns(open) ? 0 : open.item.price) < 0}
+            over={left - (owns(open) && !isArmoryGear(open) ? 0 : open.item.price) < 0}
             onBuy={() => buy(open)}
             onSell={() => sell(open)}
             onPrimary={() => makePrimary(open.item.id)}
@@ -816,7 +864,7 @@ export function GearStep({ build, update, data }) {
         blank={
           <>
             <p className="book__blank-title">The merchant's ledger</p>
-            <p className="rule-note">Open an item from the index to see its numbers, then buy it. Armor and a shield replace the ones you have; you can carry several weapons.</p>
+            <p className="rule-note">Open an item from the index to see its numbers, then buy it. Armor and a shield replace the ones you have; you can carry several weapons, and buy gear and consumables more than once.</p>
           </>
         }
       />
@@ -825,17 +873,38 @@ export function GearStep({ build, update, data }) {
 }
 
 /** One item as the right-hand page: its numbers and traits, and buy or sell. */
-function GearLeaf({ i, owned, primary, untrained, replacing, over, onBuy, onSell, onPrimary, onClose }) {
+function GearLeaf({ i, owned, qty = 0, primary, untrained, replacing, over, onBuy, onSell, onPrimary, onClose }) {
   const x = i.item;
+  const stacks = isArmoryGear(i);
+  // Armory gear's rules text loads from its category's file when it's opened.
+  const [description, setDescription] = useState(null);
+  useEffect(() => {
+    if (!x.armory) return undefined;
+    let live = true;
+    loadItemDetails(x.armory).then((html) => live && setDescription(html), () => {});
+    return () => { live = false; };
+  }, [x.armory]);
   return (
     <BookLeaf
-      eyebrow={`${{ armor: 'Armor', shield: 'Shield', weapon: 'Weapon' }[i.kind]} · ${sourceTag(x.source)}${x.rarity && x.rarity !== 'common' ? ` · ${x.rarity}` : ''}`}
+      eyebrow={`${x.category && stacks ? x.category : KIND_LABEL[i.kind]} · ${sourceTag(x.source)}${x.rarity && x.rarity !== 'common' ? ` · ${x.rarity}` : ''}`}
       title={x.name}
-      facts={gearFacts(i.kind, x)}
-      notes={untrained && <p className="rule-note rule-note--warn">Your class is untrained with this, so you won't add your level to {i.kind === 'armor' ? 'AC' : 'attack rolls'} with it.</p>}
+      facts={gearFacts(stacks ? 'item' : i.kind, x)}
+      description={description}
+      notes={
+        <>
+          {untrained && <p className="rule-note rule-note--warn">Your class is untrained with this, so you won't add your level to {i.kind === 'armor' ? 'AC' : 'attack rolls'} with it.</p>}
+          {x.rarity === 'uncommon' && <p className="rule-note">Uncommon: ask your GM before buying it, since it needs access.</p>}
+        </>
+      }
       onClose={onClose}
     >
-      {owned ? (
+      {stacks ? (
+        <>
+          {qty > 0 && <ChosenActions label={`In your pack${qty > 1 ? ` ×${qty}` : ''}`} onRemove={onSell} removeLabel={qty > 1 ? 'Remove one' : 'Sell back'} />}
+          <button type="button" className={`btn ${qty ? '' : 'btn--blood'}`} onClick={onBuy}>{qty ? 'Buy another' : 'Buy'} for {formatPrice(x.price)}</button>
+          {over && <span className="rule-note rule-note--warn">That's more than you have left.</span>}
+        </>
+      ) : owned ? (
         <>
           <ChosenActions label={primary ? 'In your pack · primary' : 'In your pack'} onRemove={onSell} removeLabel="Sell back" />
           {i.kind === 'weapon' && !primary && <button type="button" className="btn" onClick={onPrimary}>Make primary</button>}

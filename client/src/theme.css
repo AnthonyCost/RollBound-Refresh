@@ -4736,3 +4736,4 @@ button.action-pip:focus-visible { outline: 2px solid var(--gold); outline-offset
 
 /* Sign in's "Forgot your password?", tucked right under "Create an account". */
 .auth__switch.auth__forgot { margin-top: -6px; }
+.pack__qty { color: var(--text-muted); font-variant-numeric: tabular-nums; }

@@ -80,7 +80,7 @@ const STEP_INFO = {
   gear: {
     title: 'Gear',
     Component: GearStep,
-    note: 'You start with 15 gp to spend on armor, a shield, and weapons of 1st level or lower.',
+    note: 'You start with 15 gp to spend on armor, a shield, weapons, gear and consumables of 1st level or lower. Whatever you don’t spend, you keep as coins.',
   },
   level: {
     title: 'Level',

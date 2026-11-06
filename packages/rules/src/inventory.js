@@ -62,6 +62,8 @@ export function startingInventory(character, data) {
       ...build.weapons.map((id) => find(data.weapons, id)).filter(Boolean).map((w) => inventoryItem('weapon', w, 1, true)),
       ...[find(data.armor, build.armor)].filter(Boolean).map((a) => inventoryItem('armor', a, 1, true)),
       ...[find(data.shields, build.shield)].filter(Boolean).map((s) => inventoryItem('shield', s, 1, true)),
+      // Other gear bought in the builder, from the armory (not the rules data, so kept as custom entries).
+      ...(build.gear ?? []).map((g) => ({ ...customItem(g.name, g.qty, g.bulk), price: g.price })),
     ];
     return { items, coins: coinsFromCp(Math.max(0, STARTING_GOLD_CP - gearCost(build, data))) };
   }

@@ -23,6 +23,18 @@ describe('inventory', () => {
     assert.deepEqual(R.inventoryProblems(inv), []);
   });
 
+  it('starts with gear bought from the armory, priced and counted against the 15 gp', () => {
+    const build = { ...R.emptyBuild(), gear: [{ id: 'aon-equipment-2943-0', name: 'Healing Potion (Minor)', price: 400, bulk: 0.1, qty: 2 }] };
+    assert.equal(R.gearCost(build, data), 800);
+    const inv = R.startingInventory({ build }, data);
+    assert.deepEqual(inv.items.map((i) => [i.kind, i.name, i.qty, i.price, i.equipped]), [['custom', 'Healing Potion (Minor)', 2, 400, false]]);
+    assert.equal(R.coinValue(inv.coins), R.STARTING_GOLD_CP - 800);
+    assert.deepEqual(R.inventoryProblems(inv), []);
+    // A build saved before armory gear existed has none.
+    const { gear, ...old } = build;
+    assert.equal(R.gearCost({ ...old }, data), 0);
+  });
+
   it('starts characters without builder choices with their sheet gear, matched to the rules, and no coins', () => {
     const inv = R.startingInventory(R.mira, data);
     assert.deepEqual(inv.items.map((i) => [i.kind, i.name, i.equipped]), [['weapon', 'Longsword', true], ['armor', 'Chain Mail', true]]);

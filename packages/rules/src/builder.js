@@ -63,6 +63,8 @@ export function emptyBuild() {
     armor: null,
     shield: null,
     weapons: [],
+    // Other gear from the armory, kept as bought: [{ id, name, price (cp), bulk, qty }].
+    gear: [],
     // Leveling up (leveling.js): the character's level, and one entry per level from 2.
     level: 1,
     levels: [],
@@ -510,7 +512,8 @@ export function gearCost(build, data) {
   const armor = find(data.armor, build.armor);
   const shield = find(data.shields, build.shield);
   const weapons = build.weapons.map((w) => find(data.weapons, w)).filter(Boolean);
-  return (armor?.price ?? 0) + (shield?.price ?? 0) + weapons.reduce((t, w) => t + w.price, 0);
+  const gear = (build.gear ?? []).reduce((t, g) => t + g.price * g.qty, 0);
+  return (armor?.price ?? 0) + (shield?.price ?? 0) + weapons.reduce((t, w) => t + w.price, 0) + gear;
 }
 
 // Armor that comes from a class choice or a feat, not the shop. Its price is 0 because
