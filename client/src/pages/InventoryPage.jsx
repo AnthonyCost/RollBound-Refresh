@@ -26,6 +26,8 @@ import BookLeaf from '../builder/BookLeaf.jsx';
 import { gearFacts } from '../builder/gearFacts.js';
 import { sourceTag } from '../builder/labels.js';
 import Icon from '../components/Icon.jsx';
+import Portrait from '../components/Portrait.jsx';
+import { useCarriedConsumables } from '../state/carriedItems.js';
 
 const GEAR_TYPES = ['weapons', 'armor', 'shields', 'items'];
 const KIND_OF = { weapons: 'weapon', armor: 'armor', shields: 'shield', items: 'item' };
@@ -46,7 +48,7 @@ const savedLabel = { waiting: 'Saving…', saving: 'Saving…', saved: 'Saved', 
  * of armor, shields, weapons and adventuring gear; buying pays from the purse.
  */
 export default function InventoryPage() {
-  const { character, baseCharacter, readOnly, campaign, inventory, setInventory, inventoryStatus } = useTable();
+  const { character, baseCharacter, readOnly, campaign, inventory, setInventory, inventoryStatus, portraitUrl } = useTable();
   const rules = useRules(GEAR_TYPES);
   // The campaign's books limit what can be added from the rules; custom items are always allowed.
   const view = useMemo(() => (rules && !rules.error ? campaignData(rules, campaign?.books ?? null) : null), [rules, campaign]);
@@ -55,6 +57,8 @@ export default function InventoryPage() {
   // Every equipped flag spelled out, including for inventories saved before equipping.
   const inv = useMemo(() => (inventory ?? starting) && withEquipped(inventory ?? starting), [inventory, starting]);
   const [shopping, setShopping] = useState(false);
+  const [selectedKey, setSelectedKey] = useState(null);
+  const usable = useCarriedConsumables(inv);
 
   if (!inv) {
     return <p className="muted italic center">{rules?.error ? "Couldn't load the item list. Try refreshing." : 'Unpacking…'}</p>;
@@ -70,88 +74,118 @@ export default function InventoryPage() {
 
   const equipped = inv.items.filter((i) => i.equipped);
   const pack = inv.items.filter((i) => !i.equipped);
-  const groups = [
-    ['Weapons and armor', pack.filter((i) => EQUIPPABLE.includes(i.kind))],
-    ['Consumables', pack.filter((i) => i.kind === 'item' && ruleOf(i)?.category === 'consumable')],
-    ['Treasure', pack.filter((i) => i.kind === 'item' && ruleOf(i)?.category === 'treasure')],
-    ['Gear', pack.filter((i) => i.kind === 'custom' || (i.kind === 'item' && !['consumable', 'treasure'].includes(ruleOf(i)?.category)))],
-  ].filter(([, list]) => list.length);
+  // The pack in order: weapons and armor, consumables, treasure, gear; then empty sockets to fill out the bag.
+  const ORDER = ['itemWeapons', 'itemArmor', 'itemShields', 'itemConsumables', 'coins', 'itemAdventuringGear'];
+  const bag = [...pack].sort((x, y) => ORDER.indexOf(iconOf(x, ruleOf(x))) - ORDER.indexOf(iconOf(y, ruleOf(y))));
+  const sockets = Math.max(20, Math.ceil(bag.length / 5) * 5) - bag.length;
+
+  const selected = inv.items.find((i) => i.key === selectedKey) ?? null;
+  const select = (key) => setSelectedKey((k) => (k === key ? null : key));
+  const slots = [
+    ['Armor', equipped.filter((i) => i.kind === 'armor'), 'itemArmor', 'Unarmored'],
+    ['Shield', equipped.filter((i) => i.kind === 'shield'), 'itemShields', 'No shield'],
+    ['Weapons', equipped.filter((i) => i.kind === 'weapon'), 'itemWeapons', 'Fists only'],
+  ];
 
   return (
     <div className="sheet inventory-tab">
-      <section className="sheet-panel purse-load" aria-labelledby="purse-title">
-        <div className="purse-load__head">
-          <h1 id="purse-title" className="sheet-panel__title">Purse and load</h1>
-          <span className="muted">Worth {formatPrice(coinValue(inv.coins))}</span>
-        </div>
-        <div className="coins__row">
-          {COINS.map((c) => (
-            <label key={c} className={`coin coin--${c}`}>
-              <span className="coin__name">{COIN_NAMES[c]}</span>
-              {readOnly ? (
-                <span className="coin__value">{inv.coins[c]}</span>
-              ) : (
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min="0"
-                  max={LIMITS.coins}
-                  value={inv.coins[c]}
-                  onChange={(e) => {
-                    const n = Math.max(0, Math.min(LIMITS.coins, Math.floor(Number(e.target.value)) || 0));
-                    update({ coins: { ...inv.coins, [c]: n } });
-                  }}
-                />
-              )}
-              <span className="coin__abbr"><Icon name="coins" size={16} />{c}</span>
-            </label>
-          ))}
-        </div>
-        <LoadMeter load={load} limits={limits} label={formatBulk(total)} name={character.name} />
-      </section>
-
-      <section className="sheet-panel" aria-labelledby="equipped-title">
-        <h2 id="equipped-title" className="sheet-panel__title">Equipped</h2>
-        <p className="rule-note" style={{ margin: '0 0 10px' }}>Your Sheet's AC and Strikes use what's equipped here.</p>
-        <ul className="slot-cards">
-          <SlotCard
-            label="Armor"
-            items={equipped.filter((i) => i.kind === 'armor')}
-            empty="Unarmored"
-            ruleOf={ruleOf}
-            readOnly={readOnly}
-            onUnequip={equip}
-          />
-          <SlotCard label="Shield" items={equipped.filter((i) => i.kind === 'shield')} empty="No shield" ruleOf={ruleOf} readOnly={readOnly} onUnequip={equip} />
-          <SlotCard label="Weapons" items={equipped.filter((i) => i.kind === 'weapon')} empty="Fists only" ruleOf={ruleOf} readOnly={readOnly} onUnequip={equip} />
-        </ul>
-      </section>
-
-      <section className="sheet-panel" aria-labelledby="pack-title">
-        <h2 id="pack-title" className="sheet-panel__title">Pack</h2>
-        {groups.length ? (
-          groups.map(([label, list]) => (
-            <div key={label} className="pack-group">
-              <span className="sheet-panel__label">{label}</span>
-              <ul className="pack-rows">
-                {list.map((item) => (
-                  <PackRow
-                    key={item.key}
-                    item={item}
-                    rule={ruleOf(item)}
-                    character={baseCharacter}
-                    readOnly={readOnly}
-                    onChange={(changes) => setItem(item.key, changes)}
-                    onEquip={() => equip(item.key)}
-                    onRemove={() => update({ items: inv.items.filter((i) => i.key !== item.key) })}
-                  />
+      <section className="inv" aria-label={`${character.name}'s inventory`}>
+        <div className="inv__doll" aria-labelledby="equipped-title">
+          <div className="inv__hero">
+            <Portrait url={portraitUrl} name={character.name} size="lg" />
+            <h1 id="equipped-title" className="inv__hero-name">{character.name}</h1>
+            <p className="inv__hero-note">AC and Strikes use what's equipped.</p>
+          </div>
+          {slots.map(([label, items, icon, empty]) => (
+            <div key={label} className="inv__slot-group">
+              <span className="inv__label">{label}</span>
+              <ul className="inv__slots">
+                {(items.length ? items : [null]).map((i) => (
+                  <li key={i?.key ?? 'empty'}>
+                    {i ? (
+                      <ItemTile item={i} icon={icon} sub={slotStat(i, ruleOf(i))} selected={selected?.key === i.key} onSelect={() => select(i.key)} wide />
+                    ) : (
+                      <span className="inv-tile inv-tile--wide inv-tile--empty">
+                        <span className="inv-tile__icon"><Icon name={icon} size={30} /></span>
+                        <span className="inv-tile__text"><span className="inv-tile__name">{empty}</span></span>
+                      </span>
+                    )}
+                  </li>
                 ))}
               </ul>
             </div>
-          ))
-        ) : (
-          <p className="muted italic" style={{ margin: 0 }}>{readOnly ? 'Nothing else in the pack.' : 'Nothing else in the pack. Visit the merchant to add gear.'}</p>
-        )}
+          ))}
+        </div>
+
+        <div className="inv__bag" aria-labelledby="pack-title">
+          <h2 id="pack-title" className="inv__title">Pack</h2>
+          <ul className="inv__grid">
+            {bag.map((item) => (
+              <li key={item.key}>
+                <ItemTile item={item} icon={iconOf(item, ruleOf(item))} selected={selected?.key === item.key} onSelect={() => select(item.key)} />
+              </li>
+            ))}
+            {Array.from({ length: sockets }, (_, n) => <li key={`socket-${n}`} className="inv-tile inv-tile--socket" aria-hidden="true" />)}
+          </ul>
+          {!bag.length && <p className="inv__empty">{readOnly ? 'Nothing else in the pack.' : 'Nothing else in the pack. Visit the merchant to add gear.'}</p>}
+        </div>
+
+        <div className="inv__card" aria-live="polite">
+          {selected ? (
+            <ItemCard
+              key={selected.key}
+              item={selected}
+              rule={ruleOf(selected)}
+              icon={iconOf(selected, ruleOf(selected))}
+              use={usable.find((u) => u.key === selected.key)}
+              character={baseCharacter}
+              readOnly={readOnly}
+              onChange={(changes) => setItem(selected.key, changes)}
+              onEquip={() => equip(selected.key)}
+              onRemove={() => {
+                update({ items: inv.items.filter((i) => i.key !== selected.key) });
+                setSelectedKey(null);
+              }}
+            />
+          ) : (
+            <div className="inv__card-blank">
+              <Icon name="inventory" size={44} />
+              <p>Choose an item to read it{readOnly ? '' : ', equip it or change how many you carry'}.</p>
+            </div>
+          )}
+        </div>
+
+        <div className="inv__purse purse-load" aria-labelledby="purse-title">
+          <div className="purse-load__head">
+            <h2 id="purse-title" className="inv__label">Purse</h2>
+            <span className="muted">Worth {formatPrice(coinValue(inv.coins))}</span>
+          </div>
+          <div className="coins__row">
+            {COINS.map((c) => (
+              <label key={c} className={`coin coin--${c}`}>
+                <span className="coin__abbr"><Icon name="coins" size={16} />{c}<span className="visually-hidden"> ({COIN_NAMES[c]})</span></span>
+                {readOnly ? (
+                  <span className="coin__value">{inv.coins[c]}</span>
+                ) : (
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min="0"
+                    max={LIMITS.coins}
+                    value={inv.coins[c]}
+                    onChange={(e) => {
+                      const n = Math.max(0, Math.min(LIMITS.coins, Math.floor(Number(e.target.value)) || 0));
+                      update({ coins: { ...inv.coins, [c]: n } });
+                    }}
+                  />
+                )}
+              </label>
+            ))}
+          </div>
+        </div>
+        <div className="inv__load">
+          <LoadMeter load={load} limits={limits} label={formatBulk(total)} name={character.name} />
+        </div>
       </section>
 
       {!readOnly && view && (
@@ -225,30 +259,6 @@ function slotStat(item, rule) {
   return null;
 }
 
-/** One equipment slot: what's in it (or that it's empty), with unequip. */
-function SlotCard({ label, items, empty, ruleOf, readOnly, onUnequip }) {
-  return (
-    <li className={`slot-card ${items.length ? '' : 'slot-card--empty'}`}>
-      <span className="sheet-panel__label">{label}</span>
-      {items.length ? (
-        items.map((i) => (
-          <div key={i.key} className="slot-card__item">
-            <span className="slot-card__name">{i.name}</span>
-            {slotStat(i, ruleOf(i)) && <span className="slot-card__stat">{slotStat(i, ruleOf(i))}</span>}
-            {!readOnly && (
-              <button type="button" className="link-button" onClick={() => onUnequip(i.key)}>
-                {i.kind === 'armor' ? 'Take off' : 'Unequip'}
-              </button>
-            )}
-          </div>
-        ))
-      ) : (
-        <span className="slot-card__empty">{empty}{!readOnly && ': equip something from your pack.'}</span>
-      )}
-    </li>
-  );
-}
-
 /** Why equipping this would hurt: armor or a weapon the character isn't trained with. */
 function untrainedNote(item, rule, character) {
   if (!rule) return null;
@@ -261,60 +271,89 @@ function untrainedNote(item, rule, character) {
   return null;
 }
 
-/** One line in the pack: name, quantity, Bulk and value, equip where it applies; details open below. */
-function PackRow({ item, rule, character, readOnly, onChange, onEquip, onRemove }) {
-  const [open, setOpen] = useState(false);
+/** An item's icon: its kind, or for gear, what it's for. */
+function iconOf(item, rule) {
+  if (item.kind !== 'item' && item.kind !== 'custom') return { weapon: 'itemWeapons', armor: 'itemArmor', shield: 'itemShields' }[item.kind];
+  if (rule?.category === 'consumable' || /potion|elixir|oil|scroll|bomb|talisman/i.test(item.name)) return 'itemConsumables';
+  if (rule?.category === 'treasure') return 'coins';
+  return 'itemAdventuringGear';
+}
+
+/** One item as a tile: its icon, with how many; equipped slots are wide, with the name and what it does. */
+function ItemTile({ item, icon, sub, selected, onSelect, wide }) {
+  return (
+    <button
+      type="button"
+      className={`inv-tile ${wide ? 'inv-tile--wide' : ''} ${selected ? 'inv-tile--on' : ''}`}
+      aria-pressed={selected}
+      aria-label={`${item.name}${item.qty > 1 ? `, ${item.qty}` : ''}`}
+      title={wide ? undefined : item.name}
+      onClick={onSelect}
+    >
+      <span className="inv-tile__icon"><Icon name={icon} size={wide ? 30 : 34} /></span>
+      {item.qty > 1 && <span className="inv-tile__qty">{item.qty}</span>}
+      {wide ? (
+        <span className="inv-tile__text">
+          <span className="inv-tile__name">{item.name}</span>
+          {sub && <span className="inv-tile__sub">{sub}</span>}
+        </span>
+      ) : (
+        <span className="inv-tile__label">{item.name}</span>
+      )}
+    </button>
+  );
+}
+
+/** The item you're looking at, large: what it is, how many, equip, a note, its rules text, remove. */
+function ItemCard({ item, rule, icon, use, character, readOnly, onChange, onEquip, onRemove }) {
   const equippable = EQUIPPABLE.includes(item.kind);
   const untrained = equippable && untrainedNote(item, rule, character);
-  const detailsId = `pack-${item.key}`;
+  const stat = slotStat(item, rule);
   return (
-    <li className={`pack-row ${open ? 'pack-row--open' : ''}`}>
-      <div className="pack-row__line">
-        <button type="button" className="pack-row__name" aria-expanded={open} aria-controls={detailsId} onClick={() => setOpen((v) => !v)}>
-          <span className="pack-row__caret" aria-hidden="true" />
-          {item.name}
-          {untrained && <span className="tag tag--warn">Untrained</span>}
-        </button>
-        {readOnly ? (
-          <span className="pack-row__qty">×{item.qty}</span>
-        ) : (
+    <article className="inv-card">
+      <header className="inv-card__head">
+        <span className="inv-card__icon"><Icon name={icon} size={40} /></span>
+        <div>
+          <h3 className="inv-card__name">{item.name}</h3>
+          <p className="inv-card__state">{item.equipped ? (item.kind === 'armor' ? 'Worn' : 'Equipped') : 'In the pack'}{untrained && <span className="tag tag--warn">Untrained</span>}</p>
+        </div>
+      </header>
+      <ul className="co__facts">
+        {stat && <li>{stat}</li>}
+        <li>Bulk {bulkLabel(item.bulk)} each</li>
+        {item.price != null && <li>{formatPrice(item.price)} each</li>}
+        {rule?.level > 0 && <li>Level {rule.level}</li>}
+      </ul>
+      {untrained && <p className="rule-note rule-note--warn" style={{ margin: 0 }}>{untrained}</p>}
+      {!readOnly && (
+        <div className="inv-card__actions">
           <span className="pack-row__qty stepper" role="group" aria-label={`Quantity of ${item.name}`}>
             <button type="button" aria-label="One fewer" disabled={item.qty <= 1} onClick={() => onChange({ qty: item.qty - 1 })}>−</button>
             <span className="stepper__value">{item.qty}</span>
             <button type="button" aria-label="One more" disabled={item.qty >= LIMITS.qty} onClick={() => onChange({ qty: item.qty + 1 })}>+</button>
           </span>
-        )}
-        <span className="pack-row__bulk" title="Bulk each">{bulkLabel(item.bulk)}</span>
-        <span className="pack-row__value">{item.price != null ? formatPrice(item.price * item.qty) : '—'}</span>
-        <span className="pack-row__action">
-          {equippable && !readOnly && (
-            <button type="button" className="pack-row__equip" onClick={onEquip}>{item.kind === 'armor' ? 'Wear' : 'Equip'}</button>
-          )}
-        </span>
-      </div>
-      {open && (
-        <div id={detailsId} className="pack-row__details">
-          {untrained && <p className="rule-note rule-note--warn" style={{ margin: 0 }}>{untrained}</p>}
-          <p className="inventory__facts muted">
-            {item.price != null && <span>Price {formatPrice(item.price)} each</span>}
-            <span>Bulk {bulkLabel(item.bulk)} each</span>
-            {rule?.level > 0 && <span>Level {rule.level}</span>}
-          </p>
-          {readOnly ? (
-            item.note && <p className="inventory__note">{item.note}</p>
-          ) : (
-            <label className="inventory__note-field">
-              <span className="eyebrow">Note</span>
-              <input type="text" maxLength={LIMITS.note} value={item.note} placeholder="Where it came from, charges left…" onChange={(e) => onChange({ note: e.target.value })} />
-            </label>
-          )}
-          {rule?.description && <div className="option__desc book__desc" dangerouslySetInnerHTML={{ __html: rule.description }} />}
-          {!readOnly && (
-            <button type="button" className="btn inventory__remove" onClick={onRemove}>Remove from pack</button>
+          {equippable && (
+            <button type="button" className={`btn ${item.equipped ? '' : 'btn--blood'}`} onClick={onEquip}>
+              {item.equipped ? (item.kind === 'armor' ? 'Take off' : 'Unequip') : item.kind === 'armor' ? 'Wear' : 'Equip'}
+            </button>
           )}
         </div>
       )}
-    </li>
+      {readOnly && item.qty > 1 && <p className="inv-card__state">You carry {item.qty}.</p>}
+      {use?.text && <p className="inv-card__use">{use.text}</p>}
+      {rule?.description && <div className="option__desc book__desc inv-card__desc" dangerouslySetInnerHTML={{ __html: rule.description }} />}
+      {readOnly ? (
+        item.note && <p className="inventory__note">{item.note}</p>
+      ) : (
+        <label className="inventory__note-field">
+          <span className="inv__label">Note</span>
+          <input type="text" maxLength={LIMITS.note} value={item.note} placeholder="Where it came from, charges left…" onChange={(e) => onChange({ note: e.target.value })} />
+        </label>
+      )}
+      {!readOnly && (
+        <button type="button" className="link-button inv-card__remove" onClick={onRemove}>Remove from inventory</button>
+      )}
+    </article>
   );
 }
 

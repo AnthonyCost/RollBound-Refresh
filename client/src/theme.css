@@ -3829,50 +3829,114 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .load__mark--max { background: var(--blood-text); }
 @media (prefers-reduced-motion: reduce) { .load__fill { transition: none; } }
 
-.slot-cards { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
-.slot-card { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border: 1px solid var(--bronze-dark); border-radius: 4px; background: var(--panel-mid); }
-.slot-card--empty { border-style: dashed; border-color: var(--line); background: none; }
-.slot-card__item { display: flex; flex-direction: column; gap: 2px; padding-top: 4px; border-top: 1px solid var(--line-faint); }
-.slot-card__item:first-of-type { border-top: 0; padding-top: 0; }
-.slot-card__name { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
-.slot-card__stat { font-size: 13px; color: var(--text-soft); }
-.slot-card .link-button { padding: 2px 0; font-size: 13px; }
-.slot-card__empty { font-size: 14px; font-style: italic; color: var(--text-muted); }
-
-.pack-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
-.pack-group:last-child { margin-bottom: 0; }
-.pack-group > .sheet-panel__label { padding-bottom: 4px; border-bottom: 1px solid var(--line-faint); }
-.pack-rows { margin: 0; padding: 0; list-style: none; }
-.pack-row { border-bottom: 1px solid var(--line-faint); }
-.pack-row--open { background: var(--panel-hot); }
-.pack-row__line { display: grid; grid-template-columns: minmax(0, 1fr) auto 32px 72px 64px; align-items: center; gap: 8px; min-height: 46px; padding: 2px 4px; }
-.pack-row__name {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px 8px;
-  min-height: 40px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--text);
-  font: inherit;
-  font-size: 15px;
-  text-align: left;
-  cursor: pointer;
-}
-@media (hover: hover) { .pack-row__name:hover { color: var(--gold); } }
-.pack-row__caret { width: 7px; height: 7px; transform: rotate(45deg); border: 1px solid var(--bronze); flex: none; }
-.pack-row--open .pack-row__caret { background: var(--bronze); }
+/* The quantity stepper, in the item card. */
 .pack-row__qty { display: inline-flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
-.pack-row__qty button { width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--text-soft); font-size: 16px; line-height: 1; cursor: pointer; }
+.pack-row__qty button { width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--text-soft); font-size: 16px; line-height: 1; cursor: pointer; }
 .pack-row__qty button:disabled { opacity: 0.35; cursor: default; }
-.pack-row__qty .stepper__value { min-width: 28px; text-align: center; }
-.pack-row__bulk, .pack-row__value { font-size: 13px; color: var(--text-muted); text-align: right; font-variant-numeric: tabular-nums; }
-.pack-row__action { text-align: right; }
-.pack-row__equip { min-height: 32px; padding: 0 10px; border: 1px solid var(--blood); border-radius: 4px; background: var(--panel-hot); color: var(--blood-text); font-family: var(--display); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
-.pack-row__details { display: flex; flex-direction: column; gap: 8px; padding: 4px 8px 14px 22px; }
-.pack-row__details .inventory__remove { align-self: flex-start; }
+.pack-row__qty .stepper__value { min-width: 32px; text-align: center; font-family: var(--display); font-size: 18px; }
+
+/* A character screen, like an RPG's: the hero and what they have equipped on the left, the pack
+   as a grid of item tiles in the middle, the item you're looking at on the right, and the purse
+   and load along the bottom. Same frame as Class Options. */
+.inv {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr) minmax(280px, 340px);
+  grid-template-areas: 'doll bag card' 'purse purse load';
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--panel) 0%, var(--bg-deep) 100%);
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.45), inset 0 0 0 3px var(--bg), inset 0 0 0 4px var(--line-faint);
+}
+.inv__doll { grid-area: doll; display: flex; flex-direction: column; gap: 14px; padding: 20px 16px; border-right: 1px solid var(--line); background: color-mix(in srgb, var(--bg-deep) 70%, transparent); }
+.inv__hero { display: flex; flex-direction: column; align-items: center; gap: 6px; padding-bottom: 14px; border-bottom: 1px solid var(--line-soft); text-align: center; }
+.inv__hero-name { margin: 4px 0 0; font: 400 28px/1 var(--accent-font); color: var(--text); }
+.inv__hero-note { margin: 0; font-size: 13px; font-style: italic; color: var(--text-muted); }
+.inv__label { margin: 0; font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--bronze); }
+.inv__slot-group { display: flex; flex-direction: column; gap: 6px; }
+.inv__slots, .inv__grid { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+.inv__bag { grid-area: bag; display: flex; flex-direction: column; gap: 16px; min-width: 0; padding: 20px; }
+.inv__title { display: flex; align-items: baseline; justify-content: space-between; margin: 0; font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+.inv__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.inv__empty { margin: 0; font-style: italic; color: var(--text-muted); }
+
+/* An item tile: a dark socket with the item's icon, the count in the corner, the name beneath. */
+.inv-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 10px 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--panel-raised) 80%, transparent), var(--bg-deep) 75%);
+  box-shadow: inset 0 2px 8px rgb(0 0 0 / 0.6);
+  color: var(--text-soft);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.inv-tile__icon { display: grid; place-items: center; color: var(--bronze); transition: color 0.2s, filter 0.2s; }
+.inv-tile__label { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 12px; line-height: 1.2; text-align: center; overflow-wrap: anywhere; }
+.inv-tile__qty { position: absolute; top: 4px; right: 6px; font-family: var(--display); font-size: 13px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; text-shadow: 0 1px 3px #000; }
+@media (hover: hover) {
+  .inv-tile:hover { border-color: var(--bronze); color: var(--text); }
+  .inv-tile:hover .inv-tile__icon { color: var(--gold); }
+}
+.inv-tile:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.inv-tile--on { border-color: var(--gold); color: var(--text); box-shadow: inset 0 2px 8px rgb(0 0 0 / 0.6), 0 4px 14px color-mix(in srgb, var(--gold) 22%, transparent); }
+.inv-tile--on .inv-tile__icon { color: var(--gold); filter: drop-shadow(0 0 6px var(--glow)); }
+/* Equipped slots: wide, with the name and what it does beside the icon. */
+.inv-tile--wide { flex-direction: row; justify-content: flex-start; gap: 12px; aspect-ratio: auto; min-height: 60px; padding: 8px 12px 8px 8px; text-align: left; }
+.inv-tile--wide .inv-tile__icon { flex: none; width: 44px; height: 44px; border: 1px solid var(--line-soft); border-radius: 3px; background: var(--bg-deep); color: var(--gold); }
+.inv-tile__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.inv-tile__name { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); overflow-wrap: anywhere; }
+.inv-tile__sub { font-size: 12px; color: var(--text-muted); }
+.inv-tile--socket { cursor: default; border-color: var(--line-faint); opacity: 0.55; }
+.inv-tile--empty { border-style: dashed; background: none; box-shadow: none; cursor: default; }
+.inv-tile--empty .inv-tile__icon { color: var(--line); opacity: 0.7; }
+.inv-tile--empty .inv-tile__name { font-family: var(--body); font-size: 14px; font-weight: 400; font-style: italic; letter-spacing: 0; text-transform: none; color: var(--text-muted); }
+
+/* The item card. */
+.inv__card { grid-area: card; min-width: 0; padding: 20px; border-left: 1px solid var(--line-soft); background: color-mix(in srgb, var(--bg-deep) 45%, transparent); }
+.inv__card-blank { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; min-height: 200px; color: var(--line); text-align: center; }
+.inv__card-blank p { max-width: 26ch; margin: 0; font-style: italic; color: var(--text-muted); }
+.inv-card { display: flex; flex-direction: column; gap: 14px; animation: co-reveal 280ms var(--ease-land, ease-out); }
+.inv-card__head { display: flex; align-items: center; gap: 14px; }
+.inv-card__icon { flex: none; display: grid; place-items: center; width: 64px; height: 64px; border: 1px solid var(--gold); border-radius: 3px; background: radial-gradient(circle, var(--panel-raised), var(--bg-deep) 80%); color: var(--gold); box-shadow: 0 4px 14px rgb(0 0 0 / 0.5); }
+.inv-card__name { margin: 0; font: 400 30px/1.05 var(--accent-font); color: var(--text); text-wrap: balance; }
+.inv-card__state { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 0; font-size: 13px; color: var(--text-muted); }
+.inv-card__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.inv-card__use { margin: 0; font-size: 14px; line-height: 1.6; color: var(--text-soft); }
+.inv-card__desc { padding: 0; font-size: 14px; }
+.inv-card__remove { align-self: flex-start; font-size: 13px; color: var(--blood-text); }
+
+/* Purse and load, along the bottom. */
+.inv__purse { grid-area: purse; gap: 10px; padding: 16px 20px; border-top: 1px solid var(--line); }
+.inv__load { grid-area: load; padding: 16px 20px; border-top: 1px solid var(--line); border-left: 1px solid var(--line-soft); }
+.inv .coin { flex-direction: row; gap: 8px; padding: 4px 10px; }
+.inv .coin input { font-size: 16px; min-height: 36px; }
+.inv .coin__value { min-height: 36px; font-size: 16px; }
+
+@media (max-width: 1100px) {
+  .inv { grid-template-columns: 250px minmax(0, 1fr); grid-template-areas: 'doll bag' 'doll card' 'purse purse' 'load load'; }
+  .inv__card { border-left: 0; border-top: 1px solid var(--line-soft); }
+  .inv__load { border-left: 0; }
+}
+@media (max-width: 700px) {
+  .inv { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'doll' 'bag' 'card' 'purse' 'load'; }
+  .inv__doll { border-right: 0; border-bottom: 1px solid var(--line); }
+  .inv__hero { flex-direction: row; text-align: left; }
+  .inv__hero-name { margin: 0; font-size: 24px; }
+  .inv__grid { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
+  .inv .coins__row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) { .inv-card { animation: none; } .inv-tile, .inv-tile__icon { transition: none; } }
 
 .merchant { display: flex; flex-direction: column; gap: 12px; }
 .merchant__head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
@@ -3880,11 +3944,6 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .merchant__body { display: flex; flex-direction: column; gap: 12px; }
 .merchant .add-item__custom { display: flex; flex-direction: column; gap: 8px; }
 
-@media (max-width: 560px) {
-  /* Phones: the value column steps aside to keep the name readable. */
-  .pack-row__line { grid-template-columns: minmax(0, 1fr) auto 28px 60px; }
-  .pack-row__value { display: none; }
-}
 
 /* ---------- Campaign Overview, as a title page ----------
    (pages/CampaignPage.jsx) */
