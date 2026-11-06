@@ -14,8 +14,8 @@ import FormErrors, { errorsFrom } from '../components/FormErrors.jsx';
 import homeMap from '../assets/home-map.webp';
 import buildArt from '../assets/start/build-your-own.webp';
 import campaignArt from '../assets/campaign-covers/snowy-village.webp';
-import bestiaryArt from '../assets/creatures/adult-cinder-dragon.webp';
-import spellsArt from '../assets/art/class-wizard.webp';
+import bestiaryArt from '../assets/welcome/bestiary.webp';
+import spellsArt from '../assets/welcome/spells.webp';
 import learnArt from '../assets/resources/free-rules.webp';
 import { adventurePath } from '@rollbound/rules';
 import { classArtOf, lineOf } from './CharactersPage.jsx';
@@ -44,8 +44,8 @@ const REFERENCE = [
 const WELCOME = [
   { to: '/create', art: buildArt, at: '40% 100%', name: 'Build your first hero', blurb: 'Pick an ancestry, background and class, or start with an iconic hero. Each step explains what your choices do.' },
   { to: '/campaigns/new', art: campaignArt, at: '50% 60%', name: 'Start a campaign', blurb: 'Gather a party with an invite code, then run encounters, track initiative and keep session logs.' },
-  { to: '/bestiary', art: bestiaryArt, at: '50% 25%', name: 'Bestiary', blurb: 'Hundreds of creatures with full stat blocks.' },
-  { to: '/spells', art: spellsArt, at: '50% 8%', name: 'Spell Book', blurb: 'Every spell with its ranks, traditions and full rules text.' },
+  { to: '/bestiary', art: bestiaryArt, at: '30% 30%', name: 'Bestiary', blurb: 'Hundreds of creatures with full stat blocks.' },
+  { to: '/spells', art: spellsArt, at: '62% 30%', name: 'Spell Book', blurb: 'Every spell with its ranks, traditions and full rules text.' },
   { to: '/learn/overview', art: learnArt, at: '50% 35%', name: 'Learn the Game', blurb: 'New to Pathfinder? Short guides to checks, combat and your first session.' },
 ];
 
