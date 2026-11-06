@@ -1,5 +1,6 @@
 import express from 'express';
 import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 import { characters } from './routes/characters.js';
 import { auth } from './routes/auth.js';
 import { campaigns } from './routes/campaigns.js';
@@ -22,6 +23,14 @@ app.use('/api/sheets', sheets);
 app.use('/api/inbox', inbox);
 app.use('/api/join-requests', joinRequests);
 app.use('/api/uploads', uploads);
+
+// Hosted (Render), one service serves the built site too: its files, then index.html for the
+// app's own addresses (/campaigns/12) so a reload or shared link works. Skipped until it's built.
+const site = fileURLToPath(new URL('../../client/dist', import.meta.url));
+if (existsSync(site)) {
+  app.use(express.static(site));
+  app.get(/^\/(?!api\/).*/, (_req, res) => res.sendFile('index.html', { root: site }));
+}
 
 // Express 5 forwards rejected promises from async handlers here.
 app.use((err, _req, res, _next) => {
