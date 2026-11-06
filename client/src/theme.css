@@ -1744,7 +1744,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 .kind-choice { display: grid; gap: 10px; }
 @media (min-width: 640px) { .kind-choice { grid-template-columns: 1fr 1fr; } }
-.kind-card, .path-card {
+.kind-card {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1756,13 +1756,11 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   text-align: left;
   cursor: pointer;
 }
-.kind-card[aria-checked='true'], .path-card[aria-checked='true'] { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 18px var(--hot-shadow), 0 0 14px var(--glow); }
-@media (hover: hover) { .kind-card:hover, .path-card:hover { border-color: var(--bronze); } }
+.kind-card[aria-checked='true'] { border-color: var(--blood); background: var(--panel-hot); box-shadow: inset 0 0 18px var(--hot-shadow), 0 0 14px var(--glow); }
+@media (hover: hover) { .kind-card:hover { border-color: var(--bronze); } }
 .kind-card__title { font-family: var(--display); font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
 .kind-card__text { font-size: 15px; line-height: 1.5; color: var(--text-soft); }
 
-.paths { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); align-items: start; gap: 10px; }
-.path-card { padding: 0; gap: 0; overflow: hidden; }
 .path-card__art { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .path-card__art--plain {
   display: grid;
@@ -1777,9 +1775,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   text-transform: uppercase;
   color: var(--bronze);
 }
-.path-card__body { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px 14px; }
-.path-card__name { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
-.path-card__meta { font-size: 14px; color: var(--text-soft); }
 .path-card__tags { display: flex; flex-wrap: wrap; gap: 4px; }
 .tag.tag--theme { border-color: var(--line); color: var(--text-soft); }
 .tag.tag--theme-beginner { border-color: var(--gold); color: var(--gold); }
@@ -1792,13 +1787,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .theme-filter::-webkit-scrollbar { display: none; }
   .theme-filter .chip { flex: none; }
 }
-.path-card__more { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
-.path-card__synopsis { font-size: 15px; line-height: 1.6; color: var(--text-soft); }
-.path-card__note { font-size: 13px; font-style: italic; color: var(--bronze); }
-/* The chosen path's card spans the row, so its premise has room. */
-@media (min-width: 640px) { .paths li:has(.path-card[aria-checked='true']) { grid-column: span 2; } }
-/* Keep Back and Run in reach while scrolling the list. */
-.path-actions { position: sticky; bottom: 0; z-index: 5; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(transparent, var(--bg) 30%); }
 .prefill-note, .form-field > .prefill-note { margin: 0; padding: 8px 10px; border-left: 2px solid var(--bronze); background: var(--panel); font-size: 13px; font-style: italic; letter-spacing: 0; text-transform: none; font-family: var(--body); font-weight: 400; color: var(--text-soft); }
 .campaign-path { margin: 0; }
 
@@ -3948,7 +3936,7 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
 .nav.subnav { margin: -4px 0 2px; padding: 0; background: none; }
 .nav.subnav a { min-height: 42px; }
 /* The merchant's shop: the Class Options frame, with categories in the rail and prices in the list. */
-.shop__sigil { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold); background: radial-gradient(circle, var(--panel-raised), var(--bg-deep) 80%); box-shadow: 0 4px 12px rgb(0 0 0 / 0.5); }
+.shop__sigil { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold); background: radial-gradient(circle, var(--panel-raised), var(--bg-deep) 80%); box-shadow: 0 4px 12px rgb(0 0 0 / 0.5); }
 .co__tab.shop__tab { grid-template-columns: 20px minmax(0, 1fr) auto; align-items: center; padding: 9px 16px; }
 .shop__tab-icon { position: relative; z-index: 1; display: grid; place-items: center; color: var(--bronze); }
 .shop__tab[aria-selected='true'] .shop__tab-icon { color: var(--gold); }
@@ -4819,3 +4807,106 @@ button.action-pip:focus-visible { outline: 2px solid var(--gold); outline-offset
 /* Sign in's "Forgot your password?", tucked right under "Create an account". */
 .auth__switch.auth__forgot { margin-top: -6px; }
 .pack__qty { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+/* ---------- Settings, as an options menu (components/SettingsMenu.jsx) ----------
+   The Class Options frame: who it's for and the sections down the left, the section you're on
+   beside it. It grows with its content instead of the fixed height Class Options uses. */
+.settings-menu { height: auto; grid-template-columns: 270px minmax(0, 1fr); }
+.settings-menu .co__rail { max-height: none; }
+.settings-menu__head { gap: 14px; }
+.settings-menu__head > .portrait { flex: none; }
+.settings-menu__head > div { min-width: 0; }
+.settings-menu__head .co__class-name { font-size: 24px; overflow-wrap: anywhere; }
+.co__tab.settings-menu__tab { grid-template-columns: 22px minmax(0, 1fr); align-items: center; gap: 2px 14px; padding: 13px 18px; }
+.settings-menu__icon { position: relative; z-index: 1; grid-row: 1 / 3; display: grid; place-items: center; color: var(--bronze); transition: color 0.2s; }
+.settings-menu__tab[aria-selected='true'] .settings-menu__icon { color: var(--gold); }
+.settings-menu__hint { position: relative; z-index: 1; grid-column: 2; font-size: 13px; color: var(--text-muted); }
+.settings-menu__tab--danger .co__tab-title, .settings-menu__tab--danger .settings-menu__icon { color: var(--blood-text); }
+.settings-menu__tab--danger[aria-selected='true'] .co__tab-title, .settings-menu__tab--danger[aria-selected='true'] .settings-menu__icon { color: var(--blood-text); }
+/* The danger section sits apart at the bottom of the rail. */
+.settings-menu__tab--danger { margin-top: 10px; border-top: 1px solid var(--line-soft); }
+
+.settings-menu__panel { min-width: 0; padding: 28px clamp(20px, 3vw, 40px) 32px; }
+.settings-menu__inner { display: flex; flex-direction: column; gap: 16px; }
+.settings-menu__title { margin: 0; font: 400 clamp(30px, 1.8vw + 16px, 44px)/1.05 var(--accent-font); color: var(--text); text-shadow: 0 2px 14px rgb(0 0 0 / 0.7); animation: co-reveal 280ms var(--ease-land, ease-out); }
+.settings-menu__title--danger { color: var(--blood-text); }
+.settings-menu__lede { max-width: 62ch; margin: 0; font-size: 15px; line-height: 1.6; color: var(--text-soft); }
+.settings-menu__frame { display: inline-block; padding: 4px; border: 1px solid var(--gold); box-shadow: 0 6px 18px rgb(0 0 0 / 0.5); }
+.settings-menu__frame .portrait--lg { width: 132px; height: 132px; }
+.settings__portrait { align-items: flex-start; gap: 22px; flex-wrap: wrap; }
+.settings__portrait-text { display: flex; flex-direction: column; gap: 14px; flex: 1; min-width: 220px; }
+.settings-menu__danger { display: flex; flex-direction: column; gap: 14px; max-width: 62ch; padding: 18px 20px; border: 1px solid color-mix(in srgb, var(--blood) 60%, transparent); background: color-mix(in srgb, var(--blood) 8%, transparent); }
+.settings-menu .split { gap: 24px; }
+/* One group of the campaign form's fields at a time; the hidden ones stay in the form. */
+.form__group:not([hidden]) { display: contents; }
+
+@media (max-width: 980px) {
+  .settings-menu { grid-template-columns: minmax(0, 1fr); }
+  .co__tab.settings-menu__tab { min-width: 0; padding: 12px 14px; }
+  .settings-menu__hint { display: none; }
+  .settings-menu__tab--danger { margin-top: 0; border-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .settings-menu__title { animation: none; } }
+
+/* ---------- New campaign, as a GM's tome (pages/CampaignCreatePage.jsx) ----------
+   The first step picks a tome like a game's mode select: two illustrated cards. The Adventure
+   Paths are a book (BookSpread). The details are an open spread: the form on the left page,
+   the campaign's title page on the right. */
+.tome-choice { display: flex; flex-direction: column; gap: 16px; max-width: 860px; margin: 0 auto; }
+.tome-choice .kind-choice { gap: 16px; }
+.kind-card.tome-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  gap: 10px;
+  min-height: 400px;
+  justify-content: flex-end;
+  padding: 24px 24px 22px;
+  border-color: var(--line);
+  background: linear-gradient(180deg, var(--panel) 0%, var(--bg-deep) 100%);
+  box-shadow: 0 14px 34px rgb(0 0 0 / 0.45), inset 0 0 0 3px var(--bg), inset 0 0 0 4px var(--line-faint);
+  transition: border-color 0.25s, box-shadow 0.25s, translate 0.25s var(--ease-land, ease-out);
+}
+/* The art fills the top of the card and fades into the page below it. */
+.tome-card__art { position: absolute; inset: 0 0 auto; z-index: -1; width: 100%; height: 62%; object-fit: cover; opacity: 0.55; mask-image: linear-gradient(#000 35%, transparent); transition: opacity 0.3s, scale 0.6s var(--ease-land, ease-out); }
+.tome-card__emblem { display: grid; place-items: center; width: 58px; height: 58px; margin-bottom: 4px; border: 1px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, var(--panel-raised), var(--bg-deep) 80%); color: var(--gold); box-shadow: 0 6px 16px rgb(0 0 0 / 0.6); }
+.tome-card .kind-card__title { font: 400 34px/1 var(--accent-font); letter-spacing: 0; text-transform: none; color: var(--text); text-shadow: 0 2px 12px rgb(0 0 0 / 0.8); }
+.tome-card__gets { display: flex; flex-direction: column; gap: 4px; padding-top: 10px; border-top: 1px solid var(--line-soft); font-size: 14px; color: var(--text-muted); }
+.tome-card__gets span::before { content: ''; display: inline-block; width: 6px; height: 6px; margin: 0 10px 2px 2px; transform: rotate(45deg); border: 1px solid var(--bronze); }
+.tome-card__pick { align-self: flex-start; margin-top: 6px; font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--bronze); }
+@media (hover: hover) {
+  .kind-card.tome-card:hover { border-color: var(--bronze); translate: 0 -3px; }
+  .tome-card:hover .tome-card__art { opacity: 0.75; scale: 1.03; }
+}
+.kind-card.tome-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.kind-card.tome-card[aria-checked='true'] { border-color: var(--gold); background: linear-gradient(180deg, var(--panel) 0%, var(--bg-deep) 100%); box-shadow: 0 14px 34px rgb(0 0 0 / 0.45), 0 0 0 1px var(--gold), 0 8px 30px color-mix(in srgb, var(--gold) 20%, transparent); }
+.tome-card[aria-checked='true'] .tome-card__art { opacity: 0.8; }
+.tome-card[aria-checked='true'] .tome-card__gets span::before { border-color: var(--gold); background: var(--gold); }
+.tome-card[aria-checked='true'] .tome-card__pick { color: var(--gold); }
+.tome-choice__go { align-self: center; min-width: min(100%, 340px); }
+
+/* The Adventure Path's leaf. */
+.book__leaf .path-card__art { margin: 4px 0; border: 1px solid var(--line); }
+.path-leaf__synopsis { max-width: 62ch; margin: 6px 0 0; font-size: 16px; line-height: 1.7; color: var(--text-soft); }
+.path-leaf__synopsis::first-letter { float: left; margin: 5px 3px 0 0; font: 400 3.1em/0.8 var(--accent-font); color: var(--gold); }
+.path-leaf__note { margin: 0; }
+
+/* The details: an open book. */
+.tome .split { gap: 0; }
+.tome .split__col {
+  position: relative;
+  padding: 26px clamp(18px, 2.5vw, 34px);
+  border: 1px solid var(--line);
+  background: radial-gradient(ellipse 120% 70% at 50% 0%, var(--panel-warm) 0%, var(--panel-mid) 55%, var(--panel-deep) 100%);
+  box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px var(--line-faint), 0 10px 30px rgb(0 0 0 / 0.45);
+}
+.tome .split__col::before { content: ''; position: absolute; top: 9px; left: 9px; width: 22px; height: 22px; border: 0 solid var(--bronze); border-top-width: 1px; border-left-width: 1px; opacity: 0.7; pointer-events: none; }
+@media (min-width: 900px) {
+  .tome .split { flex-direction: row; align-items: stretch; }
+  .tome .split__col { flex: 1; }
+  /* The spine: the two pages meet in a shadowed fold. */
+  .tome .split__col:first-child { border-right: 0; box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px var(--line-faint), inset -26px 0 30px -18px rgb(0 0 0 / 0.75), 0 10px 30px rgb(0 0 0 / 0.45); }
+  .tome .split__col:last-child { border-left: 1px solid var(--line-soft); box-shadow: inset 0 0 0 4px var(--bg), inset 0 0 0 5px var(--line-faint), inset 26px 0 30px -18px rgb(0 0 0 / 0.75), 0 10px 30px rgb(0 0 0 / 0.45); }
+}
+@media (max-width: 899px) { .tome .split { gap: 12px; } }
+@media (prefers-reduced-motion: reduce) { .kind-card.tome-card, .tome-card__art { transition: none; } }

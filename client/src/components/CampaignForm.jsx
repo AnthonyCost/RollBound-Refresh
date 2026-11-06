@@ -53,7 +53,7 @@ function BooksField({ books, onChange }) {
  * Path), so the form can say they're only a starting point: { from, backstory,
  * cover (a File) }. Nothing is saved until the form is submitted.
  */
-export default function CampaignForm({ initial, prefill, submitLabel, onSubmit, children }) {
+export default function CampaignForm({ initial, prefill, submitLabel, onSubmit, children, panel = null }) {
   const [name, setName] = useState(initial?.name ?? '');
   const [partyLevel, setPartyLevel] = useState(initial?.partyLevel ?? 1);
   const [backstory, setBackstory] = useState(initial?.backstory ?? prefill?.backstory ?? '');
@@ -71,6 +71,9 @@ export default function CampaignForm({ initial, prefill, submitLabel, onSubmit, 
     return () => URL.revokeObjectURL(url);
   }, [cover, initial?.coverUrl]);
 
+  // panel shows one group of fields (Settings' sections); the others stay mounted, hidden, so their edits are kept and saved together.
+  const shows = (group) => !panel || panel === group;
+
   const submit = async (e) => {
     e.preventDefault();
     setErrors([]);
@@ -86,6 +89,7 @@ export default function CampaignForm({ initial, prefill, submitLabel, onSubmit, 
   return (
     <div className="split">
       <form className="split__col form" onSubmit={submit}>
+        <div className="form__group" hidden={!shows('details')}>
         <label className="form-field">
           <span>Title</span>
           <input value={name} required maxLength={NAME_MAX} onChange={(e) => setName(e.target.value)} placeholder="The Gilded Crypt" />
@@ -100,8 +104,13 @@ export default function CampaignForm({ initial, prefill, submitLabel, onSubmit, 
           <small className="muted italic">The level your heroes are at. Raise it as the party levels up.</small>
         </label>
 
-        <BooksField books={books} onChange={setBooks} />
+        </div>
 
+        <div className="form__group" hidden={!shows('books')}>
+          <BooksField books={books} onChange={setBooks} />
+        </div>
+
+        <div className="form__group" hidden={!shows('story')}>
         <label className="form-field">
           <span>Backstory</span>
           {prefill?.backstory && backstory === prefill.backstory && (
@@ -120,10 +129,14 @@ export default function CampaignForm({ initial, prefill, submitLabel, onSubmit, 
           <small className="muted counter">{backstory.length}/{BACKSTORY_MAX}</small>
         </label>
 
+        </div>
+
+        <div className="form__group" hidden={!shows('cover')}>
         <ImagePicker label="Cover image" hint="wide images work best" value={cover} currentUrl={initial?.coverUrl ?? null} onChange={setCover} />
         {prefill?.cover && cover.file === prefill.cover && (
           <p className="prefill-note">This is {prefill.from}'s cover. Keep it, choose your own, or remove it.</p>
         )}
+        </div>
 
         <FormErrors errors={errors} />
         <div className="btn-row">

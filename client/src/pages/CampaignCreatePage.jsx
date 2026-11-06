@@ -5,15 +5,39 @@ import { useCampaignService } from '../state/campaignService.js';
 import { adventureCover, adventureCoverFile } from '../state/adventureCovers.js';
 import PageShell from '../components/PageShell.jsx';
 import CampaignForm from '../components/CampaignForm.jsx';
+import BookSpread from '../components/BookSpread.jsx';
+import BookLeaf, { wide } from '../builder/BookLeaf.jsx';
+import Icon from '../components/Icon.jsx';
+import adventureArt from '../assets/art/campaign-kind-adventure.webp';
+import homebrewArt from '../assets/art/campaign-kind-homebrew.webp';
 
 const KINDS = [
   {
     id: 'adventure-path',
     title: 'Adventure Path',
-    text: "Run one of Paizo's published campaigns. We'll fill in its premise, starting level and cover for you to adjust.",
+    text: "Run one of Paizo's published campaigns.",
+    gets: ['A written story, start to finish', 'Premise and level filled in'],
+    icon: 'book',
+    art: adventureArt,
   },
-  { id: 'homebrew', title: 'Homebrew', text: 'Start from a blank page with your own world and story.' },
+  {
+    id: 'homebrew',
+    title: 'Homebrew',
+    text: 'Start from a blank page with your own world and story.',
+    gets: ['Your world, your rules', 'Everything left for you to write'],
+    icon: 'lore',
+    art: homebrewArt,
+  },
 ];
+
+// The book of Adventure Paths: what's coming, then by the rules they were written for.
+const PATH_SECTIONS = [
+  { key: 'upcoming', tab: 'Coming soon', name: 'Coming soon' },
+  { key: 'remastered', tab: 'Remastered', name: 'Remastered' },
+  { key: 'pre', tab: 'Pre-Remaster', name: 'Pre-Remaster' },
+];
+const sectionOfPath = (p) => (p.status === 'upcoming' ? 'upcoming' : p.preRemaster ? 'pre' : 'remastered');
+const BY_SECTION = PATH_SECTIONS.flatMap(({ key }) => ADVENTURE_PATHS.filter((p) => sectionOfPath(p) === key));
 
 const STEP_INFO = {
   kind: { title: 'What are you running?', note: 'An Adventure Path is a campaign Paizo has written and published; homebrew is one you make yourself.' },
@@ -63,7 +87,8 @@ export default function CampaignCreatePage() {
   const campaigns = useCampaignService();
   const navigate = useNavigate();
   const [kind, setKind] = useState(null);
-  const [chosen, setChosen] = useState(null);
+  // The path open in the book: on wide screens the newest opens to start with.
+  const [chosen, setChosen] = useState(() => (wide() ? BY_SECTION[0]?.slug ?? null : null));
   const [path, setPath] = useState(null);
   const [step, setStep] = useState('kind');
   // Show only paths with this theme or edition (null: every path).
@@ -126,25 +151,31 @@ export default function CampaignCreatePage() {
       </header>
 
       {step === 'kind' && (
-        <div className="narrow">
+        <div className="tome-choice">
           <div className="kind-choice" role="radiogroup" aria-label="Kind of campaign">
             {KINDS.map((k) => (
-              <button key={k.id} type="button" role="radio" aria-checked={kind === k.id} className="kind-card" onClick={() => setKind(k.id)}>
+              <button key={k.id} type="button" role="radio" aria-checked={kind === k.id} className="kind-card tome-card" onClick={() => setKind(k.id)}>
+                <img className="tome-card__art" src={k.art} alt="" />
+                <span className="tome-card__emblem" aria-hidden="true"><Icon name={k.icon} size={30} /></span>
                 <span className="kind-card__title">{k.title}</span>
                 <span className="kind-card__text">{k.text}</span>
+                <span className="tome-card__gets">
+                  {k.gets.map((g) => <span key={g}>{g}</span>)}
+                </span>
+                <span className="tome-card__pick" aria-hidden="true">{kind === k.id ? 'Chosen' : 'Choose'}</span>
               </button>
             ))}
           </div>
           <button
             type="button"
-            className="btn btn--blood"
+            className="btn btn--blood tome-choice__go"
             disabled={!kind}
             onClick={() => {
               if (kind === 'homebrew') setPath(null);
               go(kind === 'homebrew' ? 'details' : 'path');
             }}
           >
-            Continue
+            {kind ? `Continue with ${KINDS.find((k) => k.id === kind).title}` : 'Choose one to continue'}
           </button>
         </div>
       )}
@@ -167,52 +198,69 @@ export default function CampaignCreatePage() {
               ))}
           </div>
           {theme && <p className="rule-note theme-filter__about">{(THEMES[theme] ?? EDITIONS[theme]).about}</p>}
-          <ul className="paths" role="radiogroup" aria-label="Adventure Paths">
-            {ADVENTURE_PATHS.filter(matches).map((p) => (
-              <li key={p.slug}>
-                <button type="button" role="radio" aria-checked={chosen === p.slug} className="path-card" onClick={() => setChosen(p.slug)}>
-                  <PathArt path={p} />
-                  <span className="path-card__body">
-                    {/* Without a cover, the title card already shows the name. */}
-                    {adventureCover(p.slug) && <span className="path-card__name">{p.name}</span>}
-                    <span className="path-card__meta">
-                      Levels {p.levels[0]}–{p.levels[1]} · {p.setting}
-                    </span>
+          <BookSpread
+            items={BY_SECTION.filter(matches)}
+            total={ADVENTURE_PATHS.length}
+            noun="Adventure Paths"
+            sections={PATH_SECTIONS}
+            sectionOf={sectionOfPath}
+            tabsOnTop
+            open={selected && matches(selected) ? selected : null}
+            onOpen={(p) => setChosen(p.slug)}
+            resetKey={theme ?? ''}
+            filtered={Boolean(theme)}
+            meta={(p) => <span>Levels {p.levels[0]}–{p.levels[1]}</span>}
+            emptyText="No Adventure Path has that theme."
+            blankIcon="book"
+            blank={
+              <>
+                <p className="book__blank-title">The Adventure Paths</p>
+                <p className="rule-note">Open one to read its premise, then run it.</p>
+              </>
+            }
+            leaf={selected && (
+              <BookLeaf
+                key={selected.slug}
+                eyebrow={`${selected.setting} · Levels ${selected.levels[0]}–${selected.levels[1]}`}
+                title={selected.name}
+                facts={[
+                  ['Levels', `${selected.levels[0]}–${selected.levels[1]}`],
+                  ['Setting', selected.setting],
+                  [selected.status === 'upcoming' ? 'Comes out' : 'Released', longDate(selected.released)],
+                ]}
+                notes={
+                  <>
+                    {adventureCover(selected.slug) && <PathArt path={selected} />}
                     <span className="path-card__tags">
-                      {pathThemes(p).map((t) => (
+                      {pathThemes(selected).map((t) => (
                         <span key={t} className={`tag tag--theme tag--theme-${t}`} title={THEMES[t].about}>{THEMES[t].label}</span>
                       ))}
-                      {p.status === 'upcoming' && <span className="tag tag--warn">Coming soon</span>}
-                      {p.edition && <span className="tag">{p.edition}</span>}
-                      {p.mythic && <span className="tag">Mythic</span>}
-                      {p.preRemaster && <span className="tag">Pre-Remaster</span>}
+                      {selected.status === 'upcoming' && <span className="tag tag--warn">Coming soon</span>}
+                      {selected.edition && <span className="tag">{selected.edition}</span>}
+                      {selected.mythic && <span className="tag">Mythic</span>}
+                      {selected.preRemaster && <span className="tag">Pre-Remaster</span>}
                     </span>
-                    {chosen === p.slug && (
-                      <span className="path-card__more" aria-live="polite">
-                        <span className="path-card__synopsis">{p.synopsis}</span>
-                        {pathNotes(p).map((n) => (
-                          <span key={n} className="path-card__note">{n}</span>
-                        ))}
-                      </span>
-                    )}
-                  </span>
+                    <p className="path-leaf__synopsis">{selected.synopsis}</p>
+                    {pathNotes(selected).map((n) => <p key={n} className="rule-note path-leaf__note">{n}</p>)}
+                  </>
+                }
+                onClose={() => setChosen(null)}
+              >
+                <button
+                  type="button"
+                  className="btn btn--blood"
+                  onClick={() => {
+                    setPath(selected);
+                    go('details');
+                  }}
+                >
+                  Run {selected.name}
                 </button>
-              </li>
-            ))}
-          </ul>
-          <div className="btn-row path-actions">
+              </BookLeaf>
+            )}
+          />
+          <div className="btn-row">
             <button type="button" className="btn" onClick={() => go('kind')}>Back</button>
-            <button
-              type="button"
-              className="btn btn--blood btn--grow"
-              disabled={!selected}
-              onClick={() => {
-                setPath(selected);
-                go('details');
-              }}
-            >
-              {selected ? `Run ${selected.name}` : 'Choose an Adventure Path'}
-            </button>
           </div>
         </>
       )}
@@ -221,6 +269,7 @@ export default function CampaignCreatePage() {
         (path && cover.slug !== path.slug ? (
           <p className="muted italic center">Unrolling {path.name}…</p>
         ) : (
+          <div className="tome">
           <CampaignForm
             key={path?.slug ?? 'homebrew'}
             initial={path ? { name: path.name, partyLevel: path.levels[0] } : undefined}
@@ -230,6 +279,7 @@ export default function CampaignCreatePage() {
           >
             <button type="button" className="btn" onClick={() => go(path ? 'path' : 'kind')}>Back</button>
           </CampaignForm>
+          </div>
         ))}
     </PageShell>
   );
