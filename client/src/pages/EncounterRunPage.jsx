@@ -516,7 +516,7 @@ export default function EncounterRunPage() {
         <h1 className="title center">{encounter.name}</h1>
         <p className="muted center">
           {total} creature{total === 1 ? '' : 's'} and {campaign.characters.length} character{campaign.characters.length === 1 ? '' : 's'}.
-          Everyone rolls initiative (d20 + Perception); you can change any roll afterwards.
+          Everyone rolls initiative (d20 + Perception); you can change any roll afterward.
         </p>
         <FormErrors errors={errors} />
         <button type="button" className="btn btn--blood" disabled={busy || !total} onClick={start}>

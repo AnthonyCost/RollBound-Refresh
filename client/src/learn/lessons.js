@@ -69,14 +69,14 @@ export const TOPICS = [
         body: ['The game moves between three paces, and the GM says which one you are in.'],
         list: [
           'Encounters: fights and tense moments, played in rounds of about 6 seconds.',
-          'Exploration: travelling, searching and talking, measured in minutes and hours.',
+          'Exploration: traveling, searching and talking, measured in minutes and hours.',
           'Downtime: days or weeks between adventures, for crafting, earning money and training.',
         ],
       },
       {
         title: 'What you need',
         body: ['A set of polyhedral dice (d4, d6, d8, d10, d12, d20), a character sheet, and the rules. The full rules are free to read on Archives of Nethys, Paizo’s official online reference.'],
-        tip: { text: 'RollBound keeps your character sheet and does the maths for you.', to: '/create', label: 'Create a character' },
+        tip: { text: 'RollBound keeps your character sheet and does the math for you.', to: '/create', label: 'Create a character' },
       },
     ],
   },
@@ -121,7 +121,7 @@ export const TOPICS = [
         body: ['At level 1, your maximum Hit Points are your ancestry’s HP plus your class’s HP plus your Constitution modifier. Your class trains you in some skills, plus one more for each point of your Intelligence modifier. You start with 15 gold pieces for weapons, armor and an adventurer’s pack.'],
       },
       {
-        title: 'Levelling up',
+        title: 'Leveling up',
         body: ['Heroes level up every 1,000 experience points, or when the GM decides (milestones). Each level brings more Hit Points and new feats. At levels 5, 10, 15 and 20 you boost four attributes.'],
       },
       {
@@ -157,7 +157,7 @@ export const TOPICS = [
       },
       {
         title: 'Teamwork and positioning',
-        body: ['If you and an ally are on opposite sides of an enemy, it is flanked and off-guard to both of you: −2 to its AC. Cover makes you harder to hit, and helping an ally with Aid can give them a bonus. Good positioning wins fights.'],
+        body: ['If you and an ally are on opposite sides of an enemy, it is flanked and off-guard to both of you: −2 to its AC. Cover makes you harder to hit, and helping an ally with Aid can give them a bonus.'],
       },
       {
         title: 'Conditions',
@@ -169,8 +169,8 @@ export const TOPICS = [
         title: 'Dying and Hero Points',
         body: [
           'At 0 Hit Points you fall unconscious and are dying 1, or dying 2 if a critical hit dropped you. At the start of each turn you make a flat check against DC 10 + your dying value to recover. Reach dying 4 and your hero dies.',
-          'When you recover, you become wounded, which makes the next fall more dangerous. Healing from an ally gets you back up straight away.',
-          'Hero Points are your safety net. You usually start each session with 1. Spend one to reroll a check, or spend them all when you would die to stabilise at 0 HP instead.',
+          'When you recover, you become wounded, which makes the next fall more dangerous. Healing from an ally gets you back up right away.',
+          'Hero Points are your safety net. You usually start each session with 1. Spend one to reroll a check, or spend them all when you would die to stabilize at 0 HP instead.',
         ],
         more: search('dying'),
       },
@@ -180,11 +180,11 @@ export const TOPICS = [
     slug: 'exploration',
     label: 'Skills & Exploration',
     icon: 'map',
-    blurb: 'Skills, travelling between fights, resting and downtime.',
+    blurb: 'Skills, traveling between fights, resting and downtime.',
     lessons: [
       {
         title: 'Skills',
-        body: ['Sixteen skills cover what heroes do outside combat, plus Lore skills for narrow topics like Sailing Lore or Academia Lore. Some favourites:'],
+        body: ['Sixteen skills cover what heroes do outside combat, plus Lore skills for narrow topics like Sailing Lore or Academia Lore. Some favorites:'],
         list: ['Recall Knowledge: Arcana, Nature, Religion or Society to learn a creature’s weaknesses.', 'Demoralize: Intimidation to make a foe frightened.', 'Treat Wounds: Medicine to heal an ally over 10 minutes.', 'Climb, Swim, Force Open: Athletics.', 'Hide and Sneak: Stealth.'],
         more: `${AON}/Skills.aspx`,
       },
@@ -196,7 +196,7 @@ export const TOPICS = [
       },
       {
         title: 'Resting',
-        body: ['A full night’s rest (8 hours) restores Hit Points equal to your Constitution modifier (minimum 1) times your level. Daily preparations afterwards refresh your spells and other daily abilities.'],
+        body: ['A full night’s rest (8 hours) restores Hit Points equal to your Constitution modifier (minimum 1) times your level. Daily preparations afterward refresh your spells and other daily abilities.'],
       },
       {
         title: 'Downtime',
@@ -289,7 +289,7 @@ export const TOPICS = [
             ['Extreme', '160', '+40'],
           ],
         },
-        tip: { text: 'The encounter builder in each campaign does this maths from your party and the Bestiary.', to: '/campaigns', label: 'Your campaigns' },
+        tip: { text: 'The encounter builder in each campaign does this math from your party and the Bestiary.', to: '/campaigns', label: 'Your campaigns' },
         more: `${AON}/Rules.aspx?ID=2716`,
       },
       {

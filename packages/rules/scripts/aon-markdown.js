@@ -22,7 +22,7 @@ export function inline(text) {
 
 /**
  * Turns a run of stat block markdown into paragraphs, lists and rules. Lines that
- * continue a list item (a spell rank's spells) or a labelled field (Languages, then
+ * continue a list item (a spell rank's spells) or a labeled field (Languages, then
  * the languages) are joined to it.
  */
 export function blocks(md) {

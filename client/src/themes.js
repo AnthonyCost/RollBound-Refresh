@@ -73,7 +73,7 @@ export const THEMES = [
   },
   {
     id: 'judgement',
-    name: 'Judgement',
+    name: 'Judgment',
     blurb: 'Black plate and gold filigree, electric-blue and red gems, white light.',
     browser: '#07080b',
   },

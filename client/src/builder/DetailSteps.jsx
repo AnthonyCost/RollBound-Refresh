@@ -445,7 +445,7 @@ export function FeatsStep({ build, update, data }) {
             blank={
               <>
                 <p className="book__blank-title">Choose your feats</p>
-                <p className="rule-note">Open a feat from the index to read it here. Each tab is one of your feat slots. Feats you don't meet the prerequisites for are greyed out.</p>
+                <p className="rule-note">Open a feat from the index to read it here. Each tab is one of your feat slots. Feats you don't meet the prerequisites for are grayed out.</p>
               </>
             }
           />
@@ -702,7 +702,7 @@ const isArmoryGear = (i) => i.kind === 'gear' || i.kind === 'consumable';
 /**
  * Gear as a merchant's ledger: your pack and purse above, then a book of armor, shields
  * and weapons. Open an item to see its numbers, then buy it (armor and shields replace
- * the one you have) or sell it back. The first weapon is the one your Turn screen uses.
+ * the one you have) or sell it back. The first weapon is the one the Combat tab uses.
  */
 export function GearStep({ build, update, data }) {
   const { cls } = lookup(build, data);
@@ -806,7 +806,7 @@ export function GearStep({ build, update, data }) {
         ) : (
           <p className="muted italic" style={{ margin: 0 }}>Nothing yet. You have 15 gp to spend on armor, a shield, weapons, gear and consumables.</p>
         )}
-        {build.weapons.length > 1 && <p className="rule-note" style={{ margin: 0 }}>★ Your primary weapon is the one your Turn screen strikes with.</p>}
+        {build.weapons.length > 1 && <p className="rule-note" style={{ margin: 0 }}>★ Your primary weapon is the one you Strike with on the Combat tab.</p>}
       </section>
 
       <div className="filters" role="search">

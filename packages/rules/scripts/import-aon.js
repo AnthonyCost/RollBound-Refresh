@@ -98,7 +98,7 @@ function toHtml(markdown, { body = true } = {}) {
     .join('\n');
 }
 
-/** A bold-labelled field from the markdown header, e.g. field(doc, 'Usage'). */
+/** A bold-labeled field from the markdown header, e.g. field(doc, 'Usage'). */
 const field = (doc, label) => {
   const m = new RegExp(`\\*\\*${label}\\*\\*\\s*([^\\n]+)`).exec(doc.markdown ?? '');
   return m ? m[1].replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').trim() || null : null;

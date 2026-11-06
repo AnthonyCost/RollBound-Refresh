@@ -1,6 +1,6 @@
 // Builds the armory in armory/ from the Archives of Nethys: every piece of equipment
 // (weapons, armor, shields, and every other item category), as AoN lists it with
-// legacy items hidden: an item that has a Remaster version is left out in favour of it.
+// legacy items hidden: an item that has a Remaster version is left out in favor of it.
 // Variants ("Healing Potion (Minor)") stay on their parent's page, as on AoN.
 //   npm run data:armory --workspace @rollbound/rules   (add --refresh to re-download)
 // Writes armory/index.json (categories), armory/items.json (what lists and filters

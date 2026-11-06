@@ -54,4 +54,4 @@ Tests: `packages/rules/test/inventory.test.js`, "shield damage" (full HP, breaki
 - **The PDF export shows full HP.** `client/src/sheet/characterSheetPdf.js` fills the sheet's shield HP box with the maximum; it should use `shieldState`'s current HP.
 - **Destroyed shields stay equipped.** A destroyed shield could be unequipped automatically, or flagged on the Inventory tab.
 - **Repairs are free.** Repairing takes the Repair activity (a Crafting check, 10 minutes) in the rules; the tracker just adds HP. A note or a roll could come later.
-- **Shield runes and special shields.** Reinforcing runes and shields with their own HP, Hardness or abilities (such as a tower shield's Take Cover) aren't modelled; `shieldState` reads only the shield's base numbers.
+- **Shield runes and special shields.** Reinforcing runes and shields with their own HP, Hardness or abilities (such as a tower shield's Take Cover) aren't modeled; `shieldState` reads only the shield's base numbers.

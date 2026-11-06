@@ -53,7 +53,7 @@ function targetsOf(s) {
  * Proficiency increases a feature gives one class: { increases: [{ target, rank }],
  * flags: [text] }. A flag is a sentence that talks about a proficiency rank but
  * couldn't be read with confidence (limited to a weapon group, several ranks at once,
- * or no recognisable target), for the report.
+ * or no recognizable target), for the report.
  */
 export function proficiencyIncreases(html, className, classNames) {
   const text = plain(sectionFor(html, className, classNames));

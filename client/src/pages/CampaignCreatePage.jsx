@@ -70,7 +70,7 @@ function PathArt({ path }) {
 function pathNotes(path) {
   return [
     path.status === 'upcoming' && `Comes out ${longDate(path.released)}.`,
-    path.levels[0] > 1 && `It starts at level ${path.levels[0]}. RollBound's builder makes level 1 characters for now, so you'll level them up by hand.`,
+    path.levels[0] > 1 && `It starts at level ${path.levels[0]}. Players can start their characters at that level with the builder's Level step.`,
     path.mythic && "It uses mythic rules, which RollBound doesn't track yet.",
     path.preRemaster && 'It was written for the original Second Edition rules, before the Remaster. It runs fine with the Remastered rules; a few spell and condition names have changed.',
     path.sequelTo && `It continues the story of ${adventurePath(path.sequelTo).name}.`,

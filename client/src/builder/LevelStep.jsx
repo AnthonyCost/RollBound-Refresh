@@ -326,7 +326,7 @@ function LevelBook({ noun, items, tab, startOpen, marked, blocked, meta, leaf, b
         blank={
           <>
             <p className="book__blank-title">{blank}</p>
-            <p className="rule-note">Open an entry from the index to read it here. Greyed-out entries need something you don’t have yet.</p>
+            <p className="rule-note">Open an entry from the index to read it here. Grayed-out entries need something you don’t have yet.</p>
           </>
         }
       />

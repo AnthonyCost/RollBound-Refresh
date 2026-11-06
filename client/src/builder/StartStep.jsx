@@ -67,7 +67,7 @@ export default function StartStep({ onCustom, onPregen }) {
       </li>
       <li>
         <button type="button" className="start-choice" disabled={!PREGENS.length} onClick={() => setBrowsing(true)}>
-          {/* Framed on the three heroes, centred on the swordsman. */}
+          {/* Framed on the three heroes, centered on the swordsman. */}
           <img className="start-choice__art" src={iconicArt} alt="" style={{ objectPosition: '50% 20%' }} />
           <span className="start-choice__text">
             <span className="start-choice__name">Take an iconic hero</span>

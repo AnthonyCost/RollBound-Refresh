@@ -123,7 +123,7 @@ export default function CampaignsPage() {
           <section className="camp-section" aria-labelledby="hosting-title">
             <div className="camp-section__head">
               <h2 id="hosting-title">Campaigns I'm Hosting</h2>
-              <p className="rule-note">You're the Game Master. Share each one's invite code from its page to gather players.</p>
+              <p className="rule-note">You're the Game Master. Share each one's invite code, from its Settings, to gather players.</p>
             </div>
             {data.running.length ? (
               <ul className="camp-grid">

@@ -31,7 +31,7 @@ export const letterOf = (item) => {
  * In the character builder, entries open with onOpen(item) instead of a link, and the
  * page is kept on screen rather than in the address (resetKey: change it to go back to
  * the first page, e.g. when a filter changes). marked(item) shows the chosen diamond;
- * blocked(item) greys an entry out, with the reason as its tooltip. tabsOnTop runs the
+ * blocked(item) grays an entry out, with the reason as its tooltip. tabsOnTop runs the
  * tabs across the top, for sections with names rather than letters. short leaves out the
  * tabs and page turner, for an index that always fits one page. heading replaces the
  * running head's list of sections.

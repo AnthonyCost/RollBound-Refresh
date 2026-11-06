@@ -1,6 +1,6 @@
 // Builds the rules glossary in glossary/ from the Archives of Nethys: the rulebooks' rules
 // sections, conditions and traits, and the basic, skill and specialty actions from the core
-// books. Legacy entries that have a Remaster version are left out in favour of it, and the
+// books. Legacy entries that have a Remaster version are left out in favor of it, and the
 // Remaster entry keeps its old name ("Off-Guard, formerly Flat-Footed"), so either finds it.
 //   npm run data:glossary --workspace @rollbound/rules   (add --refresh to re-download)
 // Writes glossary/index.json (kinds and counts), glossary/entries.json (what lists and search

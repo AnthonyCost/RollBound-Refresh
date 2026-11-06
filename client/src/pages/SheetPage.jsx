@@ -326,7 +326,7 @@ function describe(key, character, opts, { shield, currentHp, maxHp, prepared, sp
             const d = describeCondition(c);
             return [d.name, d.summary];
           }),
-          empty: 'No conditions right now. Set them on the Turn tab during an encounter.',
+          empty: 'No conditions right now. Set them on the Combat tab during an encounter.',
         },
       ],
     };
