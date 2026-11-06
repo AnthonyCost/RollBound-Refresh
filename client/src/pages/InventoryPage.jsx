@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   COINS,
@@ -44,6 +44,15 @@ const savedLabel = { waiting: 'Saving…', saving: 'Saving…', saved: 'Saved', 
 export default function InventoryPage() {
   const { character, baseCharacter, readOnly, inventory, setInventory, inventoryStatus, portraitUrl, rollDamage, rollHealing } = useTable();
   const rules = useRules(GEAR_TYPES);
+  // The pack grid's column count (it changes with the screen), so the empty sockets always finish its last row.
+  const [cols, setCols] = useState(5);
+  const gridRef = useCallback((grid) => {
+    if (!grid) return undefined;
+    const measure = () => setCols(getComputedStyle(grid).gridTemplateColumns.split(' ').length || 1);
+    const observer = new ResizeObserver(measure);
+    observer.observe(grid);
+    return () => observer.disconnect();
+  }, []);
   // Until the first edit, the builder's gear and leftover gold; saved on the first change.
   const starting = useMemo(() => (rules && !rules.error ? startingInventory(baseCharacter, rules) : null), [baseCharacter, rules]);
   // Every equipped flag spelled out, including for inventories saved before equipping.
@@ -87,7 +96,8 @@ export default function InventoryPage() {
   const ORDER = ['itemWeapons', 'itemArmor', 'itemShields', 'itemConsumables', 'itemAlchemicalItems'];
   const rank = (i) => (ORDER.includes(iconFor(i)) ? ORDER.indexOf(iconFor(i)) : ORDER.length);
   const bag = [...pack].sort((x, y) => rank(x) - rank(y) || iconFor(x).localeCompare(iconFor(y)));
-  const sockets = Math.max(20, Math.ceil(bag.length / 5) * 5) - bag.length;
+  // About 20 tiles (9 on a phone's three columns), rounded up to whole rows.
+  const sockets = Math.ceil(Math.max(cols <= 3 ? 9 : 20, bag.length) / cols) * cols - bag.length;
 
   const selected = inv.items.find((i) => i.key === selectedKey) ?? null;
   const select = (key) => setSelectedKey((k) => (k === key ? null : key));
@@ -140,7 +150,7 @@ export default function InventoryPage() {
 
         <div className="inv__bag" aria-labelledby="pack-title">
           <h2 id="pack-title" className="inv__title">Pack</h2>
-          <ul className="inv__grid">
+          <ul className="inv__grid" ref={gridRef}>
             {bag.map((item) => (
               <li key={item.key}>
                 <ItemTile item={item} icon={iconFor(item)} selected={selected?.key === item.key} onSelect={() => select(item.key)} />

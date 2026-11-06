@@ -160,6 +160,10 @@ ALTER TABLE encounters ADD COLUMN IF NOT EXISTS actions JSONB NOT NULL DEFAULT '
 
 -- The color theme each person picked in Account settings (client/src/themes.js).
 ALTER TABLE users ADD COLUMN IF NOT EXISTS theme TEXT NOT NULL DEFAULT 'infernal';
+-- Frigid was replaced by Cosmic: anyone who had it moves to Cosmic.
+UPDATE users SET theme = 'cosmic' WHERE theme = 'frigid';
+-- Retro became Beacon, then Lunar, then Alchemist, then Aurora.
+UPDATE users SET theme = 'aurora' WHERE theme IN ('retro', 'beacon', 'lunar', 'alchemist');
 
 -- Forgot-password links: only a SHA-256 of each token is kept, each works once, for 30 minutes.
 CREATE TABLE IF NOT EXISTS password_resets (

@@ -24,10 +24,10 @@ export const THEMES = [
     browser: '#0d0e10',
   },
   {
-    id: 'frigid',
-    name: 'Frigid',
-    blurb: 'Polar night under the aurora: ice-white, frost blue and northern-lights green.',
-    browser: '#080d16',
+    id: 'cosmic',
+    name: 'Cosmic',
+    blurb: 'Deep space under a nebula: magenta and violet clouds, cyan starlight and a sky of stars.',
+    browser: '#06040f',
   },
   {
     id: 'obscure',
@@ -100,6 +100,18 @@ export const THEMES = [
     name: 'Briar',
     blurb: 'A sleeping kingdom’s briar-rose keep: rosewood, dusty rose, antique silver and bone.',
     browser: '#140c0f',
+  },
+  {
+    id: 'aurora',
+    name: 'Aurora',
+    blurb: 'The northern lights over a polar night: aurora green, teal, violet and a pink fringe.',
+    browser: '#050a14',
+  },
+  {
+    id: 'pastel',
+    name: 'Pastel',
+    blurb: 'Easter eggs: bright bubblegum, mint, lemon, sky blue and lilac on a grape dusk.',
+    browser: '#1d1730',
   },
 ];
 

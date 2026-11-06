@@ -22,7 +22,7 @@ import { sendEmail } from '../email.js';
 export const auth = Router();
 
 // The site's color themes (client/src/themes.js). Infernal is the default.
-const THEMES = ['infernal', 'mirage', 'gothic', 'frigid', 'obscure', 'luminary', 'radiant', 'tunic', 'ethereal', 'badge', 'traveler', 'judgement', 'atrophy', 'emblem', 'tarnished', 'briar'];
+const THEMES = ['infernal', 'mirage', 'gothic', 'cosmic', 'obscure', 'luminary', 'radiant', 'tunic', 'ethereal', 'badge', 'traveler', 'judgement', 'atrophy', 'emblem', 'tarnished', 'briar', 'aurora', 'pastel'];
 
 const toJson = (u) => ({
   id: u.id,

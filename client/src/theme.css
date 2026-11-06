@@ -175,53 +175,72 @@
   --deg-critfail: #c8414a;
 }
 
-/* Frigid: a polar night under the aurora. Deep navy ground with a green glow overhead,
-   ice-white text, frost-blue labels, glacier-blue actions and aurora-green highlights. */
-[data-theme='frigid'] {
-  --bg: #080d16;
-  --bg-deep: #05080e;
-  --glow: #0f3b3a;
-  --glow-mid: #0b1a24;
-  --panel: #0f1622;
-  --panel-hot: #102a44;
-  --panel-deep: #0b111b;
-  --panel-warm: #131d2c;
-  --panel-mid: #0e1520;
-  --panel-ember: #0f1a28;
-  --panel-raised: #1a2a40;
-  --line: #34506a;
-  --line-soft: #283f56;
-  --line-faint: #1c2d40;
-  --text: #eaf3f8;
-  --text-soft: #c8dbe6;
-  --text-muted: #8fa9bb;
-  --text-dim: #6f879a;
-  --text-bright: #f6fbfe;
-  --bronze: #a8d8f0;
-  --bronze-dark: #3a6680;
-  --gold: #7cf0b4;
-  --gold-light: #c2fadc;
-  --gold-dark: #2f9a6a;
-  --gold-deep: #14281f;
-  --gold-flare: #7cf0b4;
-  --gold-flare-dim: #3fb07c;
-  --blood: #2f6fb8;
-  --blood-text: #7fb8ec;
-  --blood-dark: #14335c;
-  --blood-top: #3d84d0;
-  --blood-glow: #2f6fb8;
-  --blood-shadow: #12304e;
-  --blood-flash: #c8e8ff;
-  --hot-shadow: #12304e;
-  --art-hi: #1a2a40;
-  --art-lo: #05080e;
-  --orb-hi: #161a24;
-  --steel-dark: #2a3646;
-  --steel-light: #52667c;
-  --deg-crit: #7cf0b4;
-  --deg-success: #a8d8f0;
-  --deg-fail: #6f879a;
-  --deg-critfail: #e2604a;
+/* Cosmic: deep space. Near-black ground under a magenta-and-violet nebula, starlight-white
+   text, nebula-cyan labels, star-gold highlights and magenta actions; stars behind the page. */
+[data-theme='cosmic'] {
+  --bg: #06040f;
+  --bg-deep: #030209;
+  --glow: #3b1458;
+  --glow-mid: #150a2a;
+  --panel: #0e0b1e;
+  --panel-hot: #24113d;
+  --panel-deep: #0a0817;
+  --panel-warm: #161130;
+  --panel-mid: #0c0a1b;
+  --panel-ember: #140c27;
+  --panel-raised: #241b48;
+  --line: #463c86;
+  --line-soft: #342c66;
+  --line-faint: #221d47;
+  --text: #eef0ff;
+  --text-soft: #cfd2f3;
+  --text-muted: #9c9fcc;
+  --text-dim: #7a7cab;
+  --text-bright: #ffffff;
+  --bronze: #7fd6ff;
+  --bronze-dark: #2c5a7a;
+  --gold: #ffe9a8;
+  --gold-light: #fff6d6;
+  --gold-dark: #b8984a;
+  --gold-deep: #1f1830;
+  --gold-flare: #ff9ff0;
+  --gold-flare-dim: #b05fc2;
+  --blood: #c43ad6;
+  --blood-text: #f07bff;
+  --blood-dark: #4d1260;
+  --blood-top: #d653e6;
+  --blood-glow: #9d2fd0;
+  --blood-shadow: #2c0a40;
+  --blood-flash: #ffb8ff;
+  --hot-shadow: #3b1458;
+  --art-hi: #2c1450;
+  --art-lo: #030209;
+  --orb-hi: #1c1236;
+  --steel-dark: #232044;
+  --steel-light: #4a4680;
+  --deg-crit: #ffe9a8;
+  --deg-success: #7fd6ff;
+  --deg-fail: #7a7cab;
+  --deg-critfail: #ff5a7a;
+}
+/* Cosmic's stars: small points of light over the page's nebula glow (the page itself only,
+   not the theme preview cards). */
+html[data-theme='cosmic'] .app {
+  background:
+    radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 27% 62%, #cfe8ff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 41% 9%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 58% 41%, #ffe9a8 50%, transparent 51%),
+    radial-gradient(1px 1px at 69% 77%, #fff 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 83% 23%, #cfe8ff 50%, transparent 51%),
+    radial-gradient(1px 1px at 91% 58%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 6% 84%, #ffd6fb 50%, transparent 51%),
+    radial-gradient(1px 1px at 35% 33%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 76% 6%, #fff 50%, transparent 51%),
+    radial-gradient(ellipse 60% 380px at 22% 0%, color-mix(in srgb, #2a4fa8 45%, transparent), transparent 70%),
+    radial-gradient(ellipse 120% 480px at 60% 0%, var(--glow) 0%, var(--glow-mid) 45%, var(--bg) 75%);
+  background-size: 360px 360px, 420px 420px, 380px 380px, 460px 460px, 340px 340px, 400px 400px, 440px 440px, 360px 360px, 300px 300px, 520px 520px, auto, auto;
+  background-color: var(--bg);
 }
 
 /* Obscure: the sky at dusk, from Secrets of the Obscure. Deep violet ground with an amethyst
@@ -827,6 +846,126 @@
   --deg-fail: #82707a;
   --deg-critfail: #e04a5a;
   --on-action: #1e0c10;
+}
+
+/* Aurora: the northern lights over a polar night. Midnight-navy ground and panels, aurora green
+   for actions (dark text on them), teal labels, violet lines, and the pink fringe of the
+   lights for highlights; curtains of green, teal and violet hang over the top of the page. */
+[data-theme='aurora'] {
+  --bg: #050a14;
+  --bg-deep: #03060d;
+  --glow: #0c3d3a;
+  --glow-mid: #0a1428;
+  --panel: #0c1424;
+  --panel-hot: #13223a;
+  --panel-deep: #09101e;
+  --panel-warm: #101a2e;
+  --panel-mid: #0b1322;
+  --panel-ember: #0f1a30;
+  --panel-raised: #1a2a46;
+  --line: #4a5aa8;
+  --line-soft: #34407a;
+  --line-faint: #1f2950;
+  --text: #eef6ff;
+  --text-soft: #cfdcef;
+  --text-muted: #94a6c4;
+  --text-dim: #7486a4;
+  --text-bright: #ffffff;
+  --bronze: #5ee8d4;
+  --bronze-dark: #1c6e66;
+  --gold: #ff8fd8;
+  --gold-light: #ffc6ec;
+  --gold-dark: #a8508c;
+  --gold-deep: #2a1430;
+  --gold-flare: #b48cff;
+  --gold-flare-dim: #7a5ac4;
+  --blood: #4cf08e;
+  --blood-text: #7cf7ae;
+  --blood-dark: #1aa860;
+  --blood-top: #7cf7ae;
+  --blood-glow: #2ed67a;
+  --blood-shadow: #0a3a26;
+  --blood-flash: #c8ffe0;
+  --hot-shadow: #0c3d3a;
+  --art-hi: #1a2a46;
+  --art-lo: #03060d;
+  --orb-hi: #121c32;
+  --steel-dark: #1c2640;
+  --steel-light: #4a5a84;
+  --deg-crit: #ff8fd8;
+  --deg-success: #5ee8d4;
+  --deg-fail: #7486a4;
+  --deg-critfail: #ff6a7a;
+  --on-action: #03140a;
+}
+/* Aurora's lights: soft curtains of green, teal and violet across the top of the page. */
+html[data-theme='aurora'] .app {
+  background:
+    radial-gradient(ellipse 30% 340px at 15% 0%, rgb(76 240 142 / 0.26), transparent 70%),
+    radial-gradient(ellipse 34% 400px at 42% 0%, rgb(94 232 212 / 0.2), transparent 70%),
+    radial-gradient(ellipse 30% 360px at 68% 0%, rgb(180 140 255 / 0.22), transparent 70%),
+    radial-gradient(ellipse 26% 300px at 92% 0%, rgb(255 143 216 / 0.16), transparent 70%),
+    radial-gradient(ellipse 120% 480px at 50% 0%, var(--glow-mid) 0%, var(--bg) 75%);
+  background-color: var(--bg);
+}
+
+/* Pastel: Easter eggs. A grape-dusk ground with egg-colored glows, lilac lines, bright
+   bubblegum actions (dark text on them), mint labels, lemon highlights and sky-blue successes. */
+[data-theme='pastel'] {
+  --bg: #1d1730;
+  --bg-deep: #150f24;
+  --glow: #5a3a8a;
+  --glow-mid: #2c2148;
+  --panel: #2a2042;
+  --panel-hot: #3d2c5e;
+  --panel-deep: #231b38;
+  --panel-warm: #34284f;
+  --panel-mid: #281f40;
+  --panel-ember: #30254a;
+  --panel-raised: #4a3870;
+  --line: #c39bff;
+  --line-soft: #8a6cc4;
+  --line-faint: #4f3f78;
+  --text: #fff8fd;
+  --text-soft: #f0e2fa;
+  --text-muted: #c8b6e4;
+  --text-dim: #a492c4;
+  --text-bright: #ffffff;
+  --bronze: #7ff0c8;
+  --bronze-dark: #2f8a6c;
+  --gold: #fff07a;
+  --gold-light: #fff8c2;
+  --gold-dark: #c2b040;
+  --gold-deep: #2c2620;
+  --gold-flare: #ff9fd0;
+  --gold-flare-dim: #e070a8;
+  --blood: #ff8cc6;
+  --blood-text: #ffa6d4;
+  --blood-dark: #f070b0;
+  --blood-top: #ffb0d8;
+  --blood-glow: #ff7ab8;
+  --blood-shadow: #5a2a4a;
+  --blood-flash: #ffe0f0;
+  --hot-shadow: #6a2f6a;
+  --art-hi: #4a3870;
+  --art-lo: #150f24;
+  --orb-hi: #3a2c58;
+  --steel-dark: #352a52;
+  --steel-light: #7a68a8;
+  --deg-crit: #fff07a;
+  --deg-success: #8fd4ff;
+  --deg-fail: #a492c4;
+  --deg-critfail: #ff8a8a;
+  --on-action: #3a1030;
+}
+/* Pastel's page: soft egg-colored glows of pink, mint, butter and sky behind everything. */
+html[data-theme='pastel'] .app {
+  background:
+    radial-gradient(ellipse 45% 360px at 8% 0%, rgb(255 140 198 / 0.55), transparent 70%),
+    radial-gradient(ellipse 40% 340px at 38% 0%, rgb(127 240 200 / 0.4), transparent 70%),
+    radial-gradient(ellipse 40% 340px at 68% 0%, rgb(255 240 122 / 0.34), transparent 70%),
+    radial-gradient(ellipse 45% 360px at 96% 0%, rgb(143 212 255 / 0.48), transparent 70%),
+    var(--bg);
 }
 
 :root {
@@ -3982,7 +4121,6 @@ button.sheet-def[aria-pressed='true'] { border-color: var(--blood); background: 
   .inv__hero { flex-direction: row; text-align: left; }
   .inv__hero-name { margin: 0; font-size: 24px; }
   .inv__grid { grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); }
-  .inv__grid > .inv-tile--socket:nth-child(n+10) { display: none; }
   .inv .coins__row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) { .inv-card { animation: none; } .inv-tile, .inv-tile__icon { transition: none; } }
