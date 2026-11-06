@@ -172,49 +172,130 @@ export function CampaignOverview() {
   const path = adventurePath(campaign.adventurePath);
   const latest = logs?.length ? [...logs].sort((a, b) => b.number - a.number)[0] : null;
   const ready = encounters?.filter((e) => e.creatures.length) ?? [];
-  const stats = [
-    { label: 'Party', value: campaign.characters.length, to: null },
-    { label: 'Party level', value: campaign.partyLevel, to: null },
-    { label: 'Sessions', value: logs ? logs.length : '…', to: `/campaigns/${id}/logs` },
-    ...(campaign.isGm ? [{ label: 'Encounters', value: encounters ? encounters.length : '…', to: `/campaigns/${id}/encounters` }] : []),
-  ];
+  // The backstory's first sentence becomes the pull-quote; the rest is the chronicle.
+  const story = campaign.backstory?.trim() ?? '';
+  const firstEnd = story.search(/[.!?](\s|$)/);
+  const quote = firstEnd > 0 && firstEnd < story.length - 2 ? story.slice(0, firstEnd + 1) : null;
+  const chronicle = quote ? story.slice(firstEnd + 1).trim() : story;
 
   return (
-    <div className="campaign-home">
-      {/* The cover as a banner: shorter than the cover's own shape, with the name over its foot. */}
-      <header className="campaign-banner">
-        <img className="campaign-banner__img" src={campaignCover(campaign)} alt="" />
-        <div className="campaign-banner__text">
-          <h1 className="campaign-banner__name">{campaign.name}</h1>
-          <p className="campaign-card__byline">
-            <Avatar url={campaign.gmAvatarUrl} name={campaign.gmName} size={22} />
-            {campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`}
-          </p>
-          <p className="campaign-tags">
-            <span className="tag tag--theme">{path ? path.name : 'Homebrew'}</span>
-            {path && <span className="tag">Levels {path.levels.join('–')}</span>}
-            {path && <span className="tag">{path.setting}</span>}
-          </p>
+    <div className="saga campaign-home">
+      {/* The splash: the cover across the whole screen, the name over its foot. */}
+      <header className="saga__splash">
+        <img className="saga__splash-art" src={campaignCover(campaign)} alt="" />
+        <div className="saga__title">
+          <h1 className="saga__name">{campaign.name}</h1>
+          <p className="saga__subtitle">{campaign.isGm ? 'You run this campaign' : `Run by ${campaign.gmName}`}</p>
         </div>
       </header>
 
-      <div className="campaign-layout">
-        <aside className="campaign-side" aria-label="About the campaign">
-          <section className="sheet-panel campaign-card">
-            <h2 className="sheet-panel__title">At a glance</h2>
-            <dl className="campaign-card__stats">
-              {stats.map((st) => (
-                <div key={st.label}>
-                  <dt>{st.label}</dt>
-                  <dd>{st.to ? <Link to={st.to}>{st.value} <span aria-hidden="true">›</span></Link> : st.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
+      {state?.created && (
+        <p className="panel panel--hot" role="status" style={{ margin: 0 }}>
+          Your campaign is ready. Share the invite code with your players.
+        </p>
+      )}
+      <FormErrors errors={errors} />
 
+      <div className="saga__grid">
+        <section className="saga__box saga__party" aria-labelledby="party-title">
+          <h2 id="party-title" className="saga__label">The party</h2>
+          {campaign.characters.length ? (
+            <ul className="saga__members">
+              {campaign.characters.map((c) => {
+                const art = c.portraitUrl ?? (c.className ? cardArtFor(c.className.toLowerCase().replace(/\s+/g, '-')) : null);
+                return (
+                  <li key={c.id} className="saga-member">
+                    {/* Your own character opens to play; anyone else's opens read-only, for the party and the GM. */}
+                    <Link to={c.mine ? `/play/${c.id}/sheet` : `/campaigns/${id}/characters/${c.id}/sheet`} className="saga-member__open">
+                      <span className="saga-ring">
+                        {art ? <img src={art} alt="" loading="lazy" /> : <span aria-hidden="true">{c.name.trim()[0]}</span>}
+                      </span>
+                      <span className="saga-member__name">{c.name}</span>
+                      <span className="saga-member__line">{[c.ancestry, c.className].filter(Boolean).join(' ')} · Level {c.level}</span>
+                      <span className="saga-member__player">{c.mine ? 'Your character' : `Played by ${c.player}`}</span>
+                    </Link>
+                    {c.outsideBooks?.length > 0 && (
+                      <span className="hub-card__alert hub-card__warn">Uses books this campaign doesn't: {c.outsideBooks.join(', ')}</span>
+                    )}
+                    {c.mine && (
+                      <div className="saga-member__actions">
+                        {c.outsideBooks?.length > 0 && <Link to={`/characters/${c.id}/edit`} className="chip chip--link">Edit</Link>}
+                        <button type="button" className="chip" onClick={() => leave(c.id)}>Leave</button>
+                      </div>
+                    )}
+                    {!c.mine && campaign.isGm && removing !== c.id && (
+                      <div className="saga-member__actions">
+                        <button type="button" className="chip" onClick={() => setRemoving(c.id)}>Remove</button>
+                      </div>
+                    )}
+                    {removing === c.id && (
+                      <div className="confirm confirm--inline" role="alertdialog" aria-label={`Remove ${c.name}`}>
+                        <p>Remove {c.name} from {campaign.name}? {c.player} keeps the character and can rejoin with the invite code.</p>
+                        <div className="btn-row">
+                          <button type="button" className="btn btn--grow" onClick={() => setRemoving(null)}>Keep</button>
+                          <button type="button" className="btn btn--blood btn--grow" onClick={() => remove(c.id)}>Remove</button>
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="saga__empty">{campaign.isGm ? 'No one has joined yet. Share your invite code to gather a party.' : 'No characters yet.'}</p>
+          )}
+          {!campaign.isGm && others.length === 0 && campaign.characters.length > 0 && (
+            <p className="saga__empty">Ask your GM for the invite code to bring more players in.</p>
+          )}
+        </section>
+
+        <div className="saga__center">
+          <section className="saga__box saga__quote-box" aria-label="The premise">
+            <span className="saga__medallion" aria-hidden="true"><Icon name="crown" size={40} /></span>
+            {quote || !story ? (
+              <blockquote className="saga__quote">
+                <p>{quote ? `“${quote}”` : 'Every legend starts somewhere.'}</p>
+                <footer>~ {campaign.gmName}</footer>
+              </blockquote>
+            ) : (
+              <p className="saga__quote saga__quote--plain">A tale told by {campaign.gmName}</p>
+            )}
+          </section>
+          <section className="saga__box saga__chronicle" aria-labelledby="chronicle-title">
+            <h2 id="chronicle-title" className="visually-hidden">The chronicle</h2>
+            {chronicle ? <p className="saga__story">{chronicle}</p> : <p className="saga__empty center">{campaign.isGm ? 'No backstory yet. Add one in Settings.' : 'No backstory yet.'}</p>}
+            <Link to={`/campaigns/${id}/logs`} className="saga__cta">
+              Read the session logs{logs?.length ? ` (${logs.length})` : ''} <span aria-hidden="true">›</span>
+            </Link>
+          </section>
+        </div>
+
+        <aside className="saga__side" aria-label="About the campaign">
+          <div className="saga__box saga-tile">
+            <span className="saga-tile__icon"><Icon name="crown" size={30} /></span>
+            <span className="saga-tile__text">
+              <span className="saga__label">Party level</span>
+              <strong className="saga-tile__value">{campaign.partyLevel}</strong>
+            </span>
+          </div>
+          <div className="saga__box saga-tile saga-tile--emblem">
+            <span className="saga-tile__emblem" aria-hidden="true"><Icon name={path ? 'book' : 'map'} size={110} /></span>
+            <span className="saga-tile__foot">
+              <span className="saga__label">{path ? 'Adventure Path' : 'Adventure'}</span>
+              <span className="saga-tile__name">{path ? path.name : 'Homebrew'}</span>
+              {path && <span className="saga-tile__sub">Levels {path.levels.join('–')} · {path.setting}</span>}
+            </span>
+          </div>
+          <div className="saga__box saga-tile">
+            <span className="saga-tile__icon"><Icon name="spells" size={30} /></span>
+            <span className="saga-tile__text">
+              <span className="saga__label">Books</span>
+              <span className="saga-tile__sub">{booksLabel(campaign.books)}. Characters using other books can't join.</span>
+            </span>
+          </div>
           {campaign.isGm && (
-            <section className="sheet-panel campaign-gm" aria-labelledby="gm-title">
-              <h2 id="gm-title" className="sheet-panel__title">Game master's tools</h2>
+            <section className="saga__box saga-gm" aria-labelledby="gm-title">
+              <h2 id="gm-title" className="saga__label">Game master’s tools</h2>
               <InviteCode code={campaign.inviteCode} />
               {campaign.requests?.length > 0 && (
                 <div className="campaign-requests">
@@ -243,134 +324,59 @@ export function CampaignOverview() {
               )}
             </section>
           )}
-
         </aside>
+      </div>
 
-        <div className="campaign-main">
-          {state?.created && (
-            <p className="panel panel--hot" role="status" style={{ margin: 0 }}>
-              Your campaign is ready. Share the invite code with your players.
+      {/* The featured block: the latest session, like a feature beside its title. */}
+      <section className={`saga__box saga__feature ${latest ? '' : 'saga__feature--empty'}`} aria-labelledby="latest-title">
+        {latest && (
+          <div className="saga__feature-art" aria-hidden="true">
+            <img src={campaignCover(campaign)} alt="" />
+            <span className="saga__feature-number">{latest.number}</span>
+          </div>
+        )}
+        <div className="saga__feature-text">
+          <h2 id="latest-title" className="saga__label">Latest session</h2>
+          {latest ? (
+            <Link to={`/campaigns/${id}/logs/${latest.id}`} className="saga__feature-link">
+              <span className="saga__feature-title"><span className="visually-hidden">Session {latest.number}: </span>{latest.title}</span>
+              {latest.excerpt && <span className="saga__feature-excerpt">{latest.excerpt.length >= 280 ? `${latest.excerpt.trimEnd()}…` : latest.excerpt}</span>}
+              <span className="saga__feature-more">Read it in the journal ›</span>
+            </Link>
+          ) : (
+            <p className="saga__empty">
+              {logs ? (campaign.isGm ? 'No sessions logged yet. After you play, write up what happened.' : 'No sessions logged yet.') : 'Gathering the chronicle…'}
             </p>
           )}
-          <FormErrors errors={errors} />
-          <section className="sheet-panel campaign-chronicle" aria-labelledby="chronicle-title">
-            <h2 id="chronicle-title" className="sheet-panel__title">The chronicle</h2>
-            {path && (
-              <p className="campaign-path">
-                <strong>{path.name}</strong>
-                <span className="muted"> · Levels {path.levels.join('–')} · {path.setting}</span>
-              </p>
-            )}
-            {campaign.backstory ? <p className="backstory campaign-chronicle__story">{campaign.backstory}</p> : <p className="rule-note">No backstory yet.</p>}
-            <div className="campaign-books">
-              <span className="sheet-panel__label">Books</span>
-              <p className="rule-note" style={{ margin: 0 }}>{booksLabel(campaign.books)}. Characters are built from these, and characters using other books can't join.</p>
-            </div>
-          </section>
-
-          <section className="sheet-panel" aria-labelledby="latest-title">
-            <h2 id="latest-title" className="sheet-panel__title">Latest session</h2>
-            {latest ? (
-              <Link to={`/campaigns/${id}/logs/${latest.id}`} className="campaign-latest">
-                <span className="eyebrow">Session {latest.number}</span>
-                <span className="campaign-latest__title">{latest.title}</span>
-                {latest.excerpt && <span className="campaign-latest__excerpt">{latest.excerpt.length >= 280 ? `${latest.excerpt.trimEnd()}…` : latest.excerpt}</span>}
-                <span className="campaign-latest__more">Read it in the journal ›</span>
-              </Link>
-            ) : (
-              <p className="muted italic" style={{ margin: 0 }}>
-                {logs ? (campaign.isGm ? 'No sessions logged yet. After you play, write up what happened.' : 'No sessions logged yet.') : 'Gathering the chronicle…'}
-              </p>
-            )}
-          </section>
-          <section className="sheet-panel" aria-labelledby="party-title">
-            <h2 id="party-title" className="sheet-panel__title">The party</h2>
-            {campaign.characters.length ? (
-              <ul className="party-banners">
-                {campaign.characters.map((c) => {
-                  const art = c.className ? cardArtFor(c.className.toLowerCase().replace(/\s+/g, '-')) : null;
-                  return (
-                    <li key={c.id} className="party-banner">
-                      {art && <img className="party-banner__art" src={art} alt="" loading="lazy" />}
-                      {/* Your own character opens to play; anyone else's opens read-only, for the party and the GM. */}
-                      <Link
-                        to={c.mine ? `/play/${c.id}/sheet` : `/campaigns/${id}/characters/${c.id}/sheet`}
-                        className="party-banner__open"
-                        aria-label={`${c.mine ? 'Play' : 'View'} ${c.name}'s sheet`}
-                      >
-                        <Portrait url={c.portraitUrl} name={c.name} size="sm" />
-                        <span className="party-banner__body">
-                          <span className="party-banner__name">{c.name}</span>
-                          <span className="party-banner__sub">
-                            {[c.ancestry, c.className].filter(Boolean).join(' ')} · Level {c.level}
-                          </span>
-                          <span className="party-banner__player">
-                            {!c.mine && <Avatar url={c.playerAvatarUrl} name={c.player} size={18} />}
-                            {c.mine ? 'Your character' : `Played by ${c.player}`}
-                          </span>
-                          {c.outsideBooks?.length > 0 && (
-                            <span className="hub-card__alert hub-card__warn">Uses books this campaign doesn't: {c.outsideBooks.join(', ')}</span>
-                          )}
-                        </span>
-                      </Link>
-                      {c.mine && (
-                        <div className="party-banner__actions">
-                          {c.outsideBooks?.length > 0 && <Link to={`/characters/${c.id}/edit`} className="chip chip--link">Edit</Link>}
-                          <button type="button" className="chip" onClick={() => leave(c.id)}>Leave</button>
-                        </div>
-                      )}
-                      {!c.mine && campaign.isGm && removing !== c.id && (
-                        <div className="party-banner__actions">
-                          <button type="button" className="chip" onClick={() => setRemoving(c.id)}>Remove</button>
-                        </div>
-                      )}
-                      {removing === c.id && (
-                        <div className="confirm confirm--inline party-banner__confirm" role="alertdialog" aria-label={`Remove ${c.name}`}>
-                          <p>Remove {c.name} from {campaign.name}? {c.player} keeps the character and can rejoin with the invite code.</p>
-                          <div className="btn-row">
-                            <button type="button" className="btn btn--grow" onClick={() => setRemoving(null)}>Keep</button>
-                            <button type="button" className="btn btn--blood btn--grow" onClick={() => remove(c.id)}>Remove</button>
-                          </div>
-                        </div>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className="muted italic" style={{ margin: 0 }}>
-                {campaign.isGm ? 'No one has joined yet. Share your invite code to gather a party.' : 'No characters yet.'}
-              </p>
-            )}
-            {!campaign.isGm && others.length === 0 && campaign.characters.length > 0 && (
-              <p className="rule-note" style={{ margin: '10px 0 0' }}>Ask your GM for the invite code to bring more players in.</p>
-            )}
-          </section>
-
-          {campaign.isGm && (
-            <section className="sheet-panel" aria-labelledby="ready-title">
-              <h2 id="ready-title" className="sheet-panel__title">Ready encounters</h2>
-              {ready.length ? (
-                <ul className="sheet-list">
-                  {ready.slice(0, 4).map((e) => {
-                    const r = encounterRating(e, campaign);
-                    return (
-                      <li key={e.id}>
-                        <Link to={`/campaigns/${id}/encounters/${e.id}`}>{e.name}</Link>
-                        <span className="book__entry-dots" aria-hidden="true" />
-                        <span className={`encounter__threat encounter__threat--${r.threat.replace(' ', '-')}`}>{r.threat}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <p className="muted italic" style={{ margin: 0 }}>{encounters ? 'No encounters ready. Build one from the bestiary.' : 'Checking the war table…'}</p>
-              )}
-              {ready.length > 4 && <Link to={`/campaigns/${id}/encounters`} className="campaign-latest__more">All {ready.length} encounters ›</Link>}
-            </section>
-          )}
         </div>
-      </div>
+      </section>
+
+      {campaign.isGm && (
+        <section className="saga__box saga__encounters" aria-labelledby="ready-title">
+          <header className="saga__encounters-head">
+            <h2 id="ready-title" className="saga__label">Ready encounters</h2>
+            <Link to={`/campaigns/${id}/encounters`} className="saga__feature-more">
+              {encounters?.length ? `All ${encounters.length} encounters ›` : 'Build one ›'}
+            </Link>
+          </header>
+          {ready.length ? (
+            <ul className="sheet-list">
+              {ready.slice(0, 4).map((e) => {
+                const r = encounterRating(e, campaign);
+                return (
+                  <li key={e.id}>
+                    <Link to={`/campaigns/${id}/encounters/${e.id}`}>{e.name}</Link>
+                    <span className="book__entry-dots" aria-hidden="true" />
+                    <span className={`encounter__threat encounter__threat--${r.threat.replace(' ', '-')}`}>{r.threat}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="saga__empty">{encounters ? 'No encounters ready. Build one from the bestiary.' : 'Checking the war table…'}</p>
+          )}
+        </section>
+      )}
     </div>
   );
 }

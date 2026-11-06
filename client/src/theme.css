@@ -1788,7 +1788,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   .theme-filter .chip { flex: none; }
 }
 .prefill-note, .form-field > .prefill-note { margin: 0; padding: 8px 10px; border-left: 2px solid var(--bronze); background: var(--panel); font-size: 13px; font-style: italic; letter-spacing: 0; text-transform: none; font-family: var(--body); font-weight: 400; color: var(--text-soft); }
-.campaign-path { margin: 0; }
 
 /* ---------- Campaign: session logs ---------- */
 
@@ -3174,26 +3173,93 @@ tbody .skill-sheet__skill { color: var(--text-soft); }
 .field-toggle { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; min-height: 32px; font-size: 14px; color: var(--text-muted); cursor: pointer; }
 .field-toggle input { width: 16px; height: 16px; accent-color: var(--blood-text); }
 
-/* The account page: a profile header with your counts, then the form and your session. */
-.account { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 980px; margin-inline: auto; }
-.account__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%; }
-.account__stat { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 6px; border: 1px solid var(--line); background: var(--bg); color: var(--bronze); text-decoration: none; transition: border-color 0.2s, color 0.2s; }
-.account__stat strong { font-family: var(--display); font-size: 22px; line-height: 1.2; color: var(--text); font-variant-numeric: tabular-nums; }
-.account__stat span { font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 1px; line-height: 1.3; text-transform: uppercase; color: var(--text-muted); }
-@media (hover: hover) { .account__stat:hover { border-color: var(--bronze); color: var(--gold); } }
+/* The account page, as a game profile (pages/AccountPage.jsx): a banner with the avatar in a
+   gilded frame, showcases of your heroes and campaigns, and a sidebar with your counts and theme. */
+.prof { display: flex; flex-direction: column; gap: 18px; width: 100%; max-width: 1120px; margin-inline: auto; }
+.prof__banner {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 18px 26px;
+  min-height: 250px;
+  padding: 28px clamp(18px, 3vw, 36px);
+  border: 1px solid var(--line);
+  background: var(--bg-deep);
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.45), inset 0 0 0 3px var(--bg), inset 0 0 0 4px var(--line-faint);
+}
+.prof__banner-art { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; opacity: 0.5; }
+/* The art darkens toward the bottom, where the name sits. */
+.prof__banner::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, var(--bg-deep) 8%, color-mix(in srgb, var(--bg-deep) 55%, transparent) 55%, transparent), radial-gradient(ellipse 60% 90% at 0% 100%, color-mix(in srgb, var(--glow) 60%, transparent), transparent); }
+.prof__frame { padding: 5px; border: 1px solid var(--gold); background: linear-gradient(145deg, var(--gold-dark, var(--bronze)), var(--bg-deep) 60%, var(--bronze)); box-shadow: 0 10px 24px rgb(0 0 0 / 0.6), 0 0 22px var(--glow); }
+.prof__frame .avatar { display: grid; border-radius: 0; border: 0; }
+.prof__who { min-width: 0; padding-bottom: 4px; }
+.prof__name { margin: 0; font: 400 clamp(36px, 2.6vw + 20px, 60px)/1 var(--accent-font); color: var(--text); text-shadow: 0 3px 16px rgb(0 0 0 / 0.85); overflow-wrap: anywhere; }
+.prof__line { margin: 8px 0 0; font-size: 15px; color: var(--text-soft); overflow-wrap: anywhere; }
+.prof__actions { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 4px; }
+.prof__actions .btn { display: inline-flex; align-items: center; gap: 8px; background: color-mix(in srgb, var(--bg-deep) 75%, transparent); }
+.prof__actions .btn[aria-pressed='true'] { border-color: var(--gold); color: var(--gold); }
+
+.prof__body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: start; gap: 18px; }
+.prof__main { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.prof__panel { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px 22px; border: 1px solid var(--line); background: linear-gradient(180deg, var(--panel) 0%, var(--bg-deep) 100%); }
+.prof__panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.prof__panel-head a { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+.prof__title { margin: 0; font: 400 30px/1.05 var(--accent-font); color: var(--text); }
+.prof__back { align-self: flex-start; font-size: 14px; }
+.prof__empty { margin: 0; font-style: italic; color: var(--text-muted); }
+
+/* Showcases: heroes as tall art cards, campaigns as cover tiles. */
+.prof__heroes, .prof__camps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.prof__heroes { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+.prof__camps { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.prof-hero { position: relative; isolation: isolate; display: flex; align-items: flex-end; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid var(--line); background: radial-gradient(circle at 50% 30%, var(--panel-raised), var(--bg-deep)); text-decoration: none; transition: border-color 0.2s, translate 0.25s var(--ease-land, ease-out); }
+.prof-hero__art { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transition: scale 0.5s var(--ease-land, ease-out); }
+.prof-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgb(0 0 0 / 0.92), transparent 60%); }
+.prof-hero__text { display: flex; flex-direction: column; gap: 2px; padding: 12px; min-width: 0; }
+.prof-hero__name { font: 400 22px/1 var(--accent-font); color: var(--text); overflow-wrap: anywhere; }
+.prof-hero__line { font-size: 12px; color: var(--text-soft); }
+.prof-camp { display: flex; flex-direction: column; gap: 4px; padding-bottom: 10px; border: 1px solid var(--line); background: var(--bg-deep); text-decoration: none; transition: border-color 0.2s, translate 0.25s var(--ease-land, ease-out); }
+.prof-camp__art { width: 100%; aspect-ratio: 5 / 2; object-fit: cover; margin-bottom: 6px; }
+.prof-camp__name { padding: 0 12px; font-family: var(--display); font-size: 14px; font-weight: 700; letter-spacing: 1px; color: var(--text); overflow-wrap: anywhere; }
+.prof-camp__role { padding: 0 12px; font-size: 13px; color: var(--text-muted); }
+@media (hover: hover) {
+  .prof-hero:hover, .prof-camp:hover { border-color: var(--gold); translate: 0 -2px; }
+  .prof-hero:hover .prof-hero__art { scale: 1.04; }
+}
+.prof-hero:focus-visible, .prof-camp:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* The sidebar: counts like a profile's stats, then the theme you're in. */
+.prof__side { display: flex; flex-direction: column; gap: 12px; }
+.prof__stats { margin: 0; padding: 6px 0; list-style: none; border: 1px solid var(--line); background: linear-gradient(180deg, var(--panel) 0%, var(--bg-deep) 100%); }
+.prof-stat { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 16px; color: var(--bronze); text-decoration: none; transition: background-color 0.2s; }
+.prof-stat__label { font-size: 14px; color: var(--text-soft); }
+.prof-stat__value { font: 700 24px/1 var(--display); color: var(--text); font-variant-numeric: tabular-nums; }
+@media (hover: hover) { .prof-stat:hover { background: color-mix(in srgb, var(--panel-raised) 60%, transparent); } .prof-stat:hover .prof-stat__value { color: var(--gold); } }
+.prof-stat:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
+.prof__theme { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--line); background: var(--panel); }
+.prof__theme-swatches { display: flex; }
+.prof__theme-swatches i { width: 12px; height: 32px; border: 1px solid rgb(255 255 255 / 0.1); }
+.prof__theme-name { display: flex; flex-direction: column; font-family: var(--display); font-size: 15px; font-weight: 700; color: var(--text); }
+.prof__theme-kicker { font-size: 11px; font-weight: 400; letter-spacing: 1px; color: var(--text-muted); }
+
 .account__profile { display: flex; flex-direction: column; gap: 16px; }
 .account__save { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 14px; }
 .account__save .btn { min-width: 180px; }
-.account__session { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
-.account__session p { margin: 0; font-size: 15px; line-height: 1.5; }
-.account__session .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-/* In the account menu: the stats as large tiles, the email allowed to wrap. */
-.settings-menu .account__stats { gap: 10px; max-width: 620px; }
-.settings-menu .account__stat { gap: 6px; padding: 22px 10px 18px; background: color-mix(in srgb, var(--bg-deep) 70%, transparent); box-shadow: inset 0 2px 10px rgb(0 0 0 / 0.5); }
-.settings-menu .account__stat strong { font-size: 34px; }
-.settings-menu .account__stat span { font-size: 10px; letter-spacing: 1.5px; text-align: center; }
-.account__email { overflow-wrap: anywhere; }
-.settings-menu__head > .avatar { flex: none; }
+
+@media (max-width: 900px) {
+  .prof__body { grid-template-columns: minmax(0, 1fr); }
+  .prof__side { order: -1; }
+}
+@media (max-width: 640px) {
+  .prof__banner { grid-template-columns: auto minmax(0, 1fr); min-height: 0; padding-top: 90px; }
+  .prof__frame .avatar { width: 84px !important; height: 84px !important; }
+  .prof__actions { grid-column: 1 / -1; }
+  .prof__heroes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) { .prof-hero, .prof-camp, .prof-hero__art { transition: none; } }
 
 /* ---------- Sheet backdrop ---------- */
 /* The class banner behind the Sheet tab: it takes no space itself, its picture spans
@@ -3966,10 +4032,8 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
 
 .campaign-chronicle { display: flex; flex-direction: column; gap: 12px; }
 .campaign-chronicle .sheet-panel__title { margin-bottom: 0; }
-.campaign-chronicle .campaign-path { margin: 0; }
 /* The backstory opens with a large first letter, like the journal's logs. */
 .campaign-chronicle__story::first-letter { float: left; margin: 6px 8px 0 0; font-family: var(--display); font-size: 52px; line-height: 0.8; color: var(--bronze); }
-.campaign-books { display: flex; flex-direction: column; gap: 4px; padding-top: 10px; border-top: 1px solid var(--line-faint); }
 
 .campaign-latest { display: flex; flex-direction: column; gap: 6px; color: var(--text); text-decoration: none; }
 .campaign-latest__title { font-family: var(--display); font-size: 18px; font-weight: 700; letter-spacing: 1px; overflow-wrap: anywhere; }
@@ -3977,23 +4041,8 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
 .campaign-latest__more { font-size: 14px; color: var(--bronze); }
 @media (hover: hover) { .campaign-latest:hover .campaign-latest__title { color: var(--gold); } }
 
-.campaign-gm { display: flex; flex-direction: column; gap: 12px; }
-.campaign-gm .sheet-panel__title { margin-bottom: 0; }
 .campaign-requests { display: flex; flex-direction: column; gap: 6px; }
 
-/* The party, each character over their class's banner art. */
-.party-banners { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.party-banner { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--bg-deep); isolation: isolate; }
-.party-banner__art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; opacity: 0.35; }
-.party-banner::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, color-mix(in srgb, var(--bg-deep) 95%, transparent) 30%, color-mix(in srgb, var(--bg-deep) 35%, transparent)); }
-.party-banner__open { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; }
-@media (hover: hover) { .party-banner:has(.party-banner__open:hover) { border-color: var(--bronze); } .party-banner__open:hover .party-banner__name { color: var(--gold); } }
-.party-banner__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.party-banner__name { font-family: var(--display); font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; overflow-wrap: anywhere; }
-.party-banner__sub { font-size: 14px; color: var(--text-soft); }
-.party-banner__player { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-style: italic; color: var(--text-muted); }
-.party-banner__actions { display: flex; gap: 6px; }
-.party-banner__confirm { flex-basis: 100%; }
 
 /* ---------- Encounters, as a war table ----------
    Threat seals (cool for trivial to blood red for extreme), encounter cards with
@@ -4078,44 +4127,6 @@ a.camp-stat .sheet-def__extra { font-style: normal; font-family: var(--display);
   .war-table__side { position: sticky; top: 16px; max-height: calc(100dvh - 32px); overflow-y: auto; scrollbar-width: thin; }
 }
 
-/* Campaign Overview with a sidebar: the campaign card (cover, name, tags, numbers) and
-   the GM's tools on the left; the chronicle, latest session, party and encounters on
-   the right. Phones stack the sidebar first. */
-.campaign-layout { display: grid; gap: 16px; align-items: start; }
-.campaign-side, .campaign-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-.campaign-card { display: flex; flex-direction: column; gap: 10px; }
-.campaign-card__byline { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 14px; font-style: italic; color: var(--text-soft); }
-.campaign-card .campaign-tags { margin: 0; }
-.campaign-card__stats { margin: 4px 0 0; display: flex; flex-direction: column; }
-.campaign-card__stats div { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line-faint); }
-.campaign-card__stats dt { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
-.campaign-card__stats dd { margin: 0; font-family: var(--display); font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.campaign-card__stats a { color: var(--bronze); text-decoration: none; }
-@media (hover: hover) { .campaign-card__stats a:hover { color: var(--gold); } }
-/* The banner: the cover at 3:1, never taller than 320px, with the name and tags over its foot. */
-.campaign-home { display: flex; flex-direction: column; gap: 16px; }
-.campaign-banner {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  /* The shape covers are cropped to (ImagePicker's CROPS.wide), so the banner shows the whole crop. */
-  aspect-ratio: 5 / 2;
-  min-height: 200px;
-  width: 100%;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  background: radial-gradient(ellipse 80% 70% at 50% 40%, var(--glow) 0%, var(--panel-ember) 60%, var(--bg-deep) 100%);
-}
-.campaign-banner__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.campaign-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--bg-deep) 0%, transparent) 30%, color-mix(in srgb, var(--bg-deep) 90%, transparent)); }
-.campaign-banner__text { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; }
-.campaign-banner__name { margin: 0; font-family: var(--display); font-size: clamp(24px, 2vw + 16px, 40px); font-weight: 900; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 2px 10px #000; overflow-wrap: anywhere; }
-.campaign-banner .campaign-tags { margin: 0; }
-.campaign-card .sheet-panel__title { margin-bottom: 0; }
-@media (min-width: 900px) {
-  .campaign-layout { grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); }
-}
 
 /* ---------- Responsive pass ----------
    Fixes from measuring every page at 320, 375, 600, 768, 1024 and 1440 wide. */
@@ -4905,3 +4916,112 @@ button.action-pip:focus-visible { outline: 2px solid var(--gold); outline-offset
 }
 @media (max-width: 899px) { .tome .split { gap: 12px; } }
 @media (prefers-reduced-motion: reduce) { .kind-card.tome-card, .tome-card__art { transition: none; } }
+
+
+/* ---------- Campaign Overview, as a legend's page (CampaignPage.jsx) ----------
+   A splash of the cover across the whole screen with the name over its foot; then three
+   columns of gilt-edged boxes (the party in rings, a medallion over the premise and the
+   chronicle, tiles for level, adventure and books); then the latest session as a feature. */
+.app:has(.saga) { overflow-x: clip; }
+.saga { display: flex; flex-direction: column; gap: 14px; }
+.saga__splash {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100vw;
+  height: clamp(380px, 62vh, 680px);
+  margin: -16px calc(50% - 50vw) 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse 80% 70% at 50% 40%, var(--glow) 0%, var(--panel-ember) 60%, var(--bg-deep) 100%);
+}
+.saga__splash-art { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+.saga__splash::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, var(--bg) 2%, color-mix(in srgb, var(--bg) 70%, transparent) 22%, transparent 55%), linear-gradient(to bottom, color-mix(in srgb, var(--bg) 60%, transparent), transparent 18%); }
+.saga__title { display: flex; flex-direction: column; align-items: center; gap: 10px; max-width: min(1200px, 92vw); padding: 0 16px 34px; text-align: center; }
+.saga__name { margin: 0; font: 700 clamp(34px, 4.6vw + 10px, 92px)/1 var(--display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); text-shadow: 0 4px 24px rgb(0 0 0 / 0.85); text-wrap: balance; overflow-wrap: anywhere; }
+.saga__subtitle { margin: 0; font-family: var(--display); font-size: clamp(13px, 0.5vw + 11px, 17px); letter-spacing: 0.3em; text-transform: uppercase; color: var(--text); text-shadow: 0 2px 10px #000; }
+
+/* A gilt-edged box, the page's one container. */
+.saga__box { position: relative; padding: 22px; border: 1px solid color-mix(in srgb, var(--gold) 38%, var(--line)); background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 92%, transparent), var(--bg-deep)); }
+.saga__label { margin: 0; font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--bronze); }
+.saga__empty { margin: 0; font-size: 14px; font-style: italic; color: var(--text-muted); }
+
+.saga__grid { display: grid; grid-template-columns: minmax(220px, 290px) minmax(0, 1fr) minmax(220px, 290px); align-items: start; gap: 12px; margin-top: 18px; }
+.saga__center { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+/* The party, in rings. */
+.saga__party { display: flex; flex-direction: column; align-items: center; gap: 18px; padding-top: 26px; text-align: center; }
+.saga__party > .saga__label { align-self: stretch; padding-bottom: 18px; border-bottom: 1px solid color-mix(in srgb, var(--gold) 30%, var(--line)); }
+.saga__members { display: flex; flex-direction: column; gap: 22px; margin: 0; padding: 0; list-style: none; width: 100%; }
+.saga-member { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.saga-member__open { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text); text-decoration: none; }
+.saga-ring { display: grid; place-items: center; width: 112px; height: 112px; margin-bottom: 6px; overflow: hidden; border: 3px solid var(--gold-dark, var(--bronze)); border-radius: 50%; background: radial-gradient(circle, var(--panel-raised), var(--bg-deep)); box-shadow: 0 0 0 2px var(--bg-deep), 0 0 0 3px color-mix(in srgb, var(--gold) 45%, transparent), 0 8px 18px rgb(0 0 0 / 0.55); font: 400 44px/1 var(--accent-font); color: var(--bronze); transition: border-color 0.2s, box-shadow 0.2s; }
+.saga-ring img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.saga-member__name { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.saga-member__line { font-size: 13px; color: var(--text-soft); }
+.saga-member__player { font-size: 13px; font-style: italic; color: var(--bronze); }
+.saga-member__actions { display: flex; gap: 6px; }
+@media (hover: hover) { .saga-member__open:hover .saga-ring { border-color: var(--gold); box-shadow: 0 0 0 2px var(--bg-deep), 0 0 0 3px var(--gold), 0 0 22px var(--glow); } .saga-member__open:hover .saga-member__name { color: var(--gold); } }
+.saga-member__open:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+/* The medallion over the premise, then the chronicle. */
+.saga__quote-box { display: flex; flex-direction: column; align-items: center; margin-top: 46px; padding-top: 64px; text-align: center; }
+.saga__medallion { position: absolute; top: -46px; left: 50%; translate: -50% 0; display: grid; place-items: center; width: 92px; height: 92px; border: 2px solid var(--gold); border-radius: 50%; background: radial-gradient(circle, var(--panel-raised), var(--bg-deep) 75%); color: var(--gold); box-shadow: 0 0 0 5px var(--bg-deep), 0 0 0 6px color-mix(in srgb, var(--gold) 50%, transparent), 0 10px 24px rgb(0 0 0 / 0.6); }
+.saga__quote { margin: 0; }
+.saga__quote p { max-width: 46ch; margin: 0 auto; font: 400 clamp(20px, 0.7vw + 16px, 26px)/1.35 var(--accent-font); color: var(--text); text-wrap: balance; }
+.saga__quote footer { margin-top: 14px; font: 400 20px/1 var(--accent-font); color: var(--bronze); }
+.saga__quote--plain { font: 400 22px/1.3 var(--accent-font); color: var(--bronze); }
+.saga__chronicle { display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 32px clamp(20px, 3vw, 44px); }
+.saga__story { max-width: 62ch; margin: 0; font-size: 16px; line-height: 1.75; color: var(--text-soft); text-align: justify; hyphens: auto; white-space: pre-line; }
+.saga__story::first-letter { float: left; margin: 2px 12px 0 0; padding-bottom: 4px; border-bottom: 2px solid var(--bronze); font: 400 3.4em/0.85 var(--accent-font); color: var(--text); }
+.saga__cta { display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 36px; border: 1px solid var(--gold); font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); text-decoration: none; transition: background-color 0.2s, color 0.2s; }
+@media (hover: hover) { .saga__cta:hover { background: color-mix(in srgb, var(--gold) 12%, transparent); color: var(--text); } }
+.saga__cta:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* The tiles: level, the adventure under a big emblem, the books, the GM's tools. */
+.saga__side { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.saga-tile { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; padding: 0; }
+.saga-tile__icon { display: grid; place-items: center; align-self: stretch; min-height: 76px; border-right: 1px solid color-mix(in srgb, var(--gold) 30%, var(--line)); color: var(--bronze); }
+.saga-tile__text { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px; text-align: center; }
+.saga-tile__value { font: 700 30px/1 var(--display); color: var(--text); font-variant-numeric: tabular-nums; }
+.saga-tile__sub { font-size: 13px; line-height: 1.45; color: var(--text-soft); }
+.saga-tile--emblem { grid-template-columns: minmax(0, 1fr); }
+.saga-tile__emblem { display: grid; place-items: center; min-height: 190px; color: var(--gold); background: radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--glow) 55%, transparent), transparent 70%); filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.6)); }
+.saga-tile__foot { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px; border-top: 1px solid color-mix(in srgb, var(--gold) 30%, var(--line)); text-align: center; }
+.saga-tile__name { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); }
+.saga-gm { display: flex; flex-direction: column; gap: 12px; padding: 18px; }
+.saga-gm .invite { padding: 0; border: 0; background: none; box-shadow: none; }
+.saga-gm .invite::before, .saga-gm .invite::after, .saga-gm .invite .panel__title { display: none; }
+.saga-gm .invite__code { font-size: 30px; letter-spacing: 3px; white-space: nowrap; }
+
+/* The latest session as a feature: art and its number on the left, the title beside it. */
+.saga__feature { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; gap: 30px; padding: 18px; }
+.saga__feature--empty { grid-template-columns: minmax(0, 1fr); padding: 22px; }
+.saga__feature--empty .saga__feature-text { padding: 0; gap: 8px; }
+.saga__feature-art { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--bg-deep); }
+.saga__feature-art img { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
+.saga__feature-number { position: absolute; top: 50%; left: 50%; translate: -50% -50%; display: grid; place-items: center; width: 92px; height: 92px; border: 2px solid var(--gold); border-radius: 50%; background: color-mix(in srgb, var(--bg-deep) 70%, transparent); font: 700 38px/1 var(--display); color: var(--gold); box-shadow: 0 0 0 4px color-mix(in srgb, var(--bg-deep) 60%, transparent), 0 0 24px var(--glow); }
+.saga__feature-text { display: flex; flex-direction: column; gap: 14px; padding-right: 18px; }
+.saga__feature-link { display: flex; flex-direction: column; gap: 12px; color: var(--text); text-decoration: none; }
+.saga__feature-title { font: 700 clamp(24px, 1.2vw + 16px, 36px)/1.15 var(--display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text); text-wrap: balance; }
+.saga__feature-excerpt { font-size: 15px; line-height: 1.6; color: var(--text-soft); white-space: pre-line; }
+.saga__feature-more { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bronze); text-decoration: none; }
+@media (hover: hover) { .saga__feature-link:hover .saga__feature-title { color: var(--gold); } }
+.saga__encounters { display: flex; flex-direction: column; gap: 12px; }
+.saga__encounters-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 1080px) {
+  .saga__grid { grid-template-columns: minmax(0, 1fr) minmax(220px, 280px); }
+  .saga__party { grid-column: 1 / -1; grid-row: 2; }
+  .saga__members { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 22px 34px; }
+}
+@media (max-width: 760px) {
+  .saga__grid { grid-template-columns: minmax(0, 1fr); }
+  .saga__party { grid-row: auto; }
+  .saga__feature { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .saga__feature-text { padding: 0 4px 6px; }
+  .saga__story { text-align: left; }
+  .saga-ring { width: 92px; height: 92px; }
+}
+@media (prefers-reduced-motion: reduce) { .saga-ring, .saga__cta { transition: none; } }
