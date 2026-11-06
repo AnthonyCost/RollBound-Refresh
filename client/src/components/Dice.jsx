@@ -194,7 +194,7 @@ export function useTumble(final, faces = 20, ms = TUMBLE_MS) {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [final, faces, ms]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [final, faces, ms]);
   return [shown, landed];
 }
 

@@ -165,11 +165,9 @@ for (const spec of SPECS) {
   results.push({ spec, build, issues, notes, stats, ancestry, heritage, cls });
 }
 
-let ok = 0;
 for (const r of results) {
   const diffs = r.stats ? Object.entries(r.spec.sheet).filter(([k, v]) => r.stats[k] !== v).map(([k, v]) => `${k} ${r.stats[k]} (sheet ${v})`) : [];
   const status = r.issues.length ? 'PROBLEM' : 'ok';
-  if (!r.issues.length) ok++;
   console.log(`${status.padEnd(7)} ${r.spec.name}${diffs.length ? `  differs: ${diffs.join(', ')}` : r.stats ? '  matches the sheet' : ''}`);
   for (const i of r.issues) console.log(`          - ${i}`);
   for (const n of r.notes ?? []) console.log(`          · ${n}`);

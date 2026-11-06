@@ -37,6 +37,6 @@ export function useCarriedConsumables(inventory) {
     return () => {
       live = false;
     };
-  }, [names]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [names]);
   return found;
 }

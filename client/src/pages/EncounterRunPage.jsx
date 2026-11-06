@@ -285,7 +285,7 @@ function usePartySheet(campaignId, characterId, version) {
     return () => {
       cancelled = true;
     };
-  }, [campaignId, characterId, version]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [campaignId, characterId, version]);
   return [sheet, setSheet];
 }
 

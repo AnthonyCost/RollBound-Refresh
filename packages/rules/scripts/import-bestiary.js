@@ -86,8 +86,6 @@ function intro(md) {
   return { description: blocks(lore), recall };
 }
 
-const sum = (o) => Object.values(o ?? {}).filter((v) => typeof v === 'number');
-
 function mapCreature(doc) {
   const md = doc.markdown ?? '';
   const traits = (doc.trait_raw ?? []).filter((t) => !RARITIES.includes(t.toLowerCase()));

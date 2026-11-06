@@ -94,7 +94,7 @@ function RollButton({ label, stat, onRoll, className }) {
  * it's worked out and the rules behind it.
  */
 export default function SheetPage() {
-  const { character, characterId, readOnly, portraitUrl, setPortraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared, rollCheck, rollDamage } = useTable();
+  const { character, readOnly, portraitUrl, campaign, currentHp, maxHp, setHp, hpError, conditions, shieldRaised, shield, prepared, rollCheck, rollDamage } = useTable();
   // What the details drawer shows: 'attr:str', 'def:ac', 'hp:', 'skill:athletics', 'strike:0', 'magic:classDc', 'spell:<id>'.
   const [open, setOpen] = useState(null);
   const spellRules = useDetailRules(/^(spell|origin|rune):/.test(open ?? ''));

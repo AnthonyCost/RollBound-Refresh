@@ -6,7 +6,6 @@ import { ICON_PATHS } from '../components/iconPaths.js';
 
 export const ARMORY_CATEGORIES = index.categories;
 export const ARMORY_LICENSE = index.license;
-export const ARMORY_COUNT = index.count;
 
 const LIST = import.meta.glob('../../../packages/rules/armory/items.json', { import: 'default' });
 const DETAILS = import.meta.glob('../../../packages/rules/armory/details/*.json', { import: 'default' });

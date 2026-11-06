@@ -84,7 +84,7 @@ packages/rules/        Rules engine: pure functions, no dependencies. Shared by 
   test/                  rules.test.js, builder.test.js, sweep.test.js, data.test.js
 client/                React app (Vite)
   src/pages/             Login, Register, Characters, Campaigns, Account, Builder, Campaign pages, Sheet/Turn/Roll/GM
-  src/builder/           Builder steps, Showcase (character select), OptionList, art.js
+  src/builder/           Builder steps, Showcase (character select), art.js
   src/sheet/             PDF export: fill logic, field map, open/download
   src/state/             Auth, table state, campaign service, portraits, inbox
   src/assets/art/        Class/ancestry portraits and icons (found by file name)

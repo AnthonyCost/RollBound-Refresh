@@ -115,7 +115,6 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       cancelled = true;
     };
     // party is a new object each render; its ids are what matter.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [characterId, sharedId, readOnly, party?.campaignId, party?.characterId, campaigns]);
 
   // The sheet everyone reads: the built sheet with the inventory's equipped weapons,
@@ -228,7 +227,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     if (!feedConditions) return;
     if (feedConditions !== seen.current.conditions) setConditions(me.conditions);
     seen.current.conditions = feedConditions;
-  }, [feedConditions]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [feedConditions]);
   useEffect(() => {
     if (!feedShield) return;
     // On our own equipped shield: an inventory that was never edited gets fresh item keys
@@ -237,7 +236,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
       setStoredInventory(setItemDamage(currentInventory, shield.key, me.shield.max - me.shield.current));
     }
     seen.current.shield = feedShield;
-  }, [feedShield]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [feedShield]);
   const myTurn = encounterActive && encounter.current === me.key;
   // A new turn of yours: three fresh actions (a reaction spent earlier this round stays spent),
   // and a raised shield comes down. A new round refreshes your actions and reaction, as the table's do.
@@ -264,7 +263,7 @@ export function TableProvider({ characterId, shareId: sharedId, party, children 
     if (entry === pushed.current) return;
     pushed.current = entry;
     api.setEncounterActions(campaign.id, me.key, { used: spent, reaction: reactionUsed }).catch(() => {}); // a missed push is caught up by the next
-  }, [encounterActive, spent, reactionUsed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [encounterActive, spent, reactionUsed]);
 
   const strikesSoFar = used.filter((a) => a.id === 'strike').length;
   // Each action spent this turn has a cost: 1, 2 or 3 actions (reactions and free actions cost none).

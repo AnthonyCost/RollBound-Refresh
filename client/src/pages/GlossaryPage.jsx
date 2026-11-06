@@ -190,7 +190,6 @@ function Entry({ entry, closeTo, search, setFailed }) {
       </header>
 
       <section className="statblock" aria-label={`${entry.name} rules`}>
-        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- the links inside handle the keyboard */}
         <div className="statblock__body item-text glossary-text" onClick={follow}>
           {html == null ? <p className="muted italic">Reading the rules…</p> : <div dangerouslySetInnerHTML={{ __html: html }} />}
         </div>

@@ -132,12 +132,3 @@ export function applyTheme(id) {
   }
   return theme.id;
 }
-
-/** The theme this device last used, for pages before sign-in. */
-export function rememberedTheme() {
-  try {
-    return known(localStorage.getItem(STORAGE_KEY)).id;
-  } catch {
-    return DEFAULT_THEME;
-  }
-}

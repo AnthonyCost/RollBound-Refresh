@@ -311,7 +311,6 @@ export default function BuilderPage() {
       cancelled = true;
     };
     // chooseCampaign only reads state through setDraft, so it doesn't need to be a dependency.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inviteCode, data, service, setSearch]);
 
   /** Builds this new character for a campaign, clearing choices from books it doesn't use. */

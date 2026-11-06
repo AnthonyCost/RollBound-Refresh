@@ -33,7 +33,6 @@ export default function CharacterDrawer({ open, onClose }) {
     document.addEventListener('keydown', esc);
     return () => document.removeEventListener('keydown', esc);
     // Only on opening: the name field shouldn't reset while it's being typed in.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, onClose]);
 
   const trimmed = name.trim();
