@@ -97,6 +97,7 @@ GitHub Actions runs the tests and a build on every push.
 
 RollBound runs on [Render](https://render.com) as one web service (the API and the built app) plus a Postgres database, with images on AWS S3 and email through Resend. Pushing to `main` deploys.
 
+- [docs/launch-prep.md](docs/launch-prep.md): the launch checklist, in order
 - [docs/render-deployment.md](docs/render-deployment.md): first-time setup, and archiving an old project
 - [docs/render-upkeep.md](docs/render-upkeep.md): updates, backups, resetting the database, a monthly checklist
 - [docs/aws-s3-setup.md](docs/aws-s3-setup.md): image storage
