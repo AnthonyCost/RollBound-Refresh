@@ -5,6 +5,7 @@ import {
   BUILD_VERSION,
   EARLY_TYPES,
   runesOf,
+  spellcastingOf,
   emptyBuild,
   buildProblems,
   buildCharacter,
@@ -136,6 +137,7 @@ function loadDraft(key) {
         campaign: saved.campaign?.isGm ? null : (saved.campaign ?? null),
         // Drafts from before the start screen were already under way.
         start: saved.start ?? 'custom',
+        visited: Array.isArray(saved.visited) ? saved.visited : [],
       };
     }
   } catch {
@@ -243,7 +245,7 @@ export default function BuilderPage() {
   const [loadFailed, setLoadFailed] = useState(false);
   const [hadDraft] = useState(() => Boolean(loadDraft(draftKey)));
   // campaign: { code, name, books } when a new character is built for a campaign.
-  const [{ build, step, campaign = null, start = null }, setDraft] = useState(() => loadDraft(draftKey) ?? BLANK);
+  const [{ build, step, campaign = null, start = null, visited = [] }, setDraft] = useState(() => loadDraft(draftKey) ?? BLANK);
   const [removed, setRemoved] = useState([]);
   // Edit mode: { name, original, repick, books, campaignName, inventory } once the saved character has loaded.
   const [editing, setEditing] = useState(null);
@@ -338,12 +340,13 @@ export default function BuilderPage() {
   const earlyOk = !editId && build.v >= BUILD_VERSION && EARLY_STEPS.includes(step);
   const stepData = ready ? view : earlyOk ? earlyView : null;
   useEffect(() => {
-    if (ready) saveDraft(draftKey, { build, step, start, ...(campaign && { campaign }) });
-  }, [ready, draftKey, build, step, start, campaign]);
+    if (ready) saveDraft(draftKey, { build, step, start, visited, ...(campaign && { campaign }) });
+  }, [ready, draftKey, build, step, start, visited, campaign]);
 
   const update = (patch) => setDraft((d) => ({ ...d, build: { ...d.build, ...patch } }));
+  // Steps the player has opened, for the diamonds of steps with nothing to pick (Level, Spells for a non-caster).
   const goTo = (s) => {
-    setDraft((d) => ({ ...d, step: s }));
+    setDraft((d) => ({ ...d, step: s, visited: [...new Set([...(d.visited ?? []), s])] }));
     window.scrollTo(0, 0);
   };
   // A new character always opens on the start screen, even with a draft saved: the
@@ -382,7 +385,18 @@ export default function BuilderPage() {
   const infoFor = (s) => (s === 'spells' && view && runesOf(build, view) ? RUNES_INFO : STEP_INFO[s]);
   const info = infoFor(step);
   const problems = view ? buildProblems(build, view) : [];
-  const touched = (s) => STEP_TOUCHED[s](build);
+  // A step with nothing to pick (Level, or Spells for a class without spells to choose) fills
+  // once the player has opened it, and at once for an iconic hero.
+  const seen = (s) => start === 'pregen' || visited.includes(s);
+  const noSpellsToPick = () => {
+    if (!view || !build.class || runesOf(build, view)) return false;
+    const casting = spellcastingOf(build, view);
+    return !casting || casting.kind === 'focus';
+  };
+  const touched = (s) =>
+    s === 'level' ? seen('level') || STEP_TOUCHED.level(build)
+    : s === 'spells' && noSpellsToPick() ? seen('spells')
+    : STEP_TOUCHED[s](build);
   const anyTouched = STEPS.some(touched);
   // A draft worth offering to continue: one the player had already started on.
   const inProgress = !editId && hadDraft && (start === 'pregen' || anyTouched);

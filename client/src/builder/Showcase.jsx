@@ -126,10 +126,6 @@ export default function Showcase({ kind, label, items, selected, onSelect, stats
               ))}
             </dl>
             <div className="showcase__lede" dangerouslySetInnerHTML={{ __html: firstParagraph(current.description) }} />
-            <details className="feature">
-              <summary>Full rules text</summary>
-              <div className="option__desc" dangerouslySetInnerHTML={{ __html: current.description }} />
-            </details>
           </>
         ) : (
           <p className="rule-note" style={{ margin: 0 }}>Select a tile to see what it brings to your character.</p>
