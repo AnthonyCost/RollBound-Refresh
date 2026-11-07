@@ -1,92 +1,81 @@
 # RollBound
 
-A Pathfinder 2e (Remaster) table companion that **teaches the rules while you play**. Every number on the sheet shows its math, the turn helper tracks your three actions and the multiple attack penalty, and every roll explains its degree of success.
+A Pathfinder Second Edition (Remaster) companion for your table, which **teaches the rules while you play**. Every number on a character sheet shows its math, every roll explains its degree of success, and every step of the character builder explains the rule it applies.
 
-Built with the PERN stack: **Postgres, Express, React, Node**.
+Built with **Postgres, Express, React and Node**. How it all fits together, and why, is in **[docs/how-rollbound-works.md](docs/how-rollbound-works.md)**.
 
-## Screens
+## What's in it
 
-| Screen | What it teaches |
-| --- | --- |
-| **Home, Characters & Campaigns** | Home shows My Characters, Campaigns I'm Hosting and Campaigns I'm Playing together. The Characters page adds search, sort, View, Edit and Delete; the Campaigns page adds the box to join with an invite code. Campaign cards show the party's portraits. |
-| **Builder** | Step-by-step level 1 character creation from Player Core and Player Core 2: ancestry, heritage, background, class and subclass, deity, attribute boosts, skills, languages, feats (with prerequisite checks and bonus feats), spells, and 15 gp of gear. Each step explains the rule it applies. Demo users can build and play a character for the rest of their session. |
-| **Campaigns** | GMs create a campaign step by step, starting from any of Paizo's 26 Second Edition Adventure Paths, tagged by theme and by Remastered or Pre-Remaster (its premise, starting level and cover filled in to adjust) or as homebrew, and edit a campaign's title, party level, backstory, and cover image, and get a permanent invite code only they can see. They can remove characters from the party or delete the campaign. Party members and the GM can open each other's sheets, read-only. Players enter the code on their hub to ask to bring a character in, and the GM accepts or rejects the request from their inbox. Demo users can try the whole flow; their campaigns last until the tab closes. |
-| **Inbox** | Next to your profile picture: announcements, patch notes, join requests for your campaigns (accept or reject), and the answers to yours. |
-| **Session logs** | A campaign's GM writes, edits and deletes blog-style recaps of each session; the party reads them, numbered by the date played. |
-| **Encounters** | The GM saves encounters for their campaign: creatures from the bestiary (or homebrew) rated live against the XP budget for the party, which follows the campaign's characters and levels unless the GM sets it. |
-| **Bestiary** | All 840 creatures from Monster Core and Monster Core 2, with search, filters by level, type, size and rarity, and full stat blocks. |
-| **Spell Book** | All 1,028 spells: cantrips, ranks 1–10, focus spells and rituals, searchable by name or trait and filterable by type, rank, tradition, rarity and book, each with its own page. |
-| **Sheet** | Tap AC, a save, or Perception to see the breakdown: ability, proficiency rank + level, item bonus, armor's Dex cap, and condition penalties. The health globe fills to current HP; take damage or heal from the sheet. Shows the character's campaign, has a share link anyone can open read-only, and lets the owner reopen the character in the builder to edit it. Lists Strikes for the equipped weapons. |
-| **Spells** | Every spell the character knows, by rank, with spell attack and DC and each spell's full rules text. |
-| **Inventory** | Items and coins. Equip weapons and wear armor or a shield, and the sheet's Strikes and AC follow. Search the rules' gear to add or buy (paying from the coins), add custom items, and track quantity, notes and Bulk against your limits. |
-| **Lore** | The player's backstory, plus the character's origins and background rules. |
-| **Turn** | *(Hidden until the encounter tracker exists; shows during an active encounter.)* The 3-action economy. Strikes show the multiple attack penalty as it grows; conditions like Frightened apply to the numbers and tick down when you end your turn. |
-| **Roll** | *(Hidden, like Turn.)* Rolls a Strike against the GM's target AC and shows where it landed on the four degrees of success, including natural 20/1 shifts and crit damage. |
+**For players**
+
+- **Character builder:** ancestry, heritage, background, class and its options (deity, doctrine, bloodline, school…), attribute boosts, skills, languages, feats, spells or runes, gear from the whole armory, and leveling up to 20. Or start from one of 24 of Paizo's iconic heroes. Drafts save as you go, and saved characters can be reopened and edited.
+- **Character sheet:** tap any number to see how it's worked out and the rule behind it. It includes HP and shield tracking, conditions, a share link anyone can open read-only, and an export to Paizo's fillable PDF sheet.
+- **Tabs for each character:** Feats, Spells (with daily preparation), Inventory (equipped slots, the pack, coins and Bulk, and a merchant selling every item in the game), Lore (backstory), and **Combat**: the three-action turn, Strikes with the multiple attack penalty, spells and potions, all rolled in a 3D dice drawer.
+- **Campaigns:** join with a GM's invite code (the GM approves each request), see the party and the session logs, and follow a running fight from the Combat tab.
+
+**For game masters**
+
+- **Campaigns** from any of Paizo's 26 Adventure Paths, or homebrew, with a cover, backstory, party level and the books players may build from.
+- **Session logs** the party can read.
+- **Encounters:** build them from the bestiary, rated live against the party's XP budget, then **run** them in an initiative tracker. The tracker handles turns and rounds, HP and conditions, creature attacks against a target, and actions and reactions that the players see too.
+
+**For everyone** (no account needed for the last three)
+
+- **Bestiary** (Monster Core 1 and 2), **Spell Book** (every spell) and **Armory** (every item), each laid out as an open book with search and filters.
+- **Rules Glossary:** 2,700+ rules, conditions, traits and actions, searchable by their pre-Remaster names too.
+- **Learning the Game** lessons and a **Resources** page.
+- **A demo:** "Try the demo" gives a temporary account with a character of every class and a table of pretend players to play with.
+- **Accounts:** profile picture, password reset by email, and 18 color themes.
 
 ## Project layout
 
 ```
-packages/rules   Pure-function rules engine (no dependencies) + tests
-                 data/: imported character-creation data, one file per book and type
-client           Vite + React app (gothic dark-fantasy theme)
-server           Express API + Postgres schema and seed data
+packages/rules   The rules engine (pure functions, shared by client and server) and all game data
+client           The React app (Vite)
+server           The Express API, the Postgres schema, and image and email services
+infra/aws        S3 configuration files
+docs             Guides, including how-rollbound-works.md
 ```
 
-The rules engine is shared: the client uses it for live math, and the server uses it to validate characters and return derived stats.
+## Running it locally
 
-## Getting started
-
-Requires Node 20+ and Postgres 14+.
+You need **Node 24** and **Postgres 14 or newer**.
 
 ```bash
 npm install
 
-# 1. Database
-createdb rollbound
+# 1. The database
+createdb rollbound                    # or: sudo -u postgres createdb rollbound
 cp server/.env.example server/.env    # then edit DATABASE_URL if needed
-npm run db:setup                      # creates tables, seeds a level 1 fighter (safe to re-run)
+npm run db:setup                      # creates the tables (safe to re-run)
 
-# 2. Run the API (port 3001) and the client (port 5173)
-npm run dev:server
-npm run dev:client                    # in a second terminal
+# 2. The API (port 3001) and the app (port 5173) together
+npm run dev
 ```
 
-Open http://localhost:5173 to reach the sign-in page. Create an account, or choose **Try the demo** for a temporary account with sample characters and campaigns, deleted when you exit or after 24 hours. Both need the API running.
+Open http://localhost:5173. Create an account, or choose **Try the demo**.
 
-`createdb` is a Postgres command-line tool, so run it in your terminal. If your OS user has no Postgres role, run `sudo -u postgres createdb rollbound` instead.
+Out of the box, uploaded images are saved on disk (`server/uploads/`) and emails are printed in the server's terminal, so nothing else needs setting up. The settings for S3 and Resend are in `server/.env.example`.
 
-## Rules data
+`npm run dev:server` and `npm run dev:client` run either half alone. `npm run dev:client -- --host` opens the app to a phone on the same Wi-Fi.
 
-The builder reads the rules data in `packages/rules/data/`, generated from the open data in the [Foundry VTT pf2e system](https://github.com/foundryvtt/pf2e). It's one file per book and type (such as `player-core/feats.json`), plus `index.json`, which lists them and holds the data version. In code, load it with `loadRulesData()` from `@rollbound/rules/load` (Node) or `loadRules()` in `client/src/state/rulesData.js` (browser). Books Foundry doesn't have yet (currently *Impossible Magic* and *Dark Archive (Remastered)*) come from the Archives of Nethys as hand-made books in `packages/rules/books/`; see the README there. The files are committed, so you only need to regenerate them to pick up upstream fixes or new books:
+## Commands
 
-```bash
-npm run data:import    # set GITHUB_TOKEN to avoid API rate limits
-```
-
-The importer keeps content from the books listed in `BOOKS` in `packages/rules/scripts/import-pf2e.js` (currently Player Core and Player Core 2) and records the upstream commit it used.
-
-A few rules live only in the rulebook text, not in Foundry's data, such as a Warpriest's armor training or each class's starting spells. Those are filled in from one corrections file per book in `packages/rules/corrections/`, so the rules engine has no book-specific code. After each import, the importer prints a report of anything that looks like it needs a correction. See [packages/rules/corrections/README.md](packages/rules/corrections/README.md).
-
-Every rules item keeps Foundry's stable ID, and characters save their choices by ID, so renames and new books can't scramble them. Characters saved by older versions store names instead. The builder converts drafts automatically, and `npm run db:setup` converts saved characters (or run `npm run db:migrate-builds --workspace @rollbound/server`). It keeps level 1 feats, cantrips and 1st-rank spells, gear of level 1 or lower, and any feat something else grants. Deities come from Foundry's `core-gods` folder, which is Player Core's deity list (Foundry files it under *Lost Omens Divine Mysteries*).
-
-## Character sheet PDF
-
-The sheet screen can download the character as Paizo's official fillable Remaster character sheet, filled in. The template isn't in the repo; see [docs/character-sheet-pdf.md](docs/character-sheet-pdf.md) to install it.
-
-## Builder art
-
-The ancestry and class steps show portrait art and tile icons, found by file name in `client/src/assets/art/`. To add more, run `npm run art:import -- <folder>`; see [docs/adding-art.md](docs/adding-art.md).
-
-## Image uploads
-
-Campaign covers, account profile images, and character portraits use presigned uploads: `POST /api/uploads` (with `kind` = `cover`, `avatar`, or `portrait`) returns a short-lived signed URL, the browser `PUT`s the file straight to it, and the record stores only the object key. Replaced or removed images are deleted.
-
-`STORAGE_DRIVER` in `server/.env` picks where files go:
-
-- `local` (default): saved under `server/uploads/` (ignored by git), with signed URLs the API checks itself. Set `UPLOAD_SECRET` so links survive restarts.
-- `s3`: uploaded straight to an AWS S3 bucket and served through CloudFront. Follow [docs/aws-s3-setup.md](docs/aws-s3-setup.md). The bucket, CORS, lifecycle, and IAM configs are in `infra/aws/`.
-
-Both drivers live in `server/src/storage/`. The client and database are the same either way.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Runs the API and the app |
+| `npm test` | Runs the rules tests, including the build sweep |
+| `npm run build` | Builds the app into `client/dist` (which the server serves in production) |
+| `npm run db:setup` | Creates or updates the database tables (safe to re-run) |
+| `npm run data:import` | Re-imports character-creation data from Foundry VTT, then runs the tests |
+| `npm run data:bestiary -w @rollbound/rules` | Rebuilds the bestiary from the Archives of Nethys |
+| `npm run data:armory -w @rollbound/rules` | Rebuilds the armory from the Archives of Nethys |
+| `npm run data:glossary -w @rollbound/rules` | Rebuilds the rules glossary from the Archives of Nethys |
+| `npm run pregens -w packages/rules` | Rebuilds the iconic heroes from `packages/rules/pregens/specs.js` |
+| `npm run art:import -- <folder>` | Adds class, ancestry and Adventure Path art ([docs/adding-art.md](docs/adding-art.md)) |
+| `npm run art:creatures -- <folder>` | Adds bestiary art |
+| `npm run icons -w client` | Rebuilds the icon set after editing `client/scripts/build-icons.js` |
+| `npm run inbox:post -- --title "…" --body "…"` | Posts an announcement to everyone's inbox |
 
 ## Tests
 
@@ -94,43 +83,42 @@ Both drivers live in `server/src/storage/`. The client and database are the same
 npm test
 ```
 
-Runs the rules engine tests with Node's built-in test runner: proficiency, AC with Dex caps, saves, strikes and MAP, degrees of success, condition stacking, encounter budgets, and DCs by level.
+The rules tests (300+) cover the engine, the builder, leveling, combat, conditions, encounters, inventory and every data file. The **build sweep** builds a character for every combination of class, ancestry, heritage, background, subclass option and deity, so a data import can't quietly break one.
 
 ```bash
 TEST_DATABASE_URL=postgres://localhost:5432/rollbound_test npm test -w server
 ```
 
-Runs the API's access tests against a throwaway database (they skip without one): nobody reaches another person's characters or campaigns, players only read session logs, saved sheets are rebuilt from their builds, and sign-in attempts are limited.
+The API access tests run against a throwaway database (they skip without one). They check that nobody can reach another person's characters or campaigns.
 
-## API
+GitHub Actions runs the tests and a build on every push.
 
-| Method | Path | |
-| --- | --- | --- |
-| POST | `/api/auth/register` | Create an account and sign in (`displayName`, `email`, `password`) |
-| POST | `/api/auth/login` | Sign in; sets an HTTP-only session cookie |
-| POST | `/api/auth/logout` | End the session |
-| GET | `/api/auth/me` | The signed-in user, or 401 |
-| GET | `/api/characters` | Your characters (with campaign name and derived max HP and AC) |
-| GET | `/api/characters/:id` | One character |
-| POST | `/api/characters` | Create (validated) |
-| PUT | `/api/characters/:id` | Update (validated) |
-| DELETE | `/api/characters/:id` | Delete |
-| GET | `/api/campaigns` | `{ running, playing }`: campaigns you GM and campaigns your characters are in |
-| POST | `/api/campaigns` | Create (`name`, `backstory`, `partyLevel`, optional `coverKey`); returns the invite code |
-| GET | `/api/campaigns/:id` | One campaign with its party (GM or members only; only the GM sees the code) |
-| PATCH | `/api/campaigns/:id` | GM: edit `name`, `backstory`, `partyLevel`; `coverKey` replaces the cover, `null` removes it, omitted keeps it |
-| POST | `/api/campaigns/:id/invite-code` | GM: replace the invite code (the old one stops working) |
-| GET | `/api/campaigns/invites/:code` | Preview a campaign from its invite code |
-| POST | `/api/campaigns/join` | Bring one of your characters in (`code`, `characterId`) |
-| POST | `/api/campaigns/:id/leave` | Take your character out (`characterId`) |
-| POST | `/api/uploads` | Get a signed upload URL (`kind`: `cover`, `avatar`, or `portrait`; `contentType`; `size`) |
-| PATCH | `/api/auth/me` | Update your `displayName` and/or `avatarKey` (`null` removes it) |
-| PUT | `/api/characters/:id/portrait` | Set (`portraitKey`) or remove (`null`) a character's portrait |
+## Deploying
 
-Character and campaign routes require a signed-in session and only touch the signed-in user's own rows.
+RollBound runs on [Render](https://render.com) as one web service (the API and the built app) plus a Postgres database, with images on AWS S3 and email through Resend. Pushing to `main` deploys.
+
+- [docs/render-deployment.md](docs/render-deployment.md): first-time setup, and archiving an old project
+- [docs/render-upkeep.md](docs/render-upkeep.md): updates, backups, resetting the database, a monthly checklist
+- [docs/aws-s3-setup.md](docs/aws-s3-setup.md): image storage
+- [docs/password-reset-email-setup.md](docs/password-reset-email-setup.md): email, and using Resend templates
+
+## Guides
+
+| Guide | About |
+| --- | --- |
+| [how-rollbound-works.md](docs/how-rollbound-works.md) | The whole system: how each part works and why |
+| [database-schema.md](docs/database-schema.md) | The tables and how they connect |
+| [HANDOFF.md](docs/HANDOFF.md) | The history of each feature, decisions made along the way, open items |
+| [adding-art.md](docs/adding-art.md) | Adding class, ancestry and creature art |
+| [character-sheet-pdf.md](docs/character-sheet-pdf.md) | Installing the PDF sheet template |
+| [leveling-report.md](docs/leveling-report.md) | How leveling was checked against the rules |
+| [shield-hit-points.md](docs/shield-hit-points.md) | How shield damage works, and what's left |
 
 ## Licensing
 
-Game mechanics come from the Pathfinder Second Edition Remaster rules, which Paizo publishes under the [ORC License](https://paizo.com/community/blog/v5748dyo6sico). RollBound reimplements mechanics only. The rules text in the builder comes from Player Core and Player Core 2, which Paizo publishes under the ORC License. The class art is Paizo's iconic character art from the Community Use Package, used under Paizo's [Community Use Policy](https://paizo.com/licenses/communityuse). See [docs/adding-art.md](docs/adding-art.md).
+- **Game rules and rules text** come from Paizo's Pathfinder Second Edition Remaster books, published under the [ORC License](https://paizo.com/orclicense), by way of the [Foundry VTT pf2e system](https://github.com/foundryvtt/pf2e) and the [Archives of Nethys](https://2e.aonprd.com).
+- **Class and iconic art** is from Paizo's Community Use Package, used under Paizo's [Community Use Policy](https://paizo.com/licenses/communityuse). That requires RollBound to stay free and non-commercial while it uses the art.
+- **Icons** are from [game-icons.net](https://game-icons.net) by Lorc, Delapouite and contributors, under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+- **Not in this repository:** Paizo's fillable character sheet PDF and Adventure Path covers, which aren't licensed for redistribution. Each is installed locally (see the guides above).
 
-This is an unofficial fan project. *Pathfinder* is a trademark of Paizo Inc.; see Paizo's [Community Use Policy](https://paizo.com/community/communityuse).
+This is an unofficial fan project. *Pathfinder* is a trademark of Paizo Inc.

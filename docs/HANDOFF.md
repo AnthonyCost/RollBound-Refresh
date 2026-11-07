@@ -2,6 +2,8 @@
 
 A record of everything built in this project so far, why it was built that way, what's still open, and where to pick up. Written 2026-10-23.
 
+> **For how the system works today, start with [how-rollbound-works.md](how-rollbound-works.md).** This file is the history: what was built when, and why, written as the work happened. Some details below describe earlier versions of features (for example, the Turn and Roll tabs being hidden; they are now the Combat tab).
+
 It's organized by topic, roughly in the order the work happened. Each section says what exists, where it lives, and anything worth knowing before you change it. The [Open items](#open-items) list at the end is the place to start next time.
 
 ---
