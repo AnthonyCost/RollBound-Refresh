@@ -169,6 +169,8 @@ Your image uploads use S3. On AWS itself, the server would get a role; Render ha
 
 ## Everyday use
 
+The basics are below. For backups, resetting the database and a monthly checklist, see `docs/render-upkeep.md`.
+
 - **Updating the site:** push to `main` and Render rebuilds and redeploys on its own. Watch progress under **Events** and **Logs**.
 - **Rolling back:** under **Events**, choose an earlier deploy and **Rollback**.
 - **Changing a setting:** under **Environment**, edit it and save. Render restarts the service with the new value.
