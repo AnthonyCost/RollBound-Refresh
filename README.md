@@ -39,12 +39,13 @@ docs             Guides, including how-rollbound-works.md
 
 ## Running it locally
 
-You need **Node 24** and **Postgres 14 or newer**.
+You need **Node 24** and **Postgres 12 or newer**.
 
 ```bash
 npm install
 
 # 1. The database
+sudo service postgresql start         # if Postgres isn't running (common after a restart)
 createdb rollbound                    # or: sudo -u postgres createdb rollbound
 cp server/.env.example server/.env    # then edit DATABASE_URL if needed
 npm run db:setup                      # creates the tables (safe to re-run)
